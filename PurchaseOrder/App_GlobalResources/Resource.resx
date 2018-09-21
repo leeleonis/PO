@@ -1,0 +1,728 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+		Microsoft ResX Schema
+
+		Version 1.3
+
+		The primary goals of this format is to allow a simple XML format 
+		that is mostly human readable. The generation and parsing of the 
+		various data types are done through the TypeConverter classes 
+		associated with the data types.
+
+		Example:
+
+		... ado.net/XML headers & schema ...
+		<resheader name="resmimetype">text/microsoft-resx</resheader>
+		<resheader name="version">1.3</resheader>
+		<resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+		<resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+		<data name="Name1">this is my long string</data>
+		<data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+		<data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+			[base64 mime encoded serialized .NET Framework object]
+		</data>
+		<data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+			[base64 mime encoded string representing a byte array form of the .NET Framework object]
+		</data>
+
+		There are any number of "resheader" rows that contain simple 
+		name/value pairs.
+
+		Each data row contains a name, and value. The row also contains a 
+		type or mimetype. Type corresponds to a .NET class that support 
+		text/value conversion through the TypeConverter architecture. 
+		Classes that don't support this are serialized and stored with the 
+		mimetype set.
+
+		The mimetype is used for serialized objects, and tells the 
+		ResXResourceReader how to depersist the object. This is currently not 
+		extensible. For a given mimetype the value must be set accordingly:
+
+		Note - application/x-microsoft.net.object.binary.base64 is the format 
+		that the ResXResourceWriter will generate, however the reader can 
+		read any of the formats listed below.
+
+		mimetype: application/x-microsoft.net.object.binary.base64
+		value   : The object must be serialized with 
+			: System.Serialization.Formatters.Binary.BinaryFormatter
+			: and then encoded with base64 encoding.
+
+		mimetype: application/x-microsoft.net.object.soap.base64
+		value   : The object must be serialized with 
+			: System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+			: and then encoded with base64 encoding.
+
+		mimetype: application/x-microsoft.net.object.bytearray.base64
+		value   : The object must be serialized into a byte array 
+			: using a System.ComponentModel.TypeConverter
+			: and then encoded with base64 encoding.
+	-->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Language" xml:space="preserve">
+    <value>Language</value>
+    <comment>Language</comment>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Login</value>
+    <comment>Login</comment>
+  </data>
+  <data name="LoginHeader" xml:space="preserve">
+    <value>Login System</value>
+    <comment>Login System</comment>
+  </data>
+  <data name="MaxLength" xml:space="preserve">
+    <value>Please enter no more than {1} characters</value>
+    <comment>Please enter no more than {1} characters</comment>
+  </data>
+  <data name="MinLength" xml:space="preserve">
+    <value>Please enter at least {1} characters</value>
+    <comment>Please enter at least {1} characters</comment>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+    <comment>Password</comment>
+  </data>
+  <data name="Required" xml:space="preserve">
+    <value>Please Enter  {0}</value>
+    <comment>Please Enter {0}</comment>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>QD - SKU System</value>
+    <comment>QD - SKU System</comment>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>User Name</value>
+    <comment>User Name</comment>
+  </data>
+  <data name="PurchaseOrder_IsEnable" xml:space="preserve">
+    <value>Is Enable</value>
+    <comment>Is Enable</comment>
+  </data>
+  <data name="PurchaseOrder_ID" xml:space="preserve">
+    <value>ID</value>
+    <comment>ID</comment>
+  </data>
+  <data name="PurchaseOrder_Name" xml:space="preserve">
+    <value>Name</value>
+    <comment>Name</comment>
+  </data>
+  <data name="PurchaseOrder_CompanyID" xml:space="preserve">
+    <value>Company ID</value>
+    <comment>Company ID</comment>
+  </data>
+  <data name="PurchaseOrder_VendorID" xml:space="preserve">
+    <value>Vendor ID</value>
+    <comment>Vendor ID</comment>
+  </data>
+  <data name="PurchaseOrder_POStatus" xml:space="preserve">
+    <value>PO Status</value>
+    <comment>PO Status</comment>
+  </data>
+  <data name="PurchaseOrder_POType" xml:space="preserve">
+    <value>PO Type</value>
+    <comment>PO Type</comment>
+  </data>
+  <data name="PurchaseOrder_PODate" xml:space="preserve">
+    <value>PO Date</value>
+    <comment>PO Date</comment>
+  </data>
+  <data name="PurchaseOrder_ReceiveStatus" xml:space="preserve">
+    <value>Receive Status</value>
+    <comment>Receive Status</comment>
+  </data>
+  <data name="PurchaseOrder_ReceivedDate" xml:space="preserve">
+    <value>Received Date</value>
+    <comment>Received Date</comment>
+  </data>
+  <data name="PurchaseOrder_ShippedDate" xml:space="preserve">
+    <value>Shipped Date</value>
+    <comment>Shipped Date</comment>
+  </data>
+  <data name="PurchaseOrder_Carrier" xml:space="preserve">
+    <value>Carrier</value>
+    <comment>Carrier</comment>
+  </data>
+  <data name="PurchaseOrder_Tracking" xml:space="preserve">
+    <value>Tracking</value>
+    <comment>Tracking</comment>
+  </data>
+  <data name="PurchaseOrder_PaymentStatus" xml:space="preserve">
+    <value>Payment Status</value>
+    <comment>Payment Status</comment>
+  </data>
+  <data name="PurchaseOrder_PaymentDate" xml:space="preserve">
+    <value>Payment Date</value>
+    <comment>Payment Date</comment>
+  </data>
+  <data name="PurchaseOrder_PaidAmount" xml:space="preserve">
+    <value>Paid Amount</value>
+    <comment>Paid Amount</comment>
+  </data>
+  <data name="PurchaseOrder_CreateBy" xml:space="preserve">
+    <value>Create By</value>
+    <comment>Create By</comment>
+  </data>
+  <data name="PurchaseOrder_CreateAt" xml:space="preserve">
+    <value>Create At</value>
+    <comment>Create At</comment>
+  </data>
+  <data name="PurchaseOrder_UpdateBy" xml:space="preserve">
+    <value>Update By</value>
+    <comment>Update By</comment>
+  </data>
+  <data name="PurchaseOrder_UpdateAt" xml:space="preserve">
+    <value>Update At</value>
+    <comment>Update At</comment>
+  </data>
+  <data name="PurchaseOrder_ReceivedBy" xml:space="preserve">
+    <value>Received By</value>
+    <comment>Received By</comment>
+  </data>
+  <data name="PurchaseOrder_ReceivedAt" xml:space="preserve">
+    <value>Received At</value>
+    <comment>Received At</comment>
+  </data>
+  <data name="QTY" xml:space="preserve">
+    <value>QTY</value>
+    <comment>QTY</comment>
+  </data>
+  <data name="GrandTotal" xml:space="preserve">
+    <value>Grand Total</value>
+    <comment>Grand Total</comment>
+  </data>
+  <data name="PaidAmount" xml:space="preserve">
+    <value>PaidAmount</value>
+    <comment>Paid Amount</comment>
+  </data>
+  <data name="Balance" xml:space="preserve">
+    <value>Balance</value>
+    <comment>Balance</comment>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+    <comment>Status</comment>
+  </data>
+  <data name="POTypePurchaseOrderDDL" xml:space="preserve">
+    <value>Purchase Order</value>
+    <comment>Purchase Order</comment>
+  </data>
+  <data name="POTypeDropshpOrderDDL" xml:space="preserve">
+    <value>Dropshp Order</value>
+    <comment>Dropshp Order</comment>
+  </data>
+  <data name="POTypeCreditMemoDDL" xml:space="preserve">
+    <value>Credit Memo</value>
+    <comment>Credit Memo</comment>
+  </data>
+  <data name="POStatusOpenedDDL" xml:space="preserve">
+    <value>Opened</value>
+    <comment>Opened</comment>
+  </data>
+  <data name="POStatusPendingDDL" xml:space="preserve">
+    <value>Pending</value>
+    <comment>Pending</comment>
+  </data>
+  <data name="POStatusCompletedDDL" xml:space="preserve">
+    <value>Completed</value>
+    <comment>Completed</comment>
+  </data>
+  <data name="PurchaseSKU_IsEnable" xml:space="preserve">
+    <value>Is Enable</value>
+    <comment>Is Enable</comment>
+  </data>
+  <data name="PurchaseSKU_ID" xml:space="preserve">
+    <value>ID</value>
+    <comment>ID</comment>
+  </data>
+  <data name="PurchaseSKU_Name" xml:space="preserve">
+    <value>Name</value>
+    <comment>Name</comment>
+  </data>
+  <data name="PurchaseSKU_PurchaseOrderID" xml:space="preserve">
+    <value>Purchase Order ID</value>
+    <comment>Purchase Order ID</comment>
+  </data>
+  <data name="PurchaseSKU_SkuNo" xml:space="preserve">
+    <value>Sku No</value>
+    <comment>Sku No</comment>
+  </data>
+  <data name="PurchaseSKU_QTYOrdered" xml:space="preserve">
+    <value>QTY Ordered</value>
+    <comment>QTY Ordered</comment>
+  </data>
+  <data name="PurchaseSKU_QTYFulfilled" xml:space="preserve">
+    <value>QTY Fulfilled</value>
+    <comment>QTY Fulfilled</comment>
+  </data>
+  <data name="PurchaseSKU_Price" xml:space="preserve">
+    <value>Price</value>
+    <comment>Price</comment>
+  </data>
+  <data name="PurchaseSKU_Discount" xml:space="preserve">
+    <value>Discount</value>
+    <comment>Discount</comment>
+  </data>
+  <data name="PurchaseSKU_DiscountedPrice" xml:space="preserve">
+    <value>Discounted Price</value>
+    <comment>Discounted Price</comment>
+  </data>
+  <data name="PurchaseSKU_ShippingCost" xml:space="preserve">
+    <value>Shipping Cost</value>
+    <comment>Shipping Cost</comment>
+  </data>
+  <data name="PurchaseSKU_Other" xml:space="preserve">
+    <value>Other</value>
+    <comment>Other</comment>
+  </data>
+  <data name="PurchaseSKU_TotalRefunded" xml:space="preserve">
+    <value>Total Refunded</value>
+    <comment>Total Refunded</comment>
+  </data>
+  <data name="PurchaseSKU_CreateBy" xml:space="preserve">
+    <value>Create By</value>
+    <comment>Create By</comment>
+  </data>
+  <data name="PurchaseSKU_CreateAt" xml:space="preserve">
+    <value>Create At</value>
+    <comment>Create At</comment>
+  </data>
+  <data name="PurchaseSKU_UpdateBy" xml:space="preserve">
+    <value>Update By</value>
+    <comment>Update By</comment>
+  </data>
+  <data name="PurchaseSKU_UpdateAt" xml:space="preserve">
+    <value>Update At</value>
+    <comment>Update At</comment>
+  </data>
+  <data name="PurchaseSKU_ReceivedBy" xml:space="preserve">
+    <value>Received By</value>
+    <comment>Received By</comment>
+  </data>
+  <data name="PurchaseSKU_ReceivedAt" xml:space="preserve">
+    <value>Received At</value>
+    <comment>Received At</comment>
+  </data>
+  <data name="PurchaseSKU_VendorSKU" xml:space="preserve">
+    <value>Vendor SKU</value>
+    <comment>Vendor SKU</comment>
+  </data>
+  <data name="SerialsLlist_ID" xml:space="preserve">
+    <value>ID</value>
+    <comment>ID</comment>
+  </data>
+  <data name="SerialsLlist_PurchaseSKUID" xml:space="preserve">
+    <value>Purchase SKU ID</value>
+    <comment>Purchase SKU ID</comment>
+  </data>
+  <data name="SerialsLlist_SerialsNo" xml:space="preserve">
+    <value>Serials No</value>
+    <comment>Serials No</comment>
+  </data>
+  <data name="SerialsLlist_SerialsType" xml:space="preserve">
+    <value>Serials Type</value>
+    <comment>Serials Type</comment>
+  </data>
+  <data name="SerialsLlist_CreateBy" xml:space="preserve">
+    <value>CreateBy</value>
+    <comment>CreateBy</comment>
+  </data>
+  <data name="SerialsLlist_CreateAt" xml:space="preserve">
+    <value>Create At</value>
+    <comment>Create At</comment>
+  </data>
+  <data name="SerialsLlist_UpdateBy" xml:space="preserve">
+    <value>Update By</value>
+    <comment>Update By</comment>
+  </data>
+  <data name="SerialsLlist_UpdateAt" xml:space="preserve">
+    <value>Update At</value>
+    <comment>Update At</comment>
+  </data>
+  <data name="SerialsLlist_ReceivedBy" xml:space="preserve">
+    <value>Received By</value>
+    <comment>Received By</comment>
+  </data>
+  <data name="SerialsLlist_ReceivedAt" xml:space="preserve">
+    <value>Received At</value>
+    <comment>Received At</comment>
+  </data>
+  <data name="PurchaseOrder_InvoiceDate" xml:space="preserve">
+    <value>Invoice Date</value>
+    <comment>Invoice Date</comment>
+  </data>
+  <data name="PurchaseOrder_InvoiceNo" xml:space="preserve">
+    <value>Invoice No</value>
+    <comment>Invoice No</comment>
+  </data>
+  <data name="PurchaseOrder_PaymentProof" xml:space="preserve">
+    <value>Payment Proof</value>
+    <comment>Payment Proof</comment>
+  </data>
+  <data name="PurchaseOrder_Warehouse" xml:space="preserve">
+    <value>Warehouse</value>
+    <comment>Warehouse</comment>
+  </data>
+  <data name="PurchaseOrder_Currency" xml:space="preserve">
+    <value>Currency</value>
+    <comment>Currency</comment>
+  </data>
+  <data name="PurchaseOrder_Tax" xml:space="preserve">
+    <value>Tax</value>
+    <comment>Tax</comment>
+  </data>
+  <data name="DefaultSelect" xml:space="preserve">
+    <value>Select</value>
+    <comment>Select</comment>
+  </data>
+  <data name="ReceiveStatusPartiallyReceivedDDL" xml:space="preserve">
+    <value>Partially Received</value>
+    <comment>Partially Received</comment>
+  </data>
+  <data name="ReceiveStatusPendingDDL" xml:space="preserve">
+    <value>Pending</value>
+    <comment>Pending</comment>
+  </data>
+  <data name="ReceiveStatusCompletedDDL" xml:space="preserve">
+    <value>Completed</value>
+    <comment>Completed</comment>
+  </data>
+  <data name="ReceiveStatusOverReceivedDDL" xml:space="preserve">
+    <value>Over Received</value>
+    <comment>Over Received</comment>
+  </data>
+  <data name="PaymentStatusPendingDDL" xml:space="preserve">
+    <value>Pending</value>
+    <comment>Pending</comment>
+  </data>
+  <data name="PaymentStatusPartiallyPaidDDL" xml:space="preserve">
+    <value>Partially Paid</value>
+    <comment>Partially Paid</comment>
+  </data>
+  <data name="PaymentStatusCompletedDDL" xml:space="preserve">
+    <value>Completed</value>
+    <comment>Completed</comment>
+  </data>
+  <data name="PaymentStatusOverPaidDDL" xml:space="preserve">
+    <value>Over Paid</value>
+    <comment>Over Paid</comment>
+  </data>
+  <data name="PurchaseSKU_Credit" xml:space="preserve">
+    <value>Credit</value>
+    <comment>Credit</comment>
+  </data>
+  <data name="PurchaseSKU_QTYReceived" xml:space="preserve">
+    <value>QTY Received</value>
+    <comment>QTY Received</comment>
+  </data>
+  <data name="CMCreditNote_IsEnable" xml:space="preserve">
+    <value>Is Enable</value>
+    <comment>Is Enable</comment>
+  </data>
+  <data name="CMCreditNote_ID" xml:space="preserve">
+    <value>ID</value>
+    <comment>ID</comment>
+  </data>
+  <data name="CMCreditNote_PurchaseOrderID" xml:space="preserve">
+    <value>PurchaseOrder ID</value>
+    <comment>PurchaseOrder ID</comment>
+  </data>
+  <data name="CMCreditNote_SkuNo" xml:space="preserve">
+    <value>SkuNo</value>
+    <comment>SkuNo</comment>
+  </data>
+  <data name="CMCreditNote_VendorSKU" xml:space="preserve">
+    <value>VendorSKU</value>
+    <comment>VendorSKU</comment>
+  </data>
+  <data name="CMCreditNote_Name" xml:space="preserve">
+    <value>Name</value>
+    <comment>Name</comment>
+  </data>
+  <data name="CMCreditNote_QTYOrdered" xml:space="preserve">
+    <value>QTYOrdered</value>
+    <comment>QTYOrdered</comment>
+  </data>
+  <data name="CMCreditNote_CreditQTY" xml:space="preserve">
+    <value>CreditQTY</value>
+    <comment>CreditQTY</comment>
+  </data>
+  <data name="CMCreditNote_Credit" xml:space="preserve">
+    <value>Credit</value>
+    <comment>Credit</comment>
+  </data>
+  <data name="CMReplacement_IsEnable" xml:space="preserve">
+    <value>Is Enable</value>
+    <comment>Is Enable</comment>
+  </data>
+  <data name="CMReplacement_ID" xml:space="preserve">
+    <value>ID</value>
+    <comment>ID</comment>
+  </data>
+  <data name="CMReplacement_PurchaseOrderID" xml:space="preserve">
+    <value>PurchaseOrder D</value>
+    <comment>PurchaseOrder D</comment>
+  </data>
+  <data name="CMReplacement_SkuNo" xml:space="preserve">
+    <value>Sku No</value>
+    <comment>Sku No</comment>
+  </data>
+  <data name="CMReplacement_Name" xml:space="preserve">
+    <value>Name</value>
+    <comment>Name</comment>
+  </data>
+  <data name="CMReplacement_UPCEAN" xml:space="preserve">
+    <value>UPC/EAN</value>
+    <comment>UPC/EAN</comment>
+  </data>
+  <data name="CMReplacement_QTYOrdered" xml:space="preserve">
+    <value>QTY Ordered</value>
+    <comment>QTY Ordered</comment>
+  </data>
+  <data name="CMReplacement_QTYReturned" xml:space="preserve">
+    <value>QTY Returned</value>
+    <comment>QTY Returned</comment>
+  </data>
+  <data name="CMReplacement_Serial" xml:space="preserve">
+    <value>Serial</value>
+    <comment>Serial</comment>
+  </data>
+  <data name="CMReplacement_SerialQTY" xml:space="preserve">
+    <value>Serial QTY</value>
+    <comment>Serial QTY</comment>
+  </data>
+  <data name="PurchaseNote_IsEnable" xml:space="preserve">
+    <value>IsEnable</value>
+    <comment>IsEnable</comment>
+  </data>
+  <data name="PurchaseNote_ID" xml:space="preserve">
+    <value>ID</value>
+    <comment>ID</comment>
+  </data>
+  <data name="PurchaseNote_PurchaseOrderID" xml:space="preserve">
+    <value>PurchaseOrderID</value>
+    <comment>PurchaseOrderID</comment>
+  </data>
+  <data name="PurchaseNote_Note" xml:space="preserve">
+    <value>Note</value>
+    <comment>Note</comment>
+  </data>
+  <data name="PurchaseNote_CreateBy" xml:space="preserve">
+    <value>CreateBy</value>
+    <comment>CreateBy</comment>
+  </data>
+  <data name="PurchaseNote_CreateAt" xml:space="preserve">
+    <value>CreateAt</value>
+    <comment>CreateAt</comment>
+  </data>
+  <data name="PurchaseNote_UpdateBy" xml:space="preserve">
+    <value>UpdateBy</value>
+    <comment>UpdateBy</comment>
+  </data>
+  <data name="PurchaseNote_UpdateAt" xml:space="preserve">
+    <value>UpdateAt</value>
+    <comment>UpdateAt</comment>
+  </data>
+  <data name="CMCreditNote_CompanyID" xml:space="preserve">
+    <value>Company ID</value>
+    <comment>Company ID</comment>
+  </data>
+  <data name="CMCreditNote_VendorID" xml:space="preserve">
+    <value>Vendor ID</value>
+    <comment>Vendor ID</comment>
+  </data>
+  <data name="CMCreditNote_InvoiceDate" xml:space="preserve">
+    <value>Invoice Date</value>
+    <comment>Invoice Date</comment>
+  </data>
+  <data name="CMCreditNote_InvoiceNo" xml:space="preserve">
+    <value>Invoice No</value>
+    <comment>Invoice No</comment>
+  </data>
+  <data name="CMCreditNote_CMStatus" xml:space="preserve">
+    <value>CM Status</value>
+    <comment>CM Status</comment>
+  </data>
+  <data name="CMCreditNote_CMType" xml:space="preserve">
+    <value>CM Type</value>
+    <comment>CM Type</comment>
+  </data>
+  <data name="CMCreditNote_CMDate" xml:space="preserve">
+    <value>CM Date</value>
+    <comment>CM Date</comment>
+  </data>
+  <data name="CMCreditNote_ShippingStatus" xml:space="preserve">
+    <value>Shipping Status</value>
+    <comment>Shipping Status</comment>
+  </data>
+  <data name="CMCreditNote_ShippedDate" xml:space="preserve">
+    <value>Shipped Date</value>
+    <comment>Shipped Date</comment>
+  </data>
+  <data name="CMCreditNote_Carrier" xml:space="preserve">
+    <value>Carrier</value>
+    <comment>Carrier</comment>
+  </data>
+  <data name="CMCreditNote_Tracking" xml:space="preserve">
+    <value>Tracking</value>
+    <comment>Tracking</comment>
+  </data>
+  <data name="CMCreditNote_CreditStatus" xml:space="preserve">
+    <value>Credit Status</value>
+    <comment>Credit Status</comment>
+  </data>
+  <data name="CMCreditNote_CreditDate" xml:space="preserve">
+    <value>Credit Date</value>
+    <comment>Credit Date</comment>
+  </data>
+  <data name="CMCreditNote_CreditAmount" xml:space="preserve">
+    <value>Credit Amount</value>
+    <comment>Credit Amount</comment>
+  </data>
+  <data name="CMCreditNote_CreateBy" xml:space="preserve">
+    <value>Create By</value>
+    <comment>Create By</comment>
+  </data>
+  <data name="CMCreditNote_CreateAt" xml:space="preserve">
+    <value>Create At</value>
+    <comment>Create At</comment>
+  </data>
+  <data name="CMCreditNote_UpdateBy" xml:space="preserve">
+    <value>Update By</value>
+    <comment>Update By</comment>
+  </data>
+  <data name="CMCreditNote_UpdateAt" xml:space="preserve">
+    <value>Update At</value>
+    <comment>Update At</comment>
+  </data>
+  <data name="CMCreditNote_ReceivedBy" xml:space="preserve">
+    <value>Received By</value>
+    <comment>Received By</comment>
+  </data>
+  <data name="CMCreditNote_ReceivedAt" xml:space="preserve">
+    <value>Received At</value>
+    <comment>Received At</comment>
+  </data>
+  <data name="CMReplacement_CompanyID" xml:space="preserve">
+    <value>Company ID</value>
+    <comment>Company ID</comment>
+  </data>
+  <data name="CMReplacement_VendorID" xml:space="preserve">
+    <value>Vendor ID</value>
+    <comment>Vendor ID</comment>
+  </data>
+  <data name="CMReplacement_InvoiceDate" xml:space="preserve">
+    <value>Invoice Date</value>
+    <comment>Invoice Date</comment>
+  </data>
+  <data name="CMReplacement_InvoiceNo" xml:space="preserve">
+    <value>Invoice No</value>
+    <comment>Invoice No</comment>
+  </data>
+  <data name="CMReplacement_CMStatus" xml:space="preserve">
+    <value>CM Status</value>
+    <comment>CM Status</comment>
+  </data>
+  <data name="CMReplacement_CMType" xml:space="preserve">
+    <value>CM Type</value>
+    <comment>CM Type</comment>
+  </data>
+  <data name="CMReplacement_ReplacementPO" xml:space="preserve">
+    <value>Replacement PO</value>
+    <comment>Replacement PO</comment>
+  </data>
+  <data name="CMReplacement_CMDate" xml:space="preserve">
+    <value>CM Date</value>
+    <comment>CM Date</comment>
+  </data>
+  <data name="CMReplacement_ShippingStatus" xml:space="preserve">
+    <value>Shipping Status</value>
+    <comment>Shipping Status</comment>
+  </data>
+  <data name="CMReplacement_ShippedDate" xml:space="preserve">
+    <value>Shipped Date</value>
+    <comment>Shipped Date</comment>
+  </data>
+  <data name="CMReplacement_Carrier" xml:space="preserve">
+    <value>Carrier</value>
+    <comment>Carrier</comment>
+  </data>
+  <data name="CMReplacement_Tracking" xml:space="preserve">
+    <value>Tracking</value>
+    <comment>Tracking</comment>
+  </data>
+  <data name="CMReplacement_CreditStatus" xml:space="preserve">
+    <value>Credit Status</value>
+    <comment>Credit Status</comment>
+  </data>
+  <data name="CMReplacement_CreditDate" xml:space="preserve">
+    <value>Credit Date</value>
+    <comment>Credit Date</comment>
+  </data>
+  <data name="CMReplacement_CreditAmount" xml:space="preserve">
+    <value>Credit Amount</value>
+    <comment>Credit Amount</comment>
+  </data>
+  <data name="CMReplacement_CreateBy" xml:space="preserve">
+    <value>Create By</value>
+    <comment>Create By</comment>
+  </data>
+  <data name="CMReplacement_CreateAt" xml:space="preserve">
+    <value>Create At</value>
+    <comment>Create At</comment>
+  </data>
+  <data name="CMReplacement_UpdateBy" xml:space="preserve">
+    <value>Update By</value>
+    <comment>Update By</comment>
+  </data>
+  <data name="CMReplacement_UpdateAt" xml:space="preserve">
+    <value>Update At</value>
+    <comment>Update At</comment>
+  </data>
+  <data name="CMReplacement_ReceivedBy" xml:space="preserve">
+    <value>Received By</value>
+    <comment>Received By</comment>
+  </data>
+  <data name="CMReplacement_ReceivedAt" xml:space="preserve">
+    <value>Received At</value>
+    <comment>Received At</comment>
+  </data>
+</root>

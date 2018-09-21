@@ -1,0 +1,591 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Language" xml:space="preserve">
+    <value>語系</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>登入</value>
+  </data>
+  <data name="LoginHeader" xml:space="preserve">
+    <value>登入系統</value>
+  </data>
+  <data name="MaxLength" xml:space="preserve">
+    <value>{0}最多{1}個字</value>
+  </data>
+  <data name="MinLength" xml:space="preserve">
+    <value>{0}最少{1}個字</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>密碼</value>
+  </data>
+  <data name="Required" xml:space="preserve">
+    <value>請輸入{0}</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>QD - 品號管理系統</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>帳號</value>
+  </data>
+  <data name="PurchaseOrder_IsEnable" xml:space="preserve">
+    <value>啟用</value>
+  </data>
+  <data name="PurchaseOrder_ID" xml:space="preserve">
+    <value>NULL</value>
+  </data>
+  <data name="PurchaseOrder_Name" xml:space="preserve">
+    <value>名稱</value>
+  </data>
+  <data name="PurchaseOrder_CompanyID" xml:space="preserve">
+    <value>採購的公司</value>
+  </data>
+  <data name="PurchaseOrder_VendorID" xml:space="preserve">
+    <value>供應商</value>
+  </data>
+  <data name="PurchaseOrder_POStatus" xml:space="preserve">
+    <value>PO狀態</value>
+  </data>
+  <data name="PurchaseOrder_POType" xml:space="preserve">
+    <value>PO 的種類</value>
+  </data>
+  <data name="PurchaseOrder_PODate" xml:space="preserve">
+    <value>訂貨日</value>
+  </data>
+  <data name="PurchaseOrder_ReceiveStatus" xml:space="preserve">
+    <value>收貨狀態</value>
+  </data>
+  <data name="PurchaseOrder_ReceivedDate" xml:space="preserve">
+    <value>收貨日期</value>
+  </data>
+  <data name="PurchaseOrder_ShippedDate" xml:space="preserve">
+    <value>廠商出貨日</value>
+  </data>
+  <data name="PurchaseOrder_Carrier" xml:space="preserve">
+    <value>貨品的運輸商</value>
+  </data>
+  <data name="PurchaseOrder_Tracking" xml:space="preserve">
+    <value>提單號碼</value>
+  </data>
+  <data name="PurchaseOrder_PaymentStatus" xml:space="preserve">
+    <value>付款狀況</value>
+  </data>
+  <data name="PurchaseOrder_PaymentDate" xml:space="preserve">
+    <value>付款日期</value>
+  </data>
+  <data name="PurchaseOrder_PaidAmount" xml:space="preserve">
+    <value>付款金額</value>
+  </data>
+  <data name="PurchaseOrder_CreateBy" xml:space="preserve">
+    <value>建立者</value>
+  </data>
+  <data name="PurchaseOrder_CreateAt" xml:space="preserve">
+    <value>建立時間</value>
+  </data>
+  <data name="PurchaseOrder_UpdateBy" xml:space="preserve">
+    <value>修改者</value>
+  </data>
+  <data name="PurchaseOrder_UpdateAt" xml:space="preserve">
+    <value>修改時間</value>
+  </data>
+  <data name="PurchaseOrder_ReceivedBy" xml:space="preserve">
+    <value>入庫者</value>
+  </data>
+  <data name="PurchaseOrder_ReceivedAt" xml:space="preserve">
+    <value>入庫時間</value>
+  </data>
+  <data name="QTY" xml:space="preserve">
+    <value>採購數量</value>
+  </data>
+  <data name="GrandTotal" xml:space="preserve">
+    <value>採購總金額</value>
+  </data>
+  <data name="PaidAmount" xml:space="preserve">
+    <value>採購已付金額</value>
+  </data>
+  <data name="Balance" xml:space="preserve">
+    <value>應付總額</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>採購單狀態</value>
+  </data>
+  <data name="POTypePurchaseOrderDDL" xml:space="preserve">
+    <value>採購單</value>
+  </data>
+  <data name="POTypeDropshpOrderDDL" xml:space="preserve">
+    <value>直發單</value>
+  </data>
+  <data name="POTypeCreditMemoDDL" xml:space="preserve">
+    <value>退貨單</value>
+  </data>
+  <data name="POStatusOpenedDDL" xml:space="preserve">
+    <value>PO已被開啟</value>
+  </data>
+  <data name="POStatusPendingDDL" xml:space="preserve">
+    <value>PO待處理的狀態</value>
+  </data>
+  <data name="POStatusCompletedDDL" xml:space="preserve">
+    <value>PO已付完款並且物品已經確認收到</value>
+  </data>
+  <data name="PurchaseSKU_IsEnable" xml:space="preserve">
+    <value>啟用</value>
+  </data>
+  <data name="PurchaseSKU_ID" xml:space="preserve">
+    <value>SKU ID</value>
+  </data>
+  <data name="PurchaseSKU_Name" xml:space="preserve">
+    <value>名稱</value>
+  </data>
+  <data name="PurchaseSKU_PurchaseOrderID" xml:space="preserve">
+    <value>NULL</value>
+  </data>
+  <data name="PurchaseSKU_SkuNo" xml:space="preserve">
+    <value>SKU NO</value>
+  </data>
+  <data name="PurchaseSKU_QTYOrdered" xml:space="preserve">
+    <value>訂購數量</value>
+  </data>
+  <data name="PurchaseSKU_QTYFulfilled" xml:space="preserve">
+    <value>入庫數量</value>
+  </data>
+  <data name="PurchaseSKU_Price" xml:space="preserve">
+    <value>進貨價</value>
+  </data>
+  <data name="PurchaseSKU_Discount" xml:space="preserve">
+    <value>折讓金額</value>
+  </data>
+  <data name="PurchaseSKU_DiscountedPrice" xml:space="preserve">
+    <value>折讓後的出貨價</value>
+  </data>
+  <data name="PurchaseSKU_ShippingCost" xml:space="preserve">
+    <value>運費</value>
+  </data>
+  <data name="PurchaseSKU_Other" xml:space="preserve">
+    <value>其他費用</value>
+  </data>
+  <data name="PurchaseSKU_TotalRefunded" xml:space="preserve">
+    <value>退款總額</value>
+  </data>
+  <data name="PurchaseSKU_CreateBy" xml:space="preserve">
+    <value>建立者</value>
+  </data>
+  <data name="PurchaseSKU_CreateAt" xml:space="preserve">
+    <value>建立時間</value>
+  </data>
+  <data name="PurchaseSKU_UpdateBy" xml:space="preserve">
+    <value>修改者</value>
+  </data>
+  <data name="PurchaseSKU_UpdateAt" xml:space="preserve">
+    <value>修改時間</value>
+  </data>
+  <data name="PurchaseSKU_ReceivedBy" xml:space="preserve">
+    <value>入庫者</value>
+  </data>
+  <data name="PurchaseSKU_ReceivedAt" xml:space="preserve">
+    <value>入庫時間</value>
+  </data>
+  <data name="PurchaseSKU_VendorSKU" xml:space="preserve">
+    <value>Vendor SKU</value>
+  </data>
+  <data name="SerialsLlist_ID" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="SerialsLlist_PurchaseSKUID" xml:space="preserve">
+    <value>採購單號</value>
+  </data>
+  <data name="SerialsLlist_SerialsNo" xml:space="preserve">
+    <value>Serials號碼</value>
+  </data>
+  <data name="SerialsLlist_SerialsType" xml:space="preserve">
+    <value>狀態 </value>
+  </data>
+  <data name="SerialsLlist_CreateBy" xml:space="preserve">
+    <value>建立者</value>
+  </data>
+  <data name="SerialsLlist_CreateAt" xml:space="preserve">
+    <value>建立時間</value>
+  </data>
+  <data name="SerialsLlist_UpdateBy" xml:space="preserve">
+    <value>修改者</value>
+  </data>
+  <data name="SerialsLlist_UpdateAt" xml:space="preserve">
+    <value>修改時間</value>
+  </data>
+  <data name="SerialsLlist_ReceivedBy" xml:space="preserve">
+    <value>入庫者</value>
+  </data>
+  <data name="SerialsLlist_ReceivedAt" xml:space="preserve">
+    <value>入庫時間</value>
+  </data>
+  <data name="PurchaseOrder_InvoiceDate" xml:space="preserve">
+    <value>發票日期</value>
+  </data>
+  <data name="PurchaseOrder_InvoiceNo" xml:space="preserve">
+    <value>發票號碼</value>
+  </data>
+  <data name="PurchaseOrder_PaymentProof" xml:space="preserve">
+    <value>付款憑證</value>
+  </data>
+  <data name="PurchaseOrder_Warehouse" xml:space="preserve">
+    <value>倉庫</value>
+  </data>
+  <data name="PurchaseOrder_Currency" xml:space="preserve">
+    <value>幣別</value>
+  </data>
+  <data name="PurchaseOrder_Tax" xml:space="preserve">
+    <value>稅率</value>
+  </data>
+  <data name="DefaultSelect" xml:space="preserve">
+    <value>請選擇</value>
+  </data>
+  <data name="ReceiveStatusPendingDDL" xml:space="preserve">
+    <value>待處理. 未收到任採購的商品.</value>
+  </data>
+  <data name="ReceiveStatusPartiallyReceivedDDL" xml:space="preserve">
+    <value>收到部分的商品</value>
+  </data>
+  <data name="ReceiveStatusOverReceivedDDL" xml:space="preserve">
+    <value>收到比原先採購的數量還要多</value>
+  </data>
+  <data name="ReceiveStatusCompletedDDL" xml:space="preserve">
+    <value>採購的商品接收到</value>
+  </data>
+  <data name="PaymentStatusCompletedDDL" xml:space="preserve">
+    <value>將欠款全支付完畢</value>
+  </data>
+  <data name="PaymentStatusOverPaidDDL" xml:space="preserve">
+    <value>多支付款項</value>
+  </data>
+  <data name="PaymentStatusPartiallyPaidDDL" xml:space="preserve">
+    <value>已支付部分款項但未完全繳清</value>
+  </data>
+  <data name="PaymentStatusPendingDDL" xml:space="preserve">
+    <value>待處理. 未收到任採購的商品</value>
+  </data>
+  <data name="PurchaseSKU_Credit" xml:space="preserve">
+    <value>下個月折讓金額</value>
+  </data>
+  <data name="PurchaseSKU_QTYReceived" xml:space="preserve">
+    <value>入庫數量</value>
+  </data>
+  <data name="CMCreditNote_IsEnable" xml:space="preserve">
+    <value>啟用</value>
+  </data>
+  <data name="CMCreditNote_ID" xml:space="preserve">
+    <value>流水號</value>
+  </data>
+  <data name="CMCreditNote_PurchaseOrderID" xml:space="preserve">
+    <value>CM號碼</value>
+  </data>
+  <data name="CMCreditNote_SkuNo" xml:space="preserve">
+    <value>SKU號碼</value>
+  </data>
+  <data name="CMCreditNote_VendorSKU" xml:space="preserve">
+    <value>供應商SKU</value>
+  </data>
+  <data name="CMCreditNote_Name" xml:space="preserve">
+    <value>名稱</value>
+  </data>
+  <data name="CMCreditNote_QTYOrdered" xml:space="preserve">
+    <value>訂購數量</value>
+  </data>
+  <data name="CMCreditNote_CreditQTY" xml:space="preserve">
+    <value>折讓數量</value>
+  </data>
+  <data name="CMCreditNote_Credit" xml:space="preserve">
+    <value>折讓金額</value>
+  </data>
+  <data name="CMReplacement_IsEnable" xml:space="preserve">
+    <value>啟用</value>
+  </data>
+  <data name="CMReplacement_ID" xml:space="preserve">
+    <value>流水號</value>
+  </data>
+  <data name="CMReplacement_PurchaseOrderID" xml:space="preserve">
+    <value>CM號碼</value>
+  </data>
+  <data name="CMReplacement_SkuNo" xml:space="preserve">
+    <value>SKU號碼</value>
+  </data>
+  <data name="CMReplacement_Name" xml:space="preserve">
+    <value>名稱</value>
+  </data>
+  <data name="CMReplacement_UPCEAN" xml:space="preserve">
+    <value>UPC/EAN</value>
+  </data>
+  <data name="CMReplacement_QTYOrdered" xml:space="preserve">
+    <value>訂購數量</value>
+  </data>
+  <data name="CMReplacement_QTYReturned" xml:space="preserve">
+    <value>入庫數量</value>
+  </data>
+  <data name="CMReplacement_Serial" xml:space="preserve">
+    <value>有無序號</value>
+  </data>
+  <data name="CMReplacement_SerialQTY" xml:space="preserve">
+    <value>序號數量</value>
+  </data>
+  <data name="PurchaseNote_IsEnable" xml:space="preserve">
+    <value>啟用</value>
+  </data>
+  <data name="PurchaseNote_ID" xml:space="preserve">
+    <value>NULL</value>
+  </data>
+  <data name="PurchaseNote_PurchaseOrderID" xml:space="preserve">
+    <value>PO單號</value>
+  </data>
+  <data name="PurchaseNote_Note" xml:space="preserve">
+    <value>註記內容</value>
+  </data>
+  <data name="PurchaseNote_CreateBy" xml:space="preserve">
+    <value>建立者</value>
+  </data>
+  <data name="PurchaseNote_CreateAt" xml:space="preserve">
+    <value>建立時間</value>
+  </data>
+  <data name="PurchaseNote_UpdateBy" xml:space="preserve">
+    <value>修改者</value>
+  </data>
+  <data name="PurchaseNote_UpdateAt" xml:space="preserve">
+    <value>修改時間</value>
+  </data>
+  <data name="CMCreditNote_CompanyID" xml:space="preserve">
+    <value>採購的公司</value>
+  </data>
+  <data name="CMCreditNote_VendorID" xml:space="preserve">
+    <value>供應商</value>
+  </data>
+  <data name="CMCreditNote_InvoiceDate" xml:space="preserve">
+    <value>發票日期</value>
+  </data>
+  <data name="CMCreditNote_InvoiceNo" xml:space="preserve">
+    <value>發票號碼</value>
+  </data>
+  <data name="CMCreditNote_CMStatus" xml:space="preserve">
+    <value>CM狀態</value>
+  </data>
+  <data name="CMCreditNote_CMType" xml:space="preserve">
+    <value>CM的種類</value>
+  </data>
+  <data name="CMCreditNote_CMDate" xml:space="preserve">
+    <value>訂貨日</value>
+  </data>
+  <data name="CMCreditNote_ShippingStatus" xml:space="preserve">
+    <value>退貨運輸狀態</value>
+  </data>
+  <data name="CMCreditNote_ShippedDate" xml:space="preserve">
+    <value>退貨出貨日</value>
+  </data>
+  <data name="CMCreditNote_Carrier" xml:space="preserve">
+    <value>運輸商</value>
+  </data>
+  <data name="CMCreditNote_Tracking" xml:space="preserve">
+    <value>提單號碼</value>
+  </data>
+  <data name="CMCreditNote_CreditStatus" xml:space="preserve">
+    <value>折讓進度</value>
+  </data>
+  <data name="CMCreditNote_CreditDate" xml:space="preserve">
+    <value>折讓日期</value>
+  </data>
+  <data name="CMCreditNote_CreditAmount" xml:space="preserve">
+    <value>折讓金額</value>
+  </data>
+  <data name="CMCreditNote_CreateBy" xml:space="preserve">
+    <value>建立者</value>
+  </data>
+  <data name="CMCreditNote_CreateAt" xml:space="preserve">
+    <value>建立時間</value>
+  </data>
+  <data name="CMCreditNote_UpdateBy" xml:space="preserve">
+    <value>修改者</value>
+  </data>
+  <data name="CMCreditNote_UpdateAt" xml:space="preserve">
+    <value>修改時間</value>
+  </data>
+  <data name="CMCreditNote_ReceivedBy" xml:space="preserve">
+    <value>入庫者</value>
+  </data>
+  <data name="CMCreditNote_ReceivedAt" xml:space="preserve">
+    <value>入庫時間</value>
+  </data>
+  <data name="CMReplacement_CompanyID" xml:space="preserve">
+    <value>採購的公司</value>
+  </data>
+  <data name="CMReplacement_VendorID" xml:space="preserve">
+    <value>供應商</value>
+  </data>
+  <data name="CMReplacement_InvoiceDate" xml:space="preserve">
+    <value>發票日期</value>
+  </data>
+  <data name="CMReplacement_InvoiceNo" xml:space="preserve">
+    <value>發票號碼</value>
+  </data>
+  <data name="CMReplacement_CMStatus" xml:space="preserve">
+    <value>CM狀態</value>
+  </data>
+  <data name="CMReplacement_CMType" xml:space="preserve">
+    <value>CM的種類</value>
+  </data>
+  <data name="CMReplacement_ReplacementPO" xml:space="preserve">
+    <value>換貨的PO</value>
+  </data>
+  <data name="CMReplacement_CMDate" xml:space="preserve">
+    <value>訂貨日</value>
+  </data>
+  <data name="CMReplacement_ShippingStatus" xml:space="preserve">
+    <value>退貨運輸狀態</value>
+  </data>
+  <data name="CMReplacement_ShippedDate" xml:space="preserve">
+    <value>退貨出貨日</value>
+  </data>
+  <data name="CMReplacement_Carrier" xml:space="preserve">
+    <value>運輸商</value>
+  </data>
+  <data name="CMReplacement_Tracking" xml:space="preserve">
+    <value>提單號碼</value>
+  </data>
+  <data name="CMReplacement_CreditStatus" xml:space="preserve">
+    <value>折讓進度</value>
+  </data>
+  <data name="CMReplacement_CreditDate" xml:space="preserve">
+    <value>折讓日期</value>
+  </data>
+  <data name="CMReplacement_CreditAmount" xml:space="preserve">
+    <value>折讓金額</value>
+  </data>
+  <data name="CMReplacement_CreateBy" xml:space="preserve">
+    <value>建立者</value>
+  </data>
+  <data name="CMReplacement_CreateAt" xml:space="preserve">
+    <value>建立時間</value>
+  </data>
+  <data name="CMReplacement_UpdateBy" xml:space="preserve">
+    <value>修改者</value>
+  </data>
+  <data name="CMReplacement_UpdateAt" xml:space="preserve">
+    <value>修改時間</value>
+  </data>
+  <data name="CMReplacement_ReceivedBy" xml:space="preserve">
+    <value>入庫者</value>
+  </data>
+  <data name="CMReplacement_ReceivedAt" xml:space="preserve">
+    <value>入庫時間</value>
+  </data>
+</root>

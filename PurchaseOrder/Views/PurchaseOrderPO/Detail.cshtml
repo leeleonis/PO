@@ -1,0 +1,66 @@
+﻿@model IEnumerable<PurchaseSKU>
+<table class="text-center hidden">
+    <thead>
+        <tr class="datagrid-header-row">
+            <td><div></div></td>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr class="datagrid-row">
+                    <td><div class="datagrid-cell"></div></td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+<table class="text-center" style="width:100%">
+    <thead>
+        <tr class="datagrid-header-row">
+            <td><div class="datagrid-cell">@Html.DisplayNameFor(x => x.ID)</div></td>
+            <td><div class="datagrid-cell">@Html.DisplayNameFor(x => x.SkuNo)</div></td>
+            <td><div class="datagrid-cell">@Html.DisplayNameFor(x => x.VendorSKU)</div></td>
+            <td><div class="datagrid-cell">@Html.DisplayNameFor(x => x.Name)</div></td>
+            <td><div class="datagrid-cell">@Html.DisplayNameFor(x => x.QTYOrdered)</div></td>
+            <td><div class="datagrid-cell">@Html.DisplayNameFor(x => x.QTYReceived)</div></td>
+            <td><div class="datagrid-cell">@Html.DisplayNameFor(x => x.Price)</div></td>
+            <td><div class="datagrid-cell">@Html.DisplayNameFor(x => x.Discount)</div></td>
+            <td><div class="datagrid-cell">@Html.DisplayNameFor(x => x.DiscountedPrice)</div></td>
+            <td><div class="datagrid-cell">Subtotal (currency)</div></td>
+        </tr>
+    </thead>
+    <tbody class="datagrid-body">
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                var Received = 0;
+                if (item.SerialsLlist.Any())
+                {
+                    Received = item.SerialsLlist.Count();
+                }
+                else if (item.QTYReceived.HasValue)
+                {
+                    Received = item.QTYReceived.Value;
+                }
+                <tr class="datagrid-row">
+                    <td><div class="datagrid-cell">@Html.DisplayFor(x => item.ID)</div></td>
+                    <td><div class="datagrid-cell">@Html.DisplayFor(x => item.SkuNo)</div></td>
+                    <td><div class="datagrid-cell">@Html.DisplayFor(x => item.VendorSKU)</div></td>
+                    <td><div class="datagrid-cell">@Html.DisplayFor(x => item.Name)</div></td>
+                    <td><div class="datagrid-cell">@Html.DisplayFor(x => item.QTYOrdered)</div></td>
+                    <td><div class="datagrid-cell">@Html.DisplayFor(x => Received)</div></td>
+                    <td><div class="datagrid-cell">@Html.DisplayFor(x => item.Price)</div></td>
+                    <td><div class="datagrid-cell">@Html.DisplayFor(x => item.Discount)</div></td>
+                    <td><div class="datagrid-cell">@Html.DisplayFor(x => item.DiscountedPrice)</div></td>
+                    <td><div class="datagrid-cell"></div></td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+

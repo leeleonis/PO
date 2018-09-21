@@ -1,0 +1,103 @@
+﻿@model SerialsLlist
+@{
+    ViewBag.title = "Serials入庫";
+    var SerialsLlists = (IEnumerable<string>)ViewBag.SerialsLlist;
+}
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-xs-12">
+                <div class="jarviswidget" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+
+                        <h2>新增</h2>
+                        <ul class="nav nav-tabs pull-right">
+                            <li><a data-toggle="tab" href="#hb1">@ViewBag.title</a></li>
+                        </ul>
+                    </header>
+
+                    <div>
+                        <div class="widget-body no-padding">
+                            <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data" onkeydown="if(event.keyCode==13)return false;">
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("PurchaseSKUID")
+                                <div id="content" class="tab-content">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="tab-pane" id="hb1">
+                                        <fieldset>
+                                            <legend>@ViewBag.title</legend>
+                                            <legend>SKU：@Html.Display("SKUNO")</legend>
+                                        </fieldset>
+                                        <fieldset>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.SerialsNo, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.EditorFor(model => model.SerialsNo, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                                    @Html.ValidationMessageFor(model => model.SerialsNo, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-2" for="SerialsList">已掃瞄Serials列表</label>
+                                                <div class="col-sm-9 col-lg-2">
+                                                    <ul class="list-group" id="SerialsList">
+                                                        @foreach (var item in SerialsLlists)
+                                                        {
+                                                            <li> @item </li>
+                                                        }
+
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+
+                                <div class="widget-footer">
+                                    <button type="submit" class="btn btn-primary" id="save">儲存</button>
+                                    <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index")'">返回</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section pagespecific {
+    <script type="text/javascript">
+        var hash = window.location.hash;
+        $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
+        $('.tab-pane').eq(hash.substr(1)).addClass('active');
+        $(document).ready(function () {
+            $("#SerialsNo").on("keyup", function (event) {
+                if (event.which == 13) {
+                    var SerialsNo = $(this).val();
+                    $.ajax({
+                        url: "@Url.Action("CreateItem")",
+                        type: "post",
+                        data: { "PurchaseSKUID": "@ViewBag.PurchaseSKUID", "SerialsNo": SerialsNo},
+                        dataType: "json",
+                        success: function (result) {
+                            if (result.status) {
+                                $("#SerialsList").append('<li>' + SerialsNo+ '</li>');
+                                $("#SerialsNo").val("")
+                            }
+                            else {
+                                alert(result.Msg);
+                            }
+                           
+                        },
+                        error: function (response) {
+                            alert("error");
+                        }
+                    });
+
+                   
+                }
+            })
+        });
+    </script>
+}

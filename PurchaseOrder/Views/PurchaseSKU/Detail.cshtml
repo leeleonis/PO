@@ -1,0 +1,50 @@
+﻿@model IEnumerable<SerialsLlist>
+<div class="row">
+    <article class="col-xs-12">
+        <table class="text-center hidden">
+            <thead>
+                <tr class="datagrid-header-row">
+                    <td><div></div></td>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr class="datagrid-row">
+                            <td><div class="datagrid-cell"></div></td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+        <table class="DetailTable text-center">
+            <thead>
+                <tr class="datagrid-header-row">
+                    <td><div class="datagrid-cell">@Html.DisplayNameFor(x => x.ID)</div></td>
+                    <td><div class="datagrid-cell">@Html.DisplayNameFor(x => x.SerialsNo)</div></td>
+                </tr>
+            </thead>
+            <tbody class="datagrid-body">
+                @if (Model != null)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr class="datagrid-row">
+                            <td><div class="datagrid-cell">@Html.DisplayFor(x => item.ID)</div></td>
+                            <td><div class="datagrid-cell">@Html.DisplayFor(x => item.SerialsNo)</div></td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </article>
+    </div>
+    <script>
+        $(document).ready(function () {
+
+        });
+    </script>
+
+

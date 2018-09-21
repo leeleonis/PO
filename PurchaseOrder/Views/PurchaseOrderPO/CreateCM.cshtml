@@ -1,0 +1,249 @@
+﻿@model CMVM
+@{
+    ViewBag.title = "新增CM單";
+    var CMTypeDDL = EnumData.CMTypeDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var CompanyDDL = EnumData.CompanyDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var VendorDDL = EnumData.VendorDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var DefaultSelect = PurchaseOrderSys.App_GlobalResources.Resource.DefaultSelect;
+    var POStatusDDL = EnumData.POStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+}
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-xs-12">
+                <div class="jarviswidget" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+
+                        <h2>新增CM</h2>
+                        <ul class="nav nav-tabs pull-right">
+                            <li><a data-toggle="tab" href="#hb1">@ViewBag.title</a></li>
+                        </ul>
+                    </header>
+
+                    <div>
+                        <div class="widget-body no-padding">
+                            <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="IsEnable" value="True">
+
+                                <div id="content" class="tab-content">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="tab-pane" id="hb1">
+                                        <fieldset>
+                                            <legend>@ViewBag.title</legend>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.CompanyID, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownListFor(model => model.CompanyID, CompanyDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                </div>
+                                                @Html.LabelFor(model => model.VendorID, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownListFor(model => model.VendorID, VendorDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.Label("Company No", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("CompanyNo", new { htmlAttributes = new { @class = "form-control" } })
+                                                </div>
+                                                @Html.Label("Vendor No", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("VendorNo", new { htmlAttributes = new { @class = "form-control" } })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.CMStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownListFor(model => model.CMStatus, POStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(model => model.CMStatus, "", new { @class = "text-danger" })
+                                                </div>
+                                                @Html.LabelFor(model => model.InvoiceDate, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.EditorFor(model => model.InvoiceDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                    @Html.ValidationMessageFor(model => model.InvoiceDate, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.CMType, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownListFor(model => model.CMType, CMTypeDDL, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(model => model.CMType, "", new { @class = "text-danger" })
+                                                </div>
+                                                @Html.LabelFor(model => model.InvoiceNo, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.EditorFor(model => model.InvoiceNo, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " } } })
+                                                    @Html.ValidationMessageFor(model => model.InvoiceNo, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.CMDate, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.EditorFor(model => model.CMDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                    @Html.ValidationMessageFor(model => model.CMDate, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.ShippingStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownListFor(model => model.ShippingStatus, POStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(model => model.ShippingStatus, "", new { @class = "text-danger" })
+                                                </div>
+                                                @Html.LabelFor(model => model.CreditStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownListFor(model => model.CreditStatus, POStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(model => model.CreditStatus, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.ShippedDate, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.EditorFor(model => model.ShippedDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                    @Html.ValidationMessageFor(model => model.ShippedDate, "", new { @class = "text-danger" })
+                                                </div>
+                                                @Html.LabelFor(model => model.ShippedDate, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.EditorFor(model => model.ShippedDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                    @Html.ValidationMessageFor(model => model.ShippedDate, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Carrier, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.EditorFor(model => model.Carrier, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                                    @Html.ValidationMessageFor(model => model.Carrier, "", new { @class = "text-danger" })
+                                                </div>
+                                                @Html.LabelFor(model => model.CreditAmount, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.EditorFor(model => model.CreditAmount, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                                    @Html.ValidationMessageFor(model => model.CreditAmount, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Tracking, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.EditorFor(model => model.Tracking, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                                    @Html.ValidationMessageFor(model => model.Tracking, "", new { @class = "text-danger" })
+                                                </div>
+                                                @Html.Label("Vendor CM", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <article class="col-xs-12">
+                                                    <table id="DataGridC" class="table table-bordered table-striped text-center dataTable no-footer">
+                                                        <thead>
+                                                            <tr>
+                                                                <th></th>
+                                                                <th></th>
+                                                                <th>SKU</th>
+                                                                <th>Vendor SKU</th>
+                                                                <th>Name</th>
+                                                                <th>QTY Ordered</th>
+                                                                <th>QTY Returned</th>
+                                                                <th>Credit QTY</th>
+                                                                <th>Credit</th>
+                                                                <th>Subtotal (currency)</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach (var item in Model.PurchaseSKU)
+                                                            {
+                                                            <tr>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td>@item.SkuNo</td>
+                                                                <td>@item.VendorSKU</td>
+                                                                <td>@item.Name</td>
+                                                                <td>@item.QTYOrdered</td>
+                                                                <td>@item.QTYReturned</td>
+                                                                <td>@item.CreditQTY</td>
+                                                                <td>@item.Credit</td>
+                                                                <td></td>
+                                                            </tr>
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </article>
+                                                <article class="col-xs-12">
+                                                    <table id="DataGridR" class="table table-bordered table-striped text-center dataTable no-footer" style="display:none">
+                                                        <thead>
+                                                            <tr>
+                                                                <th></th>
+                                                                <th></th>
+                                                                <th>SKU</th>
+                                                                <th>Vendor SKU</th>
+                                                                <th>Name</th>
+                                                                <th>QTY Ordered</th>
+                                                                <th>QTY Returned</th>
+                                                                <th>Credit QTY</th>
+                                                                <th>QTY Received</th>
+                                                                <th>Balance</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach (var item in Model.PurchaseSKU)
+                                                            {
+                                                            <tr>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td>@item.SkuNo</td>
+                                                                <td>@item.VendorSKU</td>
+                                                                <td>@item.Name</td>
+                                                                <td>@item.QTYOrdered</td>
+                                                                <td>@item.QTYReturned</td>
+                                                                <td>@item.CreditQTY</td>
+                                                                <td></td>
+                                                                <td></td>
+                                                            </tr>
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </article>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-sm-10 col-lg-10">
+                                                    <textarea rows="20" style="width:100%" id="textnote"></textarea>
+                                                    <button type="button" id="addnote" style="float:right">Add Note</button>
+                                                </div>
+                                                <div class="col-sm-2 col-lg-2">
+                                                    <ul style="list-style-type:none;list-style-position: inside;padding-left: 0px;padding-left: 0px;" id="textnotelog"></ul>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                                <div class="widget-footer">
+                                    <button type="submit" class="btn btn-primary" id="save">儲存</button>
+                                    <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index")'">返回</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section pagespecific {
+    <script type="text/javascript">
+        var hash = window.location.hash;
+        $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
+        $('.tab-pane').eq(hash.substr(1)).addClass('active');
+        $(document).ready(function () {
+            $("#CMType").on("change", function () {
+                $("#CMType option:selected").each(function () {
+                    $("table").hide();
+                    if ($(this).val() =="CreditNote") {
+                        $("#DataGridC").show();
+                    }
+                    if ($(this).val() == "Replacement") {
+                        $("#DataGridR").show();
+                    }
+                });
+            });
+        });
+    </script>
+}

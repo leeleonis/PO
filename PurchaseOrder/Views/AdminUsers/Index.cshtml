@@ -1,0 +1,60 @@
+﻿@model IEnumerable<AdminUser>
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-xs-12">
+                <div class="jarviswidget jarviswidget-color-darken" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false"
+                     data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+
+                    <header>
+                        <span class="widget-icon"><i class="fa fa-table"></i></span>
+
+                        <h2>使用者 列表</h2>
+                    </header>
+
+                    <div>
+                        <div class="widget-body no-padding">
+                            <div class="table-responsive">
+                                <table id="dt_basic" class="table table-bordered table-striped text-center">
+                                    <thead>
+                                        <tr>
+                                            <th class="nosort"></th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Name)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Group)
+                                            </th>
+                                            <th class="nosort"></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                        <tr>
+                                            <td><img src="/Content/img/plus.png" rel="@Url.Action("MenuListAuth", "Ajax",new { id= item.ID,mod = "UI",Gid = item.Group})" alt="expand/collapse" class="detaildables"></td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Name)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.AdminGroup.Name)
+                                            </td>
+                                            <td>
+                                                @Html.TableRowCtrl("AdminUsers", new { id = item.ID })
+                                            </td>
+                                        </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section pagespecific {
+
+}

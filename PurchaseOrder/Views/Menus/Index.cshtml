@@ -1,0 +1,52 @@
+﻿@model IEnumerable<Menu>
+
+@{
+    ViewBag.Title = "網頁權限設定";
+}
+
+<h2>@ViewBag.Title</h2>
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-xs-12 sortable-grid ui-sortable">
+                <div class="jarviswidget" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false" role="widget">
+
+                    <header role="heading">
+                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+                        <h2>編輯</h2>
+                    </header>
+
+                    <div role="content">
+                        <div class="widget-body no-padding">
+                            <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
+                                @Html.AntiForgeryToken()
+                                <div id="content" class="tab-content">
+                                    <div class="tab-pane active" id="hb2">
+                                        <fieldset>
+                                            <legend>權限設定</legend>
+                                            <div class="form-group">
+                                                <div class="col-sm-12">
+                                                    <ol class="dd-list" id="auth-list">
+                                                        @foreach (var menu in Model.Where(x => !x.PrevID.HasValue))
+                                                        {
+                                                            Html.RenderPartial("_AuthList", menu);
+                                                        }
+                                                    </ol>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                                <div class="widget-footer">
+                                    <button type="submit" class="btn btn-primary" id="save">儲存</button>
+                                    <!-- <button type="submit" class="btn btn-primary" id="back" onclick="$('#data-form').attr('action', '?back=1');">儲存後返回</button> -->
+                                    <button type="button" class="btn btn-default" onclick="location.href='/admin/group?start=0&amp;length=10'">返回</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>

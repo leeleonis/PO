@@ -1,0 +1,57 @@
+﻿  <!--表單↓通常放置查詢條件-->
+<!--action在這裡可以不用給，因為發出ajax時就會指派url-->
+<form name="myForm" action="" method="post">
+    <label>MyTitle:</label> <input type="text" name="MyTitle" /><br />
+    <label>MyMoney:</label> <input type="text" name="MyMoney" /><br />
+    <input type="button" id="btnQuery" value="查詢" />
+</form>
+
+
+
+<!--DataTables的表格-->
+<table id="myDataTalbe" class="table table-bordered table-striped text-center dataTable no-footer">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>MyTitle</th>
+            <th>MyMoney</th>
+        </tr>
+    </thead>
+</table>
+@section pagespecific {
+    <script type="text/javascript">
+        $(function () {
+
+             let table =
+                 $("#myDataTalbe").DataTable({
+                     /* processing: true,*/  //→這太醜了，所以關閉
+                     searching: false,  //關閉filter功能
+                     columns: [ //指定Server端的資料行繫結名稱
+                         { data: "sysid" },
+                         { data: "MyTitle" },
+                         { data: "MyMoney" }
+                     ],
+                     serverSide: true,//啟用ServerSide模式
+                     //ajax參數在1.9版以前參數名稱為sAjaxSource
+                     ajax: {
+                         method:"get",//或post，自由決定，影響到Server端用FormCollection取值或Request.QueryString取得DataTables傳遞的資訊
+                         url: "@Url.Action("GetData_Full")",
+                         data: function (d)
+                         {
+                             d.MyTitle = $("input[name=MyTitle]").val();
+                             d.MyMoney = $("input[name=MyMoney]").val();
+                         }
+                     },
+                     deferLoading: 0, //初始化DataTable時，不發出ajax
+                     order: [[0, "asc"]], //預設排序資料行(由0算起)
+                     orderMulti : false
+                 });
+
+            $("#btnQuery").click(function () {
+                 //按下表單的查詢按鈕後才發出Ajax載入資料
+                 table.draw(); //或table.ajax.reload();
+
+            });
+        });
+    </script>
+}

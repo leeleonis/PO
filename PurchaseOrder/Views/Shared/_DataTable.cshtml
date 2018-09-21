@@ -1,0 +1,21 @@
+﻿<script type="text/javascript">
+        var oTable, $groupSelect;
+        $(document).ready(function () {
+            oTable = $('#dt_basic').dataTable({
+                "columnDefs": [{ "orderable": false, "targets": 0 }],
+                "order": [],
+                "bJQueryUI": true,
+                "sDom": "<'dt-toolbar'<'col-sm-7 hidden-xs' f<'group-select input-group'>><'col-xs-12 col-sm-5'Tl>>" + "t" + "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+                "oTableTools": {
+                    "aButtons": [{
+                        "sExtends": "text",
+                        "sButtonText": '<i class="fa fa-plus"></i> <span class="hidden-mobile">新增</span>',
+                        "sButtonClass": "btn-lg",
+                        "fnInit": function (nButton, oConfig) {
+                            $(nButton).css('margin-left', 5).attr('href', '@Url.Action("Create")');
+                        }
+                    }]
+                }
+            });
+        });
+</script>

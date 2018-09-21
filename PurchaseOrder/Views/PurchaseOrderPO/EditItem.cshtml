@@ -1,0 +1,507 @@
+﻿@model PurchaseOrder
+@{
+    ViewBag.title = "修改採購單";
+    var dtval = DateTime.UtcNow.ToString("yyyy/MM/dd");
+    var POTypeDDL = EnumData.POTypeDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var POStatusDDL = EnumData.POStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var VendorDDL = EnumData.VendorDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var CompanyDDL = EnumData.CompanyDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var ReceiveStatusDDL = EnumData.ReceiveStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var PaymentStatusDDL = EnumData.PaymentStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+
+    var DefaultSelect = PurchaseOrderSys.App_GlobalResources.Resource.DefaultSelect;
+
+    if (Model != null)
+    {
+        if (Model.PODate.HasValue)
+        {
+            dtval = Model.PODate.Value.ToString("yyyy/MM/dd");
+        }
+    }
+}
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-xs-12">
+                <div class="jarviswidget" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+
+                        <h2>新增</h2>
+                        <ul class="nav nav-tabs pull-right">
+                            <li><a data-toggle="tab" href="#hb1">@ViewBag.title</a></li>
+                        </ul>
+                    </header>
+                    <div>
+                        <div class="widget-body no-padding">
+                            <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="IsEnable" value="True">
+                                @Html.HiddenFor(x=>x.ID)
+                                <div id="content" class="tab-content">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="tab-pane" id="hb1">
+                                        <fieldset>
+                                            <legend>@ViewBag.title</legend>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.CompanyID, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownListFor(model => model.CompanyID, CompanyDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                </div>
+                                                @Html.LabelFor(model => model.VendorID, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownListFor(model => model.VendorID, VendorDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.Label("Company No", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("CompanyNo", new { htmlAttributes = new { @class = "form-control" } })
+                                                </div>
+                                                @Html.Label("Vendor No", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("VendorNo", new { htmlAttributes = new { @class = "form-control" } })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.POStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownListFor(model => model.POStatus, POStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(model => model.POStatus, "", new { @class = "text-danger" })
+                                                </div>
+                                                @Html.LabelFor(model => model.InvoiceDate, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.EditorFor(model => model.InvoiceDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                    @Html.ValidationMessageFor(model => model.InvoiceDate, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.POType, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownListFor(model => model.POType, POTypeDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(model => model.POType, "", new { @class = "text-danger" })
+                                                </div>
+                                                @Html.LabelFor(model => model.InvoiceNo, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.EditorFor(model => model.InvoiceNo, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " } } })
+                                                    @Html.ValidationMessageFor(model => model.InvoiceNo, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.PODate, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.EditorFor(model => model.PODate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "Value", dtval }, { "data-dateformat", "yy/mm/dd" } } })
+                                                    @Html.ValidationMessageFor(model => model.PODate, "", new { @class = "text-danger" })
+                                                </div>
+                                                @Html.LabelFor(model => model.InvoiceNo, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("VendorInvoice", new { htmlAttributes = new { @class = "form-control" } })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.ReceiveStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownListFor(model => model.ReceiveStatus, ReceiveStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(model => model.ReceiveStatus, "", new { @class = "text-danger" })
+                                                </div>
+                                                @Html.LabelFor(model => model.PaymentStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownListFor(model => model.ReceiveStatus, ReceiveStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(model => model.ReceiveStatus, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.ReceivedDate, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.EditorFor(model => model.ReceivedDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                    @Html.ValidationMessageFor(model => model.ReceivedDate, "", new { @class = "text-danger" })
+                                                </div>
+                                                @Html.LabelFor(model => model.PaymentDate, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.EditorFor(model => model.PaymentDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                    @Html.ValidationMessageFor(model => model.PaymentDate, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.ShippedDate, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.EditorFor(model => model.ShippedDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                    @Html.ValidationMessageFor(model => model.ShippedDate, "", new { @class = "text-danger" })
+                                                </div>
+                                                @Html.LabelFor(model => model.PaidAmount, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.EditorFor(model => model.PaidAmount, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                                    @Html.ValidationMessageFor(model => model.PaidAmount, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Carrier, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.EditorFor(model => model.Carrier, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                                    @Html.ValidationMessageFor(model => model.Carrier, "", new { @class = "text-danger" })
+                                                </div>
+                                                @Html.LabelFor(model => model.PaymentProof, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.EditorFor(model => model.PaymentProof, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                                    @Html.ValidationMessageFor(model => model.PaymentProof, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Tracking, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.EditorFor(model => model.Tracking, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                                    @Html.ValidationMessageFor(model => model.Tracking, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset>
+                                            <legend>Items Ordered</legend>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Warehouse, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownListFor(model => model.Warehouse, CompanyDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(model => model.Warehouse, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Currency, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownListFor(model => model.Currency, CompanyDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Tax, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    <div class="col-sm-2 col-lg-2">
+                                                        @Html.CheckBox("TaxShow", true, new { @class = "form-control" })
+                                                    </div>
+                                                    <div class="col-sm-10 col-lg-10">
+                                                        @Html.EditorFor(model => model.Tax, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                                        @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset>
+                                            <legend></legend>
+                                            <div class="form-group">
+                                                <div class="col-sm-9 col-lg-2">
+                                                    <button type="button">Edit items</button>
+                                                    <button type="button">Remove items</button>
+                                                </div>
+                                                <div class="col-lg-offset-10">
+                                                    <a type="button" href="@Url.Action("CreateCM",new {Model.ID})" class='btn btn-danger btn-sm' id='btn-Add'>Create CM</a>
+                                                    <a type="button" href="@Url.Action("ReceiveItems",new {Model.ID})" class='btn btn-danger btn-sm'>Receive Items</a>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <article class="col-xs-12">
+                                                    <table id="DataGridC" class="table table-bordered table-striped text-center dataTable no-footer">
+                                                        <thead>
+                                                            <tr>
+                                                                <th><input type="checkbox" /></th>
+                                                                <th></th>
+                                                                <th>SKU</th>
+                                                                <th>Vendor SKU</th>
+                                                                <th>Name</th>
+                                                                <th>QTY Ordered</th>
+                                                                <th>QTY Fulfilled</th>
+                                                                <th>Price</th>
+                                                                <th>Discount</th>
+                                                                <th>Credit</th>
+                                                                <th>Discounted Price</th>
+                                                                <th>Subtotal (currency)</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                        <tfoot>
+                                                            <tr>
+                                                                <td colspan="10">
+                                                                    <select id="gebruikerId" name="gebruikerId" class=" form-control" style="width:50%"></select>
+                                                                    <button type="button" id="addsku">Add SKU</button>
+                                                                </td>
+                                                                <td></td>
+                                                                <td></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="10" rowspan="10">
+                                                                    <div class="col-sm-10 col-lg-10">
+                                                                        <textarea rows="20" style="width:100%" id="textnote"></textarea>
+                                                                        <button type="button" id="addnote" style="float:right">Add Note</button>
+                                                                    </div>
+                                                                    <div class="col-sm-2 col-lg-2">
+                                                                        <ul style="list-style-type:none;list-style-position: inside;padding-left: 0px;padding-left: 0px;" id="textnotelog">
+                                                                            @foreach (var item in Model.PurchaseNote)
+                                                                            {
+                                                                                <li>@(item.CreateBy + "： " + item.CreateAt.ToString("yyyy/MM/dd HH:mm:ss"))</li>
+                                                                            }
+                                                                        </ul>
+                                                                    </div>
+                                                                </td>
+                                                                <td>Total:</td>
+                                                                <td></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Total Discount:</td>
+                                                                <td></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Tax:</td>
+                                                                <td></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Shipping Cost:</td>
+                                                                <td></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Other:</td>
+                                                                <td></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Grand Total:</td>
+                                                                <td></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Total Paid:</td>
+                                                                <td></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Total Refunded:</td>
+                                                                <td></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>CM Credit:</td>
+                                                                <td></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Balance:</td>
+                                                                <td></td>
+                                                            </tr>
+                                                        </tfoot>
+                                                    </table>
+                                                </article>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+
+                                <div class="widget-footer">
+                                    <button type="submit" class="btn btn-primary" id="save">儲存</button>
+                                    <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index")'">返回</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section pagespecific {
+    <script type="text/javascript">
+        var thousandComma = function (number) {
+            if (number != null) {
+                var num = number.toFixed(2).toString();
+                var pattern = /(-?\d+)(\d{3})/;
+                while (pattern.test(num)) {
+                    num = num.replace(pattern, "$1,$2");
+                }
+                return num;
+            }
+            else {
+                return number;
+            }
+        }
+        var hash = window.location.hash;
+        $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
+        $('.tab-pane').eq(hash.substr(1)).addClass('active');
+        var tableID = "#DataGridC";
+        $(document).ready(function () {
+            var DataGridC = $(tableID).DataTable({
+                fixedHeader: {
+                    header: true,
+                    footer: true
+                },
+                select: {
+                    style: 'os',
+                    selector: 'td:first-child'
+                },
+                columns: [
+                    {
+                        data: "ck",
+                        className: 'select-checkbox',
+                        orderable: false,
+                        render: function (data, type, obj, meta) {
+                            return '<input type="checkbox" value="' + data + '">';
+                        }
+                    },
+                    {
+                        "className": 'details-control',
+                        "orderable": false,
+                        "data": null,
+                        "defaultContent": '' },
+                    { data: "SKU" },
+                    { data: "VendorSKU" },
+                    { data: "Name" },
+                    { data: "QTYOrdered", render: function (data, type, row) { return thousandComma(data); } },
+                    { data: "QTYFulfilled", render: function (data, type, row) { return thousandComma(data); } },
+                    { data: "Price", render: function (data, type, row) { return thousandComma(data); }  },
+                    { data: "Discount", render: function (data, type, row) { return thousandComma(data); } },
+                    { data: "Credit", render: function (data, type, row) { return thousandComma(data); }  },
+                    { data: "DiscountedPrice", render: function (data, type, row) { return thousandComma(data); } },
+                    { data: "Subtotal", render: function (data, type, row) { return thousandComma(data); } }
+                ],
+                ajax: {
+                    traditional: true,
+                    method: "get",//或post，自由決定，影響到Server端用FormCollection取值或Request.QueryString取得DataTables傳遞的資訊
+                    url: "@Url.Action("SkuNumberList", "Ajax")",
+                    data: function (d) {
+                        var Skulist = $("#gebruikerId").val();
+                        d.Skulist = Skulist;
+                        $("#gebruikerId").val(null).trigger('change');
+                    }
+                },
+                serverSide: true,//啟用ServerSide模式
+                //deferLoading: 0, //初始化DataTable時，不發出ajax
+                orderMulti: false,
+                "paging": false,
+                "ordering": false,
+                "info": true,
+                "searching": false, "footerCallback": function (row, data, start, end, display) {
+                    var api = this.api(), data;
+
+                    // Remove the formatting to get integer data for summation
+                    var intVal = function (i) {
+                        return typeof i === 'string' ?
+                            i.replace(/[\$,]/g, '') * 1 :
+                            typeof i === 'number' ?
+                                i : 0;
+                    };
+                    //Total
+                    total = api.column(11).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    $('tr:eq(1) td:eq(2)', api.table().footer()).html(thousandComma(total));//Total
+                    //TotalDiscount
+                    TotalDiscount = 0;
+                    TotalDiscount5 = api.column(5).data();
+                    TotalDiscount8 = api.column(8).data();
+                    for (var i = 0; i < TotalDiscount5.length; i++) {
+                        TotalDiscount += intVal(TotalDiscount5[i]) * intVal(TotalDiscount8[i]);
+                    }
+                    $('tr:eq(2) td:eq(1)', api.table().footer()).html(thousandComma(TotalDiscount));//TotalDiscount
+                    //Tax:
+                    var TaxVal = $("#Tax").val();
+                    Tax = total - (total / (1 + TaxVal / 100));
+                    $('tr:eq(3) td:eq(1)', api.table().footer()).html(thousandComma(Tax));//TotalDiscount
+
+                    //Shipping Cost:
+                    ShippingCost = 0;
+                    $('tr:eq(4) td:eq(1)', api.table().footer()).html(thousandComma(ShippingCost));//Shipping Cost
+                    //Other:
+                    Other = 0;
+                    $('tr:eq(5) td:eq(1)', api.table().footer()).html(thousandComma(Other));
+                    //Grand Total:
+                    GrandTotal = total + ShippingCost + Other;
+                    $('tr:eq(6) td:eq(1)', api.table().footer()).html(thousandComma(GrandTotal));
+                    //Total Paid:
+                    TotalPaid = 0;
+                    $('tr:eq(7) td:eq(1)', api.table().footer()).html(thousandComma(TotalPaid));
+                    //Total Refunded:
+                    TotalRefunded = 0;
+                    $('tr:eq(8) td:eq(1)', api.table().footer()).html(thousandComma(TotalRefunded));
+                    //CM Credit:
+                    CMCredit = 0;
+                    $('tr:eq(9) td:eq(1)', api.table().footer()).html(thousandComma(CMCredit));
+                    //Balance:
+                    Balance = TotalPaid - GrandTotal + TotalRefunded + CMCredit;
+                    $('tr:eq(10) td:eq(1)', api.table().footer()).html(thousandComma(Balance));
+                }
+            });
+            $("#gebruikerId").select2({
+                minimumInputLength: 1,
+                placeholder: "Search",
+                allowClear: true,
+                multiple: true,
+                ajax: {
+                    url: "@Url.Action("SkuNumberGet", "Ajax")",
+                    dataType: 'json',
+                    delay: 0,
+                    data: function (term) {
+                        return {
+                            Search: term.term
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data.items
+                        };
+                    }
+                }
+            });
+            $("#addsku").click(function () {
+                DataGridC.draw();
+            });
+            $("#Tax").change(function () {
+                DataGridC.draw();
+            });
+            $("#addnote").click(function () {
+                $.ajax({
+                    traditional: true,
+                    type: "post",
+                    url: "@Url.Action("CreatNote")",
+                    data: {
+                        ID: "@Html.DisplayFor(x=>x.ID)",
+                        Note: $("#textnote").val()
+                    },
+                    success: function (data) {
+                        if (data.status) {
+                            $("#textnote").val("");
+                            $("#textnotelog li").remove();
+                            data.datalist.forEach(function (value) {
+                                //$("#textnotelog").append("<li>Appended item</li>");
+                                $("#textnotelog").append("<li>" + value.CreateBy + "： " + value.CreateAt + "</li>");
+                            });
+                        }
+                        else {
+                            alert(data.Errmsg);
+                        }
+                    }
+                });
+            });
+            $(tableID + ' tbody').on('click', 'td.details-control', function () {
+                var tr = $(this).closest('tr');
+                var row = DataGridC.row(tr);
+
+                if (row.child.isShown()) {
+                    // This row is already open - close it
+                    row.child.hide();
+                    tr.removeClass('shown');
+                }
+                else {
+                    // Open this row
+                    row.child(format(row.data())).show();
+                    tr.addClass('shown');
+                }
+            });
+        });
+        function format(d) {
+            // `d` is the original data object for the row
+            return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+                '<tr>' +
+                '<td>Full name:</td>' +
+                '<td>' + d.name + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Extension number:</td>' +
+                '<td>' + d.extn + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Extra info:</td>' +
+                '<td>And any further details here (images etc)...</td>' +
+                '</tr>' +
+                '</table>';
+        }
+    </script>
+}

@@ -1,0 +1,38 @@
+﻿@{ 
+    var menuList =(List<Menu>)Session["Menu"];
+    var AuthList = ((Dictionary<string, List<string>>)Session["Auth"]).Where(x => x.Value.Any()).Select(x => int.Parse(x.Key));
+    var IsManager= (bool)Session["IsManager"];
+}
+<aside id="left-panel">
+    <nav>
+        <ul>
+            @foreach (var menuItem in menuList.Where(x=> x.PrevID == null).OrderBy(x => x.Order))
+            {
+                <li class="">
+                    <a href="#">
+                        <span class="">@Html.TableLangName(menuItem.MenuLang)</span><br />
+                    </a>
+                    <ul>
+                        @foreach (var item in menuItem.MenuChild.OrderBy(x => x.Order))
+                        {
+                            if (IsManager || AuthList.Contains(item.MenuID))
+                            {
+                                var href = "#";
+                                if (!string.IsNullOrEmpty(item.Controller))
+                                {
+                                    href = Url.Action(item.Action, item.Controller);
+                                }
+                                <li>
+                                    <a href="@href">
+                                        <span class="">@Html.TableLangName(item.MenuLang)</span><br />
+                                    </a>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </li>
+            }
+        </ul>
+    </nav>
+    <span class="minifyme" data-action="minifyMenu" style=""> <i class="fa fa-arrow-circle-left hit"></i> </span>
+</aside>

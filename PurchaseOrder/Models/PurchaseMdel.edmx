@@ -1,0 +1,1071 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="PurchaseOrderModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CMCreditNote">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="bit" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PurchaseOrderID" Type="int" />
+          <Property Name="CompanyID" Type="int" />
+          <Property Name="VendorID" Type="int" />
+          <Property Name="InvoiceDate" Type="datetime" />
+          <Property Name="InvoiceNo" Type="nvarchar" MaxLength="20" />
+          <Property Name="CMStatus" Type="nvarchar" MaxLength="20" />
+          <Property Name="CMType" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="CMDate" Type="datetime" />
+          <Property Name="ShippingStatus" Type="nvarchar" MaxLength="20" />
+          <Property Name="ShippedDate" Type="datetime" />
+          <Property Name="Carrier" Type="nvarchar" MaxLength="20" />
+          <Property Name="Tracking" Type="nvarchar" MaxLength="20" />
+          <Property Name="CreditStatus" Type="nvarchar" MaxLength="20" />
+          <Property Name="CreditDate" Type="datetime" />
+          <Property Name="CreditAmount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreateAt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="UpdateAt" Type="datetime" />
+          <Property Name="ReceivedBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReceivedAt" Type="datetime" />
+        </EntityType>
+        <EntityType Name="CMReplacement">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="bit" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PurchaseOrderID" Type="int" />
+          <Property Name="CompanyID" Type="int" />
+          <Property Name="VendorID" Type="int" />
+          <Property Name="InvoiceDate" Type="datetime" />
+          <Property Name="InvoiceNo" Type="nvarchar" MaxLength="20" />
+          <Property Name="CMStatus" Type="nvarchar" MaxLength="20" />
+          <Property Name="CMType" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="ReplacementPO" Type="nvarchar" MaxLength="20" />
+          <Property Name="CMDate" Type="datetime" />
+          <Property Name="ShippingStatus" Type="nvarchar" MaxLength="20" />
+          <Property Name="ShippedDate" Type="datetime" />
+          <Property Name="Carrier" Type="nvarchar" MaxLength="20" />
+          <Property Name="Tracking" Type="nvarchar" MaxLength="20" />
+          <Property Name="CreditStatus" Type="nvarchar" MaxLength="20" />
+          <Property Name="CreditDate" Type="datetime" />
+          <Property Name="CreditAmount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreateAt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="UpdateAt" Type="datetime" />
+          <Property Name="ReceivedBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReceivedAt" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="bit" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ShandowSuffix" Type="nvarchar" MaxLength="10" />
+          <Property Name="ParentID" Type="int" />
+          <Property Name="RelateID" Type="int" />
+          <Property Name="eBayAccountID" Type="nvarchar" MaxLength="50" />
+          <Property Name="AmazonAccountID" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreateAt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="UpdateAt" Type="datetime" />
+          <Property Name="CompanyNo" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="PurchaseNote">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="bit" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PurchaseOrderID" Type="int" />
+          <Property Name="Note" Type="ntext" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreateAt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="UpdateAt" Type="datetime" />
+        </EntityType>
+        <EntityType Name="PurchaseOrder">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="bit" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyID" Type="int" />
+          <Property Name="VendorID" Type="int" />
+          <Property Name="POStatus" Type="nvarchar" MaxLength="20" />
+          <Property Name="POType" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="PODate" Type="datetime" />
+          <Property Name="ReceiveStatus" Type="nvarchar" MaxLength="20" />
+          <Property Name="ReceivedDate" Type="datetime" />
+          <Property Name="ShippedDate" Type="datetime" />
+          <Property Name="Carrier" Type="nvarchar" MaxLength="20" />
+          <Property Name="Tracking" Type="nvarchar" MaxLength="20" />
+          <Property Name="InvoiceDate" Type="datetime" />
+          <Property Name="InvoiceNo" Type="nvarchar" MaxLength="20" />
+          <Property Name="PaymentProof" Type="nvarchar(max)" />
+          <Property Name="PaymentStatus" Type="nvarchar" MaxLength="20" />
+          <Property Name="PaymentDate" Type="datetime" />
+          <Property Name="PaidAmount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Warehouse" Type="nvarchar" MaxLength="20" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="10" />
+          <Property Name="Tax" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreateAt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="UpdateAt" Type="datetime" />
+          <Property Name="ReceivedBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReceivedAt" Type="datetime" />
+        </EntityType>
+        <EntityType Name="PurchaseSKU">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="bit" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="200" />
+          <Property Name="PurchaseOrderID" Type="int" />
+          <Property Name="SkuNo" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="QTYOrdered" Type="int" />
+          <Property Name="QTYFulfilled" Type="int" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Discount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="DiscountedPrice" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ShippingCost" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Other" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="TotalRefunded" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreateAt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="UpdateAt" Type="datetime" />
+          <Property Name="ReceivedBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReceivedAt" Type="datetime" />
+          <Property Name="VendorSKU" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Credit" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="CMCreditNoteID" Type="int" />
+          <Property Name="CMReplacementID" Type="int" />
+          <Property Name="CreditQTY" Type="int" />
+          <Property Name="QTYReturned" Type="int" />
+          <Property Name="QTYReceived" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="SerialsLlist">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PurchaseSKUID" Type="int" />
+          <Property Name="SerialsNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="SerialsType" Type="int" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreateAt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="UpdateAt" Type="datetime" />
+          <Property Name="ReceivedBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReceivedAt" Type="datetime" />
+        </EntityType>
+        <EntityType Name="SKU">
+          <Key>
+            <PropertyRef Name="Sku" />
+          </Key>
+          <Property Name="IsEnable" Type="bit" Nullable="false" />
+          <Property Name="Sku" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Type" Type="tinyint" Nullable="false" />
+          <Property Name="ParentSku" Type="nvarchar" MaxLength="50" />
+          <Property Name="ParentKit" Type="nvarchar" MaxLength="50" />
+          <Property Name="Condition" Type="int" Nullable="false" />
+          <Property Name="Category" Type="int" Nullable="false" />
+          <Property Name="Brand" Type="int" Nullable="false" />
+          <Property Name="EAN" Type="nvarchar" MaxLength="50" />
+          <Property Name="UPC" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreateAt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="UpdateAt" Type="datetime" />
+        </EntityType>
+        <EntityType Name="SkuLang">
+          <Key>
+            <PropertyRef Name="Sku" />
+            <PropertyRef Name="LangID" />
+          </Key>
+          <Property Name="Sku" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LangID" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="200" />
+          <Property Name="Model" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreateAt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="UpdateAt" Type="datetime" />
+        </EntityType>
+        <EntityType Name="VendorLIst">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="bit" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VendorNo" Type="nvarchar" MaxLength="20" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Principal" Type="nvarchar" MaxLength="50" />
+          <Property Name="Address" Type="nvarchar" MaxLength="100" />
+          <Property Name="TEL" Type="nvarchar" MaxLength="20" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="20" />
+          <Property Name="Fax" Type="nvarchar" MaxLength="20" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreateAt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="UpdateAt" Type="datetime" />
+          <Property Name="DelBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="DelAt" Type="datetime" />
+        </EntityType>
+        <Association Name="FK_CMCreditNote_PurchaseOrder">
+          <End Role="PurchaseOrder" Type="Self.PurchaseOrder" Multiplicity="0..1" />
+          <End Role="CMCreditNote" Type="Self.CMCreditNote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseOrder">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CMCreditNote">
+              <PropertyRef Name="PurchaseOrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CMReplacement_PurchaseOrder">
+          <End Role="PurchaseOrder" Type="Self.PurchaseOrder" Multiplicity="0..1" />
+          <End Role="CMReplacement" Type="Self.CMReplacement" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseOrder">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CMReplacement">
+              <PropertyRef Name="PurchaseOrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PurchaseNote_PurchaseOrder">
+          <End Role="PurchaseOrder" Type="Self.PurchaseOrder" Multiplicity="0..1" />
+          <End Role="PurchaseNote" Type="Self.PurchaseNote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseOrder">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PurchaseNote">
+              <PropertyRef Name="PurchaseOrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PurchaseOrder_Company">
+          <End Role="Company" Type="Self.Company" Multiplicity="0..1" />
+          <End Role="PurchaseOrder" Type="Self.PurchaseOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PurchaseOrder">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PurchaseOrder_VendorLIst">
+          <End Role="VendorLIst" Type="Self.VendorLIst" Multiplicity="0..1" />
+          <End Role="PurchaseOrder" Type="Self.PurchaseOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="VendorLIst">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PurchaseOrder">
+              <PropertyRef Name="VendorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PurchaseSKU_CMCreditNote">
+          <End Role="CMCreditNote" Type="Self.CMCreditNote" Multiplicity="0..1" />
+          <End Role="PurchaseSKU" Type="Self.PurchaseSKU" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CMCreditNote">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PurchaseSKU">
+              <PropertyRef Name="CMCreditNoteID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PurchaseSKU_CMReplacement">
+          <End Role="CMReplacement" Type="Self.CMReplacement" Multiplicity="0..1" />
+          <End Role="PurchaseSKU" Type="Self.PurchaseSKU" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CMReplacement">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PurchaseSKU">
+              <PropertyRef Name="CMReplacementID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PurchaseSKU_PurchaseOrder">
+          <End Role="PurchaseOrder" Type="Self.PurchaseOrder" Multiplicity="0..1" />
+          <End Role="PurchaseSKU" Type="Self.PurchaseSKU" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseOrder">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PurchaseSKU">
+              <PropertyRef Name="PurchaseOrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SerialsLlist_PurchaseSKU">
+          <End Role="PurchaseSKU" Type="Self.PurchaseSKU" Multiplicity="0..1" />
+          <End Role="SerialsLlist" Type="Self.SerialsLlist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseSKU">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SerialsLlist">
+              <PropertyRef Name="PurchaseSKUID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SkuLang_Sku">
+          <End Role="SKU" Type="Self.SKU" Multiplicity="1" />
+          <End Role="SkuLang" Type="Self.SkuLang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SKU">
+              <PropertyRef Name="Sku" />
+            </Principal>
+            <Dependent Role="SkuLang">
+              <PropertyRef Name="Sku" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PurchaseOrderModelStoreContainer">
+          <EntitySet Name="CMCreditNote" EntityType="Self.CMCreditNote" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CMReplacement" EntityType="Self.CMReplacement" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Company" EntityType="Self.Company" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PurchaseNote" EntityType="Self.PurchaseNote" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PurchaseOrder" EntityType="Self.PurchaseOrder" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PurchaseSKU" EntityType="Self.PurchaseSKU" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SerialsLlist" EntityType="Self.SerialsLlist" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SKU" EntityType="Self.SKU" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SkuLang" EntityType="Self.SkuLang" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VendorLIst" EntityType="Self.VendorLIst" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_CMCreditNote_PurchaseOrder" Association="Self.FK_CMCreditNote_PurchaseOrder">
+            <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
+            <End Role="CMCreditNote" EntitySet="CMCreditNote" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CMReplacement_PurchaseOrder" Association="Self.FK_CMReplacement_PurchaseOrder">
+            <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
+            <End Role="CMReplacement" EntitySet="CMReplacement" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PurchaseNote_PurchaseOrder" Association="Self.FK_PurchaseNote_PurchaseOrder">
+            <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
+            <End Role="PurchaseNote" EntitySet="PurchaseNote" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PurchaseOrder_Company" Association="Self.FK_PurchaseOrder_Company">
+            <End Role="Company" EntitySet="Company" />
+            <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PurchaseOrder_VendorLIst" Association="Self.FK_PurchaseOrder_VendorLIst">
+            <End Role="VendorLIst" EntitySet="VendorLIst" />
+            <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PurchaseSKU_CMCreditNote" Association="Self.FK_PurchaseSKU_CMCreditNote">
+            <End Role="CMCreditNote" EntitySet="CMCreditNote" />
+            <End Role="PurchaseSKU" EntitySet="PurchaseSKU" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PurchaseSKU_CMReplacement" Association="Self.FK_PurchaseSKU_CMReplacement">
+            <End Role="CMReplacement" EntitySet="CMReplacement" />
+            <End Role="PurchaseSKU" EntitySet="PurchaseSKU" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PurchaseSKU_PurchaseOrder" Association="Self.FK_PurchaseSKU_PurchaseOrder">
+            <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
+            <End Role="PurchaseSKU" EntitySet="PurchaseSKU" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SerialsLlist_PurchaseSKU" Association="Self.FK_SerialsLlist_PurchaseSKU">
+            <End Role="PurchaseSKU" EntitySet="PurchaseSKU" />
+            <End Role="SerialsLlist" EntitySet="SerialsLlist" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SkuLang_Sku" Association="Self.FK_SkuLang_Sku">
+            <End Role="SKU" EntitySet="SKU" />
+            <End Role="SkuLang" EntitySet="SkuLang" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PurchaseOrderModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="PurchaseOrderEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="PurchaseOrder" EntityType="PurchaseOrderModel.PurchaseOrder" />
+          <EntitySet Name="Company" EntityType="PurchaseOrderModel.Company" />
+          <EntitySet Name="VendorLIst" EntityType="PurchaseOrderModel.VendorLIst" />
+          <AssociationSet Name="FK_PurchaseOrder_Company" Association="PurchaseOrderModel.FK_PurchaseOrder_Company">
+            <End Role="Company" EntitySet="Company" />
+            <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PurchaseOrder_VendorLIst" Association="PurchaseOrderModel.FK_PurchaseOrder_VendorLIst">
+            <End Role="VendorLIst" EntitySet="VendorLIst" />
+            <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
+          </AssociationSet>
+          <EntitySet Name="SerialsLlist" EntityType="PurchaseOrderModel.SerialsLlist" />
+          <EntitySet Name="SKU" EntityType="PurchaseOrderModel.SKU" />
+          <EntitySet Name="SkuLang" EntityType="PurchaseOrderModel.SkuLang" />
+          <AssociationSet Name="FK_SkuLang_Sku" Association="PurchaseOrderModel.FK_SkuLang_Sku">
+            <End Role="SKU" EntitySet="SKU" />
+            <End Role="SkuLang" EntitySet="SkuLang" />
+          </AssociationSet>
+          <EntitySet Name="PurchaseSKU" EntityType="PurchaseOrderModel.PurchaseSKU" />
+          <AssociationSet Name="FK_PurchaseSKU_PurchaseOrder" Association="PurchaseOrderModel.FK_PurchaseSKU_PurchaseOrder">
+            <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
+            <End Role="PurchaseSKU" EntitySet="PurchaseSKU" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SerialsLlist_PurchaseSKU" Association="PurchaseOrderModel.FK_SerialsLlist_PurchaseSKU">
+            <End Role="PurchaseSKU" EntitySet="PurchaseSKU" />
+            <End Role="SerialsLlist" EntitySet="SerialsLlist" />
+          </AssociationSet>
+          <EntitySet Name="PurchaseNote" EntityType="PurchaseOrderModel.PurchaseNote" />
+          <AssociationSet Name="FK_PurchaseNote_PurchaseOrder" Association="PurchaseOrderModel.FK_PurchaseNote_PurchaseOrder">
+            <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
+            <End Role="PurchaseNote" EntitySet="PurchaseNote" />
+          </AssociationSet>
+          <EntitySet Name="CMCreditNote" EntityType="PurchaseOrderModel.CMCreditNote" />
+          <AssociationSet Name="FK_CMCreditNote_PurchaseOrder" Association="PurchaseOrderModel.FK_CMCreditNote_PurchaseOrder">
+            <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
+            <End Role="CMCreditNote" EntitySet="CMCreditNote" />
+          </AssociationSet>
+          <EntitySet Name="CMReplacement" EntityType="PurchaseOrderModel.CMReplacement" />
+          <AssociationSet Name="FK_PurchaseSKU_CMCreditNote" Association="PurchaseOrderModel.FK_PurchaseSKU_CMCreditNote">
+            <End Role="CMCreditNote" EntitySet="CMCreditNote" />
+            <End Role="PurchaseSKU" EntitySet="PurchaseSKU" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CMReplacement_PurchaseOrder" Association="PurchaseOrderModel.FK_CMReplacement_PurchaseOrder">
+            <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
+            <End Role="CMReplacement" EntitySet="CMReplacement" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PurchaseSKU_CMReplacement" Association="PurchaseOrderModel.FK_PurchaseSKU_CMReplacement">
+            <End Role="CMReplacement" EntitySet="CMReplacement" />
+            <End Role="PurchaseSKU" EntitySet="PurchaseSKU" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="PurchaseOrder">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyID" Type="Int32" />
+          <Property Name="VendorID" Type="Int32" />
+          <Property Name="POType" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="PODate" Type="DateTime" Precision="3" />
+          <Property Name="ReceiveStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ReceivedDate" Type="DateTime" Precision="3" />
+          <Property Name="ShippedDate" Type="DateTime" Precision="3" />
+          <Property Name="Carrier" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Tracking" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="PaymentStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="PaymentDate" Type="DateTime" Precision="3" />
+          <Property Name="PaidAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <Property Name="ReceivedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReceivedAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Company" Relationship="PurchaseOrderModel.FK_PurchaseOrder_Company" FromRole="PurchaseOrder" ToRole="Company" />
+          <NavigationProperty Name="VendorLIst" Relationship="PurchaseOrderModel.FK_PurchaseOrder_VendorLIst" FromRole="PurchaseOrder" ToRole="VendorLIst" />
+          <Property Name="POStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="InvoiceDate" Type="DateTime" Precision="3" />
+          <Property Name="InvoiceNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="PaymentProof" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Warehouse" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Currency" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Tax" Type="Decimal" Precision="18" Scale="2" />
+          <NavigationProperty Name="PurchaseSKU" Relationship="PurchaseOrderModel.FK_PurchaseSKU_PurchaseOrder" FromRole="PurchaseOrder" ToRole="PurchaseSKU" />
+          <NavigationProperty Name="PurchaseNote" Relationship="PurchaseOrderModel.FK_PurchaseNote_PurchaseOrder" FromRole="PurchaseOrder" ToRole="PurchaseNote" />
+          <NavigationProperty Name="CMCreditNote" Relationship="PurchaseOrderModel.FK_CMCreditNote_PurchaseOrder" FromRole="PurchaseOrder" ToRole="CMCreditNote" />
+          <NavigationProperty Name="CMReplacement" Relationship="PurchaseOrderModel.FK_CMReplacement_PurchaseOrder" FromRole="PurchaseOrder" ToRole="CMReplacement" />
+        </EntityType>
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ShandowSuffix" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="ParentID" Type="Int32" />
+          <Property Name="RelateID" Type="Int32" />
+          <Property Name="eBayAccountID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AmazonAccountID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <Property Name="CompanyNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PurchaseOrder" Relationship="PurchaseOrderModel.FK_PurchaseOrder_Company" FromRole="Company" ToRole="PurchaseOrder" />
+        </EntityType>
+        <EntityType Name="VendorLIst">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VendorNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Principal" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="TEL" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Fax" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <Property Name="DelBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DelAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="PurchaseOrder" Relationship="PurchaseOrderModel.FK_PurchaseOrder_VendorLIst" FromRole="VendorLIst" ToRole="PurchaseOrder" />
+        </EntityType>
+        <Association Name="FK_PurchaseOrder_Company">
+          <End Type="PurchaseOrderModel.Company" Role="Company" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.PurchaseOrder" Role="PurchaseOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PurchaseOrder">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PurchaseOrder_VendorLIst">
+          <End Type="PurchaseOrderModel.VendorLIst" Role="VendorLIst" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.PurchaseOrder" Role="PurchaseOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="VendorLIst">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PurchaseOrder">
+              <PropertyRef Name="VendorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="SerialsLlist">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PurchaseSKUID" Type="Int32" />
+          <Property Name="SerialsNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SerialsType" Type="Int32" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <Property Name="ReceivedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReceivedAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="PurchaseSKU" Relationship="PurchaseOrderModel.FK_SerialsLlist_PurchaseSKU" FromRole="SerialsLlist" ToRole="PurchaseSKU" />
+        </EntityType>
+        <EntityType Name="SKU">
+          <Key>
+            <PropertyRef Name="Sku1" />
+          </Key>
+          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
+          <Property Name="Sku1" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="Byte" Nullable="false" />
+          <Property Name="ParentSku" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ParentKit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Condition" Type="Int32" Nullable="false" />
+          <Property Name="Category" Type="Int32" Nullable="false" />
+          <Property Name="Brand" Type="Int32" Nullable="false" />
+          <Property Name="EAN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UPC" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="SkuLang" Relationship="PurchaseOrderModel.FK_SkuLang_Sku" FromRole="SKU" ToRole="SkuLang" />
+        </EntityType>
+        <EntityType Name="SkuLang">
+          <Key>
+            <PropertyRef Name="Sku" />
+            <PropertyRef Name="LangID" />
+          </Key>
+          <Property Name="Sku" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LangID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Model" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="SKU1" Relationship="PurchaseOrderModel.FK_SkuLang_Sku" FromRole="SkuLang" ToRole="SKU" />
+        </EntityType>
+        <Association Name="FK_SkuLang_Sku">
+          <End Type="PurchaseOrderModel.SKU" Role="SKU" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.SkuLang" Role="SkuLang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SKU">
+              <PropertyRef Name="Sku1" />
+            </Principal>
+            <Dependent Role="SkuLang">
+              <PropertyRef Name="Sku" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="PurchaseSKU">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PurchaseOrderID" Type="Int32" />
+          <Property Name="SkuNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="QTYOrdered" Type="Int32" />
+          <Property Name="QTYFulfilled" Type="Int32" />
+          <Property Name="Price" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Discount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="DiscountedPrice" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ShippingCost" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Other" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="TotalRefunded" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <Property Name="ReceivedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReceivedAt" Type="DateTime" Precision="3" />
+          <Property Name="VendorSKU" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PurchaseOrder" Relationship="PurchaseOrderModel.FK_PurchaseSKU_PurchaseOrder" FromRole="PurchaseSKU" ToRole="PurchaseOrder" />
+          <NavigationProperty Name="SerialsLlist" Relationship="PurchaseOrderModel.FK_SerialsLlist_PurchaseSKU" FromRole="PurchaseSKU" ToRole="SerialsLlist" />
+          <Property Name="Credit" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="CMCreditNoteID" Type="Int32" />
+          <Property Name="CMReplacementID" Type="Int32" />
+          <NavigationProperty Name="CMCreditNote" Relationship="PurchaseOrderModel.FK_PurchaseSKU_CMCreditNote" FromRole="PurchaseSKU" ToRole="CMCreditNote" />
+          <NavigationProperty Name="CMReplacement" Relationship="PurchaseOrderModel.FK_PurchaseSKU_CMReplacement" FromRole="PurchaseSKU" ToRole="CMReplacement" />
+          <Property Name="CreditQTY" Type="Int32" />
+          <Property Name="QTYReturned" Type="Int32" />
+          <Property Name="QTYReceived" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_PurchaseSKU_PurchaseOrder">
+          <End Type="PurchaseOrderModel.PurchaseOrder" Role="PurchaseOrder" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.PurchaseSKU" Role="PurchaseSKU" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseOrder">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PurchaseSKU">
+              <PropertyRef Name="PurchaseOrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SerialsLlist_PurchaseSKU">
+          <End Type="PurchaseOrderModel.PurchaseSKU" Role="PurchaseSKU" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.SerialsLlist" Role="SerialsLlist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseSKU">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SerialsLlist">
+              <PropertyRef Name="PurchaseSKUID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="PurchaseNote">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PurchaseOrderID" Type="Int32" />
+          <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="PurchaseOrder" Relationship="PurchaseOrderModel.FK_PurchaseNote_PurchaseOrder" FromRole="PurchaseNote" ToRole="PurchaseOrder" />
+        </EntityType>
+        <Association Name="FK_PurchaseNote_PurchaseOrder">
+          <End Type="PurchaseOrderModel.PurchaseOrder" Role="PurchaseOrder" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.PurchaseNote" Role="PurchaseNote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseOrder">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PurchaseNote">
+              <PropertyRef Name="PurchaseOrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="CMCreditNote">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PurchaseOrderID" Type="Int32" />
+          <Property Name="CompanyID" Type="Int32" />
+          <Property Name="VendorID" Type="Int32" />
+          <Property Name="InvoiceDate" Type="DateTime" Precision="3" />
+          <Property Name="InvoiceNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CMStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CMType" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CMDate" Type="DateTime" Precision="3" />
+          <Property Name="ShippingStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ShippedDate" Type="DateTime" Precision="3" />
+          <Property Name="Carrier" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Tracking" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CreditStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CreditDate" Type="DateTime" Precision="3" />
+          <Property Name="CreditAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <Property Name="ReceivedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReceivedAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="PurchaseOrder" Relationship="PurchaseOrderModel.FK_CMCreditNote_PurchaseOrder" FromRole="CMCreditNote" ToRole="PurchaseOrder" />
+          <NavigationProperty Name="PurchaseSKU" Relationship="PurchaseOrderModel.FK_PurchaseSKU_CMCreditNote" FromRole="CMCreditNote" ToRole="PurchaseSKU" />
+        </EntityType>
+        <Association Name="FK_CMCreditNote_PurchaseOrder">
+          <End Type="PurchaseOrderModel.PurchaseOrder" Role="PurchaseOrder" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.CMCreditNote" Role="CMCreditNote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseOrder">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CMCreditNote">
+              <PropertyRef Name="PurchaseOrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="CMReplacement">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PurchaseOrderID" Type="Int32" />
+          <Property Name="CompanyID" Type="Int32" />
+          <Property Name="VendorID" Type="Int32" />
+          <Property Name="InvoiceDate" Type="DateTime" Precision="3" />
+          <Property Name="InvoiceNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CMStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CMType" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ReplacementPO" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CMDate" Type="DateTime" Precision="3" />
+          <Property Name="ShippingStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ShippedDate" Type="DateTime" Precision="3" />
+          <Property Name="Carrier" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Tracking" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CreditStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CreditDate" Type="DateTime" Precision="3" />
+          <Property Name="CreditAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <Property Name="ReceivedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReceivedAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="PurchaseOrder" Relationship="PurchaseOrderModel.FK_CMReplacement_PurchaseOrder" FromRole="CMReplacement" ToRole="PurchaseOrder" />
+          <NavigationProperty Name="PurchaseSKU" Relationship="PurchaseOrderModel.FK_PurchaseSKU_CMReplacement" FromRole="CMReplacement" ToRole="PurchaseSKU" />
+        </EntityType>
+        <Association Name="FK_PurchaseSKU_CMCreditNote">
+          <End Type="PurchaseOrderModel.CMCreditNote" Role="CMCreditNote" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.PurchaseSKU" Role="PurchaseSKU" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CMCreditNote">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PurchaseSKU">
+              <PropertyRef Name="CMCreditNoteID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CMReplacement_PurchaseOrder">
+          <End Type="PurchaseOrderModel.PurchaseOrder" Role="PurchaseOrder" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.CMReplacement" Role="CMReplacement" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseOrder">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CMReplacement">
+              <PropertyRef Name="PurchaseOrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PurchaseSKU_CMReplacement">
+          <End Type="PurchaseOrderModel.CMReplacement" Role="CMReplacement" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.PurchaseSKU" Role="PurchaseSKU" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CMReplacement">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PurchaseSKU">
+              <PropertyRef Name="CMReplacementID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PurchaseOrderModelStoreContainer" CdmEntityContainer="PurchaseOrderEntities">
+          <EntitySetMapping Name="PurchaseOrder">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.PurchaseOrder">
+              <MappingFragment StoreEntitySet="PurchaseOrder">
+                <ScalarProperty Name="Tax" ColumnName="Tax" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Warehouse" ColumnName="Warehouse" />
+                <ScalarProperty Name="PaymentProof" ColumnName="PaymentProof" />
+                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+                <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
+                <ScalarProperty Name="POStatus" ColumnName="POStatus" />
+                <ScalarProperty Name="ReceivedAt" ColumnName="ReceivedAt" />
+                <ScalarProperty Name="ReceivedBy" ColumnName="ReceivedBy" />
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="PaidAmount" ColumnName="PaidAmount" />
+                <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+                <ScalarProperty Name="PaymentStatus" ColumnName="PaymentStatus" />
+                <ScalarProperty Name="Tracking" ColumnName="Tracking" />
+                <ScalarProperty Name="Carrier" ColumnName="Carrier" />
+                <ScalarProperty Name="ShippedDate" ColumnName="ShippedDate" />
+                <ScalarProperty Name="ReceivedDate" ColumnName="ReceivedDate" />
+                <ScalarProperty Name="ReceiveStatus" ColumnName="ReceiveStatus" />
+                <ScalarProperty Name="PODate" ColumnName="PODate" />
+                <ScalarProperty Name="POType" ColumnName="POType" />
+                <ScalarProperty Name="VendorID" ColumnName="VendorID" />
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Company">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.Company">
+              <MappingFragment StoreEntitySet="Company">
+                <ScalarProperty Name="CompanyNo" ColumnName="CompanyNo" />
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="AmazonAccountID" ColumnName="AmazonAccountID" />
+                <ScalarProperty Name="eBayAccountID" ColumnName="eBayAccountID" />
+                <ScalarProperty Name="RelateID" ColumnName="RelateID" />
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="ShandowSuffix" ColumnName="ShandowSuffix" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VendorLIst">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.VendorLIst">
+              <MappingFragment StoreEntitySet="VendorLIst">
+                <ScalarProperty Name="DelAt" ColumnName="DelAt" />
+                <ScalarProperty Name="DelBy" ColumnName="DelBy" />
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="TEL" ColumnName="TEL" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Principal" ColumnName="Principal" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="VendorNo" ColumnName="VendorNo" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SerialsLlist">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.SerialsLlist">
+              <MappingFragment StoreEntitySet="SerialsLlist">
+                <ScalarProperty Name="ReceivedAt" ColumnName="ReceivedAt" />
+                <ScalarProperty Name="ReceivedBy" ColumnName="ReceivedBy" />
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="SerialsType" ColumnName="SerialsType" />
+                <ScalarProperty Name="SerialsNo" ColumnName="SerialsNo" />
+                <ScalarProperty Name="PurchaseSKUID" ColumnName="PurchaseSKUID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SKU">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.SKU">
+              <MappingFragment StoreEntitySet="SKU">
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="UPC" ColumnName="UPC" />
+                <ScalarProperty Name="EAN" ColumnName="EAN" />
+                <ScalarProperty Name="Brand" ColumnName="Brand" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="Condition" ColumnName="Condition" />
+                <ScalarProperty Name="ParentKit" ColumnName="ParentKit" />
+                <ScalarProperty Name="ParentSku" ColumnName="ParentSku" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Sku1" ColumnName="Sku" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SkuLang">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.SkuLang">
+              <MappingFragment StoreEntitySet="SkuLang">
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="LangID" ColumnName="LangID" />
+                <ScalarProperty Name="Sku" ColumnName="Sku" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PurchaseSKU">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.PurchaseSKU">
+              <MappingFragment StoreEntitySet="PurchaseSKU">
+                <ScalarProperty Name="QTYReceived" ColumnName="QTYReceived" />
+                <ScalarProperty Name="QTYReturned" ColumnName="QTYReturned" />
+                <ScalarProperty Name="CreditQTY" ColumnName="CreditQTY" />
+                <ScalarProperty Name="CMReplacementID" ColumnName="CMReplacementID" />
+                <ScalarProperty Name="CMCreditNoteID" ColumnName="CMCreditNoteID" />
+                <ScalarProperty Name="Credit" ColumnName="Credit" />
+                <ScalarProperty Name="VendorSKU" ColumnName="VendorSKU" />
+                <ScalarProperty Name="ReceivedAt" ColumnName="ReceivedAt" />
+                <ScalarProperty Name="ReceivedBy" ColumnName="ReceivedBy" />
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="TotalRefunded" ColumnName="TotalRefunded" />
+                <ScalarProperty Name="Other" ColumnName="Other" />
+                <ScalarProperty Name="ShippingCost" ColumnName="ShippingCost" />
+                <ScalarProperty Name="DiscountedPrice" ColumnName="DiscountedPrice" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="QTYFulfilled" ColumnName="QTYFulfilled" />
+                <ScalarProperty Name="QTYOrdered" ColumnName="QTYOrdered" />
+                <ScalarProperty Name="SkuNo" ColumnName="SkuNo" />
+                <ScalarProperty Name="PurchaseOrderID" ColumnName="PurchaseOrderID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PurchaseNote">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.PurchaseNote">
+              <MappingFragment StoreEntitySet="PurchaseNote">
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="PurchaseOrderID" ColumnName="PurchaseOrderID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CMCreditNote">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.CMCreditNote">
+              <MappingFragment StoreEntitySet="CMCreditNote">
+                <ScalarProperty Name="ReceivedAt" ColumnName="ReceivedAt" />
+                <ScalarProperty Name="ReceivedBy" ColumnName="ReceivedBy" />
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="CreditAmount" ColumnName="CreditAmount" />
+                <ScalarProperty Name="CreditDate" ColumnName="CreditDate" />
+                <ScalarProperty Name="CreditStatus" ColumnName="CreditStatus" />
+                <ScalarProperty Name="Tracking" ColumnName="Tracking" />
+                <ScalarProperty Name="Carrier" ColumnName="Carrier" />
+                <ScalarProperty Name="ShippedDate" ColumnName="ShippedDate" />
+                <ScalarProperty Name="ShippingStatus" ColumnName="ShippingStatus" />
+                <ScalarProperty Name="CMDate" ColumnName="CMDate" />
+                <ScalarProperty Name="CMType" ColumnName="CMType" />
+                <ScalarProperty Name="CMStatus" ColumnName="CMStatus" />
+                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+                <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
+                <ScalarProperty Name="VendorID" ColumnName="VendorID" />
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+                <ScalarProperty Name="PurchaseOrderID" ColumnName="PurchaseOrderID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CMReplacement">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.CMReplacement">
+              <MappingFragment StoreEntitySet="CMReplacement">
+                <ScalarProperty Name="ReceivedAt" ColumnName="ReceivedAt" />
+                <ScalarProperty Name="ReceivedBy" ColumnName="ReceivedBy" />
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="CreditAmount" ColumnName="CreditAmount" />
+                <ScalarProperty Name="CreditDate" ColumnName="CreditDate" />
+                <ScalarProperty Name="CreditStatus" ColumnName="CreditStatus" />
+                <ScalarProperty Name="Tracking" ColumnName="Tracking" />
+                <ScalarProperty Name="Carrier" ColumnName="Carrier" />
+                <ScalarProperty Name="ShippedDate" ColumnName="ShippedDate" />
+                <ScalarProperty Name="ShippingStatus" ColumnName="ShippingStatus" />
+                <ScalarProperty Name="CMDate" ColumnName="CMDate" />
+                <ScalarProperty Name="ReplacementPO" ColumnName="ReplacementPO" />
+                <ScalarProperty Name="CMType" ColumnName="CMType" />
+                <ScalarProperty Name="CMStatus" ColumnName="CMStatus" />
+                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+                <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
+                <ScalarProperty Name="VendorID" ColumnName="VendorID" />
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+                <ScalarProperty Name="PurchaseOrderID" ColumnName="PurchaseOrderID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="無" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
