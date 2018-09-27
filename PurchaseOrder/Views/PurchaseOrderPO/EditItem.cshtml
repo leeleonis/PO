@@ -27,7 +27,7 @@
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
 
-                        <h2>新增</h2>
+                        <h2>@ViewBag.title</h2>
                         <ul class="nav nav-tabs pull-right">
                             <li><a data-toggle="tab" href="#hb1">@ViewBag.title</a></li>
                         </ul>
@@ -208,7 +208,7 @@
                                                                 <th>Vendor SKU</th>
                                                                 <th>Name</th>
                                                                 <th>QTY Ordered</th>
-                                                                <th>QTY Fulfilled</th>
+                                                                <th>QTY Received</th>
                                                                 <th>Price</th>
                                                                 <th>Discount</th>
                                                                 <th>Credit</th>
@@ -302,25 +302,13 @@
 </div>
 @section pagespecific {
     <script type="text/javascript">
-        var thousandComma = function (number) {
-            if (number != null) {
-                var num = number.toFixed(2).toString();
-                var pattern = /(-?\d+)(\d{3})/;
-                while (pattern.test(num)) {
-                    num = num.replace(pattern, "$1,$2");
-                }
-                return num;
-            }
-            else {
-                return number;
-            }
-        }
         var hash = window.location.hash;
         $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
         $('.tab-pane').eq(hash.substr(1)).addClass('active');
         var tableID = "#DataGridC";
+        var DataGridC;
         $(document).ready(function () {
-            var DataGridC = $(tableID).DataTable({
+             DataGridC = $(tableID).DataTable({
                 fixedHeader: {
                     header: true,
                     footer: true
@@ -348,9 +336,9 @@
                     { data: "Name" },
                     { data: "QTYOrdered", render: function (data, type, row) { return thousandComma(data); } },
                     { data: "QTYFulfilled", render: function (data, type, row) { return thousandComma(data); } },
-                    { data: "Price", render: function (data, type, row) { return thousandComma(data); }  },
-                    { data: "Discount", render: function (data, type, row) { return thousandComma(data); } },
-                    { data: "Credit", render: function (data, type, row) { return thousandComma(data); }  },
+                    { data: "Price", render: function (data, type, row) { return '<input class="form-control" type="text" onchange="Calculation(this,\'Price\',\'' + row.SKU + '\',' + data + ',' + row.ID + ')"  value = ' + thousandComma(data) + ' > '; }  },
+                    { data: "Discount", render: function (data, type, row) { return '<input class="form-control" type="text" onchange="Calculation(this,\'Discount\',\'' + row.SKU + '\',' + data + ',' + row.ID + ')"  value = ' + thousandComma(data) + '  > '; } },
+                    { data: "Credit", render: function (data, type, row) { return '<input class="form-control" type="text" onchange="Calculation(this,\'Credit\',\'' + row.SKU + '\',' + data + ',' + row.ID + ')"  value = ' + thousandComma(data) + '  > '; }  },
                     { data: "DiscountedPrice", render: function (data, type, row) { return thousandComma(data); } },
                     { data: "Subtotal", render: function (data, type, row) { return thousandComma(data); } }
                 ],
@@ -486,6 +474,28 @@
                 }
             });
         });
+        function Calculation(x, type, SKU, oval,ID) {
+            $.ajax({
+                type: "post",
+                url: "@Url.Action("SkuNumberListEdit", "Ajax")",
+                data: {
+                    SKU: SKU,
+                    type: type,
+                    oval: oval,
+                    val: $(x).val(),
+                    ID: ID
+                },
+                success: function (data) {
+                    if (data.status) {
+                        DataGridC.draw();
+                    }
+                    else {
+                        alert(data.Errmsg);
+                    }
+                }
+            });
+           
+        }
         function format(d) {
             // `d` is the original data object for the row
             return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +

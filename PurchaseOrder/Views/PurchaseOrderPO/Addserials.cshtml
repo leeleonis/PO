@@ -1,0 +1,109 @@
+﻿@model PurchaseSKU
+@{
+    ViewBag.title = "Add Serials";
+}
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-xs-12">
+                <div class="jarviswidget" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+
+                        <h2>新增</h2>
+                        <ul class="nav nav-tabs pull-right">
+                            <li><a data-toggle="tab" href="#hb1">@ViewBag.title</a></li>
+                        </ul>
+                    </header>
+                    <div>
+                        <div class="widget-body no-padding">
+                            <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="IsEnable" value="True">
+                                <div id="content" class="tab-content">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="tab-pane" id="hb1">
+                                        <fieldset>
+                                            <legend>@ViewBag.title</legend>
+                                            <div class="form-group">
+                                                @Html.Label("PO #:", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.EditorFor(x=>Model.PurchaseOrder.ID, new { htmlAttributes = new { @class = "form-control",@readonly= "readonly" } })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.Label("SKU:", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.EditorFor(x=>Model.SkuNo, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.Label("UPC/EAN:", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("UPCEAN", new { htmlAttributes = new { @class = "form-control" } })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.Label("Received Date:", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("ReceivedDate", new { htmlAttributes = new { @class = "form-control" } })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.Label("QTY Received:", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.EditorFor(x => Model.QTYReceived, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset>
+                                            <legend>
+                                            </legend>
+                                            <div class="row">
+                                                <article class="col-xs-12">
+                                                    <div class="form-group">
+                                                        @Html.Label("Serial:", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                        <div class="col-sm-9 col-lg-2">
+                                                            @Html.Editor("Serial", new { htmlAttributes = new { @class = "form-control" } })
+                                                        </div>
+                                                    </div>
+                                                    <label>Serial # ( <label id="Serialcount">@Model.SerialsLlist.Count()</label> /50)</label>
+                                                    <ul style="list-style-type:none;list-style-position: inside;padding-left: 0px;padding-left: 0px;" id="SerialList"></ul>
+                                                </article>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                                <div class="widget-footer">
+                                    <button type="submit" class="btn btn-primary" id="save">儲存</button>
+                                    <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index")'">返回</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section pagespecific {
+    <script type="text/javascript">
+        var hash = window.location.hash;
+        $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
+        $('.tab-pane').eq(hash.substr(1)).addClass('active');
+        $(document).ready(function () {
+            $("#Serial").keypress(function (e) {
+                code = e.keyCode ? e.keyCode : e.which;
+                if (code == 13) {
+                    e.preventDefault();
+                    $("#SerialList").prepend("<li>" + $(this).val() + "</li>");
+                    $("#Serialcount").text($("#SerialList li").length);
+                    $(this).val("");
+                }
+            });
+        });
+
+
+        
+    </script>
+}

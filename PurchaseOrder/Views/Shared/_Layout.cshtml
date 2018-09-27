@@ -69,6 +69,24 @@
     @RenderSection("scripts", required: false)
     @*@MiniProfiler.RenderIncludes()*@
     <script type="text/javascript">
+        var thousandComma = function (number) {
+            if (number != null) {
+                if (!isNaN(number)) {
+                    var num = number.toFixed(2).toString();
+                    var pattern = /(-?\d+)(\d{3})/;
+                    while (pattern.test(num)) {
+                        num = num.replace(pattern, "$1,$2");
+                    }
+                    return num;
+                } else {
+                    return number;
+                }
+               
+            }
+            else {
+                return "";
+            }
+        }
         var oTable;
         $(document).ready(function () {
             $("form").makeValidationInline();

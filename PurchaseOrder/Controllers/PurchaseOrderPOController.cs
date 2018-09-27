@@ -199,6 +199,7 @@ namespace PurchaseOrderSys.Controllers
 
             var dataList = PurchaseOrder.PurchaseSKU.Select(x => new PoSKUVM
             {
+                ID = x.ID,
                 ck = x.SkuNo,
                 sk = x.SkuNo,
                 Name = x.Name,
@@ -218,6 +219,7 @@ namespace PurchaseOrderSys.Controllers
         [HttpPost]
         public ActionResult EditItem(PurchaseOrderPOVM filter)
         {
+            var dt = DateTime.UtcNow;
             var PurchaseOrder = db.PurchaseOrder.Find(filter.ID);
 
             PurchaseOrder.CompanyID = filter.CompanyID;
@@ -226,13 +228,14 @@ namespace PurchaseOrderSys.Controllers
             PurchaseOrder.POStatus = filter.POStatus;
             PurchaseOrder.POType = filter.POType;
             PurchaseOrder.UpdateBy = UserBy;
-            PurchaseOrder.UpdateAt = DateTime.UtcNow; ;
+            PurchaseOrder.UpdateAt = dt;
 
             var dataList = (List<PoSKUVM>)Session["SkuNumberList"];
             if (dataList != null)
             {
                 var PurchaseSKUlist = dataList.Select(x => new PurchaseSKU
                 {
+                    ID=x.ID.Value,
                     IsEnable = true,
                     Name = x.Name,
                     SkuNo = x.SKU,
@@ -243,23 +246,46 @@ namespace PurchaseOrderSys.Controllers
                     Discount = x.Discount,
                     DiscountedPrice = x.DiscountedPrice,
                     Credit = x.Credit,
-                    CreateBy = UserBy,
-                    CreateAt = DateTime.UtcNow
                 });
                 foreach (var item in PurchaseSKUlist)
                 {
-                    PurchaseOrder.PurchaseSKU.Add(item);
+                    foreach (var SKUitem in PurchaseOrder.PurchaseSKU.Where(x => x.ID == item.ID))
+                    {
+                        if (SKUitem.Price != item.Price)
+                        {
+                            SKUitem.Price = item.Price;
+                            SKUitem.UpdateBy = UserBy;
+                            SKUitem.UpdateAt = dt;
+                        }
+                        if (SKUitem.Discount != item.Discount)
+                        {
+                            SKUitem.Discount = item.Discount;
+                            SKUitem.UpdateBy = UserBy;
+                            SKUitem.UpdateAt = dt;
+                        }
+                        if (SKUitem.Credit != item.Credit)
+                        {
+                            SKUitem.Credit = item.Credit;
+                            SKUitem.UpdateBy = UserBy;
+                            SKUitem.UpdateAt = dt;
+                        }
+                    }
                 }
             }
-
+            db.SaveChanges();
             return RedirectToAction("Index");
         }
 
         public ActionResult ReceiveItems(int ID)
         {
+            ViewBag.ID= ID;
             return View();
         }
-        
+        public ActionResult Addserials(int ID)
+        {
+            var PurchaseSKU = db.PurchaseSKU.Find(ID);
+            return View(PurchaseSKU);
+        }
         [HttpPost]
         public ActionResult CreatNote(int? ID, string Note)
         {

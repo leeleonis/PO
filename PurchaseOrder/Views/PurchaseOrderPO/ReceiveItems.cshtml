@@ -1,7 +1,248 @@
-﻿
+﻿@model PurchaseOrder
 @{
-    ViewBag.Title = "ReceiveItems";
+    ViewBag.title = "Receiving";
+    var dtval = DateTime.UtcNow.ToString("yyyy/MM/dd");
+    var POTypeDDL = EnumData.POTypeDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var POStatusDDL = EnumData.POStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var VendorDDL = EnumData.VendorDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var CompanyDDL = EnumData.CompanyDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var ReceiveStatusDDL = EnumData.ReceiveStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var PaymentStatusDDL = EnumData.PaymentStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+
+    var DefaultSelect = PurchaseOrderSys.App_GlobalResources.Resource.DefaultSelect;
+
+    if (Model != null)
+    {
+        if (Model.PODate.HasValue)
+        {
+            dtval = Model.PODate.Value.ToString("yyyy/MM/dd");
+        }
+    }
 }
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-xs-12">
+                <div class="jarviswidget" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
 
-<h2>ReceiveItems</h2>
+                        <h2>新增</h2>
+                        <ul class="nav nav-tabs pull-right">
+                            <li><a data-toggle="tab" href="#hb1">@ViewBag.title</a></li>
+                        </ul>
+                    </header>
+                    <div>
+                        <div class="widget-body no-padding">
+                            <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="IsEnable" value="True">
+                                <div id="content" class="tab-content">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="tab-pane" id="hb1">
+                                        <fieldset>
+                                            <legend>@ViewBag.title</legend>
+                                            <div class="form-group">
+                                                @Html.Label("PO #:", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.EditorFor(model => model.ID, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control", @readonly = "readonly" } } })
+                                                    @Html.ValidationMessageFor(model => model.ID, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.POType, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownListFor(model => model.POType, POTypeDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(model => model.POType, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.InvoiceNo, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.EditorFor(model => model.InvoiceNo, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " } } })
+                                                    @Html.ValidationMessageFor(model => model.InvoiceNo, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.InvoiceNo, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("VendorInvoice", new { htmlAttributes = new { @class = "form-control" } })
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset>
+                                            <legend></legend>
+                                            <div class="row">
+                                                <article class="col-xs-12">
+                                                    <table id="DataGridC" class="table table-bordered table-striped text-center dataTable no-footer">
+                                                        <thead>
+                                                            <tr>
+                                                                <th></th>
+                                                                <th>SKU</th>
+                                                                <th>Name</th>
+                                                                <th>UPC/EAN</th>
+                                                                <th>QTY Ordered</th>
+                                                                <th>QTY Received</th>
+                                                                <th>Serial</th>
+                                                                <th>Serial QTY</th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </article>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                                <div class="widget-footer">
+                                    <button type="submit" class="btn btn-primary" id="save">儲存</button>
+                                    <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index")'">返回</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section pagespecific {
+    <script type="text/javascript">
+        var hash = window.location.hash;
+        $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
+        $('.tab-pane').eq(hash.substr(1)).addClass('active');
+        var tableID = "#DataGridC";
+        $(document).ready(function () {
+            var DataGridC = $(tableID).DataTable({
+                fixedHeader: {
+                    header: true,
+                    footer: true
+                },
+                select: {
+                    style: 'os',
+                    selector: 'td:first-child'
+                },
+                columns: [
+                    {
+                        "className": 'details-control',
+                        "orderable": false,
+                        "data": null,
+                        "defaultContent": '' },
+                    { data: "SKU" },
+                    { data: "Name" },
+                    { data: "UPCEAN" },
+                    { data: "QTYOrdered", render: function (data, type, row) { return thousandComma(data); } },
+                    { data: "QTYReceived", render: function (data, type, row) { return '<input class="form-control" type="text" onchange="Calculation(this,\'Price\',\'' + row.SKU + '\',' + data + ',' + row.ID + ')"  value = ' + thousandComma(data) + ' > '; } },
+                    { data: "Serial", render: function (data, type, row) { return thousandComma(data); }  },
+                    { data: "SerialQTY", render: function (data, type, row) { return thousandComma(data); } },
+                    {
+                        data: "ck",
+                        orderable: false,
+                        render: function (data, type, row) {
+                            return "<a href='" + "@Url.Action("Addserials")" + "?ID=" + row.ID + "' class='btn btn-default btn-sm' >Add serials</a> ";
+                        } 
+                    }
+                ],
+                ajax: {
+                    traditional: true,
+                    method: "get",//或post，自由決定，影響到Server端用FormCollection取值或Request.QueryString取得DataTables傳遞的資訊
+                    url: "@Url.Action("GetSkuNumberList", "Ajax")",
+                    data: function (d) {
+                        d.ID =@ViewBag.ID;
+                        $("#gebruikerId").val(null).trigger('change');
+                    }
+                },
+                serverSide: true,//啟用ServerSide模式
+                //deferLoading: 0, //初始化DataTable時，不發出ajax
+                orderMulti: false,
+                "paging": false,
+                "ordering": false,
+                "info": true,
+            });
+            $("#gebruikerId").select2({
+                minimumInputLength: 1,
+                placeholder: "Search",
+                allowClear: true,
+                multiple: true,
+                ajax: {
+                    url: "@Url.Action("SkuNumberGet", "Ajax")",
+                    dataType: 'json',
+                    delay: 0,
+                    data: function (term) {
+                        return {
+                            Search: term.term
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data.items
+                        };
+                    }
+                }
+            });
+            $("#addsku").click(function () {
+                DataGridC.draw();
+            });
+            $("#addnote").click(function () {
+                $.ajax({
+                    traditional: true,
+                    type: "post",
+                    url: "@Url.Action("CreatNote")",
+                    data: {
+                        ID:"@Html.DisplayFor(x=>x.ID)",
+                        Note: $("#textnote").val()
+                    },
+                    success: function (data) {
+                        if (data.status) {
+                            $("#textnote").val("");
+                            $("#textnotelog li").remove();
+                            data.datalist.forEach(function (value) {
+                                //$("#textnotelog").append("<li>Appended item</li>");
+                                $("#textnotelog").append("<li>" + value.CreateBy + "： " + value.CreateAt+"</li>");
+                            });
+                        }
+                        else {
+                            alert(data.Errmsg);
+                        }
+                    }
+                });
+            });
+            $("#Tax").change(function () {
+                DataGridC.draw();
+            });
+            $(tableID + ' tbody').on('click', 'td.details-control', function () {
+                var tr = $(this).closest('tr');
+                var row = DataGridC.row(tr);
 
+                if (row.child.isShown()) {
+                    // This row is already open - close it
+                    row.child.hide();
+                    tr.removeClass('shown');
+                }
+                else {
+                    // Open this row
+                    row.child(format(row.data())).show();
+                    tr.addClass('shown');
+                }
+            });
+        });
+        function format(d) {
+            // `d` is the original data object for the row
+            return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+                '<tr>' +
+                '<td>Full name:</td>' +
+                '<td>' + d.name + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Extension number:</td>' +
+                '<td>' + d.extn + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Extra info:</td>' +
+                '<td>And any further details here (images etc)...</td>' +
+                '</tr>' +
+                '</table>';
+        }
+    </script>
+}

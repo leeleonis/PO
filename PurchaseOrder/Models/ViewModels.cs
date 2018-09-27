@@ -299,6 +299,7 @@ namespace PurchaseOrderSys.Models
     }
     public class PoSKUVM
     {
+        public int? ID { get; set; }
         public string ck { get; set; }
         public string sk { get; set; }
         /// <summary>
@@ -341,5 +342,12 @@ namespace PurchaseOrderSys.Models
         /// 應付總額
         /// </summary>
         public decimal? Subtotal { get; set; }
+
+        public string UPCEAN { get; set; }
+
+        public int? QTYReceived { get; set; }
+        public string Serial { get; set; }
+
+        public int? SerialQTY { get; set; }
     }
 }

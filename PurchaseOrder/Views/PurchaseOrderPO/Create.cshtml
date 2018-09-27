@@ -295,14 +295,6 @@
 </div>
 @section pagespecific {
     <script type="text/javascript">
-        var thousandComma = function (number) {
-            var num = number.toFixed(2).toString();
-            var pattern = /(-?\d+)(\d{3})/;
-            while (pattern.test(num)) {
-                num = num.replace(pattern, "$1,$2");
-            }
-            return num;
-        }
         var hash = window.location.hash;
         $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
         $('.tab-pane').eq(hash.substr(1)).addClass('active');
