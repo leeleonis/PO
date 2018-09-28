@@ -14,6 +14,12 @@ namespace PurchaseOrderSys.Models
     
     public partial class SerialsLlist
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public SerialsLlist()
+        {
+            this.SerialsLlistC = new HashSet<SerialsLlist>();
+        }
+    
         public int ID { get; set; }
         public Nullable<int> PurchaseSKUID { get; set; }
         public string SerialsNo { get; set; }
@@ -24,7 +30,11 @@ namespace PurchaseOrderSys.Models
         public Nullable<System.DateTime> UpdateAt { get; set; }
         public string ReceivedBy { get; set; }
         public Nullable<System.DateTime> ReceivedAt { get; set; }
+        public Nullable<int> PID { get; set; }
     
         public virtual PurchaseSKU PurchaseSKU { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SerialsLlist> SerialsLlistC { get; set; }
+        public virtual SerialsLlist SerialsLlistP { get; set; }
     }
 }

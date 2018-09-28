@@ -1,0 +1,25 @@
+﻿@model IEnumerable<string>
+@{
+    Layout = null;
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Serial
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+
+                    @item
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

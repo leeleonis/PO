@@ -297,6 +297,13 @@ namespace PurchaseOrderSys.Models
 
 
     }
+
+    public class PostList
+    {
+        public int ID { get; set; }
+        public string val { get; set; }
+    }
+
     public class PoSKUVM
     {
         public int? ID { get; set; }
@@ -346,6 +353,7 @@ namespace PurchaseOrderSys.Models
         public string UPCEAN { get; set; }
 
         public int? QTYReceived { get; set; }
+        public int? QTYReturned { get; set; }
         public string Serial { get; set; }
 
         public int? SerialQTY { get; set; }

@@ -31,9 +31,9 @@ namespace PurchaseOrderSys.Models
         public virtual DbSet<SerialsLlist> SerialsLlist { get; set; }
         public virtual DbSet<SKU> SKU { get; set; }
         public virtual DbSet<SkuLang> SkuLang { get; set; }
-        public virtual DbSet<PurchaseSKU> PurchaseSKU { get; set; }
         public virtual DbSet<PurchaseNote> PurchaseNote { get; set; }
         public virtual DbSet<CMCreditNote> CMCreditNote { get; set; }
         public virtual DbSet<CMReplacement> CMReplacement { get; set; }
+        public virtual DbSet<PurchaseSKU> PurchaseSKU { get; set; }
     }
 }

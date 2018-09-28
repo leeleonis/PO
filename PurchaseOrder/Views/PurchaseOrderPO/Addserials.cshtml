@@ -67,8 +67,16 @@
                                                             @Html.Editor("Serial", new { htmlAttributes = new { @class = "form-control" } })
                                                         </div>
                                                     </div>
-                                                    <label>Serial # ( <label id="Serialcount">@Model.SerialsLlist.Count()</label> /50)</label>
-                                                    <ul style="list-style-type:none;list-style-position: inside;padding-left: 0px;padding-left: 0px;" id="SerialList"></ul>
+                                                    @{ 
+                                                        var SerialsLlist = Model.SerialsLlist.Where(x => x.SerialsType == 1 && x.SerialsLlistC.Count() == 0);
+                                                    }
+                                                    <label>Serial # ( <label id="Serialcount">@SerialsLlist.Count()</label> /@(Model.QTYOrdered??0))</label>
+                                                    <ul style="list-style-type:none;list-style-position: inside;padding-left: 0px;padding-left: 0px;" id="SerialList">
+                                                        @foreach (var item in SerialsLlist)
+                                                        {
+                                                            <li>@item.SerialsNo</li>
+                                                        }
+                                                    </ul>
                                                 </article>
                                             </div>
                                         </fieldset>
@@ -92,13 +100,30 @@
         $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
         $('.tab-pane').eq(hash.substr(1)).addClass('active');
         $(document).ready(function () {
+            $("#Serial").focus();
             $("#Serial").keypress(function (e) {
+                var serials = $(this).val();
                 code = e.keyCode ? e.keyCode : e.which;
                 if (code == 13) {
                     e.preventDefault();
-                    $("#SerialList").prepend("<li>" + $(this).val() + "</li>");
-                    $("#Serialcount").text($("#SerialList li").length);
-                    $(this).val("");
+                    $.ajax({
+                        type: "post",
+                        url: "@Url.Action("Saveserials")",
+                        data: {
+                            serials: serials,
+                            PurchaseSKUID : @Model.ID
+                        },
+                        success: function (data) {
+                            if (data.status) {
+                                $("#SerialList").prepend("<li>" + serials + "</li>");
+                                $("#Serialcount").text($("#SerialList li").length);
+                                $("#Serial").val("");
+                            }
+                            else {
+                                alert(data.Errmsg);
+                            }
+                        }
+                    });
                 }
             });
         });

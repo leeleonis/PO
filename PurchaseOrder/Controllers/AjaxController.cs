@@ -28,7 +28,8 @@ namespace PurchaseOrderSys.Controllers
                 UPCEAN = "",
                 QTYOrdered = x.QTYOrdered,
                 QTYFulfilled = x.QTYFulfilled,
-                QTYReceived = 0,
+                QTYReceived = x.QTYReceived,
+                QTYReturned = x.QTYReturned,
                 Serial = x.SerialsLlist.Any() ? "Yes" : "No",
                 SerialQTY = x.SerialsLlist.Count()
             }).ToList();

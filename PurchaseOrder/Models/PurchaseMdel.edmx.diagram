@@ -17,18 +17,19 @@
         <EntityTypeShape EntityType="PurchaseOrderModel.SKU" Width="1.5" PointX="5.375" PointY="6" />
         <EntityTypeShape EntityType="PurchaseOrderModel.SkuLang" Width="1.5" PointX="7.625" PointY="6.625" />
         <AssociationConnector Association="PurchaseOrderModel.FK_SkuLang_Sku" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.PurchaseSKU" Width="1.5" PointX="3" PointY="0.75" />
-        <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseSKU_PurchaseOrder" />
-        <AssociationConnector Association="PurchaseOrderModel.FK_SerialsLlist_PurchaseSKU" />
         <EntityTypeShape EntityType="PurchaseOrderModel.PurchaseNote" Width="1.5" PointX="3" PointY="15" />
         <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseNote_PurchaseOrder" />
         <EntityTypeShape EntityType="PurchaseOrderModel.CMCreditNote" Width="1.5" PointX="3" PointY="18.625" />
         <AssociationConnector Association="PurchaseOrderModel.FK_CMCreditNote_PurchaseOrder" />
         <EntityTypeShape EntityType="PurchaseOrderModel.CMReplacement" Width="1.5" PointX="3" PointY="8.375" />
-        <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseSKU_CMCreditNote" />
         <AssociationConnector Association="PurchaseOrderModel.FK_CMReplacement_PurchaseOrder" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.PurchaseSKU" Width="1.5" PointX="5.25" PointY="11.25" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseSKU_CMCreditNote" />
         <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseSKU_CMReplacement" />
-      </Diagram>
+        <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseSKU_PurchaseOrder" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_SerialsLlist_PurchaseSKU" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_SerialsLlist_SerialsLlist" />
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

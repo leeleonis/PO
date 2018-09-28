@@ -17,10 +17,10 @@ namespace PurchaseOrderSys.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PurchaseOrder()
         {
-            this.PurchaseSKU = new HashSet<PurchaseSKU>();
             this.PurchaseNote = new HashSet<PurchaseNote>();
             this.CMCreditNote = new HashSet<CMCreditNote>();
             this.CMReplacement = new HashSet<CMReplacement>();
+            this.PurchaseSKU = new HashSet<PurchaseSKU>();
         }
     
         public bool IsEnable { get; set; }
@@ -54,12 +54,12 @@ namespace PurchaseOrderSys.Models
         public virtual Company Company { get; set; }
         public virtual VendorLIst VendorLIst { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PurchaseSKU> PurchaseSKU { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseNote> PurchaseNote { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CMCreditNote> CMCreditNote { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CMReplacement> CMReplacement { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PurchaseSKU> PurchaseSKU { get; set; }
     }
 }

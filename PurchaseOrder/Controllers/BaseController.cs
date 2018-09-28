@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI;
 using PurchaseOrderSys.Models;
 
 namespace PurchaseOrderSys.Controllers
@@ -64,6 +67,20 @@ namespace PurchaseOrderSys.Controllers
         {
             Random crandom = new Random(Guid.NewGuid().GetHashCode());
             return crandom.Next(minValue, maxValue);
+        }
+        protected string ControlToString(string controlPath, object model)
+        {
+            //CshtmlView control = new CshtmlView(controlPath);
+            RazorView control = new RazorView(this.ControllerContext, controlPath, null, false, null);
+
+            this.ViewData.Model = model;
+
+            HtmlTextWriter writer = new HtmlTextWriter(new System.IO.StringWriter());
+            control.Render(new ViewContext(this.ControllerContext, control, this.ViewData, this.TempData, writer), writer);
+
+            string value = ((StringWriter)writer.InnerWriter).ToString();
+
+            return value;
         }
     }
 }

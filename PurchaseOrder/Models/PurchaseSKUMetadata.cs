@@ -197,6 +197,27 @@ namespace PurchaseOrderSys.Models
     		public Nullable<int>  CMReplacementID { get; set; }
     
     		    
+    		/// <summary>
+    		/// Credit QTY
+    		/// </summary>        
+    	    [Display(Name = "PurchaseSKU_CreditQTY", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  CreditQTY { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// QTYReturned
+    		/// </summary>        
+    	    [Display(Name = "PurchaseSKU_QTYReturned", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  QTYReturned { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// QTYReceived
+    		/// </summary>        
+    	    [Display(Name = "PurchaseSKU_QTYReceived", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  QTYReceived { get; set; }
+    
+    		    
     	}
     }
     

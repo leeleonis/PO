@@ -278,13 +278,83 @@ namespace PurchaseOrderSys.Controllers
 
         public ActionResult ReceiveItems(int ID)
         {
-            ViewBag.ID= ID;
-            return View();
+            var PurchaseOrder = db.PurchaseOrder.Find(ID);
+            return View(PurchaseOrder);
+        }
+        [HttpPost]
+        public ActionResult ReceiveItems(PurchaseOrder PurchaseOrder, List<PostList> QTYReceived)
+        {
+            var oPurchaseOrder = db.PurchaseOrder.Find(PurchaseOrder.ID);
+            if (oPurchaseOrder.POType!= PurchaseOrder.POType)
+            {
+                oPurchaseOrder.POType = PurchaseOrder.POType;
+            }
+            if (oPurchaseOrder.InvoiceNo != PurchaseOrder.InvoiceNo)
+            {
+                oPurchaseOrder.InvoiceNo = PurchaseOrder.InvoiceNo;
+            }
+
+            foreach (var QTYReceiveditem in QTYReceived)
+            {
+                if (!string.IsNullOrWhiteSpace(QTYReceiveditem.val))
+                {
+                    var val = 0;
+                    if (int.TryParse(QTYReceiveditem.val, out val))
+                    {
+                        foreach (var item in oPurchaseOrder.PurchaseSKU.Where(x => x.ID == QTYReceiveditem.ID))
+                        {
+                            item.QTYReceived = val;
+                        }
+                    }
+                }
+            }
+            db.SaveChanges();
+            return View(PurchaseOrder);
         }
         public ActionResult Addserials(int ID)
         {
             var PurchaseSKU = db.PurchaseSKU.Find(ID);
             return View(PurchaseSKU);
+        }
+        public ActionResult Saveserials(string serials, int PurchaseSKUID)
+        {
+            var PurchaseSKU = db.PurchaseSKU.Find(PurchaseSKUID);
+            var SerialsLlistCount = PurchaseSKU.SerialsLlist.Where(x => x.SerialsType == 1 && x.SerialsLlistC.Count() == 0).Count();
+
+            if (SerialsLlistCount >= PurchaseSKU.QTYOrdered)
+            {
+                return Json(new { status = false, Errmsg = "序號不可大於採購數" }, JsonRequestBehavior.AllowGet);
+            }
+            var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials);
+            if (SerialsLlist.Count() == 0 || SerialsLlist.Sum(x => x.SerialsType) == 0)
+            {
+                var dt = DateTime.UtcNow;
+                var nSerialsLlist = new SerialsLlist
+                {
+                    PurchaseSKUID = PurchaseSKUID,
+                    SerialsNo = serials,
+                    SerialsType = 1,
+                    ReceivedBy = UserBy,
+                    ReceivedAt = dt,
+                    CreateBy = UserBy,
+                    CreateAt = dt
+                };
+                db.SerialsLlist.Add(nSerialsLlist);
+                try
+                {
+                    db.SaveChanges();
+                    return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { status = false, Errmsg = ex.ToString() }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                return Json(new { status = false, Errmsg = "序號已經存在" }, JsonRequestBehavior.AllowGet);
+            }
+
         }
         [HttpPost]
         public ActionResult CreatNote(int? ID, string Note)
@@ -426,5 +496,24 @@ namespace PurchaseOrderSys.Controllers
             db.SaveChanges();
             return Json(new { status = true }, JsonRequestBehavior.AllowGet);
         }
+        //[HttpPost]
+        public ActionResult GetSerialList(int ID)
+        {
+            var PurchaseSKU = db.PurchaseSKU.Find(ID);
+            var SerialsLlist = PurchaseSKU.SerialsLlist.Where(x => x.SerialsType == 1 && x.SerialsLlistC.Count() == 0).Select(x => x.SerialsNo).ToList();
+            var partial = ControlToString("~/Views/PurchaseOrderPO/GetSerialList.cshtml", SerialsLlist);
+            //var partial = Engine.Razor.RunCompile(template, "templateKey", null, new { Name = "World" });
+            return Json(new { status = true, partial }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult RemoveData(string[] IDList)
+        {
+
+            foreach (var item in IDList)
+            {
+
+            }
+            return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+        }
+        
     }
 }

@@ -886,6 +886,7 @@
     <Content Include="Views\PurchaseOrderPO\EditItem.cshtml" />
     <Content Include="Views\PurchaseOrderPO\ReceiveItems.cshtml" />
     <Content Include="Views\PurchaseOrderPO\Addserials.cshtml" />
+    <Content Include="Views\PurchaseOrderPO\GetSerialList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

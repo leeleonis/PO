@@ -45,12 +45,12 @@ namespace PurchaseOrderSys.Models
         public Nullable<int> CMReplacementID { get; set; }
         public Nullable<int> CreditQTY { get; set; }
         public Nullable<int> QTYReturned { get; set; }
-        public string QTYReceived { get; set; }
+        public Nullable<int> QTYReceived { get; set; }
     
+        public virtual CMCreditNote CMCreditNote { get; set; }
+        public virtual CMReplacement CMReplacement { get; set; }
         public virtual PurchaseOrder PurchaseOrder { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SerialsLlist> SerialsLlist { get; set; }
-        public virtual CMCreditNote CMCreditNote { get; set; }
-        public virtual CMReplacement CMReplacement { get; set; }
     }
 }
