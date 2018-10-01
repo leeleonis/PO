@@ -193,10 +193,9 @@ namespace PurchaseOrderSys.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
-        public ActionResult EditItem(int ID)
+        public ActionResult EditItem(int ID, string POTypeVal)
         {
             var PurchaseOrder = db.PurchaseOrder.Find(ID);
-
             var dataList = PurchaseOrder.PurchaseSKU.Select(x => new PoSKUVM
             {
                 ID = x.ID,
@@ -207,12 +206,20 @@ namespace PurchaseOrderSys.Controllers
                 VendorSKU = x.VendorSKU,
                 QTYOrdered = x.QTYOrdered,
                 QTYFulfilled = x.QTYFulfilled,
+                QTYReceived = x.QTYReceived,
+                QTYReturned = x.QTYReturned,
                 Price = x.Price,
                 Discount = x.Discount,
                 DiscountedPrice = x.DiscountedPrice,
                 Credit = x.Credit,
-                Subtotal = (x.QTYOrdered * (x.Price - x.Discount))
+                Subtotal = (x.QTYOrdered * (x.Price - x.Discount)),
+                SerialQTY = x.SerialsLlist.Count()
             });
+            if (!string.IsNullOrWhiteSpace(POTypeVal))
+            {
+                PurchaseOrder.POType = POTypeVal;
+            }
+
             Session["SkuNumberList"] = dataList.ToList();
             return View(PurchaseOrder);
         }
