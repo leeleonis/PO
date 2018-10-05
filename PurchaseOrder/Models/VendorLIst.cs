@@ -29,6 +29,8 @@ namespace PurchaseOrderSys.Models
         public string TEL { get; set; }
         public string Phone { get; set; }
         public string Fax { get; set; }
+        public string Currency { get; set; }
+        public Nullable<decimal> Tax { get; set; }
         public string CreateBy { get; set; }
         public System.DateTime CreateAt { get; set; }
         public string UpdateBy { get; set; }

@@ -725,4 +725,84 @@
     <value>Received At</value>
     <comment>Received At</comment>
   </data>
+  <data name="VendorLIst_IsEnable" xml:space="preserve">
+    <value>IsEnable</value>
+    <comment>IsEnable</comment>
+  </data>
+  <data name="VendorLIst_ID" xml:space="preserve">
+    <value>ID</value>
+    <comment>ID</comment>
+  </data>
+  <data name="VendorLIst_VendorNo" xml:space="preserve">
+    <value>VendorNo</value>
+    <comment>VendorNo</comment>
+  </data>
+  <data name="VendorLIst_Name" xml:space="preserve">
+    <value>Name</value>
+    <comment>Name</comment>
+  </data>
+  <data name="VendorLIst_Principal" xml:space="preserve">
+    <value>Principal</value>
+    <comment>Principal</comment>
+  </data>
+  <data name="VendorLIst_Address" xml:space="preserve">
+    <value>Address</value>
+    <comment>Address</comment>
+  </data>
+  <data name="VendorLIst_TEL" xml:space="preserve">
+    <value>TEL</value>
+    <comment>TEL</comment>
+  </data>
+  <data name="VendorLIst_Phone" xml:space="preserve">
+    <value>Phone</value>
+    <comment>Phone</comment>
+  </data>
+  <data name="VendorLIst_Fax" xml:space="preserve">
+    <value>Fax</value>
+    <comment>Fax</comment>
+  </data>
+  <data name="VendorLIst_Currency" xml:space="preserve">
+    <value>Currency</value>
+    <comment>Currency</comment>
+  </data>
+  <data name="VendorLIst_Tax" xml:space="preserve">
+    <value>Tax</value>
+    <comment>Tax</comment>
+  </data>
+  <data name="VendorLIst_CreateBy" xml:space="preserve">
+    <value>CreateBy</value>
+    <comment>CreateBy</comment>
+  </data>
+  <data name="VendorLIst_CreateAt" xml:space="preserve">
+    <value>CreateAt</value>
+    <comment>CreateAt</comment>
+  </data>
+  <data name="VendorLIst_UpdateBy" xml:space="preserve">
+    <value>UpdateBy</value>
+    <comment>UpdateBy</comment>
+  </data>
+  <data name="VendorLIst_UpdateAt" xml:space="preserve">
+    <value>UpdateAt</value>
+    <comment>UpdateAt</comment>
+  </data>
+  <data name="VendorLIst_DelBy" xml:space="preserve">
+    <value>DelBy</value>
+    <comment>DelBy</comment>
+  </data>
+  <data name="VendorLIst_DelAt" xml:space="preserve">
+    <value>DelAt</value>
+    <comment>DelAt</comment>
+  </data>
+  <data name="CurrencyTWD" xml:space="preserve">
+    <value>TWD</value>
+    <comment>TWD</comment>
+  </data>
+  <data name="CurrencyAUD" xml:space="preserve">
+    <value>AUD</value>
+    <comment>AUD</comment>
+  </data>
+  <data name="CurrencyUSD" xml:space="preserve">
+    <value>USD</value>
+    <comment>USD</comment>
+  </data>
 </root>

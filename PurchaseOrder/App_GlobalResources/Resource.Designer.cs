@@ -610,6 +610,33 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查詢類似 AUD 的當地語系化字串。
+        /// </summary>
+        public static string CurrencyAUD {
+            get {
+                return ResourceManager.GetString("CurrencyAUD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 TWD 的當地語系化字串。
+        /// </summary>
+        public static string CurrencyTWD {
+            get {
+                return ResourceManager.GetString("CurrencyTWD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 USD 的當地語系化字串。
+        /// </summary>
+        public static string CurrencyUSD {
+            get {
+                return ResourceManager.GetString("CurrencyUSD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 Select 的當地語系化字串。
         /// </summary>
         public static string DefaultSelect {
@@ -1470,6 +1497,159 @@ namespace PurchaseOrderSys.App_GlobalResources {
         public static string Username {
             get {
                 return ResourceManager.GetString("Username", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Address 的當地語系化字串。
+        /// </summary>
+        public static string VendorLIst_Address {
+            get {
+                return ResourceManager.GetString("VendorLIst_Address", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CreateAt 的當地語系化字串。
+        /// </summary>
+        public static string VendorLIst_CreateAt {
+            get {
+                return ResourceManager.GetString("VendorLIst_CreateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CreateBy 的當地語系化字串。
+        /// </summary>
+        public static string VendorLIst_CreateBy {
+            get {
+                return ResourceManager.GetString("VendorLIst_CreateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Currency 的當地語系化字串。
+        /// </summary>
+        public static string VendorLIst_Currency {
+            get {
+                return ResourceManager.GetString("VendorLIst_Currency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 DelAt 的當地語系化字串。
+        /// </summary>
+        public static string VendorLIst_DelAt {
+            get {
+                return ResourceManager.GetString("VendorLIst_DelAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 DelBy 的當地語系化字串。
+        /// </summary>
+        public static string VendorLIst_DelBy {
+            get {
+                return ResourceManager.GetString("VendorLIst_DelBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Fax 的當地語系化字串。
+        /// </summary>
+        public static string VendorLIst_Fax {
+            get {
+                return ResourceManager.GetString("VendorLIst_Fax", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ID 的當地語系化字串。
+        /// </summary>
+        public static string VendorLIst_ID {
+            get {
+                return ResourceManager.GetString("VendorLIst_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 IsEnable 的當地語系化字串。
+        /// </summary>
+        public static string VendorLIst_IsEnable {
+            get {
+                return ResourceManager.GetString("VendorLIst_IsEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Name 的當地語系化字串。
+        /// </summary>
+        public static string VendorLIst_Name {
+            get {
+                return ResourceManager.GetString("VendorLIst_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Phone 的當地語系化字串。
+        /// </summary>
+        public static string VendorLIst_Phone {
+            get {
+                return ResourceManager.GetString("VendorLIst_Phone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Principal 的當地語系化字串。
+        /// </summary>
+        public static string VendorLIst_Principal {
+            get {
+                return ResourceManager.GetString("VendorLIst_Principal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Tax 的當地語系化字串。
+        /// </summary>
+        public static string VendorLIst_Tax {
+            get {
+                return ResourceManager.GetString("VendorLIst_Tax", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 TEL 的當地語系化字串。
+        /// </summary>
+        public static string VendorLIst_TEL {
+            get {
+                return ResourceManager.GetString("VendorLIst_TEL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UpdateAt 的當地語系化字串。
+        /// </summary>
+        public static string VendorLIst_UpdateAt {
+            get {
+                return ResourceManager.GetString("VendorLIst_UpdateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UpdateBy 的當地語系化字串。
+        /// </summary>
+        public static string VendorLIst_UpdateBy {
+            get {
+                return ResourceManager.GetString("VendorLIst_UpdateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 VendorNo 的當地語系化字串。
+        /// </summary>
+        public static string VendorLIst_VendorNo {
+            get {
+                return ResourceManager.GetString("VendorLIst_VendorNo", resourceCulture);
             }
         }
     }

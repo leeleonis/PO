@@ -52,7 +52,6 @@ namespace PurchaseOrderSys.Models
         public Nullable<decimal> Tax { get; set; }
     
         public virtual Company Company { get; set; }
-        public virtual VendorLIst VendorLIst { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseNote> PurchaseNote { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -61,5 +60,6 @@ namespace PurchaseOrderSys.Models
         public virtual ICollection<CMReplacement> CMReplacement { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseSKU> PurchaseSKU { get; set; }
+        public virtual VendorLIst VendorLIst { get; set; }
     }
 }

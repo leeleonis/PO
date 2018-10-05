@@ -588,4 +588,64 @@
   <data name="CMReplacement_ReceivedAt" xml:space="preserve">
     <value>入庫時間</value>
   </data>
+  <data name="VendorLIst_IsEnable" xml:space="preserve">
+    <value>啟用</value>
+  </data>
+  <data name="VendorLIst_ID" xml:space="preserve">
+    <value>流水號</value>
+  </data>
+  <data name="VendorLIst_VendorNo" xml:space="preserve">
+    <value>供應商的統編</value>
+  </data>
+  <data name="VendorLIst_Name" xml:space="preserve">
+    <value>供應商的名稱</value>
+  </data>
+  <data name="VendorLIst_Principal" xml:space="preserve">
+    <value>負責人</value>
+  </data>
+  <data name="VendorLIst_Address" xml:space="preserve">
+    <value>供應商地址</value>
+  </data>
+  <data name="VendorLIst_TEL" xml:space="preserve">
+    <value>供應商聯絡電話</value>
+  </data>
+  <data name="VendorLIst_Phone" xml:space="preserve">
+    <value>供應商手機號碼</value>
+  </data>
+  <data name="VendorLIst_Fax" xml:space="preserve">
+    <value>供應商傳真號碼</value>
+  </data>
+  <data name="VendorLIst_Currency" xml:space="preserve">
+    <value>幣別</value>
+  </data>
+  <data name="VendorLIst_Tax" xml:space="preserve">
+    <value>稅率</value>
+  </data>
+  <data name="VendorLIst_CreateBy" xml:space="preserve">
+    <value>建立者</value>
+  </data>
+  <data name="VendorLIst_CreateAt" xml:space="preserve">
+    <value>建立時間</value>
+  </data>
+  <data name="VendorLIst_UpdateBy" xml:space="preserve">
+    <value>修改者</value>
+  </data>
+  <data name="VendorLIst_UpdateAt" xml:space="preserve">
+    <value>修改時間</value>
+  </data>
+  <data name="VendorLIst_DelBy" xml:space="preserve">
+    <value>刪除者</value>
+  </data>
+  <data name="VendorLIst_DelAt" xml:space="preserve">
+    <value>刪除時間</value>
+  </data>
+  <data name="CurrencyTWD" xml:space="preserve">
+    <value>台幣</value>
+  </data>
+  <data name="CurrencyAUD" xml:space="preserve">
+    <value>澳幣</value>
+  </data>
+  <data name="CurrencyUSD" xml:space="preserve">
+    <value>美金</value>
+  </data>
 </root>

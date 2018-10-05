@@ -136,6 +136,8 @@
           <Property Name="SkuNo" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="QTYOrdered" Type="int" />
           <Property Name="QTYFulfilled" Type="int" />
+          <Property Name="QTYReturned" Type="int" />
+          <Property Name="QTYReceived" Type="int" />
           <Property Name="Price" Type="decimal" Precision="18" Scale="2" />
           <Property Name="Discount" Type="decimal" Precision="18" Scale="2" />
           <Property Name="DiscountedPrice" Type="decimal" Precision="18" Scale="2" />
@@ -153,8 +155,6 @@
           <Property Name="CMCreditNoteID" Type="int" />
           <Property Name="CMReplacementID" Type="int" />
           <Property Name="CreditQTY" Type="int" />
-          <Property Name="QTYReturned" Type="int" />
-          <Property Name="QTYReceived" Type="int" />
         </EntityType>
         <EntityType Name="SerialsLlist">
           <Key>
@@ -218,6 +218,8 @@
           <Property Name="TEL" Type="nvarchar" MaxLength="20" />
           <Property Name="Phone" Type="nvarchar" MaxLength="20" />
           <Property Name="Fax" Type="nvarchar" MaxLength="20" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="10" />
+          <Property Name="Tax" Type="decimal" Precision="18" Scale="2" />
           <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="CreateAt" Type="datetime" Nullable="false" />
           <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
@@ -420,13 +422,8 @@
         <EntityContainer Name="PurchaseOrderEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="PurchaseOrder" EntityType="PurchaseOrderModel.PurchaseOrder" />
           <EntitySet Name="Company" EntityType="PurchaseOrderModel.Company" />
-          <EntitySet Name="VendorLIst" EntityType="PurchaseOrderModel.VendorLIst" />
           <AssociationSet Name="FK_PurchaseOrder_Company" Association="PurchaseOrderModel.FK_PurchaseOrder_Company">
             <End Role="Company" EntitySet="Company" />
-            <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PurchaseOrder_VendorLIst" Association="PurchaseOrderModel.FK_PurchaseOrder_VendorLIst">
-            <End Role="VendorLIst" EntitySet="VendorLIst" />
             <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
           </AssociationSet>
           <EntitySet Name="SerialsLlist" EntityType="PurchaseOrderModel.SerialsLlist" />
@@ -472,6 +469,11 @@
             <End Role="SerialsLlist" EntitySet="SerialsLlist" />
             <End Role="SerialsLlist1" EntitySet="SerialsLlist" />
           </AssociationSet>
+          <EntitySet Name="VendorLIst" EntityType="PurchaseOrderModel.VendorLIst" />
+          <AssociationSet Name="FK_PurchaseOrder_VendorLIst" Association="PurchaseOrderModel.FK_PurchaseOrder_VendorLIst">
+            <End Role="VendorLIst" EntitySet="VendorLIst" />
+            <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="PurchaseOrder">
           <Key>
@@ -498,7 +500,6 @@
           <Property Name="ReceivedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ReceivedAt" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Company" Relationship="PurchaseOrderModel.FK_PurchaseOrder_Company" FromRole="PurchaseOrder" ToRole="Company" />
-          <NavigationProperty Name="VendorLIst" Relationship="PurchaseOrderModel.FK_PurchaseOrder_VendorLIst" FromRole="PurchaseOrder" ToRole="VendorLIst" />
           <Property Name="POStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="InvoiceDate" Type="DateTime" Precision="3" />
           <Property Name="InvoiceNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
@@ -510,6 +511,7 @@
           <NavigationProperty Name="CMCreditNote" Relationship="PurchaseOrderModel.FK_CMCreditNote_PurchaseOrder" FromRole="PurchaseOrder" ToRole="CMCreditNote" />
           <NavigationProperty Name="CMReplacement" Relationship="PurchaseOrderModel.FK_CMReplacement_PurchaseOrder" FromRole="PurchaseOrder" ToRole="CMReplacement" />
           <NavigationProperty Name="PurchaseSKU" Relationship="PurchaseOrderModel.FK_PurchaseSKU_PurchaseOrder" FromRole="PurchaseOrder" ToRole="PurchaseSKU" />
+          <NavigationProperty Name="VendorLIst" Relationship="PurchaseOrderModel.FK_PurchaseOrder_VendorLIst" FromRole="PurchaseOrder" ToRole="VendorLIst" />
         </EntityType>
         <EntityType Name="Company">
           <Key>
@@ -530,27 +532,6 @@
           <Property Name="CompanyNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="PurchaseOrder" Relationship="PurchaseOrderModel.FK_PurchaseOrder_Company" FromRole="Company" ToRole="PurchaseOrder" />
         </EntityType>
-        <EntityType Name="VendorLIst">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="VendorNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Principal" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="TEL" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Fax" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
-          <Property Name="DelBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="DelAt" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="PurchaseOrder" Relationship="PurchaseOrderModel.FK_PurchaseOrder_VendorLIst" FromRole="VendorLIst" ToRole="PurchaseOrder" />
-        </EntityType>
         <Association Name="FK_PurchaseOrder_Company">
           <End Type="PurchaseOrderModel.Company" Role="Company" Multiplicity="0..1" />
           <End Type="PurchaseOrderModel.PurchaseOrder" Role="PurchaseOrder" Multiplicity="*" />
@@ -560,18 +541,6 @@
             </Principal>
             <Dependent Role="PurchaseOrder">
               <PropertyRef Name="CompanyID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PurchaseOrder_VendorLIst">
-          <End Type="PurchaseOrderModel.VendorLIst" Role="VendorLIst" Multiplicity="0..1" />
-          <End Type="PurchaseOrderModel.PurchaseOrder" Role="PurchaseOrder" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="VendorLIst">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="PurchaseOrder">
-              <PropertyRef Name="VendorID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -847,6 +816,41 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="VendorLIst">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VendorNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Principal" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="TEL" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Fax" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Currency" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Tax" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <Property Name="DelBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DelAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="PurchaseOrder" Relationship="PurchaseOrderModel.FK_PurchaseOrder_VendorLIst" FromRole="VendorLIst" ToRole="PurchaseOrder" />
+        </EntityType>
+        <Association Name="FK_PurchaseOrder_VendorLIst">
+          <End Type="PurchaseOrderModel.VendorLIst" Role="VendorLIst" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.PurchaseOrder" Role="PurchaseOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="VendorLIst">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PurchaseOrder">
+              <PropertyRef Name="VendorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -900,27 +904,6 @@
                 <ScalarProperty Name="ParentID" ColumnName="ParentID" />
                 <ScalarProperty Name="ShandowSuffix" ColumnName="ShandowSuffix" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="VendorLIst">
-            <EntityTypeMapping TypeName="PurchaseOrderModel.VendorLIst">
-              <MappingFragment StoreEntitySet="VendorLIst">
-                <ScalarProperty Name="DelAt" ColumnName="DelAt" />
-                <ScalarProperty Name="DelBy" ColumnName="DelBy" />
-                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
-                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
-                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
-                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-                <ScalarProperty Name="Fax" ColumnName="Fax" />
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
-                <ScalarProperty Name="TEL" ColumnName="TEL" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="Principal" ColumnName="Principal" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="VendorNo" ColumnName="VendorNo" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
               </MappingFragment>
@@ -1077,6 +1060,29 @@
                 <ScalarProperty Name="SkuNo" ColumnName="SkuNo" />
                 <ScalarProperty Name="PurchaseOrderID" ColumnName="PurchaseOrderID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VendorLIst">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.VendorLIst">
+              <MappingFragment StoreEntitySet="VendorLIst">
+                <ScalarProperty Name="DelAt" ColumnName="DelAt" />
+                <ScalarProperty Name="DelBy" ColumnName="DelBy" />
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="Tax" ColumnName="Tax" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="TEL" ColumnName="TEL" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Principal" ColumnName="Principal" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="VendorNo" ColumnName="VendorNo" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
               </MappingFragment>

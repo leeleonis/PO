@@ -8,6 +8,20 @@ namespace PurchaseOrderSys.Models
     public static class EnumData
     {
         /// <summary>
+        /// 幣別
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<string, string> CurrencyDDL()
+        {
+            return new Dictionary<string, string>()
+            {
+                { "TWD", App_GlobalResources.Resource.CurrencyTWD },
+                { "AUD", App_GlobalResources.Resource.CurrencyAUD },
+                { "USD", App_GlobalResources.Resource.CurrencyUSD }
+            };
+        }
+
+        /// <summary>
         /// 採購單的種類
         /// </summary>
         /// <returns></returns>

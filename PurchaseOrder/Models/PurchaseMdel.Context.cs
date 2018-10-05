@@ -27,7 +27,6 @@ namespace PurchaseOrderSys.Models
     
         public virtual DbSet<PurchaseOrder> PurchaseOrder { get; set; }
         public virtual DbSet<Company> Company { get; set; }
-        public virtual DbSet<VendorLIst> VendorLIst { get; set; }
         public virtual DbSet<SerialsLlist> SerialsLlist { get; set; }
         public virtual DbSet<SKU> SKU { get; set; }
         public virtual DbSet<SkuLang> SkuLang { get; set; }
@@ -35,5 +34,6 @@ namespace PurchaseOrderSys.Models
         public virtual DbSet<CMCreditNote> CMCreditNote { get; set; }
         public virtual DbSet<CMReplacement> CMReplacement { get; set; }
         public virtual DbSet<PurchaseSKU> PurchaseSKU { get; set; }
+        public virtual DbSet<VendorLIst> VendorLIst { get; set; }
     }
 }
