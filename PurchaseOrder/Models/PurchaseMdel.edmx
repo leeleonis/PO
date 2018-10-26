@@ -5,6 +5,26 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="PurchaseOrderModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AdminUser">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="bit" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Group" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Account" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ApiUserName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ApiPassword" Type="nvarchar" MaxLength="50" />
+          <Property Name="TimeZone" Type="int" Nullable="false" />
+          <Property Name="AllowWarehouse" Type="nvarchar(max)" />
+          <Property Name="Auth" Type="nvarchar(max)" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreateAt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="UpdateAt" Type="datetime" />
+        </EntityType>
         <EntityType Name="CMCreditNote">
           <Key>
             <PropertyRef Name="ID" />
@@ -284,6 +304,20 @@
           <Property Name="Marketplace" Type="text" />
           <Property Name="Company" Type="nvarchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="WarehouseUser">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="bit" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Purview" Type="nvarchar" MaxLength="50" />
+          <Property Name="WarehouseID" Type="int" Nullable="false" />
+          <Property Name="AdminUserID" Type="int" Nullable="false" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreateAt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="UpdateAt" Type="datetime" />
+        </EntityType>
         <Association Name="FK_CMCreditNote_PurchaseOrder">
           <End Role="PurchaseOrder" Type="Self.PurchaseOrder" Multiplicity="0..1" />
           <End Role="CMCreditNote" Type="Self.CMCreditNote" Multiplicity="*" />
@@ -476,7 +510,32 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_WarehouseUser_AdminUser">
+          <End Role="AdminUser" Type="Self.AdminUser" Multiplicity="1" />
+          <End Role="WarehouseUser" Type="Self.WarehouseUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AdminUser">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="WarehouseUser">
+              <PropertyRef Name="AdminUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_WarehouseUser_Warehouse">
+          <End Role="Warehouse" Type="Self.Warehouse" Multiplicity="1" />
+          <End Role="WarehouseUser" Type="Self.WarehouseUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Warehouse">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="WarehouseUser">
+              <PropertyRef Name="WarehouseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="PurchaseOrderModelStoreContainer">
+          <EntitySet Name="AdminUser" EntityType="Self.AdminUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CMCreditNote" EntityType="Self.CMCreditNote" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CMReplacement" EntityType="Self.CMReplacement" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Company" EntityType="Self.Company" Schema="dbo" store:Type="Tables" />
@@ -490,6 +549,7 @@
           <EntitySet Name="TransferSKU" EntityType="Self.TransferSKU" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VendorLIst" EntityType="Self.VendorLIst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Warehouse" EntityType="Self.Warehouse" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WarehouseUser" EntityType="Self.WarehouseUser" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_CMCreditNote_PurchaseOrder" Association="Self.FK_CMCreditNote_PurchaseOrder">
             <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
             <End Role="CMCreditNote" EntitySet="CMCreditNote" />
@@ -553,6 +613,14 @@
           <AssociationSet Name="FK_TransferSKU_Transfer" Association="Self.FK_TransferSKU_Transfer">
             <End Role="Transfer" EntitySet="Transfer" />
             <End Role="TransferSKU" EntitySet="TransferSKU" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WarehouseUser_AdminUser" Association="Self.FK_WarehouseUser_AdminUser">
+            <End Role="AdminUser" EntitySet="AdminUser" />
+            <End Role="WarehouseUser" EntitySet="WarehouseUser" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WarehouseUser_Warehouse" Association="Self.FK_WarehouseUser_Warehouse">
+            <End Role="Warehouse" EntitySet="Warehouse" />
+            <End Role="WarehouseUser" EntitySet="WarehouseUser" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -636,6 +704,16 @@
           <AssociationSet Name="FK_Transfer_Warehouse1" Association="PurchaseOrderModel.FK_Transfer_Warehouse1">
             <End Role="Warehouse" EntitySet="Warehouse" />
             <End Role="Transfer" EntitySet="Transfer" />
+          </AssociationSet>
+          <EntitySet Name="AdminUser" EntityType="PurchaseOrderModel.AdminUser" />
+          <EntitySet Name="WarehouseUser" EntityType="PurchaseOrderModel.WarehouseUser" />
+          <AssociationSet Name="FK_WarehouseUser_AdminUser" Association="PurchaseOrderModel.FK_WarehouseUser_AdminUser">
+            <End Role="AdminUser" EntitySet="AdminUser" />
+            <End Role="WarehouseUser" EntitySet="WarehouseUser" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WarehouseUser_Warehouse" Association="PurchaseOrderModel.FK_WarehouseUser_Warehouse">
+            <End Role="Warehouse" EntitySet="Warehouse" />
+            <End Role="WarehouseUser" EntitySet="WarehouseUser" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="PurchaseOrder">
@@ -1104,6 +1182,7 @@
           <NavigationProperty Name="PurchaseOrder" Relationship="PurchaseOrderModel.FK_PurchaseOrder_Warehouse" FromRole="Warehouse" ToRole="PurchaseOrder" />
           <NavigationProperty Name="Transfer" Relationship="PurchaseOrderModel.FK_Transfer_Warehouse" FromRole="Warehouse" ToRole="Transfer" />
           <NavigationProperty Name="Transfer1" Relationship="PurchaseOrderModel.FK_Transfer_Warehouse1" FromRole="Warehouse" ToRole="Transfer" />
+          <NavigationProperty Name="WarehouseUser" Relationship="PurchaseOrderModel.FK_WarehouseUser_Warehouse" FromRole="Warehouse" ToRole="WarehouseUser" />
         </EntityType>
         <Association Name="FK_PurchaseOrder_Warehouse">
           <End Type="PurchaseOrderModel.Warehouse" Role="Warehouse" Multiplicity="0..1" />
@@ -1138,6 +1217,67 @@
             </Principal>
             <Dependent Role="Transfer">
               <PropertyRef Name="ToWID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="AdminUser">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Group" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Account" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ApiUserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ApiPassword" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TimeZone" Type="Int32" Nullable="false" />
+          <Property Name="AllowWarehouse" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Auth" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="WarehouseUser" Relationship="PurchaseOrderModel.FK_WarehouseUser_AdminUser" FromRole="AdminUser" ToRole="WarehouseUser" />
+        </EntityType>
+        <EntityType Name="WarehouseUser">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Purview" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="WarehouseID" Type="Int32" Nullable="false" />
+          <Property Name="AdminUserID" Type="Int32" Nullable="false" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="AdminUser" Relationship="PurchaseOrderModel.FK_WarehouseUser_AdminUser" FromRole="WarehouseUser" ToRole="AdminUser" />
+          <NavigationProperty Name="Warehouse" Relationship="PurchaseOrderModel.FK_WarehouseUser_Warehouse" FromRole="WarehouseUser" ToRole="Warehouse" />
+        </EntityType>
+        <Association Name="FK_WarehouseUser_AdminUser">
+          <End Type="PurchaseOrderModel.AdminUser" Role="AdminUser" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.WarehouseUser" Role="WarehouseUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AdminUser">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="WarehouseUser">
+              <PropertyRef Name="AdminUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_WarehouseUser_Warehouse">
+          <End Type="PurchaseOrderModel.Warehouse" Role="Warehouse" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.WarehouseUser" Role="WarehouseUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Warehouse">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="WarehouseUser">
+              <PropertyRef Name="WarehouseID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1434,6 +1574,42 @@
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="IsSellable" ColumnName="IsSellable" />
                 <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AdminUser">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.AdminUser">
+              <MappingFragment StoreEntitySet="AdminUser">
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="Auth" ColumnName="Auth" />
+                <ScalarProperty Name="AllowWarehouse" ColumnName="AllowWarehouse" />
+                <ScalarProperty Name="TimeZone" ColumnName="TimeZone" />
+                <ScalarProperty Name="ApiPassword" ColumnName="ApiPassword" />
+                <ScalarProperty Name="ApiUserName" ColumnName="ApiUserName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Account" ColumnName="Account" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Group" ColumnName="Group" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WarehouseUser">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.WarehouseUser">
+              <MappingFragment StoreEntitySet="WarehouseUser">
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="AdminUserID" ColumnName="AdminUserID" />
+                <ScalarProperty Name="WarehouseID" ColumnName="WarehouseID" />
+                <ScalarProperty Name="Purview" ColumnName="Purview" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
               </MappingFragment>
             </EntityTypeMapping>

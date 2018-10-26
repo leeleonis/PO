@@ -696,4 +696,76 @@
   <data name="Warehouse_Company" xml:space="preserve">
     <value>Company</value>
   </data>
+  <data name="WarehouseUser_IsEnable" xml:space="preserve">
+    <value>IsEnable</value>
+  </data>
+  <data name="WarehouseUser_ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="WarehouseUser_Purview" xml:space="preserve">
+    <value>Purview</value>
+  </data>
+  <data name="WarehouseUser_WarehouseID" xml:space="preserve">
+    <value>WarehouseID</value>
+  </data>
+  <data name="WarehouseUser_AdminUserID" xml:space="preserve">
+    <value>AdminUserID</value>
+  </data>
+  <data name="WarehouseUser_CreateBy" xml:space="preserve">
+    <value>CreateBy</value>
+  </data>
+  <data name="WarehouseUser_CreateAt" xml:space="preserve">
+    <value>CreateAt</value>
+  </data>
+  <data name="WarehouseUser_UpdateBy" xml:space="preserve">
+    <value>UpdateBy</value>
+  </data>
+  <data name="WarehouseUser_UpdateAt" xml:space="preserve">
+    <value>UpdateAt</value>
+  </data>
+  <data name="AdminUser_IsEnable" xml:space="preserve">
+    <value>IsEnable</value>
+  </data>
+  <data name="AdminUser_ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="AdminUser_Group" xml:space="preserve">
+    <value>Group</value>
+  </data>
+  <data name="AdminUser_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="AdminUser_Account" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="AdminUser_Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="AdminUser_ApiUserName" xml:space="preserve">
+    <value>ApiUserName</value>
+  </data>
+  <data name="AdminUser_ApiPassword" xml:space="preserve">
+    <value>ApiPassword</value>
+  </data>
+  <data name="AdminUser_TimeZone" xml:space="preserve">
+    <value>TimeZone</value>
+  </data>
+  <data name="AdminUser_AllowWarehouse" xml:space="preserve">
+    <value>AllowWarehouse</value>
+  </data>
+  <data name="AdminUser_Auth" xml:space="preserve">
+    <value>Auth</value>
+  </data>
+  <data name="AdminUser_CreateBy" xml:space="preserve">
+    <value>CreateBy</value>
+  </data>
+  <data name="AdminUser_CreateAt" xml:space="preserve">
+    <value>CreateAt</value>
+  </data>
+  <data name="AdminUser_UpdateBy" xml:space="preserve">
+    <value>UpdateBy</value>
+  </data>
+  <data name="AdminUser_UpdateAt" xml:space="preserve">
+    <value>UpdateAt</value>
+  </data>
 </root>

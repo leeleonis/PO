@@ -38,5 +38,35 @@ namespace PurchaseOrderSys.Controllers
 
             return RedirectToAction("Index");
         }
+        public ActionResult Edit(int ID)
+        {
+            ViewBag.CompanyList = db.Company.Where(x => x.IsEnable).Select(x => new SelectListItem { Text = x.Name, Value = x.ID.ToString() }).ToList();
+            var Warehouse = db.Warehouse.Find(ID);
+            if (Warehouse.IsEnable)
+            {
+                return View(Warehouse);
+            }
+            return RedirectToAction("Index");
+        }
+        [HttpPost]
+        public ActionResult Edit(Warehouse Warehouse)
+        {
+            var OldWarehouse = db.Warehouse.Find(Warehouse.ID);
+           
+
+            OldWarehouse.UpdateBy = UserBy;
+            OldWarehouse.UpdateAt = DateTime.UtcNow;
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+        public ActionResult Delete(int ID)
+        {
+            var OldWarehouse = db.Warehouse.Find(ID);
+            OldWarehouse.IsEnable = false;
+            OldWarehouse.UpdateBy = UserBy;
+            OldWarehouse.UpdateAt = DateTime.UtcNow;
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
     }
 }

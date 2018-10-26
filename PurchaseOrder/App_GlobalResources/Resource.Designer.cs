@@ -61,6 +61,141 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查詢類似 Account 的當地語系化字串。
+        /// </summary>
+        public static string AdminUser_Account {
+            get {
+                return ResourceManager.GetString("AdminUser_Account", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 AllowWarehouse 的當地語系化字串。
+        /// </summary>
+        public static string AdminUser_AllowWarehouse {
+            get {
+                return ResourceManager.GetString("AdminUser_AllowWarehouse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ApiPassword 的當地語系化字串。
+        /// </summary>
+        public static string AdminUser_ApiPassword {
+            get {
+                return ResourceManager.GetString("AdminUser_ApiPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ApiUserName 的當地語系化字串。
+        /// </summary>
+        public static string AdminUser_ApiUserName {
+            get {
+                return ResourceManager.GetString("AdminUser_ApiUserName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Auth 的當地語系化字串。
+        /// </summary>
+        public static string AdminUser_Auth {
+            get {
+                return ResourceManager.GetString("AdminUser_Auth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CreateAt 的當地語系化字串。
+        /// </summary>
+        public static string AdminUser_CreateAt {
+            get {
+                return ResourceManager.GetString("AdminUser_CreateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CreateBy 的當地語系化字串。
+        /// </summary>
+        public static string AdminUser_CreateBy {
+            get {
+                return ResourceManager.GetString("AdminUser_CreateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Group 的當地語系化字串。
+        /// </summary>
+        public static string AdminUser_Group {
+            get {
+                return ResourceManager.GetString("AdminUser_Group", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ID 的當地語系化字串。
+        /// </summary>
+        public static string AdminUser_ID {
+            get {
+                return ResourceManager.GetString("AdminUser_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 IsEnable 的當地語系化字串。
+        /// </summary>
+        public static string AdminUser_IsEnable {
+            get {
+                return ResourceManager.GetString("AdminUser_IsEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Name 的當地語系化字串。
+        /// </summary>
+        public static string AdminUser_Name {
+            get {
+                return ResourceManager.GetString("AdminUser_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Password 的當地語系化字串。
+        /// </summary>
+        public static string AdminUser_Password {
+            get {
+                return ResourceManager.GetString("AdminUser_Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 TimeZone 的當地語系化字串。
+        /// </summary>
+        public static string AdminUser_TimeZone {
+            get {
+                return ResourceManager.GetString("AdminUser_TimeZone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UpdateAt 的當地語系化字串。
+        /// </summary>
+        public static string AdminUser_UpdateAt {
+            get {
+                return ResourceManager.GetString("AdminUser_UpdateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UpdateBy 的當地語系化字串。
+        /// </summary>
+        public static string AdminUser_UpdateBy {
+            get {
+                return ResourceManager.GetString("AdminUser_UpdateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 Balance 的當地語系化字串。
         /// </summary>
         public static string Balance {
@@ -1794,6 +1929,87 @@ namespace PurchaseOrderSys.App_GlobalResources {
         public static string Warehouse_WinitWarehouse {
             get {
                 return ResourceManager.GetString("Warehouse_WinitWarehouse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 AdminUserID 的當地語系化字串。
+        /// </summary>
+        public static string WarehouseUser_AdminUserID {
+            get {
+                return ResourceManager.GetString("WarehouseUser_AdminUserID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CreateAt 的當地語系化字串。
+        /// </summary>
+        public static string WarehouseUser_CreateAt {
+            get {
+                return ResourceManager.GetString("WarehouseUser_CreateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CreateBy 的當地語系化字串。
+        /// </summary>
+        public static string WarehouseUser_CreateBy {
+            get {
+                return ResourceManager.GetString("WarehouseUser_CreateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ID 的當地語系化字串。
+        /// </summary>
+        public static string WarehouseUser_ID {
+            get {
+                return ResourceManager.GetString("WarehouseUser_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 IsEnable 的當地語系化字串。
+        /// </summary>
+        public static string WarehouseUser_IsEnable {
+            get {
+                return ResourceManager.GetString("WarehouseUser_IsEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Purview 的當地語系化字串。
+        /// </summary>
+        public static string WarehouseUser_Purview {
+            get {
+                return ResourceManager.GetString("WarehouseUser_Purview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UpdateAt 的當地語系化字串。
+        /// </summary>
+        public static string WarehouseUser_UpdateAt {
+            get {
+                return ResourceManager.GetString("WarehouseUser_UpdateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UpdateBy 的當地語系化字串。
+        /// </summary>
+        public static string WarehouseUser_UpdateBy {
+            get {
+                return ResourceManager.GetString("WarehouseUser_UpdateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 WarehouseID 的當地語系化字串。
+        /// </summary>
+        public static string WarehouseUser_WarehouseID {
+            get {
+                return ResourceManager.GetString("WarehouseUser_WarehouseID", resourceCulture);
             }
         }
     }

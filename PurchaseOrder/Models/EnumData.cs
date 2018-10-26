@@ -126,5 +126,14 @@ namespace PurchaseOrderSys.Models
                 { "Winit", "Winit" }
             };
         }
+        /// <summary>
+        /// 倉庫權限
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<string, string> WarehousePurviewDLL()
+        {
+            var list = new Dictionary<string, string> { { "Requested", "Requested" }, { "Shipped", "Shipped" }, { "Received", "Received" } };
+            return list;
+        }
     }
 }

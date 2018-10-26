@@ -192,6 +192,12 @@
     </Compile>
     <Compile Include="Helpers\MyFilter.cs" />
     <Compile Include="Helpers\MyHelps.cs" />
+    <Compile Include="Models\AdminUser.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AdminUserMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CMCreditNote.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
     </Compile>
@@ -292,6 +298,12 @@
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\WarehouseMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\WarehouseUser.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\WarehouseUserMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -915,11 +927,14 @@
     <Content Include="Views\WarehouseInventory\Index.cshtml" />
     <Content Include="Views\Warehouse\Create.cshtml" />
     <Content Include="Views\Transfer\Index.cshtml" />
+    <Content Include="Views\WarehouseUser\Index.cshtml" />
+    <Content Include="Views\WarehouseUser\Create.cshtml" />
+    <Content Include="Views\WarehouseUser\Edit.cshtml" />
+    <Content Include="Views\Warehouse\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Filters\" />
-    <Folder Include="Views\WarehouseUser\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

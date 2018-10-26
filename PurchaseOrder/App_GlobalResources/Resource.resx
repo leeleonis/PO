@@ -869,4 +869,100 @@
     <value>Company</value>
     <comment>Company</comment>
   </data>
+  <data name="WarehouseUser_IsEnable" xml:space="preserve">
+    <value>IsEnable</value>
+    <comment>IsEnable</comment>
+  </data>
+  <data name="WarehouseUser_ID" xml:space="preserve">
+    <value>ID</value>
+    <comment>ID</comment>
+  </data>
+  <data name="WarehouseUser_Purview" xml:space="preserve">
+    <value>Purview</value>
+    <comment>Purview</comment>
+  </data>
+  <data name="WarehouseUser_WarehouseID" xml:space="preserve">
+    <value>WarehouseID</value>
+    <comment>WarehouseID</comment>
+  </data>
+  <data name="WarehouseUser_AdminUserID" xml:space="preserve">
+    <value>AdminUserID</value>
+    <comment>AdminUserID</comment>
+  </data>
+  <data name="WarehouseUser_CreateBy" xml:space="preserve">
+    <value>CreateBy</value>
+    <comment>CreateBy</comment>
+  </data>
+  <data name="WarehouseUser_CreateAt" xml:space="preserve">
+    <value>CreateAt</value>
+    <comment>CreateAt</comment>
+  </data>
+  <data name="WarehouseUser_UpdateBy" xml:space="preserve">
+    <value>UpdateBy</value>
+    <comment>UpdateBy</comment>
+  </data>
+  <data name="WarehouseUser_UpdateAt" xml:space="preserve">
+    <value>UpdateAt</value>
+    <comment>UpdateAt</comment>
+  </data>
+  <data name="AdminUser_IsEnable" xml:space="preserve">
+    <value>IsEnable</value>
+    <comment>IsEnable</comment>
+  </data>
+  <data name="AdminUser_ID" xml:space="preserve">
+    <value>ID</value>
+    <comment>ID</comment>
+  </data>
+  <data name="AdminUser_Group" xml:space="preserve">
+    <value>Group</value>
+    <comment>Group</comment>
+  </data>
+  <data name="AdminUser_Name" xml:space="preserve">
+    <value>Name</value>
+    <comment>Name</comment>
+  </data>
+  <data name="AdminUser_Account" xml:space="preserve">
+    <value>Account</value>
+    <comment>Account</comment>
+  </data>
+  <data name="AdminUser_Password" xml:space="preserve">
+    <value>Password</value>
+    <comment>Password</comment>
+  </data>
+  <data name="AdminUser_ApiUserName" xml:space="preserve">
+    <value>ApiUserName</value>
+    <comment>ApiUserName</comment>
+  </data>
+  <data name="AdminUser_ApiPassword" xml:space="preserve">
+    <value>ApiPassword</value>
+    <comment>ApiPassword</comment>
+  </data>
+  <data name="AdminUser_TimeZone" xml:space="preserve">
+    <value>TimeZone</value>
+    <comment>TimeZone</comment>
+  </data>
+  <data name="AdminUser_AllowWarehouse" xml:space="preserve">
+    <value>AllowWarehouse</value>
+    <comment>AllowWarehouse</comment>
+  </data>
+  <data name="AdminUser_Auth" xml:space="preserve">
+    <value>Auth</value>
+    <comment>Auth</comment>
+  </data>
+  <data name="AdminUser_CreateBy" xml:space="preserve">
+    <value>CreateBy</value>
+    <comment>CreateBy</comment>
+  </data>
+  <data name="AdminUser_CreateAt" xml:space="preserve">
+    <value>CreateAt</value>
+    <comment>CreateAt</comment>
+  </data>
+  <data name="AdminUser_UpdateBy" xml:space="preserve">
+    <value>UpdateBy</value>
+    <comment>UpdateBy</comment>
+  </data>
+  <data name="AdminUser_UpdateAt" xml:space="preserve">
+    <value>UpdateAt</value>
+    <comment>UpdateAt</comment>
+  </data>
 </root>

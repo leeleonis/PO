@@ -34,6 +34,10 @@
         <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseOrder_Warehouse" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Transfer_Warehouse" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Transfer_Warehouse1" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.AdminUser" Width="1.5" PointX="12.375" PointY="1" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.WarehouseUser" Width="1.5" PointX="14.625" PointY="1.625" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_WarehouseUser_AdminUser" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_WarehouseUser_Warehouse" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

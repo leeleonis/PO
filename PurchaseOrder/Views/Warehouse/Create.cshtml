@@ -21,6 +21,7 @@
                     <div>
                         <div class="widget-body no-padding">
                             <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
+                                @Html.HiddenFor(x=>x.ID)
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="IsEnable" value="True">
                                 <div id="content" class="tab-content">

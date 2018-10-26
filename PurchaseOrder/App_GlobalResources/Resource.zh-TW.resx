@@ -696,4 +696,76 @@
   <data name="Warehouse_Company" xml:space="preserve">
     <value>供應商</value>
   </data>
+  <data name="WarehouseUser_IsEnable" xml:space="preserve">
+    <value>啟用</value>
+  </data>
+  <data name="WarehouseUser_ID" xml:space="preserve">
+    <value>流水號</value>
+  </data>
+  <data name="WarehouseUser_Purview" xml:space="preserve">
+    <value>倉庫權限</value>
+  </data>
+  <data name="WarehouseUser_WarehouseID" xml:space="preserve">
+    <value>倉庫</value>
+  </data>
+  <data name="WarehouseUser_AdminUserID" xml:space="preserve">
+    <value>使用者</value>
+  </data>
+  <data name="WarehouseUser_CreateBy" xml:space="preserve">
+    <value>建立者</value>
+  </data>
+  <data name="WarehouseUser_CreateAt" xml:space="preserve">
+    <value>建立時間</value>
+  </data>
+  <data name="WarehouseUser_UpdateBy" xml:space="preserve">
+    <value>修改者</value>
+  </data>
+  <data name="WarehouseUser_UpdateAt" xml:space="preserve">
+    <value>修改時間</value>
+  </data>
+  <data name="AdminUser_IsEnable" xml:space="preserve">
+    <value>啟用</value>
+  </data>
+  <data name="AdminUser_ID" xml:space="preserve">
+    <value>流水號</value>
+  </data>
+  <data name="AdminUser_Group" xml:space="preserve">
+    <value>組別</value>
+  </data>
+  <data name="AdminUser_Name" xml:space="preserve">
+    <value>名稱</value>
+  </data>
+  <data name="AdminUser_Account" xml:space="preserve">
+    <value>帳號</value>
+  </data>
+  <data name="AdminUser_Password" xml:space="preserve">
+    <value>密碼</value>
+  </data>
+  <data name="AdminUser_ApiUserName" xml:space="preserve">
+    <value>SC使用者名稱</value>
+  </data>
+  <data name="AdminUser_ApiPassword" xml:space="preserve">
+    <value>SC密碼</value>
+  </data>
+  <data name="AdminUser_TimeZone" xml:space="preserve">
+    <value>使用的時區</value>
+  </data>
+  <data name="AdminUser_AllowWarehouse" xml:space="preserve">
+    <value>充許的出貨倉</value>
+  </data>
+  <data name="AdminUser_Auth" xml:space="preserve">
+    <value>權限</value>
+  </data>
+  <data name="AdminUser_CreateBy" xml:space="preserve">
+    <value>建立者</value>
+  </data>
+  <data name="AdminUser_CreateAt" xml:space="preserve">
+    <value>建立時間</value>
+  </data>
+  <data name="AdminUser_UpdateBy" xml:space="preserve">
+    <value>修改者</value>
+  </data>
+  <data name="AdminUser_UpdateAt" xml:space="preserve">
+    <value>修改時間</value>
+  </data>
 </root>

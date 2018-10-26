@@ -38,5 +38,7 @@ namespace PurchaseOrderSys.Models
         public virtual DbSet<Transfer> Transfer { get; set; }
         public virtual DbSet<TransferSKU> TransferSKU { get; set; }
         public virtual DbSet<Warehouse> Warehouse { get; set; }
+        public virtual DbSet<AdminUser> AdminUser { get; set; }
+        public virtual DbSet<WarehouseUser> WarehouseUser { get; set; }
     }
 }

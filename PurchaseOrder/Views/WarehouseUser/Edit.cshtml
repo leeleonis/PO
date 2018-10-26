@@ -1,0 +1,77 @@
+﻿@model WarehouseUser
+@{
+    ViewBag.title = "修改使用者倉庫權限";
+    var Warehouse = (List<SelectListItem>)ViewBag.Warehouse;
+    var AdminUser = (List<SelectListItem>)ViewBag.AdminUser;
+    var WarehousePurviewDLL = EnumData.WarehousePurviewDLL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var DefaultSelect = PurchaseOrderSys.App_GlobalResources.Resource.DefaultSelect;
+}
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-xs-12">
+                <div class="jarviswidget" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+
+                        <h2>修改</h2>
+                        <ul class="nav nav-tabs pull-right">
+                            <li><a data-toggle="tab" href="#hb1">@ViewBag.title</a></li>
+                        </ul>
+                    </header>
+                    <div>
+                        <div class="widget-body no-padding">
+                            <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
+                                @Html.HiddenFor(x=>x.ID)
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="IsEnable" value="True">
+                                <div id="content" class="tab-content">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="tab-pane" id="hb1">
+                                        <fieldset>
+                                            <legend>@ViewBag.title</legend>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.AdminUserID, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownListFor(model => model.AdminUserID, AdminUser, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                </div>
+                                                @Html.LabelFor(model => model.WarehouseID, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownListFor(model => model.WarehouseID, Warehouse, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Purview, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-1">
+                                                    @foreach (var item in WarehousePurviewDLL)
+                                                    {
+                                                        <div class="form-group">
+                                                            <input type="checkbox" name="PurviewList" value="@item.Value" id="PurviewList"     @(Model.Purview.Contains(item.Value) ? "checked" : "")/>
+                                                            @Html.Label(item.Text)
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+
+                                <div class="widget-footer">
+                                    <button type="submit" class="btn btn-primary" id="save">儲存</button>
+                                    <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index")'">返回</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section pagespecific {
+    <script type="text/javascript">
+        var hash = window.location.hash;
+        $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
+        $('.tab-pane').eq(hash.substr(1)).addClass('active');
+    </script>
+}
