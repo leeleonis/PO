@@ -111,5 +111,20 @@ namespace PurchaseOrderSys.Models
             var list = new Dictionary<string, string>{{ "CreditNote", "Credit Note" },{ "Replacement", "Replacement" } };
             return list;
         }
+
+        /// <summary>
+        /// 倉庫類型
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<string, string> warehouseTypeDDL()
+        {
+            return new Dictionary<string, string>()
+            {
+                { "Normal", "Normal" },
+                { "DropShip", "DropShip"},
+                { "FBA", "FBA" },
+                { "Winit", "Winit" }
+            };
+        }
     }
 }

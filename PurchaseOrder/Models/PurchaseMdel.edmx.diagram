@@ -26,6 +26,14 @@
         <AssociationConnector Association="PurchaseOrderModel.FK_SerialsLlist_SerialsLlist" />
         <EntityTypeShape EntityType="PurchaseOrderModel.VendorLIst" Width="1.5" PointX="0.75" PointY="9.125" />
         <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseOrder_VendorLIst" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.Transfer" Width="1.5" PointX="9.625" PointY="1.375" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.TransferSKU" Width="1.5" PointX="11.875" PointY="7.75" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_TransferSKU_PurchaseSKU" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_TransferSKU_Transfer" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.Warehouse" Width="1.5" PointX="7.625" PointY="0.75" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseOrder_Warehouse" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_Transfer_Warehouse" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_Transfer_Warehouse1" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

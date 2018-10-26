@@ -358,4 +358,34 @@ namespace PurchaseOrderSys.Models
 
         public int? SerialQTY { get; set; }
     }
+    public class WarehouseVM
+    {
+        public int ID { get; set; }
+        public string SKU { get; set; }
+        public string Name { get; set; }
+        /// <summary>
+        /// 顯示30天內的出貨數量
+        /// </summary>
+        public int Velocity { get; set; }
+        /// <summary>
+        /// 依照當下庫存數, 算出能維持的天數
+        /// </summary>
+        public int DaysOfSupply { get; set; }
+        /// <summary>
+        /// 可出貨的庫存
+        /// </summary>
+        public int Fulfillable { get; set; }
+        /// <summary>
+        /// 等待出貨的庫總量
+        /// </summary>
+        public decimal Awaiting { get; set; }
+        /// <summary>
+        /// 可上架的庫存總數
+        /// </summary>
+        public int Aggregate { get; set; }
+        /// <summary>
+        /// 不可銷售的庫總量
+        /// </summary>
+        public int Unfulfillable { get; set; }
+    }
 }

@@ -805,4 +805,68 @@
     <value>USD</value>
     <comment>USD</comment>
   </data>
+  <data name="Warehouse_IsEnable" xml:space="preserve">
+    <value>IsEnable</value>
+    <comment>IsEnable</comment>
+  </data>
+  <data name="Warehouse_IsDefault" xml:space="preserve">
+    <value>IsDefault</value>
+    <comment>IsDefault</comment>
+  </data>
+  <data name="Warehouse_IsSellable" xml:space="preserve">
+    <value>IsSellable</value>
+    <comment>IsSellable</comment>
+  </data>
+  <data name="Warehouse_ID" xml:space="preserve">
+    <value>ID</value>
+    <comment>ID</comment>
+  </data>
+  <data name="Warehouse_Name" xml:space="preserve">
+    <value>Name</value>
+    <comment>Name</comment>
+  </data>
+  <data name="Warehouse_Type" xml:space="preserve">
+    <value>Type</value>
+    <comment>Type</comment>
+  </data>
+  <data name="Warehouse_WinitWarehouse" xml:space="preserve">
+    <value>WinitWarehouse</value>
+    <comment>WinitWarehouse</comment>
+  </data>
+  <data name="Warehouse_CreateBy" xml:space="preserve">
+    <value>CreateBy</value>
+    <comment>CreateBy</comment>
+  </data>
+  <data name="Warehouse_CreateAt" xml:space="preserve">
+    <value>CreateAt</value>
+    <comment>CreateAt</comment>
+  </data>
+  <data name="Warehouse_UpdateBy" xml:space="preserve">
+    <value>UpdateBy</value>
+    <comment>UpdateBy</comment>
+  </data>
+  <data name="Warehouse_UpdateAt" xml:space="preserve">
+    <value>UpdateAt</value>
+    <comment>UpdateAt</comment>
+  </data>
+  <data name="Warehouse_Fulfillable" xml:space="preserve">
+    <value>Fulfillable</value>
+    <comment>Fulfillable</comment>
+  </data>
+  <data name="Warehouse_Location" xml:space="preserve">
+    <value>Location</value>
+    <comment>Location</comment>
+  </data>
+  <data name="Warehouse_Countries" xml:space="preserve">
+    <value>Countries</value>
+    <comment>Countries</comment>
+  </data>
+  <data name="Warehouse_Marketplace" xml:space="preserve">
+    <value>Marketplace</value>
+    <comment>Marketplace</comment>
+  </data>
+  <data name="Warehouse_Company" xml:space="preserve">
+    <value>Company</value>
+    <comment>Company</comment>
+  </data>
 </root>

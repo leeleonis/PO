@@ -648,4 +648,52 @@
   <data name="CurrencyUSD" xml:space="preserve">
     <value>美金</value>
   </data>
+  <data name="Warehouse_IsEnable" xml:space="preserve">
+    <value>啟用</value>
+  </data>
+  <data name="Warehouse_IsDefault" xml:space="preserve">
+    <value>預設</value>
+  </data>
+  <data name="Warehouse_IsSellable" xml:space="preserve">
+    <value>可出貨</value>
+  </data>
+  <data name="Warehouse_ID" xml:space="preserve">
+    <value>流水號</value>
+  </data>
+  <data name="Warehouse_Name" xml:space="preserve">
+    <value>名稱</value>
+  </data>
+  <data name="Warehouse_Type" xml:space="preserve">
+    <value>倉庫類別</value>
+  </data>
+  <data name="Warehouse_WinitWarehouse" xml:space="preserve">
+    <value>Winit倉庫</value>
+  </data>
+  <data name="Warehouse_CreateBy" xml:space="preserve">
+    <value>建立者</value>
+  </data>
+  <data name="Warehouse_CreateAt" xml:space="preserve">
+    <value>建立時間</value>
+  </data>
+  <data name="Warehouse_UpdateBy" xml:space="preserve">
+    <value>修改者</value>
+  </data>
+  <data name="Warehouse_UpdateAt" xml:space="preserve">
+    <value>修改時間</value>
+  </data>
+  <data name="Warehouse_Fulfillable" xml:space="preserve">
+    <value>是否是可銷售</value>
+  </data>
+  <data name="Warehouse_Location" xml:space="preserve">
+    <value>倉庫所在地</value>
+  </data>
+  <data name="Warehouse_Countries" xml:space="preserve">
+    <value>服務的國家</value>
+  </data>
+  <data name="Warehouse_Marketplace" xml:space="preserve">
+    <value>上架的平台</value>
+  </data>
+  <data name="Warehouse_Company" xml:space="preserve">
+    <value>供應商</value>
+  </data>
 </root>

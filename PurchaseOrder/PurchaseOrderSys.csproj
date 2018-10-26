@@ -182,8 +182,11 @@
     <Compile Include="Controllers\PurchaseOrderPOController.cs" />
     <Compile Include="Controllers\PurchaseSKUController.cs" />
     <Compile Include="Controllers\TestController.cs" />
+    <Compile Include="Controllers\TransferController.cs" />
     <Compile Include="Controllers\VendorController.cs" />
+    <Compile Include="Controllers\WarehouseInventoryController.cs" />
     <Compile Include="Controllers\WarehouseController.cs" />
+    <Compile Include="Controllers\WarehouseUserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -266,6 +269,18 @@
     <Compile Include="Models\SKUMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Transfer.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TransferMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TransferSKU.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TransferSKUMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\VendorLIst.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
     </Compile>
@@ -273,6 +288,12 @@
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ViewModels.cs" />
+    <Compile Include="Models\Warehouse.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\WarehouseMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -891,10 +912,14 @@
     <Content Include="Views\Vendor\Index.cshtml" />
     <Content Include="Views\Vendor\Create.cshtml" />
     <Content Include="Views\Vendor\Edit.cshtml" />
+    <Content Include="Views\WarehouseInventory\Index.cshtml" />
+    <Content Include="Views\Warehouse\Create.cshtml" />
+    <Content Include="Views\Transfer\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Filters\" />
+    <Folder Include="Views\WarehouseUser\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

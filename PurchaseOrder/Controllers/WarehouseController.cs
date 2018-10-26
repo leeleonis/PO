@@ -12,12 +12,31 @@ namespace PurchaseOrderSys.Controllers
         // GET: Warehouse
         public ActionResult Index()
         {
-          
-            return View();
+            var Warehouse = db.Warehouse.Where(x => x.IsEnable);
+            return View(Warehouse);
         }
         public ActionResult Create()
         {
+            ViewBag.CompanyList = db.Company.Where(x => x.IsEnable).Select(x => new SelectListItem { Text = x.Name, Value = x.ID.ToString() }).ToList();
             return View();
+        }
+        [HttpPost]
+        public ActionResult Create(Warehouse Warehouse)
+        {
+            Warehouse.CreateBy = UserBy;
+            Warehouse.CreateAt = DateTime.UtcNow;
+            db.Warehouse.Add(Warehouse);
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+
+                var s = ex;
+            }
+
+            return RedirectToAction("Index");
         }
     }
 }

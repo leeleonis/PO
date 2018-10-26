@@ -50,6 +50,7 @@ namespace PurchaseOrderSys.Models
         public string Warehouse { get; set; }
         public string Currency { get; set; }
         public Nullable<decimal> Tax { get; set; }
+        public Nullable<int> WarehouseID { get; set; }
     
         public virtual Company Company { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -61,5 +62,6 @@ namespace PurchaseOrderSys.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseSKU> PurchaseSKU { get; set; }
         public virtual VendorLIst VendorLIst { get; set; }
+        public virtual Warehouse Warehouse1 { get; set; }
     }
 }

@@ -1652,5 +1652,149 @@ namespace PurchaseOrderSys.App_GlobalResources {
                 return ResourceManager.GetString("VendorLIst_VendorNo", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   查詢類似 Company 的當地語系化字串。
+        /// </summary>
+        public static string Warehouse_Company {
+            get {
+                return ResourceManager.GetString("Warehouse_Company", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Countries 的當地語系化字串。
+        /// </summary>
+        public static string Warehouse_Countries {
+            get {
+                return ResourceManager.GetString("Warehouse_Countries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CreateAt 的當地語系化字串。
+        /// </summary>
+        public static string Warehouse_CreateAt {
+            get {
+                return ResourceManager.GetString("Warehouse_CreateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CreateBy 的當地語系化字串。
+        /// </summary>
+        public static string Warehouse_CreateBy {
+            get {
+                return ResourceManager.GetString("Warehouse_CreateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Fulfillable 的當地語系化字串。
+        /// </summary>
+        public static string Warehouse_Fulfillable {
+            get {
+                return ResourceManager.GetString("Warehouse_Fulfillable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ID 的當地語系化字串。
+        /// </summary>
+        public static string Warehouse_ID {
+            get {
+                return ResourceManager.GetString("Warehouse_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 IsDefault 的當地語系化字串。
+        /// </summary>
+        public static string Warehouse_IsDefault {
+            get {
+                return ResourceManager.GetString("Warehouse_IsDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 IsEnable 的當地語系化字串。
+        /// </summary>
+        public static string Warehouse_IsEnable {
+            get {
+                return ResourceManager.GetString("Warehouse_IsEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 IsSellable 的當地語系化字串。
+        /// </summary>
+        public static string Warehouse_IsSellable {
+            get {
+                return ResourceManager.GetString("Warehouse_IsSellable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Location 的當地語系化字串。
+        /// </summary>
+        public static string Warehouse_Location {
+            get {
+                return ResourceManager.GetString("Warehouse_Location", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Marketplace 的當地語系化字串。
+        /// </summary>
+        public static string Warehouse_Marketplace {
+            get {
+                return ResourceManager.GetString("Warehouse_Marketplace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Name 的當地語系化字串。
+        /// </summary>
+        public static string Warehouse_Name {
+            get {
+                return ResourceManager.GetString("Warehouse_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Type 的當地語系化字串。
+        /// </summary>
+        public static string Warehouse_Type {
+            get {
+                return ResourceManager.GetString("Warehouse_Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UpdateAt 的當地語系化字串。
+        /// </summary>
+        public static string Warehouse_UpdateAt {
+            get {
+                return ResourceManager.GetString("Warehouse_UpdateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UpdateBy 的當地語系化字串。
+        /// </summary>
+        public static string Warehouse_UpdateBy {
+            get {
+                return ResourceManager.GetString("Warehouse_UpdateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 WinitWarehouse 的當地語系化字串。
+        /// </summary>
+        public static string Warehouse_WinitWarehouse {
+            get {
+                return ResourceManager.GetString("Warehouse_WinitWarehouse", resourceCulture);
+            }
+        }
     }
 }
