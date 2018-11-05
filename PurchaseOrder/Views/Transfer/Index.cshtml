@@ -1,6 +1,6 @@
-﻿@model IEnumerable<WarehouseVM>
+﻿@model IEnumerable<Transfer>
 @{
-    ViewBag.title = "倉庫轉移";
+    ViewBag.ptitle = "倉庫轉移";
 }
 <div id="content">
     <section id="widget-grid" class="">
@@ -11,75 +11,75 @@
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
 
-                        <h2>@ViewBag.title</h2>
+                        <h2>@ViewBag.ptitle</h2>
                         <ul class="nav nav-tabs pull-right">
-                            <li><a data-toggle="tab" href="#hb1">@ViewBag.title</a></li>
+                            <li><a data-toggle="tab" href="#hb1">@ViewBag.ptitle</a></li>
                         </ul>
                     </header>
 
                     <div>
                         <div class="widget-body no-padding">
-                            <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
-                                @Html.AntiForgeryToken()
-                                <input type="hidden" name="IsEnable" value="True">
-
                                 <div id="content" class="tab-content">
-                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                     <div class="tab-pane" id="hb1">
                                         <fieldset>
-                                            <legend>Search</legend>
-                                            <div class="form-group">
-                                                @Html.Label("Status", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Status", new { htmlAttributes = new { @class = "form-control" } })
+                                            <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
+                                                <legend>Search</legend>
+                                                <div class="form-group">
+                                                    @Html.Label("Status", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("Status", new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>
+                                                    @Html.Label("SKU", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("SKU", new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>
+                                                    @Html.Label("Interim", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("Interim", new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>
                                                 </div>
-                                                @Html.Label("SKU", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("SKU", new { htmlAttributes = new { @class = "form-control" } })
+                                                <div class="form-group">
+                                                    @Html.Label("Serial", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("Serial", new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>
+                                                    @Html.Label("From", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("From", new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>
+                                                    @Html.Label("To", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("To", new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>
                                                 </div>
-                                                @Html.Label("Interim", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Interim", new { htmlAttributes = new { @class = "form-control" } })
+                                                <div class="form-group">
+                                                    @Html.Label("Transfer", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("Transfer", new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>
+                                                    @Html.Label("External Transfer", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("External Transfer", new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>
+                                                    @Html.Label("Title", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("Title", new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @Html.Label("Serial", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Serial", new { htmlAttributes = new { @class = "form-control" } })
+                                                <div class="form-group">
+                                                    @Html.Label("Carrier", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("Carrier", new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>
+                                                    @Html.Label("Tracking", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("Tracking", new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>
                                                 </div>
-                                                @Html.Label("From", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("From", new { htmlAttributes = new { @class = "form-control" } })
+                                                <div class="col-lg-offset-10">
+                                                    <button type="button" id="btn-search" class="btn btn-info btn-lg">Search</button>
                                                 </div>
-                                                @Html.Label("To", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("To", new { htmlAttributes = new { @class = "form-control" } })
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @Html.Label("Transfer", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Transfer", new { htmlAttributes = new { @class = "form-control" } })
-                                                </div>
-                                                @Html.Label("External Transfer", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("External Transfer", new { htmlAttributes = new { @class = "form-control" } })
-                                                </div>
-                                                @Html.Label("Title", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Title", new { htmlAttributes = new { @class = "form-control" } })
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @Html.Label("Carrier", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Carrier", new { htmlAttributes = new { @class = "form-control" } })
-                                                </div>
-                                                @Html.Label("Tracking", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Tracking", new { htmlAttributes = new { @class = "form-control" } })
-                                                </div>
-                                            </div>
+                                            </form>
                                         </fieldset>
                                         <fieldset>
                                             <legend></legend>
@@ -90,9 +90,10 @@
                                             </div>
                                             <div class="row">
                                                 <article class="col-xs-12">
-                                                    <table id="DataGridC" class="table table-striped table-bordered">
+                                                    <table id="DataGrid" class="table table-striped table-bordered">
                                                         <thead>
                                                             <tr>
+                                                                <th><input type="checkbox"/></th>
                                                                 <th>Transfer</th>
                                                                 <th>External Transfer</th>
                                                                 <th>Title</th>
@@ -110,16 +111,19 @@
                                                             {
                                                                 foreach (var item in Model)
                                                                 {
-                                                                <tr>
-                                                                    <td>@item.SKU</td>
-                                                                    <td>@item.Name</td>
-                                                                    <td>@item.Velocity</td>
-                                                                    <td>@item.DaysOfSupply</td>
-                                                                    <td>@item.Fulfillable</td>
-                                                                    <td>@item.Awaiting</td>
-                                                                    <td>@item.Aggregate</td>
-                                                                    <td>@item.Unfulfillable</td>
-                                                                </tr>
+                                                                    <tr>
+                                                                        <td><input type="checkbox" /></td>
+                                                                        <td>@item.ID</td>
+                                                                        <td>@item.ExternalTra</td>
+                                                                        <td>@item.Title</td>
+                                                                        <td>@item.WarehouseFrom.Name</td>
+                                                                        <td>@item.WarehouseTo.Name</td>
+                                                                        <td>@item.TotalQTY</td>
+                                                                        <td>@item.CreateAt</td>
+                                                                        <td>@item.CreateBy</td>
+                                                                        <td>@item.Status</td>
+                                                                        <td>Download</td>
+                                                                    </tr>
                                                                 }
                                                             }
                                                         </tbody>
@@ -129,12 +133,6 @@
                                         </fieldset>
                                     </div>
                                 </div>
-
-                                @*<div class="widget-footer">
-                                        <button type="submit" class="btn btn-primary" id="save">儲存</button>
-                                        <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index")'">返回</button>
-                                    </div>*@
-                            </form>
                         </div>
                     </div>
                 </div>
@@ -152,7 +150,7 @@
         //    dateFormat: 'yy-mm-dd'
         //});
         $(document).ready(function () {
-
+            $('#DataGrid').DataTable();
         });
     </script>
 }

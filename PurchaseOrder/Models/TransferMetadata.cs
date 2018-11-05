@@ -116,6 +116,30 @@ namespace PurchaseOrderSys.Models
     		public Nullable<System.DateTime>  UpdateAt { get; set; }
     
     		    
+    		/// <summary>
+    		/// Interim
+    		/// </summary>        
+    	    [Display(Name = "Transfer_Interim", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  Interim { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Carrier
+    		/// </summary>        
+    	    [Display(Name = "Transfer_Carrier", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  Carrier { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Tracking
+    		/// </summary>        
+    	    [Display(Name = "Transfer_Tracking", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  Tracking { get; set; }
+    
+    		    
     	}
     }
     

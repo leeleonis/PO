@@ -32,10 +32,13 @@ namespace PurchaseOrderSys.Models
         public System.DateTime CreateAt { get; set; }
         public string UpdateBy { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }
+        public string Interim { get; set; }
+        public string Carrier { get; set; }
+        public string Tracking { get; set; }
     
+        public virtual Warehouse WarehouseFrom { get; set; }
+        public virtual Warehouse WarehouseTo { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TransferSKU> TransferSKU { get; set; }
-        public virtual Warehouse Warehouse { get; set; }
-        public virtual Warehouse Warehouse1 { get; set; }
     }
 }

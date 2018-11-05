@@ -35,10 +35,10 @@ namespace PurchaseOrderSys.Models
         public virtual DbSet<CMReplacement> CMReplacement { get; set; }
         public virtual DbSet<PurchaseSKU> PurchaseSKU { get; set; }
         public virtual DbSet<VendorLIst> VendorLIst { get; set; }
-        public virtual DbSet<Transfer> Transfer { get; set; }
         public virtual DbSet<TransferSKU> TransferSKU { get; set; }
         public virtual DbSet<Warehouse> Warehouse { get; set; }
         public virtual DbSet<AdminUser> AdminUser { get; set; }
         public virtual DbSet<WarehouseUser> WarehouseUser { get; set; }
+        public virtual DbSet<Transfer> Transfer { get; set; }
     }
 }

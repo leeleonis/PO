@@ -44,6 +44,48 @@ namespace PurchaseOrderSys.Controllers
             };
             return Json(returnObj, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult TSkuNumberList(int? draw, int? start, int? length, string[] Skulist)
+        {
+            var odataList = (List<TranSKUVM>)Session["TSkuNumberList"];
+            if (odataList == null)
+            {
+                odataList = new List<TranSKUVM>();
+            }
+            if (Skulist != null && Skulist.Where(x => !string.IsNullOrWhiteSpace(x)).Any())
+            {
+                var dataList = db.SkuLang.Where(x => x.LangID == "zh-tw" && Skulist.Contains(x.Sku)).Select(x =>
+                new TranSKUVM
+                {
+                    ck = x.Sku,
+                    sk = x.Sku,
+                    SKU = x.Sku,
+                    ProductName = x.Name,
+
+                }
+                ).ToList();
+                //foreach (var item in dataList)
+                //{
+                //    var QTYOrdered = RandomVal(100, 1000);
+                //    var QTYFulfilled = RandomVal(100, 1000);
+                //    var Price = RandomVal(1000, 30000);
+                //    var Discount = RandomVal(0, 100);
+                //    var Credit = RandomVal(0, 100);
+                  
+                //}
+                odataList.AddRange(dataList);
+                Session["TSkuNumberList"] = odataList;
+            }
+            int recordsTotal = odataList.Count();
+            var returnObj =
+            new
+            {
+                draw = draw,
+                recordsTotal = recordsTotal,
+                recordsFiltered = recordsTotal,
+                data = odataList//分頁後的資料 
+            };
+            return Json(returnObj, JsonRequestBehavior.AllowGet);
+        }
         public ActionResult SkuNumberList(int? draw, int? start, int? length, string[] Skulist)
         {
             var odataList = (List<PoSKUVM>)Session["SkuNumberList"];

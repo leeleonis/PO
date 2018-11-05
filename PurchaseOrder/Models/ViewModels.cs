@@ -303,7 +303,27 @@ namespace PurchaseOrderSys.Models
         public int ID { get; set; }
         public string val { get; set; }
     }
-
+    public class TranSKUVM
+    {
+        public int? ID { get; set; }
+        public string ck { get; set; }
+        public string sk { get; set; }
+        /// <summary>
+        /// 品號
+        /// </summary>
+        public string SKU { get; set; }
+        /// <summary>
+        /// 品名
+        /// </summary>
+        public string ProductName { get; set; }
+        /// <summary>
+        /// 移倉數量
+        /// </summary>
+        public int? QTY { get; set; }
+        public decimal? TotalReceive { get; set; }
+        public string TWN { get; set; }
+        public string Winit { get; set; }
+    }
     public class PoSKUVM
     {
         public int? ID { get; set; }

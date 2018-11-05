@@ -768,4 +768,49 @@
   <data name="AdminUser_UpdateAt" xml:space="preserve">
     <value>修改時間</value>
   </data>
+  <data name="Transfer_IsEnable" xml:space="preserve">
+    <value>啟用</value>
+  </data>
+  <data name="Transfer_ID" xml:space="preserve">
+    <value>移倉單號</value>
+  </data>
+  <data name="Transfer_ExternalTra" xml:space="preserve">
+    <value>外部轉移</value>
+  </data>
+  <data name="Transfer_Title" xml:space="preserve">
+    <value>名稱</value>
+  </data>
+  <data name="Transfer_FromWID" xml:space="preserve">
+    <value>出貨倉</value>
+  </data>
+  <data name="Transfer_ToWID" xml:space="preserve">
+    <value>收貨倉</value>
+  </data>
+  <data name="Transfer_TotalQTY" xml:space="preserve">
+    <value>數量</value>
+  </data>
+  <data name="Transfer_Status" xml:space="preserve">
+    <value>狀態</value>
+  </data>
+  <data name="Transfer_CreateBy" xml:space="preserve">
+    <value>建立者</value>
+  </data>
+  <data name="Transfer_CreateAt" xml:space="preserve">
+    <value>建立時間</value>
+  </data>
+  <data name="Transfer_UpdateBy" xml:space="preserve">
+    <value>修改者</value>
+  </data>
+  <data name="Transfer_UpdateAt" xml:space="preserve">
+    <value>修改時間</value>
+  </data>
+  <data name="Transfer_Interim" xml:space="preserve">
+    <value>臨時</value>
+  </data>
+  <data name="Transfer_Carrier" xml:space="preserve">
+    <value>運輸商</value>
+  </data>
+  <data name="Transfer_Tracking" xml:space="preserve">
+    <value>追蹤單號</value>
+  </data>
 </root>

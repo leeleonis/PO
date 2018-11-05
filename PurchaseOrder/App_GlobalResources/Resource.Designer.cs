@@ -1627,6 +1627,141 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查詢類似 Carrier 的當地語系化字串。
+        /// </summary>
+        public static string Transfer_Carrier {
+            get {
+                return ResourceManager.GetString("Transfer_Carrier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CreateAt 的當地語系化字串。
+        /// </summary>
+        public static string Transfer_CreateAt {
+            get {
+                return ResourceManager.GetString("Transfer_CreateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CreateBy 的當地語系化字串。
+        /// </summary>
+        public static string Transfer_CreateBy {
+            get {
+                return ResourceManager.GetString("Transfer_CreateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ExternalTra 的當地語系化字串。
+        /// </summary>
+        public static string Transfer_ExternalTra {
+            get {
+                return ResourceManager.GetString("Transfer_ExternalTra", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 FromWID 的當地語系化字串。
+        /// </summary>
+        public static string Transfer_FromWID {
+            get {
+                return ResourceManager.GetString("Transfer_FromWID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ID 的當地語系化字串。
+        /// </summary>
+        public static string Transfer_ID {
+            get {
+                return ResourceManager.GetString("Transfer_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Interim 的當地語系化字串。
+        /// </summary>
+        public static string Transfer_Interim {
+            get {
+                return ResourceManager.GetString("Transfer_Interim", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 IsEnable 的當地語系化字串。
+        /// </summary>
+        public static string Transfer_IsEnable {
+            get {
+                return ResourceManager.GetString("Transfer_IsEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Status 的當地語系化字串。
+        /// </summary>
+        public static string Transfer_Status {
+            get {
+                return ResourceManager.GetString("Transfer_Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Title 的當地語系化字串。
+        /// </summary>
+        public static string Transfer_Title {
+            get {
+                return ResourceManager.GetString("Transfer_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 TotalQTY 的當地語系化字串。
+        /// </summary>
+        public static string Transfer_TotalQTY {
+            get {
+                return ResourceManager.GetString("Transfer_TotalQTY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ToWID 的當地語系化字串。
+        /// </summary>
+        public static string Transfer_ToWID {
+            get {
+                return ResourceManager.GetString("Transfer_ToWID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Tracking 的當地語系化字串。
+        /// </summary>
+        public static string Transfer_Tracking {
+            get {
+                return ResourceManager.GetString("Transfer_Tracking", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UpdateAt 的當地語系化字串。
+        /// </summary>
+        public static string Transfer_UpdateAt {
+            get {
+                return ResourceManager.GetString("Transfer_UpdateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UpdateBy 的當地語系化字串。
+        /// </summary>
+        public static string Transfer_UpdateBy {
+            get {
+                return ResourceManager.GetString("Transfer_UpdateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 User Name 的當地語系化字串。
         /// </summary>
         public static string Username {

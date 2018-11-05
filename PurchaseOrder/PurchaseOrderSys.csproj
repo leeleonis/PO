@@ -931,6 +931,8 @@
     <Content Include="Views\WarehouseUser\Create.cshtml" />
     <Content Include="Views\WarehouseUser\Edit.cshtml" />
     <Content Include="Views\Warehouse\Edit.cshtml" />
+    <Content Include="Views\Transfer\Create.cshtml" />
+    <Content Include="Views\Transfer\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

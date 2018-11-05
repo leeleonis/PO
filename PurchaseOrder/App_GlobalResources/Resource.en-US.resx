@@ -768,4 +768,49 @@
   <data name="AdminUser_UpdateAt" xml:space="preserve">
     <value>UpdateAt</value>
   </data>
+  <data name="Transfer_IsEnable" xml:space="preserve">
+    <value>IsEnable</value>
+  </data>
+  <data name="Transfer_ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="Transfer_ExternalTra" xml:space="preserve">
+    <value>ExternalTra</value>
+  </data>
+  <data name="Transfer_Title" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="Transfer_FromWID" xml:space="preserve">
+    <value>FromWID</value>
+  </data>
+  <data name="Transfer_ToWID" xml:space="preserve">
+    <value>ToWID</value>
+  </data>
+  <data name="Transfer_TotalQTY" xml:space="preserve">
+    <value>TotalQTY</value>
+  </data>
+  <data name="Transfer_Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Transfer_CreateBy" xml:space="preserve">
+    <value>CreateBy</value>
+  </data>
+  <data name="Transfer_CreateAt" xml:space="preserve">
+    <value>CreateAt</value>
+  </data>
+  <data name="Transfer_UpdateBy" xml:space="preserve">
+    <value>UpdateBy</value>
+  </data>
+  <data name="Transfer_UpdateAt" xml:space="preserve">
+    <value>UpdateAt</value>
+  </data>
+  <data name="Transfer_Interim" xml:space="preserve">
+    <value>Interim</value>
+  </data>
+  <data name="Transfer_Carrier" xml:space="preserve">
+    <value>Carrier</value>
+  </data>
+  <data name="Transfer_Tracking" xml:space="preserve">
+    <value>Tracking</value>
+  </data>
 </root>

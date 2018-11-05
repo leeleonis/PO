@@ -18,9 +18,9 @@ namespace PurchaseOrderSys.Models
         public Warehouse()
         {
             this.PurchaseOrder = new HashSet<PurchaseOrder>();
-            this.Transfer = new HashSet<Transfer>();
-            this.Transfer1 = new HashSet<Transfer>();
             this.WarehouseUser = new HashSet<WarehouseUser>();
+            this.TransferFrom = new HashSet<Transfer>();
+            this.TransferTo = new HashSet<Transfer>();
         }
     
         public bool IsEnable { get; set; }
@@ -43,10 +43,10 @@ namespace PurchaseOrderSys.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseOrder> PurchaseOrder { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Transfer> Transfer { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Transfer> Transfer1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<WarehouseUser> WarehouseUser { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Transfer> TransferFrom { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Transfer> TransferTo { get; set; }
     }
 }

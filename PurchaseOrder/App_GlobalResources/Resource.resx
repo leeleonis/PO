@@ -965,4 +965,64 @@
     <value>UpdateAt</value>
     <comment>UpdateAt</comment>
   </data>
+  <data name="Transfer_IsEnable" xml:space="preserve">
+    <value>IsEnable</value>
+    <comment>IsEnable</comment>
+  </data>
+  <data name="Transfer_ID" xml:space="preserve">
+    <value>ID</value>
+    <comment>ID</comment>
+  </data>
+  <data name="Transfer_ExternalTra" xml:space="preserve">
+    <value>ExternalTra</value>
+    <comment>ExternalTra</comment>
+  </data>
+  <data name="Transfer_Title" xml:space="preserve">
+    <value>Title</value>
+    <comment>Title</comment>
+  </data>
+  <data name="Transfer_FromWID" xml:space="preserve">
+    <value>FromWID</value>
+    <comment>FromWID</comment>
+  </data>
+  <data name="Transfer_ToWID" xml:space="preserve">
+    <value>ToWID</value>
+    <comment>ToWID</comment>
+  </data>
+  <data name="Transfer_TotalQTY" xml:space="preserve">
+    <value>TotalQTY</value>
+    <comment>TotalQTY</comment>
+  </data>
+  <data name="Transfer_Status" xml:space="preserve">
+    <value>Status</value>
+    <comment>Status</comment>
+  </data>
+  <data name="Transfer_CreateBy" xml:space="preserve">
+    <value>CreateBy</value>
+    <comment>CreateBy</comment>
+  </data>
+  <data name="Transfer_CreateAt" xml:space="preserve">
+    <value>CreateAt</value>
+    <comment>CreateAt</comment>
+  </data>
+  <data name="Transfer_UpdateBy" xml:space="preserve">
+    <value>UpdateBy</value>
+    <comment>UpdateBy</comment>
+  </data>
+  <data name="Transfer_UpdateAt" xml:space="preserve">
+    <value>UpdateAt</value>
+    <comment>UpdateAt</comment>
+  </data>
+  <data name="Transfer_Interim" xml:space="preserve">
+    <value>Interim</value>
+    <comment>Interim</comment>
+  </data>
+  <data name="Transfer_Carrier" xml:space="preserve">
+    <value>Carrier</value>
+    <comment>Carrier</comment>
+  </data>
+  <data name="Transfer_Tracking" xml:space="preserve">
+    <value>Tracking</value>
+    <comment>Tracking</comment>
+  </data>
 </root>
