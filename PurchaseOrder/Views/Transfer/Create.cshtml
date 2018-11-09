@@ -100,8 +100,8 @@
                                                                 <th>Total Receive</th>
                                                                 <th>TWN (Available)</th>
                                                                 <th>Winit US WC (Available)</th>
-                                                                <th>Download</th>
-                                                                <th>Action</th>
+                                                                @*<th>Download</th>*@
+                                                                @*<th>Action</th>*@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -128,7 +128,7 @@
                                                         </tbody>
                                                         <tfoot>
                                                             <tr>
-                                                                <td colspan="12">
+                                                                <td colspan="10">
                                                                     <select id="gebruikerId" name="gebruikerId" class=" form-control" style="width:50%"></select>
                                                                     <button type="button" id="addsku">Add SKU</button>
                                                                 </td>
@@ -184,18 +184,17 @@
                         "defaultContent": '' },
                     { data: "SKU" },
                     { data: "ProductName" },
-                    { data: "QTYOrdered", render: function (data, type, row) { return thousandComma(data); } },
-                    { data: "QTYFulfilled", render: function (data, type, row) { return thousandComma(data); } },
-                    { data: "Price", render: function (data, type, row) { return thousandComma(data); }  },
-                    { data: "Discount", render: function (data, type, row) { return thousandComma(data); } },
-                    { data: "Credit", render: function (data, type, row) { return thousandComma(data); }  },
-                    { data: "DiscountedPrice", render: function (data, type, row) { return thousandComma(data); } },
-                    { data: "Subtotal", render: function (data, type, row) { return thousandComma(data); } }
+                    { data: "QTY", render: function (data, type, row) { return thousandComma(data); } },
+                    { data: "Serial", render: function (data, type, row) { return thousandComma(data); } },
+                    { data: "Label", render: function (data, type, row) { return thousandComma(data); }  },
+                    { data: "TotalReceive", render: function (data, type, row) { return thousandComma(data); } },
+                    { data: "TWN", render: function (data, type, row) { return thousandComma(data); }  },
+                    { data: "Winit", render: function (data, type, row) { return thousandComma(data); } }
                 ],
                 ajax: {
                     traditional: true,
                     method: "get",//或post，自由決定，影響到Server端用FormCollection取值或Request.QueryString取得DataTables傳遞的資訊
-                    url: "@Url.Action("SkuNumberList", "Ajax")",
+                    url: "@Url.Action("TSkuNumberList", "Ajax")",
                     data: function (d) {
                         var Skulist = $("#gebruikerId").val();
                         d.Skulist = Skulist;
