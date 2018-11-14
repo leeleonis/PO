@@ -14,9 +14,14 @@ namespace PurchaseOrderSys.Models
     
     public partial class TransferSKU
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public TransferSKU()
+        {
+            this.SerialsLlist = new HashSet<SerialsLlist>();
+        }
+    
         public bool IsEnable { get; set; }
         public int ID { get; set; }
-        public Nullable<int> SKUID { get; set; }
         public Nullable<int> TransferID { get; set; }
         public string CreateBy { get; set; }
         public System.DateTime CreateAt { get; set; }
@@ -27,8 +32,11 @@ namespace PurchaseOrderSys.Models
         public Nullable<int> TWN { get; set; }
         public Nullable<int> Winit { get; set; }
         public Nullable<int> Action { get; set; }
+        public string SkuNo { get; set; }
+        public string Name { get; set; }
     
-        public virtual PurchaseSKU PurchaseSKU { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SerialsLlist> SerialsLlist { get; set; }
         public virtual Transfer Transfer { get; set; }
     }
 }

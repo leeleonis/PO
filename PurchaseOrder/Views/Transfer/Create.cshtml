@@ -31,11 +31,11 @@
                                             <div class="form-group">
                                                 @Html.Label("Transfer #:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Status", new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.Editor("ID", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
                                                 @Html.Label("External Transfer #:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("SKU", new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.Editor("ExternalTra", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
                                                 @Html.Label("Status:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
@@ -157,9 +157,10 @@
         var hash = window.location.hash;
         $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
         $('.tab-pane').eq(hash.substr(1)).addClass('active');
+        var DataGrid;
         var tableID = "#DataGrid";
         $(document).ready(function () {
-            var DataGrid = $(tableID).DataTable({
+             DataGrid = $(tableID).DataTable({
                 fixedHeader: {
                     header: true,
                     footer: true
@@ -184,7 +185,7 @@
                         "defaultContent": '' },
                     { data: "SKU" },
                     { data: "ProductName" },
-                    { data: "QTY", render: function (data, type, row) { return thousandComma(data); } },
+                    { data: "QTY", render: function (data, type, row) { return '<input class="form-control" type="text" onchange="TSkuNumberListQTY(this,\'' + row.SKU + '\',' + data + ')"  value = ' +data + ' > '; } },
                     { data: "Serial", render: function (data, type, row) { return thousandComma(data); } },
                     { data: "Label", render: function (data, type, row) { return thousandComma(data); }  },
                     { data: "TotalReceive", render: function (data, type, row) { return thousandComma(data); } },
@@ -197,12 +198,14 @@
                     url: "@Url.Action("TSkuNumberList", "Ajax")",
                     data: function (d) {
                         var Skulist = $("#gebruikerId").val();
+                        var FromWID = $("#FromWID").val();
                         d.Skulist = Skulist;
+                        d.FromWID = FromWID;
                         $("#gebruikerId").val(null).trigger('change');
                     }
                 },
                 serverSide: true,//啟用ServerSide模式  
-                //deferLoading: 0, //初始化DataTable時，不發出ajax
+                deferLoading: 0, //初始化DataTable時，不發出ajax
                 orderMulti: false,
                 "paging": false,
                 "ordering": false,
@@ -216,25 +219,62 @@
                 allowClear: true,
                 multiple: true,
                 ajax: {
-                    url: "@Url.Action("SkuNumberGet", "Ajax")",
+                    url: "@Url.Action("TSkuNumberGet", "Ajax")",
                     dataType: 'json',
                     delay: 0,
                     data: function (term) {
-                        return {
-                            Search: term.term
-                        };
+                        var FromWID = $("#FromWID").val();
+                        if (FromWID == "") {
+                            alert("請選擇移出倉");
+                            return "";
+                        }
+                        else {
+                            var query = {
+                                search: term.term,
+                                FromWID: FromWID
+                            }
+                            return query;
+                        }
                     },
                     processResults: function (data) {
                         return {
-                            results: data.items
+                            results: data.items,
+                            pagination: {
+                                more: true
+                            }
                         };
                     }
                 }
             });
             $("#addsku").click(function () {
-                DataGrid.draw();
+                var FromWID = $("#FromWID").val();
+                if (FromWID == "") {
+                    alert("請選擇移出倉");
+                }
+                else {
+                    DataGrid.draw();
+                }
             });
         });
+        function TSkuNumberListQTY(x,SKU) {
+            $.ajax({
+                type: "post",
+                url: "@Url.Action("TSkuNumberListQTY", "Ajax")",
+                data: {
+                    SKU: SKU,
+                    val: $(x).val(),
+                },
+                success: function (data) {
+                    if (data.status) {
+                        DataGrid.draw();
+                    }
+                    else {
+                        alert(data.Errmsg);
+                    }
+                }
+            });
+
+        }
     </script>
 }
 

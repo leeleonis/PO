@@ -1762,6 +1762,123 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查詢類似 Action 的當地語系化字串。
+        /// </summary>
+        public static string TransferSKU_Action {
+            get {
+                return ResourceManager.GetString("TransferSKU_Action", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CreateAt 的當地語系化字串。
+        /// </summary>
+        public static string TransferSKU_CreateAt {
+            get {
+                return ResourceManager.GetString("TransferSKU_CreateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CreateBy 的當地語系化字串。
+        /// </summary>
+        public static string TransferSKU_CreateBy {
+            get {
+                return ResourceManager.GetString("TransferSKU_CreateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ID 的當地語系化字串。
+        /// </summary>
+        public static string TransferSKU_ID {
+            get {
+                return ResourceManager.GetString("TransferSKU_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 IsEnable 的當地語系化字串。
+        /// </summary>
+        public static string TransferSKU_IsEnable {
+            get {
+                return ResourceManager.GetString("TransferSKU_IsEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 QTY 的當地語系化字串。
+        /// </summary>
+        public static string TransferSKU_QTY {
+            get {
+                return ResourceManager.GetString("TransferSKU_QTY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 SkuNo 的當地語系化字串。
+        /// </summary>
+        public static string TransferSKU_SkuNo {
+            get {
+                return ResourceManager.GetString("TransferSKU_SkuNo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Total Receive 的當地語系化字串。
+        /// </summary>
+        public static string TransferSKU_TotalReceive {
+            get {
+                return ResourceManager.GetString("TransferSKU_TotalReceive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 TransferID 的當地語系化字串。
+        /// </summary>
+        public static string TransferSKU_TransferID {
+            get {
+                return ResourceManager.GetString("TransferSKU_TransferID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 TWN 的當地語系化字串。
+        /// </summary>
+        public static string TransferSKU_TWN {
+            get {
+                return ResourceManager.GetString("TransferSKU_TWN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UpdateAt 的當地語系化字串。
+        /// </summary>
+        public static string TransferSKU_UpdateAt {
+            get {
+                return ResourceManager.GetString("TransferSKU_UpdateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UpdateBy 的當地語系化字串。
+        /// </summary>
+        public static string TransferSKU_UpdateBy {
+            get {
+                return ResourceManager.GetString("TransferSKU_UpdateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Winit 的當地語系化字串。
+        /// </summary>
+        public static string TransferSKU_Winit {
+            get {
+                return ResourceManager.GetString("TransferSKU_Winit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 User Name 的當地語系化字串。
         /// </summary>
         public static string Username {

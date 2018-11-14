@@ -221,6 +221,8 @@ namespace PurchaseOrderSys.Controllers
             }
 
             Session["SkuNumberList"] = dataList.ToList();
+            var Warehouselist = db.Warehouse.Where(x => x.IsEnable).Select(x => new SelectListItem { Text = x.Name, Value = x.ID.ToString() }).ToList();
+            ViewBag.Warehouselist = Warehouselist;
             return View(PurchaseOrder);
         }
         [HttpPost]
@@ -234,6 +236,7 @@ namespace PurchaseOrderSys.Controllers
             PurchaseOrder.PODate = filter.PODate;
             PurchaseOrder.POStatus = filter.POStatus;
             PurchaseOrder.POType = filter.POType;
+            PurchaseOrder.WarehouseID = filter.WarehouseID;
             PurchaseOrder.UpdateBy = UserBy;
             PurchaseOrder.UpdateAt = dt;
 

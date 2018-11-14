@@ -15,6 +15,13 @@ namespace PurchaseOrderSys.Controllers
             var dataList = db.SkuLang.Where(x => x.LangID == "zh-tw" && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
             return Json(new { items = dataList }, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult TSkuNumberGet(string Search, int FromWID)
+        {
+            var PurchaseSKUList = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.IsEnable && x.PurchaseOrder.WarehouseID == FromWID).Select(x => x.SkuNo);
+            var dataList = db.SkuLang.Where(x => x.LangID == "zh-tw" && PurchaseSKUList.Contains(x.Sku) && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
+            //var dataList = db.SkuLang.Where(x => x.LangID == "zh-tw" && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
+            return Json(new { items = dataList }, JsonRequestBehavior.AllowGet);
+        }
         public ActionResult GetSkuNumberList(int? draw, int? start, int? length, int ID)
         {
             var odataList = db.PurchaseSKU.Where(x => x.PurchaseOrderID == ID).Select(x => new PoSKUVM
@@ -44,7 +51,7 @@ namespace PurchaseOrderSys.Controllers
             };
             return Json(returnObj, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult TSkuNumberList(int? draw, int? start, int? length, string[] Skulist)
+        public ActionResult TSkuNumberList(int? draw, int? start, int? length, string[] Skulist,int FromWID)
         {
             var odataList = (List<TranSKUVM>)Session["TSkuNumberList"];
             if (odataList == null)
@@ -53,15 +60,15 @@ namespace PurchaseOrderSys.Controllers
             }
             if (Skulist != null && Skulist.Where(x => !string.IsNullOrWhiteSpace(x)).Any())
             {
-                var dataList = db.SkuLang.Where(x => x.LangID == "zh-tw" && Skulist.Contains(x.Sku)).Select(x =>
-                new TranSKUVM
-                {
-                    ck = x.Sku,
-                    sk = x.Sku,
-                    SKU = x.Sku,
-                    ProductName = x.Name,
-
-                }
+                var dataList = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.IsEnable && x.PurchaseOrder.WarehouseID == FromWID && Skulist.Contains(x.SkuNo)).Select(x =>
+                  new TranSKUVM
+                  {
+                      ck = x.SkuNo,
+                      sk = x.SkuNo,
+                      SKU = x.SkuNo,
+                      ProductName = x.Name,
+                      QTY = 0
+                  }
                 ).ToList();
                 //foreach (var item in dataList)
                 //{
@@ -70,7 +77,7 @@ namespace PurchaseOrderSys.Controllers
                 //    var Price = RandomVal(1000, 30000);
                 //    var Discount = RandomVal(0, 100);
                 //    var Credit = RandomVal(0, 100);
-                  
+
                 //}
                 odataList.AddRange(dataList);
                 Session["TSkuNumberList"] = odataList;
@@ -139,34 +146,22 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult SkuNumberListEdit(string SKU,string type ,decimal oval, decimal val,int? ID)
         {
             var odataList = (List<PoSKUVM>)Session["SkuNumberList"];
-            switch (type)
+            if (odataList == null)
             {
-                case "Price":
-                    foreach (var item in odataList.Where(x => (x.ID== ID || x.SKU == SKU) && x.Price == oval))
-                    {
-                        item.Price = val;
-                        item.DiscountedPrice = (item.Price - item.Discount);
-                        item.Subtotal = (item.QTYOrdered * (item.Price - item.Discount));
-                    }
-                    break;
-                case "Discount":
-                    foreach (var item in odataList.Where(x => (x.ID == ID || x.SKU == SKU) && x.Discount == oval))
-                    {
-                        item.Discount = val;
-                        item.DiscountedPrice = (item.Price - item.Discount);
-                        item.Subtotal = (item.QTYOrdered * (item.Price - item.Discount));
-                    }
-                    break;
-                case "Credit":
-                    foreach (var item in odataList.Where(x => (x.ID == ID || x.SKU == SKU) && x.Credit == oval))
-                    {
-                        item.Credit = val;
-                        item.DiscountedPrice = (item.Price - item.Discount);
-                        item.Subtotal = (item.QTYOrdered * (item.Price - item.Discount));
-                    }
-                    break;
-            }    
+                odataList = new List<PoSKUVM>();
+            }
             Session["SkuNumberList"] = odataList;
+            return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public ActionResult TSkuNumberListQTY(string SKU,int val)
+        {
+            var odataList = (List<TranSKUVM>)Session["TSkuNumberList"];
+            foreach (var item in odataList.Where(x=>x.SKU== SKU))
+            {
+                item.QTY = val;
+            }
+            Session["TSkuNumberList"] = odataList;
             return Json(new { status = true }, JsonRequestBehavior.AllowGet);
         }
     }

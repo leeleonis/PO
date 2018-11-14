@@ -813,4 +813,43 @@
   <data name="Transfer_Tracking" xml:space="preserve">
     <value>Tracking</value>
   </data>
+  <data name="TransferSKU_IsEnable" xml:space="preserve">
+    <value>IsEnable</value>
+  </data>
+  <data name="TransferSKU_ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="TransferSKU_TransferID" xml:space="preserve">
+    <value>TransferID</value>
+  </data>
+  <data name="TransferSKU_CreateBy" xml:space="preserve">
+    <value>CreateBy</value>
+  </data>
+  <data name="TransferSKU_CreateAt" xml:space="preserve">
+    <value>CreateAt</value>
+  </data>
+  <data name="TransferSKU_UpdateBy" xml:space="preserve">
+    <value>UpdateBy</value>
+  </data>
+  <data name="TransferSKU_UpdateAt" xml:space="preserve">
+    <value>UpdateAt</value>
+  </data>
+  <data name="TransferSKU_QTY" xml:space="preserve">
+    <value>QTY</value>
+  </data>
+  <data name="TransferSKU_TotalReceive" xml:space="preserve">
+    <value>Total Receive</value>
+  </data>
+  <data name="TransferSKU_TWN" xml:space="preserve">
+    <value>TWN</value>
+  </data>
+  <data name="TransferSKU_Winit" xml:space="preserve">
+    <value>Winit</value>
+  </data>
+  <data name="TransferSKU_Action" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="TransferSKU_SkuNo" xml:space="preserve">
+    <value>SkuNo</value>
+  </data>
 </root>

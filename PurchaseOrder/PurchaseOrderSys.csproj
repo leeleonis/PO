@@ -800,6 +800,7 @@
     <Content Include="Scripts\plugin\datatables\dataTables.bootstrap.min.js" />
     <Content Include="Scripts\plugin\datatables\dataTables.colReorder.min.js" />
     <Content Include="Scripts\plugin\datatables\dataTables.colVis.min.js" />
+    <Content Include="Scripts\plugin\datatables\dataTables.rowsGroup.js" />
     <Content Include="Scripts\plugin\datatables\dataTables.tableTools.min.js" />
     <Content Include="Scripts\plugin\datatables\jquery.dataTables.min.js" />
     <Content Include="Scripts\plugin\datatables\swf\copy_csv_xls.swf" />
@@ -933,6 +934,7 @@
     <Content Include="Views\Warehouse\Edit.cshtml" />
     <Content Include="Views\Transfer\Create.cshtml" />
     <Content Include="Views\Transfer\Edit.cshtml" />
+    <Content Include="Views\Transfer\Prep.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

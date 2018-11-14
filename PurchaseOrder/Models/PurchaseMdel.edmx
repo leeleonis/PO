@@ -192,6 +192,7 @@
           <Property Name="UpdateAt" Type="datetime" />
           <Property Name="ReceivedBy" Type="nvarchar" MaxLength="50" />
           <Property Name="ReceivedAt" Type="datetime" />
+          <Property Name="TransferSKUID" Type="int" />
         </EntityType>
         <EntityType Name="SKU">
           <Key>
@@ -252,7 +253,6 @@
           </Key>
           <Property Name="IsEnable" Type="bit" Nullable="false" />
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="SKUID" Type="int" />
           <Property Name="TransferID" Type="int" />
           <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="CreateAt" Type="datetime" Nullable="false" />
@@ -263,6 +263,8 @@
           <Property Name="TWN" Type="int" />
           <Property Name="Winit" Type="int" />
           <Property Name="Action" Type="int" />
+          <Property Name="SkuNo" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="VendorLIst">
           <Key>
@@ -453,6 +455,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_SerialsLlist_TransferSKU">
+          <End Role="TransferSKU" Type="Self.TransferSKU" Multiplicity="0..1" />
+          <End Role="SerialsLlist" Type="Self.SerialsLlist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TransferSKU">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SerialsLlist">
+              <PropertyRef Name="TransferSKUID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SkuLang_Sku">
           <End Role="SKU" Type="Self.SKU" Multiplicity="1" />
           <End Role="SkuLang" Type="Self.SkuLang" Multiplicity="*" />
@@ -486,18 +500,6 @@
             </Principal>
             <Dependent Role="Transfer">
               <PropertyRef Name="ToWID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_TransferSKU_PurchaseSKU">
-          <End Role="PurchaseSKU" Type="Self.PurchaseSKU" Multiplicity="0..1" />
-          <End Role="TransferSKU" Type="Self.TransferSKU" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PurchaseSKU">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="TransferSKU">
-              <PropertyRef Name="SKUID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -597,6 +599,10 @@
             <End Role="SerialsLlist" EntitySet="SerialsLlist" />
             <End Role="SerialsLlist1" EntitySet="SerialsLlist" />
           </AssociationSet>
+          <AssociationSet Name="FK_SerialsLlist_TransferSKU" Association="Self.FK_SerialsLlist_TransferSKU">
+            <End Role="TransferSKU" EntitySet="TransferSKU" />
+            <End Role="SerialsLlist" EntitySet="SerialsLlist" />
+          </AssociationSet>
           <AssociationSet Name="FK_SkuLang_Sku" Association="Self.FK_SkuLang_Sku">
             <End Role="SKU" EntitySet="SKU" />
             <End Role="SkuLang" EntitySet="SkuLang" />
@@ -608,10 +614,6 @@
           <AssociationSet Name="FK_Transfer_Warehouse1" Association="Self.FK_Transfer_Warehouse1">
             <End Role="Warehouse" EntitySet="Warehouse" />
             <End Role="Transfer" EntitySet="Transfer" />
-          </AssociationSet>
-          <AssociationSet Name="FK_TransferSKU_PurchaseSKU" Association="Self.FK_TransferSKU_PurchaseSKU">
-            <End Role="PurchaseSKU" EntitySet="PurchaseSKU" />
-            <End Role="TransferSKU" EntitySet="TransferSKU" />
           </AssociationSet>
           <AssociationSet Name="FK_TransferSKU_Transfer" Association="Self.FK_TransferSKU_Transfer">
             <End Role="Transfer" EntitySet="Transfer" />
@@ -685,11 +687,6 @@
             <End Role="VendorLIst" EntitySet="VendorLIst" />
             <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
           </AssociationSet>
-          <EntitySet Name="TransferSKU" EntityType="PurchaseOrderModel.TransferSKU" />
-          <AssociationSet Name="FK_TransferSKU_PurchaseSKU" Association="PurchaseOrderModel.FK_TransferSKU_PurchaseSKU">
-            <End Role="PurchaseSKU" EntitySet="PurchaseSKU" />
-            <End Role="TransferSKU" EntitySet="TransferSKU" />
-          </AssociationSet>
           <EntitySet Name="Warehouse" EntityType="PurchaseOrderModel.Warehouse" />
           <AssociationSet Name="FK_PurchaseOrder_Warehouse" Association="PurchaseOrderModel.FK_PurchaseOrder_Warehouse">
             <End Role="Warehouse" EntitySet="Warehouse" />
@@ -713,6 +710,11 @@
           <AssociationSet Name="FK_Transfer_Warehouse1" Association="PurchaseOrderModel.FK_Transfer_Warehouse1">
             <End Role="Warehouse" EntitySet="Warehouse" />
             <End Role="Transfer" EntitySet="Transfer" />
+          </AssociationSet>
+          <EntitySet Name="TransferSKU" EntityType="PurchaseOrderModel.TransferSKU" />
+          <AssociationSet Name="FK_SerialsLlist_TransferSKU" Association="PurchaseOrderModel.FK_SerialsLlist_TransferSKU">
+            <End Role="TransferSKU" EntitySet="TransferSKU" />
+            <End Role="SerialsLlist" EntitySet="SerialsLlist" />
           </AssociationSet>
           <AssociationSet Name="FK_TransferSKU_Transfer" Association="PurchaseOrderModel.FK_TransferSKU_Transfer">
             <End Role="Transfer" EntitySet="Transfer" />
@@ -808,6 +810,8 @@
           <Property Name="PID" Type="Int32" />
           <NavigationProperty Name="SerialsLlistC" Relationship="PurchaseOrderModel.FK_SerialsLlist_SerialsLlist" FromRole="SerialsLlist" ToRole="SerialsLlist1" />
           <NavigationProperty Name="SerialsLlistP" Relationship="PurchaseOrderModel.FK_SerialsLlist_SerialsLlist" FromRole="SerialsLlist1" ToRole="SerialsLlist" />
+          <Property Name="TransferSKUID" Type="Int32" />
+          <NavigationProperty Name="TransferSKU" Relationship="PurchaseOrderModel.FK_SerialsLlist_TransferSKU" FromRole="SerialsLlist" ToRole="TransferSKU" />
         </EntityType>
         <EntityType Name="SKU">
           <Key>
@@ -1001,7 +1005,6 @@
           <NavigationProperty Name="CMReplacement" Relationship="PurchaseOrderModel.FK_PurchaseSKU_CMReplacement" FromRole="PurchaseSKU" ToRole="CMReplacement" />
           <NavigationProperty Name="PurchaseOrder" Relationship="PurchaseOrderModel.FK_PurchaseSKU_PurchaseOrder" FromRole="PurchaseSKU" ToRole="PurchaseOrder" />
           <NavigationProperty Name="SerialsLlist" Relationship="PurchaseOrderModel.FK_SerialsLlist_PurchaseSKU" FromRole="PurchaseSKU" ToRole="SerialsLlist" />
-          <NavigationProperty Name="TransferSKU" Relationship="PurchaseOrderModel.FK_TransferSKU_PurchaseSKU" FromRole="PurchaseSKU" ToRole="TransferSKU" />
         </EntityType>
         <Association Name="FK_PurchaseSKU_CMCreditNote">
           <End Type="PurchaseOrderModel.CMCreditNote" Role="CMCreditNote" Multiplicity="0..1" />
@@ -1095,38 +1098,6 @@
             </Principal>
             <Dependent Role="PurchaseOrder">
               <PropertyRef Name="VendorID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="TransferSKU">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="SKUID" Type="Int32" />
-          <Property Name="TransferID" Type="Int32" />
-          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
-          <Property Name="QTY" Type="Int32" />
-          <Property Name="TotalReceive" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="TWN" Type="Int32" />
-          <Property Name="Winit" Type="Int32" />
-          <Property Name="Action" Type="Int32" />
-          <NavigationProperty Name="PurchaseSKU" Relationship="PurchaseOrderModel.FK_TransferSKU_PurchaseSKU" FromRole="TransferSKU" ToRole="PurchaseSKU" />
-          <NavigationProperty Name="Transfer" Relationship="PurchaseOrderModel.FK_TransferSKU_Transfer" FromRole="TransferSKU" ToRole="Transfer" />
-        </EntityType>
-        <Association Name="FK_TransferSKU_PurchaseSKU">
-          <End Type="PurchaseOrderModel.PurchaseSKU" Role="PurchaseSKU" Multiplicity="0..1" />
-          <End Type="PurchaseOrderModel.TransferSKU" Role="TransferSKU" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PurchaseSKU">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="TransferSKU">
-              <PropertyRef Name="SKUID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1275,6 +1246,39 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="TransferSKU">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TransferID" Type="Int32" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <Property Name="QTY" Type="Int32" />
+          <Property Name="TotalReceive" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="TWN" Type="Int32" />
+          <Property Name="Winit" Type="Int32" />
+          <Property Name="Action" Type="Int32" />
+          <NavigationProperty Name="SerialsLlist" Relationship="PurchaseOrderModel.FK_SerialsLlist_TransferSKU" FromRole="TransferSKU" ToRole="SerialsLlist" />
+          <NavigationProperty Name="Transfer" Relationship="PurchaseOrderModel.FK_TransferSKU_Transfer" FromRole="TransferSKU" ToRole="Transfer" />
+          <Property Name="SkuNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_SerialsLlist_TransferSKU">
+          <End Type="PurchaseOrderModel.TransferSKU" Role="TransferSKU" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.SerialsLlist" Role="SerialsLlist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TransferSKU">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SerialsLlist">
+              <PropertyRef Name="TransferSKUID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_TransferSKU_Transfer">
           <End Type="PurchaseOrderModel.Transfer" Role="Transfer" Multiplicity="0..1" />
           <End Type="PurchaseOrderModel.TransferSKU" Role="TransferSKU" Multiplicity="*" />
@@ -1349,6 +1353,7 @@
           <EntitySetMapping Name="SerialsLlist">
             <EntityTypeMapping TypeName="PurchaseOrderModel.SerialsLlist">
               <MappingFragment StoreEntitySet="SerialsLlist">
+                <ScalarProperty Name="TransferSKUID" ColumnName="TransferSKUID" />
                 <ScalarProperty Name="PID" ColumnName="PID" />
                 <ScalarProperty Name="ReceivedAt" ColumnName="ReceivedAt" />
                 <ScalarProperty Name="ReceivedBy" ColumnName="ReceivedBy" />
@@ -1525,25 +1530,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="TransferSKU">
-            <EntityTypeMapping TypeName="PurchaseOrderModel.TransferSKU">
-              <MappingFragment StoreEntitySet="TransferSKU">
-                <ScalarProperty Name="Action" ColumnName="Action" />
-                <ScalarProperty Name="Winit" ColumnName="Winit" />
-                <ScalarProperty Name="TWN" ColumnName="TWN" />
-                <ScalarProperty Name="TotalReceive" ColumnName="TotalReceive" />
-                <ScalarProperty Name="QTY" ColumnName="QTY" />
-                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
-                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
-                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
-                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-                <ScalarProperty Name="TransferID" ColumnName="TransferID" />
-                <ScalarProperty Name="SKUID" ColumnName="SKUID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Warehouse">
             <EntityTypeMapping TypeName="PurchaseOrderModel.Warehouse">
               <MappingFragment StoreEntitySet="Warehouse">
@@ -1618,6 +1604,26 @@
                 <ScalarProperty Name="FromWID" ColumnName="FromWID" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="ExternalTra" ColumnName="ExternalTra" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TransferSKU">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.TransferSKU">
+              <MappingFragment StoreEntitySet="TransferSKU">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="SkuNo" ColumnName="SkuNo" />
+                <ScalarProperty Name="Action" ColumnName="Action" />
+                <ScalarProperty Name="Winit" ColumnName="Winit" />
+                <ScalarProperty Name="TWN" ColumnName="TWN" />
+                <ScalarProperty Name="TotalReceive" ColumnName="TotalReceive" />
+                <ScalarProperty Name="QTY" ColumnName="QTY" />
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="TransferID" ColumnName="TransferID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
               </MappingFragment>

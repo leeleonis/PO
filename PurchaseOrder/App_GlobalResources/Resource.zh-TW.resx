@@ -813,4 +813,43 @@
   <data name="Transfer_Tracking" xml:space="preserve">
     <value>追蹤單號</value>
   </data>
+  <data name="TransferSKU_IsEnable" xml:space="preserve">
+    <value>啟用</value>
+  </data>
+  <data name="TransferSKU_ID" xml:space="preserve">
+    <value>流水號</value>
+  </data>
+  <data name="TransferSKU_TransferID" xml:space="preserve">
+    <value>TransferID</value>
+  </data>
+  <data name="TransferSKU_CreateBy" xml:space="preserve">
+    <value>建立者</value>
+  </data>
+  <data name="TransferSKU_CreateAt" xml:space="preserve">
+    <value>建立時間</value>
+  </data>
+  <data name="TransferSKU_UpdateBy" xml:space="preserve">
+    <value>修改者</value>
+  </data>
+  <data name="TransferSKU_UpdateAt" xml:space="preserve">
+    <value>修改時間</value>
+  </data>
+  <data name="TransferSKU_QTY" xml:space="preserve">
+    <value>數量</value>
+  </data>
+  <data name="TransferSKU_TotalReceive" xml:space="preserve">
+    <value>Total Receive</value>
+  </data>
+  <data name="TransferSKU_TWN" xml:space="preserve">
+    <value>TWN</value>
+  </data>
+  <data name="TransferSKU_Winit" xml:space="preserve">
+    <value>Winit</value>
+  </data>
+  <data name="TransferSKU_Action" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="TransferSKU_SkuNo" xml:space="preserve">
+    <value>SkuNo</value>
+  </data>
 </root>

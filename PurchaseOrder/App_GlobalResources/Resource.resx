@@ -1025,4 +1025,56 @@
     <value>Tracking</value>
     <comment>Tracking</comment>
   </data>
+  <data name="TransferSKU_IsEnable" xml:space="preserve">
+    <value>IsEnable</value>
+    <comment>IsEnable</comment>
+  </data>
+  <data name="TransferSKU_ID" xml:space="preserve">
+    <value>ID</value>
+    <comment>ID</comment>
+  </data>
+  <data name="TransferSKU_TransferID" xml:space="preserve">
+    <value>TransferID</value>
+    <comment>TransferID</comment>
+  </data>
+  <data name="TransferSKU_CreateBy" xml:space="preserve">
+    <value>CreateBy</value>
+    <comment>CreateBy</comment>
+  </data>
+  <data name="TransferSKU_CreateAt" xml:space="preserve">
+    <value>CreateAt</value>
+    <comment>CreateAt</comment>
+  </data>
+  <data name="TransferSKU_UpdateBy" xml:space="preserve">
+    <value>UpdateBy</value>
+    <comment>UpdateBy</comment>
+  </data>
+  <data name="TransferSKU_UpdateAt" xml:space="preserve">
+    <value>UpdateAt</value>
+    <comment>UpdateAt</comment>
+  </data>
+  <data name="TransferSKU_QTY" xml:space="preserve">
+    <value>QTY</value>
+    <comment>QTY</comment>
+  </data>
+  <data name="TransferSKU_TotalReceive" xml:space="preserve">
+    <value>Total Receive</value>
+    <comment>Total Receive</comment>
+  </data>
+  <data name="TransferSKU_TWN" xml:space="preserve">
+    <value>TWN</value>
+    <comment>TWN</comment>
+  </data>
+  <data name="TransferSKU_Winit" xml:space="preserve">
+    <value>Winit</value>
+    <comment>Winit</comment>
+  </data>
+  <data name="TransferSKU_Action" xml:space="preserve">
+    <value>Action</value>
+    <comment>Action</comment>
+  </data>
+  <data name="TransferSKU_SkuNo" xml:space="preserve">
+    <value>SkuNo</value>
+    <comment>SkuNo</comment>
+  </data>
 </root>

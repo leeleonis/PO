@@ -217,6 +217,20 @@ namespace PurchaseOrderSys.Models
         [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
         [DataGrid(Align = "center", ColumnsType = "select", Formatter = true)]
         public string POStatus { get; set; }
+
+        /// <summary>
+        /// Warehouse
+        /// </summary>        
+        [Display(Name = "PurchaseOrder_Warehouse", ResourceType = typeof(App_GlobalResources.Resource))]
+        public int? WarehouseID { get; set; }
+
+
+        /// <summary>
+        /// Currency
+        /// </summary>        
+        [Display(Name = "PurchaseOrder_Currency", ResourceType = typeof(App_GlobalResources.Resource))]
+        [MaxLength(10, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+        public string Currency { get; set; }
     }
     public class PurchaseSKUVM
     {
@@ -294,8 +308,6 @@ namespace PurchaseOrderSys.Models
         [Display(Name = "PurchaseSKU_DiscountedPrice", ResourceType = typeof(App_GlobalResources.Resource))]
         [DataGrid(Align = "center", Widths = 150, ColumnsType = "input")]
         public Nullable<decimal> DiscountedPrice { get; set; }
-
-
     }
 
     public class PostList
@@ -408,4 +420,21 @@ namespace PurchaseOrderSys.Models
         /// </summary>
         public int Unfulfillable { get; set; }
     }
+    public class PrepVM
+    {
+        public string SKU { get; set; }
+        public string Name { get; set; }
+        public int? QTY { get; set; }
+        public List<string> SerialsLlist { get; set; }
+    }
+    public class PrepTable
+    {
+        public string SKU { get; set; }
+        public string Name { get; set; }
+        public string QTY { get; set; }
+        public string Serial { get; set; }
+        public string Label { get; set; }
+        public string Download { get; set; }
+    }
+
 }
