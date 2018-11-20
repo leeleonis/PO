@@ -21,7 +21,7 @@ namespace PurchaseOrderSys.Models
         }
     
         public bool IsEnable { get; set; }
-        public string Sku1 { get; set; }
+        public string SkuID { get; set; }
         public byte Type { get; set; }
         public string ParentSku { get; set; }
         public string ParentKit { get; set; }
@@ -30,6 +30,8 @@ namespace PurchaseOrderSys.Models
         public int Brand { get; set; }
         public string EAN { get; set; }
         public string UPC { get; set; }
+        public bool Replenishable { get; set; }
+        public byte Status { get; set; }
         public string CreateBy { get; set; }
         public System.DateTime CreateAt { get; set; }
         public string UpdateBy { get; set; }

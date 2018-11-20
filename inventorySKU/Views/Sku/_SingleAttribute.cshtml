@@ -1,0 +1,111 @@
+﻿@model Sku
+@{
+    int i = 0;
+    string LangID = ViewData["LangID"].ToString();
+    string DefaultLangID = EnumData.DataLangList().First().Key;
+
+    var YesNo = Enum.GetValues(typeof(EnumData.YesNo)).Cast<EnumData.YesNo>().Select(b => new SelectListItem() { Text = b.ToString(), Value = ((byte)b).ToString() });
+    Dictionary<int, int[]> attributeGroup = JsonConvert.DeserializeObject<Dictionary<int, int[]>>(Model.SkuType.AttributeGroup);
+    foreach (SkuAttributeType type in (List<SkuAttributeType>)ViewData["AttributeTypeList"])
+    {
+        if (attributeGroup.ContainsKey(type.ID))
+        {
+            <legend>@type.Name</legend>
+
+            <div class="form-group">
+                <div class="table-responsive col-sm-10">
+                    <table class="table table-bordered table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th width="20%" class="text-center">Attribute</th>
+                                <th class="text-center">Value</th>
+                                <th width="150" class="text-center">Html</th>
+                                <th width="150" class="text-center">eBay</th>
+                            </tr>
+                        </thead>
+
+                        <tbody class="">
+                            @foreach (var attribute in type.SkuAttribute.Where(a => a.IsEnable && attributeGroup[type.ID].Contains(a.ID)))
+                            {
+                                string disabled = !string.IsNullOrEmpty(Model.ParentSku) ? "disabled" : "";
+                                var name = string.Format("AttributeValue[{0}]", i++);
+                                var value = Model.Sku_Attribute.FirstOrDefault(s => s.AttrID.Equals(attribute.ID) && s.LangID.Equals(LangID));
+                                value = value ?? new Sku_Attribute() { };
+                                <tr>
+                                    @Html.Hidden(string.Format("{0}[Sku]", name), Model.ID)
+                                    @Html.Hidden(string.Format("{0}[AttrID]", name), attribute.ID)
+                                    @Html.Hidden(string.Format("{0}[LangID]", name), LangID)
+                                    <td>@(attribute.SkuAttributeLang.FirstOrDefault(l => l.LangID.Equals(attribute.SkuAttributeLang.Any(ll => ll.LangID.Equals(LangID)) ? LangID : DefaultLangID))?.Name)</td>
+                                    @switch (attribute.Property)
+                                    {
+                                        case 1:
+                                            <td class="no-padding">
+                                                @if (string.IsNullOrEmpty(disabled))
+                                                {
+                                                    @Html.DropDownList(string.Format("{0}[Value]", name), YesNo.Select(b => new SelectListItem() { Text = b.Text, Value = b.Value, Selected = b.Value.Equals(value?.Value) }), new { @class = "form-control" })
+                                                }
+                                                else
+                                                {
+                                                    @Html.DropDownList(string.Format("{0}[Value]", name), YesNo.Select(b => new SelectListItem() { Text = b.Text, Value = b.Value, Selected = b.Value.Equals(value?.Value) }), new { @class = "form-control", disabled })
+                                                }
+                                            </td>
+                                            break;
+                                        case 2:
+                                            <td class="no-padding" id="Dimension">
+                                                @{
+                                                    float DimValue = 0;
+                                                    string[] dimensions = value.Value?.Split('x') ?? new string[] { };
+                                                }
+                                                @Html.Hidden(string.Format("{0}[Value]", name), value?.Value, new { @rel = value.AttrID })
+                                                <div class="col-sm-4">
+                                                    <input type="text" class="form-control" value="@(dimensions.FirstOrDefault() ?? "0")" rel="@value.AttrID" placeholder="h (mm)" @disabled />
+                                                    <input type="text" class="form-control" value="@(float.TryParse(dimensions.FirstOrDefault() ?? "0", out DimValue) ? DimValue*0.03937 : 0)" rel="@value.AttrID" placeholder="h (in.)" disabled />
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <input type="text" class="form-control" value="@(dimensions.Skip(1).FirstOrDefault() ?? "0")" rel="@value.AttrID" placeholder="w (mm)" @disabled />
+                                                    <input type="text" class="form-control" value="@(float.TryParse(dimensions.Skip(1).FirstOrDefault() ?? "0", out DimValue) ? DimValue*0.03937 : 0)" rel="@value.AttrID" placeholder="w (in.)" disabled />
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <input type="text" class="form-control" value="@(dimensions.Skip(2).FirstOrDefault() ?? "0")" rel="@value.AttrID" placeholder="l (mm)" @disabled />
+                                                    <input type="text" class="form-control" value="@(float.TryParse(dimensions.Skip(2).FirstOrDefault() ?? "0", out DimValue) ? DimValue*0.03937 : 0)" rel="@value.AttrID" placeholder="l (in.)" disabled />
+                                                </div>
+                                            </td>
+                                            break;
+                                        case 3:
+                                            <td class="no-padding" id="Resolution">
+                                                @{
+                                                    string[] resolution = value.Value?.Split('x') ?? new string[] { };
+                                                }
+                                                @Html.Hidden(string.Format("{0}[Value]", name), value?.Value, new { @rel = value.AttrID })
+                                                <div class="col-sm-4 col-sm-offset-2">
+                                                    <input type="text" class="form-control" value="@(resolution.FirstOrDefault() ?? "")" rel="@value.AttrID" placeholder="pixels" @disabled />
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <input type="text" class="form-control" value="@(resolution.Skip(1).FirstOrDefault() ?? "")" rel="@value.AttrID" placeholder="pixels" @disabled />
+                                                </div>
+                                            </td>
+                                            break;
+                                        default:
+                                            <td>
+                                                @if (string.IsNullOrEmpty(disabled))
+                                                {
+                                                    @Html.TextBox(string.Format("{0}[Value]", name), value?.Value, new { @class = "form-control" })
+                                                }
+                                                else
+                                                {
+                                                    @Html.TextBox(string.Format("{0}[Value]", name), value?.Value, new { @class = "form-control", disabled })
+                                                }
+                                            </td>
+                                            break;
+                                    }
+                                    <td>@Html.BooleanSwitch(string.Format("{0}[Html]", name), (value != null ? value.Html : false))</td>
+                                    <td>@Html.BooleanSwitch(string.Format("{0}[eBay]", name), (value != null ? value.eBay : false))</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    }
+}

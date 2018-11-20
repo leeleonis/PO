@@ -1,0 +1,120 @@
+﻿@model inventorySKU.Models.Condition
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Condition</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.IsEnable)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsEnable)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Amazon)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Amazon)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.eBay)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.eBay)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Buy_com)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Buy_com)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NewEgg_com)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NewEgg_com)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Sears)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Sears)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Suffix)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Suffix)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreateBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreateBy)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreateAt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreateAt)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UpdateBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UpdateBy)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UpdateAt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UpdateAt)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

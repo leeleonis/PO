@@ -30,10 +30,10 @@ namespace PurchaseOrderSys.Models
     		/// <summary>
     		/// Sku1
     		/// </summary>        
-    	    [Display(Name = "SKU_Sku1", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "SKU_SkuID", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public string  Sku1 { get; set; }
+    		public string SkuID { get; set; }
     
     		    
     		/// <summary>

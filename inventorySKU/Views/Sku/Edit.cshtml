@@ -1,0 +1,607 @@
+﻿@model inventorySKU.Models.Sku
+@section styles{
+    <link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
+    <link href="~/Content/themes/icon.css" rel="stylesheet" />
+}
+@{
+    string LangID = (string)ViewBag.LangID;
+}
+
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-xs-12">
+                <div class="jarviswidget" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+
+                        <h2>Edit</h2>
+                        <ul class="nav nav-tabs pull-right">
+                            <li><a data-toggle="tab" href="#hb1">Summary</a></li>
+                            <li><a data-toggle="tab" href="#hb2">Attribute</a></li>
+                            <li><a data-toggle="tab" href="#hb3">Picture</a></li>
+                        </ul>
+                    </header>
+
+                    <div>
+                        <div class="widget-body no-padding">
+                            <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
+                                @Html.AntiForgeryToken()
+                                <div id="content" class="tab-content">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.SkuLang.First().LangID, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                        <div class="col-sm-9 col-lg-2">
+                                            @Html.DropDownList("LangID", (IEnumerable<SelectListItem>)ViewBag.LangList, htmlAttributes: new { @class = "form-control" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.ID, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                        <div class="col-sm-9 col-lg-3">
+                                            @Html.EditorFor(model => model.ID, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                            @Html.ValidationMessageFor(model => model.ID, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.SkuLang.First().Name, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                        <div class="col-sm-9 col-lg-4">
+                                            @Html.EditorFor(model => model.SkuLang.First(l => l.LangID.Equals(LangID)).Name, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.SkuLang.First().Name, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane" id="hb1">
+                                        <fieldset>
+                                            <legend>Summary</legend>
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownList("Type", (List<SelectListItem>)ViewBag.TypeList, htmlAttributes: new { @class = "form-control" })
+                                                </div>
+                                            </div>
+
+                                            @if (!Model.Type.Equals((byte)EnumData.SkuType.Variation))
+                                            {
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.ParentSku, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-3">
+                                                        <div class="input-group">
+                                                            @Html.EditorFor(model => model.ParentSku, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                            <div class="input-group-btn">
+                                                                <button class="btn btn-default" type="button" id="btn-parent">
+                                                                    Search
+                                                                </button>
+                                                            </div>
+                                                            @Html.ValidationMessageFor(model => model.ParentSku, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Condition, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownListFor(model => model.Condition, null, htmlAttributes: new { @class = "form-control" })
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Category, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownListFor(model => model.Category, null, htmlAttributes: new { @class = "form-control" })
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Brand, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownListFor(model => model.Brand, null, htmlAttributes: new { @class = "form-control" })
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.SkuLang.First().Models, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-3">
+                                                    @Html.EditorFor(model => model.SkuLang.First(l => l.LangID.Equals(LangID)).Models, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(model => model.SkuLang.First().Models, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.EAN, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-3">
+                                                    @Html.EditorFor(model => model.EAN, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(model => model.EAN, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.UPC, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-3">
+                                                    @Html.EditorFor(model => model.UPC, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(model => model.UPC, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+
+                                            @Html.HiddenFor(model => model.Replenishable)
+                                            @Html.HiddenFor(model => model.Status)
+                                        </fieldset>
+
+                                        @if (Model.Type.Equals((byte)EnumData.SkuType.Variation))
+                                        {
+                                            <fieldset id="Variation">
+                                                <legend>Variation</legend>
+
+                                                <div class="col-sm-8">
+                                                    <div class="table-responsive col-sm-12">
+                                                        <table class="table table-bordered table-striped text-center">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th width="150" class="text-center">Sku</th>
+                                                                    <th class="text-center">Name</th>
+                                                                    <th width="250" class="text-center">Attribute Name</th>
+                                                                    <th width="" class="text-center">Attribute Value</th>
+                                                                    <th width="50"><button type="button" class="btn btn-default btn-sm" onclick="AttrAdd();">+</button></th>
+                                                                </tr>
+                                                            </thead>
+
+                                                            <tbody id="list-variation"></tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-2 col-sm-offset-1">
+                                                    <table class="table table-bordered table-striped text-center">
+                                                        <thead>
+                                                            <tr>
+                                                                <td>Choose Attribute</td>
+                                                                <td width="50">
+                                                                    @if (!Model.Sku_Attribute.Any(a => a.IsDiverse))
+                                                                    {
+                                                                        <button type="button" class="btn btn-default btn-sm" onclick="TypeAdd();">+</button>
+                                                                    }
+                                                                </td>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="list-attributeType">
+                                                            @{
+                                                                List<SkuAttributeLang> attributeList = new List<SkuAttributeLang>();
+                                                                if (!Model.Sku_Attribute.Any(a => a.IsDiverse))
+                                                                {
+                                                                    using (StockKeepingUnit SKU = new StockKeepingUnit(Model.ID))
+                                                                    {
+                                                                        var skuAttributeList = SKU.CompareVariationSku();
+                                                                        if (skuAttributeList.Any())
+                                                                        {
+                                                                            attributeList = skuAttributeList.OrderBy(a => a.AttrID).SelectMany(a => a.SkuAttribute.SkuAttributeLang).Where(l => l.LangID.Equals(LangID)).Distinct().ToList();
+                                                                        }
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    attributeList = Model.Sku_Attribute.Where(a => a.IsDiverse).OrderBy(a => a.AttrID).SelectMany(a => a.SkuAttribute.SkuAttributeLang).Where(l => l.LangID.Equals(LangID)).Distinct().ToList();
+                                                                }
+
+                                                                foreach (var attrLang in attributeList)
+                                                                {
+                                                                    <tr><td colspan="2"><span>@attrLang.Name</span><input type="hidden" name="DiverseAttribute[]" value="@attrLang.AttrID" /></td></tr>
+                                                                }
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </fieldset>
+                                        }
+
+                                        @if (Model.Type.Equals((byte)EnumData.SkuType.Kit))
+                                        {
+                                            <fieldset>
+                                                <legend>Kit SKU</legend>
+
+                                                <div class="col-sm-8">
+                                                    <div class="table-responsive col-sm-12">
+                                                        <table class="table table-bordered table-striped text-center">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th width="200" class="text-center">Sku</th>
+                                                                    <th class="text-center">Name</th>
+                                                                    <th width="100" class="text-center">Qty</th>
+                                                                    <th width="50"><button type="button" class="btn btn-default btn-sm" onclick="KitAdd();">+</button></th>
+                                                                </tr>
+                                                            </thead>
+
+                                                            <tbody id="list-kit"></tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        }
+
+                                        <fieldset>
+                                            <legend>Shadows</legend>
+
+                                            <div class="col-sm-6">
+                                                <div class="table-responsive col-sm-12">
+                                                    <table class="table table-bordered table-striped text-center">
+                                                        <thead>
+                                                            <tr>
+                                                                <th width="50%" class="text-center">Company</th>
+                                                                <th width="50%" class="text-center">SKU</th>
+                                                            </tr>
+                                                        </thead>
+
+                                                        <tbody>
+                                                            @foreach (var company in (List<Company>)ViewBag.CompanyList)
+                                                            {
+                                                                <tr>
+                                                                    <td>@company.Name</td>
+                                                                    <td>@string.Format("{0}{1}", Model.ID, company.ShandowSuffix)</td>
+                                                                </tr>
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+
+                                        <fieldset>
+                                            <legend>Linked</legend>
+
+                                        </fieldset>
+                                    </div>
+
+                                    <div class="tab-pane" id="hb2">
+                                        <fieldset id="list-attribute"></fieldset>
+                                    </div>
+
+                                    <div class="tab-pane" id="hb3">
+                                        <fieldset>
+                                            <legend>Main Picture</legend>
+
+                                            <div class="form-group">
+                                                <label class="col-md-2 control-label">Main Picture</label>
+
+                                                <div class="col-md-10">
+                                                    <input type="file" class="btn btn-default" name="picture">
+
+                                                    <p class="help-block">
+                                                        @if (Model.SkuPicture.Any(p => p.IsMain))
+                                                        {
+                                                            <img src="@string.Format("/Uploads/Sku/{0}/{1}", Model.ID, Model.SkuPicture.First(p => p.IsMain).FileName)" style="max-height:300px;" />
+                                                        }
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+
+                                        <fieldset>
+                                            <legend>Picture List</legend>
+
+                                            <div class="jarviswidget jarviswidget-color-blueLight" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-collapsed="false" data-widget-sortable="false">
+                                                <header class="ui-sortable-handle">
+                                                    <span class="widget-icon"> <i class="fa fa-photo"></i> </span>
+                                                    <span class="jarviswidget-loader"><i class="fa fa-refresh fa-spin"></i></span>
+                                                </header>
+
+                                                <!-- widget div-->
+                                                <div>
+                                                    <!-- widget content -->
+                                                    <div class="widget-body">
+                                                        <div class="dz-clickable" id="mydropzone"></div>
+                                                    </div>
+                                                    <!-- end widget content -->
+                                                </div>
+                                                <!-- end widget div -->
+
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+
+                                <div class="widget-footer">
+                                    <button type="submit" class="btn btn-primary" id="save">儲存</button>
+                                    <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index", "Sku")'">返回</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+<div class="hidden">
+    <div id="dialog-parent" class="easyui-dialog" title="請選擇品號" data-options="iconCls:'icon-edit',closed:true,resizable:false,shadow:false" style="width:1400px;top:200px;">
+        <div class="form-horizontal" data-options="region:'north',border:false">
+            <div class="col-sm-12" style="padding:5px;">
+                <div class="col-sm-4 no-padding">
+                    <input type="text" class="form-control" id="search-filter" placeholder="Search" />
+                </div>
+            </div>
+        </div>
+        <div data-options="region:'center'">
+            <table id="table-sku" class="easyui-datagrid" style="width:100%;" data-options="onBeforeSelect:function(){return false;}">
+                <thead>
+                    <tr>
+                        <th data-options="field:'ck', checkbox:true, width:'5%', align:'center'"></th>
+                        <th data-options="field:'ID', width:'20%', align:'center'">SKU</th>
+                        <th data-options="field:'Name', width:'75%', align:'center'">品名</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div data-options="region:'south',border:false" style="text-align:right;padding:5px;">
+            <button type="button" class="btn btn-default btn-sm" id="btn-addParent">確定</button>
+            <button type="button" class="btn btn-default btn-sm" onclick="$parentDialog.dialog('close');">取消</button>
+        </div>
+    </div>
+</div>
+<div class="hidden" id="temple-pic">
+    <div class="dz-preview dz-file-preview">
+        <div style="width:100px; padding-bottom:3px;"><input type="text" class="form-control" /></div>
+        <div class="dz-details">
+            <div class="dz-filename"><span data-dz-name></span></div>
+            <div class="dz-size" data-dz-size></div>
+            <img data-dz-thumbnail />
+        </div>
+        <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
+        <div class="dz-success-mark"><span>✔</span></div>
+        <div class="dz-error-mark"><span>✘</span></div>
+        <div class="dz-error-message"><span data-dz-errormessage></span></div>
+    </div>
+</div>
+@section pagespecific {
+    <script src="~/scripts/jquery.easyui-1.4.3.min.js"></script>
+    <script src="~/scripts/plugin/dropzone/dropzone.min.js"></script>
+    <script type="text/javascript">
+        var hash = window.location.hash;
+        $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
+        $('.tab-pane').eq(hash.substr(1)).addClass('active');
+
+        var $parentBtn = $('#btn-parent'), $parentDialog = $('#dialog-parent'), $filterSearch = $('#search-filter'), $skuTable = $('#table-sku');
+        var $variationList = $('#list-variation'), $kitList = $('#list-kit'), $attributeList = $("#list-attribute"), $attributeTypeList = $('#list-attributeType');
+
+        $(document).ready(function () {
+            $('#LangID').change(function () {
+                website.AjaxUrl('@Url.Action("GetLangData", "Sku", new { ID = Model.ID })', 'get', { LangID: $(this).val() }).done(function (response) {
+                    if (response.status) {
+                        $('#Name').val(response.data.Name);
+                        $('#Models').val(response.data.Models);
+                        if (!website.IsEmpty(response.data.VariationList)) {
+                            $variationList.html(response.data.VariationList);
+                        }
+                        if (!website.IsEmpty(response.data.KitList)) {
+                            $kitList.html(response.data.KitList);
+                        }
+                        $attributeList.html(response.data.AttributeList);
+                    } else {
+                        alert(response.message);
+                    }
+                });
+            }).trigger('change');
+
+            $parentBtn.click(function () {
+                $skuTable.datagrid('reload');
+                $parentDialog.dialog('open');
+            })
+
+            $skuTable.datagrid({
+                idField: 'ID',
+                url: '@Url.Action("GetParent")',
+                singleSelect: true,
+                onBeforeLoad: function (param) {
+                    param.filter = $filterSearch.val();
+                    param.Type = 1;
+                    param.Condition = $('#Condition').val();
+                    param.Category = $('#Category').val();
+                    param.Brand = $('#Brand').val();
+                },
+                onLoadSuccess: function (data) {
+                    $skuTable.datagrid('uncheckAll');
+                }
+            });
+
+            $filterSearch.change(function () { $skuTable.datagrid('reload'); });
+
+            $('#btn-addParent').click(function () {
+                var rows = $skuTable.datagrid('getChecked');
+
+                if (rows.length != 1) return alert('請選擇一個品號!');
+
+                $('#ParentSku').val(rows[0].ID);
+
+                $parentDialog.dialog('close');
+            });
+
+            $('#list-variation, #list-attribute').on('change', 'td#Dimension input, td#Resolution input', function () {
+                if (parseFloat($(this).val())) {
+                    var $attr = $(this).parents('td:first');
+
+                    var value = [];
+
+                    $attr.find(":text:not([disabled='disabled'])").each(function (i, element) {
+                        value.push($(element).val());
+                    });
+                    $attr.find(':hidden').val(value.join('x'));
+
+                    if ($attr.attr('id') == 'Dimension') {
+                        $(this).siblings(':text').val(parseFloat($(this).val()) * 0.03937);
+                    }
+                } else {
+                    $(this).val('');
+                    $(this).siblings(':text').val(0);
+                }
+            })
+
+            Dropzone.autoDiscover = false;
+            $("#mydropzone").addClass('dropzone').dropzone({
+                url: '@Url.Action("UploadPicture", "Sku", new { ID = Model.ID })',
+                uploadMultiple: true,
+                paramName: 'files',
+                acceptedFiles: 'image/*',
+                addRemoveLinks: true,
+                previewTemplate: document.querySelector('#temple-pic').innerHTML,
+                init: function () {
+                    var dropZone = this;
+                    website.AjaxUrl('@Url.Action("SkuPicture", "Sku", new { sku = Model.ID })', 'get').done(function (response) {
+                        if (response.status) {
+                            if (response.data.length > 0) {
+                                $.each(response.data, function (i, file) {
+                                    dropZone.emit("addedfile", file);
+                                    dropZone.emit("thumbnail", file, "/Uploads/Sku/@Model.ID/" + file.name);
+                                });
+                            }
+                        } else {
+                            alert(response.message);
+                        }
+                    });
+
+                    this.on("successmultiple", function (files, response) {
+                        $.each(files, function (i, file) {
+                            file.ID = response.data[i].ID;
+                            file.previewTemplate.querySelector('input').value = response.data[i].Order;
+                        });
+                    });
+
+                    this.on("addedfile", function (file) {
+                        file.previewTemplate.querySelector('input').value = file.Order;
+                        file.previewTemplate.querySelector('input').onchange = function () {
+                            website.AjaxUrl('@Url.Action("UpdatePicture", "Sku")', 'post', { ID: file.ID, Order: $(this).val() }).done(function (response) {
+                                if (!response.status) {
+                                    alert(response.message);
+                                }
+                            });
+                        };
+                    });
+
+                    this.on("removedfile", function (file) {
+                        website.AjaxUrl('@Url.Action("RemovePicture", "Sku")', 'post', { ID: file.ID }).done(function (response) {
+                            if (!response.status) {
+                                alert(response.message);
+                            }
+                        });
+                    });
+                }
+            });
+        });
+
+        function AttrAdd() {
+            var source = $attributeTypeList.children('tr').map(function () {
+                if (website.IsEmpty($(this).find('span').text()) && !website.IsEmpty($(this).find(':text').val())) {
+                    return { text: $(this).find(':text').val(), value: $(this).find(':hidden').val() };
+                }
+                return { text: $(this).find('span').text(), value: $(this).find(':hidden').val() };
+            });
+
+            var index = $variationList.children('tr').length;
+            var amount = source.length;
+            source.each(function (i) {
+                var name = 'VariationValue[' + (parseInt(index) + parseInt(i)) + ']';
+                var $newAttr = $("<tr rel='newSku-" + index + "'>").append($("<input type='hidden' name='" + name + "[LangID]' value='@LangID'>"));
+                $newAttr.append($("<input type='hidden' name='" + name + "[Sku]' value='newSku-" + index + "'>"));
+                if (i == 0) {
+                    $newAttr.append($('<td rowspan="' + amount + '" colspan="2">').append($("<input type='text' class='form-control' style='width:80%;height:30px;'>")));
+
+                    $newAttr.find(':text:eq(0)').combobox({
+                        valueField: 'value',
+                        textField: 'label',
+                        loader: function (param, success, error) {
+                            if (param.q <= 3) return false;
+
+                            website.AjaxUrl('@Url.Action("FilterSku", "Sku")', 'get', { filter: param.q || '', parentSku: '@Model.ID' }).done(function (data) {
+                                data = data.map(function (r) {
+                                    r.label = r.value + ' - ' + r.name;
+                                    return r;
+                                });
+                                success(data);
+                            });
+                        },
+                        filter: function (q, row) {
+                            return (row.label.toLowerCase().indexOf(q.toLowerCase()) >= 0);
+                        },
+                        onSelect: function (row) {
+                            $("tr[rel='newSku-" + index + "']").each(function () {
+                                $(this).find(':hidden:eq(0)').val(row.value);
+                            });
+                        }
+                    });
+                }
+                $newAttr.append($('<td>').append(this.text).append($("<input type='hidden' name='" + name + "[AttrID]' value='" + this.value + "'>")));
+                $newAttr.append($('<td class="no-padding">').append($("<input type='text' class='form-control' name='" + name + "[Value]'>")));
+                if (i == 0) $newAttr.append('<td rowspan="' + amount + '"><button type="button" class="btn btn-default btn-sm" onclick="$variationList.find(\'tr[rel=newSku-' + index + ']\').remove();">–</button></td>');
+
+                $variationList.append($newAttr);
+            });
+        };
+
+        function TypeAdd() {
+            $newType = $("<tr>").append($("<td colspan='2'>").append($("<input type='text' class='form-control' name='DiverseAttribute[]'>")));
+            $attributeTypeList.append($newType);
+
+            $newType.find(':text').combobox({
+                valueField: 'attrID',
+                textField: 'value',
+                loader: function (param, success, error) {
+                    if (param.q <= 3) return false;
+
+                    website.AjaxUrl('@Url.Action("FilterAttribute", "SkuAttribute")', 'get', { filter: param.q || '', parentSku: '@Model.ID' }).done(function (data) {
+                        success(data);
+                    });
+                },
+                filter: function (q, row) {
+                    return (row.value.toLowerCase().indexOf(q.toLowerCase()) >= 0);
+                }
+            });
+        }
+
+        function KitAdd() {
+            var index = $kitList.children('tr').length;
+            var name = 'KitSku[' + parseInt(index) + ']';
+            var $newKit = $("<tr rel=''>").append($("<input type='hidden' name='" + name + "[ParentKit]' value='@Model.ID'>"));
+            $newKit.append($("<td colspan='2'>").append($("<input type='text' class='form-control' name='" + name + "[Sku]' style='width:80%;height:30px;'>")));
+            $newKit.append($('<td>').append($("<input type='number' class='form-control' name='" + name + "[Qty]'>")));
+            $newKit.append($('<td>').append($("<button type='button' class='btn btn-default btn-sm' onclick='$(this).parents(\"tr\").remove();'>–</button>")));
+
+            $newKit.find(':text:eq(0)').combobox({
+                valueField: 'value',
+                textField: 'label',
+                loader: function (param, success, error) {
+                    if (param.q <= 3) return false;
+
+                    website.AjaxUrl('@Url.Action("FilterSku", "Sku")', 'get', { filter: param.q || '' }).done(function (data) {
+                        data = data.map(function (r) {
+                            r.label = r.value + ' - ' + r.name;
+                            return r;
+                        });
+                        success(data);
+                    });
+                },
+                filter: function (q, row) {
+                    return (row.label.toLowerCase().indexOf(q.toLowerCase()) >= 0);
+                }
+            });
+
+            $kitList.append($newKit);
+        }
+
+        function AttrDel($btn) {
+            var sku = $btn.parents('tr').attr('rel');
+            website.AjaxUrl('@Url.Action("RemoveVariation", "Sku")', 'post', { ID: sku }).done(function (response) {
+                if (response.status) {
+                    $variationList.find("tr[rel='" + sku + "']").remove();
+                } else {
+                    alert(response.message);
+                }
+            });
+        }
+
+        function KitDel($btn) {
+
+        }
+    </script>
+}

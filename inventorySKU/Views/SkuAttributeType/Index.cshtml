@@ -1,0 +1,151 @@
+﻿@model inventorySKU.Models.SkuAttributeType
+@section styles{
+    <link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
+    <link href="~/Content/themes/icon.css" rel="stylesheet" />
+    <style>
+        .datagrid-btable .filterColumn:first-child td div {
+            padding: 0
+        }
+    </style>
+}
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <div class="table-parent tool-content col-xs-12">
+                <div class="action-button col-xs-2 col-xs-offset-10">
+                    <a class="btn btn-default" href="@Url.Action("Create", "SkuAttributeType")">新增</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <article class="col-xs-12">
+                <table id="DataGrid"></table>
+            </article>
+        </div>
+    </section>
+</div>
+@section pagespecific {
+    <script src="~/scripts/jquery.easyui-1.4.3.min.js"></script>
+    <script src="~/scripts/datagrid-detailview.js"></script>
+    <script src="~/scripts/jquery.number.min.js"></script>
+    <script type="text/javascript">
+        var pager, pageSize = 100, selectOption;
+        var $table = $("#DataGrid"), datagrid;
+
+        $(function () {
+            dataInit();
+        });
+
+        function dataInit() {
+            datagrid = new Datagrid("屬性類型 列表", "ID", "@Url.Action("GetData")");
+            
+            datagrid.dataInit.frozenColumns = [[
+                { field: "ck", checkbox: true },
+                { field: "ID", title: "@Html.DisplayNameFor(model => model.ID)", width: 100, align: "center", sortable: false }
+            ]];
+
+            datagrid.dataInit.columns = [[
+                {
+                    field: "Name", title: "@Html.DisplayNameFor(model => model.Name)", width: 250, align: "center", sortable: false,
+                    formatter: function (value, row, index) {
+                        return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
+                    }
+                }, {
+                    field: "Order", title: "@Html.DisplayNameFor(model => model.Order)", width: 100, align: "center", sortable: false,
+                    formatter: function (value, row, index) {
+                        return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
+                    }
+                }, {
+                    field: "Action", title: "Action", width: 90, align: "center", sortable: false,
+                    formatter: function (value, row, index) {
+                        if (website.IsEmpty(row.IsFilter)) {
+                            return "<button type='button' class='btn btn-default btn-sm' id='btn-save' onclick='SaveData(" + row.ID + ")' disabled>SAVE</button>";
+                        } else {
+                            return value;
+                        }
+                    }
+                }
+            ]];
+
+            $table.datagrid(datagrid.dataInit);
+
+            pager = $table.datagrid("getPager");
+            $(pager).pagination({
+                pageSize: pageSize,
+                showPageList: true,
+                pageList: [100, 200, 300, 500],
+                beforePageTest: "第",
+                afterPageTest: "頁，共 {pages} 頁",
+                displayMsg: "顯示 {from} 到 {to} 筆資料，共 {total} 筆資料"
+            });
+        }
+
+        function getFilterData() {
+            return {
+                ID: $('.filterColumn .s-ID').val(),
+                Name: $('.filterColumn .s-name').val()
+            };
+        }
+
+        function setFilterColumn(filterValue) {
+            return {
+                IsFilter: true,
+                ID: "<input type='text' class='form-control s-ID' value='" + (!website.IsEmpty(filterValue['ID']) ? filterValue['ID'] : '') + "'>",
+                Name: "<input type='text' class='form-control s-name' value='" + (!website.IsEmpty(filterValue['Name']) ? filterValue['Name'] : '') + "'>",
+                Order: "",
+                Action: "<button type='button' class='btn btn-default btn-sm' onclick='SaveData()'>SAVE ALL</button>"
+            };
+        }
+
+        function onDataChange(ID) {
+            var index = $table.datagrid("getRowIndex", ID) - 1;
+
+            $table.datagrid('checkRow', index + 1);
+            $("button#btn-save:eq(" + index + ")").removeAttr("disabled");
+        }
+
+        function SaveData(ID) {
+            var dataList = [];
+
+            if (website.IsEmpty(ID)) {
+                var rows = $table.datagrid('getSelections');
+                for (var i in rows) {
+                    index = $table.datagrid('getRowIndex', rows[i].ID) - 1;
+                    if (!$("button#btn-save:eq(" + index + ")").is("[disabled]")) {
+                        dataList.push(setData(rows[i], index));
+                        $("button#btn-save:eq(" + index + ")").attr("disabled", "disabled");
+                    }
+                }
+            } else {
+                var index = $table.datagrid("getRowIndex", ID) - 1;
+                row = $table.datagrid("getRows")[index + 1];
+                dataList.push(setData(row, index));
+                $("button#btn-save:eq(" + index + ")").attr("disabled", "disabled");
+            }
+
+            if (dataList.length > 0) {
+                dataList.forEach(function (data) {
+                    $.ajax({
+                        url: "@Url.Action("Update")",
+                        type: "post",
+                        data: data,
+                        dataType: "json"
+                    });
+                });
+
+                alert('Success!');
+            };
+
+            $table.datagrid('uncheckAll');
+        }
+
+        function setData(row, index) {
+            return {
+                ID: row.ID,
+                Name: $("input#Name:eq(" + index + ")").val(),
+                Order: $('input#Order:eq(' + index + ')').val()
+            }
+        }
+    </script>
+}

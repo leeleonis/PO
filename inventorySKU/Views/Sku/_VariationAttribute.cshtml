@@ -1,0 +1,123 @@
+﻿@model Sku
+@{
+    int i = 0;
+    string LangID = ViewData["LangID"].ToString();
+    string DefaultLangID = EnumData.DataLangList().First().Key;
+
+    StockKeepingUnit SKU = new StockKeepingUnit(Model.ID);
+    var YesNo = Enum.GetValues(typeof(EnumData.YesNo)).Cast<EnumData.YesNo>().Select(b => new SelectListItem() { Text = b.ToString(), Value = ((byte)b).ToString() });
+    foreach (var skuAttributeGroup in SKU.CompareVariationSku().Where(a => a.LangID.Equals(LangID)).OrderBy(a => a.Sku).GroupBy(a => a.Sku))
+    {
+        List<Sku_Attribute> attrList = skuAttributeGroup.OrderBy(a => a.AttrID).ToList();
+
+        var name = string.Format("VariationValue[{0}]", i++);
+        var firstAttr = attrList.First();
+        <tr rel="@firstAttr.Sku">
+            @Html.Hidden(string.Format("{0}[Sku]", name), firstAttr.Sku)
+            @Html.Hidden(string.Format("{0}[AttrID]", name), firstAttr.AttrID)
+            @Html.Hidden(string.Format("{0}[LangID]", name), LangID)
+            <td rowspan="@attrList.Count()">@Html.ActionLink(firstAttr.Sku, "Edit/" + firstAttr.Sku)</td>
+            <td rowspan="@attrList.Count()">@(firstAttr.GetSku.SkuLang.FirstOrDefault(l => l.LangID.Equals(firstAttr.GetSku.SkuLang.Any(ll => ll.LangID.Equals(LangID)) ? LangID : DefaultLangID))?.Name)</td>
+            <td>@(firstAttr.SkuAttribute.SkuAttributeLang.FirstOrDefault(l => l.LangID.Equals(firstAttr.SkuAttribute.SkuAttributeLang.Any(ll => ll.LangID.Equals(LangID)) ? LangID : DefaultLangID))?.Name)</td>
+            @switch (firstAttr.SkuAttribute.Property)
+            {
+                case 1:
+                    <td class="no-padding">@Html.DropDownList(string.Format("{0}[Value]", name), YesNo.Select(b => new SelectListItem() { Text = b.Text, Value = b.Value, Selected = b.Value.Equals(firstAttr?.Value) }), new { @class = "form-control" })</td>
+                    break;
+                case 2:
+                    <td class="no-padding" id="Dimension">
+                        @{
+                            float DimValue = 0;
+                            string[] dimensions = firstAttr.Value?.Split('x') ?? new string[] { };
+                        }
+                        @Html.Hidden(string.Format("{0}[Value]", name), firstAttr?.Value, new { @rel = firstAttr.AttrID })
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" value="@(dimensions.FirstOrDefault() ?? "0")" rel="@firstAttr.AttrID" placeholder="h (mm)" />
+                            <input type="text" class="form-control" value="@(float.TryParse(dimensions.FirstOrDefault() ?? "0", out DimValue) ? DimValue*0.03937 : 0)" rel="@firstAttr.AttrID" placeholder="h (in.)" disabled />
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" value="@(dimensions.Skip(1).FirstOrDefault() ?? "0")" rel="@firstAttr.AttrID" placeholder="w (mm)" />
+                            <input type="text" class="form-control" value="@(float.TryParse(dimensions.Skip(1).FirstOrDefault() ?? "0", out DimValue) ? DimValue*0.03937 : 0)" rel="@firstAttr.AttrID" placeholder="w (in.)" disabled />
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" value="@(dimensions.Skip(2).FirstOrDefault() ?? "0")" rel="@firstAttr.AttrID" placeholder="l (mm)" />
+                            <input type="text" class="form-control" value="@(float.TryParse(dimensions.Skip(2).FirstOrDefault() ?? "0", out DimValue) ? DimValue*0.03937 : 0)" rel="@firstAttr.AttrID" placeholder="l (in.)" disabled />
+                        </div>
+                    </td>
+                    break;
+                case 3:
+                    <td class="no-padding" id="Resolution">
+                        @{
+                            string[] resolution = firstAttr.Value?.Split('x') ?? new string[] { };
+                        }
+                        @Html.Hidden(string.Format("{0}[Value]", name), firstAttr?.Value, new { @rel = firstAttr.AttrID })
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <input type="text" class="form-control" value="@(resolution.FirstOrDefault() ?? "")" rel="@firstAttr.AttrID" placeholder="pixels" />
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" value="@(resolution.Skip(1).FirstOrDefault() ?? "")" rel="@firstAttr.AttrID" placeholder="pixels" />
+                        </div>
+                    </td>
+                    break;
+                default:
+                    <td>@Html.TextBox(string.Format("{0}[Value]", name), firstAttr?.Value, new { @class = "form-control" })</td>
+                    break;
+            }
+            <td rowspan="@attrList.Count()"><button type="button" class="btn btn-default btn-sm" onclick="AttrDel($(this));">–</button></td>
+        </tr>
+        foreach (var skuAttribute in attrList.Skip(1))
+        {
+            name = string.Format("VariationValue[{0}]", i++);
+        <tr rel="@skuAttribute.Sku">
+            @Html.Hidden(string.Format("{0}[Sku]", name), skuAttribute.Sku)
+            @Html.Hidden(string.Format("{0}[AttrID]", name), skuAttribute.AttrID)
+            @Html.Hidden(string.Format("{0}[LangID]", name), LangID)
+            <td>@(skuAttribute.SkuAttribute.SkuAttributeLang.FirstOrDefault(l => l.LangID.Equals(skuAttribute.SkuAttribute.SkuAttributeLang.Any(ll => ll.LangID.Equals(LangID)) ? LangID : DefaultLangID))?.Name)</td>
+            @switch (skuAttribute.SkuAttribute.Property)
+            {
+                case 1:
+                    <td class="no-padding">@Html.DropDownList(string.Format("{0}[Value]", name), YesNo.Select(b => new SelectListItem() { Text = b.Text, Value = b.Value, Selected = b.Value.Equals(skuAttribute?.Value) }), new { @class = "form-control" })</td>
+                    break;
+                case 2:
+                    <td class="no-padding" id="Dimension">
+                        @{
+                            float DimValue = 0;
+                            string[] dimensions = skuAttribute.Value?.Split('x') ?? new string[] { };
+                        }
+                        @Html.Hidden(string.Format("{0}[Value]", name), skuAttribute?.Value, new { @rel = skuAttribute.AttrID })
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" value="@(dimensions.FirstOrDefault() ?? "0")" rel="@skuAttribute.AttrID" placeholder="h (mm)" />
+                            <input type="text" class="form-control" value="@(float.TryParse(dimensions.FirstOrDefault() ?? "0", out DimValue) ? DimValue*0.03937 : 0)" rel="@skuAttribute.AttrID" placeholder="h (in.)" disabled />
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" value="@(dimensions.Skip(1).FirstOrDefault() ?? "0")" rel="@skuAttribute.AttrID" placeholder="w (mm)" />
+                            <input type="text" class="form-control" value="@(float.TryParse(dimensions.Skip(1).FirstOrDefault() ?? "0", out DimValue) ? DimValue*0.03937 : 0)" rel="@skuAttribute.AttrID" placeholder="w (in.)" disabled />
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" value="@(dimensions.Skip(2).FirstOrDefault() ?? "0")" rel="@skuAttribute.AttrID" placeholder="l (mm)" />
+                            <input type="text" class="form-control" value="@(float.TryParse(dimensions.Skip(2).FirstOrDefault() ?? "0", out DimValue) ? DimValue*0.03937 : 0)" rel="@skuAttribute.AttrID" placeholder="l (in.)" disabled />
+                        </div>
+                    </td>
+                    break;
+                case 3:
+                    <td class="no-padding" id="Resolution">
+                        @{
+                            string[] resolution = skuAttribute.Value?.Split('x') ?? new string[] { };
+                        }
+                        @Html.Hidden(string.Format("{0}[Value]", name), skuAttribute?.Value, new { @rel = skuAttribute.AttrID })
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <input type="text" class="form-control" value="@(resolution.FirstOrDefault() ?? "")" rel="@skuAttribute.AttrID" placeholder="pixels" />
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" value="@(resolution.Skip(1).FirstOrDefault() ?? "")" rel="@skuAttribute.AttrID" placeholder="pixels" />
+                        </div>
+                    </td>
+                    break;
+                default:
+                    <td>@Html.TextBox(string.Format("{0}[Value]", name), skuAttribute?.Value, new { @class = "form-control" })</td>
+                    break;
+            }
+        </tr>
+        }
+    }
+}

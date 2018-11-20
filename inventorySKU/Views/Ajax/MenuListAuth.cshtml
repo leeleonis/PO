@@ -1,0 +1,24 @@
+﻿@model AdminGroup
+@{
+    Layout = null;
+    var mod = ViewBag.mod;//顯示的模式
+    var MenuList = (IEnumerable<Menu>)ViewBag.menu;//選單列表
+}
+<ol class="dd-list" id="auth-list">
+    @foreach (var menu in MenuList.Where(x => !x.PrevID.HasValue))
+    {
+        ViewBag.Auth = Model.Auth;
+        Html.RenderPartial("_AuthList", menu);
+    }
+</ol>
+@if (mod == "UE")
+{
+
+}
+else
+{
+    <script>
+        $('.onoffswitch-checkbox').attr('disabled', 'true');
+    </script>
+}
+
