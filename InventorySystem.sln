@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PurchaseOrderSys", "PurchaseOrder\PurchaseOrderSys.csproj", "{C8DCE860-E4A9-4109-9D9B-3E512504A0EF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1F434187-3F61-47E1-92E5-3F1944658DCF} = {1F434187-3F61-47E1-92E5-3F1944658DCF}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "inventorySKU", "inventorySKU\inventorySKU.csproj", "{1F434187-3F61-47E1-92E5-3F1944658DCF}"
 EndProject
