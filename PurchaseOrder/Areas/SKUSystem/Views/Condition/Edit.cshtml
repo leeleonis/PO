@@ -1,0 +1,120 @@
+﻿@model inventorySKU.Models.Condition
+@{
+    var LangID = (string)ViewBag.LangID;
+}
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-xs-12">
+                <div class="jarviswidget" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+
+                        <h2>修改</h2>
+                        <ul class="nav nav-tabs pull-right">
+                            <li><a data-toggle="tab" href="#hb1">狀態資料</a></li>
+                        </ul>
+                    </header>
+
+                    <div>
+                        <div class="widget-body no-padding">
+                            <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
+                                @Html.AntiForgeryToken()
+                                <div id="content" class="tab-content">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="tab-pane" id="hb1">
+                                        <fieldset>
+                                            <legend>狀態資料</legend>
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.ConditionLang.First().LangID, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownList("LangID", (IEnumerable<SelectListItem>)ViewBag.LangList, htmlAttributes: new { @class = "form-control" })
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.ConditionLang.First().Name, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-3">
+                                                    @Html.EditorFor(model => model.ConditionLang.First(l => l.LangID.Equals(LangID)).Name, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(model => model.ConditionLang.First().Name, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Amazon, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-3">
+                                                    @Html.EditorFor(model => model.Amazon, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(model => model.Amazon, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.eBay, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-3">
+                                                    @Html.EditorFor(model => model.eBay, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(model => model.eBay, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Buy_com, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-3">
+                                                    @Html.EditorFor(model => model.Buy_com, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(model => model.Buy_com, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.NewEgg_com, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-3">
+                                                    @Html.EditorFor(model => model.NewEgg_com, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(model => model.NewEgg_com, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Sears, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-3">
+                                                    @Html.EditorFor(model => model.Sears, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(model => model.Sears, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Suffix, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-3">
+                                                    @Html.EditorFor(model => model.Suffix, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(model => model.Suffix, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+
+                                <div class="widget-footer">
+                                    <button type="submit" class="btn btn-primary" id="save">儲存</button>
+                                    <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index")'">返回</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section pagespecific {
+    <script type="text/javascript">
+        var hash = window.location.hash;
+        $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
+        $('.tab-pane').eq(hash.substr(1)).addClass('active');
+
+        $(document).ready(function () {
+            $('#LangID').change(function () {
+                website.AjaxUrl('@Url.Action("GetLangData", "Condition", new { ID = Model.ID })', 'get', { LangID: $(this).val() }).done(function (response) {
+                    if (response.status) {
+                        $('#Name').val(response.data.Name);
+                    } else {
+                        alert(response.message);
+                    }
+                });
+            });
+        });
+    </script>
+}

@@ -852,4 +852,7 @@
   <data name="TransferSKU_SkuNo" xml:space="preserve">
     <value>SkuNo</value>
   </data>
+  <data name="AttributeErr" xml:space="preserve">
+    <value>權限不足</value>
+  </data>
 </root>

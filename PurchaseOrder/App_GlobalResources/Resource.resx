@@ -1077,4 +1077,8 @@
     <value>SkuNo</value>
     <comment>SkuNo</comment>
   </data>
+  <data name="AttributeErr" xml:space="preserve">
+    <value>buteErr</value>
+    <comment>buteErr</comment>
+  </data>
 </root>

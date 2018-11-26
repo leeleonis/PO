@@ -1,0 +1,87 @@
+﻿@model Menu
+@{
+    var mod = ViewBag.mod;//顯示的模式
+    var MenuSet = (bool?)ViewBag.MenuSet;
+    var Authlist = ViewBag.Authlist;//權限種類
+    string Auth = ViewBag.Auth;//群組的權限
+    var UserAuth = new Dictionary<string, List<string>>();//使用者權限
+    var GAuthItem =new Dictionary<string, List<string>>();//群組的權限
+    if (!string.IsNullOrWhiteSpace(Auth))
+    {
+        GAuthItem = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(Auth);
+    }
+    if (ViewBag.UserAuth!=null)
+    {
+        UserAuth = ViewBag.UserAuth;
+    }
+}
+<div class="dd3-content">
+    @Html.TableLangName(Model.MenuLang)
+    @if (!Model.MenuChild.Any())
+    {
+        <div class="pull-right hidden-xs">
+            @foreach (var item in Authlist)
+            {
+                if ((MenuSet.HasValue && MenuSet.Value) || (!string.IsNullOrWhiteSpace(Model.Auth)))
+                {
+                    var disabled = "";
+                    var chk = "";
+                    var MenuAuthLis = Model.Auth.Split(';').ToList();
+                    if (!(MenuSet.HasValue && MenuSet.Value) && !MenuAuthLis.Contains(item.Value))
+                    {
+                        disabled = "disabled";
+                    }
+                    if (MenuSet.HasValue && MenuSet.Value)
+                    {
+                        chk = !string.IsNullOrWhiteSpace(Model.Auth) && Model.Auth.Contains(item.Value) ? "checked" : "";
+                    }
+                    else if (GAuthItem.Any())
+                    {
+                        if (GAuthItem.Where(x => x.Key == Model.MenuID.ToString() && x.Value.Where(y => y == item.Value).Any()).Any())
+                        {
+                            if (mod == "UE" || mod == "UI")
+                            {
+                                if (UserAuth.Any())
+                                {
+                                    if (UserAuth.Where(x => x.Key == Model.MenuID.ToString() && x.Value.Where(y => y == item.Value).Any()).Any())
+                                    {
+                                        chk = "checked";
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                chk = "checked";
+                            }
+                        }
+                        else
+                        {
+                            if (mod == "UE" || mod == "UI")
+                            {
+                                disabled = "disabled";
+                            }
+
+                        }
+
+                    }
+                    if (disabled == "disabled")
+                    {
+                        chk = "";
+                    }
+                    var id = "auth[" + Model.MenuID + "][" + item.Value + "]";
+                    <label for="@id">
+                        <span>@item.Name</span>
+                    </label>
+                    <div class="onoffswitch">
+                        <input type="checkbox" name="@id" class="onoffswitch-checkbox" id="@id" value="@item.Value" @chk @disabled>
+                        <label class="onoffswitch-label" for="@id">
+                            <span class="onoffswitch-inner" data-swchon-text="Yes" data-swchoff-text="No"></span>
+                            <span class="onoffswitch-switch"></span>
+                        </label>
+                        <input type="hidden" name="@id" value="false">
+                    </div>
+                }
+            }
+        </div>
+    }
+</div>

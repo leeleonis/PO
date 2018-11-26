@@ -119,22 +119,22 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult Saveserials(string serials)
         {
             var PrepVMList = (List<PrepVM>)Session["PrepVMList"];
-            if (PrepVMList[0].QTY > PrepVMList[0].SerialsLlist.Count())
-            {
-                PrepVMList[0].SerialsLlist.Add(serials);
-                Session["PrepVMList"] = PrepVMList;
-                return Json(new { status = true }, JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
-                return Json(new { status = false, Errmsg = "移倉數量超過" }, JsonRequestBehavior.AllowGet);
-            }
+            
             var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials);//找到序號
             if (SerialsLlist.Any())
             {
                 if (SerialsLlist.Sum(c => c.SerialsType) == 1)
                 {
-                    return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+                    if (PrepVMList[0].QTY > PrepVMList[0].SerialsLlist.Count())
+                    {
+                        PrepVMList[0].SerialsLlist.Add(serials);
+                        Session["PrepVMList"] = PrepVMList;
+                        return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json(new { status = false, Errmsg = "移倉數量超過" }, JsonRequestBehavior.AllowGet);
+                    }
                 }
                 else
                 {

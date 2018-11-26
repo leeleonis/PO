@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+//using PurchaseOrderSys.Areas.SKUSystem.Models;
 
 namespace inventorySKU
 {
@@ -43,7 +44,7 @@ namespace inventorySKU
                            { "action", "Login" },
                            { "id", UrlParameter.Optional }
                       });
-                    context.Controller.TempData["ErrMsg"] = ViewRes.Resource.AttributeErr;
+                    context.Controller.TempData["ErrMsg"] = PurchaseOrderSys.App_GlobalResources.Resource.AttributeErr;
                     //context.Result = new ContentResult { Content = "權限不足" };
                 }
                 else
@@ -60,7 +61,7 @@ namespace inventorySKU
                         if (!(((actionName == "index"||actionName == "getdata") && Authlist.Value.Value.Contains("0")) || (actionName == "create" && Authlist.Value.Value.Contains("1")) || ((actionName == "edit"|| actionName == "update") && Authlist.Value.Value.Contains("2")) || (actionName == "delete" && Authlist.Value.Value.Contains("3")) || (actionName == "print" && Authlist.Value.Value.Contains("4"))))
                         {
                             context.Result = new RedirectToRouteResult(new RouteValueDictionary { { "controller", "Main" }, { "action", "Login" }, { "id", UrlParameter.Optional } });
-                            context.Controller.TempData["ErrMsg"] = ViewRes.Resource.AttributeErr;
+                            context.Controller.TempData["ErrMsg"] = PurchaseOrderSys.App_GlobalResources.Resource.AttributeErr;
                         }
                     }
                     else
@@ -72,7 +73,7 @@ namespace inventorySKU
                            { "action", "Login" },
                            { "id", UrlParameter.Optional }
                           });
-                        context.Controller.TempData["ErrMsg"] = ViewRes.Resource.AttributeErr;
+                        context.Controller.TempData["ErrMsg"] = PurchaseOrderSys.App_GlobalResources.Resource.AttributeErr;
                         //context.Result = new ContentResult { Content = "權限不足" };
                     }
                 }

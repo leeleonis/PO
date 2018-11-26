@@ -1,0 +1,36 @@
+﻿@model Menu
+@{
+    var mod = ViewBag.mod;//顯示的模式
+    var MenuChild = Model.MenuChild.AsEnumerable();//子項目資料
+    string Auth = ViewBag.Auth;//群組的權限
+    var AuthItem = new List<int>();
+    if (!string.IsNullOrWhiteSpace(Auth))
+    {
+        AuthItem = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(Auth).Where(x => x.Value.Any()).Select(x => int.Parse(x.Key)).ToList();
+    }
+    if (mod == "UE" || mod == "UI")
+    {
+        MenuChild = Model.MenuChild.Where(x => AuthItem.Contains(x.MenuID));
+    }
+    if (ViewBag.Authlist == null)
+    {
+        using (InventorySKUEntities db = new InventorySKUEntities())
+        {
+            ViewBag.Authlist = db.Auth.ToList();
+        }
+    }
+}
+<li class="dd-item dd3-item">
+    <div class="dd-handle dd3-handle">..</div>
+    @{Html.RenderPartial("_ActionList", Model); }
+    @if (MenuChild.Any())
+    {
+        <ol class="dd-list">
+            @{foreach (Menu sub in MenuChild)
+                {
+                    Html.RenderPartial("_AuthList", sub);
+                }
+            }
+        </ol>
+    }
+</li>

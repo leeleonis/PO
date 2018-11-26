@@ -42,8 +42,29 @@ namespace PurchaseOrderSys
     {
         public string LangID { get; set; }
         public Nullable<int> Type { get; set; }
+        public Nullable<byte> Property { get; set; }
     }
 
+    public class ConditionFilter
+    {
+        private string nameField;
+        private string amazonField;
+        private string eBayField;
+        private string buy_comField;
+        private string newEgg_comField;
+        private string searsField;
+        private string suffixField;
+
+        public Nullable<int> ID { get; set; }
+        public string LangID { get; set; }
+        public string Name { get { return nameField; } set { nameField = !string.IsNullOrEmpty(value) ? value.Trim() : value; } }
+        public string Amazon { get { return amazonField; } set { amazonField = !string.IsNullOrEmpty(value) ? value.Trim() : value; } }
+        public string eBay { get { return eBayField; } set { eBayField = !string.IsNullOrEmpty(value) ? value.Trim() : value; } }
+        public string Buy_com { get { return buy_comField; } set { buy_comField = !string.IsNullOrEmpty(value) ? value.Trim() : value; } }
+        public string NewEgg_com { get { return newEgg_comField; } set { newEgg_comField = !string.IsNullOrEmpty(value) ? value.Trim() : value; } }
+        public string Sears { get { return searsField; } set { searsField = !string.IsNullOrEmpty(value) ? value.Trim() : value; } }
+        public string Suffix { get { return suffixField; } set { suffixField = !string.IsNullOrEmpty(value) ? value.Trim() : value; } }
+    }
     public class SkuTypeFilter
     {
         private string nameField;

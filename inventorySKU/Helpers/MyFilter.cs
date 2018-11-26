@@ -34,7 +34,6 @@ namespace inventorySKU
     public class SkuAttributeTypeFilter
     {
         private string nameField;
-
         public Nullable<int> ID { get; set; }
         public string Name { get { return nameField; } set { nameField = !string.IsNullOrEmpty(value) ? value.Trim() : value; } }
     }
@@ -70,7 +69,6 @@ namespace inventorySKU
     public class SkuTypeFilter
     {
         private string nameField;
-
         public Nullable<int> ID { get; set; }
         public string LangID { get; set; }
         public Nullable<int> NetoID { get; set; }

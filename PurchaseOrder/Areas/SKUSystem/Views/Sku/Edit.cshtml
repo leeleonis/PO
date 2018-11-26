@@ -1,0 +1,226 @@
+﻿@model inventorySKU.Models.Sku
+@{
+    string LangID = (string)ViewBag.LangID;
+}
+
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-xs-12">
+                <div class="jarviswidget" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+
+                        <h2>Edit</h2>
+                        <ul class="nav nav-tabs pull-right">
+                            <li><a data-toggle="tab" href="#hb1">Summary</a></li>
+                            <li><a data-toggle="tab" href="#hb2">Attribute</a></li>
+                        </ul>
+                    </header>
+
+                    <div>
+                        <div class="widget-body no-padding">
+                            <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
+                                @Html.AntiForgeryToken()
+                                <div id="content" class="tab-content">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.SkuLang.First().LangID, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                        <div class="col-sm-9 col-lg-2">
+                                            @Html.DropDownList("LangID", (IEnumerable<SelectListItem>)ViewBag.LangList, htmlAttributes: new { @class = "form-control" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.ID, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                        <div class="col-sm-9 col-lg-3">
+                                            @Html.EditorFor(model => model.ID, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                            @Html.ValidationMessageFor(model => model.ID, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.SkuLang.First().Name, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                        <div class="col-sm-9 col-lg-4">
+                                            @Html.EditorFor(model => model.SkuLang.First(l => l.LangID.Equals(LangID)).Name, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.SkuLang.First().Name, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane" id="hb1">
+                                        <fieldset>
+                                            <legend>Summary</legend>
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownList("Type", (List<SelectListItem>)ViewBag.TypeList, htmlAttributes: new { @class = "form-control" })
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.ParentSku, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-3">
+                                                    <div class="input-group">
+                                                        @Html.EditorFor(model => model.ParentSku, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                        <div class="input-group-btn">
+                                                            <button class="btn btn-default" type="button">
+                                                                Search
+                                                            </button>
+                                                        </div>
+                                                        @Html.ValidationMessageFor(model => model.ParentSku, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Condition, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownListFor(model => model.Condition, null, htmlAttributes: new { @class = "form-control" })
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Category, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownListFor(model => model.Category, null, htmlAttributes: new { @class = "form-control" })
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Brand, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownListFor(model => model.Brand, null, htmlAttributes: new { @class = "form-control" })
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.SkuLang.First().Models, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-3">
+                                                    @Html.EditorFor(model => model.SkuLang.First(l => l.LangID.Equals(LangID)).Models, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(model => model.SkuLang.First().Models, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.EAN, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-3">
+                                                    @Html.EditorFor(model => model.EAN, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(model => model.EAN, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.UPC, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-3">
+                                                    @Html.EditorFor(model => model.UPC, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(model => model.UPC, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+
+                                            @Html.HiddenFor(model => model.Replenishable)
+                                            @Html.HiddenFor(model => model.Status)
+                                        </fieldset>
+
+                                        <fieldset id="Variation" style="display:@(Model.Type.Equals(1) ? "block" : "none")">
+                                            <legend>Variation</legend>
+
+                                        </fieldset>
+
+                                        <fieldset>
+                                            <legend>Kit SKU</legend>
+
+                                        </fieldset>
+
+                                        <fieldset>
+                                            <legend>Shadows</legend>
+
+                                        </fieldset>
+
+                                        <fieldset>
+                                            <legend>Linked</legend>
+
+                                        </fieldset>
+                                    </div>
+
+                                    <div class="tab-pane" id="hb2">
+                                        <fieldset>
+                                            @{
+                                                Dictionary<int, int[]> attributeGroup = JsonConvert.DeserializeObject<Dictionary<int, int[]>>(Model.SkuType.AttributeGroup);
+                                                foreach (SkuAttributeType type in ViewBag.AttributeTypeList)
+                                                {
+                                                    if (attributeGroup.ContainsKey(type.ID))
+                                                    {
+                                                        <legend>@type.Name</legend>
+
+                                                        <div class="form-group">
+                                                            <div class="table-responsive col-sm-10">
+                                                                <table class="table table-bordered table-striped text-center">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th class="text-center">Attribute</th>
+                                                                            <th class="text-center">Value</th>
+                                                                            <th width="150" class="text-center">Html</th>
+                                                                            <th width="150" class="text-center">eBay</th>
+                                                                        </tr>
+                                                                    </thead>
+
+                                                                    <tbody class="smart-form">
+                                                                        @foreach (var attribute in type.SkuAttribute.Where(a => a.IsEnable))
+                                                                        {
+                                                                            var name = string.Format("AttributeValue[{0}]", attribute.ID);
+                                                                            <tr>
+                                                                                <td>@(attribute.SkuAttributeLang.First(l => l.LangID.Equals(LangID)).Name)</td>
+                                                                                <td>@Html.Editor(string.Format("{0}[Value]", name), new { htmlAttributes = new { @class = "form-control" } })</td>
+                                                                                <td>@Html.BooleanSwitch(string.Format("{0}[Html]", name), true)</td>
+                                                                                <td>@Html.BooleanSwitch(string.Format("{0}[eBay]", name), false)</td>
+                                                                            </tr>
+                                                                        }
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                }
+                                            }
+                                        </fieldset>
+                                    </div>
+                                </div>
+
+                                <div class="widget-footer">
+                                    <button type="submit" class="btn btn-primary" id="save">儲存</button>
+                                    <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index", "Sku")'">返回</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section pagespecific {
+    <script type="text/javascript">
+        var hash = window.location.hash;
+        $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
+        $('.tab-pane').eq(hash.substr(1)).addClass('active');
+
+        $(document).ready(function () {
+            $('#LangID').change(function () {
+                website.AjaxUrl('@Url.Action("GetLangData", "Sku", new { ID = Model.ID })', 'get', { LangID: $(this).val() }).done(function (response) {
+                    if (response.status) {
+                        $('#Name').val(response.data.Name);
+                        $('Models').val(response.data.Models);
+                    } else {
+                        alert(response.message);
+                    }
+                });
+            });
+
+            $('#Type').change(function () {
+                $('#Variation').css('display', $(this).val() == 1 ? 'block' : 'none');
+            });
+        });
+    </script>
+}
