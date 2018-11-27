@@ -1,5 +1,4 @@
-﻿@model inventorySKU.Models.Sku
-
+﻿@model SKU
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -28,10 +27,10 @@
                                             <legend>基本資料</legend>
 
                                             <div class="form-group">
-                                                @Html.LabelFor(model => model.ID, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @Html.LabelFor(model => model.SkuID, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-3">
-                                                    @Html.EditorFor(model => model.ID, new { htmlAttributes = new { @class = "form-control" } })
-                                                    @Html.ValidationMessageFor(model => model.ID, "", new { @class = "text-danger" })
+                                                    @Html.EditorFor(model => model.SkuID, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(model => model.SkuID, "", new { @class = "text-danger" })
                                                 </div>
                                             </div>
 
@@ -72,10 +71,10 @@
                                             </div>
 
                                             <div class="form-group">
-                                                @Html.LabelFor(model => model.SkuLang.First().Models, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @Html.LabelFor(model => model.SkuLang.First().Model, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-3">
-                                                    @Html.EditorFor(model => model.SkuLang.First().Models, new { htmlAttributes = new { @class = "form-control" } })
-                                                    @Html.ValidationMessageFor(model => model.SkuLang.First().Models, "", new { @class = "text-danger" })
+                                                    @Html.EditorFor(model => model.SkuLang.First().Model, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(model => model.SkuLang.First().Model, "", new { @class = "text-danger" })
                                                 </div>
                                             </div>
 

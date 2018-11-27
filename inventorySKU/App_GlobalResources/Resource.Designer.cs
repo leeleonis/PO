@@ -1053,9 +1053,9 @@ namespace ViewRes {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string Sku_ID {
+        public static string SKU_ID {
             get {
-                return ResourceManager.GetString("Sku_ID", resourceCulture);
+                return ResourceManager.GetString("SKU_ID", resourceCulture);
             }
         }
         

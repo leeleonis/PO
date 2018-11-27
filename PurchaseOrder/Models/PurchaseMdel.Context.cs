@@ -40,5 +40,24 @@ namespace PurchaseOrderSys.Models
         public virtual DbSet<Transfer> Transfer { get; set; }
         public virtual DbSet<TransferSKU> TransferSKU { get; set; }
         public virtual DbSet<SKU> SKU { get; set; }
+        public virtual DbSet<AdminGroup> AdminGroup { get; set; }
+        public virtual DbSet<API> API { get; set; }
+        public virtual DbSet<Auth> Auth { get; set; }
+        public virtual DbSet<Brand> Brand { get; set; }
+        public virtual DbSet<Carrier> Carrier { get; set; }
+        public virtual DbSet<Condition> Condition { get; set; }
+        public virtual DbSet<ConditionLang> ConditionLang { get; set; }
+        public virtual DbSet<DirectLine> DirectLine { get; set; }
+        public virtual DbSet<Menu> Menu { get; set; }
+        public virtual DbSet<MenuLang> MenuLang { get; set; }
+        public virtual DbSet<ShippingMethod> ShippingMethod { get; set; }
+        public virtual DbSet<Sku_Attribute> Sku_Attribute { get; set; }
+        public virtual DbSet<SkuAttribute> SkuAttribute { get; set; }
+        public virtual DbSet<SkuAttributeLang> SkuAttributeLang { get; set; }
+        public virtual DbSet<SkuAttributeType> SkuAttributeType { get; set; }
+        public virtual DbSet<SkuType> SkuType { get; set; }
+        public virtual DbSet<SkuTypeLang> SkuTypeLang { get; set; }
+        public virtual DbSet<KitSku> KitSku { get; set; }
+        public virtual DbSet<SkuPicture> SkuPicture { get; set; }
     }
 }

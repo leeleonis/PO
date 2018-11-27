@@ -38,5 +38,6 @@ namespace PurchaseOrderSys.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<WarehouseUser> WarehouseUser { get; set; }
+        public virtual AdminGroup AdminGroup { get; set; }
     }
 }

@@ -83,12 +83,14 @@ namespace PurchaseOrderSys
         private string eanField;
         public string ID { get { return this.idField; } set { idField = !string.IsNullOrEmpty(value) ? value.Trim() : value; } }
         public string LangID { get; set; }
-        public string ParentSku { get { return this.parentSkuField; } set { parentSkuField = !string.IsNullOrEmpty(value) ? value.Trim() : value; } }
-        public string Name { get { return this.nameField; } set { nameField = !string.IsNullOrEmpty(value) ? value.Trim() : value; } }
+        public string ParentSku { get { return parentSkuField; } set { parentSkuField = !string.IsNullOrEmpty(value) ? value.Trim() : value; } }
+        public string Name { get { return nameField; } set { nameField = !string.IsNullOrEmpty(value) ? value.Trim() : value; } }
+        public Nullable<byte> Type { get; set; }
         public Nullable<int> Condition { get; set; }
         public Nullable<int> Category { get; set; }
-        public string UPC { get { return this.nameField; } set { nameField = !string.IsNullOrEmpty(value) ? value.Trim() : value; } }
-        public string EAN { get { return this.nameField; } set { nameField = !string.IsNullOrEmpty(value) ? value.Trim() : value; } }
+        public Nullable<int> Brand { get; set; }
+        public string UPC { get { return upcField; } set { upcField = !string.IsNullOrEmpty(value) ? value.Trim() : value; } }
+        public string EAN { get { return eanField; } set { eanField = !string.IsNullOrEmpty(value) ? value.Trim() : value; } }
         public Nullable<int> Replenishable { get; set; }
         public Nullable<int> Status { get; set; }
     }

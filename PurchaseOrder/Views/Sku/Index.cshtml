@@ -1,4 +1,4 @@
-﻿@model inventorySKU.Models.Sku
+﻿@model SKU
 @section styles{
     <link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
     <link href="~/Content/themes/icon.css" rel="stylesheet" />
@@ -52,7 +52,7 @@
 
             datagrid.dataInit.frozenColumns = [[
                 { field: "ck", checkbox: true },
-                { field: "ID", title: "@Html.DisplayNameFor(model => model.ID)", width: 150, align: "center", sortable: false }
+                { field: "ID", title: "@Html.DisplayNameFor(model => model.SkuID)", width: 150, align: "center", sortable: false }
             ]];
 
             datagrid.dataInit.columns = [[

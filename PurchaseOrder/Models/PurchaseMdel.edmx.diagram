@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="5872b44f309a44909e8a45ca6f67f469" Name="Diagram1" ZoomLevel="91">
+      <Diagram DiagramId="5872b44f309a44909e8a45ca6f67f469" Name="Diagram1" ZoomLevel="85">
         <EntityTypeShape EntityType="PurchaseOrderModel.PurchaseOrder" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="PurchaseOrderModel.Company" Width="1.5" PointX="0.75" PointY="15" />
         <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseOrder_Company" />
@@ -38,6 +38,43 @@
         <AssociationConnector Association="PurchaseOrderModel.FK_TransferSKU_Transfer" />
         <EntityTypeShape EntityType="PurchaseOrderModel.SKU" Width="1.5" PointX="5.375" PointY="18.875" />
         <AssociationConnector Association="PurchaseOrderModel.FK_SkuLang_Sku" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.AdminGroup" Width="1.5" PointX="10.75" PointY="11.75" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.API" Width="1.5" PointX="15" PointY="24.125" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.Auth" Width="1.5" PointX="8" PointY="10.75" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.Brand" Width="1.5" PointX="3.75" PointY="28" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.Carrier" Width="1.5" PointX="15" PointY="7" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.Condition" Width="1.5" PointX="0.75" PointY="24.375" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.ConditionLang" Width="1.5" PointX="3" PointY="36.125" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.DirectLine" Width="1.5" PointX="15" PointY="18.75" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.Menu" Width="1.5" PointX="18" PointY="1" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.MenuLang" Width="1.5" PointX="20.25" PointY="1.25" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.ShippingMethod" Width="1.5" PointX="17.25" PointY="6" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.Sku_Attribute" Width="1.5" PointX="17.5" PointY="14.125" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.SkuAttribute" Width="1.5" PointX="15.25" PointY="14" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.SkuAttributeLang" Width="1.5" PointX="17.5" PointY="18.375" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.SkuAttributeType" Width="1.5" PointX="13" PointY="14.125" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.SkuType" Width="1.5" PointX="0.75" PointY="19.875" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.SkuTypeLang" Width="1.5" PointX="3" PointY="32.125" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_AdminUser_AdminGroup" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_ShippingMethod_API" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_Sku_Brand" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_ShippingMethod_Carrier" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_ConditionLang_Condition" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_Sku_Condition" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_ShippingMethod_DirectLine" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_Menu_Menu" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_MenuLang_Menu" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_Sku_Attribute_Sku" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_Sku_SkuType" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_Sku_Attribute_SkuAttribute" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_SkuAttribute_SkuAttributeType" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_SkuAttributeLang_SkuAttribute" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_SkuTypeLang_SkuType" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.KitSku" Width="1.5" PointX="7.625" PointY="22.125" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.SkuPicture" Width="1.5" PointX="7.625" PointY="18.375" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_KitSku_Sku" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_KitSku_Sku1" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_SkuPicture_Sku" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

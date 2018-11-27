@@ -1081,4 +1081,460 @@
     <value>buteErr</value>
     <comment>buteErr</comment>
   </data>
+  <data name="Menu_IsEnable" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Menu_MenuID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Menu_Name" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Menu_PrevID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Menu_Controller" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Menu_Action" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Menu_Auth" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Menu_Order" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="AdminGroup_IsEnable" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="AdminGroup_ID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="AdminGroup_Name" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="AdminGroup_Auth" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="AdminGroup_CreateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="AdminGroup_CreateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="AdminGroup_UpdateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="AdminGroup_UpdateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="MenuLang_MenuID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="MenuLang_LangID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="MenuLang_Name" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="MenuLang_CreateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="MenuLang_CreateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="MenuLang_UpdateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="MenuLang_UpdateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Brand_IsEnable" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Brand_ID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Brand_NetoID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Brand_Name" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Brand_IsExport" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Brand_CreateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Brand_CreateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Brand_UpdateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Brand_UpdateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Company_IsEnable" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Company_ID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Company_Name" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Company_ShandowSuffix" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Company_ParentID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Company_RelateID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Company_eBayAccountID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Company_AmazonAccountID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Company_CreateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Company_CreateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Company_UpdateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Company_UpdateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuAttribute_IsEnable" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuAttribute_ID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuAttribute_Type" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuAttribute_CreateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuAttribute_CreateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuAttribute_UpdateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuAttribute_UpdateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuAttributeLang_AttrID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuAttributeLang_LangID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuAttributeLang_Name" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuAttributeLang_CreateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuAttributeLang_CreateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuAttributeLang_UpdateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuAttributeLang_UpdateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuAttributeType_IsEnable" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuAttributeType_ID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuAttributeType_Name" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuAttributeType_CreateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuAttributeType_CreateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuAttributeType_UpdateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuAttributeType_UpdateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuType_IsEnable" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuType_ID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuType_NetoID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuType_AttributeGroup" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuType_CreateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuType_CreateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuType_UpdateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuType_UpdateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuTypeLang_TypeID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuTypeLang_LangID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuTypeLang_Name" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuTypeLang_CreateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuTypeLang_CreateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuTypeLang_UpdateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuTypeLang_UpdateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Condition_IsEnable" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Condition_ID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Condition_Name" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Condition_Amazon" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Condition_eBay" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Condition_Buy_com" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Condition_NewEgg_com" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Condition_Sears" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Condition_Suffix" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Condition_CreateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Condition_CreateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Condition_UpdateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Condition_UpdateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ConditionLang_ConditionID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ConditionLang_LangID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ConditionLang_Name" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ConditionLang_CreateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ConditionLang_CreateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ConditionLang_UpdateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ConditionLang_UpdateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Sku_IsEnable" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SKU_SkuID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SKU_Type" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SKU_ParentSku" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SKU_Condition" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SKU_Category" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SKU_Brand" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SKU_EAN" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SKU_UPC" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SKU_Replenishable" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SKU_Status" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SKU_CreateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SKU_CreateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SKU_UpdateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SKU_UpdateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuLang_Sku" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuLang_LangID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuLang_Name" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuLang_Model" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuLang_CreateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuLang_CreateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuLang_UpdateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuLang_UpdateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuAttributeType_Order" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Sku_Attribute_Sku" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Sku_Attribute_AttrID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Sku_Attribute_LangID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Sku_Attribute_Value" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Sku_Attribute_Html" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Sku_Attribute_eBay" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Sku_Attribute_CreateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Sku_Attribute_CreateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Sku_Attribute_UpdateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Sku_Attribute_UpdateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="KitSku_Sku" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="KitSku_ParentKit" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="KitSku_Qty" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="KitSku_CreateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="KitSku_CreateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="KitSku_UpdateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="KitSku_UpdateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuPicture_ID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuPicture_Sku" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuPicture_FileName" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuPicture_FileSize" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuPicture_CreateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuPicture_CreateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuPicture_IsMain" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuAttribute_Property" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuPicture_Order" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuPicture_UpdateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuPicture_UpdateAt" xml:space="preserve">
+    <value></value>
+  </data>
 </root>

@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using PurchaseOrderSys.Areas.SKUSystem.Models;
-
-namespace PurchaseOrderSys.Areas.SKUSystem.Models
+namespace PurchaseOrderSys.Models
 {
     public class StockKeepingUnit : IDisposable
     {
-        protected InventorySKUEntities db = new InventorySKUEntities();
+        protected PurchaseOrderEntities db = new PurchaseOrderEntities();
 
         protected SKU skuData;
 
@@ -36,10 +34,10 @@ namespace PurchaseOrderSys.Areas.SKUSystem.Models
 
             try
             {
-                if (db.SKU.Any(s => s.ID.StartsWith(category.ToString() + brand.ToString())))
+                if (db.SKU.Any(s => s.SkuID.StartsWith(category.ToString() + brand.ToString())))
                 {
-                    Sku lastest =db.SKU.AsNoTracking().Where(s => s.ID.StartsWith(category.ToString() + brand.ToString())).OrderByDescending(s => s.ID).First(s => s.ID.Length.Equals(9));
-                    string oldNumber = string.Join("", lastest.ID.Skip(6).Take(3));
+                    SKU lastest =db.SKU.AsNoTracking().Where(s => s.SkuID.StartsWith(category.ToString() + brand.ToString())).OrderByDescending(s => s.SkuID).First(s => s.SkuID.Length.Equals(9));
+                    string oldNumber = string.Join("", lastest.SkuID.Skip(6).Take(3));
                     number = int.Parse(oldNumber, System.Globalization.NumberStyles.HexNumber) + 1;
                 }
 
@@ -54,11 +52,11 @@ namespace PurchaseOrderSys.Areas.SKUSystem.Models
             return string.Format("{0}{1}{2}", category, brand, newNumber);
         }
 
-        public Sku CreateSku(Sku newSku, SkuLang newLang)
+        public SKU CreateSku(SKU newSku, SkuLang newLang)
         {
-            if (string.IsNullOrEmpty(newSku.ID)) newSku.ID = GetNewSku(newSku.Category, newSku.Brand);
+            if (string.IsNullOrEmpty(newSku.SkuID)) newSku.SkuID = GetNewSku(newSku.Category, newSku.Brand);
 
-            newLang.Sku = newSku.ID;
+            newLang.Sku = newSku.SkuID;
             newLang.CreateAt = newSku.CreateAt;
             newLang.CreateBy = newSku.CreateBy;
 
@@ -69,10 +67,10 @@ namespace PurchaseOrderSys.Areas.SKUSystem.Models
             {
                 foreach (var condition in db.Condition.Where(c => c.IsEnable && !c.ID.Equals(newSku.Condition)).ToList())
                 {
-                    Sku sku_suffix = new Sku()
+                    SKU sku_suffix = new SKU()
                     {
                         IsEnable = true,
-                        ID = newSku.ID + condition.Suffix,
+                        SkuID = newSku.SkuID + condition.Suffix,
                         Type = (byte)EnumData.SkuType.Single,
                         Condition = condition.ID,
                         Category = newSku.Category,
@@ -85,7 +83,7 @@ namespace PurchaseOrderSys.Areas.SKUSystem.Models
                    db.SKU.Add(sku_suffix);
                     db.SkuLang.Add(new SkuLang()
                     {
-                        Sku = sku_suffix.ID,
+                        Sku = sku_suffix.SkuID,
                         LangID = newLang.LangID,
                         Name = newLang.Name,
                         CreateAt = newLang.CreateAt,
@@ -105,7 +103,7 @@ namespace PurchaseOrderSys.Areas.SKUSystem.Models
             {
                 if (skuData == null) throw new Exception("No Sku data!");
 
-                return db.SKU.Where(s => s.IsEnable && s.ParentSku.Equals(skuData.ID)).OrderBy(s => s.ID).ToList();
+                return db.SKU.Where(s => s.IsEnable && s.ParentSku.Equals(skuData.SkuID)).OrderBy(s => s.SkuID).ToList();
             }
             catch (Exception e)
             {

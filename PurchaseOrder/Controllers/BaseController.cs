@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using System.Web.UI;
 using PurchaseOrderSys.Models;
 
@@ -81,6 +82,52 @@ namespace PurchaseOrderSys.Controllers
             string value = ((StringWriter)writer.InnerWriter).ToString();
 
             return value;
+        }
+        protected string AuthToString(Dictionary<string, List<string>> auth)
+        {
+            var authW = new Dictionary<string, List<string>>();
+            foreach (var authitem in auth)
+            {
+                if (authitem.Value.Where(x => x != "false").Any())
+                {
+                    authW.Add(authitem.Key, authitem.Value.Where(x => x != "false").ToList());
+                }
+            }
+            return new JavaScriptSerializer().Serialize(authW);
+        }
+        protected void SetUpdateData<T>(T originData, T updateData, string[] updateColumn)
+        {
+            var TypeInfoList = originData.GetType().GetProperties();
+            foreach (string column in updateColumn)
+            {
+                var newData = TypeInfoList.FirstOrDefault(info => info.Name.Equals(column)).GetValue(updateData, null);
+                TypeInfoList.FirstOrDefault(info => info.Name.Equals(column)).SetValue(originData, newData);
+            }
+            TypeInfoList.FirstOrDefault(info => info.Name.Equals("UpdateBy")).SetValue(originData, Session["AdminName"]);
+            TypeInfoList.FirstOrDefault(info => info.Name.Equals("UpdateAt")).SetValue(originData, DateTime.UtcNow);
+        }
+
+        public string RenderViewToString(ControllerContext controllerContext, string viewName, object model, ViewDataDictionary viewData = null, TempDataDictionary tempData = null)
+        {
+            if (viewData == null) viewData = new ViewDataDictionary();
+
+            if (tempData == null) tempData = new TempDataDictionary();
+
+            // assing model to the viewdata
+            viewData.Model = model;
+
+            using (var sw = new System.IO.StringWriter())
+            {
+                // try to find the specified view
+                ViewEngineResult viewResult = ViewEngines.Engines.FindPartialView(controllerContext, viewName);
+                // create the associated context
+                ViewContext viewContext = new ViewContext(controllerContext, viewResult.View, viewData, tempData, sw);
+                // write the render view with the given context to the stringwriter
+                viewResult.View.Render(viewContext, sw);
+
+                viewResult.ViewEngine.ReleaseView(controllerContext, viewResult.View);
+                return sw.GetStringBuilder().ToString();
+            }
         }
     }
 }

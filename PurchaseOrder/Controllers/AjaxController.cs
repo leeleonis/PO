@@ -164,5 +164,74 @@ namespace PurchaseOrderSys.Controllers
             Session["TSkuNumberList"] = odataList;
             return Json(new { status = true }, JsonRequestBehavior.AllowGet);
         }
+        [HttpPost]
+        public ActionResult GetSelectOption(string[] optionType)
+        {
+            AjaxResult result = new AjaxResult();
+
+            try
+            {
+                if (!optionType.Any()) throw new Exception("沒有給項目!");
+
+                var LangID = EnumData.DataLangList().First().Key;
+                Dictionary<string, object> optionList = new Dictionary<string, object>();
+
+                foreach (string type in optionType)
+                {
+                    switch (type)
+                    {
+                        case "ApprevedForExport":
+                        case "Replenishable":
+                            optionList.Add(type, Enum.GetValues(typeof(EnumData.YesNo)).Cast<EnumData.YesNo>().Select(e => new { text = e.ToString(), value = Convert.ToBoolean((int)e).ToString() }));
+                            break;
+                        case "CompanyOption":
+                            var companyList = new List<object>() { new { text = "Not Choose", value = "" } };
+                            companyList.AddRange(db.Company.AsNoTracking().Where(c => c.IsEnable).Select(c => new { text = c.Name, value = c.ID.ToString() }));
+                            optionList.Add(type, companyList);
+                            break;
+                        case "SkuAttributeType":
+                            optionList.Add(type, db.SkuAttributeType.AsNoTracking().Where(t => t.IsEnable).Select(t => new { text = t.Name, value = t.ID.ToString() }));
+                            break;
+                        case "SkuAttributeProperty":
+                            optionList.Add(type, Enum.GetValues(typeof(EnumData.AttributeProperty)).Cast<EnumData.AttributeProperty>().Select(p => new { text = p.ToString(), value = ((int)p).ToString() }));
+                            break;
+                        case "SkuCondition":
+                            optionList.Add(type, db.ConditionLang.AsNoTracking().Where(l => l.LangID.Equals(LangID)).Select(l => new { text = l.Name, value = l.ConditionID.ToString() }));
+                            break;
+                        case "SkuType":
+                            optionList.Add(type, db.SkuTypeLang.AsNoTracking().Where(l => l.LangID.Equals(LangID)).Select(l => new { text = l.Name, value = l.TypeID.ToString() }));
+                            break;
+                        case "SkuStatus":
+                            optionList.Add(type, Enum.GetValues(typeof(EnumData.SkuStatus)).Cast<EnumData.SkuStatus>().Select(s => new { text = s.ToString(), value = Convert.ToBoolean((int)s).ToString() }));
+                            break;
+                    }
+                }
+
+                result.data = optionList;
+            }
+            catch (Exception e)
+            {
+                result.SetError(e.InnerException != null && !string.IsNullOrEmpty(e.InnerException.Message) ? e.InnerException.Message : e.Message);
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+    }
+    internal class AjaxResult
+    {
+        public bool status { get; set; }
+        public string message { get; set; }
+        public object data { get; set; }
+
+        public AjaxResult()
+        {
+            status = true;
+        }
+
+        public void SetError(string msg)
+        {
+            status = false;
+            message = msg;
+        }
     }
 }

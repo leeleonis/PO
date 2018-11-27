@@ -163,6 +163,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_GlobalResources\Resource.ja.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.ja.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_GlobalResources\Resource.zh-TW.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -175,12 +180,24 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AdminGroupsController.cs" />
+    <Compile Include="Controllers\AdminUsersController.cs" />
     <Compile Include="Controllers\AjaxController.cs" />
+    <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\BrandController.cs" />
+    <Compile Include="Controllers\CompanyController.cs" />
+    <Compile Include="Controllers\ConditionController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MainController.cs" />
+    <Compile Include="Controllers\MenusController.cs" />
     <Compile Include="Controllers\PurchaseOrderCMController.cs" />
     <Compile Include="Controllers\PurchaseOrderPOController.cs" />
     <Compile Include="Controllers\PurchaseSKUController.cs" />
+    <Compile Include="Controllers\SkuAttributeController.cs" />
+    <Compile Include="Controllers\SkuAttributeTypeController.cs" />
+    <Compile Include="Controllers\SkuController.cs" />
+    <Compile Include="Controllers\SkuTypeController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\TransferController.cs" />
     <Compile Include="Controllers\VendorController.cs" />
@@ -192,10 +209,40 @@
     </Compile>
     <Compile Include="Helpers\MyFilter.cs" />
     <Compile Include="Helpers\MyHelps.cs" />
+    <Compile Include="Models\AdminGroup.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AdminGroupMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\AdminUser.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AdminUserMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\API.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\APIMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Auth.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AuthMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Brand.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\BrandMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Carrier.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CarrierMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CMCreditNote.cs">
@@ -216,8 +263,44 @@
     <Compile Include="Models\CompanyMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Condition.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ConditionLang.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ConditionLangMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ConditionMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DataGridAttribute.cs" />
+    <Compile Include="Models\DirectLine.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DirectLineMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\EnumData.cs" />
+    <Compile Include="Models\KitSku.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\KitSkuMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Menu.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MenuLang.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MenuLangMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MenuMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ModelTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -263,8 +346,32 @@
     <Compile Include="Models\SerialsLlistMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ShippingMethod.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ShippingMethodMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\SKU.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SkuAttribute.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SkuAttributeLang.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SkuAttributeLangMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SkuAttributeMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SkuAttributeType.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SkuAttributeTypeMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SkuLang.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
@@ -275,6 +382,31 @@
     <Compile Include="Models\SKUMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SkuPicture.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SkuPictureMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SkuType.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SkuTypeLang.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SkuTypeLangMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SkuTypeMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Sku_Attribute.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Sku_AttributeMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\StockKeepingUnit.cs" />
     <Compile Include="Models\Transfer.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
     </Compile>
@@ -935,10 +1067,61 @@
     <Content Include="Views\Transfer\Create.cshtml" />
     <Content Include="Views\Transfer\Edit.cshtml" />
     <Content Include="Views\Transfer\Prep.cshtml" />
+    <Content Include="Views\AdminGroups\Create.cshtml" />
+    <Content Include="Views\AdminGroups\Delete.cshtml" />
+    <Content Include="Views\AdminGroups\Details.cshtml" />
+    <Content Include="Views\AdminGroups\Edit.cshtml" />
+    <Content Include="Views\AdminGroups\Index.cshtml" />
+    <Content Include="Views\AdminUsers\Create.cshtml" />
+    <Content Include="Views\AdminUsers\Delete.cshtml" />
+    <Content Include="Views\AdminUsers\Details.cshtml" />
+    <Content Include="Views\AdminUsers\Edit.cshtml" />
+    <Content Include="Views\AdminUsers\Index.cshtml" />
+    <Content Include="Views\Ajax\MenuListAuth.cshtml" />
+    <Content Include="Views\Auth\Index.cshtml" />
+    <Content Include="Views\Brand\Create.cshtml" />
+    <Content Include="Views\Brand\Delete.cshtml" />
+    <Content Include="Views\Brand\Details.cshtml" />
+    <Content Include="Views\Brand\Edit.cshtml" />
+    <Content Include="Views\Brand\Index.cshtml" />
+    <Content Include="Views\Company\Create.cshtml" />
+    <Content Include="Views\Company\Delete.cshtml" />
+    <Content Include="Views\Company\Details.cshtml" />
+    <Content Include="Views\Company\Edit.cshtml" />
+    <Content Include="Views\Company\Index.cshtml" />
+    <Content Include="Views\Condition\Create.cshtml" />
+    <Content Include="Views\Condition\Delete.cshtml" />
+    <Content Include="Views\Condition\Details.cshtml" />
+    <Content Include="Views\Condition\Edit.cshtml" />
+    <Content Include="Views\Condition\Index.cshtml" />
+    <Content Include="Views\Main\Index.cshtml" />
+    <Content Include="Views\Main\Login.cshtml" />
+    <Content Include="Views\Menus\Index.cshtml" />
+    <Content Include="Views\SkuAttributeType\Create.cshtml" />
+    <Content Include="Views\SkuAttributeType\Delete.cshtml" />
+    <Content Include="Views\SkuAttributeType\Details.cshtml" />
+    <Content Include="Views\SkuAttributeType\Edit.cshtml" />
+    <Content Include="Views\SkuAttributeType\Index.cshtml" />
+    <Content Include="Views\SkuAttribute\Create.cshtml" />
+    <Content Include="Views\SkuAttribute\Delete.cshtml" />
+    <Content Include="Views\SkuAttribute\Details.cshtml" />
+    <Content Include="Views\SkuAttribute\Edit.cshtml" />
+    <Content Include="Views\SkuAttribute\Index.cshtml" />
+    <Content Include="Views\SkuType\Create.cshtml" />
+    <Content Include="Views\SkuType\Delete.cshtml" />
+    <Content Include="Views\SkuType\Details.cshtml" />
+    <Content Include="Views\SkuType\Edit.cshtml" />
+    <Content Include="Views\SkuType\Index.cshtml" />
+    <Content Include="Views\Sku\Create.cshtml" />
+    <Content Include="Views\Sku\Delete.cshtml" />
+    <Content Include="Views\Sku\Details.cshtml" />
+    <Content Include="Views\Sku\Edit.cshtml" />
+    <Content Include="Views\Sku\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Filters\" />
+    <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -967,6 +1150,10 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_GlobalResources\Resource.ja.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Resource.ja.designer.cs</LastGenOutput>
+    </Content>
     <EmbeddedResource Include="App_GlobalResources\Resource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
