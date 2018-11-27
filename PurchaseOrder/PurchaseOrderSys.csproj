@@ -1117,6 +1117,15 @@
     <Content Include="Views\Sku\Details.cshtml" />
     <Content Include="Views\Sku\Edit.cshtml" />
     <Content Include="Views\Sku\Index.cshtml" />
+    <Content Include="Views\Shared\_ActionList.cshtml" />
+    <Content Include="Views\Shared\_Aside.cshtml" />
+    <Content Include="Views\Shared\_AuthList.cshtml" />
+    <Content Include="Views\Shared\_DataTable.cshtml" />
+    <Content Include="Views\Shared\_Footer.cshtml" />
+    <Content Include="Views\Shared\_Header.cshtml" />
+    <Content Include="Views\Shared\_LoginText.cshtml" />
+    <Content Include="Views\Shared\_Ribbon.cshtml" />
+    <Content Include="Views\Shared\_Scripts.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

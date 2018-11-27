@@ -1,4 +1,4 @@
-﻿@model inventorySKU.Models.SkuAttributeType
+﻿@model SkuAttributeType
 @section styles{
     <link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
     <link href="~/Content/themes/icon.css" rel="stylesheet" />
@@ -52,6 +52,11 @@
                         return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
                     }
                 }, {
+                    field: "Order", title: "@Html.DisplayNameFor(model => model.Order)", width: 100, align: "center", sortable: false,
+                    formatter: function (value, row, index) {
+                        return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
+                    }
+                }, {
                     field: "Action", title: "Action", width: 90, align: "center", sortable: false,
                     formatter: function (value, row, index) {
                         if (website.IsEmpty(row.IsFilter)) {
@@ -88,6 +93,7 @@
                 IsFilter: true,
                 ID: "<input type='text' class='form-control s-ID' value='" + (!website.IsEmpty(filterValue['ID']) ? filterValue['ID'] : '') + "'>",
                 Name: "<input type='text' class='form-control s-name' value='" + (!website.IsEmpty(filterValue['Name']) ? filterValue['Name'] : '') + "'>",
+                Order: "",
                 Action: "<button type='button' class='btn btn-default btn-sm' onclick='SaveData()'>SAVE ALL</button>"
             };
         }
@@ -137,7 +143,8 @@
         function setData(row, index) {
             return {
                 ID: row.ID,
-                Name: $("input#Name:eq(" + index + ")").val()
+                Name: $("input#Name:eq(" + index + ")").val(),
+                Order: $('input#Order:eq(' + index + ')').val()
             }
         }
     </script>

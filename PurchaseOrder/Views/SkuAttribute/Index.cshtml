@@ -1,4 +1,4 @@
-﻿@model inventorySKU.Models.SkuAttribute
+﻿@model SkuAttribute
 @section styles{
     <link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
     <link href="~/Content/themes/icon.css" rel="stylesheet" />
@@ -34,7 +34,7 @@
         var $table = $("#DataGrid"), datagrid;
 
         $(function () {
-            var data = { optionType: ['SkuAttributeType'] };
+            var data = { optionType: ['SkuAttributeType', 'SkuAttributeProperty'] };
 
             website.AjaxUrl("@Url.Action("GetSelectOption", "Ajax")", 'post', data).done(function (response) {
                 if (response.status) {
@@ -65,6 +65,11 @@
                     field: "Type", title: "@Html.DisplayNameFor(model => model.Type)", width: 150, align: "center", sortable: false,
                     formatter: function (value, row, index) {
                         return website.IsEmpty(row.IsFilter) ? datagrid.setDropdown(row.ID, this.field, selectOption['SkuAttributeType'], value) : value;
+                    }
+                }, {
+                    field: "Property", title: "@Html.DisplayNameFor(model => model.Property)", width: 150, align: "center", sortable: false,
+                    formatter: function (value, row, index) {
+                        return website.IsEmpty(row.IsFilter) ? datagrid.setDropdown(row.ID, this.field, selectOption['SkuAttributeProperty'], value) : value;
                     }
                 }, {
                     field: "Save", title: "Save", width: 90, align: "center", sortable: false,
@@ -102,7 +107,8 @@
             return {
                 ID: $('.filterColumn .s-ID').val(),
                 Name: $('.filterColumn .s-name').val(),
-                Type: $('.filterColumn .s-type').val()
+                Type: $('.filterColumn .s-type').val(),
+                Property: $('.filterColumn .s-property').val()
             };
         }
 
@@ -112,6 +118,7 @@
                 ID: "<input type='text' class='form-control s-ID' value='" + (!website.IsEmpty(filterValue['ID']) ? filterValue['ID'] : '') + "'>",
                 Name: "<input type='text' class='form-control s-name' value='" + (!website.IsEmpty(filterValue['Name']) ? filterValue['Name'] : '') + "'>",
                 Type: "<select class='form-control s-type'><option value=''>全部</option>" + datagrid.setSelectOption(selectOption['SkuAttributeType'], filterValue['Type']) + "</select>",
+                Property: "<select class='form-control s-property'><option value=''>全部</option>" + datagrid.setSelectOption(selectOption['SkuAttributeProperty'], filterValue['Property']) + "</select>",
                 Save: "<button type='button' class='btn btn-default btn-sm' onclick='SaveData()'>SAVE ALL</button>"
             };
         }
@@ -163,7 +170,8 @@
                 ID: row.ID,
                 AttrID: row.ID,
                 Name: $("input#Name:eq(" + index + ")").val(),
-                Type: $("select#Type:eq(" + index + ")").val()
+                Type: $("select#Type:eq(" + index + ")").val(),
+                Property: $("select#Property:eq(" + index + ")").val()
             }
         }
     </script>

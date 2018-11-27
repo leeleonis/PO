@@ -1,4 +1,4 @@
-﻿@model Condition
+﻿@model inventorySKU.Models.Condition
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -27,10 +27,10 @@
                                             <legend>狀態資料</legend>
 
                                             <div class="form-group">
-                                                @Html.LabelFor(model => model.ConditionLang.First().Name, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-3">
-                                                    @Html.EditorFor(model => model.ConditionLang.First().Name, new { htmlAttributes = new { @class = "form-control" } })
-                                                    @Html.ValidationMessageFor(model => model.ConditionLang.First().Name, "", new { @class = "text-danger" })
+                                                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -59,13 +59,6 @@
                                                 <div class="col-sm-9 col-lg-3">
                                                     @Html.EditorFor(model => model.NewEgg_com, new { htmlAttributes = new { @class = "form-control" } })
                                                     @Html.ValidationMessageFor(model => model.NewEgg_com, "", new { @class = "text-danger" })
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @Html.LabelFor(model => model.Sears, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-3">
-                                                    @Html.EditorFor(model => model.Sears, new { htmlAttributes = new { @class = "form-control" } })
-                                                    @Html.ValidationMessageFor(model => model.Sears, "", new { @class = "text-danger" })
                                                 </div>
                                             </div>
                                             <div class="form-group">

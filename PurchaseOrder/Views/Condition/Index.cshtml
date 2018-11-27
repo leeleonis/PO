@@ -48,37 +48,37 @@
 
             datagrid.dataInit.columns = [[
                 {
-                    field: "Name", title: "@Html.DisplayNameFor(model => model.ConditionLang.First().Name)", width: 250, align: "center", sortable: false,
+                    field: "Name", title: "@Html.DisplayNameFor(model => model.ConditionLang.First().Name)", width: 300, align: "center", sortable: false,
                     formatter: function (value, row, index) {
                         return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
                     }
                 }, {
-                    field: "Amazon", title: "@Html.DisplayNameFor(model => model.Amazon)", width: 150, align: "center", sortable: false,
+                    field: "Amazon", title: "@Html.DisplayNameFor(model => model.Amazon)", width: 200, align: "center", sortable: false,
                     formatter: function (value, row, index) {
                         return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
                     }
                 }, {
-                    field: "eBay", title: "@Html.DisplayNameFor(model => model.eBay)", width: 150, align: "center", sortable: false,
+                    field: "eBay", title: "@Html.DisplayNameFor(model => model.eBay)", width: 200, align: "center", sortable: false,
                     formatter: function (value, row, index) {
                         return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
                     }
                 }, {
-                    field: "Buy_com", title: "@Html.DisplayNameFor(model => model.Buy_com)", width: 150, align: "center", sortable: false,
+                    field: "Buy_com", title: "@Html.DisplayNameFor(model => model.Buy_com)", width: 200, align: "center", sortable: false,
                     formatter: function (value, row, index) {
                         return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
                     }
                 }, {
-                    field: "NewEgg_com", title: "@Html.DisplayNameFor(model => model.NewEgg_com)", width: 150, align: "center", sortable: false,
+                    field: "NewEgg_com", title: "@Html.DisplayNameFor(model => model.NewEgg_com)", width: 200, align: "center", sortable: false,
                     formatter: function (value, row, index) {
                         return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
                     }
                 }, {
-                    field: "Sears", title: "@Html.DisplayNameFor(model => model.Sears)", width: 150, align: "center", sortable: false,
+                    field: "Sears", title: "@Html.DisplayNameFor(model => model.Sears)", width: 200, align: "center", sortable: false,
                     formatter: function (value, row, index) {
                         return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
                     }
                 }, {
-                    field: "Suffix", title: "@Html.DisplayNameFor(model => model.Suffix)", width: 150, align: "center", sortable: false,
+                    field: "Suffix", title: "@Html.DisplayNameFor(model => model.Suffix)", width: 100, align: "center", sortable: false,
                     formatter: function (value, row, index) {
                         return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
                     }
@@ -186,7 +186,7 @@
         function setData(row, index) {
             return {
                 ID: row.ID,
-                TypeID: row.ID,
+                ConditionID: row.ID,
                 Name: $("input#Name:eq(" + index + ")").val(),
                 Amazon: $("input#Amazon:eq(" + index + ")").val(),
                 eBay: $("input#eBay:eq(" + index + ")").val(),

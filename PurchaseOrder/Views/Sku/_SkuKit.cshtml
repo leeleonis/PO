@@ -1,0 +1,19 @@
+﻿@model Sku
+@{
+    int i = 0;
+    string LangID = ViewData["LangID"].ToString();
+    string DefaultLangID = EnumData.DataLangList().First().Key;
+
+    foreach (var kit in Model.GetKit)
+    {
+        string name = string.Format("KitSku[{0}]", i++);
+        <tr rel="@kit.Sku">
+            @Html.Hidden(string.Format("{0}[Sku]", name), kit.Sku)
+            @Html.Hidden(string.Format("{0}[ParentKit]", name), kit.ParentKit)
+            <td>@kit.Sku</td>
+            <td>@(kit.GetSku.SkuLang.FirstOrDefault(l => l.LangID.Equals(kit.GetSku.SkuLang.Any(ll => ll.LangID.Equals(LangID)) ? LangID : DefaultLangID))?.Name)</td>
+            <td>@Html.TextBox(string.Format("{0}[Qty]", name), kit.Qty, new { @class = "form-control" })</td>
+            <td><button type="button" class="btn btn-default btn-sm" onclick="KitDel($(this));">–</button></td>
+        </tr>
+    }
+}

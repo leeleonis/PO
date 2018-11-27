@@ -1,4 +1,4 @@
-﻿@model inventorySKU.Models.SkuType
+﻿@model SkuType
 @{
     var LangID = (string)ViewBag.LangID;
     var AttributeTypeList = (List<SkuAttributeType>)ViewBag.AttributeTypeList;
@@ -57,6 +57,7 @@
                                             {
                                                 <div class="form-group">
                                                     @Html.Label("", type.Name, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <input type="hidden" name="AttributeGroup[0]" value="" />
                                                     <div class="col-sm-9">
                                                         @{
                                                             var attributeLangList = type.SkuAttribute.Where(a => a.IsEnable).SelectMany(a => a.SkuAttributeLang).Where(l => l.LangID.Equals(LangID));

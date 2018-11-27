@@ -1,4 +1,4 @@
-﻿@model SKU
+﻿@model Condition
 @section styles{
     <link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
     <link href="~/Content/themes/icon.css" rel="stylesheet" />
@@ -26,6 +26,7 @@
     </section>
 </div>
 @section pagespecific {
+    @*@Html.DataGridFor(x=>Model)*@
     <script src="~/scripts/jquery.easyui-1.4.3.min.js"></script>
     <script src="~/scripts/datagrid-detailview.js"></script>
     <script src="~/scripts/jquery.number.min.js"></script>
@@ -34,69 +35,58 @@
         var $table = $("#DataGrid"), datagrid;
 
         $(function () {
-            var data = { optionType: ['SkuCondition', 'SkuType', 'Replenishable', 'SkuStatus'] };
-
-            website.AjaxUrl("@Url.Action("GetSelectOption", "Ajax")", 'post', data).done(function (response) {
-                if (response.status) {
-                    selectOption = response.data;
-
-                    dataInit();
-                } else {
-                    alert(response.message);
-                }
-            });
+            dataInit();
         });
 
         function dataInit() {
-            datagrid = new Datagrid("品號 列表", "ID", "@Url.Action("GetData")");
+            datagrid = new Datagrid("狀態 列表", "ID", "@Url.Action("GetData")");
 
             datagrid.dataInit.frozenColumns = [[
                 { field: "ck", checkbox: true },
-                { field: "ID", title: "@Html.DisplayNameFor(model => model.SkuID)", width: 120, align: "center", sortable: false }
+                { field: "ID", title: "@Html.DisplayNameFor(model => model.ID)", width: 100, align: "center", sortable: false }
             ]];
 
             datagrid.dataInit.columns = [[
-                { field: "ParentSku", title: "@Html.DisplayNameFor(model => model.ParentSku)", width: 120, align: "center", sortable: false },
                 {
-                    field: "Name", title: "@Html.DisplayNameFor(model => model.SkuLang.First().Name)", width: 500, align: "center", sortable: false,
+                    field: "Name", title: "@Html.DisplayNameFor(model => model.ConditionLang.First().Name)", width: 250, align: "center", sortable: false,
                     formatter: function (value, row, index) {
                         return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
                     }
                 }, {
-                    field: "Condition", title: "@Html.DisplayNameFor(model => model.Condition)", width: 220, align: "center", sortable: false,
-                    formatter: function (value, row, index) {
-                        return website.IsEmpty(row.IsFilter) ? datagrid.setDropdown(row.ID, this.field, selectOption['SkuCondition'], value) : value;
-                    }
-                }, {
-                    field: "Category", title: "@Html.DisplayNameFor(model => model.Category)", width: 200, align: "center", sortable: false,
-                    formatter: function (value, row, index) {
-                        return website.IsEmpty(row.IsFilter) ? datagrid.setDropdown(row.ID, this.field, selectOption['SkuType'], value) : value;
-                    }
-                }, {
-                    field: "UPC", title: "@Html.DisplayNameFor(model => model.UPC)", width: 150, align: "center", sortable: false,
+                    field: "Amazon", title: "@Html.DisplayNameFor(model => model.Amazon)", width: 150, align: "center", sortable: false,
                     formatter: function (value, row, index) {
                         return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
                     }
                 }, {
-                    field: "EAN", title: "@Html.DisplayNameFor(model => model.EAN)", width: 150, align: "center", sortable: false,
+                    field: "eBay", title: "@Html.DisplayNameFor(model => model.eBay)", width: 150, align: "center", sortable: false,
                     formatter: function (value, row, index) {
                         return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
                     }
                 }, {
-                    field: "Replenishable", title: "@Html.DisplayNameFor(model => model.Replenishable)", width: 100, align: "center", sortable: false,
+                    field: "Buy_com", title: "@Html.DisplayNameFor(model => model.Buy_com)", width: 150, align: "center", sortable: false,
                     formatter: function (value, row, index) {
-                        return website.IsEmpty(row.IsFilter) ? datagrid.setCheckBox(row.ID, this.field, value) : value;
+                        return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
                     }
                 }, {
-                    field: "Status", title: "@Html.DisplayNameFor(model => model.Status)", width: 100, align: "center", sortable: false,
+                    field: "NewEgg_com", title: "@Html.DisplayNameFor(model => model.NewEgg_com)", width: 150, align: "center", sortable: false,
                     formatter: function (value, row, index) {
-                        return website.IsEmpty(row.IsFilter) ? datagrid.setDropdown(row.ID, this.field, selectOption['SkuStatus'], value) : value;
+                        return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
+                    }
+                }, {
+                    field: "Sears", title: "@Html.DisplayNameFor(model => model.Sears)", width: 150, align: "center", sortable: false,
+                    formatter: function (value, row, index) {
+                        return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
+                    }
+                }, {
+                    field: "Suffix", title: "@Html.DisplayNameFor(model => model.Suffix)", width: 150, align: "center", sortable: false,
+                    formatter: function (value, row, index) {
+                        return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
                     }
                 }, {
                     field: "Save", title: "Save", width: 90, align: "center", sortable: false,
                     formatter: function (value, row, index) {
                         if (website.IsEmpty(row.IsFilter)) {
-                            return "<button type='button' class='btn btn-default btn-sm' id='btn-save' onclick='SaveData(\"" + row.ID + "\")' disabled>SAVE</button>";
+                            return "<button type='button' class='btn btn-default btn-sm' id='btn-save' onclick='SaveData(" + row.ID + ")' disabled>SAVE</button>";
                         } else {
                             return value;
                         }
@@ -105,7 +95,7 @@
                     field: "Action", title: "Action", width: 90, align: "center", sortable: false,
                     formatter: function (value, row, index) {
                         if (website.IsEmpty(row.IsFilter)) {
-                            return "<a class='btn btn-default btn-sm' href='@Url.Action("Edit", "Sku")/" + row.ID + "'>EDIT</button>";
+                            return "<a class='btn btn-default btn-sm' href='@Url.Action("Edit")/" + row.ID + "'>EDIT</button>";
                         }
                     }
                 }
@@ -127,14 +117,13 @@
         function getFilterData() {
             return {
                 ID: $('.filterColumn .s-ID').val(),
-                ParentSku: $('.filterColumn .s-parendSku').val(),
                 Name: $('.filterColumn .s-name').val(),
-                Condition: $('.filterColumn .s-condition').val(),
-                Category: $('.filterColumn .s-category').val(),
-                UPC: $('.filterColumn .s-UPC').val(),
-                EAN: $('.filterColumn .s-EAN').val(),
-                Replenishable: $('.filterColumn .s-replenishable').val(),
-                Status: $('.filterColumn .s-status').val()
+                Amazon: $('.filterColumn .s-Amazon').val(),
+                eBay: $('.filterColumn .s-eBay').val(),
+                Buy_com: $('.filterColumn .s-Buy_com').val(),
+                NewEgg_com: $('.filterColumn .s-NewEgg_com').val(),
+                Sears: $('.filterColumn .s-Sears').val(),
+                Suffix: $('.filterColumn .s-Suffix').val()
             };
         }
 
@@ -142,14 +131,13 @@
             return {
                 IsFilter: true,
                 ID: "<input type='text' class='form-control s-ID' value='" + (!website.IsEmpty(filterValue['ID']) ? filterValue['ID'] : '') + "'>",
-                ParentSku: "<input type='text' class='form-control s-parentSku' value='" + (!website.IsEmpty(filterValue['ParentSku']) ? filterValue['ParentSku'] : '') + "'>",
                 Name: "<input type='text' class='form-control s-name' value='" + (!website.IsEmpty(filterValue['Name']) ? filterValue['Name'] : '') + "'>",
-                Condition: "<select class='form-control s-condition'><option value=''>全部</option>" + datagrid.setSelectOption(selectOption['SkuCondition'], filterValue['Condition']) + "</select>",
-                Category: "<select class='form-control s-category'><option value=''>全部</option>" + datagrid.setSelectOption(selectOption['SkuType'], filterValue['Category']) + "</select>",
-                UPC: "<input type='text' class='form-control s-UPC' value='" + (!website.IsEmpty(filterValue['UPC']) ? filterValue['UPC'] : '') + "'>",
-                EAN: "<input type='text' class='form-control s-EAN' value='" + (!website.IsEmpty(filterValue['EAN']) ? filterValue['EAN'] : '') + "'>",
-                Replenishable: "<select class='form-control s-replenishable'><option value=''>全部</option>" + datagrid.setSelectOption(selectOption['Replenishable'], filterValue['Replenishable']) + "</select>",
-                Status: "<select class='form-control s-status'><option value=''>全部</option>" + datagrid.setSelectOption(selectOption['SkuStatus'], filterValue['Status']) + "</select>",
+                Amazon: "<input type='text' class='form-control s-Amazon' value='" + (!website.IsEmpty(filterValue['Amazon']) ? filterValue['Amazon'] : '') + "'>",
+                eBay: "<input type='text' class='form-control s-eBay' value='" + (!website.IsEmpty(filterValue['eBay']) ? filterValue['eBay'] : '') + "'>",
+                Buy_com: "<input type='text' class='form-control s-Buy_com' value='" + (!website.IsEmpty(filterValue['Buy_com']) ? filterValue['Buy_com'] : '') + "'>",
+                NewEgg_com: "<input type='text' class='form-control s-NewEgg_com' value='" + (!website.IsEmpty(filterValue['NewEgg_com']) ? filterValue['NewEgg_com'] : '') + "'>",
+                Sears: "<input type='text' class='form-control s-Sears' value='" + (!website.IsEmpty(filterValue['Sears']) ? filterValue['Sears'] : '') + "'>",
+                Suffix: "<input type='text' class='form-control s-Suffix' value='" + (!website.IsEmpty(filterValue['Suffix']) ? filterValue['Suffix'] : '') + "'>",
                 Save: "<button type='button' class='btn btn-default btn-sm' onclick='SaveData()'>SAVE ALL</button>"
             };
         }
@@ -192,23 +180,20 @@
 
                 alert('Success!');
             };
-
             $table.datagrid('uncheckAll');
         }
 
         function setData(row, index) {
             return {
                 ID: row.ID,
-                Sku: row.ID,
-                ParentSku: $("input#ParentSku:eq(" + index + ")").val(),
+                TypeID: row.ID,
                 Name: $("input#Name:eq(" + index + ")").val(),
-                Condition: $("select#Condition:eq(" + index + ")").val(),
-                Category: $("select#Category:eq(" + index + ")").val(),
-                Brand: row.Brand,
-                UPC: $("input#UPC:eq(" + index + ")").val(),
-                EAN: $("input#EAN:eq(" + index + ")").val(),
-                Replenishable: $("input#Replenishable:eq(" + index + ")").prop('checked'),
-                Status: $("select#Type:eq(" + index + ")").val()
+                Amazon: $("input#Amazon:eq(" + index + ")").val(),
+                eBay: $("input#eBay:eq(" + index + ")").val(),
+                Buy_com: $("input#Buy_com:eq(" + index + ")").val(),
+                NewEgg_com: $("input#NewEgg_com:eq(" + index + ")").val(),
+                Sears: $("input#Sears:eq(" + index + ")").val(),
+                Suffix: $("input#Suffix:eq(" + index + ")").val()
             }
         }
     </script>

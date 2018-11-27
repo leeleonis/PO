@@ -1,4 +1,4 @@
-﻿@model inventorySKU.Models.SkuType
+﻿@model SkuType
 @{
     var LangID = (string)ViewBag.LangID;
     var AttributeTypeList = (List<SkuAttributeType>)ViewBag.AttributeTypeList;
@@ -24,7 +24,6 @@
                         <div class="widget-body no-padding">
                             <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
                                 @Html.AntiForgeryToken()
-                                <input type="hidden" name="IsEnable" value="True">
 
                                 <div id="content" class="tab-content">
                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -60,17 +59,19 @@
                                     <div class="tab-pane" id="hb2">
                                         <fieldset>
                                             <legend>屬性組合</legend>
-                                            @{ int[] group = JsonConvert.DeserializeObject<int[]>(Model.AttributeGroup); }
-                                            @foreach (var type in AttributeTypeList.Where(t => t.IsEnable))
+                                            @{ Dictionary<int, int[]> group = JsonConvert.DeserializeObject<Dictionary<int, int[]>>(Model.AttributeGroup); }
+                                            @foreach (var type in AttributeTypeList)
                                             {
                                                 <div class="form-group">
                                                     @Html.Label("", type.Name, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9">
                                                         @{
                                                             var attributeLangList = type.SkuAttribute.Where(a => a.IsEnable).SelectMany(a => a.SkuAttributeLang).Where(l => l.LangID.Equals(LangID));
-                                                            var selectItem = attributeLangList.Select(l => new SelectListItem() { Text = l.Name, Value = l.AttrID.ToString(), Selected = group.Contains(l.AttrID) });
+                                                            var selectItem = attributeLangList.Select(l => new SelectListItem() { Text = l.Name, Value = l.AttrID.ToString(), Selected = group.ContainsKey(type.ID) && group[type.ID].Contains(l.AttrID) });
+                                                            var name = string.Format("AttributeGroup[{0}][]", type.ID);
+                                                            var order = group.ContainsKey(type.ID) ? string.Join(",", group[type.ID]) : "";
                                                         }
-                                                        @Html.DropDownList("AttributeGroup[]", selectItem, htmlAttributes: new { @class = "form-control select-attr", @multiple = "multiple", @style = "width: 100%" })
+                                                        @Html.DropDownList(name, selectItem, htmlAttributes: new { @class = "form-control select-attr", @multiple = "multiple", @style = "width: 100%", @id = "select-attribute", @data_order = order })
                                                     </div>
                                                 </div>
                                             }
@@ -97,8 +98,8 @@
         $('.tab-pane').eq(hash.substr(1)).addClass('active');
 
         $(document).ready(function () {
-            $('.select-attr').select2();
-            
+            $('.select-attr').select2Sortable();
+
             $('#LangID').change(function () {
                 website.AjaxUrl('@Url.Action("GetLangData", "SkuType", new { ID = Model.ID })', 'get', { LangID: $(this).val() }).done(function (response) {
                     if (response.status) {
@@ -108,6 +109,95 @@
                     }
                 });
             });
+        });
+
+
+        function getSortableUl($select) {
+            return $select.siblings('.select2-container').find('ul.select2-selection__rendered');
+        };
+
+        function initSortableUl($ul, options) {
+            $ul.sortable({
+                //forcePlaceholderSize: true,
+                items: 'li.select2-selection__choice',
+                placeholder: 'select2-selection__choice'
+            }).disableSelection();
+
+            // Only bind event at initialization
+            if (options && options.bindSortEvent && options.$select) {
+                $ul.bind('sortupdate', function (e, ui) {
+                    $($ul.find('li.select2-selection__choice').get().reverse()).each(function () {
+                        var id = $(this).data('data').id,
+                            $option = options.$select.find('option[value="' + id + '"]')[0];
+
+                        options.$select.prepend($option);
+                    });
+                });
+            }
+        };
+
+        function initSelect2Sortable($select) {
+            var observer, $ul;
+
+            $select.select2();
+            $ul = getSortableUl($select);
+
+            observer = new MutationObserver(function (mutations) {
+                console.log(mutations);
+                initSortableUl($ul);
+                observer.disconnect();
+            });
+
+            $select.on('select2-selecting', function () {
+                observer.observe($ul.get(0), { subtree: false, childList: true, attributes: false });
+            });
+
+            initSortableUl($ul, { bindSortEvent: true, $select: $select });
+
+            $select.data('hasSelect2Sortable', true);
+        };
+
+        function sortSelect2Sortable($select, val) {
+            var $ul = getSortableUl($select), $lis = $ul.find('.select2-selection__choice');
+
+            $.each(val, function (i, id) {
+                $lis.each(function () {
+                    if (id == $(this).data('data').id) {
+                        $(this).insertBefore($ul.find('.select2-search'));
+                    }
+                });
+            });
+
+            $ul.trigger('sortupdate');
+        }
+
+        $.fn.extend({
+
+            select2Sortable: function (val) {
+                this.each(function () {
+                    var $select = $(this);
+
+                    if (!$select.prop('multiple')) {
+                        return;
+                    }
+
+                    if (!$select.data('hasSelect2Sortable')) {
+                        initSelect2Sortable($select);
+
+                        var values = $select.attr('data-order');
+
+                        if (values) {
+                            sortSelect2Sortable($select, values.split(','));
+                        }
+                    }
+
+                    if (val) {
+                        sortSelect2Sortable($select, val);
+                    }
+                });
+
+                return this;
+            }
         });
     </script>
 }   
