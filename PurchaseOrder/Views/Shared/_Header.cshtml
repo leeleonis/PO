@@ -3,7 +3,7 @@
 
         @if (Session["IsLogin"] != null && (bool)Session["IsLogin"])
         {
-        <span id="logo" style="@((bool)Session["IsLogin"] ? "margin: 5px; width: 180px;" : "")"><img src="~/content/img/QD.jpg" alt="@ViewRes.Resource.Title" style="width: auto; height: 40px; padding: 0;"></span>
+        <span id="logo" style="@((bool)Session["IsLogin"] ? "margin: 5px; width: 180px;" : "")"><img src="~/content/img/QD.jpg" alt="@PurchaseOrderSys.App_GlobalResources.Resource.Title" style="width: auto; height: 40px; padding: 0;"></span>
             @*<span id="activity" class="activity-dropdown" style="margin: 10px 0;"> <i class="fa fa-tasks"></i> </span>*@
             <div class="ajax-dropdown">
                 <!-- notification content -->

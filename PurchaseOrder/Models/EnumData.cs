@@ -27,6 +27,7 @@ namespace PurchaseOrderSys.Models
         {
             return new Dictionary<string, string>()
             {
+                  { "zh-tw", "繁體中文" },
                 { "en-US", "English" },
                 { "ja", "日本語" }
             };
