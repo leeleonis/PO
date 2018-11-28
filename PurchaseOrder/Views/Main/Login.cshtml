@@ -10,7 +10,7 @@
             <div class="well no-padding">
                 <form action="@Url.Action("Login")" method="POST" id="login-form" class="smart-form client-form">
                     <header>
-                        @ViewRes.Resource.LoginHeader
+                        @PurchaseOrderSys.App_GlobalResources.Resource.LoginHeader
                     </header>
                     <fieldset>
                         <section>
@@ -30,7 +30,7 @@
                             </label>
                         </section>
                         <section>
-                            <label class="label">@ViewRes.Resource.Language</label>
+                            <label class="label">@PurchaseOrderSys.App_GlobalResources.Resource.Language</label>
                             <label class="select">
                                 @Html.DropDownList("Lang", (List<SelectListItem>)ViewBag.Langlist)
                             </label>
@@ -38,7 +38,7 @@
                     </fieldset>
                     <footer>
                         <button type="submit" name="btnSubmit" class="btn btn-primary">
-                            @ViewRes.Resource.Login
+                            @PurchaseOrderSys.App_GlobalResources.Resource.Login
                         </button>
                     </footer>
                 </form>

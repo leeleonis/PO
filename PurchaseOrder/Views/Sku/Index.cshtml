@@ -48,11 +48,11 @@
         });
 
         function dataInit() {
-            datagrid = new Datagrid("品號 列表", "ID", "@Url.Action("GetData")");
+            datagrid = new Datagrid("品號 列表", "SkuID", "@Url.Action("GetData")");
 
             datagrid.dataInit.frozenColumns = [[
                 { field: "ck", checkbox: true },
-                { field: "ID", title: "@Html.DisplayNameFor(model => model.SkuID)", width: 120, align: "center", sortable: false }
+                { field: "SkuID", title: "@Html.DisplayNameFor(model => model.SkuID)", width: 120, align: "center", sortable: false }
             ]];
 
             datagrid.dataInit.columns = [[
@@ -60,43 +60,43 @@
                 {
                     field: "Name", title: "@Html.DisplayNameFor(model => model.SkuLang.First().Name)", width: 500, align: "center", sortable: false,
                     formatter: function (value, row, index) {
-                        return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
+                        return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.SkuID, this.field, value) : value;
                     }
                 }, {
                     field: "Condition", title: "@Html.DisplayNameFor(model => model.Condition)", width: 220, align: "center", sortable: false,
                     formatter: function (value, row, index) {
-                        return website.IsEmpty(row.IsFilter) ? datagrid.setDropdown(row.ID, this.field, selectOption['SkuCondition'], value) : value;
+                        return website.IsEmpty(row.IsFilter) ? datagrid.setDropdown(row.SkuID, this.field, selectOption['SkuCondition'], value) : value;
                     }
                 }, {
                     field: "Category", title: "@Html.DisplayNameFor(model => model.Category)", width: 200, align: "center", sortable: false,
                     formatter: function (value, row, index) {
-                        return website.IsEmpty(row.IsFilter) ? datagrid.setDropdown(row.ID, this.field, selectOption['SkuType'], value) : value;
+                        return website.IsEmpty(row.IsFilter) ? datagrid.setDropdown(row.SkuID, this.field, selectOption['SkuType'], value) : value;
                     }
                 }, {
                     field: "UPC", title: "@Html.DisplayNameFor(model => model.UPC)", width: 150, align: "center", sortable: false,
                     formatter: function (value, row, index) {
-                        return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
+                        return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.SkuID, this.field, value) : value;
                     }
                 }, {
                     field: "EAN", title: "@Html.DisplayNameFor(model => model.EAN)", width: 150, align: "center", sortable: false,
                     formatter: function (value, row, index) {
-                        return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
+                        return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.SkuID, this.field, value) : value;
                     }
                 }, {
                     field: "Replenishable", title: "@Html.DisplayNameFor(model => model.Replenishable)", width: 100, align: "center", sortable: false,
                     formatter: function (value, row, index) {
-                        return website.IsEmpty(row.IsFilter) ? datagrid.setCheckBox(row.ID, this.field, value) : value;
+                        return website.IsEmpty(row.IsFilter) ? datagrid.setCheckBox(row.SkuID, this.field, value) : value;
                     }
                 }, {
                     field: "Status", title: "@Html.DisplayNameFor(model => model.Status)", width: 100, align: "center", sortable: false,
                     formatter: function (value, row, index) {
-                        return website.IsEmpty(row.IsFilter) ? datagrid.setDropdown(row.ID, this.field, selectOption['SkuStatus'], value) : value;
+                        return website.IsEmpty(row.IsFilter) ? datagrid.setDropdown(row.SkuID, this.field, selectOption['SkuStatus'], value) : value;
                     }
                 }, {
                     field: "Save", title: "Save", width: 90, align: "center", sortable: false,
                     formatter: function (value, row, index) {
                         if (website.IsEmpty(row.IsFilter)) {
-                            return "<button type='button' class='btn btn-default btn-sm' id='btn-save' onclick='SaveData(\"" + row.ID + "\")' disabled>SAVE</button>";
+                            return "<button type='button' class='btn btn-default btn-sm' id='btn-save' onclick='SaveData(\"" + row.SkuID + "\")' disabled>SAVE</button>";
                         } else {
                             return value;
                         }
@@ -105,7 +105,7 @@
                     field: "Action", title: "Action", width: 90, align: "center", sortable: false,
                     formatter: function (value, row, index) {
                         if (website.IsEmpty(row.IsFilter)) {
-                            return "<a class='btn btn-default btn-sm' href='@Url.Action("Edit", "Sku")/" + row.ID + "'>EDIT</button>";
+                            return "<a class='btn btn-default btn-sm' href='@Url.Action("Edit", "Sku")/" + row.SkuID + "'>EDIT</button>";
                         }
                     }
                 }
