@@ -1,4 +1,4 @@
-﻿@model Sku
+﻿@model PurchaseOrderSys.Models.SKU
 @{
     int i = 0;
     string LangID = ViewData["LangID"].ToString();
@@ -32,7 +32,7 @@
                                 var value = Model.Sku_Attribute.FirstOrDefault(s => s.AttrID.Equals(attribute.ID) && s.LangID.Equals(LangID));
                                 value = value ?? new Sku_Attribute() { };
                                 <tr>
-                                    @Html.Hidden(string.Format("{0}[Sku]", name), Model.ID)
+                                    @Html.Hidden(string.Format("{0}[Sku]", name), Model.SkuID)
                                     @Html.Hidden(string.Format("{0}[AttrID]", name), attribute.ID)
                                     @Html.Hidden(string.Format("{0}[LangID]", name), LangID)
                                     <td>@(attribute.SkuAttributeLang.FirstOrDefault(l => l.LangID.Equals(attribute.SkuAttributeLang.Any(ll => ll.LangID.Equals(LangID)) ? LangID : DefaultLangID))?.Name)</td>

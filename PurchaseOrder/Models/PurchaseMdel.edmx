@@ -1961,8 +1961,8 @@
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
           <NavigationProperty Name="SkuLang" Relationship="PurchaseOrderModel.FK_SkuLang_Sku" FromRole="SKU" ToRole="SkuLang" />
-          <NavigationProperty Name="Brand1" Relationship="PurchaseOrderModel.FK_Sku_Brand" FromRole="SKU" ToRole="Brand" />
-          <NavigationProperty Name="Condition1" Relationship="PurchaseOrderModel.FK_Sku_Condition" FromRole="SKU" ToRole="Condition" />
+          <NavigationProperty Name="GetBrand" Relationship="PurchaseOrderModel.FK_Sku_Brand" FromRole="SKU" ToRole="Brand" />
+          <NavigationProperty Name="GetCondition" Relationship="PurchaseOrderModel.FK_Sku_Condition" FromRole="SKU" ToRole="Condition" />
           <NavigationProperty Name="Sku_Attribute" Relationship="PurchaseOrderModel.FK_Sku_Attribute_Sku" FromRole="SKU" ToRole="Sku_Attribute" />
           <NavigationProperty Name="SkuType" Relationship="PurchaseOrderModel.FK_Sku_SkuType" FromRole="SKU" ToRole="SkuType" />
           <NavigationProperty Name="Kit" Relationship="PurchaseOrderModel.FK_KitSku_Sku" FromRole="SKU" ToRole="KitSku" />
@@ -2182,7 +2182,7 @@
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="SKU1" Relationship="PurchaseOrderModel.FK_Sku_Attribute_Sku" FromRole="Sku_Attribute" ToRole="SKU" />
+          <NavigationProperty Name="GetSku" Relationship="PurchaseOrderModel.FK_Sku_Attribute_Sku" FromRole="Sku_Attribute" ToRole="SKU" />
           <NavigationProperty Name="SkuAttribute" Relationship="PurchaseOrderModel.FK_Sku_Attribute_SkuAttribute" FromRole="Sku_Attribute" ToRole="SkuAttribute" />
         </EntityType>
         <EntityType Name="SkuAttribute">
@@ -2467,7 +2467,7 @@
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="SKU1" Relationship="PurchaseOrderModel.FK_SkuPicture_Sku" FromRole="SkuPicture" ToRole="SKU" />
+          <NavigationProperty Name="GetSku" Relationship="PurchaseOrderModel.FK_SkuPicture_Sku" FromRole="SkuPicture" ToRole="SKU" />
         </EntityType>
         <Association Name="FK_KitSku_Sku">
           <End Type="PurchaseOrderModel.SKU" Role="SKU" Multiplicity="1" />

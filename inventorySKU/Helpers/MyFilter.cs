@@ -82,6 +82,7 @@ namespace inventorySKU
         private string nameField;
         private string upcField;
         private string eanField;
+
         public string ID { get { return this.idField; } set { idField = !string.IsNullOrEmpty(value) ? value.Trim() : value; } }
         public string LangID { get; set; }
         public string ParentSku { get { return parentSkuField; } set { parentSkuField = !string.IsNullOrEmpty(value) ? value.Trim() : value; } }
