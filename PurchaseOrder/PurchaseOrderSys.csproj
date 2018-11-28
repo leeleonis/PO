@@ -1126,6 +1126,9 @@
     <Content Include="Views\Shared\_LoginText.cshtml" />
     <Content Include="Views\Shared\_Ribbon.cshtml" />
     <Content Include="Views\Shared\_Scripts.cshtml" />
+    <Content Include="Views\Sku\_SingleAttribute.cshtml" />
+    <Content Include="Views\Sku\_SkuKit.cshtml" />
+    <Content Include="Views\Sku\_VariationAttribute.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

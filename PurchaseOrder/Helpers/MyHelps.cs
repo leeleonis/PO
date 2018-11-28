@@ -195,5 +195,33 @@ namespace PurchaseOrderSys.Helpers
             }
             return nlist;
         }
+        
+        public static MvcHtmlString BooleanSwitch(this HtmlHelper helper, string name, bool isChecked, string id = null)
+        {
+            TagBuilder divHtml = new TagBuilder("div");
+            divHtml.AddCssClass("onoffswitch");
+
+            TagBuilder inputHtml = new TagBuilder("input");
+            inputHtml.AddCssClass("onoffswitch-checkbox");
+            inputHtml.Attributes.Add("type", "checkbox");
+            inputHtml.Attributes.Add("id", id ?? name);
+            inputHtml.Attributes.Add("name", name);
+            inputHtml.Attributes.Add("value", "true");
+            if (isChecked) inputHtml.Attributes.Add("checked", "checked");
+
+            TagBuilder labelHtml = new TagBuilder("label");
+            labelHtml.AddCssClass("onoffswitch-label");
+            labelHtml.Attributes.Add("for", id ?? name);
+            labelHtml.InnerHtml = "<span class=\"onoffswitch-inner\" data-swchon-text=\"Yes\" data-swchoff-text=\"No\"></span><span class=\"onoffswitch-switch\"></span>";
+
+            TagBuilder hiddenHtml = new TagBuilder("input");
+            hiddenHtml.Attributes.Add("type", "hidden");
+            hiddenHtml.Attributes.Add("name", name);
+            hiddenHtml.Attributes.Add("value", "false");
+
+            divHtml.InnerHtml = inputHtml.ToString() + labelHtml.ToString() + hiddenHtml.ToString();
+
+            return MvcHtmlString.Create(divHtml.ToString());
+        }
     }
 }

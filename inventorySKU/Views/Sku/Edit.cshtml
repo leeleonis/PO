@@ -1,10 +1,12 @@
 ﻿@model inventorySKU.Models.Sku
 @section styles{
+    <link href="~/Scripts/plugin/ckeditor/skins/moono/editor.css" rel="stylesheet" />
     <link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
     <link href="~/Content/themes/icon.css" rel="stylesheet" />
 }
 @{
     string LangID = (string)ViewBag.LangID;
+    string DefaultLangID = EnumData.DataLangList().First().Key;
 }
 
 <div id="content">
@@ -20,7 +22,8 @@
                         <ul class="nav nav-tabs pull-right">
                             <li><a data-toggle="tab" href="#hb1">Summary</a></li>
                             <li><a data-toggle="tab" href="#hb2">Attribute</a></li>
-                            <li><a data-toggle="tab" href="#hb3">Picture</a></li>
+                            <li><a data-toggle="tab" href="#hb3">Editor</a></li>
+                            <li><a data-toggle="tab" href="#hb4">Picture</a></li>
                         </ul>
                     </header>
 
@@ -177,18 +180,18 @@
                                                                         var skuAttributeList = SKU.CompareVariationSku();
                                                                         if (skuAttributeList.Any())
                                                                         {
-                                                                            attributeList = skuAttributeList.OrderBy(a => a.AttrID).SelectMany(a => a.SkuAttribute.SkuAttributeLang).Where(l => l.LangID.Equals(LangID)).Distinct().ToList();
+                                                                            attributeList = skuAttributeList.OrderBy(a => a.AttrID).SelectMany(a => a.SkuAttribute.SkuAttributeLang).Distinct().ToList();
                                                                         }
                                                                     }
                                                                 }
                                                                 else
                                                                 {
-                                                                    attributeList = Model.Sku_Attribute.Where(a => a.IsDiverse).OrderBy(a => a.AttrID).SelectMany(a => a.SkuAttribute.SkuAttributeLang).Where(l => l.LangID.Equals(LangID)).Distinct().ToList();
+                                                                    attributeList = Model.Sku_Attribute.Where(a => a.IsDiverse).OrderBy(a => a.AttrID).SelectMany(a => a.SkuAttribute.SkuAttributeLang).Distinct().ToList();
                                                                 }
 
-                                                                foreach (var attrLang in attributeList)
+                                                                foreach (var attrLang in attributeList.GroupBy(l => l.AttrID))
                                                                 {
-                                                                    <tr><td colspan="2"><span>@attrLang.Name</span><input type="hidden" name="DiverseAttribute[]" value="@attrLang.AttrID" /></td></tr>
+                                                                    <tr><td colspan="2"><span>@(attrLang.First(l => l.LangID.Equals(attrLang.Any(ll => ll.LangID.Equals(LangID)) ? LangID : DefaultLangID)).Name)</span><input type="hidden" name="DiverseAttribute[]" value="@attrLang.Key" /></td></tr>
                                                                 }
                                                             }
                                                         </tbody>
@@ -259,6 +262,19 @@
                                     </div>
 
                                     <div class="tab-pane" id="hb3">
+                                        <fieldset>
+                                            <legend>Description</legend>
+
+                                            <textarea name="Description"></textarea>
+                                        </fieldset>
+
+                                        <fieldset>
+                                            <legend>Spec Content</legend>
+
+                                        </fieldset>
+                                    </div>
+
+                                    <div class="tab-pane" id="hb4">
                                         <fieldset>
                                             <legend>Main Picture</legend>
 
@@ -358,6 +374,10 @@
 @section pagespecific {
     <script src="~/scripts/jquery.easyui-1.4.3.min.js"></script>
     <script src="~/scripts/plugin/dropzone/dropzone.min.js"></script>
+    <script src="~/scripts/plugin/ckeditor/ckeditor.js"></script>
+    <script src="~/Scripts/plugin/ckeditor/lang/zh.js"></script>
+    <script src="~/Scripts/plugin/ckeditor/config.js"></script>
+    <script src="~/Scripts/plugin/ckeditor/styles.js"></script>
     <script type="text/javascript">
         var hash = window.location.hash;
         $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
@@ -367,6 +387,10 @@
         var $variationList = $('#list-variation'), $kitList = $('#list-kit'), $attributeList = $("#list-attribute"), $attributeTypeList = $('#list-attributeType');
 
         $(document).ready(function () {
+            CKEDITOR.replace('Description', {
+                height: '500px'
+            });
+
             $('#LangID').change(function () {
                 website.AjaxUrl('@Url.Action("GetLangData", "Sku", new { ID = Model.ID })', 'get', { LangID: $(this).val() }).done(function (response) {
                     if (response.status) {
