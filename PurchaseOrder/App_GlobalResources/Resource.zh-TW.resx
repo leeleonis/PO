@@ -1155,7 +1155,7 @@
   <data name="ConditionLang_UpdateAt" xml:space="preserve">
     <value>修改時間</value>
   </data>
-  <data name="Sku_IsEnable" xml:space="preserve">
+  <data name="SKU_IsEnable" xml:space="preserve">
     <value>啟用</value>
   </data>
   <data name="SKU_SkuID" xml:space="preserve">

@@ -15,11 +15,15 @@ namespace PurchaseOrderSys.Controllers
         {
             return View();
         }
-        public ActionResult Create()
+        public ActionResult Create(string POTypeVal = "PurchaseOrder")
         {
             Session["SkuNumberList"] = null;
             Session["PurchaseNote"] = null;
-            return View();
+            var PurchaseOrder = new PurchaseOrder();
+            PurchaseOrder.POType = POTypeVal;
+            var Warehouselist = db.Warehouse.Where(x => x.IsEnable).Select(x => new SelectListItem { Text = x.Name, Value = x.ID.ToString() }).ToList();
+            ViewBag.Warehouselist = Warehouselist;
+            return View(PurchaseOrder);
         }
         [HttpPost]
         public ActionResult Create(PurchaseOrderPOVM filter)
@@ -245,7 +249,7 @@ namespace PurchaseOrderSys.Controllers
             {
                 var PurchaseSKUlist = dataList.Select(x => new PurchaseSKU
                 {
-                    ID=x.ID.Value,
+                    ID = x.ID.HasValue ? x.ID.Value : 0,
                     IsEnable = true,
                     Name = x.Name,
                     SkuNo = x.SKU,
@@ -259,26 +263,42 @@ namespace PurchaseOrderSys.Controllers
                 });
                 foreach (var item in PurchaseSKUlist)
                 {
-                    foreach (var SKUitem in PurchaseOrder.PurchaseSKU.Where(x => x.ID == item.ID))
+                    var oldPurchaseSKU = PurchaseOrder.PurchaseSKU.Where(x => x.ID == item.ID);
+                    if (oldPurchaseSKU.Any())
                     {
-                        if (SKUitem.Price != item.Price)
+                        foreach (var SKUitem in oldPurchaseSKU)
                         {
-                            SKUitem.Price = item.Price;
-                            SKUitem.UpdateBy = UserBy;
-                            SKUitem.UpdateAt = dt;
+                            if (SKUitem.Price != item.Price)
+                            {
+                                SKUitem.Price = item.Price;
+                                SKUitem.UpdateBy = UserBy;
+                                SKUitem.UpdateAt = dt;
+                            }
+                            if (SKUitem.Discount != item.Discount)
+                            {
+                                SKUitem.Discount = item.Discount;
+                                SKUitem.UpdateBy = UserBy;
+                                SKUitem.UpdateAt = dt;
+                            }
+                            if (SKUitem.Credit != item.Credit)
+                            {
+                                SKUitem.Credit = item.Credit;
+                                SKUitem.UpdateBy = UserBy;
+                                SKUitem.UpdateAt = dt;
+                            }
+                            if (SKUitem.QTYOrdered != item.QTYOrdered)
+                            {
+                                SKUitem.QTYOrdered = item.QTYOrdered;
+                                SKUitem.UpdateBy = UserBy;
+                                SKUitem.UpdateAt = dt;
+                            }
                         }
-                        if (SKUitem.Discount != item.Discount)
-                        {
-                            SKUitem.Discount = item.Discount;
-                            SKUitem.UpdateBy = UserBy;
-                            SKUitem.UpdateAt = dt;
-                        }
-                        if (SKUitem.Credit != item.Credit)
-                        {
-                            SKUitem.Credit = item.Credit;
-                            SKUitem.UpdateBy = UserBy;
-                            SKUitem.UpdateAt = dt;
-                        }
+                    }
+                    else
+                    {
+                        item.CreateAt = dt;
+                        item.CreateBy = UserBy;
+                        PurchaseOrder.PurchaseSKU.Add(item);
                     }
                 }
             }

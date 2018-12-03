@@ -115,11 +115,11 @@ namespace PurchaseOrderSys.Controllers
                 ).ToList();
                 foreach (var item in dataList)
                 {
-                    var QTYOrdered = RandomVal(100, 1000);
-                    var QTYFulfilled = RandomVal(100, 1000);
-                    var Price = RandomVal(1000, 30000);
-                    var Discount = RandomVal(0, 100);
-                    var Credit = RandomVal(0, 100);
+                    var QTYOrdered = 0;
+                    var QTYFulfilled = 0;
+                    var Price = 0;
+                    var Discount = 0;
+                    var Credit =0;
                     item.QTYOrdered = QTYOrdered;
                     item.QTYFulfilled = QTYFulfilled;
                     item.Price = Price;
@@ -149,6 +149,27 @@ namespace PurchaseOrderSys.Controllers
             if (odataList == null)
             {
                 odataList = new List<PoSKUVM>();
+            }
+            foreach (var item in odataList.Where(x=>x.ID== ID || x.SKU== SKU))
+            {
+                switch (type)
+                {
+                    case "Price":
+                        item.Price = val;
+                        break;
+                    case "Discount":
+                        item.Discount = val;
+                        break;
+                    case "Credit":
+                        item.Credit = val;
+                        break;
+                    case "QTYOrdered":
+                        item.QTYOrdered = Convert.ToInt32(val);
+                        break;
+                }
+               
+                item.DiscountedPrice = (item.Price - item.Discount);
+                item.Subtotal = (item.QTYOrdered * (item.Price - item.Discount));
             }
             Session["SkuNumberList"] = odataList;
             return Json(new { status = true }, JsonRequestBehavior.AllowGet);

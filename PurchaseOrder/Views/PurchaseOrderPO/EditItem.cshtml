@@ -583,7 +583,7 @@
                     { data: "SKU" },
                     { data: "VendorSKU" },
                     { data: "Name" },
-                    { data: "QTYOrdered", render: function (data, type, row) { return data; } },
+                    { data: "QTYOrdered", render: function (data, type, row) { return '<input class="form-control" type="text" onchange="Calculation(this,\'QTYOrdered\',\'' + row.SKU + '\',' + data + ',' + row.ID + ')"  value = ' + data + ' > '; } },
                     @if (Model.POType == "PurchaseOrder")
                     {
                         @:{ data: "QTYReceived", render: function(data, type, row) { return data; } },
@@ -775,7 +775,6 @@
                     }
                 }
             });
-
         }
         function GetSerialList(d) {
             var div = $('<div style="border:2px blue solid;" />').addClass('loading').text('Loading...');
