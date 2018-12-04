@@ -18,11 +18,13 @@ namespace PurchaseOrderSys.Models
         public string LangID { get; set; }
         public string Name { get; set; }
         public string Model { get; set; }
+        public string Description { get; set; }
+        public string SpecContent { get; set; }
         public string CreateBy { get; set; }
         public System.DateTime CreateAt { get; set; }
         public string UpdateBy { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }
     
-        public virtual SKU SKU1 { get; set; }
+        public virtual SKU GetSku { get; set; }
     }
 }

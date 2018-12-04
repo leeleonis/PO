@@ -1129,6 +1129,7 @@
     <Content Include="Views\Sku\_SingleAttribute.cshtml" />
     <Content Include="Views\Sku\_SkuKit.cshtml" />
     <Content Include="Views\Sku\_VariationAttribute.cshtml" />
+    <Content Include="Views\Sku\_SpecContent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

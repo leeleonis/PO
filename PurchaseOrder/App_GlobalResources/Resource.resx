@@ -1537,4 +1537,16 @@
   <data name="SkuPicture_UpdateAt" xml:space="preserve">
     <value></value>
   </data>
+  <data name="SkuLang_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuLang_SpecContent" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SKU_ParentKit" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Sku_Attribute_IsDiverse" xml:space="preserve">
+    <value></value>
+  </data>
 </root>
