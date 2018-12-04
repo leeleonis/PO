@@ -8,15 +8,19 @@
     var CompanyDDL = EnumData.CompanyDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var ReceiveStatusDDL = EnumData.ReceiveStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var PaymentStatusDDL = EnumData.PaymentStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
-
+    var Warehouselist = (IEnumerable<SelectListItem>)ViewBag.Warehouselist;
     var DefaultSelect = PurchaseOrderSys.App_GlobalResources.Resource.DefaultSelect;
-
+    var POType = ViewBag.POTypeVal;
     if (Model != null)
     {
         if (Model.PODate.HasValue)
         {
             dtval = Model.PODate.Value.ToString("yyyy/MM/dd");
         }
+    }
+    else
+    {
+
     }
 }
 <div id="content">
@@ -37,248 +41,503 @@
                             <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="IsEnable" value="True">
+                                @Html.HiddenFor(x => x.ID)
                                 <div id="content" class="tab-content">
                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                                    <div class="tab-pane" id="hb1">
-                                        <fieldset>
-                                            <legend>@ViewBag.title</legend>
-                                            <div class="form-group">
-                                                @Html.LabelFor(model => model.CompanyID, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownListFor(model => model.CompanyID, CompanyDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
-                                                </div>
-                                                @Html.LabelFor(model => model.VendorID, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownListFor(model => model.VendorID, VendorDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @Html.Label("Company No", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("CompanyNo", new { htmlAttributes = new { @class = "form-control" } })
-                                                </div>
-                                                @Html.Label("Vendor No", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("VendorNo", new { htmlAttributes = new { @class = "form-control" } })
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @Html.LabelFor(model => model.POStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownListFor(model => model.POStatus, POStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
-                                                    @Html.ValidationMessageFor(model => model.POStatus, "", new { @class = "text-danger" })
-                                                </div>
-                                                @Html.LabelFor(model => model.InvoiceDate, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.EditorFor(model => model.InvoiceDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
-                                                    @Html.ValidationMessageFor(model => model.InvoiceDate, "", new { @class = "text-danger" })
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @Html.LabelFor(model => model.POType, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownListFor(model => model.POType, POTypeDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
-                                                    @Html.ValidationMessageFor(model => model.POType, "", new { @class = "text-danger" })
-                                                </div>
-                                                @Html.LabelFor(model => model.InvoiceNo, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.EditorFor(model => model.InvoiceNo, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " } } })
-                                                    @Html.ValidationMessageFor(model => model.InvoiceNo, "", new { @class = "text-danger" })
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @Html.LabelFor(model => model.PODate, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.EditorFor(model => model.PODate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "Value", dtval }, { "data-dateformat", "yy/mm/dd" } } })
-                                                    @Html.ValidationMessageFor(model => model.PODate, "", new { @class = "text-danger" })
-                                                </div>
-                                                @Html.LabelFor(model => model.InvoiceNo, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("VendorInvoice", new { htmlAttributes = new { @class = "form-control" } })
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @Html.LabelFor(model => model.ReceiveStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownListFor(model => model.ReceiveStatus, ReceiveStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
-                                                    @Html.ValidationMessageFor(model => model.ReceiveStatus, "", new { @class = "text-danger" })
-                                                </div>
-                                                @Html.LabelFor(model => model.PaymentStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownListFor(model => model.ReceiveStatus, ReceiveStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
-                                                    @Html.ValidationMessageFor(model => model.ReceiveStatus, "", new { @class = "text-danger" })
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @Html.LabelFor(model => model.ReceivedDate, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.EditorFor(model => model.ReceivedDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
-                                                    @Html.ValidationMessageFor(model => model.ReceivedDate, "", new { @class = "text-danger" })
-                                                </div>
-                                                @Html.LabelFor(model => model.PaymentDate, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.EditorFor(model => model.PaymentDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
-                                                    @Html.ValidationMessageFor(model => model.PaymentDate, "", new { @class = "text-danger" })
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @Html.LabelFor(model => model.ShippedDate, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.EditorFor(model => model.ShippedDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
-                                                    @Html.ValidationMessageFor(model => model.ShippedDate, "", new { @class = "text-danger" })
-                                                </div>
-                                                @Html.LabelFor(model => model.PaidAmount, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.EditorFor(model => model.PaidAmount, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
-                                                    @Html.ValidationMessageFor(model => model.PaidAmount, "", new { @class = "text-danger" })
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @Html.LabelFor(model => model.Carrier, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.EditorFor(model => model.Carrier, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
-                                                    @Html.ValidationMessageFor(model => model.Carrier, "", new { @class = "text-danger" })
-                                                </div>
-                                                @Html.LabelFor(model => model.PaymentProof, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.EditorFor(model => model.PaymentProof, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
-                                                    @Html.ValidationMessageFor(model => model.PaymentProof, "", new { @class = "text-danger" })
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @Html.LabelFor(model => model.Tracking, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.EditorFor(model => model.Tracking, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
-                                                    @Html.ValidationMessageFor(model => model.Tracking, "", new { @class = "text-danger" })
-                                                </div>
-                                            </div>
-                                        </fieldset>
-                                        <fieldset>
-                                            <legend>Items Ordered</legend>
-                                            <div class="form-group">
-                                                @Html.LabelFor(model => model.Warehouse, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownListFor(model => model.Warehouse, CompanyDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
-                                                    @Html.ValidationMessageFor(model => model.Warehouse, "", new { @class = "text-danger" })
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @Html.LabelFor(model => model.Currency, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownListFor(model => model.Currency, CompanyDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
-                                                    @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @Html.LabelFor(model => model.Tax, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    <div class="col-sm-2 col-lg-2">
-                                                        @Html.CheckBox("TaxShow", true, new { @class = "form-control" })
+                                    @if (Model.POType == "PurchaseOrder")
+                                    {
+                                        <div class="tab-pane" id="hb1">
+                                            <fieldset>
+                                                <legend>@ViewBag.title</legend>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.CompanyID, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.DropDownListFor(model => model.CompanyID, CompanyDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
                                                     </div>
-                                                    <div class="col-sm-10 col-lg-10">
-                                                        @Html.EditorFor(model => model.Tax, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
-                                                        @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
+                                                    @Html.LabelFor(model => model.VendorID, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.DropDownListFor(model => model.VendorID, VendorDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
                                                     </div>
-                                                   
-                                                  
                                                 </div>
+                                                <div class="form-group">
+                                                    @Html.Label("Company No", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("CompanyNo", new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>
+                                                    @Html.Label("Vendor No", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("VendorNo", new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>
                                                 </div>
-                                        </fieldset>
-                                        <fieldset>
-                                            <legend></legend>
-                                            <div class="form-group">
-                                                <div class="col-sm-9 col-lg-2">
-                                                    <button type="button">Edit items</button>
-                                                    <button type="button">Remove items</button>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.POStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.DropDownListFor(model => model.POStatus, POStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.POStatus, "", new { @class = "text-danger" })
+                                                    </div>
+                                                    @Html.LabelFor(model => model.InvoiceDate, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.EditorFor(model => model.InvoiceDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                        @Html.ValidationMessageFor(model => model.InvoiceDate, "", new { @class = "text-danger" })
+                                                    </div>
                                                 </div>
-                                                <div class="col-lg-offset-10">
-                                                    <button type="button">Receive Items</button>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.POType, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.DropDownListFor(model => model.POType, POTypeDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.POType, "", new { @class = "text-danger" })
+                                                    </div>
+                                                    @Html.LabelFor(model => model.InvoiceNo, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.EditorFor(model => model.InvoiceNo, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " } } })
+                                                        @Html.ValidationMessageFor(model => model.InvoiceNo, "", new { @class = "text-danger" })
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="row">
-                                                <article class="col-xs-12">
-                                                    <table id="DataGridC" class="table table-bordered table-striped text-center dataTable no-footer">
-                                                        <thead>
-                                                            <tr>
-                                                                <th><input type="checkbox"/></th>
-                                                                <th></th>
-                                                                <th>SKU</th>
-                                                                <th>Vendor SKU</th>
-                                                                <th>Name</th>
-                                                                <th>QTY Ordered</th>
-                                                                <th>QTY Fulfilled</th>
-                                                                <th>Price</th>
-                                                                <th>Discount</th>
-                                                                <th>Credit</th>
-                                                                <th>Discounted Price</th>
-                                                                <th>Subtotal (currency)</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody></tbody>
-                                                        <tfoot>
-                                                            <tr>
-                                                                <td colspan="10">
-                                                                    <select id="gebruikerId" name="gebruikerId" class=" form-control" style="width:50%"></select>
-                                                                    <button type="button" id="addsku">Add SKU</button>
-                                                                </td>
-                                                                <td></td>
-                                                                <td></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td colspan="10" rowspan="10">
-                                                                    <div class="col-sm-10 col-lg-10">
-                                                                        <textarea rows="20" style="width:100%" id="textnote"></textarea>
-                                                                        <button type="button" id="addnote" style="float:right">Add Note</button>
-                                                                    </div>
-                                                                    <div class="col-sm-2 col-lg-2">
-                                                                        <ul style="list-style-type:none;list-style-position: inside;padding-left: 0px;padding-left: 0px;" id="textnotelog"></ul>
-                                                                    </div>
-                                                                </td>
-                                                                <td>Total:</td>
-                                                                <td></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Total Discount:</td>
-                                                                <td></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Tax:</td>
-                                                                <td></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Shipping Cost:</td>
-                                                                <td></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Other:</td>
-                                                                <td></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Grand Total:</td>
-                                                                <td></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Total Paid:</td>
-                                                                <td></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Total Refunded:</td>
-                                                                <td></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>CM Credit:</td>
-                                                                <td></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Balance:</td>
-                                                                <td></td>
-                                                            </tr>
-                                                        </tfoot>
-                                                    </table>
-                                                </article>
-                                            </div>
-                                        </fieldset>
-                                    </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.PODate, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.EditorFor(model => model.PODate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "Value", dtval }, { "data-dateformat", "yy/mm/dd" } } })
+                                                        @Html.ValidationMessageFor(model => model.PODate, "", new { @class = "text-danger" })
+                                                    </div>
+                                                    @Html.Label("VendorInvoice", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("VendorInvoice", new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.ReceiveStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.DropDownListFor(model => model.ReceiveStatus, ReceiveStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.ReceiveStatus, "", new { @class = "text-danger" })
+                                                    </div>
+                                                    @Html.LabelFor(model => model.PaymentStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.DropDownListFor(model => model.ReceiveStatus, ReceiveStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.ReceiveStatus, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.ReceivedDate, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.EditorFor(model => model.ReceivedDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                        @Html.ValidationMessageFor(model => model.ReceivedDate, "", new { @class = "text-danger" })
+                                                    </div>
+                                                    @Html.LabelFor(model => model.PaymentDate, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.EditorFor(model => model.PaymentDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                        @Html.ValidationMessageFor(model => model.PaymentDate, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.ShippedDate, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.EditorFor(model => model.ShippedDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                        @Html.ValidationMessageFor(model => model.ShippedDate, "", new { @class = "text-danger" })
+                                                    </div>
+                                                    @Html.LabelFor(model => model.PaidAmount, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.EditorFor(model => model.PaidAmount, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                                        @Html.ValidationMessageFor(model => model.PaidAmount, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.Carrier, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.EditorFor(model => model.Carrier, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                                        @Html.ValidationMessageFor(model => model.Carrier, "", new { @class = "text-danger" })
+                                                    </div>
+                                                    @Html.LabelFor(model => model.PaymentProof, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.EditorFor(model => model.PaymentProof, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                                        @Html.ValidationMessageFor(model => model.PaymentProof, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.Tracking, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.EditorFor(model => model.Tracking, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                                        @Html.ValidationMessageFor(model => model.Tracking, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                            <fieldset>
+                                                <legend>Items Ordered</legend>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.Warehouse, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.DropDownListFor(model => model.WarehouseID, Warehouselist, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.WarehouseID, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.Currency, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.DropDownListFor(model => model.Currency, CompanyDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.Tax, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        <div class="col-sm-2 col-lg-2">
+                                                            @Html.CheckBox("TaxShow", true, new { @class = "form-control" })
+                                                        </div>
+                                                        <div class="col-sm-10 col-lg-10">
+                                                            @Html.EditorFor(model => model.Tax, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                                            @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                            <fieldset>
+                                                <legend></legend>
+                                                <div class="form-group">
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        <button type="button">Edit items</button>
+                                                        <button type="button" id="Removeitems">Remove items</button>
+                                                    </div>
+                                                    <div class="col-lg-offset-10">
+                                                        <a type="button" href="@Url.Action("CreateCM",new {Model.ID})" class='btn btn-danger btn-sm' id='btn-Add'>Create CM</a>
+                                                        <a type="button" href="@Url.Action("ReceiveItems",new {Model.ID})" class='btn btn-danger btn-sm'>Receive Items</a>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <article class="col-xs-12">
+                                                        <table id="DataGridC" class="table table-striped table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th><input type="checkbox" /></th>
+                                                                    <th></th>
+                                                                    <th>SKU</th>
+                                                                    <th>Vendor SKU</th>
+                                                                    <th>Name</th>
+                                                                    <th>QTY Ordered</th>
+                                                                    <th>QTY Received</th>
+                                                                    <th>Price</th>
+                                                                    <th>Discount</th>
+                                                                    <th>Credit</th>
+                                                                    <th>Discounted Price</th>
+                                                                    <th>Subtotal (currency)</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody></tbody>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <td colspan="10">
+                                                                        <select id="gebruikerId" name="gebruikerId" class=" form-control" style="width:50%"></select>
+                                                                        <button type="button" id="addsku">Add SKU</button>
+                                                                    </td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td colspan="10" rowspan="10">
+                                                                        <div class="col-sm-10 col-lg-10">
+                                                                            <textarea rows="20" style="width:100%" id="textnote"></textarea>
+                                                                            <button type="button" id="addnote" style="float:right">Add Note</button>
+                                                                        </div>
+                                                                        <div class="col-sm-2 col-lg-2">
+                                                                            <ul style="list-style-type:none;list-style-position: inside;padding-left: 0px;padding-left: 0px;" id="textnotelog">
+                                                                                @foreach (var item in Model.PurchaseNote)
+                                                                                {
+                                                                                    <li>@(item.CreateBy + "： " + item.CreateAt.ToString("yyyy/MM/dd HH:mm:ss"))</li>
+                                                                                }
+                                                                            </ul>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>Total:</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Total Discount:</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Tax:</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Shipping Cost:</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Other:</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Grand Total:</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Total Paid:</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Total Refunded:</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>CM Credit:</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Balance:</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                            </tfoot>
+                                                        </table>
+                                                    </article>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+
+                                    }
+                                    else if (Model.POType == "DropshpOrder")
+                                    {
+                                        <div class="tab-pane" id="hb1">
+                                            <fieldset>
+                                                <legend>@ViewBag.title</legend>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.CompanyID, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.DropDownListFor(model => model.CompanyID, CompanyDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                    </div>
+                                                    @Html.LabelFor(model => model.VendorID, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.DropDownListFor(model => model.VendorID, VendorDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.Label("Company No", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("CompanyNo", new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>
+                                                    @Html.Label("Vendor No", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("VendorNo", new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.POStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.DropDownListFor(model => model.POStatus, POStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.POStatus, "", new { @class = "text-danger" })
+                                                    </div>
+                                                    @Html.LabelFor(model => model.InvoiceDate, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.EditorFor(model => model.InvoiceDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                        @Html.ValidationMessageFor(model => model.InvoiceDate, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.POType, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.DropDownListFor(model => model.POType, POTypeDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.POType, "", new { @class = "text-danger" })
+                                                    </div>
+                                                    @Html.LabelFor(model => model.InvoiceNo, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.EditorFor(model => model.InvoiceNo, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " } } })
+                                                        @Html.ValidationMessageFor(model => model.InvoiceNo, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.PODate, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.EditorFor(model => model.PODate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "Value", dtval }, { "data-dateformat", "yy/mm/dd" } } })
+                                                        @Html.ValidationMessageFor(model => model.PODate, "", new { @class = "text-danger" })
+                                                    </div>
+                                                    @Html.Label("VendorInvoice", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("VendorInvoice", new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.ReceiveStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.DropDownListFor(model => model.ReceiveStatus, ReceiveStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.ReceiveStatus, "", new { @class = "text-danger" })
+                                                    </div>
+                                                    @Html.LabelFor(model => model.PaymentStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.DropDownListFor(model => model.ReceiveStatus, ReceiveStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.ReceiveStatus, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.ReceivedDate, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.EditorFor(model => model.ReceivedDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                        @Html.ValidationMessageFor(model => model.ReceivedDate, "", new { @class = "text-danger" })
+                                                    </div>
+                                                    @Html.LabelFor(model => model.PaymentDate, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.EditorFor(model => model.PaymentDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                        @Html.ValidationMessageFor(model => model.PaymentDate, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.ShippedDate, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.EditorFor(model => model.ShippedDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                        @Html.ValidationMessageFor(model => model.ShippedDate, "", new { @class = "text-danger" })
+                                                    </div>
+                                                    @Html.LabelFor(model => model.PaidAmount, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.EditorFor(model => model.PaidAmount, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                                        @Html.ValidationMessageFor(model => model.PaidAmount, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.Carrier, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.EditorFor(model => model.Carrier, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                                        @Html.ValidationMessageFor(model => model.Carrier, "", new { @class = "text-danger" })
+                                                    </div>
+                                                    @Html.LabelFor(model => model.PaymentProof, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.EditorFor(model => model.PaymentProof, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                                        @Html.ValidationMessageFor(model => model.PaymentProof, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.Tracking, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.EditorFor(model => model.Tracking, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                                        @Html.ValidationMessageFor(model => model.Tracking, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                            <fieldset>
+                                                <legend>Items Ordered</legend>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.Warehouse, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.DropDownListFor(model => model.Warehouse, CompanyDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.Warehouse, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.Currency, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.DropDownListFor(model => model.Currency, CompanyDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.Tax, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        <div class="col-sm-2 col-lg-2">
+                                                            @Html.CheckBox("TaxShow", true, new { @class = "form-control" })
+                                                        </div>
+                                                        <div class="col-sm-10 col-lg-10">
+                                                            @Html.EditorFor(model => model.Tax, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                                            @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                            <fieldset>
+                                                <legend></legend>
+                                                <div class="form-group">
+                                                    <div class="col-lg-offset-10">
+                                                        <a type="button" href="@Url.Action("CreateCM",new {Model.ID})" class='btn btn-danger btn-sm' id='btn-Add'>Create CM</a>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <article class="col-xs-12">
+                                                        <table id="DataGridC" class="table table-striped table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th><input type="checkbox" /></th>
+                                                                    <th></th>
+                                                                    <th>SKU</th>
+                                                                    <th>Vendor SKU</th>
+                                                                    <th>Name</th>
+                                                                    <th>QTY Ordered</th>
+                                                                    <th>QTY Fulfilled</th>
+                                                                    <th>Price</th>
+                                                                    <th>Discount</th>
+                                                                    <th>Credit</th>
+                                                                    <th>Discounted Price</th>
+                                                                    <th>Subtotal (currency)</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody></tbody>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <td colspan="10">
+                                                                        <select id="gebruikerId" name="gebruikerId" class=" form-control" style="width:50%"></select>
+                                                                        <button type="button" id="addsku">Add SKU</button>
+                                                                    </td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td colspan="10" rowspan="10">
+                                                                        <div class="col-sm-10 col-lg-10">
+                                                                            <textarea rows="20" style="width:100%" id="textnote"></textarea>
+                                                                            <button type="button" id="addnote" style="float:right">Add Note</button>
+                                                                        </div>
+                                                                        <div class="col-sm-2 col-lg-2">
+                                                                            <ul style="list-style-type:none;list-style-position: inside;padding-left: 0px;padding-left: 0px;" id="textnotelog">
+                                                                                @foreach (var item in Model.PurchaseNote)
+                                                                                {
+                                                                                    <li>@(item.CreateBy + "： " + item.CreateAt.ToString("yyyy/MM/dd HH:mm:ss"))</li>
+                                                                                }
+                                                                            </ul>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>Total:</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Total Discount:</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Tax:</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Shipping Cost:</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Other:</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Grand Total:</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Total Paid:</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Total Refunded:</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>CM Credit:</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Balance:</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                            </tfoot>
+                                                        </table>
+                                                    </article>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                    }
                                 </div>
 
                                 <div class="widget-footer">
@@ -300,7 +559,7 @@
         $('.tab-pane').eq(hash.substr(1)).addClass('active');
         var tableID = "#DataGridC";
         $(document).ready(function () {
-            var DataGridC = $(tableID).DataTable({
+             DataGridC = $(tableID).DataTable({
                 fixedHeader: {
                     header: true,
                     footer: true
@@ -314,9 +573,9 @@
                         data: "ck",
                         className: 'select-checkbox',
                         orderable: false,
-                        render: function (data, type, obj, meta) {
-                            return '<input type="checkbox" value="' + data + '">';
-                        } 
+                        render: function (data, type, row, meta) {
+                            return '<input type="checkbox" value="' + row.ID + '">';
+                        }
                     },
                     {
                         "className": 'details-control',
@@ -326,11 +585,18 @@
                     { data: "SKU" },
                     { data: "VendorSKU" },
                     { data: "Name" },
-                    { data: "QTYOrdered", render: function (data, type, row) { return thousandComma(data); } },
-                    { data: "QTYFulfilled", render: function (data, type, row) { return thousandComma(data); } },
-                    { data: "Price", render: function (data, type, row) { return thousandComma(data); }  },
-                    { data: "Discount", render: function (data, type, row) { return thousandComma(data); } },
-                    { data: "Credit", render: function (data, type, row) { return thousandComma(data); }  },
+                    { data: "QTYOrdered", render: function (data, type, row) { return '<input class="form-control" type="text" onchange="Calculation(this,\'QTYOrdered\',\'' + row.SKU + '\',' + data + ',' + row.ID + ')"  value = ' + data + ' > '; } },
+                    @if (Model.POType == "PurchaseOrder")
+                    {
+                        @:{ data: "QTYReceived", render: function(data, type, row) { return data; } },
+                    }
+                    else if (Model.POType == "DropshpOrder")
+                    {
+                       @:{ data: "QTYFulfilled", render: function(data, type, row) { return data; } },
+                    }
+                    { data: "Price", render: function (data, type, row) { return '<input class="form-control" type="text" onchange="Calculation(this,\'Price\',\'' + row.SKU + '\',' + data + ',' + row.ID + ')"  value = ' + thousandComma(data) + ' > '; }  },
+                    { data: "Discount", render: function (data, type, row) { return '<input class="form-control" type="text" onchange="Calculation(this,\'Discount\',\'' + row.SKU + '\',' + data + ',' + row.ID + ')"  value = ' + thousandComma(data) + '  > '; } },
+                    { data: "Credit", render: function (data, type, row) { return '<input class="form-control" type="text" onchange="Calculation(this,\'Credit\',\'' + row.SKU + '\',' + data + ',' + row.ID + ')"  value = ' + thousandComma(data) + '  > '; }  },
                     { data: "DiscountedPrice", render: function (data, type, row) { return thousandComma(data); } },
                     { data: "Subtotal", render: function (data, type, row) { return thousandComma(data); } }
                 ],
@@ -344,7 +610,7 @@
                         $("#gebruikerId").val(null).trigger('change');
                     }
                 },
-                serverSide: true,//啟用ServerSide模式  
+                serverSide: true,//啟用ServerSide模式
                 //deferLoading: 0, //初始化DataTable時，不發出ajax
                 orderMulti: false,
                 "paging": false,
@@ -375,7 +641,7 @@
                     var TaxVal = $("#Tax").val();
                     Tax = total - (total / (1 + TaxVal / 100));
                     $('tr:eq(3) td:eq(1)', api.table().footer()).html(thousandComma(Tax));//TotalDiscount
-                   
+
                     //Shipping Cost:
                     ShippingCost = 0;
                     $('tr:eq(4) td:eq(1)', api.table().footer()).html(thousandComma(ShippingCost));//Shipping Cost
@@ -423,6 +689,9 @@
             $("#addsku").click(function () {
                 DataGridC.draw();
             });
+              $("#POType").change(function () {
+                window.location.href = "@Url.Action("Create")?POTypeVal=" + $(this).val();
+            });
             $("#addnote").click(function () {
                 $.ajax({
                     traditional: true,
@@ -466,22 +735,26 @@
                 }
             });
         });
-        function format(d) {
-            // `d` is the original data object for the row
-            return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
-                '<tr>' +
-                '<td>Full name:</td>' +
-                '<td>' + d.name + '</td>' +
-                '</tr>' +
-                '<tr>' +
-                '<td>Extension number:</td>' +
-                '<td>' + d.extn + '</td>' +
-                '</tr>' +
-                '<tr>' +
-                '<td>Extra info:</td>' +
-                '<td>And any further details here (images etc)...</td>' +
-                '</tr>' +
-                '</table>';
+        function Calculation(x, type, SKU, oval, ID) {
+            $.ajax({
+                type: "post",
+                url: "@Url.Action("SkuNumberListEdit", "Ajax")",
+                data: {
+                    SKU: SKU,
+                    type: type,
+                    oval: oval,
+                    val: $(x).val(),
+                    ID: ID
+                },
+                success: function (data) {
+                    if (data.status) {
+                        DataGridC.draw();
+                    }
+                    else {
+                        alert(data.Errmsg);
+                    }
+                }
+            });
         }
     </script>
 }
