@@ -251,11 +251,19 @@ namespace PurchaseOrderSys.Models
 
 
         /// <summary>
-        /// Currency
+        /// 幣別
         /// </summary>        
         [Display(Name = "PurchaseOrder_Currency", ResourceType = typeof(App_GlobalResources.Resource))]
         [MaxLength(10, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
         public string Currency { get; set; }
+
+
+        /// <summary>
+        /// 稅率
+        /// </summary>        
+        [Display(Name = "PurchaseOrder_Tax", ResourceType = typeof(App_GlobalResources.Resource))]
+        [MaxLength(10, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+        public decimal? Tax { get; set; }
     }
     public class PurchaseSKUVM
     {
