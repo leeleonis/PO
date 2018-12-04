@@ -26,20 +26,23 @@ namespace PurchaseOrderSys.Controllers
             return View(PurchaseOrder);
         }
         [HttpPost]
-        public ActionResult Create(PurchaseOrderPOVM filter)
+        public ActionResult Create(PurchaseOrder filter)
         {
-            var PurchaseOrder = new PurchaseOrder
-            {
-                IsEnable = true,
-                CompanyID = filter.CompanyID,
-                VendorID = filter.VendorID,
-                PODate = filter.PODate,
-                POStatus = filter.POStatus,
-                POType = filter.POType,
-                CreateBy = UserBy,
-                CreateAt = DateTime.UtcNow
-            };
-            db.PurchaseOrder.Add(PurchaseOrder);
+            //var PurchaseOrder = new PurchaseOrder
+            //{
+            //    IsEnable = true,
+            //    CompanyID = filter.CompanyID,
+            //    VendorID = filter.VendorID,
+            //    PODate = filter.PODate,
+            //    POStatus = filter.POStatus,
+            //    POType = filter.POType,
+            //    CreateBy = UserBy,
+            //    CreateAt = DateTime.UtcNow
+            //};
+            filter.IsEnable = true;
+            filter.CreateBy = UserBy;
+            filter.CreateAt = DateTime.UtcNow;
+            db.PurchaseOrder.Add(filter);
             var dataList = (List<PoSKUVM>)Session["SkuNumberList"];
             if (dataList != null)
             {
@@ -60,7 +63,7 @@ namespace PurchaseOrderSys.Controllers
                 });
                 foreach (var item in PurchaseSKUlist)
                 {
-                    PurchaseOrder.PurchaseSKU.Add(item);
+                    filter.PurchaseSKU.Add(item);
                 }
             }
             var PurchaseNoteLlist = (List<PurchaseNote>)Session["PurchaseNote"];
@@ -68,7 +71,7 @@ namespace PurchaseOrderSys.Controllers
             {
                 foreach (var item in PurchaseNoteLlist)
                 {
-                    PurchaseOrder.PurchaseNote.Add(item);
+                    filter.PurchaseNote.Add(item);
                 }
             }
             try
@@ -230,7 +233,7 @@ namespace PurchaseOrderSys.Controllers
             return View(PurchaseOrder);
         }
         [HttpPost]
-        public ActionResult EditItem(PurchaseOrderPOVM filter)
+        public ActionResult EditItem(PurchaseOrder filter)
         {
             var dt = DateTime.UtcNow;
             var PurchaseOrder = db.PurchaseOrder.Find(filter.ID);
@@ -240,7 +243,20 @@ namespace PurchaseOrderSys.Controllers
             PurchaseOrder.PODate = filter.PODate;
             PurchaseOrder.POStatus = filter.POStatus;
             PurchaseOrder.POType = filter.POType;
+            PurchaseOrder.ReceiveStatus = filter.ReceiveStatus;
+            PurchaseOrder.ReceivedDate = filter.ReceivedDate;
+            PurchaseOrder.InvoiceDate = filter.InvoiceDate;
+            PurchaseOrder.InvoiceNo = filter.InvoiceNo;
+            PurchaseOrder.PaymentDate = filter.PaymentDate;
+            PurchaseOrder.ShippedDate = filter.ShippedDate;
+            PurchaseOrder.PaidAmount = filter.PaidAmount;
+            PurchaseOrder.Carrier = filter.Carrier;
+            PurchaseOrder.PaymentProof = filter.PaymentProof;
+            PurchaseOrder.Tracking = filter.Tracking;
+            // PurchaseOrder.VendorInvoice = filter.VendorInvoice;
             PurchaseOrder.WarehouseID = filter.WarehouseID;
+            PurchaseOrder.Currency = filter.Currency;
+            PurchaseOrder.Tax = filter.Tax;
             PurchaseOrder.UpdateBy = UserBy;
             PurchaseOrder.UpdateAt = dt;
 
