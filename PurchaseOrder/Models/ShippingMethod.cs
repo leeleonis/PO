@@ -31,8 +31,8 @@ namespace PurchaseOrderSys.Models
         public string UpdateBy { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }
     
-        public virtual API API1 { get; set; }
-        public virtual Carrier Carrier1 { get; set; }
-        public virtual DirectLine DirectLine1 { get; set; }
+        public virtual API GetAPI { get; set; }
+        public virtual Carrier GetCarrier { get; set; }
+        public virtual DirectLine GetDirectLine { get; set; }
     }
 }

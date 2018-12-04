@@ -118,7 +118,7 @@ namespace PurchaseOrderSys.Controllers
             if (sku.SkuLang.Any(l => l.LangID.Equals(langData.LangID)))
             {
                 SkuLang skuLang = sku.SkuLang.First(l => l.LangID.Equals(langData.LangID));
-                SetUpdateData(skuLang, langData, new string[] { "Name", "Models" });
+                SetUpdateData(skuLang, langData, new string[] { "Name", "Model", "Description", "SpecContent" });
                 db.Entry(skuLang).State = EntityState.Modified;
             }
             else
@@ -593,6 +593,8 @@ namespace PurchaseOrderSys.Controllers
             {
                 langData?.Name,
                 langData?.Model,
+                langData?.Description,
+                langData?.SpecContent,
                 VariationList = sku.Type.Equals((byte)EnumData.SkuType.Variation) ? RenderViewToString(ControllerContext, "_VariationAttribute", sku, viewData) : "",
                 KitList = sku.Type.Equals((byte)EnumData.SkuType.Kit) ? RenderViewToString(ControllerContext, "_SkuKit", sku, viewData) : "",
                 AttributeList = RenderViewToString(ControllerContext, "_SingleAttribute", sku, viewData)

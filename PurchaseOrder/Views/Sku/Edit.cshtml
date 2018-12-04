@@ -45,6 +45,7 @@
                                         <div class="col-sm-9 col-lg-3">
                                             @Html.EditorFor(model => model.SkuID, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                                             @Html.ValidationMessageFor(model => model.SkuID, "", new { @class = "text-danger" })
+                                            @Html.Hidden("Sku", Model.SkuID)
                                         </div>
                                     </div>
 
@@ -265,12 +266,21 @@
                                         <fieldset>
                                             <legend>Description</legend>
 
-                                            <textarea name="Description"></textarea>
+                                            @Html.TextArea("Description")
                                         </fieldset>
+
+                                        <hr />
 
                                         <fieldset>
                                             <legend>Spec Content</legend>
 
+                                            <div class="form-group">
+                                                <div class="col-lg-12">
+                                                    <button type="button" class="btn btn-default" onclick="ResetSpecContent()">屬性重置</button>
+                                                </div>
+                                            </div>
+
+                                            @Html.TextArea("SpecContent")
                                         </fieldset>
                                     </div>
 
@@ -387,18 +397,21 @@
         var $variationList = $('#list-variation'), $kitList = $('#list-kit'), $attributeList = $("#list-attribute"), $attributeTypeList = $('#list-attributeType');
 
         $(document).ready(function () {
-            CKEDITOR.replace('Description', {
-                height: '500px'
-            });
+            CKEDITOR.replace('Description', { height: '500px' });
+            CKEDITOR.replace('SpecContent', { height: '1000px' });
 
             $('#LangID').change(function () {
                 website.AjaxUrl('@Url.Action("GetLangData", "Sku", new { ID = Model.SkuID })', 'get', { LangID: $(this).val() }).done(function (response) {
                     if (response.status) {
                         $('#Name').val(response.data.Name);
                         $('#Models').val(response.data.Models);
+                        $('#Description').val(response.data.Description);
+                        $('#SpecContent').val(response.data.SpecContent);
+
                         if (!website.IsEmpty(response.data.VariationList)) {
                             $variationList.html(response.data.VariationList);
                         }
+
                         if (!website.IsEmpty(response.data.KitList)) {
                             $kitList.html(response.data.KitList);
                         }
@@ -626,6 +639,14 @@
 
         function KitDel($btn) {
 
+        }
+
+        function ResetSpecContent() {
+            website.AjaxUrl('@Url.Action("GetSpecContent", "Sku", new { ID = Model.SkuID })', 'get', { LangID: $('#LangID').val() }).done(function (response) {
+                if (response.Status) {
+                    $('')
+                }
+            });
         }
     </script>
 }

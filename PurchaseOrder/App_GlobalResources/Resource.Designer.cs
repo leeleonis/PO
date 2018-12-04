@@ -2304,6 +2304,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
+        public static string Sku_Attribute_IsDiverse {
+            get {
+                return ResourceManager.GetString("Sku_Attribute_IsDiverse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
         public static string Sku_Attribute_LangID {
             get {
                 return ResourceManager.GetString("Sku_Attribute_LangID", resourceCulture);
@@ -2403,9 +2412,18 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string Sku_IsEnable {
+        public static string SKU_IsEnable {
             get {
-                return ResourceManager.GetString("Sku_IsEnable", resourceCulture);
+                return ResourceManager.GetString("SKU_IsEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string SKU_ParentKit {
+            get {
+                return ResourceManager.GetString("SKU_ParentKit", resourceCulture);
             }
         }
         
@@ -2709,6 +2727,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
+        public static string SkuLang_Description {
+            get {
+                return ResourceManager.GetString("SkuLang_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
         public static string SkuLang_LangID {
             get {
                 return ResourceManager.GetString("SkuLang_LangID", resourceCulture);
@@ -2739,6 +2766,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         public static string SkuLang_Sku {
             get {
                 return ResourceManager.GetString("SkuLang_Sku", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string SkuLang_SpecContent {
+            get {
+                return ResourceManager.GetString("SkuLang_SpecContent", resourceCulture);
             }
         }
         

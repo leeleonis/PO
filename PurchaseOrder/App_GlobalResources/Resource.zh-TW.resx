@@ -1311,4 +1311,16 @@
   <data name="SkuPicture_UpdateAt" xml:space="preserve">
     <value>修改時間</value>
   </data>
+  <data name="SkuLang_Description" xml:space="preserve">
+    <value>簡述</value>
+  </data>
+  <data name="SkuLang_SpecContent" xml:space="preserve">
+    <value>屬性內容</value>
+  </data>
+  <data name="SKU_ParentKit" xml:space="preserve">
+    <value>Kit Parent</value>
+  </data>
+  <data name="Sku_Attribute_IsDiverse" xml:space="preserve">
+    <value>是否多樣性</value>
+  </data>
 </root>
