@@ -628,6 +628,30 @@ namespace PurchaseOrderSys.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult GetSpecContent(string ID, string LangID)
+        {
+            AjaxResult result = new AjaxResult();
+
+            SKU sku = db.SKU.Find(ID);
+
+            try
+            {
+                if (sku == null) throw new Exception("Not found sku!");
+
+                ViewDataDictionary viewData = new ViewDataDictionary() { { "LangID", LangID } };
+                viewData.Add("AttributeTypeList", db.SkuAttributeType.Where(t => t.IsEnable).OrderBy(t => t.Order).ToList());
+
+                result.data = RenderViewToString(ControllerContext, "_SpecContent", sku, viewData);
+            }
+            catch (Exception e)
+            {
+                result.status = false;
+                result.message = e.InnerException != null ? e.InnerException.Message ?? e.Message : e.Message;
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

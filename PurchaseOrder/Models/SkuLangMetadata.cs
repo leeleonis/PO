@@ -1,7 +1,7 @@
 using System; 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
+using System.Web.Mvc;
 
 namespace PurchaseOrderSys.Models
 {
@@ -51,19 +51,21 @@ namespace PurchaseOrderSys.Models
     	    [Display(Name = "SkuLang_Model", ResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  Model { get; set; }
-    
-    		    
-    		/// <summary>
-    		/// Description
-    		/// </summary>        
-    	    [Display(Name = "SkuLang_Description", ResourceType = typeof(App_GlobalResources.Resource))]
+
+
+            /// <summary>
+            /// Description
+            /// </summary>        
+            [AllowHtml]
+            [Display(Name = "SkuLang_Description", ResourceType = typeof(App_GlobalResources.Resource))]
     		public string  Description { get; set; }
-    
-    		    
-    		/// <summary>
-    		/// Spec Content
-    		/// </summary>        
-    	    [Display(Name = "SkuLang_SpecContent", ResourceType = typeof(App_GlobalResources.Resource))]
+
+
+            /// <summary>
+            /// Spec Content
+            /// </summary>  
+            [AllowHtml]
+            [Display(Name = "SkuLang_SpecContent", ResourceType = typeof(App_GlobalResources.Resource))]
     		public string  SpecContent { get; set; }
     
     		    

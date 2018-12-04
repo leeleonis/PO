@@ -405,8 +405,8 @@
                     if (response.status) {
                         $('#Name').val(response.data.Name);
                         $('#Models').val(response.data.Models);
-                        $('#Description').val(response.data.Description);
-                        $('#SpecContent').val(response.data.SpecContent);
+                        CKEDITOR.instances['Description'].setData(website.IsEmpty(response.data.Description) ? '' : response.data.Description);
+                        CKEDITOR.instances['SpecContent'].setData(website.IsEmpty(response.data.SpecContent) ? '' : response.data.SpecContent);
 
                         if (!website.IsEmpty(response.data.VariationList)) {
                             $variationList.html(response.data.VariationList);
@@ -643,8 +643,8 @@
 
         function ResetSpecContent() {
             website.AjaxUrl('@Url.Action("GetSpecContent", "Sku", new { ID = Model.SkuID })', 'get', { LangID: $('#LangID').val() }).done(function (response) {
-                if (response.Status) {
-                    $('')
+                if (response.status) {
+                    CKEDITOR.instances['SpecContent'].setData(response.data);
                 }
             });
         }

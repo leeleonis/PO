@@ -1,380 +1,69 @@
-﻿<table border="0" cellpadding="8" cellspacing="0" style="border-width: 0px;" width="679">
+﻿@model PurchaseOrderSys.Models.SKU
+@{
+    string LangID = ViewData["LangID"].ToString();
+    string DefaultLangID = EnumData.DataLangList().First().Key;
+}
+
+<table border="0" cellpadding="8" cellspacing="0" style="border-width: 0px;" width="679">
     <tbody>
         <tr>
             <td align="left" width="187">
                 <p style="margin: 3px;"><b><font color="#333333" face="Verdana" style="font-size: 9pt;">Specs:</font></b></p>
             </td>
             <td align="left" width="460">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;"><strong>Samsung Galaxy Note 9 (SM-N960F/DS)</strong></font></p>
+                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;"><strong>@(Model.SkuLang.First(l => l.LangID.Equals(Model.SkuLang.Any(ll => ll.LangID.Equals(LangID)) ? LangID : DefaultLangID)).Name)</strong></font></p>
             </td>
         </tr>
-        <tr>
-            <td align="left" bgcolor="#cccccc" colspan="2">
-                <p style="margin: 3px;"><b><font color="#333333" face="Verdana" style="font-size: 9pt;">GENERAL</font></b></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left" width="187">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">2G Network</font></p>
-            </td>
-            <td align="left" width="460">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">GSM 850 / 900 / 1800 / 1900</font></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left" width="187">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">3G Network</font></p>
-            </td>
-            <td align="left" width="460">
-                <p style="margin: 3px"><font color="#333333" face="Verdana" style="font-size: 9pt">WCDMA B1(2100) / B2(1900) / B4(AWS) / B5(850) / B8(900) </font></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left" width="187">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">4G Network</font></p>
-            </td>
-            <td align="left" width="460">
-                <p style="margin: 3px;">
-                    <font color="#333333" face="Verdana" style="font-size: 9pt">
-                        FDD LTE B1 / B2 / B3 / B4 / B5 / B7 / B8 / B12 / B13 / B17 / B18 / B19 / B20 / B25 / B26 / B28 / B32 / B66<br />
-                        TDD LTE B38 / B39 / B40 / B41
-                    </font>
-                </p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left" width="187">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt">SIM</font></p>
-            </td>
-            <td align="left" width="460">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt">Dual Nano-SIM (4G + 4G)</font></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left" bgcolor="#cccccc" colspan="2">
-                <p style="margin: 3px;"><b><font color="#333333" face="Verdana" style="font-size: 9pt;">BODY</font></b></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left" width="187">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">Dimensions</font></p>
-            </td>
-            <td align="left" width="460">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt">161.9 x 76.4 x 8.8 mm </font></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left" width="187">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">Weight</font></p>
-            </td>
-            <td align="left" width="460">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt">201 g</font></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left">
-                <p style="margin: 3px;">&nbsp;</p>
-            </td>
-            <td align="left">
-                <p style="margin: 3px;">
-                    <font color="#333333" face="Verdana" style="font-size: 9pt">
-                        - Samsung Pay<br />
-                        - IP68 dust/water proof (up to 1.5m for 30 mins)<br />
-                        - Stylus (Bluetooth integration)
-                    </font>
-                </p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left" bgcolor="#cccccc" colspan="2">
-                <p style="margin: 3px;"><b><font color="#333333" face="Verdana" style="font-size: 9pt;">DISPLAY</font></b></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left" width="187">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">Type</font></p>
-            </td>
-            <td align="left" width="460">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt">Super AMOLED capacitive touchscreen, 16M colors</font></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left" width="187">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">Size</font></p>
-            </td>
-            <td align="left" width="460">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt">6.4 inches</font></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left" width="187">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt">Resolution</font></p>
-            </td>
-            <td align="left" width="460">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt">2960 x 1440 pixels (~516 ppi density)</font></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">Multitouch</font></p>
-            </td>
-            <td align="left">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">Yes</font></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">Protection</font></p>
-            </td>
-            <td align="left">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">Corning Gorilla Glass 5</font></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left">
-                <p style="margin: 3px;">&nbsp;</p>
-            </td>
-            <td align="left">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">- Always-on display</font></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left" bgcolor="#cccccc" colspan="2">
-                <p style="margin: 3px;"><b><font color="#333333" face="Verdana" style="font-size: 9pt;">PLATFORM</font></b></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">OS</font></p>
-            </td>
-            <td align="left">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt">Android 8.0 (Oreo)</font></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">CPU</font></p>
-            </td>
-            <td align="left">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt">Octa-Core 2.7GHz + 1.7GHz</font></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left" bgcolor="#cccccc" colspan="2">
-                <p style="margin: 3px;"><b><font color="#333333" face="Verdana" style="font-size: 9pt;">MEMORY</font></b></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">Card slot</font></p>
-            </td>
-            <td align="left">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt">microSD, up to 512 GB (uses SIM 2 slot)</font></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">Internal</font></p>
-            </td>
-            <td align="left">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt">128 GB, 6 GB RAM</font></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left" bgcolor="#cccccc" colspan="2">
-                <p style="margin: 3px;"><b><font color="#333333" face="Verdana" style="font-size: 9pt;">MAIN CAMERA</font></b></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">Dual</font></p>
-            </td>
-            <td align="left">
-                <p style="margin: 3px;">
-                    <font color="#333333" face="Verdana" style="font-size: 9pt">
-                        12 MP, f/1.5-2.4, 1/2.55", 1.4µm, dual pixel PDAF, OIS<br />
-                        12 MP, f/2.4, 1/3.4", 1µm, AF, OIS
-                    </font>
-                </p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">Features</font></p>
-            </td>
-            <td align="left">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt">LED flash, auto-HDR, panorama</font></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">Video</font></p>
-            </td>
-            <td align="left">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt">2160p@30/60fps, 1080p@30/60/240fps, 720p@30/960fps</font></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left" bgcolor="#cccccc" colspan="2">
-                <p style="margin: 3px;"><b><font color="#333333" face="Verdana" style="font-size: 9pt;">SELFIE CAMERA</font></b></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">Single</font></p>
-            </td>
-            <td align="left">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt">8 MP, f/1.7, 1/3.6", 1.22µm, AF, DIS</font></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">Features</font></p>
-            </td>
-            <td align="left">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt">Auto-HDR</font></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left" bgcolor="#cccccc" colspan="2">
-                <p style="margin: 3px;"><b><font color="#333333" face="Verdana" style="font-size: 9pt;">SOUND</font></b></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left" width="187">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">Alert types</font></p>
-            </td>
-            <td align="left" width="460">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt">Vibration; MP3, WAV ringtones</font></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left" width="187">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">Loudspeaker</font></p>
-            </td>
-            <td align="left" width="460">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">Yes, with stereo speakers</font></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left" width="187">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">3.5mm jack</font></p>
-            </td>
-            <td align="left" width="460">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">Yes</font></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left">
-                <p style="margin: 3px;">&nbsp;</p>
-            </td>
-            <td align="left">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">- 32-bit audio</font></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left" bgcolor="#cccccc" colspan="2">
-                <p style="margin: 3px;"><b><font color="#333333" face="Verdana" style="font-size: 9pt;">COMMS</font></b></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left" width="187">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">WLAN</font></p>
-            </td>
-            <td align="left" width="460">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt">Wi-Fi 802.11 a/b/g/n/ac (2.4/5GHz)</font></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left" width="187">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">Bluetooth</font></p>
-            </td>
-            <td align="left" width="460">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt">v5.0</font></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">GPS</font></p>
-            </td>
-            <td align="left">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt">Yes, with Galileo, Glonass, BeiDou</font></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">NFC</font></p>
-            </td>
-            <td align="left">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt">Yes</font></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left" width="187">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">USB</font></p>
-            </td>
-            <td align="left" width="460">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt">Type-C 1.0 reversible connector</font></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left" bgcolor="#cccccc" colspan="2">
-                <p style="margin: 3px;"><b><font color="#333333" face="Verdana" style="font-size: 9pt;">FEATURES</font></b></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">Sensors</font></p>
-            </td>
-            <td align="left">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt">Iris sensor, Pressure sensor, Accelerometer, Barometer, Fingerprint sensor, Gyro sensor, Geomagnetic sensor, Hall sensor, HR sensor, Proximity sensor, RGB light sensor</font></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left" width="187">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">Messaging</font></p>
-            </td>
-            <td align="left" width="460">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt">SMS(threaded view), MMS, Email, Push Email, IM</font></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left" width="187">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">Browser</font></p>
-            </td>
-            <td align="left" width="460">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt">HTML5</font></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left">
-                <p style="margin: 3px;">&nbsp;</p>
-            </td>
-            <td align="left">
-                <p style="margin: 3px;">
-                    <font color="#333333" face="Verdana" style="font-size: 9pt">
-                        - Samsung DeX (desktop experience support)<br />
-                        - Fast battery charging (Quick Charge 2.0)<br />
-                        - WPC/PMA wireless charging<br />
-                        - ANT+ support<br />
-                        - Bixby natural language commands and dictation
-                    </font>
-                </p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left" bgcolor="#cccccc" colspan="2">
-                <p style="margin: 3px;"><b><font color="#333333" face="Verdana" style="font-size: 9pt;">BATTERY</font></b></p>
-            </td>
-        </tr>
-        <tr>
-            <td align="left" width="187">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">Type</font></p>
-            </td>
-            <td align="left" width="460">
-                <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt">Non-removable Li-Ion 4000 mAh battery</font></p>
-            </td>
-        </tr>
+        @{
+            Dictionary<int, int[]> attributeGroup = JsonConvert.DeserializeObject<Dictionary<int, int[]>>(Model.SkuType.AttributeGroup);
+            foreach (SkuAttributeType type in (List<SkuAttributeType>)ViewData["AttributeTypeList"])
+            {
+                if (attributeGroup.ContainsKey(type.ID))
+                {
+                    <tr>
+                        <td align="left" bgcolor="#cccccc" colspan="2">
+                            <p style="margin: 3px;"><b><font color="#333333" face="Verdana" style="font-size: 9pt;">@type.Name</font></b></p>
+                        </td>
+                    </tr>
+                    foreach (var attribute in type.SkuAttribute.Where(a => a.IsEnable && attributeGroup[type.ID].Contains(a.ID)))
+                    {
+                        Sku_Attribute value = Model.Sku_Attribute.FirstOrDefault(s => s.AttrID.Equals(attribute.ID) && s.LangID.Equals(LangID));
+                        value = value ?? new Sku_Attribute() { };
+                        if (value.Html)
+                        {
+                            <tr>
+                                <td align="left" width="187">
+                                    <p style="margin: 3px;"><font color="#333333" face="Verdana" style="font-size: 9pt;">@(attribute.SkuAttributeLang.FirstOrDefault(l => l.LangID.Equals(attribute.SkuAttributeLang.Any(ll => ll.LangID.Equals(LangID)) ? LangID : DefaultLangID))?.Name)</font></p>
+                                </td>
+                                <td align="left" width="460">
+                                    <p style="margin: 3px;">
+                                        <font color="#333333" face="Verdana" style="font-size: 9pt;">
+                                            @switch (attribute.Property)
+                                            {
+                                                case 1:
+                                                    @Enum.GetName(typeof(EnumData.YesNo), int.Parse(value.Value))
+                                                    break;
+                                                case 2:
+                                                    string[] dimensions = value.Value?.Split('x') ?? new string[] { };
+                                                    @(string.Format("{0} mm", string.Join(" x ", dimensions)))
+                                                    break;
+                                                case 3:
+                                                    string[] resolution = value.Value?.Split('x') ?? new string[] { };
+                                                    @(string.Format("{0} pixels", string.Join(" x ", resolution)))
+                                                    break;
+                                                default:
+                                                    @(value.Value ?? "")
+                                                    break;
+                                            }
+                                        </font>
+                                    </p>
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+            }
+        }
         <tr>
             <td align="left" bgcolor="#cccccc" colspan="2">
                 <p style="margin: 3px;"><span style="font-weight: 700;"><font color="#333333" face="Verdana" style="font-size: 9pt;">Disclaimer: Specifications does not reflect the actual package content and are subject to change by the manufacturer without prior notification.</font></span></p>
