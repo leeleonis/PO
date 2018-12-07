@@ -144,6 +144,47 @@ namespace PurchaseOrderSys.Models
         }
 
         /// <summary>
+        /// CM 狀態
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<string, string> CMStatusDDL()
+        {
+            var list = new Dictionary<string, string> {
+                { "Opened", "Opened" },
+                { "Pending", "Pending" },
+                 { "Completed", "Completed" }
+            };
+            return list;
+        }
+        /// <summary>
+        /// 退貨的運輸狀態
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<string, string> ShippingStatusDDL()
+        {
+            var list = new Dictionary<string, string> {
+                { "Pending", "Pending" },
+                { "PartiallyShipped", "Partially Shipped" },
+                { "Completed", "Completed" },
+                { "OverShipped", "Over Shipped" }
+            };
+            return list;
+        }
+        /// <summary>
+        /// 折讓進度
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<string, string> CreditStatusDDL()
+        {
+            var list = new Dictionary<string, string> {
+                { "Pending", "Pending" },
+                { "PartiallyCredited", "Partially Credited" },
+                { "Completed", "Completed" },
+                { "OverCredited", "Over Credited" }
+            };
+            return list;
+        }
+        /// <summary>
         /// 倉庫類型
         /// </summary>
         /// <returns></returns>

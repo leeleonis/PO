@@ -62,8 +62,8 @@ namespace PurchaseOrderSys.Models
     		/// PODate
     		/// </summary>        
     	    [Display(Name = "PurchaseOrder_PODate", ResourceType = typeof(App_GlobalResources.Resource))]
-            [UIHint("DateTime")]
-    		public Nullable<System.DateTime>  PODate { get; set; }
+            [UIHint("FDate")]
+            public Nullable<System.DateTime>  PODate { get; set; }
     
     		    
     		/// <summary>
@@ -78,16 +78,16 @@ namespace PurchaseOrderSys.Models
     		/// Received Date
     		/// </summary>        
     	    [Display(Name = "PurchaseOrder_ReceivedDate", ResourceType = typeof(App_GlobalResources.Resource))]
-            [UIHint("DateTime")]
-    		public Nullable<System.DateTime>  ReceivedDate { get; set; }
+            [UIHint("FDate")]
+            public Nullable<System.DateTime>  ReceivedDate { get; set; }
     
     		    
     		/// <summary>
     		/// Shipped Date
     		/// </summary>        
     	    [Display(Name = "PurchaseOrder_ShippedDate", ResourceType = typeof(App_GlobalResources.Resource))]
-            [UIHint("DateTime")]
-    		public Nullable<System.DateTime>  ShippedDate { get; set; }
+            [UIHint("FDate")]
+            public Nullable<System.DateTime>  ShippedDate { get; set; }
     
     		    
     		/// <summary>
@@ -118,8 +118,8 @@ namespace PurchaseOrderSys.Models
     		/// Payment Date
     		/// </summary>        
     	    [Display(Name = "PurchaseOrder_PaymentDate", ResourceType = typeof(App_GlobalResources.Resource))]
-            [UIHint("DateTime")]
-    		public Nullable<System.DateTime>  PaymentDate { get; set; }
+            [UIHint("FDate")]
+            public Nullable<System.DateTime>  PaymentDate { get; set; }
     
     		    
     		/// <summary>
@@ -192,7 +192,7 @@ namespace PurchaseOrderSys.Models
     		/// Invoice Date
     		/// </summary>        
     	    [Display(Name = "PurchaseOrder_InvoiceDate", ResourceType = typeof(App_GlobalResources.Resource))]
-            [UIHint("DateTime")]
+            [UIHint("FDate")]
     		public Nullable<System.DateTime>  InvoiceDate { get; set; }
     
     		    
@@ -231,9 +231,7 @@ namespace PurchaseOrderSys.Models
     		/// Tax
     		/// </summary>        
     	    [Display(Name = "PurchaseOrder_Tax", ResourceType = typeof(App_GlobalResources.Resource))]
-    		public Nullable<decimal>  Tax { get; set; }
-    
-    		    
+    		public Nullable<decimal>  Tax { get; set; }    		    
     	}
     }
     

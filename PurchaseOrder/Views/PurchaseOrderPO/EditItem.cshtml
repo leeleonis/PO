@@ -74,7 +74,7 @@
                                                     </div>
                                                     @Html.LabelFor(model => model.InvoiceDate, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.EditorFor(model => model.InvoiceDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                        @Html.EditorFor(model => model.InvoiceDate)
                                                         @Html.ValidationMessageFor(model => model.InvoiceDate, "", new { @class = "text-danger" })
                                                     </div>
                                                 </div>
@@ -86,7 +86,7 @@
                                                     </div>
                                                     @Html.LabelFor(model => model.InvoiceNo, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.EditorFor(model => model.InvoiceNo, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " } } })
+                                                        @Html.EditorFor(model => model.InvoiceNo, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
                                                         @Html.ValidationMessageFor(model => model.InvoiceNo, "", new { @class = "text-danger" })
                                                     </div>
                                                 </div>
@@ -116,19 +116,19 @@
                                                 <div class="form-group">
                                                     @Html.LabelFor(model => model.ReceivedDate, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.EditorFor(model => model.ReceivedDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                        @Html.EditorFor(model => model.ReceivedDate)
                                                         @Html.ValidationMessageFor(model => model.ReceivedDate, "", new { @class = "text-danger" })
                                                     </div>
                                                     @Html.LabelFor(model => model.PaymentDate, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.EditorFor(model => model.PaymentDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                        @Html.EditorFor(model => model.PaymentDate)
                                                         @Html.ValidationMessageFor(model => model.PaymentDate, "", new { @class = "text-danger" })
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     @Html.LabelFor(model => model.ShippedDate, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.EditorFor(model => model.ShippedDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                        @Html.EditorFor(model => model.ShippedDate)
                                                         @Html.ValidationMessageFor(model => model.ShippedDate, "", new { @class = "text-danger" })
                                                     </div>
                                                     @Html.LabelFor(model => model.PaidAmount, htmlAttributes: new { @class = "control-label col-sm-2" })
@@ -192,7 +192,7 @@
                                                 <legend></legend>
                                                 <div class="form-group">
                                                     <div class="col-sm-9 col-lg-2">
-                                                        <button type="button">Edit items</button>
+                                                        <button type="button" id="Edititems">Edit items</button>
                                                         <button type="button" id="Removeitems">Remove items</button>
                                                     </div>
                                                     <div class="col-lg-offset-10">
@@ -324,7 +324,7 @@
                                                     </div>
                                                     @Html.LabelFor(model => model.InvoiceDate, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.EditorFor(model => model.InvoiceDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                        @Html.EditorFor(model => model.InvoiceDate)
                                                         @Html.ValidationMessageFor(model => model.InvoiceDate, "", new { @class = "text-danger" })
                                                     </div>
                                                 </div>
@@ -366,19 +366,19 @@
                                                 <div class="form-group">
                                                     @Html.LabelFor(model => model.ReceivedDate, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.EditorFor(model => model.ReceivedDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                        @Html.EditorFor(model => model.ReceivedDate)
                                                         @Html.ValidationMessageFor(model => model.ReceivedDate, "", new { @class = "text-danger" })
                                                     </div>
                                                     @Html.LabelFor(model => model.PaymentDate, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.EditorFor(model => model.PaymentDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                        @Html.EditorFor(model => model.PaymentDate)
                                                         @Html.ValidationMessageFor(model => model.PaymentDate, "", new { @class = "text-danger" })
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     @Html.LabelFor(model => model.ShippedDate, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.EditorFor(model => model.ShippedDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                        @Html.EditorFor(model => model.ShippedDate)
                                                         @Html.ValidationMessageFor(model => model.ShippedDate, "", new { @class = "text-danger" })
                                                     </div>
                                                     @Html.LabelFor(model => model.PaidAmount, htmlAttributes: new { @class = "control-label col-sm-2" })
@@ -573,7 +573,12 @@
                         className: 'select-checkbox',
                         orderable: false,
                         render: function (data, type, row, meta) {
-                            return '<input type="checkbox" value="' + row.ID + '">';
+                            if (row.ID == null) {
+                                return '<input type="checkbox" value="' + row.SKU + '">';
+                            }
+                            else {
+                                return '<input type="checkbox" value="' + row.ID + '">';
+                            }
                         }
                     },
                     {
@@ -584,7 +589,16 @@
                     { data: "SKU" },
                     { data: "VendorSKU" },
                     { data: "Name" },
-                    { data: "QTYOrdered", render: function (data, type, row) { return '<input class="form-control" type="text" onchange="Calculation(this,\'QTYOrdered\',\'' + row.SKU + '\',' + data + ',' + row.ID + ')"  value = ' + data + ' > '; } },
+                    {
+                        data: "QTYOrdered", render: function (data, type, row) {
+                            if (row.Model=="E") {
+                                return '<input class="form-control" type="text" onchange="Calculation(this,\'QTYOrdered\',\'' + row.SKU + '\',' + data + ',' + row.ID + ')"  value = ' + data + ' > ';
+                            }
+                            else {
+                                return data;
+                            }
+                        }
+                    },
                     @if (Model.POType == "PurchaseOrder")
                     {
                         @:{ data: "QTYReceived", render: function(data, type, row) { return data; } },
@@ -593,11 +607,46 @@
                     {
                        @:{ data: "QTYFulfilled", render: function(data, type, row) { return data; } },
                     }
-                    { data: "Price", render: function (data, type, row) { return '<input class="form-control" type="text" onchange="Calculation(this,\'Price\',\'' + row.SKU + '\',' + data + ',' + row.ID + ')"  value = ' + thousandComma(data) + ' > '; }  },
-                    { data: "Discount", render: function (data, type, row) { return '<input class="form-control" type="text" onchange="Calculation(this,\'Discount\',\'' + row.SKU + '\',' + data + ',' + row.ID + ')"  value = ' + thousandComma(data) + '  > '; } },
-                    { data: "Credit", render: function (data, type, row) { return '<input class="form-control" type="text" onchange="Calculation(this,\'Credit\',\'' + row.SKU + '\',' + data + ',' + row.ID + ')"  value = ' + thousandComma(data) + '  > '; }  },
-                    { data: "DiscountedPrice", render: function (data, type, row) { return thousandComma(data); } },
-                    { data: "Subtotal", render: function (data, type, row) { return thousandComma(data); } }
+                    {
+                        data: "Price", render: function (data, type, row) {
+                            if (row.Model == "E") {
+                                return '<input class="form-control" type="text" onchange="Calculation(this,\'Price\',\'' + row.SKU + '\',' + data + ',' + row.ID + ')"  value = ' + thousandComma(data) + ' > ';
+                            }
+                            else {
+                                return data;
+                            }
+                        }
+                    },
+                    {
+                        data: "Discount", render: function (data, type, row) {
+                            if (row.Model == "E") {
+                                return '<input class="form-control" type="text" onchange="Calculation(this,\'Discount\',\'' + row.SKU + '\',' + data + ',' + row.ID + ')"  value = ' + thousandComma(data) + '  > ';
+                            }
+                            else {
+                                return data;
+                            }
+                        }
+                    },
+                    {
+                        data: "Credit", render: function (data, type, row) {
+                            if (row.Model == "E") {
+                                return '<input class="form-control" type="text" onchange="Calculation(this,\'Credit\',\'' + row.SKU + '\',' + data + ',' + row.ID + ')"  value = ' + thousandComma(data) + '  > ';
+                            }
+                            else {
+                                return data;
+                            }
+                        }
+                    },
+                    {
+                        data: "DiscountedPrice", render: function (data, type, row) {
+                            return thousandComma(data);
+                        }
+                    },
+                    {
+                        data: "Subtotal", render: function (data, type, row) {
+                            return thousandComma(data);
+                        }
+                    }
                 ],
                 ajax: {
                     traditional: true,
@@ -750,12 +799,41 @@
                     },
                     success: function (data) {
                         if (data.status) {
-                            dataInit();
+                            DataGridC.draw();
+                        }
+                        else {
+                            alert(data.Errmsg);
+                        }
+                    }
+                });
+            });
+            $("#Edititems").on("click", function () {
+                var dataList = [];
+                $(DataGridC.$('input[type="checkbox"]:checked').each(function () {
+                    dataList.push($(this).val());
+                }));
+                //for (var i in rows) {
+                //    dataList.push(i);
+                //}
+                $.ajax({
+                    traditional: true,
+                    type: "post",
+                    url: "@Url.Action("EditSKUData")",
+                    data: {
+                        IDList: dataList,
+                    },
+                    success: function (data) {
+                        if (data.status) {
+                            DataGridC.draw();
+                        }
+                        else {
+                            alert(data.Errmsg);
                         }
                     }
                 });
             });
         });
+
         function Calculation(x, type, SKU, oval, ID) {
             $.ajax({
                 type: "post",

@@ -78,7 +78,7 @@
                                                     </div>
                                                     @Html.LabelFor(model => model.InvoiceDate, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.EditorFor(model => model.InvoiceDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                        @Html.EditorFor(model => model.InvoiceDate)
                                                         @Html.ValidationMessageFor(model => model.InvoiceDate, "", new { @class = "text-danger" })
                                                     </div>
                                                 </div>
@@ -120,19 +120,19 @@
                                                 <div class="form-group">
                                                     @Html.LabelFor(model => model.ReceivedDate, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.EditorFor(model => model.ReceivedDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                        @Html.EditorFor(model => model.ReceivedDate)
                                                         @Html.ValidationMessageFor(model => model.ReceivedDate, "", new { @class = "text-danger" })
                                                     </div>
                                                     @Html.LabelFor(model => model.PaymentDate, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.EditorFor(model => model.PaymentDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                        @Html.EditorFor(model => model.PaymentDate)
                                                         @Html.ValidationMessageFor(model => model.PaymentDate, "", new { @class = "text-danger" })
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     @Html.LabelFor(model => model.ShippedDate, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.EditorFor(model => model.ShippedDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                        @Html.EditorFor(model => model.ShippedDate)
                                                         @Html.ValidationMessageFor(model => model.ShippedDate, "", new { @class = "text-danger" })
                                                     </div>
                                                     @Html.LabelFor(model => model.PaidAmount, htmlAttributes: new { @class = "control-label col-sm-2" })
@@ -328,7 +328,7 @@
                                                     </div>
                                                     @Html.LabelFor(model => model.InvoiceDate, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.EditorFor(model => model.InvoiceDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                        @Html.EditorFor(model => model.InvoiceDate)
                                                         @Html.ValidationMessageFor(model => model.InvoiceDate, "", new { @class = "text-danger" })
                                                     </div>
                                                 </div>
@@ -340,14 +340,14 @@
                                                     </div>
                                                     @Html.LabelFor(model => model.InvoiceNo, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.EditorFor(model => model.InvoiceNo, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " } } })
+                                                        @Html.EditorFor(model => model.InvoiceNo, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
                                                         @Html.ValidationMessageFor(model => model.InvoiceNo, "", new { @class = "text-danger" })
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     @Html.LabelFor(model => model.PODate, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.EditorFor(model => model.PODate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "Value", dtval }, { "data-dateformat", "yy/mm/dd" } } })
+                                                        @Html.EditorFor(model => model.PODate)
                                                         @Html.ValidationMessageFor(model => model.PODate, "", new { @class = "text-danger" })
                                                     </div>
                                                     @Html.Label("VendorInvoice", htmlAttributes: new { @class = "control-label col-sm-2" })
@@ -370,19 +370,19 @@
                                                 <div class="form-group">
                                                     @Html.LabelFor(model => model.ReceivedDate, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.EditorFor(model => model.ReceivedDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                        @Html.EditorFor(model => model.ReceivedDate)
                                                         @Html.ValidationMessageFor(model => model.ReceivedDate, "", new { @class = "text-danger" })
                                                     </div>
                                                     @Html.LabelFor(model => model.PaymentDate, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.EditorFor(model => model.PaymentDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                        @Html.EditorFor(model => model.PaymentDate)
                                                         @Html.ValidationMessageFor(model => model.PaymentDate, "", new { @class = "text-danger" })
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     @Html.LabelFor(model => model.ShippedDate, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.EditorFor(model => model.ShippedDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                        @Html.EditorFor(model => model.ShippedDate)
                                                         @Html.ValidationMessageFor(model => model.ShippedDate, "", new { @class = "text-danger" })
                                                     </div>
                                                     @Html.LabelFor(model => model.PaidAmount, htmlAttributes: new { @class = "control-label col-sm-2" })
