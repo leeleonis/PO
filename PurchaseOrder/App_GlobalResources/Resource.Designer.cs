@@ -2412,6 +2412,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
+        public static string SKU_eBayTitle {
+            get {
+                return ResourceManager.GetString("SKU_eBayTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
         public static string SKU_IsEnable {
             get {
                 return ResourceManager.GetString("SKU_IsEnable", resourceCulture);

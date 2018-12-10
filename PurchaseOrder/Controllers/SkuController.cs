@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Newtonsoft.Json;
 using PurchaseOrderSys.Models;
 
 namespace PurchaseOrderSys.Controllers
@@ -107,11 +108,12 @@ namespace PurchaseOrderSys.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(SKU updateData, SkuLang langData, int[] DiverseAttribute, Sku_Attribute[] VariationValue, Sku_Attribute[] AttributeValue, KitSku[] KitSku, HttpPostedFileBase picture)
+        public ActionResult Edit(SKU updateData, SkuLang langData, string[] eBayTitle, int[] DiverseAttribute, Sku_Attribute[] VariationValue, Sku_Attribute[] AttributeValue, KitSku[] KitSku, HttpPostedFileBase picture)
         {
             SKU sku = db.SKU.Find(updateData.SkuID);
             if (sku == null) return HttpNotFound();
 
+            sku.eBayTitle = JsonConvert.SerializeObject(eBayTitle);
             SetUpdateData(sku, updateData, EditList);
             db.Entry(sku).State = EntityState.Modified;
 

@@ -135,6 +135,28 @@
                                             @Html.HiddenFor(model => model.Status)
                                         </fieldset>
 
+                                        <div class="smart-form form-group">
+                                            <header>eBay Title</header>
+                                            @{
+                                                string[] Titles = new string[] { "Qualitydeals-usa", "AU", "AU 2", "DE", "ES", "FR", "IT", "UK", "US", "US GBH" };
+                                            }
+                                            <fieldset>
+                                                @{
+                                                    int i = 0;
+                                                    string[] eBayTitle = !string.IsNullOrEmpty(Model.eBayTitle) ? JsonConvert.DeserializeObject<string[]>(Model.eBayTitle) : new string[] { };
+                                                    foreach (string title in Titles)
+                                                    {
+                                                        <section class="col col-sm-4">
+                                                            @Html.Label(title)
+                                                            <label class="input">
+                                                                @Html.TextBox("eBayTitle[]", eBayTitle.Skip(i++).FirstOrDefault())
+                                                            </label>
+                                                        </section>
+                                                    }
+                                                }
+                                            </fieldset>
+                                        </div>
+
                                         @if (Model.Type.Equals((byte)EnumData.SkuType.Variation))
                                         {
                                             <fieldset id="Variation">
