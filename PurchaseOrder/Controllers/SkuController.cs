@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Newtonsoft.Json;
 using PurchaseOrderSys.Models;
 
 namespace PurchaseOrderSys.Controllers
@@ -107,11 +108,12 @@ namespace PurchaseOrderSys.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(SKU updateData, SkuLang langData, int[] DiverseAttribute, Sku_Attribute[] VariationValue, Sku_Attribute[] AttributeValue, KitSku[] KitSku, HttpPostedFileBase picture)
+        public ActionResult Edit(SKU updateData, SkuLang langData, string[] eBayTitle, int[] DiverseAttribute, Sku_Attribute[] VariationValue, Sku_Attribute[] AttributeValue, KitSku[] KitSku, HttpPostedFileBase picture)
         {
             SKU sku = db.SKU.Find(updateData.SkuID);
             if (sku == null) return HttpNotFound();
 
+            sku.eBayTitle = JsonConvert.SerializeObject(eBayTitle);
             SetUpdateData(sku, updateData, EditList);
             db.Entry(sku).State = EntityState.Modified;
 
@@ -618,6 +620,30 @@ namespace PurchaseOrderSys.Controllers
                 db.Entry(sku).State = EntityState.Modified;
 
                 db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                result.status = false;
+                result.message = e.InnerException != null ? e.InnerException.Message ?? e.Message : e.Message;
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetSpecContent(string ID, string LangID)
+        {
+            AjaxResult result = new AjaxResult();
+
+            SKU sku = db.SKU.Find(ID);
+
+            try
+            {
+                if (sku == null) throw new Exception("Not found sku!");
+
+                ViewDataDictionary viewData = new ViewDataDictionary() { { "LangID", LangID } };
+                viewData.Add("AttributeTypeList", db.SkuAttributeType.Where(t => t.IsEnable).OrderBy(t => t.Order).ToList());
+
+                result.data = RenderViewToString(ControllerContext, "_SpecContent", sku, viewData);
             }
             catch (Exception e)
             {

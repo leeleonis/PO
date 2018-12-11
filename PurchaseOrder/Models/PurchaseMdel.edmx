@@ -1965,6 +1965,7 @@
           <Property Name="UPC" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Replenishable" Type="Boolean" Nullable="false" />
           <Property Name="Status" Type="Byte" Nullable="false" />
+          <Property Name="eBayTitle" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />

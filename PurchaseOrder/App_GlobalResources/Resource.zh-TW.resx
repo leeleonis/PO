@@ -1323,4 +1323,7 @@
   <data name="Sku_Attribute_IsDiverse" xml:space="preserve">
     <value>是否多樣性</value>
   </data>
+  <data name="SKU_eBayTitle" xml:space="preserve">
+    <value>eBay 標題</value>
+  </data>
 </root>

@@ -27,7 +27,7 @@
                         <tbody class="">
                             @foreach (var attribute in type.SkuAttribute.Where(a => a.IsEnable && attributeGroup[type.ID].Contains(a.ID)))
                             {
-                                string disabled = !string.IsNullOrEmpty(Model.ParentSku) ? "disabled" : "";
+                                string Readonly = !string.IsNullOrEmpty(Model.ParentSku) ? "readonly" : "";
                                 var name = string.Format("AttributeValue[{0}]", i++);
                                 var value = Model.Sku_Attribute.FirstOrDefault(s => s.AttrID.Equals(attribute.ID) && s.LangID.Equals(LangID));
                                 value = value ?? new Sku_Attribute() { };
@@ -40,13 +40,13 @@
                                     {
                                         case 1:
                                             <td class="no-padding">
-                                                @if (string.IsNullOrEmpty(disabled))
+                                                @if (string.IsNullOrEmpty(Readonly))
                                                 {
                                                     @Html.DropDownList(string.Format("{0}[Value]", name), YesNo.Select(b => new SelectListItem() { Text = b.Text, Value = b.Value, Selected = b.Value.Equals(value?.Value) }), new { @class = "form-control" })
                                                 }
                                                 else
                                                 {
-                                                    @Html.DropDownList(string.Format("{0}[Value]", name), YesNo.Select(b => new SelectListItem() { Text = b.Text, Value = b.Value, Selected = b.Value.Equals(value?.Value) }), new { @class = "form-control", disabled })
+                                                    @Html.DropDownList(string.Format("{0}[Value]", name), YesNo.Select(b => new SelectListItem() { Text = b.Text, Value = b.Value, Selected = b.Value.Equals(value?.Value) }), new { @class = "form-control", Readonly })
                                                 }
                                             </td>
                                             break;
@@ -58,15 +58,15 @@
                                                 }
                                                 @Html.Hidden(string.Format("{0}[Value]", name), value?.Value, new { @rel = value.AttrID })
                                                 <div class="col-sm-4">
-                                                    <input type="text" class="form-control" value="@(dimensions.FirstOrDefault() ?? "0")" rel="@value.AttrID" placeholder="h (mm)" @disabled />
+                                                    <input type="text" class="form-control" value="@(dimensions.FirstOrDefault() ?? "0")" rel="@value.AttrID" placeholder="h (mm)" @Readonly />
                                                     <input type="text" class="form-control" value="@(float.TryParse(dimensions.FirstOrDefault() ?? "0", out DimValue) ? DimValue*0.03937 : 0)" rel="@value.AttrID" placeholder="h (in.)" disabled />
                                                 </div>
                                                 <div class="col-sm-4">
-                                                    <input type="text" class="form-control" value="@(dimensions.Skip(1).FirstOrDefault() ?? "0")" rel="@value.AttrID" placeholder="w (mm)" @disabled />
+                                                    <input type="text" class="form-control" value="@(dimensions.Skip(1).FirstOrDefault() ?? "0")" rel="@value.AttrID" placeholder="w (mm)" @Readonly />
                                                     <input type="text" class="form-control" value="@(float.TryParse(dimensions.Skip(1).FirstOrDefault() ?? "0", out DimValue) ? DimValue*0.03937 : 0)" rel="@value.AttrID" placeholder="w (in.)" disabled />
                                                 </div>
                                                 <div class="col-sm-4">
-                                                    <input type="text" class="form-control" value="@(dimensions.Skip(2).FirstOrDefault() ?? "0")" rel="@value.AttrID" placeholder="l (mm)" @disabled />
+                                                    <input type="text" class="form-control" value="@(dimensions.Skip(2).FirstOrDefault() ?? "0")" rel="@value.AttrID" placeholder="l (mm)" @Readonly />
                                                     <input type="text" class="form-control" value="@(float.TryParse(dimensions.Skip(2).FirstOrDefault() ?? "0", out DimValue) ? DimValue*0.03937 : 0)" rel="@value.AttrID" placeholder="l (in.)" disabled />
                                                 </div>
                                             </td>
@@ -78,22 +78,22 @@
                                                 }
                                                 @Html.Hidden(string.Format("{0}[Value]", name), value?.Value, new { @rel = value.AttrID })
                                                 <div class="col-sm-4 col-sm-offset-2">
-                                                    <input type="text" class="form-control" value="@(resolution.FirstOrDefault() ?? "")" rel="@value.AttrID" placeholder="pixels" @disabled />
+                                                    <input type="text" class="form-control" value="@(resolution.FirstOrDefault() ?? "")" rel="@value.AttrID" placeholder="pixels" @Readonly />
                                                 </div>
                                                 <div class="col-sm-4">
-                                                    <input type="text" class="form-control" value="@(resolution.Skip(1).FirstOrDefault() ?? "")" rel="@value.AttrID" placeholder="pixels" @disabled />
+                                                    <input type="text" class="form-control" value="@(resolution.Skip(1).FirstOrDefault() ?? "")" rel="@value.AttrID" placeholder="pixels" @Readonly />
                                                 </div>
                                             </td>
                                             break;
                                         default:
                                             <td>
-                                                @if (string.IsNullOrEmpty(disabled))
+                                                @if (string.IsNullOrEmpty(Readonly))
                                                 {
                                                     @Html.TextBox(string.Format("{0}[Value]", name), value?.Value, new { @class = "form-control" })
                                                 }
                                                 else
                                                 {
-                                                    @Html.TextBox(string.Format("{0}[Value]", name), value?.Value, new { @class = "form-control", disabled })
+                                                    @Html.TextBox(string.Format("{0}[Value]", name), value?.Value, new { @class = "form-control", Readonly })
                                                 }
                                             </td>
                                             break;

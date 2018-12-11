@@ -36,6 +36,7 @@ namespace PurchaseOrderSys.Models
         public string UPC { get; set; }
         public bool Replenishable { get; set; }
         public byte Status { get; set; }
+        public string eBayTitle { get; set; }
         public string CreateBy { get; set; }
         public System.DateTime CreateAt { get; set; }
         public string UpdateBy { get; set; }

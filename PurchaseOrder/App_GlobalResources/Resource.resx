@@ -1549,4 +1549,7 @@
   <data name="Sku_Attribute_IsDiverse" xml:space="preserve">
     <value></value>
   </data>
+  <data name="SKU_eBayTitle" xml:space="preserve">
+    <value></value>
+  </data>
 </root>
