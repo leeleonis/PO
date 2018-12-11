@@ -218,71 +218,76 @@
                                                         </thead>
                                                         <tbody></tbody>
                                                         <tfoot>
-                                                            <tr>
+                                                            @*<tr>
                                                                 <td colspan="8">
                                                                     <select id="gebruikerId" name="gebruikerId" class="form-control" style="width:50%"></select>
                                                                     <button type="button" id="addsku">Add SKU</button>
                                                                 </td>
                                                                 <td></td>
                                                                 <td></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td colspan="8" rowspan="10">
-                                                                    <div class="col-sm-10 col-lg-10">
-                                                                        <textarea rows="20" style="width:100%" id="textnote"></textarea>
-                                                                        <button type="button" id="addnote" style="float:right">Add Note</button>
-                                                                    </div>
-                                                                    <div class="col-sm-2 col-lg-2">
-                                                                        <ul style="list-style-type:none;list-style-position: inside;padding-left: 0px;padding-left: 0px;" id="textnotelog">
-                                                                            @if (Model.CMCreditNote != null)
-                                                                            {
-                                                                                foreach (var item in Model.CMCreditNote)
+                                                            </tr>*@
+                                                            @if (Model.CMType == "CreditNote")
+                                                            {
+                                                                <tr>
+                                                                    <td colspan="8" rowspan="5">
+                                                                        <div class="col-sm-10 col-lg-10">
+                                                                            <textarea rows="20" style="width:100%" id="textnote"></textarea>
+                                                                            <button type="button" id="addnote" style="float:right">Add Note</button>
+                                                                        </div>
+                                                                        <div class="col-sm-2 col-lg-2">
+                                                                            <ul style="list-style-type:none;list-style-position: inside;padding-left: 0px;padding-left: 0px;" id="textnotelog">
+                                                                                @if (Model.CMCreditNote != null)
                                                                                 {
-                                                                                    <li>@(item.CreateBy + "： " + item.CreateAt.ToString("yyyy/MM/dd HH:mm:ss"))</li>
+                                                                                    foreach (var item in Model.CMCreditNote)
+                                                                                    {
+                                                                                        <li>@(item.CreateBy + "： " + item.CreateAt.ToString("yyyy/MM/dd HH:mm:ss"))</li>
+                                                                                    }
                                                                                 }
-                                                                            }
-                                                                        </ul>
-                                                                    </div>
-                                                                </td>
-                                                                <td>Total:</td>
-                                                                <td></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Total Discount:</td>
-                                                                <td></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Tax:</td>
-                                                                <td></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Shipping Cost:</td>
-                                                                <td></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Other:</td>
-                                                                <td></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Grand Total:</td>
-                                                                <td></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Total Paid:</td>
-                                                                <td></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Total Refunded:</td>
-                                                                <td></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>CM Credit:</td>
-                                                                <td></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Balance:</td>
-                                                                <td></td>
-                                                            </tr>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>Total:</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Tax:</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Grand Total:</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Total Paid:</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Balance:</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                            }
+                                                            else if (Model.CMType == "Replacement")
+                                                            {
+                                                                <tr>
+                                                                    <td colspan="10">
+                                                                        <div class="col-sm-10 col-lg-10">
+                                                                            <textarea rows="20" style="width:100%" id="textnote"></textarea>
+                                                                            <button type="button" id="addnote" style="float:right">Add Note</button>
+                                                                        </div>
+                                                                        <div class="col-sm-2 col-lg-2">
+                                                                            <ul style="list-style-type:none;list-style-position: inside;padding-left: 0px;padding-left: 0px;" id="textnotelog">
+                                                                                @if (Model.CMCreditNote != null)
+                                                                                {
+                                                                                    foreach (var item in Model.CMCreditNote)
+                                                                                    {
+                                                                                        <li>@(item.CreateBy + "： " + item.CreateAt.ToString("yyyy/MM/dd HH:mm:ss"))</li>
+                                                                                    }
+                                                                                }
+                                                                            </ul>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            }
                                                         </tfoot>
                                                     </table>
                                                 </article>
@@ -337,13 +342,14 @@
                         "className": 'details-control',
                         "orderable": false,
                         "data": null,
-                        "defaultContent": '' },
+                        "defaultContent": ''
+                    },
                     { data: "SKU" },
                     { data: "VendorSKU" },
                     { data: "Name" },
                     {
                         data: "QTYOrdered", render: function (data, type, row) {
-                            if (row.Model=="E") {
+                            if (row.Model == "E") {
                                 return '<input class="form-control" type="text" onchange="Calculation(this,\'QTYOrdered\',\'' + row.SKU + '\',' + data + ',' + row.ID + ')"  value = ' + data + ' > ';
                             }
                             else {
@@ -353,12 +359,13 @@
                     },
                     {
                         data: "QTYReturned", render: function (data, type, row) {
-                            if (row.Model == "E") {
-                                return '<input class="form-control" type="text" onchange="Calculation(this,\'QTYReturned\',\'' + row.SKU + '\',' + data + ',' + row.ID + ')"  value = ' + data + ' > ';
-                            }
-                            else {
-                                return data;
-                            }
+                            return data;
+                            //if (row.Model == "E") {
+                            //    return '<input class="form-control" type="text" onchange="Calculation(this,\'QTYReturned\',\'' + row.SKU + '\',' + data + ',' + row.ID + ')"  value = ' + data + ' > ';
+                            //}
+                            //else {
+                            //    return data;
+                            //}
                         }
                     },
                     {
@@ -373,13 +380,13 @@
                     },
                     @if (Model.CMType == "CreditNote")
                     {
-                        @: {data: "Credit", render: function (data, type, row) {if (row.Model == "E") {return '<input class="form-control" type="text" onchange="Calculation(this,\'Credit\',\'' + row.SKU + '\',' + data + ',' + row.ID + ')"  value = ' + thousandComma(data) + '  > ';}else {return data;}}},
-                        @:{data: "Subtotal", render: function (data, type, row) {return thousandComma(data);}}
+                        @: { data: "Credit", render: function (data, type, row) { if (row.Model == "E") { return '<input class="form-control" type="text" onchange="Calculation(this,\'Credit\',\'' + row.SKU + '\',' + data + ',' + row.ID + ')"  value = ' + thousandComma(data) + '  > '; } else { return data; } } },
+                        @:{ data: "Subtotal", render: function (data, type, row) { return thousandComma(data); } }
                     }
                     else if (Model.CMType == "Replacement")
                     {
-                       @: { data: "QTYReceived", render: function (data, type, row) { if (row.Model == "E") { return '<input class="form-control" type="text" onchange="Calculation(this,\'QTYReceived\',\'' + row.SKU + '\',' + data + ',' + row.ID + ')"  value = ' + thousandComma(data) + '  > ';}else {return data;}}},
-                        @:{ data: "Balance", render: function (data, type, row) {return thousandComma(data);}}
+                       @: { data: "QTYReceived", render: function (data, type, row) { if (row.Model == "E") { return '<input class="form-control" type="text" onchange="Calculation(this,\'QTYReceived\',\'' + row.SKU + '\',' + data + ',' + row.ID + ')"  value = ' + thousandComma(data) + '  > '; } else { return data; } } },
+                        @:{ data: "Balance", render: function (data, type, row) { return thousandComma(data); } }
                     }
 
 
@@ -403,56 +410,61 @@
                 "info": true,
                 "searching": false,
                 "footerCallback": function (row, data, start, end, display) {
-                    var api = this.api(), data;
+                    @if (Model.CMType == "CreditNote")
+                    {
+                        @:var api = this.api(), data;
+                       // Remove the formatting to get integer data for summation
+                    @:var intVal = function (i) {
 
-                    // Remove the formatting to get integer data for summation
-                    var intVal = function (i) {
-                        return typeof i === 'string' ?
-                            i.replace(/[\$,]/g, '') * 1 :
-                            typeof i === 'number' ?
-                                i : 0;
-                    };
-                    //Total
-                    total = api.column(11).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
-                    $('tr:eq(1) td:eq(2)', api.table().footer()).html(thousandComma(total));//Total
-                    //TotalDiscount
-                    TotalDiscount = 0;
-                    TotalDiscount5 = api.column(5).data();
-                    TotalDiscount8 = api.column(8).data();
-                    for (var i = 0; i < TotalDiscount5.length; i++) {
-                        TotalDiscount += intVal(TotalDiscount5[i]) * intVal(TotalDiscount8[i]);
-                    }
-                    $('tr:eq(2) td:eq(1)', api.table().footer()).html(thousandComma(TotalDiscount));//TotalDiscount
+                         @:return typeof i === 'string' ?
+                            @:i.replace(/[\$,]/g, '') * 1 :
+                           @: typeof i === 'number' ?
+                            @:    i : 0;
+                   @: };
+                    ////Total
+                   @: total = api.column(9).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                   @: $('tr:eq(0) td:eq(2)', api.table().footer()).html(thousandComma(total));//Total
                     //Tax:
-                    var TaxVal = $("#Tax").val();
-                    Tax = total - (total / (1 + TaxVal / 100));
-                    $('tr:eq(3) td:eq(1)', api.table().footer()).html(thousandComma(Tax));//TotalDiscount
-
-                    //Shipping Cost:
-                    ShippingCost = 0;
-                    $('tr:eq(4) td:eq(1)', api.table().footer()).html(thousandComma(ShippingCost));//Shipping Cost
-                    //Other:
-                    Other = 0;
-                    $('tr:eq(5) td:eq(1)', api.table().footer()).html(thousandComma(Other));
+                   @: var TaxVal = $("#Tax").val();
+                   @: Tax = total - (total / (1 + TaxVal / 100));
+                   @: $('tr:eq(1) td:eq(1)', api.table().footer()).html(thousandComma(Tax));//TotalDiscount
                     //Grand Total:
-                    GrandTotal = total + ShippingCost + Other;
-                    $('tr:eq(6) td:eq(1)', api.table().footer()).html(thousandComma(GrandTotal));
-                    //Total Paid:
-                    TotalPaid = 0;
-                    $('tr:eq(7) td:eq(1)', api.table().footer()).html(thousandComma(TotalPaid));
-                    //Total Refunded:
-                    TotalRefunded = 0;
-                    $('tr:eq(8) td:eq(1)', api.table().footer()).html(thousandComma(TotalRefunded));
-                    //CM Credit:
-                    CMCredit = 0;
-                    $('tr:eq(9) td:eq(1)', api.table().footer()).html(thousandComma(CMCredit));
+                   @: GrandTotal = total;
+                   @: $('tr:eq(2) td:eq(1)', api.table().footer()).html(thousandComma(GrandTotal));
+                    //Credit Paid:
+                   @: CreditPaid = 0;
+                   @: $('tr:eq(3) td:eq(1)', api.table().footer()).html(thousandComma(CreditPaid));
                     //Balance:
-                    Balance = TotalPaid - GrandTotal + TotalRefunded + CMCredit;
-                    $('tr:eq(10) td:eq(1)', api.table().footer()).html(thousandComma(Balance));
+                  @:  Balance = GrandTotal - CreditPaid;
+                  @:  $('tr:eq(4) td:eq(1)', api.table().footer()).html(thousandComma(Balance));
+
+                    }
                 }
             });
             $("#CMType").on("change", function () {
                 window.location.href = "@Url.Action("CreateCM", new { ID=Model.PurchaseOrderID })?CMTypeVal=" + $(this).val();
+            });
+            $("#Edititems").on("click", function () {
+                var dataList = [];
+                $(DataGridC.$('input[type="checkbox"]:checked').each(function () {
+                    dataList.push($(this).val());
+                }));
+                $.ajax({
+                    traditional: true,
+                    type: "post",
+                    url: "@Url.Action("EditCMSKUData")",
+                    data: {
+                        IDList: dataList,
+                    },
+                    success: function (data) {
+                        if (data.status) {
+                            DataGridC.draw();
+                        }
+                        else {
+                            alert(data.Errmsg);
+                        }
+                    }
+                });
             });
         });
           function Calculation(x, type, SKU, oval, ID) {

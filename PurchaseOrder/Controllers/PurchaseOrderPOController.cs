@@ -213,7 +213,7 @@ namespace PurchaseOrderSys.Controllers
                 VendorSKU = x.VendorSKU,
                 QTYOrdered = x.QTYOrdered,
                 QTYFulfilled = x.QTYFulfilled,
-                QTYReceived = x.QTYReceived,
+                QTYReceived = GetQTYReceived(x),
                 QTYReturned = x.QTYReturned,
                 Price = x.Price,
                 Discount = x.Discount,
@@ -233,6 +233,21 @@ namespace PurchaseOrderSys.Controllers
             ViewBag.Warehouselist = Warehouselist;
             return View(PurchaseOrder);
         }
+
+        private int GetQTYReceived(PurchaseSKU PurchaseSKU)
+        {
+            var QTYReceived = 0;
+            if (PurchaseSKU.SerialsLlist.Any())
+            {
+                QTYReceived = PurchaseSKU.SerialsLlist.Count();
+            }
+            else
+            {
+                QTYReceived = PurchaseSKU.QTYReceived ?? 0;
+            }
+            return QTYReceived;
+        }
+
         [HttpPost]
         public ActionResult EditItem(PurchaseOrder filter)
         {
@@ -258,6 +273,8 @@ namespace PurchaseOrderSys.Controllers
             PurchaseOrder.WarehouseID = filter.WarehouseID;
             PurchaseOrder.Currency = filter.Currency;
             PurchaseOrder.Tax = filter.Tax;
+            PurchaseOrder.ShippingCost = filter.ShippingCost;
+            PurchaseOrder.Other = filter.Other;
             PurchaseOrder.UpdateBy = UserBy;
             PurchaseOrder.UpdateAt = dt;
 
@@ -501,11 +518,11 @@ namespace PurchaseOrderSys.Controllers
                 SKU = x.SkuNo,
                 VendorSKU = x.VendorSKU,
                 QTYOrdered = x.QTYOrdered,
-                QTYReceived = x.QTYReceived,
-                QTYReturned = x.QTYReturned,
-                CreditQTY=x.CreditQTY,
-                Credit = x.Credit,
-                Subtotal = (x.CreditQTY* x.Credit),
+                QTYReceived = x.QTYReceived?? 0,
+                QTYReturned = x.QTYReturned ?? 0,
+                CreditQTY=x.CreditQTY ?? 0,
+                Credit = x.Credit ?? 0,
+                Subtotal = (x.CreditQTY* x.Credit)??0,
                 Model = "L"
             });
             Session["CMSkuNumberList"] = dataList.ToList();
@@ -641,6 +658,33 @@ namespace PurchaseOrderSys.Controllers
             if (IDList != null && IDList.Any())
             {
                 var odataList = (List<PoSKUVM>)Session["SkuNumberList"];
+                foreach (var item in IDList)
+                {
+                    foreach (var odataListitem in odataList.Where(x => x.ID.ToString() == item || x.SKU == item))
+                    {
+                        odataListitem.Model = "E";
+                    }
+                }
+            }
+            else
+            {
+                Errmsg = "沒有選取SKU";
+            }
+            if (string.IsNullOrWhiteSpace(Errmsg))
+            {
+                return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { status = false, Errmsg }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        public ActionResult EditCMSKUData(string[] IDList)
+        {
+            var Errmsg = "";
+            if (IDList != null && IDList.Any())
+            {
+                var odataList = (List<CMSKUVM>)Session["CMSkuNumberList"];
                 foreach (var item in IDList)
                 {
                     foreach (var odataListitem in odataList.Where(x => x.ID.ToString() == item || x.SKU == item))

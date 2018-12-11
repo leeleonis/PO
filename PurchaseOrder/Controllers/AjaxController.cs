@@ -218,6 +218,39 @@ namespace PurchaseOrderSys.Controllers
             return Json(new { status = true }, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
+        public ActionResult CMSkuNumberListEdit(string SKU, string type, decimal oval, decimal val, int? ID)
+        {
+            var odataList = (List<CMSKUVM>)Session["CMSkuNumberList"];
+            if (odataList == null)
+            {
+                odataList = new List<CMSKUVM>();
+            }
+            foreach (var item in odataList.Where(x => x.ID == ID || x.SKU == SKU))
+            {
+                switch (type)
+                {
+                    case "QTYOrdered":
+                        item.QTYOrdered = Convert.ToInt32(val); ;
+                        break;
+                    case "QTYReturned":
+                        item.QTYReturned = Convert.ToInt32(val); ;
+                        break;
+                    case "CreditQTY":
+                        item.CreditQTY = Convert.ToInt32(val);
+                        break;
+                    case "Credit":
+                        item.Credit = Convert.ToInt32(val); ;
+                        break;
+                    case "QTYReceived":
+                        item.QTYReceived = Convert.ToInt32(val); ;
+                        break;
+                }
+                item.Subtotal = (item.CreditQTY * item.Credit) ?? 0;
+            }
+            Session["CMSkuNumberList"] = odataList;
+            return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
         public ActionResult TSkuNumberListQTY(string SKU,int val)
         {
             var odataList = (List<TranSKUVM>)Session["TSkuNumberList"];

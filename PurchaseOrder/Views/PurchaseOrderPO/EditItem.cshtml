@@ -109,7 +109,7 @@
                                                     </div>
                                                     @Html.LabelFor(model => model.PaymentStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.DropDownListFor(model => model.PaymentStatus, ReceiveStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.DropDownListFor(model => model.PaymentStatus, PaymentStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
                                                         @Html.ValidationMessageFor(model => model.PaymentStatus, "", new { @class = "text-danger" })
                                                     </div>
                                                 </div>
@@ -133,7 +133,7 @@
                                                     </div>
                                                     @Html.LabelFor(model => model.PaidAmount, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.EditorFor(model => model.PaidAmount, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                                        @Html.EditorFor(model => model.PaidAmount, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control changed" } } })
                                                         @Html.ValidationMessageFor(model => model.PaidAmount, "", new { @class = "text-danger" })
                                                     </div>
                                                 </div>
@@ -180,7 +180,7 @@
                                                             @Html.CheckBox("TaxShow", true, new { @class = "form-control" })
                                                         </div>
                                                         <div class="col-sm-10 col-lg-10">
-                                                            @Html.EditorFor(model => model.Tax, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                                            @Html.EditorFor(model => model.Tax, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control changed" } } })
                                                             @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
                                                         </div>
 
@@ -257,11 +257,11 @@
                                                                 </tr>
                                                                 <tr>
                                                                     <td>Shipping Cost:</td>
-                                                                    <td></td>
+                                                                    <td>@Html.EditorFor(model => model.ShippingCost, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control changed" } } })</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td>Other:</td>
-                                                                    <td></td>
+                                                                    <td>@Html.EditorFor(model => model.Other, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control changed" } } })</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td>Grand Total:</td>
@@ -359,7 +359,7 @@
                                                     </div>
                                                     @Html.LabelFor(model => model.PaymentStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.DropDownListFor(model => model.PaymentStatus, ReceiveStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.DropDownListFor(model => model.PaymentStatus, PaymentStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
                                                         @Html.ValidationMessageFor(model => model.PaymentStatus, "", new { @class = "text-danger" })
                                                     </div>
                                                 </div>
@@ -430,7 +430,7 @@
                                                             @Html.CheckBox("TaxShow", true, new { @class = "form-control" })
                                                         </div>
                                                         <div class="col-sm-10 col-lg-10">
-                                                            @Html.EditorFor(model => model.Tax, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                                            @Html.EditorFor(model => model.Tax, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control changed" } } })
                                                             @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
                                                         </div>
 
@@ -502,11 +502,11 @@
                                                                 </tr>
                                                                 <tr>
                                                                     <td>Shipping Cost:</td>
-                                                                    <td></td>
+                                                                    <td>@Html.EditorFor(model => model.ShippingCost, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control changed" } } })</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td>Other:</td>
-                                                                    <td></td>
+                                                                    <td>@Html.EditorFor(model => model.Other, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control changed" } } })</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td>Grand Total:</td>
@@ -686,21 +686,26 @@
                     }
                     $('tr:eq(2) td:eq(1)', api.table().footer()).html(thousandComma(TotalDiscount));//TotalDiscount
                     //Tax:
-                    var TaxVal = $("#Tax").val();
+                    var TaxVal = intVal($("#Tax").val());
                     Tax = total - (total / (1 + TaxVal / 100));
                     $('tr:eq(3) td:eq(1)', api.table().footer()).html(thousandComma(Tax));//TotalDiscount
 
                     //Shipping Cost:
-                    ShippingCost = 0;
-                    $('tr:eq(4) td:eq(1)', api.table().footer()).html(thousandComma(ShippingCost));//Shipping Cost
+                    var ShippingCost = intVal($("#ShippingCost").val());
+                    if (ShippingCost < 0) {
+                        alert("Shipping Cost 不可為負數")
+                        $("#ShippingCost").val("");
+                        $("#ShippingCost").focus();
+                    } 
+                    //$('tr:eq(4) td:eq(1)', api.table().footer()).html(thousandComma(ShippingCost));//Shipping Cost
                     //Other:
-                    Other = 0;
-                    $('tr:eq(5) td:eq(1)', api.table().footer()).html(thousandComma(Other));
+                    var Other = intVal($("#Other").val());
+                    //$('tr:eq(5) td:eq(1)', api.table().footer()).html(thousandComma(Other));
                     //Grand Total:
-                    GrandTotal = total + ShippingCost + Other;
+                    GrandTotal = total - ShippingCost + Other;
                     $('tr:eq(6) td:eq(1)', api.table().footer()).html(thousandComma(GrandTotal));
                     //Total Paid:
-                    TotalPaid = 0;
+                    TotalPaid = intVal($("#PaidAmount").val());;
                     $('tr:eq(7) td:eq(1)', api.table().footer()).html(thousandComma(TotalPaid));
                     //Total Refunded:
                     TotalRefunded = 0;
@@ -710,6 +715,13 @@
                     $('tr:eq(9) td:eq(1)', api.table().footer()).html(thousandComma(CMCredit));
                     //Balance:
                     Balance = TotalPaid - GrandTotal + TotalRefunded + CMCredit;
+                    if (Balance < 0) {
+                        $("#PaymentStatus").val("PartiallyPaid");
+                    } else if (Balance > 0) {
+                        $("#PaymentStatus").val("OverPaid");
+                    } else if (Balance == 0) {
+                        $("#PaymentStatus").val("Completed");
+                    }
                     $('tr:eq(10) td:eq(1)', api.table().footer()).html(thousandComma(Balance));
                 }
             });
@@ -737,7 +749,7 @@
             $("#addsku").click(function () {
                 DataGridC.draw();
             });
-            $("#Tax").change(function () {
+            $(".changed").change(function () {
                 DataGridC.draw();
             });
             $("#POType").change(function () {
