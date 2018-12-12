@@ -1,0 +1,12 @@
+﻿@model DateTime?
+@{
+    if (Model.HasValue)
+    {
+        var dt = TimeZoneInfo.ConvertTimeFromUtc(Model.Value, TimeZoneInfo.FindSystemTimeZoneById(TimeZoneInfo.Local.Id)).ToString("yyyy/MM/dd");
+        @Html.TextBoxFor(model => Model, new { @class = "form-control datepicker ", data_dateformat = "yy/mm/dd" , @Value = dt })
+    }
+    else
+    {
+        @Html.TextBoxFor(model => Model, new { @class = "form-control datepicker ", data_dateformat = "yy/mm/dd"})
+    }
+}

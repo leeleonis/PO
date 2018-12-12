@@ -58,7 +58,7 @@ namespace PurchaseOrderSys.Models
         /// Invoice Date
         /// </summary>        
         [Display(Name = "CMReplacement_InvoiceDate", ResourceType = typeof(App_GlobalResources.Resource))]
-        [UIHint("DateTime")]
+        [UIHint("FDate")]
         public Nullable<System.DateTime> InvoiceDate { get; set; }
 
 
@@ -99,7 +99,7 @@ namespace PurchaseOrderSys.Models
         /// CMDate
         /// </summary>        
         [Display(Name = "CMReplacement_CMDate", ResourceType = typeof(App_GlobalResources.Resource))]
-        [UIHint("DateTime")]
+        [UIHint("FDate")]
         public Nullable<System.DateTime> CMDate { get; set; }
 
 
@@ -115,7 +115,7 @@ namespace PurchaseOrderSys.Models
         /// Shipped Date
         /// </summary>        
         [Display(Name = "CMReplacement_ShippedDate", ResourceType = typeof(App_GlobalResources.Resource))]
-        [UIHint("DateTime")]
+        [UIHint("FDate")]
         public Nullable<System.DateTime> ShippedDate { get; set; }
 
 
@@ -147,7 +147,7 @@ namespace PurchaseOrderSys.Models
         /// Credit Date
         /// </summary>        
         [Display(Name = "CMReplacement_CreditDate", ResourceType = typeof(App_GlobalResources.Resource))]
-        [UIHint("DateTime")]
+        [UIHint("FDate")]
         public Nullable<System.DateTime> CreditDate { get; set; }
 
 
@@ -157,8 +157,30 @@ namespace PurchaseOrderSys.Models
         [Display(Name = "CMReplacement_CreditAmount", ResourceType = typeof(App_GlobalResources.Resource))]
         public Nullable<decimal> CreditAmount { get; set; }
 
+        /// <summary>
+        /// Warehouse
+        /// </summary>        
+        [Display(Name = "PurchaseOrder_Warehouse", ResourceType = typeof(App_GlobalResources.Resource))]
+        [MaxLength(20, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+        public int? WarehouseID { get; set; }
+
+
+        /// <summary>
+        /// Currency
+        /// </summary>        
+        [Display(Name = "PurchaseOrder_Currency", ResourceType = typeof(App_GlobalResources.Resource))]
+        [MaxLength(10, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+        public string Currency { get; set; }
+
+
+        /// <summary>
+        /// Tax
+        /// </summary>        
+        [Display(Name = "PurchaseOrder_Tax", ResourceType = typeof(App_GlobalResources.Resource))]
+        public Nullable<decimal> Tax { get; set; }
 
         public IEnumerable< PurchaseSKU> PurchaseSKU { get; set; }
+        public IEnumerable<CMCreditNote> CMCreditNote { get; set; }
     }
     public class PurchaseOrderPOVM
     {
@@ -369,6 +391,46 @@ namespace PurchaseOrderSys.Models
         public string TWN { get; set; }
         public string Winit { get; set; }
     }
+    public class CMSKUVM
+    {
+        public int? ID { get; set; }
+        public string ck { get; set; }
+        public string sk { get; set; }
+        /// <summary>
+        /// 品號
+        /// </summary>
+        public string SKU { get; set; }
+        /// <summary>
+        /// 供應商品號
+        /// </summary>
+        public string VendorSKU { get; set; }
+        /// <summary>
+        /// 品名
+        /// </summary>
+        public string Name { get; set; }
+        /// <summary>
+        /// 訂購數量
+        /// </summary>
+        public int? QTYOrdered { get; set; }
+        /// <summary>
+        /// 退回數量
+        /// </summary>
+        public int? QTYReturned { get; set; }
+
+        public int? CreditQTY { get; set; }
+        /// <summary>
+        /// 下個月折讓金額
+        /// </summary>
+        public decimal? Credit { get; set; }
+        /// <summary>
+        /// 應付總額
+        /// </summary>
+        public decimal? Subtotal { get; set; }
+
+        public int? QTYReceived { get; set; }
+        public int? Balance { get; set; }
+        public string Model { get; set; }
+    }
     public class PoSKUVM
     {
         public int? ID { get; set; }
@@ -422,6 +484,7 @@ namespace PurchaseOrderSys.Models
         public string Serial { get; set; }
 
         public int? SerialQTY { get; set; }
+        public string Model { get; set; }
     }
     public class WarehouseVM
     {

@@ -93,6 +93,48 @@ namespace PurchaseOrderSys.Controllers
             };
             return Json(returnObj, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult CMSkuNumberList(int? draw, int? start, int? length, string[] Skulist)
+        {
+            var odataList = (List<CMSKUVM>)Session["CMSkuNumberList"];
+            if (odataList == null)
+            {
+                odataList = new List<CMSKUVM>();
+            }
+            if (Skulist != null && Skulist.Where(x => !string.IsNullOrWhiteSpace(x)).Any())
+            {
+                var dataList = db.SkuLang.Where(x => x.LangID == "zh-tw" && Skulist.Contains(x.Sku)).Select(x =>
+                new CMSKUVM
+                {
+                    ck = x.Sku,
+                    sk = x.Sku,
+                    SKU = x.Sku,
+                    Name = x.Name,
+                    VendorSKU = "",
+                    QTYOrdered = 0,
+                    QTYReceived = 0,
+                    QTYReturned = 0,
+                    CreditQTY = 0,
+                    Credit = 0,
+                    Subtotal = 0,
+                    Model = "E"
+                }
+                ).ToList();
+
+                odataList.AddRange(dataList);
+                Session["CMSkuNumberList"] = odataList;
+            }
+            odataList = odataList.Where(x => x.Model != "D").ToList();
+            int recordsTotal = odataList.Count();
+            var returnObj =
+            new
+            {
+                draw = draw,
+                recordsTotal = recordsTotal,
+                recordsFiltered = recordsTotal,
+                data = odataList//分頁後的資料 
+            };
+            return Json(returnObj, JsonRequestBehavior.AllowGet);
+        }
         public ActionResult SkuNumberList(int? draw, int? start, int? length, string[] Skulist)
         {
             var odataList = (List<PoSKUVM>)Session["SkuNumberList"];
@@ -110,7 +152,7 @@ namespace PurchaseOrderSys.Controllers
                     SKU = x.Sku,
                     Name = x.Name,
                     VendorSKU = "",
-
+                    Model = "E"
                 }
                 ).ToList();
                 foreach (var item in dataList)
@@ -131,6 +173,7 @@ namespace PurchaseOrderSys.Controllers
                 odataList.AddRange(dataList);
                 Session["SkuNumberList"] = odataList;
             }
+            odataList = odataList.Where(x => x.Model != "D").ToList();
             int recordsTotal = odataList.Count();
             var returnObj =
             new
@@ -172,6 +215,39 @@ namespace PurchaseOrderSys.Controllers
                 item.Subtotal = (item.QTYOrdered * (item.Price - item.Discount));
             }
             Session["SkuNumberList"] = odataList;
+            return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public ActionResult CMSkuNumberListEdit(string SKU, string type, decimal oval, decimal val, int? ID)
+        {
+            var odataList = (List<CMSKUVM>)Session["CMSkuNumberList"];
+            if (odataList == null)
+            {
+                odataList = new List<CMSKUVM>();
+            }
+            foreach (var item in odataList.Where(x => x.ID == ID || x.SKU == SKU))
+            {
+                switch (type)
+                {
+                    case "QTYOrdered":
+                        item.QTYOrdered = Convert.ToInt32(val); ;
+                        break;
+                    case "QTYReturned":
+                        item.QTYReturned = Convert.ToInt32(val); ;
+                        break;
+                    case "CreditQTY":
+                        item.CreditQTY = Convert.ToInt32(val);
+                        break;
+                    case "Credit":
+                        item.Credit = Convert.ToInt32(val); ;
+                        break;
+                    case "QTYReceived":
+                        item.QTYReceived = Convert.ToInt32(val); ;
+                        break;
+                }
+                item.Subtotal = (item.CreditQTY * item.Credit) ?? 0;
+            }
+            Session["CMSkuNumberList"] = odataList;
             return Json(new { status = true }, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]

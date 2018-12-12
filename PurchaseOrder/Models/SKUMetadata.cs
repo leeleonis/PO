@@ -1,11 +1,12 @@
-using System;
+using System; 
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// SKU class
     /// </summary>
@@ -28,12 +29,12 @@ namespace PurchaseOrderSys.Models
     
     		    
     		/// <summary>
-    		/// Sku1
+    		/// Sku ID
     		/// </summary>        
     	    [Display(Name = "SKU_SkuID", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public string SkuID { get; set; }
+    		public string  SkuID { get; set; }
     
     		    
     		/// <summary>
@@ -98,6 +99,29 @@ namespace PurchaseOrderSys.Models
     	    [Display(Name = "SKU_UPC", ResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  UPC { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Replenishable
+    		/// </summary>        
+    	    [Display(Name = "SKU_Replenishable", ResourceType = typeof(App_GlobalResources.Resource))]
+            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public bool  Replenishable { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Status
+    		/// </summary>        
+    	    [Display(Name = "SKU_Status", ResourceType = typeof(App_GlobalResources.Resource))]
+            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public byte  Status { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// e Bay Title
+    		/// </summary>        
+    	    [Display(Name = "SKU_eBayTitle", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  eBayTitle { get; set; }
     
     		    
     		/// <summary>

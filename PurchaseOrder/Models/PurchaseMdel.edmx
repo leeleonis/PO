@@ -306,6 +306,8 @@
           <Property Name="ReceivedBy" Type="nvarchar" MaxLength="50" />
           <Property Name="ReceivedAt" Type="datetime" />
           <Property Name="WarehouseID" Type="int" />
+          <Property Name="ShippingCost" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Other" Type="decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="PurchaseSKU">
           <Key>
@@ -1307,11 +1309,6 @@
             <End Role="Transfer" EntitySet="Transfer" />
             <End Role="TransferSKU" EntitySet="TransferSKU" />
           </AssociationSet>
-          <EntitySet Name="SKU" EntityType="PurchaseOrderModel.SKU" />
-          <AssociationSet Name="FK_SkuLang_Sku" Association="PurchaseOrderModel.FK_SkuLang_Sku">
-            <End Role="SKU" EntitySet="SKU" />
-            <End Role="SkuLang" EntitySet="SkuLang" />
-          </AssociationSet>
           <EntitySet Name="AdminGroup" EntityType="PurchaseOrderModel.AdminGroup" />
           <EntitySet Name="API" EntityType="PurchaseOrderModel.API" />
           <EntitySet Name="Auth" EntityType="PurchaseOrderModel.Auth" />
@@ -1337,10 +1334,6 @@
             <End Role="API" EntitySet="API" />
             <End Role="ShippingMethod" EntitySet="ShippingMethod" />
           </AssociationSet>
-          <AssociationSet Name="FK_Sku_Brand" Association="PurchaseOrderModel.FK_Sku_Brand">
-            <End Role="Brand" EntitySet="Brand" />
-            <End Role="SKU" EntitySet="SKU" />
-          </AssociationSet>
           <AssociationSet Name="FK_ShippingMethod_Carrier" Association="PurchaseOrderModel.FK_ShippingMethod_Carrier">
             <End Role="Carrier" EntitySet="Carrier" />
             <End Role="ShippingMethod" EntitySet="ShippingMethod" />
@@ -1348,10 +1341,6 @@
           <AssociationSet Name="FK_ConditionLang_Condition" Association="PurchaseOrderModel.FK_ConditionLang_Condition">
             <End Role="Condition" EntitySet="Condition" />
             <End Role="ConditionLang" EntitySet="ConditionLang" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Sku_Condition" Association="PurchaseOrderModel.FK_Sku_Condition">
-            <End Role="Condition" EntitySet="Condition" />
-            <End Role="SKU" EntitySet="SKU" />
           </AssociationSet>
           <AssociationSet Name="FK_ShippingMethod_DirectLine" Association="PurchaseOrderModel.FK_ShippingMethod_DirectLine">
             <End Role="DirectLine" EntitySet="DirectLine" />
@@ -1364,14 +1353,6 @@
           <AssociationSet Name="FK_MenuLang_Menu" Association="PurchaseOrderModel.FK_MenuLang_Menu">
             <End Role="Menu" EntitySet="Menu" />
             <End Role="MenuLang" EntitySet="MenuLang" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Sku_Attribute_Sku" Association="PurchaseOrderModel.FK_Sku_Attribute_Sku">
-            <End Role="SKU" EntitySet="SKU" />
-            <End Role="Sku_Attribute" EntitySet="Sku_Attribute" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Sku_SkuType" Association="PurchaseOrderModel.FK_Sku_SkuType">
-            <End Role="SkuType" EntitySet="SkuType" />
-            <End Role="SKU" EntitySet="SKU" />
           </AssociationSet>
           <AssociationSet Name="FK_Sku_Attribute_SkuAttribute" Association="PurchaseOrderModel.FK_Sku_Attribute_SkuAttribute">
             <End Role="SkuAttribute" EntitySet="SkuAttribute" />
@@ -1391,6 +1372,15 @@
           </AssociationSet>
           <EntitySet Name="KitSku" EntityType="PurchaseOrderModel.KitSku" />
           <EntitySet Name="SkuPicture" EntityType="PurchaseOrderModel.SkuPicture" />
+          <EntitySet Name="SKU" EntityType="PurchaseOrderModel.SKU" />
+          <AssociationSet Name="FK_Sku_Brand" Association="PurchaseOrderModel.FK_Sku_Brand">
+            <End Role="Brand" EntitySet="Brand" />
+            <End Role="SKU" EntitySet="SKU" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sku_Condition" Association="PurchaseOrderModel.FK_Sku_Condition">
+            <End Role="Condition" EntitySet="Condition" />
+            <End Role="SKU" EntitySet="SKU" />
+          </AssociationSet>
           <AssociationSet Name="FK_KitSku_Sku" Association="PurchaseOrderModel.FK_KitSku_Sku">
             <End Role="SKU" EntitySet="SKU" />
             <End Role="KitSku" EntitySet="KitSku" />
@@ -1398,6 +1388,18 @@
           <AssociationSet Name="FK_KitSku_Sku1" Association="PurchaseOrderModel.FK_KitSku_Sku1">
             <End Role="SKU" EntitySet="SKU" />
             <End Role="KitSku" EntitySet="KitSku" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sku_Attribute_Sku" Association="PurchaseOrderModel.FK_Sku_Attribute_Sku">
+            <End Role="SKU" EntitySet="SKU" />
+            <End Role="Sku_Attribute" EntitySet="Sku_Attribute" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sku_SkuType" Association="PurchaseOrderModel.FK_Sku_SkuType">
+            <End Role="SkuType" EntitySet="SkuType" />
+            <End Role="SKU" EntitySet="SKU" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SkuLang_Sku" Association="PurchaseOrderModel.FK_SkuLang_Sku">
+            <End Role="SKU" EntitySet="SKU" />
+            <End Role="SkuLang" EntitySet="SkuLang" />
           </AssociationSet>
           <AssociationSet Name="FK_SkuPicture_Sku" Association="PurchaseOrderModel.FK_SkuPicture_Sku">
             <End Role="SKU" EntitySet="SKU" />
@@ -1443,6 +1445,8 @@
           <NavigationProperty Name="VendorLIst" Relationship="PurchaseOrderModel.FK_PurchaseOrder_VendorLIst" FromRole="PurchaseOrder" ToRole="VendorLIst" />
           <Property Name="WarehouseID" Type="Int32" />
           <NavigationProperty Name="Warehouse1" Relationship="PurchaseOrderModel.FK_PurchaseOrder_Warehouse" FromRole="PurchaseOrder" ToRole="Warehouse" />
+          <Property Name="ShippingCost" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Other" Type="Decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="Company">
           <Key>
@@ -1511,7 +1515,7 @@
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="GetSku" Relationship="PurchaseOrderModel.FK_SkuLang_Sku" FromRole="SkuLang" ToRole="SKU" />
+          <NavigationProperty Name="SKU1" Relationship="PurchaseOrderModel.FK_SkuLang_Sku" FromRole="SkuLang" ToRole="SKU" />
           </EntityType>
         <EntityType Name="PurchaseNote">
           <Key>
@@ -1945,48 +1949,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="SKU">
-          <Key>
-            <PropertyRef Name="SkuID" />
-          </Key>
-          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
-          <Property Name="SkuID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Type" Type="Byte" Nullable="false" />
-          <Property Name="ParentSku" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ParentKit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Condition" Type="Int32" Nullable="false" />
-          <Property Name="Category" Type="Int32" Nullable="false" />
-          <Property Name="Brand" Type="Int32" Nullable="false" />
-          <Property Name="EAN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="UPC" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Replenishable" Type="Boolean" Nullable="false" />
-          <Property Name="Status" Type="Byte" Nullable="false" />
-          <Property Name="eBayTitle" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="SkuLang" Relationship="PurchaseOrderModel.FK_SkuLang_Sku" FromRole="SKU" ToRole="SkuLang" />
-          <NavigationProperty Name="GetBrand" Relationship="PurchaseOrderModel.FK_Sku_Brand" FromRole="SKU" ToRole="Brand" />
-          <NavigationProperty Name="GetCondition" Relationship="PurchaseOrderModel.FK_Sku_Condition" FromRole="SKU" ToRole="Condition" />
-          <NavigationProperty Name="Sku_Attribute" Relationship="PurchaseOrderModel.FK_Sku_Attribute_Sku" FromRole="SKU" ToRole="Sku_Attribute" />
-          <NavigationProperty Name="SkuType" Relationship="PurchaseOrderModel.FK_Sku_SkuType" FromRole="SKU" ToRole="SkuType" />
-          <NavigationProperty Name="Kit" Relationship="PurchaseOrderModel.FK_KitSku_Sku" FromRole="SKU" ToRole="KitSku" />
-          <NavigationProperty Name="GetKit" Relationship="PurchaseOrderModel.FK_KitSku_Sku1" FromRole="SKU" ToRole="KitSku" />
-          <NavigationProperty Name="SkuPicture" Relationship="PurchaseOrderModel.FK_SkuPicture_Sku" FromRole="SKU" ToRole="SkuPicture" />
-        </EntityType>
-        <Association Name="FK_SkuLang_Sku">
-          <End Type="PurchaseOrderModel.SKU" Role="SKU" Multiplicity="1" />
-          <End Type="PurchaseOrderModel.SkuLang" Role="SkuLang" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SKU">
-              <PropertyRef Name="SkuID" />
-            </Principal>
-            <Dependent Role="SkuLang">
-              <PropertyRef Name="Sku" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="AdminGroup">
           <Key>
             <PropertyRef Name="ID" />
@@ -2188,8 +2150,8 @@
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="GetSku" Relationship="PurchaseOrderModel.FK_Sku_Attribute_Sku" FromRole="Sku_Attribute" ToRole="SKU" />
           <NavigationProperty Name="SkuAttribute" Relationship="PurchaseOrderModel.FK_Sku_Attribute_SkuAttribute" FromRole="Sku_Attribute" ToRole="SkuAttribute" />
+          <NavigationProperty Name="SKU1" Relationship="PurchaseOrderModel.FK_Sku_Attribute_Sku" FromRole="Sku_Attribute" ToRole="SKU" />
         </EntityType>
         <EntityType Name="SkuAttribute">
           <Key>
@@ -2247,8 +2209,8 @@
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="SKU" Relationship="PurchaseOrderModel.FK_Sku_SkuType" FromRole="SkuType" ToRole="SKU" />
           <NavigationProperty Name="SkuTypeLang" Relationship="PurchaseOrderModel.FK_SkuTypeLang_SkuType" FromRole="SkuType" ToRole="SkuTypeLang" />
+          <NavigationProperty Name="SKU" Relationship="PurchaseOrderModel.FK_Sku_SkuType" FromRole="SkuType" ToRole="SKU" />
         </EntityType>
         <EntityType Name="SkuTypeLang">
           <Key>
@@ -2288,18 +2250,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Sku_Brand">
-          <End Type="PurchaseOrderModel.Brand" Role="Brand" Multiplicity="1" />
-          <End Type="PurchaseOrderModel.SKU" Role="SKU" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Brand">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="SKU">
-              <PropertyRef Name="Brand" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_ShippingMethod_Carrier">
           <End Type="PurchaseOrderModel.Carrier" Role="Carrier" Multiplicity="1" />
           <End Type="PurchaseOrderModel.ShippingMethod" Role="ShippingMethod" Multiplicity="*" />
@@ -2321,18 +2271,6 @@
             </Principal>
             <Dependent Role="ConditionLang">
               <PropertyRef Name="ConditionID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Sku_Condition">
-          <End Type="PurchaseOrderModel.Condition" Role="Condition" Multiplicity="1" />
-          <End Type="PurchaseOrderModel.SKU" Role="SKU" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Condition">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="SKU">
-              <PropertyRef Name="Condition" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2369,30 +2307,6 @@
             </Principal>
             <Dependent Role="MenuLang">
               <PropertyRef Name="MenuID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Sku_Attribute_Sku">
-          <End Type="PurchaseOrderModel.SKU" Role="SKU" Multiplicity="1" />
-          <End Type="PurchaseOrderModel.Sku_Attribute" Role="Sku_Attribute" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SKU">
-              <PropertyRef Name="SkuID" />
-            </Principal>
-            <Dependent Role="Sku_Attribute">
-              <PropertyRef Name="Sku" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Sku_SkuType">
-          <End Type="PurchaseOrderModel.SkuType" Role="SkuType" Multiplicity="1" />
-          <End Type="PurchaseOrderModel.SKU" Role="SKU" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SkuType">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="SKU">
-              <PropertyRef Name="Category" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2456,8 +2370,8 @@
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="GetSku" Relationship="PurchaseOrderModel.FK_KitSku_Sku" FromRole="KitSku" ToRole="SKU" />
-          <NavigationProperty Name="GetParent" Relationship="PurchaseOrderModel.FK_KitSku_Sku1" FromRole="KitSku" ToRole="SKU" />
+          <NavigationProperty Name="SKU1" Relationship="PurchaseOrderModel.FK_KitSku_Sku" FromRole="KitSku" ToRole="SKU" />
+          <NavigationProperty Name="SKU2" Relationship="PurchaseOrderModel.FK_KitSku_Sku1" FromRole="KitSku" ToRole="SKU" />
         </EntityType>
         <EntityType Name="SkuPicture">
           <Key>
@@ -2473,8 +2387,61 @@
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="GetSku" Relationship="PurchaseOrderModel.FK_SkuPicture_Sku" FromRole="SkuPicture" ToRole="SKU" />
+          <NavigationProperty Name="SKU1" Relationship="PurchaseOrderModel.FK_SkuPicture_Sku" FromRole="SkuPicture" ToRole="SKU" />
         </EntityType>
+        <EntityType Name="SKU">
+          <Key>
+            <PropertyRef Name="SkuID" />
+          </Key>
+          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
+          <Property Name="SkuID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="Byte" Nullable="false" />
+          <Property Name="ParentSku" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ParentKit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Condition" Type="Int32" Nullable="false" />
+          <Property Name="Category" Type="Int32" Nullable="false" />
+          <Property Name="Brand" Type="Int32" Nullable="false" />
+          <Property Name="EAN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UPC" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Replenishable" Type="Boolean" Nullable="false" />
+          <Property Name="Status" Type="Byte" Nullable="false" />
+          <Property Name="eBayTitle" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Brand1" Relationship="PurchaseOrderModel.FK_Sku_Brand" FromRole="SKU" ToRole="Brand" />
+          <NavigationProperty Name="Condition1" Relationship="PurchaseOrderModel.FK_Sku_Condition" FromRole="SKU" ToRole="Condition" />
+          <NavigationProperty Name="GetKit" Relationship="PurchaseOrderModel.FK_KitSku_Sku" FromRole="SKU" ToRole="KitSku" />
+          <NavigationProperty Name="Sku_Attribute" Relationship="PurchaseOrderModel.FK_Sku_Attribute_Sku" FromRole="SKU" ToRole="Sku_Attribute" />
+          <NavigationProperty Name="SkuType" Relationship="PurchaseOrderModel.FK_Sku_SkuType" FromRole="SKU" ToRole="SkuType" />
+          <NavigationProperty Name="SkuLang" Relationship="PurchaseOrderModel.FK_SkuLang_Sku" FromRole="SKU" ToRole="SkuLang" />
+          <NavigationProperty Name="SkuPicture" Relationship="PurchaseOrderModel.FK_SkuPicture_Sku" FromRole="SKU" ToRole="SkuPicture" />
+        </EntityType>
+        <Association Name="FK_Sku_Brand">
+          <End Type="PurchaseOrderModel.Brand" Role="Brand" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.SKU" Role="SKU" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Brand">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SKU">
+              <PropertyRef Name="Brand" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sku_Condition">
+          <End Type="PurchaseOrderModel.Condition" Role="Condition" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.SKU" Role="SKU" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Condition">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SKU">
+              <PropertyRef Name="Condition" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_KitSku_Sku">
           <End Type="PurchaseOrderModel.SKU" Role="SKU" Multiplicity="1" />
           <End Type="PurchaseOrderModel.KitSku" Role="KitSku" Multiplicity="*" />
@@ -2499,6 +2466,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Sku_Attribute_Sku">
+          <End Type="PurchaseOrderModel.SKU" Role="SKU" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.Sku_Attribute" Role="Sku_Attribute" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SKU">
+              <PropertyRef Name="SkuID" />
+            </Principal>
+            <Dependent Role="Sku_Attribute">
+              <PropertyRef Name="Sku" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sku_SkuType">
+          <End Type="PurchaseOrderModel.SkuType" Role="SkuType" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.SKU" Role="SKU" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SkuType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SKU">
+              <PropertyRef Name="Category" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SkuLang_Sku">
+          <End Type="PurchaseOrderModel.SKU" Role="SKU" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.SkuLang" Role="SkuLang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SKU">
+              <PropertyRef Name="SkuID" />
+            </Principal>
+            <Dependent Role="SkuLang">
+              <PropertyRef Name="Sku" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SkuPicture_Sku">
           <End Type="PurchaseOrderModel.SKU" Role="SKU" Multiplicity="1" />
           <End Type="PurchaseOrderModel.SkuPicture" Role="SkuPicture" Multiplicity="*" />
@@ -2520,6 +2523,8 @@
           <EntitySetMapping Name="PurchaseOrder">
             <EntityTypeMapping TypeName="PurchaseOrderModel.PurchaseOrder">
               <MappingFragment StoreEntitySet="PurchaseOrder">
+                <ScalarProperty Name="Other" ColumnName="Other" />
+                <ScalarProperty Name="ShippingCost" ColumnName="ShippingCost" />
                 <ScalarProperty Name="WarehouseID" ColumnName="WarehouseID" />
                 <ScalarProperty Name="Tax" ColumnName="Tax" />
                 <ScalarProperty Name="Currency" ColumnName="Currency" />
@@ -2831,29 +2836,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="SKU">
-            <EntityTypeMapping TypeName="PurchaseOrderModel.SKU">
-              <MappingFragment StoreEntitySet="SKU">
-                <ScalarProperty Name="eBayTitle" ColumnName="eBayTitle" />
-                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
-                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
-                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
-                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Replenishable" ColumnName="Replenishable" />
-                <ScalarProperty Name="UPC" ColumnName="UPC" />
-                <ScalarProperty Name="EAN" ColumnName="EAN" />
-                <ScalarProperty Name="Brand" ColumnName="Brand" />
-                <ScalarProperty Name="Category" ColumnName="Category" />
-                <ScalarProperty Name="Condition" ColumnName="Condition" />
-                <ScalarProperty Name="ParentKit" ColumnName="ParentKit" />
-                <ScalarProperty Name="ParentSku" ColumnName="ParentSku" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="SkuID" ColumnName="SkuID" />
-                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="AdminGroup">
             <EntityTypeMapping TypeName="PurchaseOrderModel.AdminGroup">
               <MappingFragment StoreEntitySet="AdminGroup">
@@ -3143,6 +3125,29 @@
                 <ScalarProperty Name="Sku" ColumnName="Sku" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="IsMain" ColumnName="IsMain" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SKU">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.SKU">
+              <MappingFragment StoreEntitySet="SKU">
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="eBayTitle" ColumnName="eBayTitle" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Replenishable" ColumnName="Replenishable" />
+                <ScalarProperty Name="UPC" ColumnName="UPC" />
+                <ScalarProperty Name="EAN" ColumnName="EAN" />
+                <ScalarProperty Name="Brand" ColumnName="Brand" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="Condition" ColumnName="Condition" />
+                <ScalarProperty Name="ParentKit" ColumnName="ParentKit" />
+                <ScalarProperty Name="ParentSku" ColumnName="ParentSku" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="SkuID" ColumnName="SkuID" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -1142,6 +1142,9 @@
     <Content Include="Views\Sku\_SkuKit.cshtml" />
     <Content Include="Views\Sku\_VariationAttribute.cshtml" />
     <Content Include="Views\Sku\_SpecContent.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\FDate.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\FDate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

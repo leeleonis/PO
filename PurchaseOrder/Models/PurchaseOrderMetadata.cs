@@ -1,11 +1,12 @@
-using System;
+using System; 
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// PurchaseOrder class
     /// </summary>
@@ -232,6 +233,27 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "PurchaseOrder_Tax", ResourceType = typeof(App_GlobalResources.Resource))]
     		public Nullable<decimal>  Tax { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Warehouse ID
+    		/// </summary>        
+    	    [Display(Name = "PurchaseOrder_WarehouseID", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  WarehouseID { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Shipping Cost
+    		/// </summary>        
+    	    [Display(Name = "PurchaseOrder_ShippingCost", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<decimal>  ShippingCost { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Other
+    		/// </summary>        
+    	    [Display(Name = "PurchaseOrder_Other", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<decimal>  Other { get; set; }
     
     		    
     	}

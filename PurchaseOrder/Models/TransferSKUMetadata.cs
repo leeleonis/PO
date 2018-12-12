@@ -34,7 +34,8 @@ namespace PurchaseOrderSys.Models
     	    [Display(Name = "TransferSKU_ID", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public int  ID { get; set; }
-        		    
+    
+    		    
     		/// <summary>
     		/// Transfer ID
     		/// </summary>        
@@ -110,22 +111,26 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "TransferSKU_Action", ResourceType = typeof(App_GlobalResources.Resource))]
     		public Nullable<int>  Action { get; set; }
-
-            /// <summary>
-            /// Sku No
-            /// </summary>        
-            [Display(Name = "PurchaseSKU_SkuNo", ResourceType = typeof(App_GlobalResources.Resource))]
+    
+    		    
+    		/// <summary>
+    		/// Sku No
+    		/// </summary>        
+    	    [Display(Name = "TransferSKU_SkuNo", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-            public string SkuNo { get; set; }
-
-            /// <summary>
+    		public string  SkuNo { get; set; }
+    
+    		    
+    		/// <summary>
     		/// Name
     		/// </summary>        
-    	    [Display(Name = "PurchaseSKU_Name", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "TransferSKU_Name", ResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(200, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-            public string Name { get; set; }
-        }
+    		public string  Name { get; set; }
+    
+    		    
+    	}
     }
     
 }

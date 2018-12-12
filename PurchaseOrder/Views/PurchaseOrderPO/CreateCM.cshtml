@@ -5,7 +5,11 @@
     var CompanyDDL = EnumData.CompanyDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var VendorDDL = EnumData.VendorDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var DefaultSelect = PurchaseOrderSys.App_GlobalResources.Resource.DefaultSelect;
-    var POStatusDDL = EnumData.POStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var CMStatusDDL = EnumData.CMStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var ShippingStatusDDL = EnumData.ShippingStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var CreditStatusDDL = EnumData.CreditStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var Warehouselist = (IEnumerable<SelectListItem>)ViewBag.Warehouselist;
+    var CurrencyDDL = EnumData.CurrencyDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
 }
 <div id="content">
     <section id="widget-grid" class="">
@@ -56,12 +60,12 @@
                                             <div class="form-group">
                                                 @Html.LabelFor(model => model.CMStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownListFor(model => model.CMStatus, POStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.DropDownListFor(model => model.CMStatus, CMStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
                                                     @Html.ValidationMessageFor(model => model.CMStatus, "", new { @class = "text-danger" })
                                                 </div>
                                                 @Html.LabelFor(model => model.InvoiceDate, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.EditorFor(model => model.InvoiceDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                    @Html.EditorFor(model => model.InvoiceDate)
                                                     @Html.ValidationMessageFor(model => model.InvoiceDate, "", new { @class = "text-danger" })
                                                 </div>
                                             </div>
@@ -73,38 +77,38 @@
                                                 </div>
                                                 @Html.LabelFor(model => model.InvoiceNo, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.EditorFor(model => model.InvoiceNo, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " } } })
+                                                    @Html.EditorFor(model => model.InvoiceNo, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
                                                     @Html.ValidationMessageFor(model => model.InvoiceNo, "", new { @class = "text-danger" })
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 @Html.LabelFor(model => model.CMDate, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.EditorFor(model => model.CMDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                    @Html.EditorFor(model => model.CMDate)
                                                     @Html.ValidationMessageFor(model => model.CMDate, "", new { @class = "text-danger" })
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 @Html.LabelFor(model => model.ShippingStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownListFor(model => model.ShippingStatus, POStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.DropDownListFor(model => model.ShippingStatus, ShippingStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
                                                     @Html.ValidationMessageFor(model => model.ShippingStatus, "", new { @class = "text-danger" })
                                                 </div>
                                                 @Html.LabelFor(model => model.CreditStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownListFor(model => model.CreditStatus, POStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.DropDownListFor(model => model.CreditStatus, CreditStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
                                                     @Html.ValidationMessageFor(model => model.CreditStatus, "", new { @class = "text-danger" })
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 @Html.LabelFor(model => model.ShippedDate, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.EditorFor(model => model.ShippedDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                    @Html.EditorFor(model => model.ShippedDate)
                                                     @Html.ValidationMessageFor(model => model.ShippedDate, "", new { @class = "text-danger" })
                                                 </div>
                                                 @Html.LabelFor(model => model.ShippedDate, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.EditorFor(model => model.ShippedDate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "data-dateformat", "yy/mm/dd" } } })
+                                                    @Html.EditorFor(model => model.ShippedDate)
                                                     @Html.ValidationMessageFor(model => model.ShippedDate, "", new { @class = "text-danger" })
                                                 </div>
                                             </div>
@@ -131,86 +135,162 @@
 
                                                 </div>
                                             </div>
+                                        </fieldset>
+                                        <fieldset>
+                                            <legend>Items Ordered</legend>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.WarehouseID, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownListFor(model => model.WarehouseID, Warehouselist, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(model => model.WarehouseID, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Currency, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownListFor(model => model.Currency, CurrencyDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Tax, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    <div class="col-sm-2 col-lg-2">
+                                                        @Html.CheckBox("TaxShow", true, new { @class = "form-control" })
+                                                    </div>
+                                                    <div class="col-sm-10 col-lg-10">
+                                                        @Html.EditorFor(model => model.Tax, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                                        @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset>
+                                            <legend></legend>
+                                            <div class="form-group">
+                                                <div class="col-sm-9 col-lg-2">
+                                                    <button type="button" id="Edititems">Edit items</button>
+                                                    <button type="button" id="Removeitems">Remove items</button>
+                                                </div>
+                                                <div class="col-lg-offset-10">
+                                                  
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset>
                                             <div class="row">
                                                 <article class="col-xs-12">
                                                     <table id="DataGridC" class="table table-bordered table-striped text-center dataTable no-footer">
                                                         <thead>
-                                                            <tr>
-                                                                <th></th>
-                                                                <th></th>
-                                                                <th>SKU</th>
-                                                                <th>Vendor SKU</th>
-                                                                <th>Name</th>
-                                                                <th>QTY Ordered</th>
-                                                                <th>QTY Returned</th>
-                                                                <th>Credit QTY</th>
-                                                                <th>Credit</th>
-                                                                <th>Subtotal (currency)</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @foreach (var item in Model.PurchaseSKU)
+                                                            @if (Model.CMType== "CreditNote")
                                                             {
-                                                            <tr>
-                                                                <td></td>
-                                                                <td></td>
-                                                                <td>@item.SkuNo</td>
-                                                                <td>@item.VendorSKU</td>
-                                                                <td>@item.Name</td>
-                                                                <td>@item.QTYOrdered</td>
-                                                                <td>@item.QTYReturned</td>
-                                                                <td>@item.CreditQTY</td>
-                                                                <td>@item.Credit</td>
-                                                                <td></td>
-                                                            </tr>
+
+                                                                <tr>
+                                                                    <th></th>
+                                                                    <th></th>
+                                                                    <th>SKU</th>
+                                                                    <th>Vendor SKU</th>
+                                                                    <th>Name</th>
+                                                                    <th>QTY Ordered</th>
+                                                                    <th>QTY Returned</th>
+                                                                    <th>Credit QTY</th>
+                                                                    <th>Credit</th>
+                                                                    <th>Subtotal (currency)</th>
+                                                                </tr>
                                                             }
-                                                        </tbody>
+                                                            else if (Model.CMType == "Replacement")
+                                                            {
+                                                                <tr>
+                                                                    <th></th>
+                                                                    <th></th>
+                                                                    <th>SKU</th>
+                                                                    <th>Vendor SKU</th>
+                                                                    <th>Name</th>
+                                                                    <th>QTY Ordered</th>
+                                                                    <th>QTY Returned</th>
+                                                                    <th>Credit QTY</th>
+                                                                    <th>QTY Received</th>
+                                                                    <th>Balance</th>
+                                                                </tr>
+                                                            }
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                        <tfoot>
+                                                            @*<tr>
+                                                                <td colspan="8">
+                                                                    <select id="gebruikerId" name="gebruikerId" class="form-control" style="width:50%"></select>
+                                                                    <button type="button" id="addsku">Add SKU</button>
+                                                                </td>
+                                                                <td></td>
+                                                                <td></td>
+                                                            </tr>*@
+                                                            @if (Model.CMType == "CreditNote")
+                                                            {
+                                                                <tr>
+                                                                    <td colspan="8" rowspan="5">
+                                                                        <div class="col-sm-10 col-lg-10">
+                                                                            <textarea rows="20" style="width:100%" id="textnote"></textarea>
+                                                                            <button type="button" id="addnote" style="float:right">Add Note</button>
+                                                                        </div>
+                                                                        <div class="col-sm-2 col-lg-2">
+                                                                            <ul style="list-style-type:none;list-style-position: inside;padding-left: 0px;padding-left: 0px;" id="textnotelog">
+                                                                                @if (Model.CMCreditNote != null)
+                                                                                {
+                                                                                    foreach (var item in Model.CMCreditNote)
+                                                                                    {
+                                                                                        <li>@(item.CreateBy + "： " + item.CreateAt.ToString("yyyy/MM/dd HH:mm:ss"))</li>
+                                                                                    }
+                                                                                }
+                                                                            </ul>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>Total:</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Tax:</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Grand Total:</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Total Paid:</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Balance:</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                            }
+                                                            else if (Model.CMType == "Replacement")
+                                                            {
+                                                                <tr>
+                                                                    <td colspan="10">
+                                                                        <div class="col-sm-10 col-lg-10">
+                                                                            <textarea rows="20" style="width:100%" id="textnote"></textarea>
+                                                                            <button type="button" id="addnote" style="float:right">Add Note</button>
+                                                                        </div>
+                                                                        <div class="col-sm-2 col-lg-2">
+                                                                            <ul style="list-style-type:none;list-style-position: inside;padding-left: 0px;padding-left: 0px;" id="textnotelog">
+                                                                                @if (Model.CMCreditNote != null)
+                                                                                {
+                                                                                    foreach (var item in Model.CMCreditNote)
+                                                                                    {
+                                                                                        <li>@(item.CreateBy + "： " + item.CreateAt.ToString("yyyy/MM/dd HH:mm:ss"))</li>
+                                                                                    }
+                                                                                }
+                                                                            </ul>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        </tfoot>
                                                     </table>
                                                 </article>
-                                                <article class="col-xs-12">
-                                                    <table id="DataGridR" class="table table-bordered table-striped text-center dataTable no-footer" style="display:none">
-                                                        <thead>
-                                                            <tr>
-                                                                <th></th>
-                                                                <th></th>
-                                                                <th>SKU</th>
-                                                                <th>Vendor SKU</th>
-                                                                <th>Name</th>
-                                                                <th>QTY Ordered</th>
-                                                                <th>QTY Returned</th>
-                                                                <th>Credit QTY</th>
-                                                                <th>QTY Received</th>
-                                                                <th>Balance</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @foreach (var item in Model.PurchaseSKU)
-                                                            {
-                                                            <tr>
-                                                                <td></td>
-                                                                <td></td>
-                                                                <td>@item.SkuNo</td>
-                                                                <td>@item.VendorSKU</td>
-                                                                <td>@item.Name</td>
-                                                                <td>@item.QTYOrdered</td>
-                                                                <td>@item.QTYReturned</td>
-                                                                <td>@item.CreditQTY</td>
-                                                                <td></td>
-                                                                <td></td>
-                                                            </tr>
-                                                            }
-                                                        </tbody>
-                                                    </table>
-                                                </article>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-10 col-lg-10">
-                                                    <textarea rows="20" style="width:100%" id="textnote"></textarea>
-                                                    <button type="button" id="addnote" style="float:right">Add Note</button>
-                                                </div>
-                                                <div class="col-sm-2 col-lg-2">
-                                                    <ul style="list-style-type:none;list-style-position: inside;padding-left: 0px;padding-left: 0px;" id="textnotelog"></ul>
-                                                </div>
                                             </div>
                                         </fieldset>
                                     </div>
@@ -228,22 +308,204 @@
     </section>
 </div>
 @section pagespecific {
-    <script type="text/javascript">
+<script type="text/javascript">
         var hash = window.location.hash;
         $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
         $('.tab-pane').eq(hash.substr(1)).addClass('active');
+        var tableID = "#DataGridC";
+        var DataGridC;
         $(document).ready(function () {
-            $("#CMType").on("change", function () {
-                $("#CMType option:selected").each(function () {
-                    $("table").hide();
-                    if ($(this).val() =="CreditNote") {
-                        $("#DataGridC").show();
+            DataGridC = $(tableID).DataTable({
+                fixedHeader: {
+                    header: true,
+                    footer: true
+                },
+                select: {
+                    style: 'os',
+                    selector: 'td:first-child'
+                },
+                columns: [
+                    {
+                        data: "ck",
+                        className: 'select-checkbox',
+                        orderable: false,
+                        render: function (data, type, row, meta) {
+                            if (row.ID == null) {
+                                return '<input type="checkbox" value="' + row.SKU + '">';
+                            }
+                            else {
+                                return '<input type="checkbox" value="' + row.ID + '">';
+                            }
+                        }
+                    },
+                    {
+                        "className": 'details-control',
+                        "orderable": false,
+                        "data": null,
+                        "defaultContent": ''
+                    },
+                    { data: "SKU" },
+                    { data: "VendorSKU" },
+                    { data: "Name" },
+                    {
+                        data: "QTYOrdered", render: function (data, type, row) {
+                            if (row.Model == "E") {
+                                return '<input class="form-control" type="text" onchange="Calculation(this,\'QTYOrdered\',\'' + row.SKU + '\',' + data + ',' + row.ID + ')"  value = ' + data + ' > ';
+                            }
+                            else {
+                                return data;
+                            }
+                        }
+                    },
+                    {
+                        data: "QTYReturned", render: function (data, type, row) {
+                            return data;
+                            //if (row.Model == "E") {
+                            //    return '<input class="form-control" type="text" onchange="Calculation(this,\'QTYReturned\',\'' + row.SKU + '\',' + data + ',' + row.ID + ')"  value = ' + data + ' > ';
+                            //}
+                            //else {
+                            //    return data;
+                            //}
+                        }
+                    },
+                    {
+                        data: "CreditQTY", render: function (data, type, row) {
+                            if (row.Model == "E") {
+                                return '<input class="form-control" type="text" onchange="Calculation(this,\'CreditQTY\',\'' + row.SKU + '\',' + data + ',' + row.ID + ')"  value = ' + data + ' > ';
+                            }
+                            else {
+                                return data;
+                            }
+                        }
+                    },
+                    @if (Model.CMType == "CreditNote")
+                    {
+                        @: { data: "Credit", render: function (data, type, row) { if (row.Model == "E") { return '<input class="form-control" type="text" onchange="Calculation(this,\'Credit\',\'' + row.SKU + '\',' + data + ',' + row.ID + ')"  value = ' + thousandComma(data) + '  > '; } else { return data; } } },
+                        @:{ data: "Subtotal", render: function (data, type, row) { return thousandComma(data); } }
                     }
-                    if ($(this).val() == "Replacement") {
-                        $("#DataGridR").show();
+                    else if (Model.CMType == "Replacement")
+                    {
+                       @: { data: "QTYReceived", render: function (data, type, row) { if (row.Model == "E") { return '<input class="form-control" type="text" onchange="Calculation(this,\'QTYReceived\',\'' + row.SKU + '\',' + data + ',' + row.ID + ')"  value = ' + thousandComma(data) + '  > '; } else { return data; } } },
+                        @:{ data: "Balance", render: function (data, type, row) { return thousandComma(data); } }
+                    }
+
+
+
+                ],
+                ajax: {
+                    traditional: true,
+                    method: "get",//或post，自由決定，影響到Server端用FormCollection取值或Request.QueryString取得DataTables傳遞的資訊
+                    url: "@Url.Action("CMSkuNumberList", "Ajax")",
+                    data: function (d) {
+                        var Skulist = $("#gebruikerId").val();
+                        d.Skulist = Skulist;
+                        $("#gebruikerId").val(null).trigger('change');
+                    }
+                },
+                serverSide: true,//啟用ServerSide模式
+                //deferLoading: 0, //初始化DataTable時，不發出ajax
+                orderMulti: false,
+                "paging": false,
+                "ordering": false,
+                "info": true,
+                "searching": false,
+                "footerCallback": function (row, data, start, end, display) {
+                    @if (Model.CMType == "CreditNote")
+                    {
+                        @:var api = this.api(), data;
+                       // Remove the formatting to get integer data for summation
+                    @:var intVal = function (i) {
+
+                         @:return typeof i === 'string' ?
+                            @:i.replace(/[\$,]/g, '') * 1 :
+                           @: typeof i === 'number' ?
+                            @:    i : 0;
+                   @: };
+                    ////Total
+                   @: total = api.column(9).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                   @: $('tr:eq(0) td:eq(2)', api.table().footer()).html(thousandComma(total));//Total
+                    //Tax:
+                   @: var TaxVal = $("#Tax").val();
+                   @: Tax = total - (total / (1 + TaxVal / 100));
+                   @: $('tr:eq(1) td:eq(1)', api.table().footer()).html(thousandComma(Tax));//TotalDiscount
+                    //Grand Total:
+                   @: GrandTotal = total;
+                   @: $('tr:eq(2) td:eq(1)', api.table().footer()).html(thousandComma(GrandTotal));
+                    //Credit Paid:
+                   @: CreditPaid = 0;
+                   @: $('tr:eq(3) td:eq(1)', api.table().footer()).html(thousandComma(CreditPaid));
+                    //Balance:
+                  @:  Balance = GrandTotal - CreditPaid;
+                  @:  $('tr:eq(4) td:eq(1)', api.table().footer()).html(thousandComma(Balance));
+
+                    }
+                }
+            });
+            $("#CMType").on("change", function () {
+                window.location.href = "@Url.Action("CreateCM", new { ID=Model.PurchaseOrderID })?CMTypeVal=" + $(this).val();
+            });
+            $("#Edititems").on("click", function () {
+                var dataList = [];
+                $(DataGridC.$('input[type="checkbox"]:checked').each(function () {
+                    dataList.push($(this).val());
+                }));
+                $.ajax({
+                    traditional: true,
+                    type: "post",
+                    url: "@Url.Action("EditCMSKUData")",
+                    data: {
+                        IDList: dataList,
+                    },
+                    success: function (data) {
+                        if (data.status) {
+                            DataGridC.draw();
+                        }
+                        else {
+                            alert(data.Errmsg);
+                        }
                     }
                 });
             });
         });
-    </script>
+          function Calculation(x, type, SKU, oval, ID) {
+            $.ajax({
+                type: "post",
+                url: "@Url.Action("CMSkuNumberListEdit", "Ajax")",
+                data: {
+                    SKU: SKU,
+                    type: type,
+                    oval: oval,
+                    val: $(x).val(),
+                    ID: ID
+                },
+                success: function (data) {
+                    if (data.status) {
+                        DataGridC.draw();
+                    }
+                    else {
+                        alert(data.Errmsg);
+                    }
+                }
+            });
+        }
+        function GetSerialList(d) {
+            var div = $('<div style="border:2px blue solid;" />').addClass('loading').text('Loading...');
+            $.ajax({
+                type: "post",
+                url: "@Url.Action("GetSerialList")",
+                data: {
+                    ID: d.ID
+                },
+                success: function (data) {
+                    if (data.status) {
+                        div.html(data.partial).removeClass('loading');
+                    }
+                    else {
+                        val = data.Errmsg;
+                    }
+                }
+            });
+            return div;
+        }
+</script>
 }

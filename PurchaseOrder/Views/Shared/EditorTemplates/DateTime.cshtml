@@ -1,0 +1,7 @@
+﻿@model DateTime?
+@{
+    if (Model.HasValue)
+    {
+        @TimeZoneInfo.ConvertTimeFromUtc(Model.Value, TimeZoneInfo.FindSystemTimeZoneById(TimeZoneInfo.Local.Id));
+    }
+}

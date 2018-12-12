@@ -91,7 +91,7 @@ namespace PurchaseOrderSys.Controllers
             if (Type == "Master")
             {
                 int total = 0;
-                var listPurchaseOrder = db.PurchaseOrder.Where(x=>x.IsEnable);
+                var listPurchaseOrder = db.PurchaseOrder.Where(x => x.IsEnable);
                 if (filter.ID.HasValue)
                 {
                     listPurchaseOrder = listPurchaseOrder.Where(x => x.ID == filter.ID);
@@ -213,14 +213,15 @@ namespace PurchaseOrderSys.Controllers
                 VendorSKU = x.VendorSKU,
                 QTYOrdered = x.QTYOrdered,
                 QTYFulfilled = x.QTYFulfilled,
-                QTYReceived = x.QTYReceived,
+                QTYReceived = GetQTYReceived(x),
                 QTYReturned = x.QTYReturned,
                 Price = x.Price,
                 Discount = x.Discount,
                 DiscountedPrice = x.DiscountedPrice,
                 Credit = x.Credit,
                 Subtotal = (x.QTYOrdered * (x.Price - x.Discount)),
-                SerialQTY = x.SerialsLlist.Count()
+                SerialQTY = x.SerialsLlist.Count(),
+                Model = "L"
             });
             if (!string.IsNullOrWhiteSpace(POTypeVal))
             {
@@ -232,6 +233,21 @@ namespace PurchaseOrderSys.Controllers
             ViewBag.Warehouselist = Warehouselist;
             return View(PurchaseOrder);
         }
+
+        private int GetQTYReceived(PurchaseSKU PurchaseSKU)
+        {
+            var QTYReceived = 0;
+            if (PurchaseSKU.SerialsLlist.Any())
+            {
+                QTYReceived = PurchaseSKU.SerialsLlist.Count();
+            }
+            else
+            {
+                QTYReceived = PurchaseSKU.QTYReceived ?? 0;
+            }
+            return QTYReceived;
+        }
+
         [HttpPost]
         public ActionResult EditItem(PurchaseOrder filter)
         {
@@ -257,13 +273,15 @@ namespace PurchaseOrderSys.Controllers
             PurchaseOrder.WarehouseID = filter.WarehouseID;
             PurchaseOrder.Currency = filter.Currency;
             PurchaseOrder.Tax = filter.Tax;
+            PurchaseOrder.ShippingCost = filter.ShippingCost;
+            PurchaseOrder.Other = filter.Other;
             PurchaseOrder.UpdateBy = UserBy;
             PurchaseOrder.UpdateAt = dt;
 
             var dataList = (List<PoSKUVM>)Session["SkuNumberList"];
             if (dataList != null)
             {
-                var PurchaseSKUlist = dataList.Select(x => new PurchaseSKU
+                var PurchaseSKUlistE = dataList.Where(x => x.Model == "E").Select(x => new PurchaseSKU
                 {
                     ID = x.ID.HasValue ? x.ID.Value : 0,
                     IsEnable = true,
@@ -277,13 +295,14 @@ namespace PurchaseOrderSys.Controllers
                     DiscountedPrice = x.DiscountedPrice,
                     Credit = x.Credit,
                 });
-                foreach (var item in PurchaseSKUlist)
+                foreach (var item in PurchaseSKUlistE)
                 {
                     var oldPurchaseSKU = PurchaseOrder.PurchaseSKU.Where(x => x.ID == item.ID);
                     if (oldPurchaseSKU.Any())
                     {
                         foreach (var SKUitem in oldPurchaseSKU)
                         {
+
                             if (SKUitem.Price != item.Price)
                             {
                                 SKUitem.Price = item.Price;
@@ -317,6 +336,20 @@ namespace PurchaseOrderSys.Controllers
                         PurchaseOrder.PurchaseSKU.Add(item);
                     }
                 }
+                var PurchaseSKUlistD = dataList.Where(x => x.Model == "D").Select(x => x.ID);
+                foreach (var item in PurchaseSKUlistD)
+                {
+                    var oldPurchaseSKU = PurchaseOrder.PurchaseSKU.Where(x => x.ID == item);
+                    if (oldPurchaseSKU.Any())
+                    {
+                        foreach (var SKUitem in oldPurchaseSKU)
+                        {
+                            SKUitem.IsEnable = false;
+                            SKUitem.UpdateBy = UserBy;
+                            SKUitem.UpdateAt = dt;
+                        }
+                    }
+                }
             }
             db.SaveChanges();
             return RedirectToAction("Index");
@@ -331,7 +364,7 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult ReceiveItems(PurchaseOrder PurchaseOrder, List<PostList> QTYReceived)
         {
             var oPurchaseOrder = db.PurchaseOrder.Find(PurchaseOrder.ID);
-            if (oPurchaseOrder.POType!= PurchaseOrder.POType)
+            if (oPurchaseOrder.POType != PurchaseOrder.POType)
             {
                 oPurchaseOrder.POType = PurchaseOrder.POType;
             }
@@ -456,8 +489,10 @@ namespace PurchaseOrderSys.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
-        public ActionResult CreateCM(int ID)
+        public ActionResult CreateCM(int ID,string CMTypeVal= "CreditNote")
         {
+            var Warehouselist = db.Warehouse.Where(x => x.IsEnable).Select(x => new SelectListItem { Text = x.Name, Value = x.ID.ToString() }).ToList();
+            ViewBag.Warehouselist = Warehouselist;
             var PurchaseOrder = db.PurchaseOrder.Find(ID);
             var cmvm = new CMVM
             {
@@ -469,8 +504,28 @@ namespace PurchaseOrderSys.Controllers
                 ShippedDate = PurchaseOrder.ShippedDate,
                 Carrier = PurchaseOrder.Carrier,
                 Tracking = PurchaseOrder.Tracking,
-                PurchaseSKU = PurchaseOrder.PurchaseSKU.Where(x => x.IsEnable).ToList()
+                CMType= CMTypeVal,
+                WarehouseID= PurchaseOrder.WarehouseID,
+                Tax = PurchaseOrder.Tax,
+                Currency= PurchaseOrder.Currency
             };
+            var dataList = PurchaseOrder.PurchaseSKU.Select(x => new CMSKUVM
+            {
+                ID = x.ID,
+                ck = x.SkuNo,
+                sk = x.SkuNo,
+                Name = x.Name,
+                SKU = x.SkuNo,
+                VendorSKU = x.VendorSKU,
+                QTYOrdered = x.QTYOrdered,
+                QTYReceived = x.QTYReceived?? 0,
+                QTYReturned = x.QTYReturned ?? 0,
+                CreditQTY=x.CreditQTY ?? 0,
+                Credit = x.Credit ?? 0,
+                Subtotal = (x.CreditQTY* x.Credit)??0,
+                Model = "L"
+            });
+            Session["CMSkuNumberList"] = dataList.ToList();
             return View(cmvm);
         }
         [HttpPost]
@@ -553,13 +608,104 @@ namespace PurchaseOrderSys.Controllers
         }
         public ActionResult RemoveData(string[] IDList)
         {
-
-            foreach (var item in IDList)
+            var Errmsg = "";
+            if (IDList != null && IDList.Any())
             {
+                var odataList = (List<PoSKUVM>)Session["SkuNumberList"];
+                foreach (var item in IDList)
+                {
+                    foreach (var odataListitem in odataList.Where(x => x.ID.ToString() == item || x.SKU == item))
+                    {
+                        if (odataListitem.ID.HasValue)
+                        {
 
+
+                            var PurchaseSKU = db.PurchaseSKU.Find(odataListitem.ID);
+                            if (PurchaseSKU.SerialsLlist.Any())
+                            {
+                                Errmsg += "【" + PurchaseSKU.SkuNo + "】已有序號不能刪除；";
+                            }
+                            else
+                            {
+                                odataListitem.Model = "D";
+                            }
+                        }
+                        else
+                        {
+                            odataListitem.Model = "D";
+                        }
+                    }
+                }
+                Session["SkuNumberList"] = odataList;
             }
-            return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+            else
+            {
+                Errmsg = "沒有選取SKU";
+            }
+            if (string.IsNullOrWhiteSpace(Errmsg))
+            {
+                return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { status = false, Errmsg }, JsonRequestBehavior.AllowGet);
+            }
+
         }
-        
+        public ActionResult EditSKUData(string[] IDList)
+        {
+            var Errmsg = "";
+            if (IDList != null && IDList.Any())
+            {
+                var odataList = (List<PoSKUVM>)Session["SkuNumberList"];
+                foreach (var item in IDList)
+                {
+                    foreach (var odataListitem in odataList.Where(x => x.ID.ToString() == item || x.SKU == item))
+                    {
+                        odataListitem.Model = "E";
+                    }
+                }
+            }
+            else
+            {
+                Errmsg = "沒有選取SKU";
+            }
+            if (string.IsNullOrWhiteSpace(Errmsg))
+            {
+                return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { status = false, Errmsg }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        public ActionResult EditCMSKUData(string[] IDList)
+        {
+            var Errmsg = "";
+            if (IDList != null && IDList.Any())
+            {
+                var odataList = (List<CMSKUVM>)Session["CMSkuNumberList"];
+                foreach (var item in IDList)
+                {
+                    foreach (var odataListitem in odataList.Where(x => x.ID.ToString() == item || x.SKU == item))
+                    {
+                        odataListitem.Model = "E";
+                    }
+                }
+            }
+            else
+            {
+                Errmsg = "沒有選取SKU";
+            }
+            if (string.IsNullOrWhiteSpace(Errmsg))
+            {
+                return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { status = false, Errmsg }, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
+
 }
