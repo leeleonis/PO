@@ -245,18 +245,6 @@
     <Compile Include="Models\CarrierMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\CMCreditNote.cs">
-      <DependentUpon>PurchaseMdel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\CMCreditNoteMetadata.cs">
-      <DependentUpon>ModelTemplate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\CMReplacement.cs">
-      <DependentUpon>PurchaseMdel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\CMReplacementMetadata.cs">
-      <DependentUpon>ModelTemplate.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Company.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
     </Compile>
@@ -273,6 +261,12 @@
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ConditionMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CreditMemo.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CreditMemoMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DataGridAttribute.cs" />

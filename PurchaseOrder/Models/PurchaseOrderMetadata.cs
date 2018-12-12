@@ -1,12 +1,11 @@
-using System; 
-using System.ComponentModel;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace PurchaseOrderSys.Models
 {
-    
+
     /// <summary>
     /// PurchaseOrder class
     /// </summary>
@@ -63,7 +62,7 @@ namespace PurchaseOrderSys.Models
     		/// PODate
     		/// </summary>        
     	    [Display(Name = "PurchaseOrder_PODate", ResourceType = typeof(App_GlobalResources.Resource))]
-            [UIHint("DateTime")]
+            [UIHint("FDate")]
     		public Nullable<System.DateTime>  PODate { get; set; }
     
     		    
@@ -79,7 +78,7 @@ namespace PurchaseOrderSys.Models
     		/// Received Date
     		/// </summary>        
     	    [Display(Name = "PurchaseOrder_ReceivedDate", ResourceType = typeof(App_GlobalResources.Resource))]
-            [UIHint("DateTime")]
+            [UIHint("FDate")]
     		public Nullable<System.DateTime>  ReceivedDate { get; set; }
     
     		    
@@ -87,7 +86,7 @@ namespace PurchaseOrderSys.Models
     		/// Shipped Date
     		/// </summary>        
     	    [Display(Name = "PurchaseOrder_ShippedDate", ResourceType = typeof(App_GlobalResources.Resource))]
-            [UIHint("DateTime")]
+            [UIHint("FDate")]
     		public Nullable<System.DateTime>  ShippedDate { get; set; }
     
     		    
@@ -119,7 +118,7 @@ namespace PurchaseOrderSys.Models
     		/// Payment Date
     		/// </summary>        
     	    [Display(Name = "PurchaseOrder_PaymentDate", ResourceType = typeof(App_GlobalResources.Resource))]
-            [UIHint("DateTime")]
+            [UIHint("FDate")]
     		public Nullable<System.DateTime>  PaymentDate { get; set; }
     
     		    
@@ -143,7 +142,7 @@ namespace PurchaseOrderSys.Models
     		/// Create At
     		/// </summary>        
     	    [Display(Name = "PurchaseOrder_CreateAt", ResourceType = typeof(App_GlobalResources.Resource))]
-            [UIHint("DateTime")]
+            [UIHint("FDate")]
             [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public System.DateTime  CreateAt { get; set; }
@@ -177,7 +176,7 @@ namespace PurchaseOrderSys.Models
     		/// Received At
     		/// </summary>        
     	    [Display(Name = "PurchaseOrder_ReceivedAt", ResourceType = typeof(App_GlobalResources.Resource))]
-            [UIHint("DateTime")]
+            [UIHint("FDate")]
     		public Nullable<System.DateTime>  ReceivedAt { get; set; }
     
     		    
@@ -193,7 +192,7 @@ namespace PurchaseOrderSys.Models
     		/// Invoice Date
     		/// </summary>        
     	    [Display(Name = "PurchaseOrder_InvoiceDate", ResourceType = typeof(App_GlobalResources.Resource))]
-            [UIHint("DateTime")]
+            [UIHint("FDate")]
     		public Nullable<System.DateTime>  InvoiceDate { get; set; }
     
     		    

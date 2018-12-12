@@ -12,10 +12,10 @@ namespace PurchaseOrderSys.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class CMReplacement
+    public partial class CreditMemo
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public CMReplacement()
+        public CreditMemo()
         {
             this.PurchaseSKU = new HashSet<PurchaseSKU>();
         }
@@ -29,7 +29,6 @@ namespace PurchaseOrderSys.Models
         public string InvoiceNo { get; set; }
         public string CMStatus { get; set; }
         public string CMType { get; set; }
-        public string ReplacementPO { get; set; }
         public Nullable<System.DateTime> CMDate { get; set; }
         public string ShippingStatus { get; set; }
         public Nullable<System.DateTime> ShippedDate { get; set; }

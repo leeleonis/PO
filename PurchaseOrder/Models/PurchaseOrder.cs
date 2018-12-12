@@ -18,8 +18,7 @@ namespace PurchaseOrderSys.Models
         public PurchaseOrder()
         {
             this.PurchaseNote = new HashSet<PurchaseNote>();
-            this.CMCreditNote = new HashSet<CMCreditNote>();
-            this.CMReplacement = new HashSet<CMReplacement>();
+            this.CreditMemo = new HashSet<CreditMemo>();
             this.PurchaseSKU = new HashSet<PurchaseSKU>();
         }
     
@@ -57,13 +56,11 @@ namespace PurchaseOrderSys.Models
         public virtual Company Company { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseNote> PurchaseNote { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CMCreditNote> CMCreditNote { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CMReplacement> CMReplacement { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PurchaseSKU> PurchaseSKU { get; set; }
         public virtual VendorLIst VendorLIst { get; set; }
         public virtual Warehouse Warehouse1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CreditMemo> CreditMemo { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PurchaseSKU> PurchaseSKU { get; set; }
     }
 }

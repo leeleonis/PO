@@ -1753,6 +1753,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查詢類似 Other 的當地語系化字串。
+        /// </summary>
+        public static string PurchaseOrder_Other {
+            get {
+                return ResourceManager.GetString("PurchaseOrder_Other", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 Paid Amount 的當地語系化字串。
         /// </summary>
         public static string PurchaseOrder_PaidAmount {
@@ -1861,6 +1870,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查詢類似 Shipping Cost 的當地語系化字串。
+        /// </summary>
+        public static string PurchaseOrder_ShippingCost {
+            get {
+                return ResourceManager.GetString("PurchaseOrder_ShippingCost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 Tax 的當地語系化字串。
         /// </summary>
         public static string PurchaseOrder_Tax {
@@ -1911,6 +1929,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         public static string PurchaseOrder_Warehouse {
             get {
                 return ResourceManager.GetString("PurchaseOrder_Warehouse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Ware House 的當地語系化字串。
+        /// </summary>
+        public static string PurchaseOrder_WarehouseID {
+            get {
+                return ResourceManager.GetString("PurchaseOrder_WarehouseID", resourceCulture);
             }
         }
         

@@ -8,22 +8,22 @@ namespace PurchaseOrderSys.Models
 {
     
     /// <summary>
-    /// CMCreditNote class
+    /// CreditMemo class
     /// </summary>
-    [MetadataType(typeof(CMCreditNoteMetadata))]
-    public  partial class CMCreditNote
+    [MetadataType(typeof(CreditMemoMetadata))]
+    public  partial class CreditMemo
     {
     
     	/// <summary>
-    	/// CMCreditNote Metadata class
+    	/// CreditMemo Metadata class
     	/// </summary>
-    	public   class CMCreditNoteMetadata
+    	public   class CreditMemoMetadata
     	{
     		    
     		/// <summary>
     		/// Is Enable
     		/// </summary>        
-    	    [Display(Name = "CMCreditNote_IsEnable", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "CreditMemo_IsEnable", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public bool  IsEnable { get; set; }
     
@@ -31,7 +31,7 @@ namespace PurchaseOrderSys.Models
     		/// <summary>
     		/// ID
     		/// </summary>        
-    	    [Display(Name = "CMCreditNote_ID", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "CreditMemo_ID", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public int  ID { get; set; }
     
@@ -39,28 +39,28 @@ namespace PurchaseOrderSys.Models
     		/// <summary>
     		/// Purchase Order ID
     		/// </summary>        
-    	    [Display(Name = "CMCreditNote_PurchaseOrderID", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "CreditMemo_PurchaseOrderID", ResourceType = typeof(App_GlobalResources.Resource))]
     		public Nullable<int>  PurchaseOrderID { get; set; }
     
     		    
     		/// <summary>
     		/// Company ID
     		/// </summary>        
-    	    [Display(Name = "CMCreditNote_CompanyID", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "CreditMemo_CompanyID", ResourceType = typeof(App_GlobalResources.Resource))]
     		public Nullable<int>  CompanyID { get; set; }
     
     		    
     		/// <summary>
     		/// Vendor ID
     		/// </summary>        
-    	    [Display(Name = "CMCreditNote_VendorID", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "CreditMemo_VendorID", ResourceType = typeof(App_GlobalResources.Resource))]
     		public Nullable<int>  VendorID { get; set; }
     
     		    
     		/// <summary>
     		/// Invoice Date
     		/// </summary>        
-    	    [Display(Name = "CMCreditNote_InvoiceDate", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "CreditMemo_InvoiceDate", ResourceType = typeof(App_GlobalResources.Resource))]
             [UIHint("DateTime")]
     		public Nullable<System.DateTime>  InvoiceDate { get; set; }
     
@@ -68,7 +68,7 @@ namespace PurchaseOrderSys.Models
     		/// <summary>
     		/// Invoice No
     		/// </summary>        
-    	    [Display(Name = "CMCreditNote_InvoiceNo", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "CreditMemo_InvoiceNo", ResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(20, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  InvoiceNo { get; set; }
     
@@ -76,7 +76,7 @@ namespace PurchaseOrderSys.Models
     		/// <summary>
     		/// CMStatus
     		/// </summary>        
-    	    [Display(Name = "CMCreditNote_CMStatus", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "CreditMemo_CMStatus", ResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(20, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  CMStatus { get; set; }
     
@@ -84,7 +84,7 @@ namespace PurchaseOrderSys.Models
     		/// <summary>
     		/// CMType
     		/// </summary>        
-    	    [Display(Name = "CMCreditNote_CMType", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "CreditMemo_CMType", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(20, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  CMType { get; set; }
@@ -93,7 +93,7 @@ namespace PurchaseOrderSys.Models
     		/// <summary>
     		/// CMDate
     		/// </summary>        
-    	    [Display(Name = "CMCreditNote_CMDate", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "CreditMemo_CMDate", ResourceType = typeof(App_GlobalResources.Resource))]
             [UIHint("DateTime")]
     		public Nullable<System.DateTime>  CMDate { get; set; }
     
@@ -101,7 +101,7 @@ namespace PurchaseOrderSys.Models
     		/// <summary>
     		/// Shipping Status
     		/// </summary>        
-    	    [Display(Name = "CMCreditNote_ShippingStatus", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "CreditMemo_ShippingStatus", ResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(20, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  ShippingStatus { get; set; }
     
@@ -109,7 +109,7 @@ namespace PurchaseOrderSys.Models
     		/// <summary>
     		/// Shipped Date
     		/// </summary>        
-    	    [Display(Name = "CMCreditNote_ShippedDate", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "CreditMemo_ShippedDate", ResourceType = typeof(App_GlobalResources.Resource))]
             [UIHint("DateTime")]
     		public Nullable<System.DateTime>  ShippedDate { get; set; }
     
@@ -117,7 +117,7 @@ namespace PurchaseOrderSys.Models
     		/// <summary>
     		/// Carrier
     		/// </summary>        
-    	    [Display(Name = "CMCreditNote_Carrier", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "CreditMemo_Carrier", ResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(20, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  Carrier { get; set; }
     
@@ -125,7 +125,7 @@ namespace PurchaseOrderSys.Models
     		/// <summary>
     		/// Tracking
     		/// </summary>        
-    	    [Display(Name = "CMCreditNote_Tracking", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "CreditMemo_Tracking", ResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(20, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  Tracking { get; set; }
     
@@ -133,7 +133,7 @@ namespace PurchaseOrderSys.Models
     		/// <summary>
     		/// Credit Status
     		/// </summary>        
-    	    [Display(Name = "CMCreditNote_CreditStatus", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "CreditMemo_CreditStatus", ResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(20, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  CreditStatus { get; set; }
     
@@ -141,7 +141,7 @@ namespace PurchaseOrderSys.Models
     		/// <summary>
     		/// Credit Date
     		/// </summary>        
-    	    [Display(Name = "CMCreditNote_CreditDate", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "CreditMemo_CreditDate", ResourceType = typeof(App_GlobalResources.Resource))]
             [UIHint("DateTime")]
     		public Nullable<System.DateTime>  CreditDate { get; set; }
     
@@ -149,14 +149,14 @@ namespace PurchaseOrderSys.Models
     		/// <summary>
     		/// Credit Amount
     		/// </summary>        
-    	    [Display(Name = "CMCreditNote_CreditAmount", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "CreditMemo_CreditAmount", ResourceType = typeof(App_GlobalResources.Resource))]
     		public Nullable<decimal>  CreditAmount { get; set; }
     
     		    
     		/// <summary>
     		/// Create By
     		/// </summary>        
-    	    [Display(Name = "CMCreditNote_CreateBy", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "CreditMemo_CreateBy", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  CreateBy { get; set; }
@@ -165,7 +165,7 @@ namespace PurchaseOrderSys.Models
     		/// <summary>
     		/// Create At
     		/// </summary>        
-    	    [Display(Name = "CMCreditNote_CreateAt", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "CreditMemo_CreateAt", ResourceType = typeof(App_GlobalResources.Resource))]
             [UIHint("DateTime")]
             [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
@@ -175,7 +175,7 @@ namespace PurchaseOrderSys.Models
     		/// <summary>
     		/// Update By
     		/// </summary>        
-    	    [Display(Name = "CMCreditNote_UpdateBy", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "CreditMemo_UpdateBy", ResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  UpdateBy { get; set; }
     
@@ -183,7 +183,7 @@ namespace PurchaseOrderSys.Models
     		/// <summary>
     		/// Update At
     		/// </summary>        
-    	    [Display(Name = "CMCreditNote_UpdateAt", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "CreditMemo_UpdateAt", ResourceType = typeof(App_GlobalResources.Resource))]
             [UIHint("DateTime")]
     		public Nullable<System.DateTime>  UpdateAt { get; set; }
     
@@ -191,7 +191,7 @@ namespace PurchaseOrderSys.Models
     		/// <summary>
     		/// Received By
     		/// </summary>        
-    	    [Display(Name = "CMCreditNote_ReceivedBy", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "CreditMemo_ReceivedBy", ResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  ReceivedBy { get; set; }
     
@@ -199,7 +199,7 @@ namespace PurchaseOrderSys.Models
     		/// <summary>
     		/// Received At
     		/// </summary>        
-    	    [Display(Name = "CMCreditNote_ReceivedAt", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "CreditMemo_ReceivedAt", ResourceType = typeof(App_GlobalResources.Resource))]
             [UIHint("DateTime")]
     		public Nullable<System.DateTime>  ReceivedAt { get; set; }
     

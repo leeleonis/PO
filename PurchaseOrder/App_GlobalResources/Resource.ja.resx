@@ -120,4 +120,13 @@
   <data name="Language" xml:space="preserve">
     <value>123</value>
   </data>
+  <data name="PurchaseOrder_WarehouseID" xml:space="preserve">
+    <value>Ware House</value>
+  </data>
+  <data name="PurchaseOrder_ShippingCost" xml:space="preserve">
+    <value>Shipping Cost</value>
+  </data>
+  <data name="PurchaseOrder_Other" xml:space="preserve">
+    <value>Other</value>
+  </data>
 </root>

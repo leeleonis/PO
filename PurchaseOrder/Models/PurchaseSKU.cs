@@ -27,6 +27,8 @@ namespace PurchaseOrderSys.Models
         public string SkuNo { get; set; }
         public Nullable<int> QTYOrdered { get; set; }
         public Nullable<int> QTYFulfilled { get; set; }
+        public Nullable<int> QTYReturned { get; set; }
+        public Nullable<int> QTYReceived { get; set; }
         public Nullable<decimal> Price { get; set; }
         public Nullable<decimal> Discount { get; set; }
         public Nullable<decimal> DiscountedPrice { get; set; }
@@ -41,14 +43,10 @@ namespace PurchaseOrderSys.Models
         public Nullable<System.DateTime> ReceivedAt { get; set; }
         public string VendorSKU { get; set; }
         public Nullable<decimal> Credit { get; set; }
-        public Nullable<int> CMCreditNoteID { get; set; }
-        public Nullable<int> CMReplacementID { get; set; }
         public Nullable<int> CreditQTY { get; set; }
-        public Nullable<int> QTYReturned { get; set; }
-        public Nullable<int> QTYReceived { get; set; }
+        public Nullable<int> CreditMemoID { get; set; }
     
-        public virtual CMCreditNote CMCreditNote { get; set; }
-        public virtual CMReplacement CMReplacement { get; set; }
+        public virtual CreditMemo CreditMemo { get; set; }
         public virtual PurchaseOrder PurchaseOrder { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SerialsLlist> SerialsLlist { get; set; }

@@ -180,7 +180,7 @@ namespace PurchaseOrderSys.Models
         public Nullable<decimal> Tax { get; set; }
 
         public IEnumerable< PurchaseSKU> PurchaseSKU { get; set; }
-        public IEnumerable<CMCreditNote> CMCreditNote { get; set; }
+        public IEnumerable<CreditMemo> CreditMemo { get; set; }
     }
     public class PurchaseOrderPOVM
     {
