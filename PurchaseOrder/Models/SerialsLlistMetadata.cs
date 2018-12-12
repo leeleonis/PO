@@ -1,11 +1,12 @@
-using System;
+using System; 
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// SerialsLlist class
     /// </summary>
@@ -98,6 +99,20 @@ namespace PurchaseOrderSys.Models
     	    [Display(Name = "SerialsLlist_ReceivedAt", ResourceType = typeof(App_GlobalResources.Resource))]
             [UIHint("DateTime")]
     		public Nullable<System.DateTime>  ReceivedAt { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// PID
+    		/// </summary>        
+    	    [Display(Name = "SerialsLlist_PID", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  PID { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Transfer SKUID
+    		/// </summary>        
+    	    [Display(Name = "SerialsLlist_TransferSKUID", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  TransferSKUID { get; set; }
     
     		    
     	}

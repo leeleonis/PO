@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+
 namespace PurchaseOrderSys.Models
 {
     
@@ -140,13 +141,17 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "Warehouse_Marketplace", ResourceType = typeof(App_GlobalResources.Resource))]
     		public string  Marketplace { get; set; }
-
-            /// <summary>
-            /// Company
-            /// </summary>        
-            [Display(Name = "Warehouse_Company", ResourceType = typeof(App_GlobalResources.Resource))]
-            public string Company { get; set; }
-        }
+    
+    		    
+    		/// <summary>
+    		/// Company
+    		/// </summary>        
+    	    [Display(Name = "Warehouse_Company", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  Company { get; set; }
+    
+    		    
+    	}
     }
     
 }

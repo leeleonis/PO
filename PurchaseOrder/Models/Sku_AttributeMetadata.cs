@@ -1,39 +1,23 @@
-using System;
+using System; 
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// Sku_Attribute class
     /// </summary>
     [MetadataType(typeof(Sku_AttributeMetadata))]
-    public  partial class Sku_Attribute : IEquatable<Sku_Attribute>
+    public  partial class Sku_Attribute
     {
-        public bool Equals(Sku_Attribute other)
-        {
-            if (ReferenceEquals(other, null)) return false;
-
-            if (ReferenceEquals(this, other)) return true;
-
-            return Sku.Equals(other.Sku) && AttrID.Equals(other.AttrID) && LangID.Equals(other.LangID);
-        }
-
-        public override int GetHashCode()
-        {
-            int hashSku = Sku.GetHashCode();
-            int hashAttrID = AttrID.GetHashCode();
-            int hashLangID = LangID.GetHashCode();
-
-            return hashSku ^ hashAttrID ^ hashLangID;
-        }
-
-        /// <summary>
-        /// Sku_Attribute Metadata class
-        /// </summary>
-        public   class Sku_AttributeMetadata
+    
+    	/// <summary>
+    	/// Sku_Attribute Metadata class
+    	/// </summary>
+    	public   class Sku_AttributeMetadata
     	{
     		    
     		/// <summary>
