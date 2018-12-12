@@ -529,20 +529,51 @@ namespace PurchaseOrderSys.Controllers
             return View(cmvm);
         }
         [HttpPost]
-        public ActionResult CreateCM(PurchaseOrderPOVM filter)
+        public ActionResult CreateCM(CreditMemo filter)
         {
-            var PurchaseOrder = new PurchaseOrder
+            var CreditMemo = new CreditMemo
             {
                 IsEnable = true,
                 CompanyID = filter.CompanyID,
                 VendorID = filter.VendorID,
-                PODate = filter.PODate,
-                POStatus = filter.POStatus,
-                POType = filter.POType,
+                InvoiceDate=filter.InvoiceDate,
+                InvoiceNo= filter.InvoiceNo,
+                CMDate = filter.CMDate,
+                CMStatus = filter.CMStatus,
+                CMType = filter.CMType,
+                ShippingStatus= filter.ShippingStatus,
+                ShippedDate= filter.ShippedDate,
+                Carrier= filter.Carrier,
+                Tracking= filter.Tracking,
+                CreditStatus= filter.CreditStatus,
+                CreditDate= filter.CreditDate,
+                CreditAmount= filter.CreditAmount,
                 CreateBy = UserBy,
                 CreateAt = DateTime.UtcNow
             };
-            db.PurchaseOrder.Add(PurchaseOrder);
+            db.CreditMemo.Add(CreditMemo);
+            var dataList = (List<CMSKUVM>)Session["CMSkuNumberList"];
+            if (dataList != null)
+            {
+                var PurchaseSKUlist = dataList.Select(x => new PurchaseSKU
+                {
+                    IsEnable = true,
+                    Name = x.Name,
+                    SkuNo = x.SKU,
+                    VendorSKU = string.IsNullOrWhiteSpace(x.VendorSKU) ? x.SKU : x.VendorSKU,
+                    QTYOrdered = x.QTYOrdered,
+                    QTYReturned=x.QTYReturned,
+                    CreditQTY=x.CreditQTY,
+                    Credit = x.Credit,
+                    QTYReceived=x.QTYReceived,
+                    CreateBy = UserBy,
+                    CreateAt = DateTime.UtcNow
+                });
+                foreach (var item in PurchaseSKUlist)
+                {
+                    CreditMemo.PurchaseSKU.Add(item);
+                }
+            }
             db.SaveChanges();
             return RedirectToAction("Index");
         }

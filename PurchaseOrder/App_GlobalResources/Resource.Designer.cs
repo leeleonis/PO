@@ -1195,6 +1195,213 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查詢類似 Carrier 的當地語系化字串。
+        /// </summary>
+        public static string CreditMemo_Carrier {
+            get {
+                return ResourceManager.GetString("CreditMemo_Carrier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CMDate 的當地語系化字串。
+        /// </summary>
+        public static string CreditMemo_CMDate {
+            get {
+                return ResourceManager.GetString("CreditMemo_CMDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CMStatus 的當地語系化字串。
+        /// </summary>
+        public static string CreditMemo_CMStatus {
+            get {
+                return ResourceManager.GetString("CreditMemo_CMStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CMType 的當地語系化字串。
+        /// </summary>
+        public static string CreditMemo_CMType {
+            get {
+                return ResourceManager.GetString("CreditMemo_CMType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CompanyID 的當地語系化字串。
+        /// </summary>
+        public static string CreditMemo_CompanyID {
+            get {
+                return ResourceManager.GetString("CreditMemo_CompanyID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CreateAt 的當地語系化字串。
+        /// </summary>
+        public static string CreditMemo_CreateAt {
+            get {
+                return ResourceManager.GetString("CreditMemo_CreateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CreateBy 的當地語系化字串。
+        /// </summary>
+        public static string CreditMemo_CreateBy {
+            get {
+                return ResourceManager.GetString("CreditMemo_CreateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CreditAmount 的當地語系化字串。
+        /// </summary>
+        public static string CreditMemo_CreditAmount {
+            get {
+                return ResourceManager.GetString("CreditMemo_CreditAmount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CreditDate 的當地語系化字串。
+        /// </summary>
+        public static string CreditMemo_CreditDate {
+            get {
+                return ResourceManager.GetString("CreditMemo_CreditDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CreditStatus 的當地語系化字串。
+        /// </summary>
+        public static string CreditMemo_CreditStatus {
+            get {
+                return ResourceManager.GetString("CreditMemo_CreditStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ID 的當地語系化字串。
+        /// </summary>
+        public static string CreditMemo_ID {
+            get {
+                return ResourceManager.GetString("CreditMemo_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 InvoiceDate 的當地語系化字串。
+        /// </summary>
+        public static string CreditMemo_InvoiceDate {
+            get {
+                return ResourceManager.GetString("CreditMemo_InvoiceDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 InvoiceNo 的當地語系化字串。
+        /// </summary>
+        public static string CreditMemo_InvoiceNo {
+            get {
+                return ResourceManager.GetString("CreditMemo_InvoiceNo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 IsEnable 的當地語系化字串。
+        /// </summary>
+        public static string CreditMemo_IsEnable {
+            get {
+                return ResourceManager.GetString("CreditMemo_IsEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 PurchaseOrderID 的當地語系化字串。
+        /// </summary>
+        public static string CreditMemo_PurchaseOrderID {
+            get {
+                return ResourceManager.GetString("CreditMemo_PurchaseOrderID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ReceivedAt 的當地語系化字串。
+        /// </summary>
+        public static string CreditMemo_ReceivedAt {
+            get {
+                return ResourceManager.GetString("CreditMemo_ReceivedAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ReceivedBy 的當地語系化字串。
+        /// </summary>
+        public static string CreditMemo_ReceivedBy {
+            get {
+                return ResourceManager.GetString("CreditMemo_ReceivedBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ShippedDate 的當地語系化字串。
+        /// </summary>
+        public static string CreditMemo_ShippedDate {
+            get {
+                return ResourceManager.GetString("CreditMemo_ShippedDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ShippingStatus 的當地語系化字串。
+        /// </summary>
+        public static string CreditMemo_ShippingStatus {
+            get {
+                return ResourceManager.GetString("CreditMemo_ShippingStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Tracking 的當地語系化字串。
+        /// </summary>
+        public static string CreditMemo_Tracking {
+            get {
+                return ResourceManager.GetString("CreditMemo_Tracking", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UpdateAt 的當地語系化字串。
+        /// </summary>
+        public static string CreditMemo_UpdateAt {
+            get {
+                return ResourceManager.GetString("CreditMemo_UpdateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UpdateBy 的當地語系化字串。
+        /// </summary>
+        public static string CreditMemo_UpdateBy {
+            get {
+                return ResourceManager.GetString("CreditMemo_UpdateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 VendorID 的當地語系化字串。
+        /// </summary>
+        public static string CreditMemo_VendorID {
+            get {
+                return ResourceManager.GetString("CreditMemo_VendorID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 AUD 的當地語系化字串。
         /// </summary>
         public static string CurrencyAUD {

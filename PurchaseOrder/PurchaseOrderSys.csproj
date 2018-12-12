@@ -1172,10 +1172,10 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_GlobalResources\Resource.ja.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
+    <EmbeddedResource Include="App_GlobalResources\Resource.ja.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.ja.designer.cs</LastGenOutput>
-    </Content>
+    </EmbeddedResource>
     <EmbeddedResource Include="App_GlobalResources\Resource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>

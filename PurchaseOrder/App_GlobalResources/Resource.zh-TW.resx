@@ -1335,4 +1335,73 @@
   <data name="PurchaseOrder_Other" xml:space="preserve">
     <value>其他費用</value>
   </data>
+  <data name="CreditMemo_IsEnable" xml:space="preserve">
+    <value>啟用</value>
+  </data>
+  <data name="CreditMemo_ID" xml:space="preserve">
+    <value>流水號</value>
+  </data>
+  <data name="CreditMemo_PurchaseOrderID" xml:space="preserve">
+    <value>CM號碼</value>
+  </data>
+  <data name="CreditMemo_CompanyID" xml:space="preserve">
+    <value>採購的公司</value>
+  </data>
+  <data name="CreditMemo_VendorID" xml:space="preserve">
+    <value>供應商</value>
+  </data>
+  <data name="CreditMemo_InvoiceDate" xml:space="preserve">
+    <value>發票日期</value>
+  </data>
+  <data name="CreditMemo_InvoiceNo" xml:space="preserve">
+    <value>發票號碼</value>
+  </data>
+  <data name="CreditMemo_CMStatus" xml:space="preserve">
+    <value>CM狀態</value>
+  </data>
+  <data name="CreditMemo_CMType" xml:space="preserve">
+    <value>CM的種類</value>
+  </data>
+  <data name="CreditMemo_CMDate" xml:space="preserve">
+    <value>訂貨日</value>
+  </data>
+  <data name="CreditMemo_ShippingStatus" xml:space="preserve">
+    <value>退貨運輸狀態</value>
+  </data>
+  <data name="CreditMemo_ShippedDate" xml:space="preserve">
+    <value>退貨出貨日</value>
+  </data>
+  <data name="CreditMemo_Carrier" xml:space="preserve">
+    <value>運輸商</value>
+  </data>
+  <data name="CreditMemo_Tracking" xml:space="preserve">
+    <value>提單號碼</value>
+  </data>
+  <data name="CreditMemo_CreditStatus" xml:space="preserve">
+    <value>折讓進度</value>
+  </data>
+  <data name="CreditMemo_CreditDate" xml:space="preserve">
+    <value>折讓日期</value>
+  </data>
+  <data name="CreditMemo_CreditAmount" xml:space="preserve">
+    <value>折讓金額</value>
+  </data>
+  <data name="CreditMemo_CreateBy" xml:space="preserve">
+    <value>建立者</value>
+  </data>
+  <data name="CreditMemo_CreateAt" xml:space="preserve">
+    <value>建立時間</value>
+  </data>
+  <data name="CreditMemo_UpdateBy" xml:space="preserve">
+    <value>修改者</value>
+  </data>
+  <data name="CreditMemo_UpdateAt" xml:space="preserve">
+    <value>修改時間</value>
+  </data>
+  <data name="CreditMemo_ReceivedBy" xml:space="preserve">
+    <value>入庫者</value>
+  </data>
+  <data name="CreditMemo_ReceivedAt" xml:space="preserve">
+    <value>入庫時間</value>
+  </data>
 </root>

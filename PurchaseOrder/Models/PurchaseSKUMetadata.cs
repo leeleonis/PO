@@ -162,7 +162,7 @@ namespace PurchaseOrderSys.Models
     		/// Received At
     		/// </summary>        
     	    [Display(Name = "PurchaseSKU_ReceivedAt", ResourceType = typeof(App_GlobalResources.Resource))]
-            [UIHint("DateTime")]
+            [UIHint("FDate")]
     		public Nullable<System.DateTime>  ReceivedAt { get; set; }
     
     		    
@@ -180,20 +180,6 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "PurchaseSKU_Credit", ResourceType = typeof(App_GlobalResources.Resource))]
     		public Nullable<decimal>  Credit { get; set; }
-    
-    		    
-    		/// <summary>
-    		/// CMCredit Note ID
-    		/// </summary>        
-    	    [Display(Name = "PurchaseSKU_CMCreditNoteID", ResourceType = typeof(App_GlobalResources.Resource))]
-    		public Nullable<int>  CMCreditNoteID { get; set; }
-    
-    		    
-    		/// <summary>
-    		/// CMReplacement ID
-    		/// </summary>        
-    	    [Display(Name = "PurchaseSKU_CMReplacementID", ResourceType = typeof(App_GlobalResources.Resource))]
-    		public Nullable<int>  CMReplacementID { get; set; }
     
     		    
     		/// <summary>

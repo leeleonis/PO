@@ -30,6 +30,7 @@
                         <div class="widget-body no-padding">
                             <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
                                 @Html.AntiForgeryToken()
+                                @Html.HiddenFor(model=> model.PurchaseOrderID)
                                 <input type="hidden" name="IsEnable" value="True">
 
                                 <div id="content" class="tab-content">

@@ -129,4 +129,73 @@
   <data name="PurchaseOrder_Other" xml:space="preserve">
     <value>Other</value>
   </data>
+  <data name="CreditMemo_IsEnable" xml:space="preserve">
+    <value>IsEnable</value>
+  </data>
+  <data name="CreditMemo_ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="CreditMemo_PurchaseOrderID" xml:space="preserve">
+    <value>PurchaseOrderID</value>
+  </data>
+  <data name="CreditMemo_CompanyID" xml:space="preserve">
+    <value>CompanyID</value>
+  </data>
+  <data name="CreditMemo_VendorID" xml:space="preserve">
+    <value>VendorID</value>
+  </data>
+  <data name="CreditMemo_InvoiceDate" xml:space="preserve">
+    <value>InvoiceDate</value>
+  </data>
+  <data name="CreditMemo_InvoiceNo" xml:space="preserve">
+    <value>InvoiceNo</value>
+  </data>
+  <data name="CreditMemo_CMStatus" xml:space="preserve">
+    <value>CMStatus</value>
+  </data>
+  <data name="CreditMemo_CMType" xml:space="preserve">
+    <value>CMType</value>
+  </data>
+  <data name="CreditMemo_CMDate" xml:space="preserve">
+    <value>CMDate</value>
+  </data>
+  <data name="CreditMemo_ShippingStatus" xml:space="preserve">
+    <value>ShippingStatus</value>
+  </data>
+  <data name="CreditMemo_ShippedDate" xml:space="preserve">
+    <value>ShippedDate</value>
+  </data>
+  <data name="CreditMemo_Carrier" xml:space="preserve">
+    <value>Carrier</value>
+  </data>
+  <data name="CreditMemo_Tracking" xml:space="preserve">
+    <value>Tracking</value>
+  </data>
+  <data name="CreditMemo_CreditStatus" xml:space="preserve">
+    <value>CreditStatus</value>
+  </data>
+  <data name="CreditMemo_CreditDate" xml:space="preserve">
+    <value>CreditDate</value>
+  </data>
+  <data name="CreditMemo_CreditAmount" xml:space="preserve">
+    <value>CreditAmount</value>
+  </data>
+  <data name="CreditMemo_CreateBy" xml:space="preserve">
+    <value>CreateBy</value>
+  </data>
+  <data name="CreditMemo_CreateAt" xml:space="preserve">
+    <value>CreateAt</value>
+  </data>
+  <data name="CreditMemo_UpdateBy" xml:space="preserve">
+    <value>UpdateBy</value>
+  </data>
+  <data name="CreditMemo_UpdateAt" xml:space="preserve">
+    <value>UpdateAt</value>
+  </data>
+  <data name="CreditMemo_ReceivedBy" xml:space="preserve">
+    <value>ReceivedBy</value>
+  </data>
+  <data name="CreditMemo_ReceivedAt" xml:space="preserve">
+    <value>ReceivedAt</value>
+  </data>
 </root>
