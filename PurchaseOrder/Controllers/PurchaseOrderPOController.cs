@@ -11,9 +11,10 @@ namespace PurchaseOrderSys.Controllers
     public class PurchaseOrderPOController : BaseController
     {
         // GET: PurchaseOrder
-        public ActionResult Index()
+        public ActionResult Index(PurchaseOrderPOVM PurchaseOrderPOVM)
         {
-            return View();
+            Session["PurchaseOrderPOVM"] = PurchaseOrderPOVM;
+            return View(PurchaseOrderPOVM);
         }
         public ActionResult Create(string POTypeVal = "PurchaseOrder")
         {
@@ -90,8 +91,98 @@ namespace PurchaseOrderSys.Controllers
         {
             if (Type == "Master")
             {
+                var QPurchaseOrderPOVM = (PurchaseOrderPOVM)Session["PurchaseOrderPOVM"];
                 int total = 0;
                 var listPurchaseOrder = db.PurchaseOrder.Where(x => x.IsEnable);
+                //綱頁查詢
+                //listPurchaseOrder= QueryData(listPurchaseOrder, QPurchaseOrderPOVM);
+
+                //try
+                //{
+                //    var sl = listPurchaseOrder.ToList();
+                //}
+                //catch (Exception ex)
+                //{
+
+                // var s=   ex.ToString();
+                //}
+
+                if (QPurchaseOrderPOVM.CompanyID.HasValue)
+                {
+                    listPurchaseOrder = listPurchaseOrder.Where(x => x.CompanyID == QPurchaseOrderPOVM.CompanyID);
+                }
+                if (QPurchaseOrderPOVM.VendorID.HasValue)
+                {
+                    listPurchaseOrder = listPurchaseOrder.Where(x => x.VendorID == QPurchaseOrderPOVM.VendorID);
+                }
+                if (QPurchaseOrderPOVM.ID.HasValue)
+                {
+                    listPurchaseOrder = listPurchaseOrder.Where(x => x.ID == QPurchaseOrderPOVM.ID);
+                }
+                if (QPurchaseOrderPOVM.PODate.HasValue)
+                {
+                    listPurchaseOrder = listPurchaseOrder.Where(x => x.PODate == QPurchaseOrderPOVM.PODate);
+                }
+                if (!string.IsNullOrWhiteSpace( QPurchaseOrderPOVM.POStatus))
+                {
+                    listPurchaseOrder = listPurchaseOrder.Where(x => x.POStatus == QPurchaseOrderPOVM.POStatus);
+                }
+                if (QPurchaseOrderPOVM.InvoiceDate.HasValue)
+                {
+                    listPurchaseOrder = listPurchaseOrder.Where(x => x.InvoiceDate == QPurchaseOrderPOVM.InvoiceDate);
+                }
+                if (!string.IsNullOrWhiteSpace(QPurchaseOrderPOVM.POType))
+                {
+                    listPurchaseOrder = listPurchaseOrder.Where(x => x.POType == QPurchaseOrderPOVM.POType);
+                }
+                if (!string.IsNullOrWhiteSpace(QPurchaseOrderPOVM.InvoiceNo))
+                {
+                    listPurchaseOrder = listPurchaseOrder.Where(x => x.InvoiceNo == QPurchaseOrderPOVM.InvoiceNo);
+                }
+                //if (!string.IsNullOrWhiteSpace(QPurchaseOrderPOVM.Creater))
+                //{
+                //    listPurchaseOrder = listPurchaseOrder.Where(x => x.Creater == QPurchaseOrderPOVM.Creater);
+                //}
+                if (QPurchaseOrderPOVM.PaymentDate.HasValue)
+                {
+                    listPurchaseOrder = listPurchaseOrder.Where(x => x.PaymentDate == QPurchaseOrderPOVM.PaymentDate);
+                }
+                if (!string.IsNullOrWhiteSpace(QPurchaseOrderPOVM.PaymentStatus))
+                {
+                    listPurchaseOrder = listPurchaseOrder.Where(x => x.PaymentStatus == QPurchaseOrderPOVM.PaymentStatus);
+                }
+                if (QPurchaseOrderPOVM.ReceivedDate.HasValue)
+                {
+                    listPurchaseOrder = listPurchaseOrder.Where(x => x.ReceivedDate == QPurchaseOrderPOVM.ReceivedDate);
+                }
+                if (!string.IsNullOrWhiteSpace(QPurchaseOrderPOVM.ReceiveStatus))
+                {
+                    listPurchaseOrder = listPurchaseOrder.Where(x => x.ReceiveStatus == QPurchaseOrderPOVM.ReceiveStatus);
+                }
+                //if (!string.IsNullOrWhiteSpace(QPurchaseOrderPOVM.Tracking))
+                //{
+                //    listPurchaseOrder = listPurchaseOrder.Where(x => x.Tracking == QPurchaseOrderPOVM.Tracking);
+                //}
+                //if (!string.IsNullOrWhiteSpace(QPurchaseOrderPOVM.Brand))
+                //{
+                //    listPurchaseOrder = listPurchaseOrder.Where(x => x.Brand == QPurchaseOrderPOVM.Brand);
+                //}
+                //if (!string.IsNullOrWhiteSpace(QPurchaseOrderPOVM.SKU))
+                //{
+                //    listPurchaseOrder = listPurchaseOrder.Where(x => x.SKU == QPurchaseOrderPOVM.SKU);
+                //}
+                //if (!string.IsNullOrWhiteSpace(QPurchaseOrderPOVM.Category))
+                //{
+                //    listPurchaseOrder = listPurchaseOrder.Where(x => x.Category == QPurchaseOrderPOVM.Category);
+                //}
+                //if (!string.IsNullOrWhiteSpace(QPurchaseOrderPOVM.Serial))
+                //{
+                //    listPurchaseOrder = listPurchaseOrder.Where(x => x.Serial == QPurchaseOrderPOVM.Serial);
+                //}
+
+
+
+
                 if (filter.ID.HasValue)
                 {
                     listPurchaseOrder = listPurchaseOrder.Where(x => x.ID == filter.ID);
@@ -155,23 +246,25 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult GetSelectOption(string[] optionType)
         {
             Dictionary<string, object> optionList = new Dictionary<string, object>();
-
-            foreach (string type in optionType)
+            if (optionType !=null)
             {
-                switch (type)
+                foreach (string type in optionType)
                 {
-                    case "POTypeDDL":
-                        optionList.Add(type, EnumData.POTypeDDL().Select(x => new { text = x.Value, value = x.Key }));
-                        break;
-                    case "VendorIDDDL":
-                        optionList.Add(type, EnumData.VendorDDL().Select(x => new { text = x.Value, value = x.Key }));
-                        break;
-                    case "CompanyIDDDL":
-                        optionList.Add(type, new { });
-                        break;
-                    case "POStatusDDL":
-                        optionList.Add(type, EnumData.POStatusDDL().Select(x => new { text = x.Value, value = x.Key }));
-                        break;
+                    switch (type)
+                    {
+                        case "POTypeDDL":
+                            optionList.Add(type, EnumData.POTypeDDL().Select(x => new { text = x.Value, value = x.Key }));
+                            break;
+                        case "VendorIDDDL":
+                            optionList.Add(type, EnumData.VendorDDL().Select(x => new { text = x.Value, value = x.Key }));
+                            break;
+                        case "CompanyIDDDL":
+                            optionList.Add(type, EnumData.CompanyDDL().Select(x => new { text = x.Value, value = x.Key }));
+                            break;
+                        case "POStatusDDL":
+                            optionList.Add(type, EnumData.POStatusDDL().Select(x => new { text = x.Value, value = x.Key }));
+                            break;
+                    }
                 }
             }
             return Json(new { status = true, data = optionList }, JsonRequestBehavior.AllowGet);

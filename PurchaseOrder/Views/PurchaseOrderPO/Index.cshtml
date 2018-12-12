@@ -1,6 +1,13 @@
 ﻿@model  PurchaseOrderPOVM
 @{
     ViewBag.Title = "Index";
+    var DefaultSelect = PurchaseOrderSys.App_GlobalResources.Resource.DefaultSelect;
+    var CompanyDDL = EnumData.CompanyDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var VendorDDL = EnumData.VendorDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var POTypeDDL = EnumData.POTypeDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var POStatusDDL = EnumData.POStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var ReceiveStatusDDL = EnumData.ReceiveStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var PaymentStatusDDL = EnumData.PaymentStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
 }
 @section styles{
     <link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
@@ -16,113 +23,106 @@
         <div class="row table-parent">
             <div class="tool-content table-row col-xs-12">
                 <div class="search-input table-cell col-xs-10">
-                    <div class="table-parent">
-                        <div class="table-cell form-horizontal col-xs-11 no-padding">
-                            <div class="col-xs-12 no-padding">
-                                <label class="col-xs-4 col-md-1 control-label">Company</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <select class="form-control input-sm" id="Company" style="margin-top: 4px;">
-                                        <option value="">全部</option>
-                                    </select>
+                    @using (Html.BeginForm())
+                    {
+                        <div class="table-parent">
+                            <div class="table-cell form-horizontal col-xs-11 no-padding">
+                                <div class="col-xs-12 no-padding">
+                                    <label class="col-xs-4 col-md-1 control-label">Company</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        @Html.DropDownListFor(model => model.CompanyID, CompanyDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                    </div>
+                                    <label class="col-xs-4 col-md-1 control-label">Vendor</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        @Html.DropDownListFor(model => model.VendorID, VendorDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                    </div>
                                 </div>
-                                <label class="col-xs-4 col-md-1 control-label">Vendor</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <input class="form-control input-sm" type="text" id="Vendor">
+                                <div class="col-xs-12 no-padding">
+                                    <label class="col-xs-4 col-md-1 control-label">PO #</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        @Html.EditorFor(model => model.ID, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                    </div>
+                                    <label class="col-xs-4 col-md-1 control-label">PODate</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        @Html.EditorFor(model => model.PODate)
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 no-padding">
+                                    <label class="col-xs-4 col-md-1 control-label">PO Status</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        @Html.DropDownListFor(model => model.POStatus, POStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                    </div>
+                                    <label class="col-xs-4 col-md-1 control-label">Invoice Date</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        @Html.EditorFor(model => model.InvoiceDate)
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 no-padding">
+                                    <label class="col-xs-4 col-md-1 control-label">PO Type</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        @Html.DropDownListFor(model => model.POType, POTypeDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                    </div>
+                                    <label class="col-xs-4 col-md-1 control-label">Invoice No</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        @Html.EditorFor(model => model.InvoiceNo, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 no-padding">
+                                    <label class="col-xs-4 col-md-1 control-label">Creater</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        <input class="form-control input-sm" type="text" id="Creater">
+                                    </div>
+                                    <label class="col-xs-4 col-md-1 control-label">Payment Date</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        @Html.EditorFor(model => model.PaymentDate)
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 no-padding">
+                                    <label class="col-xs-4 col-md-1 control-label">Payment Status</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        @Html.DropDownListFor(model => model.PaymentStatus, PaymentStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                    </div>
+                                    <label class="col-xs-4 col-md-1 control-label">Received Date</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        @Html.EditorFor(model => model.ReceivedDate)
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 no-padding">
+                                    <label class="col-xs-4 col-md-1 control-label">Receive Status</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        @Html.DropDownListFor(model => model.ReceiveStatus, ReceiveStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                    </div>
+                                    <label class="col-xs-4 col-md-1 control-label">Brand</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        <input class="form-control input-sm" type="text" id="Brand">
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 no-padding">
+                                    <label class="col-xs-4 col-md-1 control-label">Tracking</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        <input class="form-control input-sm" type="text" id="Tracking">
+                                    </div>
+                                    <label class="col-xs-4 col-md-1 control-label">Category</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        <input class="form-control input-sm" type="text" id="Category">
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 no-padding">
+                                    <label class="col-xs-4 col-md-1 control-label">SKU / Name</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        <input class="form-control input-sm" type="text" id="SKU">
+                                    </div>
+                                    <label class="col-xs-4 col-md-1 control-label">Serial</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        <input class="form-control input-sm" type="text" id="Serial">
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-xs-12 no-padding">
-                                <label class="col-xs-4 col-md-1 control-label">PO #</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <input class="form-control input-sm" type="text" id="PO">
-                                </div>
-                                <label class="col-xs-4 col-md-1 control-label">PODate</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <input class="form-control input-sm" type="text" id="PODate">
-                                </div>
-                            </div>
-                            <div class="col-xs-12 no-padding">
-                                <label class="col-xs-4 col-md-1 control-label">PO Status</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <select class="form-control input-sm" id="POStatus" style="margin-top: 4px;">
-                                        <option value="">全部</option>
-                                    </select>
-                                </div>
-                                <label class="col-xs-4 col-md-1 control-label">Invoice Date</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <input class="form-control input-sm" type="text" id="InvoiceDate">
-                                </div>
-                            </div>
-                            <div class="col-xs-12 no-padding">
-                                <label class="col-xs-4 col-md-1 control-label">PO Type</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <select class="form-control input-sm" id="POType" style="margin-top: 4px;">
-                                        <option value="">全部</option>
-                                    </select>
-                                </div>
-                                <label class="col-xs-4 col-md-1 control-label">Invoice No</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <input class="form-control input-sm" type="text" id="InvoiceNo">
-                                </div>
-                            </div>
-                            <div class="col-xs-12 no-padding">
-                                <label class="col-xs-4 col-md-1 control-label">Creater</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <input class="form-control input-sm" type="text" id="Creater">
-                                </div>
-                                <label class="col-xs-4 col-md-1 control-label">Payment Date</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <input class="form-control input-sm" type="text" id="PaymentDate">
-                                </div>
-                            </div>
-                            <div class="col-xs-12 no-padding">
-                                <label class="col-xs-4 col-md-1 control-label">Payment Status</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <select class="form-control input-sm" id="PaymentStatus" style="margin-top: 4px;">
-                                        <option value="">全部</option>
-                                    </select>
-                                </div>
-                                <label class="col-xs-4 col-md-1 control-label">Received Date</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <input class="form-control input-sm" type="text" id="ReceivedDate">
-                                </div>
-                            </div>
-                            <div class="col-xs-12 no-padding">
-                                <label class="col-xs-4 col-md-1 control-label">Receive Status</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <select class="form-control input-sm" id="ReceiveStatus" style="margin-top: 4px;">
-                                        <option value="">全部</option>
-                                    </select>
-                                </div>
-                                <label class="col-xs-4 col-md-1 control-label">Brand</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <input class="form-control input-sm" type="text" id="Brand">
-                                </div>
-                            </div>
-                            <div class="col-xs-12 no-padding">
-                                <label class="col-xs-4 col-md-1 control-label">Tracking</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <input class="form-control input-sm" type="text" id="Tracking">
-                                </div>
-                                <label class="col-xs-4 col-md-1 control-label">Category</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <input class="form-control input-sm" type="text" id="Category">
-                                </div>
-                            </div>
-                            <div class="col-xs-12 no-padding">
-                                <label class="col-xs-4 col-md-1 control-label">SKU / Name</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <input class="form-control input-sm" type="text" id="SKU">
-                                </div>
-                                <label class="col-xs-4 col-md-1 control-label">Serial</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <input class="form-control input-sm" type="text" id="Serial">
-                                </div>
+                            <div class="table-cell col-xs-1">
+                                <button type="submit" id="btn-search" class="btn btn-info btn-lg">Search</button>
                             </div>
                         </div>
-                        <div class="table-cell col-xs-1">
-                            <button type="button" id="btn-search" class="btn btn-info btn-lg">Search</button>
-                        </div>
-                    </div>
+                    }
                 </div>
                 <div class="action-button table-cell ">
                     <a type="button" class="btn btn-default btn-sm btn-block" id="CreatePO" href="@Url.Action("Create")">Create PO</a>

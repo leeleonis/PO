@@ -1,11 +1,12 @@
-using System;
+using System; 
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// PurchaseSKU class
     /// </summary>
@@ -71,6 +72,20 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "PurchaseSKU_QTYFulfilled", ResourceType = typeof(App_GlobalResources.Resource))]
     		public Nullable<int>  QTYFulfilled { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// QTYReturned
+    		/// </summary>        
+    	    [Display(Name = "PurchaseSKU_QTYReturned", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  QTYReturned { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// QTYReceived
+    		/// </summary>        
+    	    [Display(Name = "PurchaseSKU_QTYReceived", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  QTYReceived { get; set; }
     
     		    
     		/// <summary>
@@ -190,17 +205,10 @@ namespace PurchaseOrderSys.Models
     
     		    
     		/// <summary>
-    		/// QTYReturned
+    		/// Credit Memo ID
     		/// </summary>        
-    	    [Display(Name = "PurchaseSKU_QTYReturned", ResourceType = typeof(App_GlobalResources.Resource))]
-    		public Nullable<int>  QTYReturned { get; set; }
-    
-    		    
-    		/// <summary>
-    		/// QTYReceived
-    		/// </summary>        
-    	    [Display(Name = "PurchaseSKU_QTYReceived", ResourceType = typeof(App_GlobalResources.Resource))]
-    		public Nullable<int>  QTYReceived { get; set; }
+    	    [Display(Name = "PurchaseSKU_CreditMemoID", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  CreditMemoID { get; set; }
     
     		    
     	}

@@ -198,7 +198,7 @@ namespace PurchaseOrderSys.Models
         /// Credit Memo: 退貨單.款項支入, 貨物支出.
         /// </summary>        
         [Display(Name = "PurchaseOrder_POType", ResourceType = typeof(App_GlobalResources.Resource))]
-        [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+        //[Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
         [MaxLength(20, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
         [DataGrid(Align = "center", Widths = 150, ColumnsType = "select", Formatter = true)]
         public string POType { get; set; }
@@ -208,22 +208,65 @@ namespace PurchaseOrderSys.Models
         /// 供應商
         /// </summary>        
         [Display(Name = "PurchaseOrder_VendorID", ResourceType = typeof(App_GlobalResources.Resource))]
-        [DataGrid(Align = "center", ColumnsType = "select", Formatter = true)]
+        [DataGrid(Align = "center", Widths = 150, ColumnsType = "select", Formatter = true)]
         public int? VendorID { get; set; }
 
         /// <summary>
         /// 公司
         /// </summary>        
         [Display(Name = "PurchaseOrder_CompanyID", ResourceType = typeof(App_GlobalResources.Resource))]
-        [DataGrid(Align = "center", ColumnsType = "select", Formatter = true)]
+        [DataGrid(Align = "center", Widths = 150, ColumnsType = "select", Formatter = true)]
         public int? CompanyID { get; set; }
         /// <summary>
         /// 訂貨日
         /// </summary>        
         [Display(Name = "PurchaseOrder_PODate", ResourceType = typeof(App_GlobalResources.Resource))]
-        [UIHint("DateTime")]
+        [UIHint("FDate")]
         [DataGrid(Align = "center", Widths = 150, ColumnsType = "input")]
         public Nullable<System.DateTime> PODate { get; set; }
+
+        /// <summary>
+        /// Invoice Date
+        /// </summary>        
+        [Display(Name = "PurchaseOrder_InvoiceDate", ResourceType = typeof(App_GlobalResources.Resource))]
+        [UIHint("FDate")]
+        public Nullable<System.DateTime> InvoiceDate { get; set; }
+
+        /// <summary>
+        /// Invoice No
+        /// </summary>        
+        [Display(Name = "PurchaseOrder_InvoiceNo", ResourceType = typeof(App_GlobalResources.Resource))]
+        [MaxLength(20, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+        public string InvoiceNo { get; set; }
+
+
+        /// <summary>
+        /// Received Date
+        /// </summary>        
+        [Display(Name = "PurchaseOrder_ReceivedDate", ResourceType = typeof(App_GlobalResources.Resource))]
+        [UIHint("FDate")]
+        public Nullable<System.DateTime> ReceivedDate { get; set; }
+
+        /// <summary>
+        /// Receive Status
+        /// </summary>        
+        [Display(Name = "PurchaseOrder_ReceiveStatus", ResourceType = typeof(App_GlobalResources.Resource))]
+        [MaxLength(20, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+        public string ReceiveStatus { get; set; }
+
+        /// <summary>
+        /// Payment Date
+        /// </summary>        
+        [Display(Name = "PurchaseOrder_PaymentDate", ResourceType = typeof(App_GlobalResources.Resource))]
+        [UIHint("FDate")]
+        public Nullable<System.DateTime> PaymentDate { get; set; }
+
+        /// <summary>
+        /// Payment Status
+        /// </summary>        
+        [Display(Name = "PurchaseOrder_PaymentStatus", ResourceType = typeof(App_GlobalResources.Resource))]
+        [MaxLength(20, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+        public string PaymentStatus { get; set; }
 
         /// <summary>
         /// 採購數量
@@ -261,7 +304,7 @@ namespace PurchaseOrderSys.Models
         /// PO 狀態, 分別為 Opened, Pending, Completed. 剛開立的 PO 都預設為 Opened.
         /// </summary>
         [Display(Name = "Status", ResourceType = typeof(App_GlobalResources.Resource))]
-        [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+        //[Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
         [DataGrid(Align = "center", ColumnsType = "select", Formatter = true)]
         public string POStatus { get; set; }
 

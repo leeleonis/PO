@@ -148,7 +148,7 @@
     <value>啟用</value>
   </data>
   <data name="PurchaseOrder_ID" xml:space="preserve">
-    <value>NULL</value>
+    <value>採購單號</value>
   </data>
   <data name="PurchaseOrder_Name" xml:space="preserve">
     <value>名稱</value>
@@ -253,7 +253,7 @@
     <value>名稱</value>
   </data>
   <data name="PurchaseSKU_PurchaseOrderID" xml:space="preserve">
-    <value>NULL</value>
+    <value>採購單號</value>
   </data>
   <data name="PurchaseSKU_SkuNo" xml:space="preserve">
     <value>SKU NO</value>

@@ -106,7 +106,20 @@ namespace PurchaseOrderSys.Controllers
             TypeInfoList.FirstOrDefault(info => info.Name.Equals("UpdateBy")).SetValue(originData, Session["AdminName"]);
             TypeInfoList.FirstOrDefault(info => info.Name.Equals("UpdateAt")).SetValue(originData, DateTime.UtcNow);
         }
-
+        protected IQueryable<T1> QueryData<T1, T2>(IQueryable<T1> BasicData, T2 QureyData)
+        {
+            var TypeInfoList = QureyData.GetType().GetProperties();
+            foreach (var item in TypeInfoList)
+            {
+                var Name = item.Name;
+                var Val = TypeInfoList.FirstOrDefault(info => info.Name.Equals(Name)).GetValue(QureyData, null);
+                if (Val != null)
+                {
+                    BasicData = BasicData.Where(x => x.GetType().GetProperty(Name).GetValue(BasicData, null) == Val);
+                }
+            }
+            return BasicData;
+        }
         public string RenderViewToString(ControllerContext controllerContext, string viewName, object model, ViewDataDictionary viewData = null, TempDataDictionary tempData = null)
         {
             if (viewData == null) viewData = new ViewDataDictionary();

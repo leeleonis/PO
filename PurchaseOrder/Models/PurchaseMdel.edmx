@@ -1316,11 +1316,11 @@
             <End Role="SkuPicture" EntitySet="SkuPicture" />
           </AssociationSet>
           <EntitySet Name="CreditMemo" EntityType="PurchaseOrderModel.CreditMemo" />
-          <EntitySet Name="PurchaseSKU" EntityType="PurchaseOrderModel.PurchaseSKU" />
           <AssociationSet Name="FK_CreditMemo_PurchaseOrder" Association="PurchaseOrderModel.FK_CreditMemo_PurchaseOrder">
             <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
             <End Role="CreditMemo" EntitySet="CreditMemo" />
           </AssociationSet>
+          <EntitySet Name="PurchaseSKU" EntityType="PurchaseOrderModel.PurchaseSKU" />
           <AssociationSet Name="FK_PurchaseSKU_CreditMemo" Association="PurchaseOrderModel.FK_PurchaseSKU_CreditMemo">
             <End Role="CreditMemo" EntitySet="CreditMemo" />
             <End Role="PurchaseSKU" EntitySet="PurchaseSKU" />
@@ -2303,6 +2303,18 @@
           <NavigationProperty Name="PurchaseOrder" Relationship="PurchaseOrderModel.FK_CreditMemo_PurchaseOrder" FromRole="CreditMemo" ToRole="PurchaseOrder" />
           <NavigationProperty Name="PurchaseSKU" Relationship="PurchaseOrderModel.FK_PurchaseSKU_CreditMemo" FromRole="CreditMemo" ToRole="PurchaseSKU" />
         </EntityType>
+        <Association Name="FK_CreditMemo_PurchaseOrder">
+          <End Type="PurchaseOrderModel.PurchaseOrder" Role="PurchaseOrder" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.CreditMemo" Role="CreditMemo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseOrder">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CreditMemo">
+              <PropertyRef Name="PurchaseOrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityType Name="PurchaseSKU">
           <Key>
             <PropertyRef Name="ID" />
@@ -2336,18 +2348,6 @@
           <NavigationProperty Name="PurchaseOrder" Relationship="PurchaseOrderModel.FK_PurchaseSKU_PurchaseOrder" FromRole="PurchaseSKU" ToRole="PurchaseOrder" />
           <NavigationProperty Name="SerialsLlist" Relationship="PurchaseOrderModel.FK_SerialsLlist_PurchaseSKU" FromRole="PurchaseSKU" ToRole="SerialsLlist" />
         </EntityType>
-        <Association Name="FK_CreditMemo_PurchaseOrder">
-          <End Type="PurchaseOrderModel.PurchaseOrder" Role="PurchaseOrder" Multiplicity="0..1" />
-          <End Type="PurchaseOrderModel.CreditMemo" Role="CreditMemo" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PurchaseOrder">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="CreditMemo">
-              <PropertyRef Name="PurchaseOrderID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_PurchaseSKU_CreditMemo">
           <End Type="PurchaseOrderModel.CreditMemo" Role="CreditMemo" Multiplicity="0..1" />
           <End Type="PurchaseOrderModel.PurchaseSKU" Role="PurchaseSKU" Multiplicity="*" />
