@@ -307,6 +307,18 @@
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MyModels.cs" />
+    <Compile Include="Models\Objects\Neto\NetoApi.cs" />
+    <Compile Include="Models\Objects\Neto\NetoBase.cs" />
+    <Compile Include="Models\Objects\Neto\Schema\AddItem.cs" />
+    <Compile Include="Models\Objects\Neto\Schema\AddItemResponse.cs" />
+    <Compile Include="Models\Objects\Neto\Schema\GetCategory.cs" />
+    <Compile Include="Models\Objects\Neto\Schema\GetCategoryResponse.cs" />
+    <Compile Include="Models\Objects\Neto\Schema\GetItem.cs" />
+    <Compile Include="Models\Objects\Neto\Schema\GetItemResponse.cs" />
+    <Compile Include="Models\Objects\Neto\Schema\GetWarehouse.cs" />
+    <Compile Include="Models\Objects\Neto\Schema\GetWarehouseResponse.cs" />
+    <Compile Include="Models\Objects\Neto\Schema\UpdateItem.cs" />
+    <Compile Include="Models\Objects\Neto\Schema\UpdateItemResponse.cs" />
     <Compile Include="Models\PurchaseMdel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -406,7 +418,7 @@
     <Compile Include="Models\Sku_AttributeMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\StockKeepingUnit.cs" />
+    <Compile Include="Models\Objects\StockKeepingUnit.cs" />
     <Compile Include="Models\Transfer.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
     </Compile>

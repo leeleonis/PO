@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using inventorySKU.NetoDeveloper;
+using PurchaseOrderSys.Models;
 
 namespace PurchaseOrderSys.Controllers
 {
@@ -16,8 +18,11 @@ namespace PurchaseOrderSys.Controllers
         public int MyMoney { get; set; }
 
     }
+
     public class TestController : Controller
     {
+        protected PurchaseOrderEntities db = new PurchaseOrderEntities();
+
         public TestController()
         {//在建構子裡新增資料
             for (int i = 0; i < 300; i++)
@@ -34,11 +39,13 @@ namespace PurchaseOrderSys.Controllers
         /// DataSource 資料集合，通常為DB裡的資料
         /// </summary>
         private List<MyRecord> _myRecords = new List<MyRecord>();
+
         // GET: Test
         public ActionResult Index()
         {
             return View();
         }
+
         public ActionResult GetData_Full(int draw, int start, int length,//→此三個為DataTables自動傳遞參數
                                                                          //↓以下兩個為表單的查詢條件，請依自己工作需求調整  
          string MyTitle, int? MyMoney)
@@ -99,6 +106,25 @@ namespace PurchaseOrderSys.Controllers
                   data = pagedData//分頁後的資料 
               };
             return Json(returnObj, JsonRequestBehavior.AllowGet);
+        }
+
+        public void SkuSync()
+        {
+            NetoApi neto = new NetoApi();
+            var categoryList = neto.GetCategory().Category.Where(c => c.ParentCategoryID.Equals("0")).ToList();
+            var aa = categoryList.Where(c => !c.ID.Equals(c.CategoryID)).ToList();
+            foreach(var category in categoryList)
+            {
+                if(!db.SkuType.Any(t => t.NetoID.ToString().Equals(category.ID))){
+                    SkuType type = new SkuType()
+                    {
+                        IsEnable = true,
+                        NetoID = int.Parse(category.ID),
+                        CreateAt = DateTime.UtcNow,
+                        CreateBy = Session["AdminName"].ToString()
+                    };
+                }
+            }
         }
     }
 }
