@@ -182,6 +182,116 @@ namespace PurchaseOrderSys.Models
         public IEnumerable< PurchaseSKU> PurchaseSKU { get; set; }
         public IEnumerable<CreditMemo> CreditMemo { get; set; }
     }
+
+    public class CreditMemoVM
+    {
+        /// <summary>
+        /// 公司
+        /// </summary>        
+        [Display(Name = "CreditMemo_CompanyID", ResourceType = typeof(App_GlobalResources.Resource))]
+        [DataGrid(Align = "center", Widths = 150, ColumnsType = "select", Formatter = true)]
+        public int? CompanyID { get; set; }
+
+        /// <summary>
+        /// 採購單號
+        /// </summary>
+        [Display(Name = "CreditMemo_ID", ResourceType = typeof(App_GlobalResources.Resource))]
+        [DataGrid(Align = "center", Widths = 150, Frozen = true)]
+        public int? ID { get; set; }
+
+
+        /// <summary>
+        /// 採購單狀態
+        /// CM 狀態, 分別為 Opened, Pending, Completed. 剛開立的 CM 都預設為 Opened.
+        /// </summary>
+        [Display(Name = "Status", ResourceType = typeof(App_GlobalResources.Resource))]
+        //[Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+        [DataGrid(Align = "center", ColumnsType = "select", Formatter = true)]
+        public string CMStatus { get; set; }
+
+
+
+        /// <summary>
+        /// 採購單類別 
+        /// </summary>        
+        [Display(Name = "CreditMemo_CMType", ResourceType = typeof(App_GlobalResources.Resource))]
+        //[Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+        [MaxLength(20, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+        [DataGrid(Align = "center", Widths = 150, ColumnsType = "select", Formatter = true)]
+        public string CMType { get; set; }
+
+
+        public string Creater { get; set; }
+
+        public string CreditStatus { get; set; }
+        public string ReturnStatus { get; set; }
+        public string Tracking { get; set; }
+        public string SKU { get; set; }
+        public string Serial { get; set; }
+
+
+        /// <summary>
+        /// 供應商
+        /// </summary>        
+        [Display(Name = "CreditMemo_VendorID", ResourceType = typeof(App_GlobalResources.Resource))]
+        [DataGrid(Align = "center", Widths = 150, ColumnsType = "select", Formatter = true)]
+        public int? VendorID { get; set; }
+
+        /// <summary>
+        /// 訂貨日
+        /// </summary>        
+        [Display(Name = "CreditMemo_CMDate", ResourceType = typeof(App_GlobalResources.Resource))]
+        [UIHint("FDate")]
+        [DataGrid(Align = "center", Widths = 150, ColumnsType = "input")]
+        public Nullable<System.DateTime> CMDate { get; set; }
+
+        /// <summary>
+        /// Invoice Date
+        /// </summary>        
+        [Display(Name = "CreditMemo_InvoiceDate", ResourceType = typeof(App_GlobalResources.Resource))]
+        [UIHint("FDate")]
+        public Nullable<System.DateTime> InvoiceDate { get; set; }
+
+        /// <summary>
+        /// Invoice No
+        /// </summary>        
+        [Display(Name = "CreditMemo_InvoiceNo", ResourceType = typeof(App_GlobalResources.Resource))]
+        [MaxLength(20, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+        public string InvoiceNo { get; set; }
+
+        [UIHint("FDate")]
+        public Nullable<System.DateTime> CreditDate { get; set; }
+
+        [UIHint("FDate")]
+        public Nullable<System.DateTime> ReturnDate { get; set; }
+        public string Brand { get; set; }
+        public string Category { get; set; }
+
+        /// <summary>
+        /// 採購數量
+        /// </summary>
+        [Display(Name = "QTY", ResourceType = typeof(App_GlobalResources.Resource))]
+        [DataGrid(Align = "center", Widths = 150, ColumnsType = "input")]
+        public int? QTY { get; set; }
+
+        /// <summary>
+        /// 採購總金額
+        /// </summary>
+        [Display(Name = "GrandTotal", ResourceType = typeof(App_GlobalResources.Resource))]
+        [DataGrid(Align = "center", Widths = 150, ColumnsType = "input")]
+        public decimal? GrandTotal { get; set; }
+
+
+        /// <summary>
+        /// 應付總額
+        /// </summary>
+        [Display(Name = "Balance", ResourceType = typeof(App_GlobalResources.Resource))]
+        [DataGrid(Align = "center", Widths = 150, ColumnsType = "input")]
+        public decimal? Balance { get; set; }
+    }
+
+
+
     public class PurchaseOrderPOVM
     {
         /// <summary>

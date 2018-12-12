@@ -10,9 +10,10 @@ namespace PurchaseOrderSys.Controllers
     public class PurchaseOrderCMController : BaseController
     {
         // GET: PurchaseOrder
-        public ActionResult Index()
+        public ActionResult Index(CreditMemoVM CreditMemoVM)
         {
-            return View();
+            Session["CreditMemoVM"] = CreditMemoVM;
+            return View(CreditMemoVM);
         }
         public ActionResult Create()
         {
@@ -36,44 +37,124 @@ namespace PurchaseOrderSys.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
-        public ActionResult GetData(PurchaseOrderPOVM filter, string Type, int? DetailID)
+        public ActionResult GetData(CreditMemoVM filter, string Type, int? DetailID)
         {
             if (Type == "Master")
             {
+                var QCreditMemoVM = (CreditMemoVM)Session["CreditMemoVM"];
                 int total = 0;
-                var listPurchaseOrder = db.PurchaseOrder.AsQueryable();
+                var listCreditMemo = db.CreditMemo.AsQueryable();
+                //綱頁查詢
+                if (QCreditMemoVM.CompanyID.HasValue)
+                {
+                    listCreditMemo = listCreditMemo.Where(x => x.CompanyID == QCreditMemoVM.CompanyID);
+                }
+                if (QCreditMemoVM.VendorID.HasValue)
+                {
+                    listCreditMemo = listCreditMemo.Where(x => x.VendorID == QCreditMemoVM.VendorID);
+                }
+                if (QCreditMemoVM.ID.HasValue)
+                {
+                    listCreditMemo = listCreditMemo.Where(x => x.ID == QCreditMemoVM.ID);
+                }
+                if (QCreditMemoVM.CMDate.HasValue)
+                {
+                    listCreditMemo = listCreditMemo.Where(x => x.CMDate == QCreditMemoVM.CMDate);
+                }
+                if (!string.IsNullOrWhiteSpace(QCreditMemoVM.CMStatus))
+                {
+                    listCreditMemo = listCreditMemo.Where(x => x.CMStatus == QCreditMemoVM.CMStatus);
+                }
+                if (QCreditMemoVM.InvoiceDate.HasValue)
+                {
+                    listCreditMemo = listCreditMemo.Where(x => x.InvoiceDate == QCreditMemoVM.InvoiceDate);
+                }
+                if (!string.IsNullOrWhiteSpace(QCreditMemoVM.CMType))
+                {
+                    listCreditMemo = listCreditMemo.Where(x => x.CMType == QCreditMemoVM.CMType);
+                }
+                if (!string.IsNullOrWhiteSpace(QCreditMemoVM.InvoiceNo))
+                {
+                    listCreditMemo = listCreditMemo.Where(x => x.InvoiceNo == QCreditMemoVM.InvoiceNo);
+                }
+                //if (!string.IsNullOrWhiteSpace(QCreditMemoVM.Creater))
+                //{
+                //    listCreditMemo = listCreditMemo.Where(x => x.Creater == QCreditMemoVM.Creater);
+                //}
+                //if (QCreditMemoVM.PaymentDate.HasValue)
+                //{
+                //    listCreditMemo = listCreditMemo.Where(x => x.PaymentDate == QCreditMemoVM.PaymentDate);
+                //}
+                //if (!string.IsNullOrWhiteSpace(QCreditMemoVM.PaymentStatus))
+                //{
+                //    listCreditMemo = listCreditMemo.Where(x => x.PaymentStatus == QCreditMemoVM.PaymentStatus);
+                //}
+                //if (QCreditMemoVM.ReceivedDate.HasValue)
+                //{
+                //    listCreditMemo = listCreditMemo.Where(x => x.ReceivedDate == QCreditMemoVM.ReceivedDate);
+                //}
+                //if (!string.IsNullOrWhiteSpace(QCreditMemoVM.ReceiveStatus))
+                //{
+                //    listCreditMemo = listCreditMemo.Where(x => x.ReceiveStatus == QCreditMemoVM.ReceiveStatus);
+                //}
+                if (!string.IsNullOrWhiteSpace(QCreditMemoVM.Tracking))
+                {
+                    listCreditMemo = listCreditMemo.Where(x => x.Tracking == QCreditMemoVM.Tracking);
+                }
+                //if (!string.IsNullOrWhiteSpace(QCreditMemoVM.Brand))
+                //{
+                //    listCreditMemo = listCreditMemo.Where(x => x.Brand == QCreditMemoVM.Brand);
+                //}
+                //if (!string.IsNullOrWhiteSpace(QCreditMemoVM.SKU))
+                //{
+                //    listCreditMemo = listCreditMemo.Where(x => x.SKU == QCreditMemoVM.SKU);
+                //}
+                //if (!string.IsNullOrWhiteSpace(QCreditMemoVM.Category))
+                //{
+                //    listCreditMemo = listCreditMemo.Where(x => x.Category == QCreditMemoVM.Category);
+                //}
+                //if (!string.IsNullOrWhiteSpace(QCreditMemoVM.Serial))
+                //{
+                //    listCreditMemo = listCreditMemo.Where(x => x.Serial == QCreditMemoVM.Serial);
+                //}
+
+
+
+
+
+                //表格查詢
                 if (filter.ID.HasValue)
                 {
-                    listPurchaseOrder = listPurchaseOrder.Where(x => x.ID == filter.ID);
+                    listCreditMemo = listCreditMemo.Where(x => x.ID == filter.ID);
                 }
-                if (!string.IsNullOrWhiteSpace(filter.POType))
+                if (!string.IsNullOrWhiteSpace(filter.CMType))
                 {
-                    listPurchaseOrder = listPurchaseOrder.Where(x => x.POType == filter.POType);
+                    listCreditMemo = listCreditMemo.Where(x => x.CMType == filter.CMType);
                 }
                 if (filter.VendorID.HasValue)
                 {
-                    listPurchaseOrder = listPurchaseOrder.Where(x => x.VendorID == filter.VendorID);
+                    listCreditMemo = listCreditMemo.Where(x => x.VendorID == filter.VendorID);
                 }
-                if (filter.PODate.HasValue)
+                if (filter.CMDate.HasValue)
                 {
-                    listPurchaseOrder = listPurchaseOrder.Where(x => x.PODate == filter.PODate);
+                    listCreditMemo = listCreditMemo.Where(x => x.CMDate == filter.CMDate);
                 }
-                if (!string.IsNullOrWhiteSpace(filter.POStatus))
+                if (!string.IsNullOrWhiteSpace(filter.CMStatus))
                 {
-                    listPurchaseOrder = listPurchaseOrder.Where(x => x.POStatus == filter.POStatus);
+                    listCreditMemo = listCreditMemo.Where(x => x.CMStatus == filter.CMStatus);
                 }
 
-                var dataList = listPurchaseOrder.ToList().Select(x => new
+                var dataList = listCreditMemo.ToList().Select(x => new
                 {
                     x.ID,
-                    x.POType,
+                    x.CMType,
                     VendorID = x.VendorID.ToString(),
-                    PODate = x.PODate.Value.ToString("yyyy/MM/dd"),
+                    CMDate = x.CMDate.Value.ToString("yyyy/MM/dd"),
                     QTY = x.PurchaseSKU.Sum(y => y.QTYOrdered),
                     GrandTotal = x.PurchaseSKU.Sum(y => (y.QTYOrdered * y.Price)),
-                    x.PaidAmount,
                     Balance = x.PurchaseSKU.Sum(y => (y.QTYOrdered * y.Price)),
-                    POStatus = x.POStatus
+                    x.CMStatus, 
+                     
                 });
 
                 if (filter.QTY.HasValue)
@@ -83,10 +164,6 @@ namespace PurchaseOrderSys.Controllers
                 if (filter.GrandTotal.HasValue)
                 {
                     dataList = dataList.Where(x => x.GrandTotal == filter.GrandTotal);
-                }
-                if (filter.PaidAmount.HasValue)
-                {
-                    dataList = dataList.Where(x => x.PaidAmount == filter.PaidAmount);
                 }
                 if (filter.Balance.HasValue)
                 {
@@ -110,17 +187,17 @@ namespace PurchaseOrderSys.Controllers
             {
                 switch (type)
                 {
-                    case "POTypeDDL":
-                        optionList.Add(type, EnumData.POTypeDDL().Select(x => new { text = x.Value, value = x.Key }));
+                    case "CMTypeDDL":
+                        optionList.Add(type, EnumData.CMTypeDDL().Select(x => new { text = x.Value, value = x.Key }));
                         break;
                     case "VendorIDDDL":
                         optionList.Add(type, EnumData.VendorDDL().Select(x => new { text = x.Value, value = x.Key }));
                         break;
                     case "CompanyIDDDL":
-                        optionList.Add(type, new { });
+                        optionList.Add(type, EnumData.CompanyDDL().Select(x => new { text = x.Value, value = x.Key }));
                         break;
-                    case "POStatusDDL":
-                        optionList.Add(type, EnumData.POStatusDDL().Select(x => new { text = x.Value, value = x.Key }));
+                    case "CMStatusDDL":
+                        optionList.Add(type, EnumData.CMStatusDDL().Select(x => new { text = x.Value, value = x.Key }));
                         break;
                 }
             }

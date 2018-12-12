@@ -1339,13 +1339,13 @@
     <value>啟用</value>
   </data>
   <data name="CreditMemo_ID" xml:space="preserve">
-    <value>流水號</value>
+    <value>CM單號</value>
   </data>
   <data name="CreditMemo_PurchaseOrderID" xml:space="preserve">
     <value>CM號碼</value>
   </data>
   <data name="CreditMemo_CompanyID" xml:space="preserve">
-    <value>採購的公司</value>
+    <value>公司</value>
   </data>
   <data name="CreditMemo_VendorID" xml:space="preserve">
     <value>供應商</value>
@@ -1363,7 +1363,7 @@
     <value>CM的種類</value>
   </data>
   <data name="CreditMemo_CMDate" xml:space="preserve">
-    <value>訂貨日</value>
+    <value>CM日期</value>
   </data>
   <data name="CreditMemo_ShippingStatus" xml:space="preserve">
     <value>退貨運輸狀態</value>

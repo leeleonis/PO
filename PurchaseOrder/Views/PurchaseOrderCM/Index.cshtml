@@ -1,6 +1,13 @@
-﻿@model  CreditMemo
+﻿@model  CreditMemoVM
 @{
     ViewBag.Title = "Index";
+    var DefaultSelect = PurchaseOrderSys.App_GlobalResources.Resource.DefaultSelect;
+    var CompanyDDL = EnumData.CompanyDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var VendorDDL = EnumData.VendorDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var CMTypeDDL = EnumData.CMTypeDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var CMStatusDDL = EnumData.CMStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    //var ReturnStatusDDL = EnumData.ReturnStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var CreditStatusDDL = EnumData.CreditStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
 }
 @section styles{
     <link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
@@ -16,155 +23,189 @@
         <div class="row table-parent">
             <div class="tool-content table-row col-xs-12">
                 <div class="search-input table-cell col-xs-10">
-                    <div class="table-parent">
-                        <div class="table-cell form-horizontal col-xs-11 no-padding">
-                            <div class="col-xs-12 no-padding">
-                                <label class="col-xs-4 col-md-1 control-label">Company</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <select class="form-control input-sm" id="Company" style="margin-top: 4px;">
-                                        <option value="">全部</option>
-                                    </select>
+                    @using (Html.BeginForm())
+                    {
+                        <div class="table-parent">
+                            <div class="table-cell form-horizontal col-xs-11 no-padding">
+                                <div class="col-xs-12 no-padding">
+                                    <label class="col-xs-4 col-md-1 control-label">Company</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        @Html.DropDownListFor(model => model.CompanyID, CompanyDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                    </div>
+                                    <label class="col-xs-4 col-md-1 control-label">Vendor</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        @Html.DropDownListFor(model => model.VendorID, VendorDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                    </div>
                                 </div>
-                                <label class="col-xs-4 col-md-1 control-label">Vendor</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <input class="form-control input-sm" type="text" id="Vendor">
+                                <div class="col-xs-12 no-padding">
+                                    <label class="col-xs-4 col-md-1 control-label">CM #</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        @Html.EditorFor(model => model.ID, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                    </div>
+                                    <label class="col-xs-4 col-md-1 control-label">CMDate</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        @Html.EditorFor(model => model.CMDate)
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 no-padding">
+                                    <label class="col-xs-4 col-md-1 control-label">CM Status</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        @Html.DropDownListFor(model => model.CMStatus, CMStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                    </div>
+                                    <label class="col-xs-4 col-md-1 control-label">Invoice Date</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        @Html.EditorFor(model => model.InvoiceDate)
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 no-padding">
+                                    <label class="col-xs-4 col-md-1 control-label">CM Type</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        @Html.DropDownListFor(model => model.CMType, CMTypeDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                    </div>
+                                    <label class="col-xs-4 col-md-1 control-label">Invoice No</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        @Html.EditorFor(model => model.InvoiceNo, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 no-padding">
+                                    <label class="col-xs-4 col-md-1 control-label">Creater</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        <input class="form-control input-sm" type="text" id="Creater">
+                                    </div>
+                                    <label class="col-xs-4 col-md-1 control-label">Credit Date</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        @Html.EditorFor(model => model.CreditDate)
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 no-padding">
+                                    <label class="col-xs-4 col-md-1 control-label">Credit Status</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        @Html.DropDownListFor(model => model.CreditStatus, CreditStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                    </div>
+                                    <label class="col-xs-4 col-md-1 control-label">Return Date</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        @Html.EditorFor(model => model.ReturnDate)
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 no-padding">
+                                    <label class="col-xs-4 col-md-1 control-label">Return Status</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        @*@Html.DropDownListFor(model => model.ReturnStatus, ReturnStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })*@
+                                    </div>
+                                    <label class="col-xs-4 col-md-1 control-label">Brand</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        <input class="form-control input-sm" type="text" id="Brand">
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 no-padding">
+                                    <label class="col-xs-4 col-md-1 control-label">Tracking</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        <input class="form-control input-sm" type="text" id="Tracking">
+                                    </div>
+                                    <label class="col-xs-4 col-md-1 control-label">Category</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        <input class="form-control input-sm" type="text" id="Category">
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 no-padding">
+                                    <label class="col-xs-4 col-md-1 control-label">SKU / Name</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        <input class="form-control input-sm" type="text" id="SKU">
+                                    </div>
+                                    <label class="col-xs-4 col-md-1 control-label">Serial</label>
+                                    <div class="col-xs-8 col-md-4">
+                                        <input class="form-control input-sm" type="text" id="Serial">
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-xs-12 no-padding">
-                                <label class="col-xs-4 col-md-1 control-label">CM #</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <input class="form-control input-sm" type="text" id="CM">
-                                </div>
-                                <label class="col-xs-4 col-md-1 control-label">CM Date</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <input class="form-control input-sm" type="text" id="CMDate">
-                                </div>
-                            </div>
-                            <div class="col-xs-12 no-padding">
-                                <label class="col-xs-4 col-md-1 control-label">CM Status</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <select class="form-control input-sm" id="CMStatus" style="margin-top: 4px;">
-                                        <option value="">全部</option>
-                                    </select>
-                                </div>
-                                <label class="col-xs-4 col-md-1 control-label">Invoice Date</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <input class="form-control input-sm" type="text" id="InvoiceDate">
-                                </div>
-                            </div>
-                            <div class="col-xs-12 no-padding">
-                                <label class="col-xs-4 col-md-1 control-label">CM Type</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <select class="form-control input-sm" id="CMType" style="margin-top: 4px;">
-                                        <option value="">全部</option>
-                                    </select>
-                                </div>
-                                <label class="col-xs-4 col-md-1 control-label">Invoice No</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <input class="form-control input-sm" type="text" id="InvoiceNo">
-                                </div>
-                            </div>
-                            <div class="col-xs-12 no-padding">
-                                <label class="col-xs-4 col-md-1 control-label">Creater</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <input class="form-control input-sm" type="text" id="Creater">
-                                </div>
-                                <label class="col-xs-4 col-md-1 control-label">Payment Date</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <input class="form-control input-sm" type="text" id="PaymentDate">
-                                </div>
-                            </div>
-                            <div class="col-xs-12 no-padding">
-                                <label class="col-xs-4 col-md-1 control-label">Payment Status</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <select class="form-control input-sm" id="PaymentStatus" style="margin-top: 4px;">
-                                        <option value="">全部</option>
-                                    </select>
-                                </div>
-                                <label class="col-xs-4 col-md-1 control-label">Received Date</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <input class="form-control input-sm" type="text" id="ReceivedDate">
-                                </div>
-                            </div>
-                            <div class="col-xs-12 no-padding">
-                                <label class="col-xs-4 col-md-1 control-label">Receive Status</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <select class="form-control input-sm" id="ReceiveStatus" style="margin-top: 4px;">
-                                        <option value="">全部</option>
-                                    </select>
-                                </div>
-                                <label class="col-xs-4 col-md-1 control-label">Brand</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <input class="form-control input-sm" type="text" id="Brand">
-                                </div>
-                            </div>
-                            <div class="col-xs-12 no-padding">
-                                <label class="col-xs-4 col-md-1 control-label">Tracking</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <input class="form-control input-sm" type="text" id="Tracking">
-                                </div>
-                                <label class="col-xs-4 col-md-1 control-label">Category</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <input class="form-control input-sm" type="text" id="Category">
-                                </div>
-                            </div>
-                            <div class="col-xs-12 no-padding">
-                                <label class="col-xs-4 col-md-1 control-label">SKU / Name</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <input class="form-control input-sm" type="text" id="SKU">
-                                </div>
-                                <label class="col-xs-4 col-md-1 control-label">Serial</label>
-                                <div class="col-xs-8 col-md-4">
-                                    <input class="form-control input-sm" type="text" id="Serial">
-                                </div>
+                            <div class="table-cell col-xs-1">
+                                <button type="submit" id="btn-search" class="btn btn-info btn-lg">Search</button>
                             </div>
                         </div>
-                        <div class="table-cell col-xs-1">
-                            <button type="button" id="btn-search" class="btn btn-info btn-lg">Search</button>
-                        </div>
-                    </div>
+                    }
                 </div>
-                @*<div class="action-button table-cell ">
-                    <button type="button" class="btn btn-default btn-sm btn-block" id="CreatePO">Create PO</button>
-                    <button type="button" class="btn btn-default btn-sm btn-block" id="CreateCM">Create CM</button>
-                </div>*@
+                <div class="action-button table-cell ">
+                    @*<a type="button" class="btn btn-default btn-sm btn-block" id="CreateCM" href="@Url.Action("Create")">Create CM</a>
+                    <a type="button" class="btn btn-default btn-sm btn-block" id="CreateCM">Create CM</a>*@
+                </div>
             </div>
         </div>
 
         <div class="row">
             <article class="col-xs-12">
-                <table id="DataGrid" class="table table-bordered table-striped text-center dataTable no-footer">
-                    <thead>
-                        <tr>
-                            <th>CM #</th>
-                            <th>CM Type</th>
-                            <th>Vendor</th>
-                            <th>CM Date</th>
-                            <th>QTY</th>
-                            <th>Grand Total</th>
-                            <th>Credit Paid</th>
-                            <th>Balance</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th>CM #</th>
-                            <th>CM Type</th>
-                            <th>Vendor</th>
-                            <th>CM Date</th>
-                            <th>QTY</th>
-                            <th>Grand Total</th>
-                            <th>Credit Paid</th>
-                            <th>Balance</th>
-                            <th>Status</th>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="col-xs-1 col-xs-offset-11">
+                    @*<button type="button" class="btn btn-default btn-sm btn-block" id="Copy">Copy</button>*@
+                    <button type="button" class="btn btn-default btn-sm btn-block" id="Delete">Delete</button>
+                </div>
+                <table id="DataGrid"></table>
             </article>
         </div>
     </section>
 </div>
 @section pagespecific {
-    @*@Html.DataGridFor(x => Model, "#DataGrid", true, "PurchaseOrderList", "ID", false, false, false, false)*@
+    @Html.DataGridFor(x => Model, "#DataGrid", true, "CreditMemoList", "ID", false, true, false, false)
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#CreateCM").on("click", function () {
+                var dataList = [];
+                var rows = $table.datagrid('getSelections');
+                for (var i in rows) {
+                    dataList.push("ID=" + rows[i].ID);
+                }
+                if (dataList.length == 1) {
+                    document.location.href = "@Url.Action("CreateCM")?" + dataList.join("&");
+                }
+                else if (dataList.length > 1) {
+                    alert("只能選擇一筆CM單號" + dataList);
+                }
+                else {
+                    alert("請勾選CM單號");
+                }
+
+            });
+            $("#Copy").on("click", function () {
+                var dataList = [];
+                var rows = $table.datagrid('getSelections');
+                for (var i in rows) {
+                    dataList.push(rows[i].ID);
+                }
+                $.ajax({
+                    traditional: true,
+                    type: "post",
+                    url: "@Url.Action("CopyData")",
+                    data: {
+                        IDList: dataList,
+                    },
+                    success: function (data) {
+                        if (data.status) {
+                            dataInit();
+                        }
+                    }
+                });
+            });
+            $("#Delete").on("click", function () {
+                var dataList = [];
+                var rows = $table.datagrid('getSelections');
+                for (var i in rows) {
+                    dataList.push(rows[i].ID);
+                }
+                var DeleteOK = confirm('是否確定刪除' + dataList);
+                if (DeleteOK) {
+                    $.ajax({
+                        traditional: true,
+                        type: "post",
+                        url: "@Url.Action("DeleteData")",
+                        data: {
+                            IDList: dataList,
+                        },
+                        success: function (data) {
+                            if (data.status) {
+                                dataInit();
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 }
