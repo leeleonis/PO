@@ -309,6 +309,8 @@
           <Property Name="Credit" Type="decimal" Precision="18" Scale="2" />
           <Property Name="CreditQTY" Type="int" />
           <Property Name="CreditMemoID" Type="int" />
+          <Property Name="UPCEAN" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReceivedDate" Type="datetime" />
         </EntityType>
         <EntityType Name="SerialsLlist">
           <Key>
@@ -2347,6 +2349,8 @@
           <NavigationProperty Name="CreditMemo" Relationship="PurchaseOrderModel.FK_PurchaseSKU_CreditMemo" FromRole="PurchaseSKU" ToRole="CreditMemo" />
           <NavigationProperty Name="PurchaseOrder" Relationship="PurchaseOrderModel.FK_PurchaseSKU_PurchaseOrder" FromRole="PurchaseSKU" ToRole="PurchaseOrder" />
           <NavigationProperty Name="SerialsLlist" Relationship="PurchaseOrderModel.FK_SerialsLlist_PurchaseSKU" FromRole="PurchaseSKU" ToRole="SerialsLlist" />
+          <Property Name="UPCEAN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReceivedDate" Type="DateTime" Precision="3" />
         </EntityType>
         <Association Name="FK_PurchaseSKU_CreditMemo">
           <End Type="PurchaseOrderModel.CreditMemo" Role="CreditMemo" Multiplicity="0..1" />
@@ -2962,6 +2966,8 @@
           <EntitySetMapping Name="PurchaseSKU">
             <EntityTypeMapping TypeName="PurchaseOrderModel.PurchaseSKU">
               <MappingFragment StoreEntitySet="PurchaseSKU">
+                <ScalarProperty Name="ReceivedDate" ColumnName="ReceivedDate" />
+                <ScalarProperty Name="UPCEAN" ColumnName="UPCEAN" />
                 <ScalarProperty Name="CreditMemoID" ColumnName="CreditMemoID" />
                 <ScalarProperty Name="CreditQTY" ColumnName="CreditQTY" />
                 <ScalarProperty Name="Credit" ColumnName="Credit" />

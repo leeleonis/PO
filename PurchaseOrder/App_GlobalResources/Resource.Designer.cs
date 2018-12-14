@@ -2293,6 +2293,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查詢類似 Received Date 的當地語系化字串。
+        /// </summary>
+        public static string PurchaseSKU_ReceivedDate {
+            get {
+                return ResourceManager.GetString("PurchaseSKU_ReceivedDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 Shipping Cost 的當地語系化字串。
         /// </summary>
         public static string PurchaseSKU_ShippingCost {
@@ -2316,6 +2325,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         public static string PurchaseSKU_TotalRefunded {
             get {
                 return ResourceManager.GetString("PurchaseSKU_TotalRefunded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UPC/EAN 的當地語系化字串。
+        /// </summary>
+        public static string PurchaseSKU_UPCEAN {
+            get {
+                return ResourceManager.GetString("PurchaseSKU_UPCEAN", resourceCulture);
             }
         }
         

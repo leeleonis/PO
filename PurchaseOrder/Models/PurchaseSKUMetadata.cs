@@ -209,9 +209,24 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "PurchaseSKU_CreditMemoID", ResourceType = typeof(App_GlobalResources.Resource))]
     		public Nullable<int>  CreditMemoID { get; set; }
-    
-    		    
-    	}
+
+            /// <summary>
+            /// UPC/EAN
+            /// </summary>        
+            [Display(Name = "PurchaseSKU_UPCEAN", ResourceType = typeof(App_GlobalResources.Resource))]
+            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+            public string UPCEAN { get; set; }
+
+            /// <summary>
+    		/// Received Date
+    		/// </summary>        
+    	    [Display(Name = "PurchaseSKU_ReceivedDate", ResourceType = typeof(App_GlobalResources.Resource))]
+            [UIHint("FDate")]
+            public Nullable<System.DateTime> ReceivedDate { get; set; }
+
+
+        }
     }
     
 }

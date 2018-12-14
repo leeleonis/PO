@@ -41,6 +41,10 @@ namespace PurchaseOrderSys.Controllers
             //    CreateAt = DateTime.UtcNow
             //};
             filter.IsEnable = true;
+            if (!filter.PODate.HasValue)
+            {
+                filter.PODate = DateTime.Today;
+            }
             filter.CreateBy = UserBy;
             filter.CreateAt = DateTime.UtcNow;
             db.PurchaseOrder.Add(filter);
@@ -332,7 +336,7 @@ namespace PurchaseOrderSys.Controllers
             var QTYReceived = 0;
             if (PurchaseSKU.SerialsLlist.Any())
             {
-                QTYReceived = PurchaseSKU.SerialsLlist.Count();
+                QTYReceived = PurchaseSKU.SerialsLlist.Where(x => x.SerialsType == 1).Count();
             }
             else
             {
@@ -488,6 +492,21 @@ namespace PurchaseOrderSys.Controllers
             var PurchaseSKU = db.PurchaseSKU.Find(ID);
             return View(PurchaseSKU);
         }
+        [HttpPost]
+        public ActionResult Addserials(int ID,string UPCEAN,DateTime? ReceivedDate)
+        {
+            var PurchaseSKU = db.PurchaseSKU.Find(ID);
+            if (!string.IsNullOrEmpty(UPCEAN))
+            {
+                PurchaseSKU.UPCEAN = UPCEAN;
+            }
+            if (ReceivedDate.HasValue)
+            {
+                PurchaseSKU.ReceivedDate = ReceivedDate;
+            }
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
         public ActionResult Saveserials(string serials, int PurchaseSKUID)
         {
             var PurchaseSKU = db.PurchaseSKU.Find(PurchaseSKUID);
@@ -497,36 +516,81 @@ namespace PurchaseOrderSys.Controllers
             {
                 return Json(new { status = false, Errmsg = "序號不可大於採購數" }, JsonRequestBehavior.AllowGet);
             }
-            var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials);
-            if (SerialsLlist.Count() == 0 || SerialsLlist.Sum(x => x.SerialsType) == 0)
+            if (PurchaseSKU.PurchaseOrder.POType== "DropshpOrder")
             {
-                var dt = DateTime.UtcNow;
-                var nSerialsLlist = new SerialsLlist
+                var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials);
+                if (SerialsLlist.Count() == 0 )
                 {
-                    PurchaseSKUID = PurchaseSKUID,
-                    SerialsNo = serials,
-                    SerialsType = 1,
-                    ReceivedBy = UserBy,
-                    ReceivedAt = dt,
-                    CreateBy = UserBy,
-                    CreateAt = dt
-                };
-                db.SerialsLlist.Add(nSerialsLlist);
-                try
-                {
-                    db.SaveChanges();
-                    return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+                    var dt = DateTime.UtcNow;
+                    var nSerialsLlistIn = new SerialsLlist
+                    {
+                        PurchaseSKUID = PurchaseSKUID,
+                        SerialsNo = serials,
+                        SerialsType = 1,
+                        ReceivedBy = UserBy,
+                        ReceivedAt = dt,
+                        CreateBy = UserBy,
+                        CreateAt = dt
+                    };
+                    db.SerialsLlist.Add(nSerialsLlistIn);
+                    var nSerialsLlistOut = new SerialsLlist
+                    {
+                        PurchaseSKUID = PurchaseSKUID,
+                        SerialsNo = serials,
+                        SerialsType = -1,
+                        ReceivedBy = UserBy,
+                        ReceivedAt = dt,
+                        CreateBy = UserBy,
+                        CreateAt = dt
+                    };
+                    db.SerialsLlist.Add(nSerialsLlistOut);
+                    try
+                    {
+                        db.SaveChanges();
+                        return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+                    }
+                    catch (Exception ex)
+                    {
+                        return Json(new { status = false, Errmsg = ex.ToString() }, JsonRequestBehavior.AllowGet);
+                    }
                 }
-                catch (Exception ex)
+                else
                 {
-                    return Json(new { status = false, Errmsg = ex.ToString() }, JsonRequestBehavior.AllowGet);
+                    return Json(new { status = false, Errmsg = "序號已經存在" }, JsonRequestBehavior.AllowGet);
                 }
             }
             else
             {
-                return Json(new { status = false, Errmsg = "序號已經存在" }, JsonRequestBehavior.AllowGet);
+                var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials);
+                if (SerialsLlist.Count() == 0 || SerialsLlist.Sum(x => x.SerialsType) == 0)
+                {
+                    var dt = DateTime.UtcNow;
+                    var nSerialsLlist = new SerialsLlist
+                    {
+                        PurchaseSKUID = PurchaseSKUID,
+                        SerialsNo = serials,
+                        SerialsType = 1,
+                        ReceivedBy = UserBy,
+                        ReceivedAt = dt,
+                        CreateBy = UserBy,
+                        CreateAt = dt
+                    };
+                    db.SerialsLlist.Add(nSerialsLlist);
+                    try
+                    {
+                        db.SaveChanges();
+                        return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+                    }
+                    catch (Exception ex)
+                    {
+                        return Json(new { status = false, Errmsg = ex.ToString() }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    return Json(new { status = false, Errmsg = "序號已經存在" }, JsonRequestBehavior.AllowGet);
+                }
             }
-
         }
         [HttpPost]
         public ActionResult CreatNote(int? ID, string Note)
@@ -629,18 +693,18 @@ namespace PurchaseOrderSys.Controllers
                 IsEnable = true,
                 CompanyID = filter.CompanyID,
                 VendorID = filter.VendorID,
-                InvoiceDate=filter.InvoiceDate,
-                InvoiceNo= filter.InvoiceNo,
-                CMDate = filter.CMDate,
+                InvoiceDate = filter.InvoiceDate,
+                InvoiceNo = filter.InvoiceNo,
+                CMDate = filter.CMDate ?? DateTime.Today,
                 CMStatus = filter.CMStatus,
                 CMType = filter.CMType,
-                ShippingStatus= filter.ShippingStatus,
-                ShippedDate= filter.ShippedDate,
-                Carrier= filter.Carrier,
-                Tracking= filter.Tracking,
-                CreditStatus= filter.CreditStatus,
-                CreditDate= filter.CreditDate,
-                CreditAmount= filter.CreditAmount,
+                ShippingStatus = filter.ShippingStatus,
+                ShippedDate = filter.ShippedDate,
+                Carrier = filter.Carrier,
+                Tracking = filter.Tracking,
+                CreditStatus = filter.CreditStatus,
+                CreditDate = filter.CreditDate,
+                CreditAmount = filter.CreditAmount,
                 CreateBy = UserBy,
                 CreateAt = DateTime.UtcNow
             };

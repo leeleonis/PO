@@ -1630,4 +1630,10 @@
   <data name="CreditMemo_ReceivedAt" xml:space="preserve">
     <value>ReceivedAt</value>
   </data>
+  <data name="PurchaseSKU_UPCEAN" xml:space="preserve">
+    <value>UPC/EAN</value>
+  </data>
+  <data name="PurchaseSKU_ReceivedDate" xml:space="preserve">
+    <value>Received Date</value>
+  </data>
 </root>
