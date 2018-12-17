@@ -30,8 +30,8 @@ namespace inventorySKU.Controllers
                     LangCookie.Expires.AddDays(30);
                 }
                 Response.Cookies.Add(LangCookie);
-                //System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(Lang);
-                //System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(Lang);
+                System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(Lang);
+                System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(Lang);
             }
             return Json(new { status = true, Lang }, JsonRequestBehavior.AllowGet);
         }

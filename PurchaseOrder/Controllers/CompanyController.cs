@@ -129,18 +129,17 @@ namespace PurchaseOrderSys.Controllers
             if (filter.RelateID.HasValue) CompanyFilter = CompanyFilter.Where(c => c.RelateID.Value.Equals(filter.RelateID.Value));
             if (!string.IsNullOrEmpty(filter.eBayAccountID)) CompanyFilter = CompanyFilter.Where(c => c.eBayAccountID.ToLower().Contains(filter.eBayAccountID.ToLower()));
             if (!string.IsNullOrEmpty(filter.AmazonAccountID)) CompanyFilter = CompanyFilter.Where(c => c.AmazonAccountID.ToLower().Contains(filter.AmazonAccountID.ToLower()));
-
-            if (CompanyFilter.Any())
+            var CompanyList = CompanyFilter.Select(x=>new CompanyVM { }).ToList();
+            if (CompanyList.Any())
             {
                 int length = rows;
                 int start = (page - 1) * length;
                 total = CompanyFilter.Count();
-                var results = CompanyFilter.OrderByDescending(c => c.CreateAt).Skip(start).Take(length).ToList();
+                var results = CompanyList.OrderByDescending(c => c.CreateAt).Skip(start).Take(length).ToList();
 
                 dataList.AddRange(results);
             }
-
-            return Json(new { total, rows = dataList }, JsonRequestBehavior.AllowGet);
+            return Json(new { total, rows = dataList.ToList() }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

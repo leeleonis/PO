@@ -1,15 +1,73 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
+using Newtonsoft.Json;
 using PurchaseOrderSys.Models;
 
 namespace PurchaseOrderSys.Controllers
 {
     public class AjaxController : BaseController
     {
+        [HttpPost]
+        public ActionResult Language(string Lang)
+        {
+            if (!string.IsNullOrEmpty(Lang))
+            {
+                HttpCookie LangCookie = Request.Cookies["Lang"];
+                if (LangCookie != null)
+                {
+                    LangCookie.Value = Lang.Trim();
+                }
+                else
+                {
+                    LangCookie = new HttpCookie("Lang");
+                    LangCookie.Value = Lang.Trim();
+                    LangCookie.Expires.AddDays(30);
+                }
+                Response.Cookies.Add(LangCookie);
+                //System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(Lang);
+                //System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(Lang);
+            }
+            return Json(new { status = true, Lang }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult MenuListAuth(int id, string mod, int? Gid)
+        {
+            ViewBag.mod = mod;
+            var Menu = db.Menu.Where(x => x.IsEnable).Include(m => m.MenuParent).AsQueryable();//選單
+            if (Gid.HasValue)
+            {
+                var UserAuth = db.AdminUser.Find(id).Auth;//使用者
+                var AdminGroup = db.AdminGroup.Find(Gid);//群組
+                if (mod == "UE" || mod == "UI")
+                {
+                    var AuthItem = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(AdminGroup.Auth).Where(x => x.Value.Any()).Select(x => int.Parse(x.Key));
+                    Menu = Menu.Where(x => x.MenuChild.Where(y => AuthItem.Contains(y.MenuID)).Any());
+                }
+                ViewBag.menu = Menu;
+                if (!string.IsNullOrWhiteSpace(UserAuth))
+                {
+                    ViewBag.UserAuth = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(UserAuth);
+                }
+                return View(AdminGroup);
+            }
+            else
+            {
+                var AdminGroup = db.AdminGroup.Find(id);//群組
+                if (mod == "UE")
+                {
+                    var AuthItem = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(AdminGroup.Auth).Where(x => x.Value.Any()).Select(x => int.Parse(x.Key));
+                    Menu = Menu.Where(x => x.MenuChild.Where(y => AuthItem.Contains(y.MenuID)).Any());
+                }
+                ViewBag.menu = Menu;
+                return View(AdminGroup);
+            }
+
+        }
+
         public ActionResult SkuNumberGet(string Search)
         {
             var dataList = db.SkuLang.Where(x => x.LangID == "zh-tw" && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });

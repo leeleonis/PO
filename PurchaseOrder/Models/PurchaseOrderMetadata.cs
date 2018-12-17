@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -253,9 +254,10 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "PurchaseOrder_Other", ResourceType = typeof(App_GlobalResources.Resource))]
     		public Nullable<decimal>  Other { get; set; }
-    
-    		    
-    	}
+
+            [JsonIgnore()]
+            public virtual Company Company { get; set; }
+        }
     }
     
 }

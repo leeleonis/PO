@@ -26,9 +26,10 @@ namespace PurchaseOrderSys
             HttpCookie Lang = Request.Cookies["Lang"];
             if (Lang != null)
             {
-                System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(sLang);
-                System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(sLang);
+                sLang = Lang.Value;
             }
+            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(sLang);
+            System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(sLang);
         }
     }
 }
