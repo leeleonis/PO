@@ -1442,7 +1442,7 @@
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="SKU1" Relationship="PurchaseOrderModel.FK_SkuLang_Sku" FromRole="SkuLang" ToRole="SKU" />
+          <NavigationProperty Name="GetSku" Relationship="PurchaseOrderModel.FK_SkuLang_Sku" FromRole="SkuLang" ToRole="SKU" />
           </EntityType>
         <EntityType Name="PurchaseNote">
           <Key>
@@ -2129,8 +2129,8 @@
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="SKU1" Relationship="PurchaseOrderModel.FK_KitSku_Sku" FromRole="KitSku" ToRole="SKU" />
-          <NavigationProperty Name="SKU2" Relationship="PurchaseOrderModel.FK_KitSku_Sku1" FromRole="KitSku" ToRole="SKU" />
+          <NavigationProperty Name="GetSku" Relationship="PurchaseOrderModel.FK_KitSku_Sku" FromRole="KitSku" ToRole="SKU" />
+          <NavigationProperty Name="GetParent" Relationship="PurchaseOrderModel.FK_KitSku_Sku1" FromRole="KitSku" ToRole="SKU" />
         </EntityType>
         <EntityType Name="SkuPicture">
           <Key>
@@ -2169,8 +2169,8 @@
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="Brand1" Relationship="PurchaseOrderModel.FK_Sku_Brand" FromRole="SKU" ToRole="Brand" />
-          <NavigationProperty Name="Condition1" Relationship="PurchaseOrderModel.FK_Sku_Condition" FromRole="SKU" ToRole="Condition" />
+          <NavigationProperty Name="GetBrand" Relationship="PurchaseOrderModel.FK_Sku_Brand" FromRole="SKU" ToRole="Brand" />
+          <NavigationProperty Name="GetCondition" Relationship="PurchaseOrderModel.FK_Sku_Condition" FromRole="SKU" ToRole="Condition" />
           <NavigationProperty Name="GetKit" Relationship="PurchaseOrderModel.FK_KitSku_Sku" FromRole="SKU" ToRole="KitSku" />
           <NavigationProperty Name="Sku_Attribute" Relationship="PurchaseOrderModel.FK_Sku_Attribute_Sku" FromRole="SKU" ToRole="Sku_Attribute" />
           <NavigationProperty Name="SkuType" Relationship="PurchaseOrderModel.FK_Sku_SkuType" FromRole="SKU" ToRole="SkuType" />

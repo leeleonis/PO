@@ -53,7 +53,7 @@
                                     <div class="tab-pane" id="hb2">
                                         <fieldset>
                                             <legend>屬性組合</legend>
-                                            @foreach (var type in AttributeTypeList.Where(t => t.IsEnable))
+                                            @foreach (var type in AttributeTypeList)
                                             {
                                                 <div class="form-group">
                                                     @Html.Label("", type.Name, htmlAttributes: new { @class = "control-label col-sm-2" })
@@ -62,8 +62,9 @@
                                                         @{
                                                             var attributeLangList = type.SkuAttribute.Where(a => a.IsEnable).SelectMany(a => a.SkuAttributeLang).Where(l => l.LangID.Equals(LangID));
                                                             var selectItem = attributeLangList.Select(l => new SelectListItem() { Text = l.Name, Value = l.AttrID.ToString() });
+                                                            var name = string.Format("AttributeGroup[{0}][]", type.ID);
                                                         }
-                                                        @Html.DropDownList("AttributeGroup[]", selectItem, htmlAttributes: new { @class = "form-control select-attr", @multiple = "multiple", @style = "width: 100%" })
+                                                        @Html.DropDownList(name, selectItem, htmlAttributes: new { @class = "form-control select-attr", @multiple = "multiple", @style = "width: 100%" })
                                                     </div>
                                                 </div>
                                             }

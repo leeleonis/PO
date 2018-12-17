@@ -52,7 +52,7 @@
 
             datagrid.dataInit.frozenColumns = [[
                 { field: "ck", checkbox: true },
-                { field: "SkuID", title: "@Html.DisplayNameFor(model => model.SkuID)", width: 120, align: "center", sortable: false }
+                { field: "SkuID", title: "@Html.DisplayNameFor(model => model.SkuID)", width: 120, align: "center", sortable: false, }
             ]];
 
             datagrid.dataInit.columns = [[
@@ -65,12 +65,12 @@
                 }, {
                     field: "Condition", title: "@Html.DisplayNameFor(model => model.Condition)", width: 220, align: "center", sortable: false,
                     formatter: function (value, row, index) {
-                        return website.IsEmpty(row.IsFilter) ? datagrid.setDropdown(row.SkuID, this.field, selectOption['SkuCondition'], value) : value;
+                        return website.IsEmpty(row.IsFilter) ? datagrid.setDropdown(row.SkuID, this.field, selectOption['SkuCondition'], value.toString()) : value;
                     }
                 }, {
                     field: "Category", title: "@Html.DisplayNameFor(model => model.Category)", width: 200, align: "center", sortable: false,
                     formatter: function (value, row, index) {
-                        return website.IsEmpty(row.IsFilter) ? datagrid.setDropdown(row.SkuID, this.field, selectOption['SkuType'], value) : value;
+                        return website.IsEmpty(row.IsFilter) ? datagrid.setDropdown(row.SkuID, this.field, selectOption['SkuType'], value.toString()) : value;
                     }
                 }, {
                     field: "UPC", title: "@Html.DisplayNameFor(model => model.UPC)", width: 150, align: "center", sortable: false,
@@ -141,7 +141,7 @@
         function setFilterColumn(filterValue) {
             return {
                 IsFilter: true,
-                ID: "<input type='text' class='form-control s-ID' value='" + (!website.IsEmpty(filterValue['ID']) ? filterValue['ID'] : '') + "'>",
+                SkuID: "<input type='text' class='form-control s-ID' value='" + (!website.IsEmpty(filterValue['ID']) ? filterValue['ID'] : '') + "'>",
                 ParentSku: "<input type='text' class='form-control s-parentSku' value='" + (!website.IsEmpty(filterValue['ParentSku']) ? filterValue['ParentSku'] : '') + "'>",
                 Name: "<input type='text' class='form-control s-name' value='" + (!website.IsEmpty(filterValue['Name']) ? filterValue['Name'] : '') + "'>",
                 Condition: "<select class='form-control s-condition'><option value=''>全部</option>" + datagrid.setSelectOption(selectOption['SkuCondition'], filterValue['Condition']) + "</select>",

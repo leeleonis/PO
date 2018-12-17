@@ -88,9 +88,9 @@ namespace NetoDeveloper
         
         private string priorityField;
         
-        private string pageField;
+        private int pageField;
         
-        private string limitField;
+        private int limitField;
         
         private GetItemFilterOrderBy orderByField;
         
@@ -325,7 +325,7 @@ namespace NetoDeveloper
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
-        public string Page {
+        public int Page {
             get {
                 return this.pageField;
             }
@@ -336,7 +336,7 @@ namespace NetoDeveloper
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
-        public string Limit {
+        public int Limit {
             get {
                 return this.limitField;
             }

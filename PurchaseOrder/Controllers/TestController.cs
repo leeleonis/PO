@@ -108,23 +108,90 @@ namespace PurchaseOrderSys.Controllers
             return Json(returnObj, JsonRequestBehavior.AllowGet);
         }
 
-        public void SkuSync()
+        public void DoSkuSync()
         {
             NetoApi neto = new NetoApi();
-            var categoryList = neto.GetCategory().Category.Where(c => c.ParentCategoryID.Equals("0")).ToList();
-            var aa = categoryList.Where(c => !c.ID.Equals(c.CategoryID)).ToList();
-            foreach(var category in categoryList)
-            {
-                if(!db.SkuType.Any(t => t.NetoID.ToString().Equals(category.ID))){
-                    SkuType type = new SkuType()
-                    {
-                        IsEnable = true,
-                        NetoID = int.Parse(category.ID),
-                        CreateAt = DateTime.UtcNow,
-                        CreateBy = Session["AdminName"].ToString()
-                    };
-                }
-            }
+            string LangID = EnumData.DataLangList().First().Key;
+
+            var skuList = neto.GetItemBySku("102001077");
+            //var categroyList = neto.GetCategory().Category.ToList();
+
+            //SKU sku;
+            //Brand brand;
+            //List<string> MissCategory = new List<string>();
+            //int page = 0, limit = 100, categoryID;
+            //var skuList = neto.GetItemBySkus(page++, limit);
+            //try
+            //{
+            //    do
+            //    {
+            //        foreach (var item in skuList.Item.Where(i => i.Categories[0] != null))
+            //        {
+            //            if (!db.SKU.Any(s => s.SkuID.Equals(item.SKU)))
+            //            {
+            //                categoryID = int.Parse(item.Categories.First().Category[0].CategoryID);
+            //                if (!db.SkuType.Any(t => t.NetoID.Value.Equals(categoryID)))
+            //                {
+            //                    categoryID = int.Parse(categroyList.First(c => c.CategoryID.Equals(categoryID.ToString())).ParentCategoryID);
+            //                }
+
+            //                string brandName = string.IsNullOrEmpty(item.Brand) ? "Other" : item.Brand.Trim(' ');
+            //                brand = db.Brand.FirstOrDefault(b => b.Name.ToLower().Equals(brandName.ToLower()));
+            //                if (brand == null)
+            //                {
+            //                    brand = new Brand()
+            //                    {
+            //                        IsEnable = true,
+            //                        Name = brandName,
+            //                        CreateAt = DateTime.UtcNow,
+            //                        CreateBy = Session["AdminName"].ToString()
+            //                    };
+
+            //                    db.Entry(brand).State = System.Data.Entity.EntityState.Added;
+            //                    db.SaveChanges();
+            //                }
+
+            //                sku = new SKU()
+            //                {
+            //                    IsEnable = true,
+            //                    SkuID = item.SKU,
+            //                    ParentSku = item.ParentSKU,
+            //                    Category = db.SkuType.FirstOrDefault(t => t.NetoID.Value.Equals(categoryID))?.ID ?? 0,
+            //                    Brand = brand.ID,
+            //                    Condition = 1,
+            //                    UPC = item.UPC,
+            //                    Type = (byte)EnumData.SkuType.Single,
+            //                    CreateAt = DateTime.UtcNow,
+            //                    CreateBy = Session["AdminName"].ToString()
+            //                };
+
+            //                sku.SkuLang.Add(new SkuLang()
+            //                {
+            //                    Sku = sku.SkuID,
+            //                    LangID = LangID,
+            //                    Name = item.Name,
+            //                    Model = item.ModelNumber,
+            //                    Description = item.Description,
+            //                    SpecContent = item.Specifications,
+            //                    CreateAt = sku.CreateAt,
+            //                    CreateBy = sku.CreateBy
+            //                });
+
+            //                db.SKU.Add(sku);
+            //            }
+            //        }
+
+            //        db.SaveChanges();
+
+            //        if (skuList.Item.Any(i => i.Categories[0] == null)) MissCategory.AddRange(skuList.Item.Where(i => i.Categories[0] == null).Select(i => i.SKU).ToArray());
+
+            //        //skuList = neto.GetItemBySkus(page++, limit);
+            //    } while (skuList.Ack == NetoDeveloper.GetItemResponseAck.Success && skuList.Item.Any());
+            //}
+            //catch (Exception e)
+            //{
+            //    string msg = e.Message;
+            //}
         }
     }
 }

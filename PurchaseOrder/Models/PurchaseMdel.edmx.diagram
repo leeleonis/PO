@@ -9,7 +9,7 @@
         <EntityTypeShape EntityType="PurchaseOrderModel.Company" Width="1.5" PointX="0.75" PointY="15" />
         <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseOrder_Company" />
         <EntityTypeShape EntityType="PurchaseOrderModel.SerialsLlist" Width="1.5" PointX="5.375" PointY="1.625" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.SkuLang" Width="1.5" PointX="7.625" PointY="6.625" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.SkuLang" Width="1.5" PointX="7.625" PointY="13.5" />
         <EntityTypeShape EntityType="PurchaseOrderModel.PurchaseNote" Width="1.5" PointX="3" PointY="15" />
         <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseNote_PurchaseOrder" />
         <AssociationConnector Association="PurchaseOrderModel.FK_SerialsLlist_SerialsLlist" />

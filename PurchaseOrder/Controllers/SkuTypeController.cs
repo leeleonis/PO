@@ -47,7 +47,7 @@ namespace PurchaseOrderSys.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IsEnable,NetoID")] SkuType skuType, SkuTypeLang langData, List<int[]> AttributeGroup)
+        public ActionResult Create([Bind(Include = "IsEnable,NetoID")] SkuType skuType, SkuTypeLang langData, Dictionary<string, int[]> AttributeGroup)
         {
             skuType.AttributeGroup = Newtonsoft.Json.JsonConvert.SerializeObject(AttributeGroup);
             skuType.CreateAt = DateTime.UtcNow;

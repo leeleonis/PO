@@ -26,6 +26,26 @@ namespace inventorySKU.NetoDeveloper
             return Request<GetItemResponse>("GetItem", request);
         }
 
+        public GetItemResponse GetItemBySkus(int page = 0, int limit = 100)
+        {
+            GetItem request = new GetItem()
+            {
+                Filter = new GetItemFilter()
+                {
+                    DateAddedTo = DateTime.UtcNow.AddDays(1),
+                    OutputSelector = Enum.GetValues(typeof(GetItemFilterOutputSelector)).Cast<GetItemFilterOutputSelector>().ToArray(),
+                    Page = page,
+                    Limit = limit,
+                    OrderBy = GetItemFilterOrderBy.DateAdded,
+                    OrderBySpecified = true,
+                    OrderDirection = GetItemFilterOrderDirection.DESC,
+                    OrderDirectionSpecified = true
+                }
+            };
+
+            return Request<GetItemResponse>("GetItem", request);
+        }
+
         public AddItemResponse UpdateItem(AddItemItem item)
         {
             AddItem request = new AddItem()

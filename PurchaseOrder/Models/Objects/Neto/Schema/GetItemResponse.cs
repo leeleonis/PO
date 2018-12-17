@@ -11,6 +11,9 @@
 // 
 // 此原始程式碼由 xsd 版本=4.6.1055.0 自動產生。
 // 
+using System;
+using Newtonsoft.Json;
+
 namespace NetoDeveloper
 {
 
@@ -19,3647 +22,4562 @@ namespace NetoDeveloper
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="NetoAPI")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace ="NetoAPI", IsNullable=false)]
-    public partial class GetItemResponse {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "NetoAPI")]
+    [System.Xml.Serialization.XmlRootAttribute(Namespace = "NetoAPI", IsNullable = false)]
+    public partial class GetItemResponse
+    {
+
         private GetItemResponseItem[] itemField;
-        
+
         private string currentTimeField;
-        
+
         private GetItemResponseAck ackField;
-        
+
         private bool ackFieldSpecified;
-        
+
         private GetItemResponseMessages messagesField;
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("Item", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public GetItemResponseItem[] Item {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute("Item", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public GetItemResponseItem[] Item
+        {
+            get
+            {
                 return this.itemField;
             }
-            set {
+            set
+            {
                 this.itemField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string CurrentTime {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string CurrentTime
+        {
+            get
+            {
                 return this.currentTimeField;
             }
-            set {
+            set
+            {
                 this.currentTimeField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public GetItemResponseAck Ack {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public GetItemResponseAck Ack
+        {
+            get
+            {
                 return this.ackField;
             }
-            set {
+            set
+            {
                 this.ackField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool AckSpecified {
-            get {
+        public bool AckSpecified
+        {
+            get
+            {
                 return this.ackFieldSpecified;
             }
-            set {
+            set
+            {
                 this.ackFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public GetItemResponseMessages Messages {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public GetItemResponseMessages Messages
+        {
+            get
+            {
                 return this.messagesField;
             }
-            set {
+            set
+            {
                 this.messagesField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="NetoAPI")]
-    public partial class GetItemResponseItem {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "NetoAPI")]
+    public partial class GetItemResponseItem
+    {
+
         private string idField;
-        
+
         private string sKUField;
-        
+
         private string inventoryIDField;
-        
+
         private string parentSKUField;
-        
+
         private string accountingCodeField;
-        
+
         private bool virtualField;
-        
+
         private bool virtualFieldSpecified;
-        
+
         private string brandField;
-        
+
         private string nameField;
-        
+
         private string modelField;
-        
+
         private string sortOrder1Field;
-        
+
         private string sortOrder2Field;
-        
+
         private decimal rRPField;
-        
+
         private bool rRPFieldSpecified;
-        
+
         private decimal defaultPriceField;
-        
+
         private bool defaultPriceFieldSpecified;
-        
+
         private decimal promotionPriceField;
-        
+
         private bool promotionPriceFieldSpecified;
-        
+
         private System.DateTime promotionStartDateField;
-        
+
         private bool promotionStartDateFieldSpecified;
-        
+
         private System.DateTime promotionStartDateLocalField;
-        
+
         private bool promotionStartDateLocalFieldSpecified;
-        
+
         private System.DateTime promotionStartDateUTCField;
-        
+
         private bool promotionStartDateUTCFieldSpecified;
-        
+
         private System.DateTime promotionExpiryDateField;
-        
+
         private bool promotionExpiryDateFieldSpecified;
-        
+
         private System.DateTime promotionExpiryDateLocalField;
-        
+
         private bool promotionExpiryDateLocalFieldSpecified;
-        
+
         private System.DateTime promotionExpiryDateUTCField;
-        
+
         private bool promotionExpiryDateUTCFieldSpecified;
-        
+
         private System.DateTime dateArrivalField;
-        
+
         private bool dateArrivalFieldSpecified;
-        
+
         private System.DateTime dateArrivalUTCField;
-        
+
         private bool dateArrivalUTCFieldSpecified;
-        
+
         private decimal costPriceField;
-        
+
         private bool costPriceFieldSpecified;
-        
+
         private string unitOfMeasureField;
-        
+
         private string baseUnitOfMeasureField;
-        
+
         private decimal baseUnitPerQuantityField;
-        
+
         private bool baseUnitPerQuantityFieldSpecified;
-        
+
         private string buyUnitQuantityField;
-        
+
         private string quantityPerScanField;
-        
+
         private string sellUnitQuantityField;
-        
+
         private string preorderQuantityField;
-        
+
         private string pickPriorityField;
-        
+
         private string pickZoneField;
-        
+
         private bool approvedField;
-        
+
         private bool approvedFieldSpecified;
-        
+
         private bool isActiveField;
-        
+
         private bool isActiveFieldSpecified;
-        
+
         private bool visibleField;
-        
+
         private bool visibleFieldSpecified;
-        
+
         private bool taxFreeItemField;
-        
+
         private bool taxFreeItemFieldSpecified;
-        
+
         private bool taxInclusiveField;
-        
+
         private bool taxInclusiveFieldSpecified;
-        
+
         private bool approvedForPOSField;
-        
+
         private bool approvedForPOSFieldSpecified;
-        
+
         private bool approvedForMobileStoreField;
-        
+
         private bool approvedForMobileStoreFieldSpecified;
-        
+
         private string searchKeywordsField;
-        
+
         private string shortDescriptionField;
-        
+
         private string descriptionField;
-        
+
         private string termsAndConditionsField;
-        
+
         private string featuresField;
-        
+
         private string specificationsField;
-        
+
         private string warrantyField;
-        
+
         private string artistOrAuthorField;
-        
+
         private string formatField;
-        
+
         private string modelNumberField;
-        
+
         private string subtitleField;
-        
+
         private string availabilityDescriptionField;
-        
+
         private GetItemResponseItemSalesChannel salesChannelsField;
-        
+
         private GetItemResponseItemImage[] imagesField;
-        
+
         private string imageURLField;
-        
+
         private string brochureURLField;
-        
+
         private string productURLField;
-        
+
         private System.DateTime dateAddedField;
-        
+
         private bool dateAddedFieldSpecified;
-        
+
         private System.DateTime dateAddedLocalField;
-        
+
         private bool dateAddedLocalFieldSpecified;
-        
+
         private System.DateTime dateAddedUTCField;
-        
+
         private bool dateAddedUTCFieldSpecified;
-        
+
         private System.DateTime dateUpdatedField;
-        
+
         private bool dateUpdatedFieldSpecified;
-        
+
         private System.DateTime dateUpdatedLocalField;
-        
+
         private bool dateUpdatedLocalFieldSpecified;
-        
+
         private System.DateTime dateUpdatedUTCField;
-        
+
         private bool dateUpdatedUTCFieldSpecified;
-        
+
         private string uPCField;
-        
+
         private string uPC1Field;
-        
+
         private string uPC2Field;
-        
+
         private string uPC3Field;
-        
+
         private string typeField;
-        
+
         private string subTypeField;
-        
+
         private string numbersOfLabelsToPrintField;
-        
+
         private string referenceNumberField;
-        
+
         private string internalNotesField;
-        
+
         private string barcodeHeightField;
-        
+
         private string isInventoriedField;
-        
+
         private string isBoughtField;
-        
+
         private string isSoldField;
-        
+
         private string expenseAccountField;
-        
+
         private string purchaseTaxCodeField;
-        
+
         private string costOfSalesAccountField;
-        
+
         private string incomeAccountField;
-        
+
         private string assetAccountField;
-        
+
         private decimal itemHeightField;
-        
+
         private bool itemHeightFieldSpecified;
-        
+
         private decimal itemLengthField;
-        
+
         private bool itemLengthFieldSpecified;
-        
+
         private decimal itemWidthField;
-        
+
         private bool itemWidthFieldSpecified;
-        
+
         private decimal shippingHeightField;
-        
+
         private bool shippingHeightFieldSpecified;
-        
+
         private decimal shippingLengthField;
-        
+
         private bool shippingLengthFieldSpecified;
-        
+
         private decimal shippingWidthField;
-        
+
         private bool shippingWidthFieldSpecified;
-        
+
         private decimal shippingWeightField;
-        
+
         private bool shippingWeightFieldSpecified;
-        
+
         private decimal cubicWeightField;
-        
+
         private bool cubicWeightFieldSpecified;
-        
+
         private string supplierItemCodeField;
-        
+
         private string splitForWarehousePickingField;
-        
+
         private string eBayDescriptionField;
-        
+
         private string primarySupplierField;
-        
+
         private string displayTemplateField;
-        
+
         private bool editableKitBundleField;
-        
+
         private bool editableKitBundleFieldSpecified;
-        
+
         private bool requiresPackagingField;
-        
+
         private bool requiresPackagingFieldSpecified;
-        
+
         private string sEOPageTitleField;
-        
+
         private string sEOMetaKeywordsField;
-        
+
         private string sEOPageHeadingField;
-        
+
         private string sEOMetaDescriptionField;
-        
+
         private string sEOCanonicalURLField;
-        
+
         private bool isAssetField;
-        
+
         private bool isAssetFieldSpecified;
-        
+
         private string whenToRepeatOnStandingOrdersField;
-        
+
         private bool serialTrackingField;
-        
+
         private bool serialTrackingFieldSpecified;
-        
+
         private string groupField;
-        
+
         private string shippingCategoryField;
-        
+
         private string jobField;
-        
+
         private decimal monthlySpendRequirementField;
-        
+
         private bool monthlySpendRequirementFieldSpecified;
-        
+
         private string restrictedToUserGroupField;
-        
+
         private string itemURLField;
-        
+
         private bool automaticURLField;
-        
+
         private bool automaticURLFieldSpecified;
-        
+
         private string committedQuantityField;
-        
+
         private string misc01Field;
-        
+
         private string misc02Field;
-        
+
         private string misc03Field;
-        
+
         private string misc04Field;
-        
+
         private string misc05Field;
-        
+
         private string misc06Field;
-        
+
         private string misc07Field;
-        
+
         private string misc08Field;
-        
+
         private string misc09Field;
-        
+
         private string misc10Field;
-        
+
         private string misc11Field;
-        
+
         private string misc12Field;
-        
+
         private string misc13Field;
-        
+
         private string misc14Field;
-        
+
         private string misc15Field;
-        
+
         private string misc16Field;
-        
+
         private string misc17Field;
-        
+
         private string misc18Field;
-        
+
         private string misc19Field;
-        
+
         private string misc20Field;
-        
+
         private string misc21Field;
-        
+
         private string misc22Field;
-        
+
         private string misc23Field;
-        
+
         private string misc24Field;
-        
+
         private string misc25Field;
-        
+
         private string misc26Field;
-        
+
         private string misc27Field;
-        
+
         private string misc28Field;
-        
+
         private string misc29Field;
-        
+
         private string misc30Field;
-        
+
         private string misc31Field;
-        
+
         private string misc32Field;
-        
+
         private string misc33Field;
-        
+
         private string misc34Field;
-        
+
         private string misc35Field;
-        
+
         private string misc36Field;
-        
+
         private string misc37Field;
-        
+
         private string misc38Field;
-        
+
         private string misc39Field;
-        
+
         private string misc40Field;
-        
+
         private string misc41Field;
-        
+
         private string misc42Field;
-        
+
         private string misc43Field;
-        
+
         private string misc44Field;
-        
+
         private string misc45Field;
-        
+
         private string misc46Field;
-        
+
         private string misc47Field;
-        
+
         private string misc48Field;
-        
+
         private string misc49Field;
-        
+
         private string misc50Field;
-        
+
         private string misc51Field;
-        
+
         private string misc52Field;
-        
+
         private GetItemResponseItemFreeGift[] freeGiftsField;
-        
+
         private GetItemResponseItemCrossSellProduct[] crossSellProductsField;
-        
+
         private GetItemResponseItemUpsellProduct[] upsellProductsField;
-        
+
         private GetItemResponseItemKitComponent[] kitComponentsField;
-        
-        private GetItemResponseItemPriceGroup[] priceGroupsField;
-        
-        private GetItemResponseItemCategory[] categoriesField;
-        
-        private GetItemResponseItemItemSpecific[] itemSpecificsField;
-        
-        private GetItemResponseItemWarehouseQuantity warehouseQuantityField;
-        
+
+        private GetItemResponseItemPriceGroupData[] priceGroupsField;
+
+        private GetItemResponseItemCategoryData[] categoriesField;
+
+        private GetItemResponseItemItemSpecificData[] itemSpecificsField;
+
+        private GetItemResponseItemWarehouseQuantity[] warehouseQuantityField;
+
         private GetItemResponseItemWarehouseLocation[] warehouseLocationsField;
-        
+
         private GetItemResponseItemRelatedContents[] relatedContentsField;
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
-        public string ID {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, DataType = "integer")]
+        public string ID
+        {
+            get
+            {
                 return this.idField;
             }
-            set {
+            set
+            {
                 this.idField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string SKU {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string SKU
+        {
+            get
+            {
                 return this.sKUField;
             }
-            set {
+            set
+            {
                 this.sKUField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
-        public string InventoryID {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, DataType = "integer")]
+        public string InventoryID
+        {
+            get
+            {
                 return this.inventoryIDField;
             }
-            set {
+            set
+            {
                 this.inventoryIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string ParentSKU {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string ParentSKU
+        {
+            get
+            {
                 return this.parentSKUField;
             }
-            set {
+            set
+            {
                 this.parentSKUField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string AccountingCode {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string AccountingCode
+        {
+            get
+            {
                 return this.accountingCodeField;
             }
-            set {
+            set
+            {
                 this.accountingCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public bool Virtual {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public bool Virtual
+        {
+            get
+            {
                 return this.virtualField;
             }
-            set {
+            set
+            {
                 this.virtualField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool VirtualSpecified {
-            get {
+        public bool VirtualSpecified
+        {
+            get
+            {
                 return this.virtualFieldSpecified;
             }
-            set {
+            set
+            {
                 this.virtualFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Brand {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Brand
+        {
+            get
+            {
                 return this.brandField;
             }
-            set {
+            set
+            {
                 this.brandField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Name {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Name
+        {
+            get
+            {
                 return this.nameField;
             }
-            set {
+            set
+            {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Model {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Model
+        {
+            get
+            {
                 return this.modelField;
             }
-            set {
+            set
+            {
                 this.modelField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
-        public string SortOrder1 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, DataType = "integer")]
+        public string SortOrder1
+        {
+            get
+            {
                 return this.sortOrder1Field;
             }
-            set {
+            set
+            {
                 this.sortOrder1Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
-        public string SortOrder2 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, DataType = "integer")]
+        public string SortOrder2
+        {
+            get
+            {
                 return this.sortOrder2Field;
             }
-            set {
+            set
+            {
                 this.sortOrder2Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public decimal RRP {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public decimal RRP
+        {
+            get
+            {
                 return this.rRPField;
             }
-            set {
+            set
+            {
                 this.rRPField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RRPSpecified {
-            get {
+        public bool RRPSpecified
+        {
+            get
+            {
                 return this.rRPFieldSpecified;
             }
-            set {
+            set
+            {
                 this.rRPFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public decimal DefaultPrice {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public decimal DefaultPrice
+        {
+            get
+            {
                 return this.defaultPriceField;
             }
-            set {
+            set
+            {
                 this.defaultPriceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DefaultPriceSpecified {
-            get {
+        public bool DefaultPriceSpecified
+        {
+            get
+            {
                 return this.defaultPriceFieldSpecified;
             }
-            set {
+            set
+            {
                 this.defaultPriceFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public decimal PromotionPrice {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public decimal PromotionPrice
+        {
+            get
+            {
                 return this.promotionPriceField;
             }
-            set {
+            set
+            {
                 this.promotionPriceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PromotionPriceSpecified {
-            get {
+        public bool PromotionPriceSpecified
+        {
+            get
+            {
                 return this.promotionPriceFieldSpecified;
             }
-            set {
+            set
+            {
                 this.promotionPriceFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public System.DateTime PromotionStartDate {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public System.DateTime PromotionStartDate
+        {
+            get
+            {
                 return this.promotionStartDateField;
             }
-            set {
+            set
+            {
                 this.promotionStartDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PromotionStartDateSpecified {
-            get {
+        public bool PromotionStartDateSpecified
+        {
+            get
+            {
                 return this.promotionStartDateFieldSpecified;
             }
-            set {
+            set
+            {
                 this.promotionStartDateFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public System.DateTime PromotionStartDateLocal {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public System.DateTime PromotionStartDateLocal
+        {
+            get
+            {
                 return this.promotionStartDateLocalField;
             }
-            set {
+            set
+            {
                 this.promotionStartDateLocalField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PromotionStartDateLocalSpecified {
-            get {
+        public bool PromotionStartDateLocalSpecified
+        {
+            get
+            {
                 return this.promotionStartDateLocalFieldSpecified;
             }
-            set {
+            set
+            {
                 this.promotionStartDateLocalFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public System.DateTime PromotionStartDateUTC {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public System.DateTime PromotionStartDateUTC
+        {
+            get
+            {
                 return this.promotionStartDateUTCField;
             }
-            set {
+            set
+            {
                 this.promotionStartDateUTCField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PromotionStartDateUTCSpecified {
-            get {
+        public bool PromotionStartDateUTCSpecified
+        {
+            get
+            {
                 return this.promotionStartDateUTCFieldSpecified;
             }
-            set {
+            set
+            {
                 this.promotionStartDateUTCFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public System.DateTime PromotionExpiryDate {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public System.DateTime PromotionExpiryDate
+        {
+            get
+            {
                 return this.promotionExpiryDateField;
             }
-            set {
+            set
+            {
                 this.promotionExpiryDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PromotionExpiryDateSpecified {
-            get {
+        public bool PromotionExpiryDateSpecified
+        {
+            get
+            {
                 return this.promotionExpiryDateFieldSpecified;
             }
-            set {
+            set
+            {
                 this.promotionExpiryDateFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public System.DateTime PromotionExpiryDateLocal {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public System.DateTime PromotionExpiryDateLocal
+        {
+            get
+            {
                 return this.promotionExpiryDateLocalField;
             }
-            set {
+            set
+            {
                 this.promotionExpiryDateLocalField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PromotionExpiryDateLocalSpecified {
-            get {
+        public bool PromotionExpiryDateLocalSpecified
+        {
+            get
+            {
                 return this.promotionExpiryDateLocalFieldSpecified;
             }
-            set {
+            set
+            {
                 this.promotionExpiryDateLocalFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public System.DateTime PromotionExpiryDateUTC {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public System.DateTime PromotionExpiryDateUTC
+        {
+            get
+            {
                 return this.promotionExpiryDateUTCField;
             }
-            set {
+            set
+            {
                 this.promotionExpiryDateUTCField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PromotionExpiryDateUTCSpecified {
-            get {
+        public bool PromotionExpiryDateUTCSpecified
+        {
+            get
+            {
                 return this.promotionExpiryDateUTCFieldSpecified;
             }
-            set {
+            set
+            {
                 this.promotionExpiryDateUTCFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="date")]
-        public System.DateTime DateArrival {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, DataType = "date")]
+        public System.DateTime DateArrival
+        {
+            get
+            {
                 return this.dateArrivalField;
             }
-            set {
+            set
+            {
                 this.dateArrivalField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DateArrivalSpecified {
-            get {
+        public bool DateArrivalSpecified
+        {
+            get
+            {
                 return this.dateArrivalFieldSpecified;
             }
-            set {
+            set
+            {
                 this.dateArrivalFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="date")]
-        public System.DateTime DateArrivalUTC {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, DataType = "date")]
+        public System.DateTime DateArrivalUTC
+        {
+            get
+            {
                 return this.dateArrivalUTCField;
             }
-            set {
+            set
+            {
                 this.dateArrivalUTCField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DateArrivalUTCSpecified {
-            get {
+        public bool DateArrivalUTCSpecified
+        {
+            get
+            {
                 return this.dateArrivalUTCFieldSpecified;
             }
-            set {
+            set
+            {
                 this.dateArrivalUTCFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public decimal CostPrice {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public decimal CostPrice
+        {
+            get
+            {
                 return this.costPriceField;
             }
-            set {
+            set
+            {
                 this.costPriceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CostPriceSpecified {
-            get {
+        public bool CostPriceSpecified
+        {
+            get
+            {
                 return this.costPriceFieldSpecified;
             }
-            set {
+            set
+            {
                 this.costPriceFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string UnitOfMeasure {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string UnitOfMeasure
+        {
+            get
+            {
                 return this.unitOfMeasureField;
             }
-            set {
+            set
+            {
                 this.unitOfMeasureField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string BaseUnitOfMeasure {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string BaseUnitOfMeasure
+        {
+            get
+            {
                 return this.baseUnitOfMeasureField;
             }
-            set {
+            set
+            {
                 this.baseUnitOfMeasureField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public decimal BaseUnitPerQuantity {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public decimal BaseUnitPerQuantity
+        {
+            get
+            {
                 return this.baseUnitPerQuantityField;
             }
-            set {
+            set
+            {
                 this.baseUnitPerQuantityField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool BaseUnitPerQuantitySpecified {
-            get {
+        public bool BaseUnitPerQuantitySpecified
+        {
+            get
+            {
                 return this.baseUnitPerQuantityFieldSpecified;
             }
-            set {
+            set
+            {
                 this.baseUnitPerQuantityFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
-        public string BuyUnitQuantity {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, DataType = "integer")]
+        public string BuyUnitQuantity
+        {
+            get
+            {
                 return this.buyUnitQuantityField;
             }
-            set {
+            set
+            {
                 this.buyUnitQuantityField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
-        public string QuantityPerScan {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, DataType = "integer")]
+        public string QuantityPerScan
+        {
+            get
+            {
                 return this.quantityPerScanField;
             }
-            set {
+            set
+            {
                 this.quantityPerScanField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
-        public string SellUnitQuantity {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, DataType = "integer")]
+        public string SellUnitQuantity
+        {
+            get
+            {
                 return this.sellUnitQuantityField;
             }
-            set {
+            set
+            {
                 this.sellUnitQuantityField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
-        public string PreorderQuantity {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, DataType = "integer")]
+        public string PreorderQuantity
+        {
+            get
+            {
                 return this.preorderQuantityField;
             }
-            set {
+            set
+            {
                 this.preorderQuantityField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string PickPriority {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string PickPriority
+        {
+            get
+            {
                 return this.pickPriorityField;
             }
-            set {
+            set
+            {
                 this.pickPriorityField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string PickZone {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string PickZone
+        {
+            get
+            {
                 return this.pickZoneField;
             }
-            set {
+            set
+            {
                 this.pickZoneField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public bool Approved {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public bool Approved
+        {
+            get
+            {
                 return this.approvedField;
             }
-            set {
+            set
+            {
                 this.approvedField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ApprovedSpecified {
-            get {
+        public bool ApprovedSpecified
+        {
+            get
+            {
                 return this.approvedFieldSpecified;
             }
-            set {
+            set
+            {
                 this.approvedFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public bool IsActive {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public bool IsActive
+        {
+            get
+            {
                 return this.isActiveField;
             }
-            set {
+            set
+            {
                 this.isActiveField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool IsActiveSpecified {
-            get {
+        public bool IsActiveSpecified
+        {
+            get
+            {
                 return this.isActiveFieldSpecified;
             }
-            set {
+            set
+            {
                 this.isActiveFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public bool Visible {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public bool Visible
+        {
+            get
+            {
                 return this.visibleField;
             }
-            set {
+            set
+            {
                 this.visibleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool VisibleSpecified {
-            get {
+        public bool VisibleSpecified
+        {
+            get
+            {
                 return this.visibleFieldSpecified;
             }
-            set {
+            set
+            {
                 this.visibleFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public bool TaxFreeItem {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public bool TaxFreeItem
+        {
+            get
+            {
                 return this.taxFreeItemField;
             }
-            set {
+            set
+            {
                 this.taxFreeItemField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TaxFreeItemSpecified {
-            get {
+        public bool TaxFreeItemSpecified
+        {
+            get
+            {
                 return this.taxFreeItemFieldSpecified;
             }
-            set {
+            set
+            {
                 this.taxFreeItemFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public bool TaxInclusive {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public bool TaxInclusive
+        {
+            get
+            {
                 return this.taxInclusiveField;
             }
-            set {
+            set
+            {
                 this.taxInclusiveField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TaxInclusiveSpecified {
-            get {
+        public bool TaxInclusiveSpecified
+        {
+            get
+            {
                 return this.taxInclusiveFieldSpecified;
             }
-            set {
+            set
+            {
                 this.taxInclusiveFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public bool ApprovedForPOS {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public bool ApprovedForPOS
+        {
+            get
+            {
                 return this.approvedForPOSField;
             }
-            set {
+            set
+            {
                 this.approvedForPOSField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ApprovedForPOSSpecified {
-            get {
+        public bool ApprovedForPOSSpecified
+        {
+            get
+            {
                 return this.approvedForPOSFieldSpecified;
             }
-            set {
+            set
+            {
                 this.approvedForPOSFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public bool ApprovedForMobileStore {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public bool ApprovedForMobileStore
+        {
+            get
+            {
                 return this.approvedForMobileStoreField;
             }
-            set {
+            set
+            {
                 this.approvedForMobileStoreField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ApprovedForMobileStoreSpecified {
-            get {
+        public bool ApprovedForMobileStoreSpecified
+        {
+            get
+            {
                 return this.approvedForMobileStoreFieldSpecified;
             }
-            set {
+            set
+            {
                 this.approvedForMobileStoreFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string SearchKeywords {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string SearchKeywords
+        {
+            get
+            {
                 return this.searchKeywordsField;
             }
-            set {
+            set
+            {
                 this.searchKeywordsField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string ShortDescription {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string ShortDescription
+        {
+            get
+            {
                 return this.shortDescriptionField;
             }
-            set {
+            set
+            {
                 this.shortDescriptionField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Description {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Description
+        {
+            get
+            {
                 return this.descriptionField;
             }
-            set {
+            set
+            {
                 this.descriptionField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string TermsAndConditions {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string TermsAndConditions
+        {
+            get
+            {
                 return this.termsAndConditionsField;
             }
-            set {
+            set
+            {
                 this.termsAndConditionsField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Features {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Features
+        {
+            get
+            {
                 return this.featuresField;
             }
-            set {
+            set
+            {
                 this.featuresField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Specifications {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Specifications
+        {
+            get
+            {
                 return this.specificationsField;
             }
-            set {
+            set
+            {
                 this.specificationsField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Warranty {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Warranty
+        {
+            get
+            {
                 return this.warrantyField;
             }
-            set {
+            set
+            {
                 this.warrantyField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string ArtistOrAuthor {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string ArtistOrAuthor
+        {
+            get
+            {
                 return this.artistOrAuthorField;
             }
-            set {
+            set
+            {
                 this.artistOrAuthorField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Format {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Format
+        {
+            get
+            {
                 return this.formatField;
             }
-            set {
+            set
+            {
                 this.formatField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string ModelNumber {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string ModelNumber
+        {
+            get
+            {
                 return this.modelNumberField;
             }
-            set {
+            set
+            {
                 this.modelNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Subtitle {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Subtitle
+        {
+            get
+            {
                 return this.subtitleField;
             }
-            set {
+            set
+            {
                 this.subtitleField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string AvailabilityDescription {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string AvailabilityDescription
+        {
+            get
+            {
                 return this.availabilityDescriptionField;
             }
-            set {
+            set
+            {
                 this.availabilityDescriptionField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("SalesChannel", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-        public GetItemResponseItemSalesChannel SalesChannels {
-            get {
+        [System.Xml.Serialization.XmlArrayAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("SalesChannel", Form = System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable = false)]
+        public GetItemResponseItemSalesChannel SalesChannels
+        {
+            get
+            {
                 return this.salesChannelsField;
             }
-            set {
+            set
+            {
                 this.salesChannelsField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("Image", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-        public GetItemResponseItemImage[] Images {
-            get {
+        [System.Xml.Serialization.XmlArrayAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("Image", Form = System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable = false)]
+        public GetItemResponseItemImage[] Images
+        {
+            get
+            {
                 return this.imagesField;
             }
-            set {
+            set
+            {
                 this.imagesField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string ImageURL {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string ImageURL
+        {
+            get
+            {
                 return this.imageURLField;
             }
-            set {
+            set
+            {
                 this.imageURLField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string BrochureURL {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string BrochureURL
+        {
+            get
+            {
                 return this.brochureURLField;
             }
-            set {
+            set
+            {
                 this.brochureURLField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string ProductURL {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string ProductURL
+        {
+            get
+            {
                 return this.productURLField;
             }
-            set {
+            set
+            {
                 this.productURLField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public System.DateTime DateAdded {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public System.DateTime DateAdded
+        {
+            get
+            {
                 return this.dateAddedField;
             }
-            set {
+            set
+            {
                 this.dateAddedField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DateAddedSpecified {
-            get {
+        public bool DateAddedSpecified
+        {
+            get
+            {
                 return this.dateAddedFieldSpecified;
             }
-            set {
+            set
+            {
                 this.dateAddedFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public System.DateTime DateAddedLocal {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public System.DateTime DateAddedLocal
+        {
+            get
+            {
                 return this.dateAddedLocalField;
             }
-            set {
+            set
+            {
                 this.dateAddedLocalField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DateAddedLocalSpecified {
-            get {
+        public bool DateAddedLocalSpecified
+        {
+            get
+            {
                 return this.dateAddedLocalFieldSpecified;
             }
-            set {
+            set
+            {
                 this.dateAddedLocalFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public System.DateTime DateAddedUTC {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public System.DateTime DateAddedUTC
+        {
+            get
+            {
                 return this.dateAddedUTCField;
             }
-            set {
+            set
+            {
                 this.dateAddedUTCField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DateAddedUTCSpecified {
-            get {
+        public bool DateAddedUTCSpecified
+        {
+            get
+            {
                 return this.dateAddedUTCFieldSpecified;
             }
-            set {
+            set
+            {
                 this.dateAddedUTCFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public System.DateTime DateUpdated {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public System.DateTime DateUpdated
+        {
+            get
+            {
                 return this.dateUpdatedField;
             }
-            set {
+            set
+            {
                 this.dateUpdatedField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DateUpdatedSpecified {
-            get {
+        public bool DateUpdatedSpecified
+        {
+            get
+            {
                 return this.dateUpdatedFieldSpecified;
             }
-            set {
+            set
+            {
                 this.dateUpdatedFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public System.DateTime DateUpdatedLocal {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public System.DateTime DateUpdatedLocal
+        {
+            get
+            {
                 return this.dateUpdatedLocalField;
             }
-            set {
+            set
+            {
                 this.dateUpdatedLocalField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DateUpdatedLocalSpecified {
-            get {
+        public bool DateUpdatedLocalSpecified
+        {
+            get
+            {
                 return this.dateUpdatedLocalFieldSpecified;
             }
-            set {
+            set
+            {
                 this.dateUpdatedLocalFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public System.DateTime DateUpdatedUTC {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public System.DateTime DateUpdatedUTC
+        {
+            get
+            {
                 return this.dateUpdatedUTCField;
             }
-            set {
+            set
+            {
                 this.dateUpdatedUTCField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DateUpdatedUTCSpecified {
-            get {
+        public bool DateUpdatedUTCSpecified
+        {
+            get
+            {
                 return this.dateUpdatedUTCFieldSpecified;
             }
-            set {
+            set
+            {
                 this.dateUpdatedUTCFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string UPC {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string UPC
+        {
+            get
+            {
                 return this.uPCField;
             }
-            set {
+            set
+            {
                 this.uPCField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string UPC1 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string UPC1
+        {
+            get
+            {
                 return this.uPC1Field;
             }
-            set {
+            set
+            {
                 this.uPC1Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string UPC2 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string UPC2
+        {
+            get
+            {
                 return this.uPC2Field;
             }
-            set {
+            set
+            {
                 this.uPC2Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string UPC3 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string UPC3
+        {
+            get
+            {
                 return this.uPC3Field;
             }
-            set {
+            set
+            {
                 this.uPC3Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Type {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Type
+        {
+            get
+            {
                 return this.typeField;
             }
-            set {
+            set
+            {
                 this.typeField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string SubType {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string SubType
+        {
+            get
+            {
                 return this.subTypeField;
             }
-            set {
+            set
+            {
                 this.subTypeField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
-        public string NumbersOfLabelsToPrint {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, DataType = "integer")]
+        public string NumbersOfLabelsToPrint
+        {
+            get
+            {
                 return this.numbersOfLabelsToPrintField;
             }
-            set {
+            set
+            {
                 this.numbersOfLabelsToPrintField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
-        public string ReferenceNumber {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, DataType = "integer")]
+        public string ReferenceNumber
+        {
+            get
+            {
                 return this.referenceNumberField;
             }
-            set {
+            set
+            {
                 this.referenceNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string InternalNotes {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string InternalNotes
+        {
+            get
+            {
                 return this.internalNotesField;
             }
-            set {
+            set
+            {
                 this.internalNotesField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
-        public string BarcodeHeight {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, DataType = "integer")]
+        public string BarcodeHeight
+        {
+            get
+            {
                 return this.barcodeHeightField;
             }
-            set {
+            set
+            {
                 this.barcodeHeightField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string IsInventoried {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string IsInventoried
+        {
+            get
+            {
                 return this.isInventoriedField;
             }
-            set {
+            set
+            {
                 this.isInventoriedField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string IsBought {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string IsBought
+        {
+            get
+            {
                 return this.isBoughtField;
             }
-            set {
+            set
+            {
                 this.isBoughtField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string IsSold {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string IsSold
+        {
+            get
+            {
                 return this.isSoldField;
             }
-            set {
+            set
+            {
                 this.isSoldField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string ExpenseAccount {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string ExpenseAccount
+        {
+            get
+            {
                 return this.expenseAccountField;
             }
-            set {
+            set
+            {
                 this.expenseAccountField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string PurchaseTaxCode {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string PurchaseTaxCode
+        {
+            get
+            {
                 return this.purchaseTaxCodeField;
             }
-            set {
+            set
+            {
                 this.purchaseTaxCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string CostOfSalesAccount {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string CostOfSalesAccount
+        {
+            get
+            {
                 return this.costOfSalesAccountField;
             }
-            set {
+            set
+            {
                 this.costOfSalesAccountField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string IncomeAccount {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string IncomeAccount
+        {
+            get
+            {
                 return this.incomeAccountField;
             }
-            set {
+            set
+            {
                 this.incomeAccountField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string AssetAccount {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string AssetAccount
+        {
+            get
+            {
                 return this.assetAccountField;
             }
-            set {
+            set
+            {
                 this.assetAccountField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public decimal ItemHeight {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public decimal ItemHeight
+        {
+            get
+            {
                 return this.itemHeightField;
             }
-            set {
+            set
+            {
                 this.itemHeightField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ItemHeightSpecified {
-            get {
+        public bool ItemHeightSpecified
+        {
+            get
+            {
                 return this.itemHeightFieldSpecified;
             }
-            set {
+            set
+            {
                 this.itemHeightFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public decimal ItemLength {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public decimal ItemLength
+        {
+            get
+            {
                 return this.itemLengthField;
             }
-            set {
+            set
+            {
                 this.itemLengthField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ItemLengthSpecified {
-            get {
+        public bool ItemLengthSpecified
+        {
+            get
+            {
                 return this.itemLengthFieldSpecified;
             }
-            set {
+            set
+            {
                 this.itemLengthFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public decimal ItemWidth {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public decimal ItemWidth
+        {
+            get
+            {
                 return this.itemWidthField;
             }
-            set {
+            set
+            {
                 this.itemWidthField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ItemWidthSpecified {
-            get {
+        public bool ItemWidthSpecified
+        {
+            get
+            {
                 return this.itemWidthFieldSpecified;
             }
-            set {
+            set
+            {
                 this.itemWidthFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public decimal ShippingHeight {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public decimal ShippingHeight
+        {
+            get
+            {
                 return this.shippingHeightField;
             }
-            set {
+            set
+            {
                 this.shippingHeightField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ShippingHeightSpecified {
-            get {
+        public bool ShippingHeightSpecified
+        {
+            get
+            {
                 return this.shippingHeightFieldSpecified;
             }
-            set {
+            set
+            {
                 this.shippingHeightFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public decimal ShippingLength {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public decimal ShippingLength
+        {
+            get
+            {
                 return this.shippingLengthField;
             }
-            set {
+            set
+            {
                 this.shippingLengthField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ShippingLengthSpecified {
-            get {
+        public bool ShippingLengthSpecified
+        {
+            get
+            {
                 return this.shippingLengthFieldSpecified;
             }
-            set {
+            set
+            {
                 this.shippingLengthFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public decimal ShippingWidth {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public decimal ShippingWidth
+        {
+            get
+            {
                 return this.shippingWidthField;
             }
-            set {
+            set
+            {
                 this.shippingWidthField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ShippingWidthSpecified {
-            get {
+        public bool ShippingWidthSpecified
+        {
+            get
+            {
                 return this.shippingWidthFieldSpecified;
             }
-            set {
+            set
+            {
                 this.shippingWidthFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public decimal ShippingWeight {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public decimal ShippingWeight
+        {
+            get
+            {
                 return this.shippingWeightField;
             }
-            set {
+            set
+            {
                 this.shippingWeightField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ShippingWeightSpecified {
-            get {
+        public bool ShippingWeightSpecified
+        {
+            get
+            {
                 return this.shippingWeightFieldSpecified;
             }
-            set {
+            set
+            {
                 this.shippingWeightFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public decimal CubicWeight {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public decimal CubicWeight
+        {
+            get
+            {
                 return this.cubicWeightField;
             }
-            set {
+            set
+            {
                 this.cubicWeightField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CubicWeightSpecified {
-            get {
+        public bool CubicWeightSpecified
+        {
+            get
+            {
                 return this.cubicWeightFieldSpecified;
             }
-            set {
+            set
+            {
                 this.cubicWeightFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string SupplierItemCode {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string SupplierItemCode
+        {
+            get
+            {
                 return this.supplierItemCodeField;
             }
-            set {
+            set
+            {
                 this.supplierItemCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string SplitForWarehousePicking {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string SplitForWarehousePicking
+        {
+            get
+            {
                 return this.splitForWarehousePickingField;
             }
-            set {
+            set
+            {
                 this.splitForWarehousePickingField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string eBayDescription {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string eBayDescription
+        {
+            get
+            {
                 return this.eBayDescriptionField;
             }
-            set {
+            set
+            {
                 this.eBayDescriptionField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string PrimarySupplier {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string PrimarySupplier
+        {
+            get
+            {
                 return this.primarySupplierField;
             }
-            set {
+            set
+            {
                 this.primarySupplierField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string DisplayTemplate {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string DisplayTemplate
+        {
+            get
+            {
                 return this.displayTemplateField;
             }
-            set {
+            set
+            {
                 this.displayTemplateField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public bool EditableKitBundle {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public bool EditableKitBundle
+        {
+            get
+            {
                 return this.editableKitBundleField;
             }
-            set {
+            set
+            {
                 this.editableKitBundleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool EditableKitBundleSpecified {
-            get {
+        public bool EditableKitBundleSpecified
+        {
+            get
+            {
                 return this.editableKitBundleFieldSpecified;
             }
-            set {
+            set
+            {
                 this.editableKitBundleFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public bool RequiresPackaging {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public bool RequiresPackaging
+        {
+            get
+            {
                 return this.requiresPackagingField;
             }
-            set {
+            set
+            {
                 this.requiresPackagingField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RequiresPackagingSpecified {
-            get {
+        public bool RequiresPackagingSpecified
+        {
+            get
+            {
                 return this.requiresPackagingFieldSpecified;
             }
-            set {
+            set
+            {
                 this.requiresPackagingFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string SEOPageTitle {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string SEOPageTitle
+        {
+            get
+            {
                 return this.sEOPageTitleField;
             }
-            set {
+            set
+            {
                 this.sEOPageTitleField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string SEOMetaKeywords {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string SEOMetaKeywords
+        {
+            get
+            {
                 return this.sEOMetaKeywordsField;
             }
-            set {
+            set
+            {
                 this.sEOMetaKeywordsField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string SEOPageHeading {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string SEOPageHeading
+        {
+            get
+            {
                 return this.sEOPageHeadingField;
             }
-            set {
+            set
+            {
                 this.sEOPageHeadingField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string SEOMetaDescription {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string SEOMetaDescription
+        {
+            get
+            {
                 return this.sEOMetaDescriptionField;
             }
-            set {
+            set
+            {
                 this.sEOMetaDescriptionField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string SEOCanonicalURL {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string SEOCanonicalURL
+        {
+            get
+            {
                 return this.sEOCanonicalURLField;
             }
-            set {
+            set
+            {
                 this.sEOCanonicalURLField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public bool IsAsset {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public bool IsAsset
+        {
+            get
+            {
                 return this.isAssetField;
             }
-            set {
+            set
+            {
                 this.isAssetField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool IsAssetSpecified {
-            get {
+        public bool IsAssetSpecified
+        {
+            get
+            {
                 return this.isAssetFieldSpecified;
             }
-            set {
+            set
+            {
                 this.isAssetFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string WhenToRepeatOnStandingOrders {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string WhenToRepeatOnStandingOrders
+        {
+            get
+            {
                 return this.whenToRepeatOnStandingOrdersField;
             }
-            set {
+            set
+            {
                 this.whenToRepeatOnStandingOrdersField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public bool SerialTracking {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public bool SerialTracking
+        {
+            get
+            {
                 return this.serialTrackingField;
             }
-            set {
+            set
+            {
                 this.serialTrackingField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool SerialTrackingSpecified {
-            get {
+        public bool SerialTrackingSpecified
+        {
+            get
+            {
                 return this.serialTrackingFieldSpecified;
             }
-            set {
+            set
+            {
                 this.serialTrackingFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Group {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Group
+        {
+            get
+            {
                 return this.groupField;
             }
-            set {
+            set
+            {
                 this.groupField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string ShippingCategory {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string ShippingCategory
+        {
+            get
+            {
                 return this.shippingCategoryField;
             }
-            set {
+            set
+            {
                 this.shippingCategoryField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Job {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Job
+        {
+            get
+            {
                 return this.jobField;
             }
-            set {
+            set
+            {
                 this.jobField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public decimal MonthlySpendRequirement {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public decimal MonthlySpendRequirement
+        {
+            get
+            {
                 return this.monthlySpendRequirementField;
             }
-            set {
+            set
+            {
                 this.monthlySpendRequirementField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool MonthlySpendRequirementSpecified {
-            get {
+        public bool MonthlySpendRequirementSpecified
+        {
+            get
+            {
                 return this.monthlySpendRequirementFieldSpecified;
             }
-            set {
+            set
+            {
                 this.monthlySpendRequirementFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string RestrictedToUserGroup {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string RestrictedToUserGroup
+        {
+            get
+            {
                 return this.restrictedToUserGroupField;
             }
-            set {
+            set
+            {
                 this.restrictedToUserGroupField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string ItemURL {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string ItemURL
+        {
+            get
+            {
                 return this.itemURLField;
             }
-            set {
+            set
+            {
                 this.itemURLField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public bool AutomaticURL {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public bool AutomaticURL
+        {
+            get
+            {
                 return this.automaticURLField;
             }
-            set {
+            set
+            {
                 this.automaticURLField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool AutomaticURLSpecified {
-            get {
+        public bool AutomaticURLSpecified
+        {
+            get
+            {
                 return this.automaticURLFieldSpecified;
             }
-            set {
+            set
+            {
                 this.automaticURLFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
-        public string CommittedQuantity {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, DataType = "integer")]
+        public string CommittedQuantity
+        {
+            get
+            {
                 return this.committedQuantityField;
             }
-            set {
+            set
+            {
                 this.committedQuantityField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc01 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc01
+        {
+            get
+            {
                 return this.misc01Field;
             }
-            set {
+            set
+            {
                 this.misc01Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc02 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc02
+        {
+            get
+            {
                 return this.misc02Field;
             }
-            set {
+            set
+            {
                 this.misc02Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc03 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc03
+        {
+            get
+            {
                 return this.misc03Field;
             }
-            set {
+            set
+            {
                 this.misc03Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc04 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc04
+        {
+            get
+            {
                 return this.misc04Field;
             }
-            set {
+            set
+            {
                 this.misc04Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc05 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc05
+        {
+            get
+            {
                 return this.misc05Field;
             }
-            set {
+            set
+            {
                 this.misc05Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc06 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc06
+        {
+            get
+            {
                 return this.misc06Field;
             }
-            set {
+            set
+            {
                 this.misc06Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc07 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc07
+        {
+            get
+            {
                 return this.misc07Field;
             }
-            set {
+            set
+            {
                 this.misc07Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc08 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc08
+        {
+            get
+            {
                 return this.misc08Field;
             }
-            set {
+            set
+            {
                 this.misc08Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc09 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc09
+        {
+            get
+            {
                 return this.misc09Field;
             }
-            set {
+            set
+            {
                 this.misc09Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc10 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc10
+        {
+            get
+            {
                 return this.misc10Field;
             }
-            set {
+            set
+            {
                 this.misc10Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc11 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc11
+        {
+            get
+            {
                 return this.misc11Field;
             }
-            set {
+            set
+            {
                 this.misc11Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc12 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc12
+        {
+            get
+            {
                 return this.misc12Field;
             }
-            set {
+            set
+            {
                 this.misc12Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc13 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc13
+        {
+            get
+            {
                 return this.misc13Field;
             }
-            set {
+            set
+            {
                 this.misc13Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc14 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc14
+        {
+            get
+            {
                 return this.misc14Field;
             }
-            set {
+            set
+            {
                 this.misc14Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc15 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc15
+        {
+            get
+            {
                 return this.misc15Field;
             }
-            set {
+            set
+            {
                 this.misc15Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc16 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc16
+        {
+            get
+            {
                 return this.misc16Field;
             }
-            set {
+            set
+            {
                 this.misc16Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc17 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc17
+        {
+            get
+            {
                 return this.misc17Field;
             }
-            set {
+            set
+            {
                 this.misc17Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc18 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc18
+        {
+            get
+            {
                 return this.misc18Field;
             }
-            set {
+            set
+            {
                 this.misc18Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc19 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc19
+        {
+            get
+            {
                 return this.misc19Field;
             }
-            set {
+            set
+            {
                 this.misc19Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc20 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc20
+        {
+            get
+            {
                 return this.misc20Field;
             }
-            set {
+            set
+            {
                 this.misc20Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc21 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc21
+        {
+            get
+            {
                 return this.misc21Field;
             }
-            set {
+            set
+            {
                 this.misc21Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc22 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc22
+        {
+            get
+            {
                 return this.misc22Field;
             }
-            set {
+            set
+            {
                 this.misc22Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc23 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc23
+        {
+            get
+            {
                 return this.misc23Field;
             }
-            set {
+            set
+            {
                 this.misc23Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc24 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc24
+        {
+            get
+            {
                 return this.misc24Field;
             }
-            set {
+            set
+            {
                 this.misc24Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc25 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc25
+        {
+            get
+            {
                 return this.misc25Field;
             }
-            set {
+            set
+            {
                 this.misc25Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc26 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc26
+        {
+            get
+            {
                 return this.misc26Field;
             }
-            set {
+            set
+            {
                 this.misc26Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc27 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc27
+        {
+            get
+            {
                 return this.misc27Field;
             }
-            set {
+            set
+            {
                 this.misc27Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc28 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc28
+        {
+            get
+            {
                 return this.misc28Field;
             }
-            set {
+            set
+            {
                 this.misc28Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc29 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc29
+        {
+            get
+            {
                 return this.misc29Field;
             }
-            set {
+            set
+            {
                 this.misc29Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc30 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc30
+        {
+            get
+            {
                 return this.misc30Field;
             }
-            set {
+            set
+            {
                 this.misc30Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc31 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc31
+        {
+            get
+            {
                 return this.misc31Field;
             }
-            set {
+            set
+            {
                 this.misc31Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc32 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc32
+        {
+            get
+            {
                 return this.misc32Field;
             }
-            set {
+            set
+            {
                 this.misc32Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc33 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc33
+        {
+            get
+            {
                 return this.misc33Field;
             }
-            set {
+            set
+            {
                 this.misc33Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc34 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc34
+        {
+            get
+            {
                 return this.misc34Field;
             }
-            set {
+            set
+            {
                 this.misc34Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc35 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc35
+        {
+            get
+            {
                 return this.misc35Field;
             }
-            set {
+            set
+            {
                 this.misc35Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc36 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc36
+        {
+            get
+            {
                 return this.misc36Field;
             }
-            set {
+            set
+            {
                 this.misc36Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc37 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc37
+        {
+            get
+            {
                 return this.misc37Field;
             }
-            set {
+            set
+            {
                 this.misc37Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc38 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc38
+        {
+            get
+            {
                 return this.misc38Field;
             }
-            set {
+            set
+            {
                 this.misc38Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc39 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc39
+        {
+            get
+            {
                 return this.misc39Field;
             }
-            set {
+            set
+            {
                 this.misc39Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc40 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc40
+        {
+            get
+            {
                 return this.misc40Field;
             }
-            set {
+            set
+            {
                 this.misc40Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc41 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc41
+        {
+            get
+            {
                 return this.misc41Field;
             }
-            set {
+            set
+            {
                 this.misc41Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc42 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc42
+        {
+            get
+            {
                 return this.misc42Field;
             }
-            set {
+            set
+            {
                 this.misc42Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc43 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc43
+        {
+            get
+            {
                 return this.misc43Field;
             }
-            set {
+            set
+            {
                 this.misc43Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc44 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc44
+        {
+            get
+            {
                 return this.misc44Field;
             }
-            set {
+            set
+            {
                 this.misc44Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc45 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc45
+        {
+            get
+            {
                 return this.misc45Field;
             }
-            set {
+            set
+            {
                 this.misc45Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc46 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc46
+        {
+            get
+            {
                 return this.misc46Field;
             }
-            set {
+            set
+            {
                 this.misc46Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc47 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc47
+        {
+            get
+            {
                 return this.misc47Field;
             }
-            set {
+            set
+            {
                 this.misc47Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc48 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc48
+        {
+            get
+            {
                 return this.misc48Field;
             }
-            set {
+            set
+            {
                 this.misc48Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc49 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc49
+        {
+            get
+            {
                 return this.misc49Field;
             }
-            set {
+            set
+            {
                 this.misc49Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc50 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc50
+        {
+            get
+            {
                 return this.misc50Field;
             }
-            set {
+            set
+            {
                 this.misc50Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc51 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc51
+        {
+            get
+            {
                 return this.misc51Field;
             }
-            set {
+            set
+            {
                 this.misc51Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Misc52 {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Misc52
+        {
+            get
+            {
                 return this.misc52Field;
             }
-            set {
+            set
+            {
                 this.misc52Field = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("FreeGift", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-        public GetItemResponseItemFreeGift[] FreeGifts {
-            get {
+        [System.Xml.Serialization.XmlArrayAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("FreeGift", Form = System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable = false)]
+        public GetItemResponseItemFreeGift[] FreeGifts
+        {
+            get
+            {
                 return this.freeGiftsField;
             }
-            set {
+            set
+            {
                 this.freeGiftsField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("CrossSellProduct", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-        public GetItemResponseItemCrossSellProduct[] CrossSellProducts {
-            get {
+        [System.Xml.Serialization.XmlArrayAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("CrossSellProduct", Form = System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable = false)]
+        public GetItemResponseItemCrossSellProduct[] CrossSellProducts
+        {
+            get
+            {
                 return this.crossSellProductsField;
             }
-            set {
+            set
+            {
                 this.crossSellProductsField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("UpsellProduct", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-        public GetItemResponseItemUpsellProduct[] UpsellProducts {
-            get {
+        [System.Xml.Serialization.XmlArrayAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("UpsellProduct", Form = System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable = false)]
+        public GetItemResponseItemUpsellProduct[] UpsellProducts
+        {
+            get
+            {
                 return this.upsellProductsField;
             }
-            set {
+            set
+            {
                 this.upsellProductsField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("KitComponent", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-        public GetItemResponseItemKitComponent[] KitComponents {
-            get {
+        [System.Xml.Serialization.XmlArrayAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("KitComponent", Form = System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable = false)]
+        public GetItemResponseItemKitComponent[] KitComponents
+        {
+            get
+            {
                 return this.kitComponentsField;
             }
-            set {
+            set
+            {
                 this.kitComponentsField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("PriceGroup", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-        public GetItemResponseItemPriceGroup[] PriceGroups {
-            get {
+        [System.Xml.Serialization.XmlArrayAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("PriceGroup", Form = System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable = false)]
+        public GetItemResponseItemPriceGroupData[] PriceGroups
+        {
+            get
+            {
                 return this.priceGroupsField;
             }
-            set {
+            set
+            {
                 this.priceGroupsField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("Category", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-        public GetItemResponseItemCategory[] Categories {
-            get {
+        [System.Xml.Serialization.XmlArrayAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("Category", Form = System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable = false)]
+        public GetItemResponseItemCategoryData[] Categories
+        {
+            get
+            {
                 return this.categoriesField;
             }
-            set {
+            set
+            {
                 this.categoriesField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ItemSpecific", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-        public GetItemResponseItemItemSpecific[] ItemSpecifics {
-            get {
+        [System.Xml.Serialization.XmlArrayAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("ItemSpecific", Form = System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable = false)]
+        public GetItemResponseItemItemSpecificData[] ItemSpecifics
+        {
+            get
+            {
                 return this.itemSpecificsField;
             }
-            set {
+            set
+            {
                 this.itemSpecificsField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("WarehouseQuantity", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public GetItemResponseItemWarehouseQuantity WarehouseQuantity {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute("WarehouseQuantity", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public dynamic WarehouseQuantity
+        {
+            get
+            {
                 return this.warehouseQuantityField;
             }
-            set {
-                this.warehouseQuantityField = value;
+            set
+            {
+                switch (value.GetType().Name)
+                {
+                    case "JObject":
+                        this.warehouseQuantityField = new GetItemResponseItemWarehouseQuantity[] { value.ToObject<GetItemResponseItemWarehouseQuantity>() };
+                        break;
+                    case "JArray":
+                        this.warehouseQuantityField = value.ToObject<GetItemResponseItemWarehouseQuantity[]>();
+                        break;
+                    default:
+                        var nVal = value;
+                        break;
+                }
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("WarehouseLocation", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-        public GetItemResponseItemWarehouseLocation[] WarehouseLocations {
-            get {
+        [System.Xml.Serialization.XmlArrayAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("WarehouseLocation", Form = System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable = false)]
+        public GetItemResponseItemWarehouseLocation[] WarehouseLocations
+        {
+            get
+            {
                 return this.warehouseLocationsField;
             }
-            set {
+            set
+            {
                 this.warehouseLocationsField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("RelatedContents", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public GetItemResponseItemRelatedContents[] RelatedContents {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute("RelatedContents", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public GetItemResponseItemRelatedContents[] RelatedContents
+        {
+            get
+            {
                 return this.relatedContentsField;
             }
-            set {
+            set
+            {
                 this.relatedContentsField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="NetoAPI")]
-    public partial class GetItemResponseItemSalesChannel {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "NetoAPI")]
+    public partial class GetItemResponseItemSalesChannel
+    {
+
         private string salesChannelIDField;
-        
+
         private string salesChannelNameField;
-        
+
         private bool isApprovedField;
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
-        public string SalesChannelID {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, DataType = "integer")]
+        public string SalesChannelID
+        {
+            get
+            {
                 return this.salesChannelIDField;
             }
-            set {
+            set
+            {
                 this.salesChannelIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string SalesChannelName {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string SalesChannelName
+        {
+            get
+            {
                 return this.salesChannelNameField;
             }
-            set {
+            set
+            {
                 this.salesChannelNameField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public bool IsApproved {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public bool IsApproved
+        {
+            get
+            {
                 return this.isApprovedField;
             }
-            set {
+            set
+            {
                 this.isApprovedField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="NetoAPI")]
-    public partial class GetItemResponseItemImage {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "NetoAPI")]
+    public partial class GetItemResponseItemImage
+    {
+
         private string nameField;
-        
+
         private string uRLField;
-        
+
         private string thumbURLField;
-        
+
         private string mediumThumbURLField;
-        
+
         private System.DateTime timestampField;
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Name {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Name
+        {
+            get
+            {
                 return this.nameField;
             }
-            set {
+            set
+            {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string URL {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string URL
+        {
+            get
+            {
                 return this.uRLField;
             }
-            set {
+            set
+            {
                 this.uRLField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string ThumbURL {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string ThumbURL
+        {
+            get
+            {
                 return this.thumbURLField;
             }
-            set {
+            set
+            {
                 this.thumbURLField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string MediumThumbURL {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string MediumThumbURL
+        {
+            get
+            {
                 return this.mediumThumbURLField;
             }
-            set {
+            set
+            {
                 this.mediumThumbURLField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public System.DateTime Timestamp {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public System.DateTime Timestamp
+        {
+            get
+            {
                 return this.timestampField;
             }
-            set {
+            set
+            {
                 this.timestampField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="NetoAPI")]
-    public partial class GetItemResponseItemFreeGift {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "NetoAPI")]
+    public partial class GetItemResponseItemFreeGift
+    {
+
         private string sKUField;
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string SKU {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string SKU
+        {
+            get
+            {
                 return this.sKUField;
             }
-            set {
+            set
+            {
                 this.sKUField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="NetoAPI")]
-    public partial class GetItemResponseItemCrossSellProduct {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "NetoAPI")]
+    public partial class GetItemResponseItemCrossSellProduct
+    {
+
         private string sKUField;
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string SKU {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string SKU
+        {
+            get
+            {
                 return this.sKUField;
             }
-            set {
+            set
+            {
                 this.sKUField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="NetoAPI")]
-    public partial class GetItemResponseItemUpsellProduct {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "NetoAPI")]
+    public partial class GetItemResponseItemUpsellProduct
+    {
+
         private string sKUField;
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string SKU {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string SKU
+        {
+            get
+            {
                 return this.sKUField;
             }
-            set {
+            set
+            {
                 this.sKUField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="NetoAPI")]
-    public partial class GetItemResponseItemKitComponent {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "NetoAPI")]
+    public partial class GetItemResponseItemKitComponent
+    {
+
         private string componentSKUField;
-        
+
         private string componentValueField;
-        
+
         private string assembleQuantityField;
-        
+
         private string minimumQuantityField;
-        
+
         private string maximumQuantityField;
-        
+
         private string sortOrderField;
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string ComponentSKU {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string ComponentSKU
+        {
+            get
+            {
                 return this.componentSKUField;
             }
-            set {
+            set
+            {
                 this.componentSKUField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string ComponentValue {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string ComponentValue
+        {
+            get
+            {
                 return this.componentValueField;
             }
-            set {
+            set
+            {
                 this.componentValueField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
-        public string AssembleQuantity {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, DataType = "integer")]
+        public string AssembleQuantity
+        {
+            get
+            {
                 return this.assembleQuantityField;
             }
-            set {
+            set
+            {
                 this.assembleQuantityField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
-        public string MinimumQuantity {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, DataType = "integer")]
+        public string MinimumQuantity
+        {
+            get
+            {
                 return this.minimumQuantityField;
             }
-            set {
+            set
+            {
                 this.minimumQuantityField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
-        public string MaximumQuantity {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, DataType = "integer")]
+        public string MaximumQuantity
+        {
+            get
+            {
                 return this.maximumQuantityField;
             }
-            set {
+            set
+            {
                 this.maximumQuantityField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
-        public string SortOrder {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, DataType = "integer")]
+        public string SortOrder
+        {
+            get
+            {
                 return this.sortOrderField;
             }
-            set {
+            set
+            {
                 this.sortOrderField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="NetoAPI")]
-    public partial class GetItemResponseItemPriceGroup {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "NetoAPI")]
+    public partial class GetItemResponseItemPriceGroup
+    {
+
         private string groupIDField;
-        
+
         private string groupField;
-        
+
         private decimal priceField;
-        
+
         private bool priceFieldSpecified;
-        
+
         private decimal promotionPriceField;
-        
+
         private bool promotionPriceFieldSpecified;
-        
+
         private string minimumQuantityField;
-        
+
         private string maximumQuantityField;
-        
+
         private string multipleField;
-        
+
         private string multipleStartQuantityField;
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string GroupID {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string GroupID
+        {
+            get
+            {
                 return this.groupIDField;
             }
-            set {
+            set
+            {
                 this.groupIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Group {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Group
+        {
+            get
+            {
                 return this.groupField;
             }
-            set {
+            set
+            {
                 this.groupField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public decimal Price {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public decimal Price
+        {
+            get
+            {
                 return this.priceField;
             }
-            set {
+            set
+            {
                 this.priceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PriceSpecified {
-            get {
+        public bool PriceSpecified
+        {
+            get
+            {
                 return this.priceFieldSpecified;
             }
-            set {
+            set
+            {
                 this.priceFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public decimal PromotionPrice {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public decimal PromotionPrice
+        {
+            get
+            {
                 return this.promotionPriceField;
             }
-            set {
+            set
+            {
                 this.promotionPriceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PromotionPriceSpecified {
-            get {
+        public bool PromotionPriceSpecified
+        {
+            get
+            {
                 return this.promotionPriceFieldSpecified;
             }
-            set {
+            set
+            {
                 this.promotionPriceFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
-        public string MinimumQuantity {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, DataType = "integer")]
+        public string MinimumQuantity
+        {
+            get
+            {
                 return this.minimumQuantityField;
             }
-            set {
+            set
+            {
                 this.minimumQuantityField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
-        public string MaximumQuantity {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, DataType = "integer")]
+        public string MaximumQuantity
+        {
+            get
+            {
                 return this.maximumQuantityField;
             }
-            set {
+            set
+            {
                 this.maximumQuantityField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
-        public string Multiple {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, DataType = "integer")]
+        public string Multiple
+        {
+            get
+            {
                 return this.multipleField;
             }
-            set {
+            set
+            {
                 this.multipleField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
-        public string MultipleStartQuantity {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, DataType = "integer")]
+        public string MultipleStartQuantity
+        {
+            get
+            {
                 return this.multipleStartQuantityField;
             }
-            set {
+            set
+            {
                 this.multipleStartQuantityField = value;
             }
         }
     }
-    
+
+    public partial class GetItemResponseItemPriceGroupData
+    {
+        private GetItemResponseItemPriceGroup[] priceGroupField;
+
+        public dynamic PriceGroup
+        {
+            get
+            {
+                return this.priceGroupField;
+            }
+            set
+            {
+                switch (value.GetType().Name)
+                {
+                    case "JObject":
+                        this.priceGroupField = new GetItemResponseItemPriceGroup[] { value.ToObject<GetItemResponseItemPriceGroup>() };
+                        break;
+                    case "JArray":
+                        this.priceGroupField = value.ToObject<GetItemResponseItemPriceGroup[]>();
+                        break;
+                    default:
+                        var nVal = value;
+                        break;
+                }
+            }
+        }
+    }
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="NetoAPI")]
-    public partial class GetItemResponseItemCategory {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "NetoAPI")]
+    public partial class GetItemResponseItemCategory
+    {
+
         private string categoryIDField;
-        
+
         private string priorityField;
-        
+
         private string categoryNameField;
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
-        public string CategoryID {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, DataType = "integer")]
+        public string CategoryID
+        {
+            get
+            {
                 return this.categoryIDField;
             }
-            set {
+            set
+            {
                 this.categoryIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
-        public string Priority {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, DataType = "integer")]
+        public string Priority
+        {
+            get
+            {
                 return this.priorityField;
             }
-            set {
+            set
+            {
                 this.priorityField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string CategoryName {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string CategoryName
+        {
+            get
+            {
                 return this.categoryNameField;
             }
-            set {
+            set
+            {
                 this.categoryNameField = value;
             }
         }
     }
-    
+
+    public partial class GetItemResponseItemCategoryData
+    {
+        private GetItemResponseItemCategory[] categoryField;
+
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public dynamic Category
+        {
+            get
+            {
+                return this.categoryField;
+            }
+            set
+            {
+                switch (value.GetType().Name)
+                {
+                    case "JObject":
+                        this.categoryField = new GetItemResponseItemCategory[] { value.ToObject<GetItemResponseItemCategory>() };
+                        break;
+                    case "JArray":
+                        this.categoryField = value.ToObject<GetItemResponseItemCategory[]>();
+                        break;
+                    default:
+                        var nVal = value;
+                        break;
+                }
+            }
+        }
+    }
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="NetoAPI")]
-    public partial class GetItemResponseItemItemSpecific {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "NetoAPI")]
+    public partial class GetItemResponseItemItemSpecific
+    {
+
         private string nameField;
-        
+
         private string valueField;
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Name {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Name
+        {
+            get
+            {
                 return this.nameField;
             }
-            set {
+            set
+            {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Value {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Value
+        {
+            get
+            {
                 return this.valueField;
             }
-            set {
+            set
+            {
                 this.valueField = value;
             }
         }
     }
-    
+
+    public partial class GetItemResponseItemItemSpecificData
+    {
+        private GetItemResponseItemItemSpecific[] itemSpecificField;
+
+        public dynamic ItemSpecific
+        {
+            get
+            {
+                return this.itemSpecificField;
+            }
+            set
+            {
+                switch (value.GetType().Name)
+                {
+                    case "JObject":
+                        this.itemSpecificField = new GetItemResponseItemItemSpecific[] { value.ToObject<GetItemResponseItemItemSpecific>() };
+                        break;
+                    case "JArray":
+                        this.itemSpecificField = value.ToObject<GetItemResponseItemItemSpecific[]>();
+                        break;
+                    default:
+                        var nVal = value;
+                        break;
+                }
+            }
+        }
+    }
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="NetoAPI")]
-    public partial class GetItemResponseItemWarehouseQuantity {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "NetoAPI")]
+    public partial class GetItemResponseItemWarehouseQuantity
+    {
+
         private string warehouseIDField;
-        
+
         private string quantityField;
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
-        public string WarehouseID {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, DataType = "integer")]
+        public string WarehouseID
+        {
+            get
+            {
                 return this.warehouseIDField;
             }
-            set {
+            set
+            {
                 this.warehouseIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
-        public string Quantity {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, DataType = "integer")]
+        public string Quantity
+        {
+            get
+            {
                 return this.quantityField;
             }
-            set {
+            set
+            {
                 this.quantityField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="NetoAPI")]
-    public partial class GetItemResponseItemWarehouseLocation {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "NetoAPI")]
+    public partial class GetItemResponseItemWarehouseLocation
+    {
+
         private string locationIDField;
-        
+
         private string warehouseIDField;
-        
+
         private string typeField;
-        
+
         private string priorityField;
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string LocationID {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string LocationID
+        {
+            get
+            {
                 return this.locationIDField;
             }
-            set {
+            set
+            {
                 this.locationIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string WarehouseID {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string WarehouseID
+        {
+            get
+            {
                 return this.warehouseIDField;
             }
-            set {
+            set
+            {
                 this.warehouseIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Type {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Type
+        {
+            get
+            {
                 return this.typeField;
             }
-            set {
+            set
+            {
                 this.typeField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
-        public string Priority {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, DataType = "integer")]
+        public string Priority
+        {
+            get
+            {
                 return this.priorityField;
             }
-            set {
+            set
+            {
                 this.priorityField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="NetoAPI")]
-    public partial class GetItemResponseItemRelatedContents {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "NetoAPI")]
+    public partial class GetItemResponseItemRelatedContents
+    {
+
         private string contentIDField;
-        
+
         private string contentNameField;
-        
+
         private string contentTypeNameField;
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
-        public string ContentID {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, DataType = "integer")]
+        public string ContentID
+        {
+            get
+            {
                 return this.contentIDField;
             }
-            set {
+            set
+            {
                 this.contentIDField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string ContentName {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string ContentName
+        {
+            get
+            {
                 return this.contentNameField;
             }
-            set {
+            set
+            {
                 this.contentNameField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string ContentTypeName {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string ContentTypeName
+        {
+            get
+            {
                 return this.contentTypeNameField;
             }
-            set {
+            set
+            {
                 this.contentTypeNameField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="NetoAPI")]
-    public enum GetItemResponseAck {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "NetoAPI")]
+    public enum GetItemResponseAck
+    {
+
         /// <remarks/>
         Error,
-        
+
         /// <remarks/>
         Warning,
-        
+
         /// <remarks/>
         Success,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="NetoAPI")]
-    public partial class GetItemResponseMessages {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "NetoAPI")]
+    public partial class GetItemResponseMessages
+    {
+
         private GetItemResponseMessagesError[] errorField;
-        
+
         private GetItemResponseMessagesWarning[] warningField;
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("Error", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public GetItemResponseMessagesError[] Error {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute("Error", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public GetItemResponseMessagesError[] Error
+        {
+            get
+            {
                 return this.errorField;
             }
-            set {
+            set
+            {
                 this.errorField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("Warning", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public GetItemResponseMessagesWarning[] Warning {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute("Warning", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public GetItemResponseMessagesWarning[] Warning
+        {
+            get
+            {
                 return this.warningField;
             }
-            set {
+            set
+            {
                 this.warningField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="NetoAPI")]
-    public partial class GetItemResponseMessagesError {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "NetoAPI")]
+    public partial class GetItemResponseMessagesError
+    {
+
         private string messageField;
-        
+
         private string severityCodeField;
-        
+
         private string descriptionField;
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Message {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Message
+        {
+            get
+            {
                 return this.messageField;
             }
-            set {
+            set
+            {
                 this.messageField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string SeverityCode {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string SeverityCode
+        {
+            get
+            {
                 return this.severityCodeField;
             }
-            set {
+            set
+            {
                 this.severityCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Description {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Description
+        {
+            get
+            {
                 return this.descriptionField;
             }
-            set {
+            set
+            {
                 this.descriptionField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="NetoAPI")]
-    public partial class GetItemResponseMessagesWarning {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "NetoAPI")]
+    public partial class GetItemResponseMessagesWarning
+    {
+
         private string messageField;
-        
+
         private string severityCodeField;
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Message {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string Message
+        {
+            get
+            {
                 return this.messageField;
             }
-            set {
+            set
+            {
                 this.messageField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string SeverityCode {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public string SeverityCode
+        {
+            get
+            {
                 return this.severityCodeField;
             }
-            set {
+            set
+            {
                 this.severityCodeField = value;
             }
         }
