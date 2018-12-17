@@ -113,7 +113,7 @@ namespace PurchaseOrderSys.Controllers
             NetoApi neto = new NetoApi();
             string LangID = EnumData.DataLangList().First().Key;
 
-            var skuList = neto.GetItemBySku("102001077");
+            var skuList = neto.GetItemBySku("102001076");
             //var categroyList = neto.GetCategory().Category.ToList();
 
             //SKU sku;

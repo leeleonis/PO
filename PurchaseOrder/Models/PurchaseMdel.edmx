@@ -1912,7 +1912,7 @@
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
           <NavigationProperty Name="SkuAttribute" Relationship="PurchaseOrderModel.FK_Sku_Attribute_SkuAttribute" FromRole="Sku_Attribute" ToRole="SkuAttribute" />
-          <NavigationProperty Name="SKU1" Relationship="PurchaseOrderModel.FK_Sku_Attribute_Sku" FromRole="Sku_Attribute" ToRole="SKU" />
+          <NavigationProperty Name="GetSku" Relationship="PurchaseOrderModel.FK_Sku_Attribute_Sku" FromRole="Sku_Attribute" ToRole="SKU" />
         </EntityType>
         <EntityType Name="SkuAttribute">
           <Key>

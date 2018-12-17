@@ -27,6 +27,6 @@ namespace PurchaseOrderSys.Models
         public Nullable<System.DateTime> UpdateAt { get; set; }
     
         public virtual SkuAttribute SkuAttribute { get; set; }
-        public virtual SKU SKU1 { get; set; }
+        public virtual SKU GetSku { get; set; }
     }
 }

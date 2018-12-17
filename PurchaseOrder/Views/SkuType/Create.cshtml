@@ -53,6 +53,7 @@
                                     <div class="tab-pane" id="hb2">
                                         <fieldset>
                                             <legend>屬性組合</legend>
+                                            @Html.Hidden("AttributeGroup[0][]")
                                             @foreach (var type in AttributeTypeList)
                                             {
                                                 <div class="form-group">

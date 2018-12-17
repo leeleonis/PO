@@ -59,6 +59,7 @@
                                     <div class="tab-pane" id="hb2">
                                         <fieldset>
                                             <legend>屬性組合</legend>
+                                            @Html.Hidden("AttributeGroup[0][]")
                                             @{ Dictionary<int, int[]> group = !string.IsNullOrEmpty(Model.AttributeGroup) ? JsonConvert.DeserializeObject<Dictionary<int, int[]>>(Model.AttributeGroup) : new Dictionary<int, int[]>(); }
                                             @foreach (var type in AttributeTypeList)
                                             {

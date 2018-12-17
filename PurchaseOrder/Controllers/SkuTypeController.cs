@@ -49,7 +49,7 @@ namespace PurchaseOrderSys.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "IsEnable,NetoID")] SkuType skuType, SkuTypeLang langData, Dictionary<string, int[]> AttributeGroup)
         {
-            skuType.AttributeGroup = Newtonsoft.Json.JsonConvert.SerializeObject(AttributeGroup);
+            skuType.AttributeGroup = Newtonsoft.Json.JsonConvert.SerializeObject(AttributeGroup ?? new Dictionary<string, int[]> { });
             skuType.CreateAt = DateTime.UtcNow;
             skuType.CreateBy = Session["AdminName"].ToString();
 
