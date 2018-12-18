@@ -137,19 +137,18 @@
 
                                         <div class="smart-form form-group">
                                             <header>eBay Title</header>
-                                            @{
-                                                string[] Titles = new string[] { "Qualitydeals-usa", "AU", "AU 2", "DE", "ES", "FR", "IT", "UK", "US", "US GBH" };
-                                            }
                                             <fieldset>
                                                 @{
                                                     int i = 0;
-                                                    string[] eBayTitle = !string.IsNullOrEmpty(Model.eBayTitle) ? JsonConvert.DeserializeObject<string[]>(Model.eBayTitle) : new string[] { };
-                                                    foreach (string title in Titles)
+                                                    Dictionary<int, string> eBayTitle = !string.IsNullOrEmpty(Model.eBayTitle) ? JsonConvert.DeserializeObject<Dictionary<int, string>>(Model.eBayTitle) : new Dictionary<int, string> { };
+                                                    foreach (var title in EnumData.eBayTitle())
                                                     {
                                                         <section class="col col-sm-4">
-                                                            @Html.Label(title)
+                                                            @Html.Label(title.Value)
                                                             <label class="input">
-                                                                @Html.TextBox("eBayTitle[]", eBayTitle.Skip(i++).FirstOrDefault())
+                                                                @{ string name = string.Format("eBayTitle[{0}]", i++); }
+                                                                @Html.Hidden(string.Format("{0}[{1}]", name, "misc"), title.Key)
+                                                                @Html.TextBox(string.Format("{0}[{1}]", name, "title"), eBayTitle.ContainsKey(title.Key) ? eBayTitle[title.Key] : "")
                                                             </label>
                                                         </section>
                                                     }
@@ -294,7 +293,7 @@
                                         <hr />
 
                                         <fieldset>
-                                            <legend>Spec Content</legend>
+                                            <legend>Specification</legend>
 
                                             <div class="form-group">
                                                 <div class="col-lg-12">

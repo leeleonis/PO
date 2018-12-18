@@ -35,7 +35,7 @@ namespace PurchaseOrderSys.Models
         public enum YesNo { No, Yes }
 
         public enum AttributeProperty { Normal, YesNo, Dimension, Resolution }
-        public enum SkuType { Single, Variation, Kit }
+        public enum SkuType { Single, Variation, Kit, Shadow }
         public enum SkuStatus { Inactive, Active }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace PurchaseOrderSys.Models
         /// <returns></returns>
         public static Dictionary<string, string> CompanyDDL()
         {
-           var list = new Dictionary<string, string>();
+            var list = new Dictionary<string, string>();
             using (var db = new PurchaseOrderEntities())
             {
                 list = db.Company.ToDictionary(y => y.ID.ToString(), y => y.CompanyNo + "_" + y.Name);
@@ -139,7 +139,7 @@ namespace PurchaseOrderSys.Models
         /// <returns></returns>
         public static Dictionary<string, string> CMTypeDDL()
         {
-            var list = new Dictionary<string, string>{{ "CreditNote", "Credit Note" },{ "Replacement", "Replacement" } };
+            var list = new Dictionary<string, string> { { "CreditNote", "Credit Note" }, { "Replacement", "Replacement" } };
             return list;
         }
 
@@ -206,6 +206,22 @@ namespace PurchaseOrderSys.Models
         {
             var list = new Dictionary<string, string> { { "Requested", "Requested" }, { "Shipped", "Shipped" }, { "Received", "Received" } };
             return list;
+        }
+
+        public static Dictionary<int, string> eBayTitle()
+        {
+            return new Dictionary<int, string>()
+            {
+                { 2, "eBay Title (qualitydeals-usa)" },
+                { 19, "eBay Title AU" },
+                { 50, "eBay Title AU 2" },
+                { 24, "eBay Title DE" },
+                { 25, "eBay Title ES" },
+                { 23, "eBay Title FR" },
+                { 21, "eBay Title IT" },
+                { 20, "eBay Title US" },
+                { 22, "eBay Title US GBH" }
+            };
         }
     }
 }
