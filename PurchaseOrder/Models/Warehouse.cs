@@ -21,6 +21,7 @@ namespace PurchaseOrderSys.Models
             this.WarehouseUser = new HashSet<WarehouseUser>();
             this.TransferFrom = new HashSet<Transfer>();
             this.TransferTo = new HashSet<Transfer>();
+            this.WarehouseSummary = new HashSet<WarehouseSummary>();
         }
     
         public bool IsEnable { get; set; }
@@ -39,6 +40,8 @@ namespace PurchaseOrderSys.Models
         public string Countries { get; set; }
         public string Marketplace { get; set; }
         public string Company { get; set; }
+        public Nullable<bool> DefaultDispatch { get; set; }
+        public Nullable<bool> DefaultRMA { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseOrder> PurchaseOrder { get; set; }
@@ -48,5 +51,7 @@ namespace PurchaseOrderSys.Models
         public virtual ICollection<Transfer> TransferFrom { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Transfer> TransferTo { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<WarehouseSummary> WarehouseSummary { get; set; }
     }
 }

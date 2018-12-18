@@ -3751,6 +3751,24 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查詢類似 Default Dispatch 的當地語系化字串。
+        /// </summary>
+        public static string Warehouse_DefaultDispatch {
+            get {
+                return ResourceManager.GetString("Warehouse_DefaultDispatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Default RMA 的當地語系化字串。
+        /// </summary>
+        public static string Warehouse_DefaultRMA {
+            get {
+                return ResourceManager.GetString("Warehouse_DefaultRMA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 Fulfillable 的當地語系化字串。
         /// </summary>
         public static string Warehouse_Fulfillable {

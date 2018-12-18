@@ -1410,4 +1410,10 @@
   <data name="PurchaseSKU_ReceivedDate" xml:space="preserve">
     <value>入庫時間</value>
   </data>
+  <data name="Warehouse_DefaultDispatch" xml:space="preserve">
+    <value>預設出貨倉</value>
+  </data>
+  <data name="Warehouse_DefaultRMA" xml:space="preserve">
+    <value>預設退貨倉</value>
+  </data>
 </root>

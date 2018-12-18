@@ -567,6 +567,19 @@
           <Property Name="Countries" Type="text" />
           <Property Name="Marketplace" Type="text" />
           <Property Name="Company" Type="nvarchar" MaxLength="50" />
+          <Property Name="DefaultDispatch" Type="bit" />
+          <Property Name="DefaultRMA" Type="bit" />
+        </EntityType>
+        <EntityType Name="WarehouseSummary">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="bit" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="WarehouseID" Type="int" Nullable="false" />
+          <Property Name="Type" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Val" Type="nvarchar" MaxLength="50" />
+          <Property Name="Url" Type="text" />
         </EntityType>
         <EntityType Name="WarehouseUser">
           <Key>
@@ -966,6 +979,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_WarehouseSummary_Warehouse">
+          <End Role="Warehouse" Type="Self.Warehouse" Multiplicity="1" />
+          <End Role="WarehouseSummary" Type="Self.WarehouseSummary" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Warehouse">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="WarehouseSummary">
+              <PropertyRef Name="WarehouseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_WarehouseUser_AdminUser">
           <End Role="AdminUser" Type="Self.AdminUser" Multiplicity="1" />
           <End Role="WarehouseUser" Type="Self.WarehouseUser" Multiplicity="*" />
@@ -1023,6 +1048,7 @@
           <EntitySet Name="TransferSKU" EntityType="Self.TransferSKU" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VendorLIst" EntityType="Self.VendorLIst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Warehouse" EntityType="Self.Warehouse" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WarehouseSummary" EntityType="Self.WarehouseSummary" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WarehouseUser" EntityType="Self.WarehouseUser" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_AdminUser_AdminGroup" Association="Self.FK_AdminUser_AdminGroup">
             <End Role="AdminGroup" EntitySet="AdminGroup" />
@@ -1152,6 +1178,10 @@
             <End Role="Transfer" EntitySet="Transfer" />
             <End Role="TransferSKU" EntitySet="TransferSKU" />
           </AssociationSet>
+          <AssociationSet Name="FK_WarehouseSummary_Warehouse" Association="Self.FK_WarehouseSummary_Warehouse">
+            <End Role="Warehouse" EntitySet="Warehouse" />
+            <End Role="WarehouseSummary" EntitySet="WarehouseSummary" />
+          </AssociationSet>
           <AssociationSet Name="FK_WarehouseUser_AdminUser" Association="Self.FK_WarehouseUser_AdminUser">
             <End Role="AdminUser" EntitySet="AdminUser" />
             <End Role="WarehouseUser" EntitySet="WarehouseUser" />
@@ -1190,8 +1220,8 @@
           </AssociationSet>
           <EntitySet Name="Warehouse" EntityType="PurchaseOrderModel.Warehouse" />
           <AssociationSet Name="FK_PurchaseOrder_Warehouse" Association="PurchaseOrderModel.FK_PurchaseOrder_Warehouse">
-            <End Role="Warehouse" EntitySet="Warehouse" />
-            <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
+            <End EntitySet="Warehouse" Role="Warehouse" />
+            <End EntitySet="PurchaseOrder" Role="PurchaseOrder" />
           </AssociationSet>
           <EntitySet Name="AdminUser" EntityType="PurchaseOrderModel.AdminUser" />
           <EntitySet Name="WarehouseUser" EntityType="PurchaseOrderModel.WarehouseUser" />
@@ -1200,17 +1230,17 @@
             <End Role="WarehouseUser" EntitySet="WarehouseUser" />
           </AssociationSet>
           <AssociationSet Name="FK_WarehouseUser_Warehouse" Association="PurchaseOrderModel.FK_WarehouseUser_Warehouse">
-            <End Role="Warehouse" EntitySet="Warehouse" />
-            <End Role="WarehouseUser" EntitySet="WarehouseUser" />
+            <End EntitySet="Warehouse" Role="Warehouse" />
+            <End EntitySet="WarehouseUser" Role="WarehouseUser" />
           </AssociationSet>
           <EntitySet Name="Transfer" EntityType="PurchaseOrderModel.Transfer" />
           <AssociationSet Name="FK_Transfer_Warehouse" Association="PurchaseOrderModel.FK_Transfer_Warehouse">
-            <End Role="Warehouse" EntitySet="Warehouse" />
-            <End Role="Transfer" EntitySet="Transfer" />
+            <End EntitySet="Warehouse" Role="Warehouse" />
+            <End EntitySet="Transfer" Role="Transfer" />
           </AssociationSet>
           <AssociationSet Name="FK_Transfer_Warehouse1" Association="PurchaseOrderModel.FK_Transfer_Warehouse1">
-            <End Role="Warehouse" EntitySet="Warehouse" />
-            <End Role="Transfer" EntitySet="Transfer" />
+            <End EntitySet="Warehouse" Role="Warehouse" />
+            <End EntitySet="Transfer" Role="Transfer" />
           </AssociationSet>
           <EntitySet Name="TransferSKU" EntityType="PurchaseOrderModel.TransferSKU" />
           <AssociationSet Name="FK_SerialsLlist_TransferSKU" Association="PurchaseOrderModel.FK_SerialsLlist_TransferSKU">
@@ -1334,6 +1364,11 @@
           <AssociationSet Name="FK_SerialsLlist_PurchaseSKU" Association="PurchaseOrderModel.FK_SerialsLlist_PurchaseSKU">
             <End Role="PurchaseSKU" EntitySet="PurchaseSKU" />
             <End Role="SerialsLlist" EntitySet="SerialsLlist" />
+          </AssociationSet>
+          <EntitySet Name="WarehouseSummary" EntityType="PurchaseOrderModel.WarehouseSummary" />
+          <AssociationSet Name="FK_WarehouseSummary_Warehouse" Association="PurchaseOrderModel.FK_WarehouseSummary_Warehouse">
+            <End Role="Warehouse" EntitySet="Warehouse" />
+            <End Role="WarehouseSummary" EntitySet="WarehouseSummary" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="PurchaseOrder">
@@ -1523,30 +1558,33 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
-          <Property Name="IsDefault" Type="Boolean" Nullable="false" />
-          <Property Name="IsSellable" Type="Boolean" Nullable="false" />
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Type" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="WinitWarehouse" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
-          <Property Name="Fulfillable" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
-          <Property Name="Location" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="Countries" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Marketplace" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Company" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsEnable" Nullable="false" Type="Boolean" />
+          <Property Name="IsDefault" Nullable="false" Type="Boolean" />
+          <Property Name="IsSellable" Nullable="false" Type="Boolean" />
+          <Property Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" Type="Int32" />
+          <Property Name="Name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="Type" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="WinitWarehouse" MaxLength="50" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="CreateBy" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="CreateAt" Nullable="false" Precision="3" Type="DateTime" />
+          <Property Name="UpdateBy" MaxLength="50" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="UpdateAt" Precision="3" Type="DateTime" />
+          <Property Name="Fulfillable" MaxLength="1" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="Location" MaxLength="10" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="Countries" MaxLength="Max" FixedLength="false" Unicode="false" Type="String" />
+          <Property Name="Marketplace" MaxLength="Max" FixedLength="false" Unicode="false" Type="String" />
+          <Property Name="Company" MaxLength="50" FixedLength="false" Unicode="true" Type="String" />
           <NavigationProperty Name="PurchaseOrder" Relationship="PurchaseOrderModel.FK_PurchaseOrder_Warehouse" FromRole="Warehouse" ToRole="PurchaseOrder" />
           <NavigationProperty Name="WarehouseUser" Relationship="PurchaseOrderModel.FK_WarehouseUser_Warehouse" FromRole="Warehouse" ToRole="WarehouseUser" />
           <NavigationProperty Name="TransferFrom" Relationship="PurchaseOrderModel.FK_Transfer_Warehouse" FromRole="Warehouse" ToRole="Transfer" />
           <NavigationProperty Name="TransferTo" Relationship="PurchaseOrderModel.FK_Transfer_Warehouse1" FromRole="Warehouse" ToRole="Transfer" />
+          <Property Name="DefaultDispatch" Type="Boolean" />
+          <Property Name="DefaultRMA" Type="Boolean" />
+          <NavigationProperty Name="WarehouseSummary" Relationship="PurchaseOrderModel.FK_WarehouseSummary_Warehouse" FromRole="Warehouse" ToRole="WarehouseSummary" />
         </EntityType>
         <Association Name="FK_PurchaseOrder_Warehouse">
-          <End Type="PurchaseOrderModel.Warehouse" Role="Warehouse" Multiplicity="0..1" />
-          <End Type="PurchaseOrderModel.PurchaseOrder" Role="PurchaseOrder" Multiplicity="*" />
+          <End Type="PurchaseOrderModel.Warehouse" Multiplicity="0..1" Role="Warehouse" />
+          <End Type="PurchaseOrderModel.PurchaseOrder" Multiplicity="*" Role="PurchaseOrder" />
           <ReferentialConstraint>
             <Principal Role="Warehouse">
               <PropertyRef Name="ID" />
@@ -1607,8 +1645,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_WarehouseUser_Warehouse">
-          <End Type="PurchaseOrderModel.Warehouse" Role="Warehouse" Multiplicity="1" />
-          <End Type="PurchaseOrderModel.WarehouseUser" Role="WarehouseUser" Multiplicity="*" />
+          <End Type="PurchaseOrderModel.Warehouse" Multiplicity="1" Role="Warehouse" />
+          <End Type="PurchaseOrderModel.WarehouseUser" Multiplicity="*" Role="WarehouseUser" />
           <ReferentialConstraint>
             <Principal Role="Warehouse">
               <PropertyRef Name="ID" />
@@ -1642,8 +1680,8 @@
           <NavigationProperty Name="TransferSKU" Relationship="PurchaseOrderModel.FK_TransferSKU_Transfer" FromRole="Transfer" ToRole="TransferSKU" />
         </EntityType>
         <Association Name="FK_Transfer_Warehouse">
-          <End Type="PurchaseOrderModel.Warehouse" Role="Warehouse" Multiplicity="0..1" />
-          <End Type="PurchaseOrderModel.Transfer" Role="Transfer" Multiplicity="*" />
+          <End Type="PurchaseOrderModel.Warehouse" Multiplicity="0..1" Role="Warehouse" />
+          <End Type="PurchaseOrderModel.Transfer" Multiplicity="*" Role="Transfer" />
           <ReferentialConstraint>
             <Principal Role="Warehouse">
               <PropertyRef Name="ID" />
@@ -1654,8 +1692,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Transfer_Warehouse1">
-          <End Type="PurchaseOrderModel.Warehouse" Role="Warehouse" Multiplicity="0..1" />
-          <End Type="PurchaseOrderModel.Transfer" Role="Transfer" Multiplicity="*" />
+          <End Type="PurchaseOrderModel.Warehouse" Multiplicity="0..1" Role="Warehouse" />
+          <End Type="PurchaseOrderModel.Transfer" Multiplicity="*" Role="Transfer" />
           <ReferentialConstraint>
             <Principal Role="Warehouse">
               <PropertyRef Name="ID" />
@@ -2388,6 +2426,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="WarehouseSummary">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="WarehouseID" Type="Int32" Nullable="false" />
+          <Property Name="Type" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Val" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Url" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Warehouse" Relationship="PurchaseOrderModel.FK_WarehouseSummary_Warehouse" FromRole="WarehouseSummary" ToRole="Warehouse" />
+        </EntityType>
+        <Association Name="FK_WarehouseSummary_Warehouse">
+          <End Type="PurchaseOrderModel.Warehouse" Role="Warehouse" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.WarehouseSummary" Role="WarehouseSummary" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Warehouse">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="WarehouseSummary">
+              <PropertyRef Name="WarehouseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2523,6 +2585,8 @@
           <EntitySetMapping Name="Warehouse">
             <EntityTypeMapping TypeName="PurchaseOrderModel.Warehouse">
               <MappingFragment StoreEntitySet="Warehouse">
+                <ScalarProperty Name="DefaultRMA" ColumnName="DefaultRMA" />
+                <ScalarProperty Name="DefaultDispatch" ColumnName="DefaultDispatch" />
                 <ScalarProperty Name="Company" ColumnName="Company" />
                 <ScalarProperty Name="Marketplace" ColumnName="Marketplace" />
                 <ScalarProperty Name="Countries" ColumnName="Countries" />
@@ -2991,6 +3055,18 @@
                 <ScalarProperty Name="SkuNo" ColumnName="SkuNo" />
                 <ScalarProperty Name="PurchaseOrderID" ColumnName="PurchaseOrderID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WarehouseSummary">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.WarehouseSummary">
+              <MappingFragment StoreEntitySet="WarehouseSummary">
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="Val" ColumnName="Val" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="WarehouseID" ColumnName="WarehouseID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
               </MappingFragment>

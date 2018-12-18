@@ -148,9 +148,19 @@ namespace PurchaseOrderSys.Models
     	    [Display(Name = "Warehouse_Company", ResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  Company { get; set; }
-    
-    		    
-    	}
+
+            /// <summary>
+            /// Default Dispatch
+            /// </summary>        
+            [Display(Name = "Warehouse_DefaultDispatch", ResourceType = typeof(App_GlobalResources.Resource))]
+            public Nullable<bool> DefaultDispatch { get; set; }
+
+            /// <summary>
+            /// Default RMA
+            /// </summary>        
+            [Display(Name = "Warehouse_DefaultRMA", ResourceType = typeof(App_GlobalResources.Resource))]
+            public Nullable<bool> DefaultRMA { get; set; }
+        }
     }
     
 }

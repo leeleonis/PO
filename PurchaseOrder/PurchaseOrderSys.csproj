@@ -188,6 +188,7 @@
     <Compile Include="Controllers\BrandController.cs" />
     <Compile Include="Controllers\CompanyController.cs" />
     <Compile Include="Controllers\ConditionController.cs" />
+    <Compile Include="Controllers\DispatchWarehouseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MainController.cs" />
     <Compile Include="Controllers\MenusController.cs" />
@@ -436,6 +437,12 @@
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\WarehouseMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\WarehouseSummary.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\WarehouseSummaryMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\WarehouseUser.cs">
@@ -1695,6 +1702,8 @@
     <Content Include="Views\Shared\DisplayTemplates\FDate.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\FDate.cshtml" />
+    <Content Include="Views\DispatchWarehouse\Index.cshtml" />
+    <Content Include="Views\DispatchWarehouse\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

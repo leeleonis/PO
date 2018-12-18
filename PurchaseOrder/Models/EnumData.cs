@@ -192,9 +192,12 @@ namespace PurchaseOrderSys.Models
         {
             return new Dictionary<string, string>()
             {
+
                 { "Normal", "Normal" },
-                { "DropShip", "DropShip"},
+                { "RMA", "RMA" },
                 { "FBA", "FBA" },
+                { "DropShip", "Drop Ship"},
+                { "Interim", "Interim"},
                 { "Winit", "Winit" }
             };
         }
