@@ -42,8 +42,6 @@
                                                     @Html.RadioButton("IsSellable", false, new { htmlAttributes = new { @class = "form-control" } })否
                                                 </div>
                                             </div>
-
-
                                             <div class="form-group">
                                                 @Html.Label("Default Dispatch", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
@@ -78,7 +76,7 @@
                                                 </div>
                                                 @Html.Label("3P Warehouse", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("3P Warehouse", new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.DropDownList("Warehouse3P",(List<SelectListItem>)ViewBag.Warehouse3PList, DefaultSelect, htmlAttributes: new { @class = "form-control" })
                                                 </div>
                                             </div>
                                         </fieldset>
@@ -131,7 +129,6 @@
                                         </fieldset>
                                     </div>
                                 </div>
-
                                 <div class="widget-footer">
                                     <button type="submit" class="btn btn-primary" id="save">儲存</button>
                                     <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index")'">返回</button>
