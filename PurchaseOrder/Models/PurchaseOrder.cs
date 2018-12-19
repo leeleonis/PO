@@ -20,6 +20,8 @@ namespace PurchaseOrderSys.Models
             this.PurchaseNote = new HashSet<PurchaseNote>();
             this.CreditMemo = new HashSet<CreditMemo>();
             this.PurchaseSKU = new HashSet<PurchaseSKU>();
+            this.CMCreditNote = new HashSet<CMCreditNote>();
+            this.CMReplacement = new HashSet<CMReplacement>();
         }
     
         public bool IsEnable { get; set; }
@@ -62,5 +64,9 @@ namespace PurchaseOrderSys.Models
         public virtual ICollection<CreditMemo> CreditMemo { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseSKU> PurchaseSKU { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CMCreditNote> CMCreditNote { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CMReplacement> CMReplacement { get; set; }
     }
 }

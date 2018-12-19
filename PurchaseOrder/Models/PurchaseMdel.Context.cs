@@ -58,5 +58,11 @@ namespace PurchaseOrderSys.Models
         public virtual DbSet<SKU> SKU { get; set; }
         public virtual DbSet<CreditMemo> CreditMemo { get; set; }
         public virtual DbSet<PurchaseSKU> PurchaseSKU { get; set; }
+        public virtual DbSet<CMCreditNote> CMCreditNote { get; set; }
+        public virtual DbSet<CMReplacement> CMReplacement { get; set; }
+        public virtual DbSet<PackageContent> PackageContent { get; set; }
+        public virtual DbSet<PackageContentLang> PackageContentLang { get; set; }
+        public virtual DbSet<Sku_PackageContent> Sku_PackageContent { get; set; }
+        public virtual DbSet<WarehouseSummary> WarehouseSummary { get; set; }
     }
 }

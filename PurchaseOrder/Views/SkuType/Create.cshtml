@@ -48,6 +48,29 @@
                                                 </div>
                                             </div>
                                         </fieldset>
+                                        <fieldset>
+                                            <legend>Package Content</legend>
+
+                                            <div class="col-sm-6 col-lg-3">
+                                                <div class="table-responsive col-sm-12">
+                                                    <table class="table table-bordered table-striped text-center">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="text-center">Content</th>
+                                                                <th width="50"><button type="button" class="btn btn-default btn-sm" onclick="ContentAdd();">+</button></th>
+                                                            </tr>
+                                                        </thead>
+
+                                                        <tbody id="list-content">
+                                                            <tr>
+                                                                <td class="no-padding">@Html.TextBox("PackageContent[]", "", new { @class = "form-control" })</td>
+                                                                <td><button type="button" class="btn btn-default btn-sm" onclick="ContentDel($(this));">－</button></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </fieldset>
                                     </div>
 
                                     <div class="tab-pane" id="hb2">
@@ -94,5 +117,15 @@
         $(document).ready(function () {
             $('.select-attr').select2();
         });
+
+        function ContentAdd() {
+            var $newContent = $('<tr>').append($("<td class='no-padding'>").append("<input type='text' class='form-control'>"));
+            $newContent.append($("<td>").append("<button type='button' class='btn btn-default btn-sm' onclick='ContentDel($(this));'>－</button>"));
+            $('#list-content').append($newContent);
+        }
+
+        function ContentDel($btn) {
+            $btn.parents('<tr>').remove();
+        }
     </script>
 }   
