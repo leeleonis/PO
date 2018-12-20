@@ -1543,9 +1543,6 @@
   <data name="SkuLang_SpecContent" xml:space="preserve">
     <value></value>
   </data>
-  <data name="SKU_ParentKit" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="Sku_Attribute_IsDiverse" xml:space="preserve">
     <value></value>
   </data>
@@ -1635,6 +1632,78 @@
   </data>
   <data name="PurchaseSKU_ReceivedDate" xml:space="preserve">
     <value>Received Date</value>
+  </data>
+  <data name="SKU_ParentShadow" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PackageContent_IsEnable" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PackageContent_ID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PackageContent_TypeID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PackageContent_CreateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PackageContent_CreateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PackageContent_UpdateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PackageContent_UpdateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PackageContentLang_ItemID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PackageContentLang_LangID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PackageContentLang_Name" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PackageContentLang_CreateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PackageContentLang_CreateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PackageContentLang_UpdateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PackageContentLang_UpdateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Sku_PackageContent_Sku" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Sku_PackageContent_ItemID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Sku_PackageContent_LangID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Sku_PackageContent_Model" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Sku_PackageContent_Html" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Sku_PackageContent_CreateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Sku_PackageContent_CreateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Sku_PackageContent_UpdateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Sku_PackageContent_UpdateAt" xml:space="preserve">
+    <value></value>
   </data>
   <data name="Warehouse_DefaultDispatch" xml:space="preserve">
     <value>Default Dispatch</value>

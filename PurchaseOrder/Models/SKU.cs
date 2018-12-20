@@ -21,13 +21,14 @@ namespace PurchaseOrderSys.Models
             this.Sku_Attribute = new HashSet<Sku_Attribute>();
             this.SkuLang = new HashSet<SkuLang>();
             this.SkuPicture = new HashSet<SkuPicture>();
+            this.Sku_PackageContent = new HashSet<Sku_PackageContent>();
         }
     
         public bool IsEnable { get; set; }
         public string SkuID { get; set; }
         public byte Type { get; set; }
         public string ParentSku { get; set; }
-        public string ParentKit { get; set; }
+        public string ParentShadow { get; set; }
         public int Condition { get; set; }
         public int Category { get; set; }
         public int Brand { get; set; }
@@ -53,5 +54,7 @@ namespace PurchaseOrderSys.Models
         public virtual ICollection<SkuLang> SkuLang { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SkuPicture> SkuPicture { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Sku_PackageContent> Sku_PackageContent { get; set; }
     }
 }

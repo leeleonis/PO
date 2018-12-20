@@ -1,11 +1,12 @@
-using System;
+using System; 
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// SKU class
     /// </summary>
@@ -31,7 +32,7 @@ namespace PurchaseOrderSys.Models
     		/// Sku ID
     		/// </summary>        
     	    [Display(Name = "SKU_SkuID", ResourceType = typeof(App_GlobalResources.Resource))]
-            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+            //[Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  SkuID { get; set; }
     
@@ -53,11 +54,11 @@ namespace PurchaseOrderSys.Models
     
     		    
     		/// <summary>
-    		/// Parent Kit
+    		/// Parent Shadow
     		/// </summary>        
-    	    [Display(Name = "SKU_ParentKit", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "SKU_ParentShadow", ResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public string  ParentKit { get; set; }
+    		public string  ParentShadow { get; set; }
     
     		    
     		/// <summary>

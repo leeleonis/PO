@@ -108,12 +108,12 @@ namespace PurchaseOrderSys.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(SKU updateData, SkuLang langData, string[] eBayTitle, int[] DiverseAttribute, Sku_Attribute[] VariationValue, Sku_Attribute[] AttributeValue, KitSku[] KitSku, HttpPostedFileBase picture)
+        public ActionResult Edit(SKU updateData, SkuLang langData, List<Dictionary<string, string>> eBayTitle, int[] DiverseAttribute, Sku_Attribute[] VariationValue, Sku_Attribute[] AttributeValue, KitSku[] KitSku, HttpPostedFileBase picture)
         {
             SKU sku = db.SKU.Find(updateData.SkuID);
             if (sku == null) return HttpNotFound();
 
-            sku.eBayTitle = JsonConvert.SerializeObject(eBayTitle);
+            sku.eBayTitle = JsonConvert.SerializeObject(eBayTitle.ToDictionary(t => int.Parse(t["misc"]), t => t["title"]));
             SetUpdateData(sku, updateData, EditList);
             db.Entry(sku).State = EntityState.Modified;
 
@@ -618,6 +618,31 @@ namespace PurchaseOrderSys.Controllers
 
                 sku.ParentSku = null;
                 db.Entry(sku).State = EntityState.Modified;
+
+                db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                result.status = false;
+                result.message = e.InnerException != null ? e.InnerException.Message ?? e.Message : e.Message;
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult RemoveKit(string ID, string ParentKit)
+        {
+            AjaxResult result = new AjaxResult();
+
+            SKU sku = db.SKU.Find(ParentKit);
+
+            try
+            {
+                if (sku == null) throw new Exception("Not found parent sku!");
+
+                var kit = sku.GetKit.First(k => k.Sku.Equals(ID));
+                sku.GetKit.Remove(kit);
 
                 db.SaveChanges();
             }

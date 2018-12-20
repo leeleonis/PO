@@ -12,21 +12,16 @@ namespace PurchaseOrderSys.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Sku_Attribute
+    public partial class PackageContentLang
     {
-        public bool IsDiverse { get; set; }
-        public string Sku { get; set; }
-        public int AttrID { get; set; }
+        public int ItemID { get; set; }
         public string LangID { get; set; }
-        public string Value { get; set; }
-        public bool Html { get; set; }
-        public bool eBay { get; set; }
+        public string Name { get; set; }
         public string CreateBy { get; set; }
         public System.DateTime CreateAt { get; set; }
         public string UpdateBy { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }
     
-        public virtual SkuAttribute SkuAttribute { get; set; }
-        public virtual SKU GetSku { get; set; }
+        public virtual PackageContent PackageContent { get; set; }
     }
 }

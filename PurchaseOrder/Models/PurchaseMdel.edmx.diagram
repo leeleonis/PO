@@ -53,11 +53,10 @@
         <AssociationConnector Association="PurchaseOrderModel.FK_SkuTypeLang_SkuType" />
         <EntityTypeShape EntityType="PurchaseOrderModel.KitSku" Width="1.5" PointX="7.625" PointY="22.125" />
         <EntityTypeShape EntityType="PurchaseOrderModel.SkuPicture" Width="1.5" PointX="7.625" PointY="18.375" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.SKU" Width="1.5" PointX="6" PointY="25.5" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.SKU" Width="1.5" PointX="6" PointY="26" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Sku_Brand" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Sku_Condition" />
         <AssociationConnector Association="PurchaseOrderModel.FK_KitSku_Sku" />
-        <AssociationConnector Association="PurchaseOrderModel.FK_KitSku_Sku1" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Sku_Attribute_Sku" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Sku_SkuType" />
         <AssociationConnector Association="PurchaseOrderModel.FK_SkuLang_Sku" />
@@ -68,6 +67,20 @@
         <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseSKU_CreditMemo" />
         <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseSKU_PurchaseOrder" />
         <AssociationConnector Association="PurchaseOrderModel.FK_SerialsLlist_PurchaseSKU" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.CMCreditNote" Width="1.5" PointX="3" PointY="8.125" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.CMReplacement" Width="1.5" PointX="3" PointY="19.25" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.PackageContent" Width="1.5" PointX="6" PointY="32.125" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.PackageContentLang" Width="1.5" PointX="8.25" PointY="32.125" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.Sku_PackageContent" Width="1.5" PointX="8.25" PointY="26.875" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.WarehouseSummary" Width="1.5" PointX="9.875" PointY="6.25" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_CMCreditNote_PurchaseOrder" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_CMReplacement_PurchaseOrder" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_PackageContentLang_PackageContent" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_Sku_PackageContent_PackageContent" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_Sku_PackageContent_SKU" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_WarehouseSummary_Warehouse" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_PackageContent_SkuType" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_KitSku_Sku1" />
         <EntityTypeShape EntityType="PurchaseOrderModel.WarehouseSummary" Width="1.5" PointX="9.875" PointY="6.5" />
         <AssociationConnector Association="PurchaseOrderModel.FK_WarehouseSummary_Warehouse" />
         <EntityTypeShape EntityType="PurchaseOrderModel.ShippingMethod" Width="1.5" PointX="17.375" PointY="5.75" />

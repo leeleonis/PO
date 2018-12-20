@@ -12,30 +12,27 @@ namespace PurchaseOrderSys.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class SkuType
+    public partial class PackageContent
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public SkuType()
+        public PackageContent()
         {
-            this.SkuTypeLang = new HashSet<SkuTypeLang>();
-            this.SKU = new HashSet<SKU>();
-            this.PackageContent = new HashSet<PackageContent>();
+            this.PackageContentLang = new HashSet<PackageContentLang>();
+            this.Sku_PackageContent = new HashSet<Sku_PackageContent>();
         }
     
         public bool IsEnable { get; set; }
         public int ID { get; set; }
-        public Nullable<int> NetoID { get; set; }
-        public string AttributeGroup { get; set; }
+        public int TypeID { get; set; }
         public string CreateBy { get; set; }
         public System.DateTime CreateAt { get; set; }
         public string UpdateBy { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SkuTypeLang> SkuTypeLang { get; set; }
+        public virtual ICollection<PackageContentLang> PackageContentLang { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SKU> SKU { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PackageContent> PackageContent { get; set; }
+        public virtual ICollection<Sku_PackageContent> Sku_PackageContent { get; set; }
+        public virtual SkuType SkuType { get; set; }
     }
 }

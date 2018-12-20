@@ -1317,9 +1317,6 @@
   <data name="SkuLang_SpecContent" xml:space="preserve">
     <value>屬性內容</value>
   </data>
-  <data name="SKU_ParentKit" xml:space="preserve">
-    <value>Kit Parent</value>
-  </data>
   <data name="Sku_Attribute_IsDiverse" xml:space="preserve">
     <value>是否多樣性</value>
   </data>
@@ -1409,6 +1406,78 @@
   </data>
   <data name="PurchaseSKU_ReceivedDate" xml:space="preserve">
     <value>入庫時間</value>
+  </data>
+  <data name="SKU_ParentShadow" xml:space="preserve">
+    <value>Shadow Parent</value>
+  </data>
+  <data name="PackageContent_IsEnable" xml:space="preserve">
+    <value>啟用</value>
+  </data>
+  <data name="PackageContent_ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="PackageContent_TypeID" xml:space="preserve">
+    <value>品項ID</value>
+  </data>
+  <data name="PackageContent_CreateBy" xml:space="preserve">
+    <value>建立者</value>
+  </data>
+  <data name="PackageContent_CreateAt" xml:space="preserve">
+    <value>建立時間</value>
+  </data>
+  <data name="PackageContent_UpdateBy" xml:space="preserve">
+    <value>修改者</value>
+  </data>
+  <data name="PackageContent_UpdateAt" xml:space="preserve">
+    <value>修改時間</value>
+  </data>
+  <data name="PackageContentLang_ItemID" xml:space="preserve">
+    <value>物品ID</value>
+  </data>
+  <data name="PackageContentLang_LangID" xml:space="preserve">
+    <value>語系ID</value>
+  </data>
+  <data name="PackageContentLang_Name" xml:space="preserve">
+    <value>名稱</value>
+  </data>
+  <data name="PackageContentLang_CreateBy" xml:space="preserve">
+    <value>建立者</value>
+  </data>
+  <data name="PackageContentLang_CreateAt" xml:space="preserve">
+    <value>建立時間</value>
+  </data>
+  <data name="PackageContentLang_UpdateBy" xml:space="preserve">
+    <value>修改者</value>
+  </data>
+  <data name="PackageContentLang_UpdateAt" xml:space="preserve">
+    <value>修改時間</value>
+  </data>
+  <data name="Sku_PackageContent_Sku" xml:space="preserve">
+    <value>品號</value>
+  </data>
+  <data name="Sku_PackageContent_ItemID" xml:space="preserve">
+    <value>物品ID</value>
+  </data>
+  <data name="Sku_PackageContent_LangID" xml:space="preserve">
+    <value>語系ID</value>
+  </data>
+  <data name="Sku_PackageContent_Model" xml:space="preserve">
+    <value>物品型號</value>
+  </data>
+  <data name="Sku_PackageContent_Html" xml:space="preserve">
+    <value>是否設為html</value>
+  </data>
+  <data name="Sku_PackageContent_CreateBy" xml:space="preserve">
+    <value>建立者</value>
+  </data>
+  <data name="Sku_PackageContent_CreateAt" xml:space="preserve">
+    <value>建立時間</value>
+  </data>
+  <data name="Sku_PackageContent_UpdateBy" xml:space="preserve">
+    <value>修改者</value>
+  </data>
+  <data name="Sku_PackageContent_UpdateAt" xml:space="preserve">
+    <value>修改時間</value>
   </data>
   <data name="Warehouse_DefaultDispatch" xml:space="preserve">
     <value>預設出貨倉</value>

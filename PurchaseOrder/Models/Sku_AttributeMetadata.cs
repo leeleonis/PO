@@ -10,13 +10,31 @@ namespace PurchaseOrderSys.Models
     /// Sku_Attribute class
     /// </summary>
     [MetadataType(typeof(Sku_AttributeMetadata))]
-    public  partial class Sku_Attribute
+    public  partial class Sku_Attribute : IEquatable<Sku_Attribute>
     {
-    
-    	/// <summary>
-    	/// Sku_Attribute Metadata class
-    	/// </summary>
-    	public   class Sku_AttributeMetadata
+
+        public bool Equals(Sku_Attribute other)
+        {
+            if (ReferenceEquals(other, null)) return false;
+
+            if (ReferenceEquals(this, other)) return true;
+
+            return Sku.Equals(other.Sku) && AttrID.Equals(other.AttrID) && LangID.Equals(other.LangID);
+        }
+
+        public override int GetHashCode()
+        {
+            int hashSku = Sku.GetHashCode();
+            int hashAttrID = AttrID.GetHashCode();
+            int hashLangID = LangID.GetHashCode();
+
+            return hashSku ^ hashAttrID ^ hashLangID;
+        }
+
+        /// <summary>
+        /// Sku_Attribute Metadata class
+        /// </summary>
+        public   class Sku_AttributeMetadata
     	{
     		    
     		/// <summary>

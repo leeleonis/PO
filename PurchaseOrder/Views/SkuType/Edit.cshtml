@@ -1,4 +1,11 @@
 ﻿@model SkuType
+@section styles{
+    <style>
+        .middle {
+            vertical-align: middle !important;
+        }
+    </style>
+}
 @{
     var LangID = (string)ViewBag.LangID;
     var AttributeTypeList = (List<SkuAttributeType>)ViewBag.AttributeTypeList;
@@ -49,8 +56,26 @@
                                             <div class="form-group">
                                                 @Html.LabelFor(model => model.SkuTypeLang.First().Name, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-3">
-                                                    @Html.EditorFor(model => model.SkuTypeLang.First().Name, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.EditorFor(model => model.SkuTypeLang.First(l => l.LangID.Equals(LangID)).Name, new { htmlAttributes = new { @class = "form-control" } })
                                                     @Html.ValidationMessageFor(model => model.SkuTypeLang.First().Name, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset>
+                                            <legend>Package Content</legend>
+
+                                            <div class="col-sm-6 col-lg-3">
+                                                <div class="table-responsive col-sm-12">
+                                                    <table class="table table-bordered table-striped text-center">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="text-center">Content</th>
+                                                                <th width="50"><button type="button" class="btn btn-default btn-sm" onclick="ContentAdd(null, 0, '');">＋</button></th>
+                                                            </tr>
+                                                        </thead>
+
+                                                        <tbody id="list-content"></tbody>
+                                                    </table>
                                                 </div>
                                             </div>
                                         </fieldset>
@@ -59,6 +84,7 @@
                                     <div class="tab-pane" id="hb2">
                                         <fieldset>
                                             <legend>屬性組合</legend>
+                                            @Html.Hidden("AttributeGroup[0][]")
                                             @{ Dictionary<int, int[]> group = !string.IsNullOrEmpty(Model.AttributeGroup) ? JsonConvert.DeserializeObject<Dictionary<int, int[]>>(Model.AttributeGroup) : new Dictionary<int, int[]>(); }
                                             @foreach (var type in AttributeTypeList)
                                             {
@@ -97,19 +123,56 @@
         $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
         $('.tab-pane').eq(hash.substr(1)).addClass('active');
 
+        var contentIndex;
+        var $contentList = $('#list-content');
+
         $(document).ready(function () {
             $('.select-attr').select2Sortable();
 
             $('#LangID').change(function () {
                 website.AjaxUrl('@Url.Action("GetLangData", "SkuType", new { ID = Model.ID })', 'get', { LangID: $(this).val() }).done(function (response) {
                     if (response.status) {
+                        var contentIndex = 0;
                         $('#Name').val(response.data.Name);
+                        $contentList.html('');
+                        $.each(response.data.PackageContent, function (ID, val) {
+                            ContentAdd(contentIndex++, ID, val);
+                        });
                     } else {
                         alert(response.message);
                     }
                 });
-            });
+            }).trigger('change');
         });
+
+        function ContentAdd(i, ID, value) {
+            if (i == null) {
+                if ($('#LangID').val() != '@EnumData.DataLangList().First().Key') return;
+                i = $contentList.find('tr').length;
+            }
+            var $newContent = $("<tr rel='" + ID + "'>").append("<input type='hidden' name='PackageContent[" + i + "][ItemID]' value='" + ID + "'>");
+            $newContent.append($("<td class='no-padding middle'>").append("<input type='text' class='form-control' name='PackageContent[" + (i++) + "][Name]' value='" + value + "'>"));
+            $newContent.append($("<td>").append("<button type='button' class='btn btn-default btn-sm' onclick='ContentDel($(this));'>－</button>"));
+            $contentList.append($newContent);
+        }
+
+        function ContentDel($btn) {
+            if ($('#LangID').val() == '@EnumData.DataLangList().First().Key') {
+                $item = $btn.parents('tr:eq(0)');
+
+                if (!website.IsEmpty($item.attr('rel'))) {
+                    website.AjaxUrl('@Url.Action("RemovePackageContent", "SkuType")', 'post', { ID: $item.attr('rel') });
+                }
+
+                $item.remove();
+
+                contentIndex = 0
+                $contentList.find('tr').each(function () {
+                    ContentAdd(contentIndex++, $(this).find(':hidden').val(), $(this).find(':text').val());
+                    $(this).remove();
+                });
+            }
+        }
 
 
         function getSortableUl($select) {
@@ -172,7 +235,6 @@
         }
 
         $.fn.extend({
-
             select2Sortable: function (val) {
                 this.each(function () {
                     var $select = $(this);
