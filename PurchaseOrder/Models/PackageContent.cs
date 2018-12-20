@@ -33,5 +33,6 @@ namespace PurchaseOrderSys.Models
         public virtual ICollection<PackageContentLang> PackageContentLang { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Sku_PackageContent> Sku_PackageContent { get; set; }
+        public virtual SkuType SkuType { get; set; }
     }
 }

@@ -47,21 +47,34 @@ namespace PurchaseOrderSys.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IsEnable,NetoID")] SkuType skuType, SkuTypeLang langData, Dictionary<string, int[]> AttributeGroup)
+        public ActionResult Create([Bind(Include = "IsEnable,NetoID")] SkuType skuType, SkuTypeLang langData, string[] PackageContent, Dictionary<string, int[]> AttributeGroup)
         {
             skuType.AttributeGroup = Newtonsoft.Json.JsonConvert.SerializeObject(AttributeGroup ?? new Dictionary<string, int[]> { });
             skuType.CreateAt = DateTime.UtcNow;
             skuType.CreateBy = Session["AdminName"].ToString();
-
-            db.SkuType.Add(skuType);
-            db.SaveChanges();
 
             langData.TypeID = skuType.ID;
             langData.LangID = EnumData.DataLangList().Keys.First();
             langData.CreateAt = skuType.CreateAt;
             langData.CreateBy = skuType.CreateBy;
 
-            db.SkuTypeLang.Add(langData);
+            skuType.SkuTypeLang.Add(langData);
+            if (PackageContent.Any())
+            {
+                foreach (string content in PackageContent)
+                {
+                    PackageContent newPC = new PackageContent() { IsEnable = true, CreateAt = skuType.CreateAt, CreateBy = skuType.CreateBy };
+                    newPC.PackageContentLang.Add(new PackageContentLang()
+                    {
+                        LangID = langData.LangID,
+                        Name = content,
+                        CreateAt = skuType.CreateAt,
+                        CreateBy = skuType.CreateBy
+                    });
+                    skuType.PackageContent.Add(newPC);
+                }
+            }
+            db.SkuType.Add(skuType);
             db.SaveChanges();
 
             return RedirectToAction("Edit", new { id = skuType.ID });
@@ -86,7 +99,7 @@ namespace PurchaseOrderSys.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,NetoID")] SkuType updateData, [Bind(Include = "LangID,Name")] SkuTypeLang langData, Dictionary<string, int[]> AttributeGroup)
+        public ActionResult Edit([Bind(Include = "ID,NetoID")] SkuType updateData, [Bind(Include = "LangID,Name")] SkuTypeLang langData, PackageContentLang[] PackageContent, Dictionary<string, int[]> AttributeGroup)
         {
             SkuType skuType = db.SkuType.Find(updateData.ID);
             if (skuType == null) return HttpNotFound();
@@ -95,7 +108,6 @@ namespace PurchaseOrderSys.Controllers
             skuType.AttributeGroup = Newtonsoft.Json.JsonConvert.SerializeObject(AttributeGroup ?? new Dictionary<string, int[]> { });
             skuType.UpdateAt = DateTime.UtcNow;
             skuType.UpdateBy = Session["AdminName"].ToString();
-            db.Entry(skuType).State = EntityState.Modified;
 
             if (skuType.SkuTypeLang.Any(l => l.LangID.Equals(langData.LangID)))
             {
@@ -103,14 +115,45 @@ namespace PurchaseOrderSys.Controllers
                 attributeLang.Name = langData.Name;
                 attributeLang.UpdateAt = skuType.UpdateAt.Value;
                 attributeLang.UpdateBy = skuType.UpdateBy;
-                db.Entry(attributeLang).State = EntityState.Modified;
             }
             else
             {
-                langData.TypeID = skuType.ID;
                 langData.CreateAt = skuType.UpdateAt.Value;
                 langData.CreateBy = skuType.UpdateBy;
-                db.Entry(langData).State = EntityState.Added;
+                skuType.SkuTypeLang.Add(langData);
+            }
+
+            if (PackageContent.Any())
+            {
+                foreach (var content in PackageContent)
+                {
+                    if (content.ItemID != 0)
+                    {
+                        var contentLang = skuType.PackageContent.First(c => c.ID.Equals(content.ItemID)).PackageContentLang.First(l => l.LangID.Equals(langData.LangID));
+                        contentLang.Name = content.Name;
+                        contentLang.UpdateAt = skuType.UpdateAt.Value;
+                        contentLang.UpdateBy = skuType.UpdateBy;
+                    }
+                    else
+                    {
+                        var packageContent = new PackageContent()
+                        {
+                            IsEnable = true,
+                            CreateAt = skuType.UpdateAt.Value,
+                            CreateBy = skuType.UpdateBy
+                        };
+
+                        packageContent.PackageContentLang.Add(new PackageContentLang()
+                        {
+                            Name = content.Name,
+                            LangID = langData.LangID,
+                            CreateAt = skuType.UpdateAt.Value,
+                            CreateBy = skuType.UpdateBy
+                        });
+
+                        skuType.PackageContent.Add(packageContent);
+                    }
+                }
             }
 
             db.SaveChanges();
@@ -199,7 +242,38 @@ namespace PurchaseOrderSys.Controllers
         {
             AjaxResult result = new AjaxResult();
 
-            result.data = new { db.SkuTypeLang.FirstOrDefault(l => l.TypeID.Equals(ID) && l.LangID.Equals(LangID))?.Name };
+            SkuType type = db.SkuType.Find(ID);
+            SkuTypeLang langData = type.SkuTypeLang.FirstOrDefault(l => l.LangID.Equals(LangID));
+
+            var DefaultLangID = EnumData.DataLangList().First().Key;
+            result.data = new
+            {
+                langData?.Name,
+                PackageContent = type.PackageContent.Where(c => c.IsEnable).Select(c => c.PackageContentLang.First(l => l.LangID.Equals(c.PackageContentLang.Any(ll => ll.LangID.Equals(LangID)) ? LangID : DefaultLangID))).ToDictionary(l => l.ItemID.ToString(), l => l.Name)
+            };
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult RemovePackageContent(int ID)
+        {
+            AjaxResult result = new AjaxResult();
+
+            try
+            {
+                var content = db.PackageContent.Find(ID);
+                var langList = content.PackageContentLang.ToList();
+
+                db.PackageContentLang.RemoveRange(langList);
+                db.PackageContent.Remove(content);
+                db.SaveChanges();
+            }
+            catch(Exception e)
+            {
+                result.status = false;
+                result.message = e.InnerException != null && !string.IsNullOrEmpty(e.InnerException.Message) ? e.InnerException.Message : e.Message;
+            }
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }

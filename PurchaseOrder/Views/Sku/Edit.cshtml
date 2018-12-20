@@ -3,6 +3,11 @@
     <link href="~/Scripts/plugin/ckeditor/skins/moono/editor.css" rel="stylesheet" />
     <link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
     <link href="~/Content/themes/icon.css" rel="stylesheet" />
+    <style>
+        #list-kit tr td {
+            vertical-align: middle;
+        }
+    </style>
 }
 @{
     string LangID = (string)ViewBag.LangID;
@@ -622,8 +627,8 @@
             var name = 'KitSku[' + parseInt(index) + ']';
             var $newKit = $("<tr rel=''>").append($("<input type='hidden' name='" + name + "[ParentKit]' value='@Model.SkuID'>"));
             $newKit.append($("<td colspan='2'>").append($("<input type='text' class='form-control' name='" + name + "[Sku]' style='width:80%;height:30px;'>")));
-            $newKit.append($('<td>').append($("<input type='number' class='form-control' name='" + name + "[Qty]'>")));
-            $newKit.append($('<td>').append($("<button type='button' class='btn btn-default btn-sm' onclick='$(this).parents(\"tr\").remove();'>–</button>")));
+            $newKit.append($('<td>').append($("<input type='text' class='form-control' name='" + name + "[Qty]'>")));
+            $newKit.append($('<td>').append($("<button type='button' class='btn btn-default btn-sm' onclick='KitDel($(this))'>–</button>")));
 
             $newKit.find(':text:eq(0)').combobox({
                 valueField: 'value',
@@ -659,7 +664,27 @@
         }
 
         function KitDel($btn) {
+            $kit = $btn.parents('tr:eq(0)');
 
+            if (!website.IsEmpty($kit.attr('rel'))) {
+                website.AjaxUrl('@Url.Action("RemoveKit", "Sku")', 'post', { ID: $kit.attr('rel'), ParentKit: '@Model.SkuID' });
+            }
+
+            $kit.remove();
+
+            $kitList.find('tr').each(function(i) {
+                var name = 'KitSku[' + i + ']';
+                if (!website.IsEmpty($kit.attr('rel'))) {
+                    $(this).find(':hidden:eq(0)').attr('name', name + '[sku]');
+                    $(this).find(':hidden:eq(1)').attr('name', name + '[ParentKit]');
+                    $(this).find(':text').attr('name', name + '[Qty]');
+                } else {
+                    $(this).find(':hidden:eq(0)').attr('name', name + '[ParentKit]');
+                    $(this).find(':text:eq(0)').attr('textboxname', name + '[Sku]');
+                    $(this).find('input.textbox-value').attr('name', name + '[Sku]');
+                    $(this).find(':text:eq(2)').attr('name', name + '[Qty]');
+                }
+            });
         }
 
         function ResetSpecContent() {

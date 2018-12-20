@@ -801,6 +801,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PackageContent_SkuType">
+          <End Role="SkuType" Type="Self.SkuType" Multiplicity="1" />
+          <End Role="PackageContent" Type="Self.PackageContent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SkuType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PackageContent">
+              <PropertyRef Name="TypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_PackageContentLang_PackageContent">
           <End Role="PackageContent" Type="Self.PackageContent" Multiplicity="1" />
           <End Role="PackageContentLang" Type="Self.PackageContentLang" Multiplicity="*" />
@@ -1249,6 +1261,10 @@
             <End Role="Menu" EntitySet="Menu" />
             <End Role="MenuLang" EntitySet="MenuLang" />
           </AssociationSet>
+          <AssociationSet Name="FK_PackageContent_SkuType" Association="Self.FK_PackageContent_SkuType">
+            <End Role="SkuType" EntitySet="SkuType" />
+            <End Role="PackageContent" EntitySet="PackageContent" />
+          </AssociationSet>
           <AssociationSet Name="FK_PackageContentLang_PackageContent" Association="Self.FK_PackageContentLang_PackageContent">
             <End Role="PackageContent" EntitySet="PackageContent" />
             <End Role="PackageContentLang" EntitySet="PackageContentLang" />
@@ -1510,10 +1526,6 @@
             <End Role="SKU" EntitySet="SKU" />
             <End Role="KitSku" EntitySet="KitSku" />
           </AssociationSet>
-          <AssociationSet Name="FK_KitSku_Sku1" Association="PurchaseOrderModel.FK_KitSku_Sku1">
-            <End Role="SKU" EntitySet="SKU" />
-            <End Role="KitSku" EntitySet="KitSku" />
-          </AssociationSet>
           <AssociationSet Name="FK_Sku_Attribute_Sku" Association="PurchaseOrderModel.FK_Sku_Attribute_Sku">
             <End Role="SKU" EntitySet="SKU" />
             <End Role="Sku_Attribute" EntitySet="Sku_Attribute" />
@@ -1577,6 +1589,14 @@
           <AssociationSet Name="FK_WarehouseSummary_Warehouse" Association="PurchaseOrderModel.FK_WarehouseSummary_Warehouse">
             <End Role="Warehouse" EntitySet="Warehouse" />
             <End Role="WarehouseSummary" EntitySet="WarehouseSummary" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PackageContent_SkuType" Association="PurchaseOrderModel.FK_PackageContent_SkuType">
+            <End Role="SkuType" EntitySet="SkuType" />
+            <End Role="PackageContent" EntitySet="PackageContent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_KitSku_Sku1" Association="PurchaseOrderModel.FK_KitSku_Sku1">
+            <End Role="SKU" EntitySet="SKU" />
+            <End Role="KitSku" EntitySet="KitSku" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="PurchaseOrder">
@@ -2220,6 +2240,7 @@
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
           <NavigationProperty Name="SkuTypeLang" Relationship="PurchaseOrderModel.FK_SkuTypeLang_SkuType" FromRole="SkuType" ToRole="SkuTypeLang" />
           <NavigationProperty Name="SKU" Relationship="PurchaseOrderModel.FK_Sku_SkuType" FromRole="SkuType" ToRole="SKU" />
+          <NavigationProperty Name="PackageContent" Relationship="PurchaseOrderModel.FK_PackageContent_SkuType" FromRole="SkuType" ToRole="PackageContent" />
         </EntityType>
         <EntityType Name="SkuTypeLang">
           <Key>
@@ -2421,7 +2442,7 @@
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
           <NavigationProperty Name="GetBrand" Relationship="PurchaseOrderModel.FK_Sku_Brand" FromRole="SKU" ToRole="Brand" />
           <NavigationProperty Name="GetCondition" Relationship="PurchaseOrderModel.FK_Sku_Condition" FromRole="SKU" ToRole="Condition" />
-          <NavigationProperty Name="GetKit" Relationship="PurchaseOrderModel.FK_KitSku_Sku" FromRole="SKU" ToRole="KitSku" />
+          <NavigationProperty Name="GetKit" Relationship="PurchaseOrderModel.FK_KitSku_Sku1" FromRole="SKU" ToRole="KitSku" />
           <NavigationProperty Name="Sku_Attribute" Relationship="PurchaseOrderModel.FK_Sku_Attribute_Sku" FromRole="SKU" ToRole="Sku_Attribute" />
           <NavigationProperty Name="SkuType" Relationship="PurchaseOrderModel.FK_Sku_SkuType" FromRole="SKU" ToRole="SkuType" />
           <NavigationProperty Name="SkuLang" Relationship="PurchaseOrderModel.FK_SkuLang_Sku" FromRole="SKU" ToRole="SkuLang" />
@@ -2461,18 +2482,6 @@
             </Principal>
             <Dependent Role="KitSku">
               <PropertyRef Name="Sku" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_KitSku_Sku1">
-          <End Type="PurchaseOrderModel.SKU" Role="SKU" Multiplicity="1" />
-          <End Type="PurchaseOrderModel.KitSku" Role="KitSku" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SKU">
-              <PropertyRef Name="SkuID" />
-            </Principal>
-            <Dependent Role="KitSku">
-              <PropertyRef Name="ParentKit" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2709,6 +2718,7 @@
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
           <NavigationProperty Name="PackageContentLang" Relationship="PurchaseOrderModel.FK_PackageContentLang_PackageContent" FromRole="PackageContent" ToRole="PackageContentLang" />
           <NavigationProperty Name="Sku_PackageContent" Relationship="PurchaseOrderModel.FK_Sku_PackageContent_PackageContent" FromRole="PackageContent" ToRole="Sku_PackageContent" />
+          <NavigationProperty Name="SkuType" Relationship="PurchaseOrderModel.FK_PackageContent_SkuType" FromRole="PackageContent" ToRole="SkuType" />
         </EntityType>
         <EntityType Name="PackageContentLang">
           <Key>
@@ -2823,6 +2833,30 @@
             </Principal>
             <Dependent Role="WarehouseSummary">
               <PropertyRef Name="WarehouseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PackageContent_SkuType">
+          <End Type="PurchaseOrderModel.SkuType" Role="SkuType" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.PackageContent" Role="PackageContent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SkuType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PackageContent">
+              <PropertyRef Name="TypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_KitSku_Sku1">
+          <End Type="PurchaseOrderModel.SKU" Role="SKU" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.KitSku" Role="KitSku" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SKU">
+              <PropertyRef Name="SkuID" />
+            </Principal>
+            <Dependent Role="KitSku">
+              <PropertyRef Name="ParentKit" />
             </Dependent>
           </ReferentialConstraint>
         </Association>

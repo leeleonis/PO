@@ -57,11 +57,10 @@
         <AssociationConnector Association="PurchaseOrderModel.FK_SkuTypeLang_SkuType" />
         <EntityTypeShape EntityType="PurchaseOrderModel.KitSku" Width="1.5" PointX="7.625" PointY="22.125" />
         <EntityTypeShape EntityType="PurchaseOrderModel.SkuPicture" Width="1.5" PointX="7.625" PointY="18.375" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.SKU" Width="1.5" PointX="6" PointY="25.5" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.SKU" Width="1.5" PointX="6" PointY="26" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Sku_Brand" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Sku_Condition" />
         <AssociationConnector Association="PurchaseOrderModel.FK_KitSku_Sku" />
-        <AssociationConnector Association="PurchaseOrderModel.FK_KitSku_Sku1" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Sku_Attribute_Sku" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Sku_SkuType" />
         <AssociationConnector Association="PurchaseOrderModel.FK_SkuLang_Sku" />
@@ -84,6 +83,8 @@
         <AssociationConnector Association="PurchaseOrderModel.FK_Sku_PackageContent_PackageContent" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Sku_PackageContent_SKU" />
         <AssociationConnector Association="PurchaseOrderModel.FK_WarehouseSummary_Warehouse" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_PackageContent_SkuType" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_KitSku_Sku1" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

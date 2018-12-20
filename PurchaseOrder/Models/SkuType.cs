@@ -19,6 +19,7 @@ namespace PurchaseOrderSys.Models
         {
             this.SkuTypeLang = new HashSet<SkuTypeLang>();
             this.SKU = new HashSet<SKU>();
+            this.PackageContent = new HashSet<PackageContent>();
         }
     
         public bool IsEnable { get; set; }
@@ -34,5 +35,7 @@ namespace PurchaseOrderSys.Models
         public virtual ICollection<SkuTypeLang> SkuTypeLang { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SKU> SKU { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PackageContent> PackageContent { get; set; }
     }
 }

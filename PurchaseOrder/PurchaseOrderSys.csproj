@@ -245,6 +245,18 @@
     <Compile Include="Models\CarrierMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CMCreditNote.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CMCreditNoteMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CMReplacement.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CMReplacementMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Company.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
     </Compile>
@@ -313,6 +325,18 @@
     <Compile Include="Models\Objects\Neto\Schema\GetWarehouseResponse.cs" />
     <Compile Include="Models\Objects\Neto\Schema\UpdateItem.cs" />
     <Compile Include="Models\Objects\Neto\Schema\UpdateItemResponse.cs" />
+    <Compile Include="Models\PackageContent.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PackageContentLang.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PackageContentLangMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PackageContentMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PurchaseMdel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -413,6 +437,12 @@
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Objects\StockKeepingUnit.cs" />
+    <Compile Include="Models\Sku_PackageContent.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Sku_PackageContentMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Transfer.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
     </Compile>
@@ -436,6 +466,12 @@
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\WarehouseMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\WarehouseSummary.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\WarehouseSummaryMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\WarehouseUser.cs">
@@ -1735,6 +1771,7 @@
     <EmbeddedResource Include="App_GlobalResources\Resource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -1747,6 +1784,7 @@
     <EmbeddedResource Include="App_GlobalResources\Resource.zh-TW.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.zh-TW.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

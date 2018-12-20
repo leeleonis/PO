@@ -630,6 +630,31 @@ namespace PurchaseOrderSys.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        public ActionResult RemoveKit(string ID, string ParentKit)
+        {
+            AjaxResult result = new AjaxResult();
+
+            SKU sku = db.SKU.Find(ParentKit);
+
+            try
+            {
+                if (sku == null) throw new Exception("Not found parent sku!");
+
+                var kit = sku.GetKit.First(k => k.Sku.Equals(ID));
+                sku.GetKit.Remove(kit);
+
+                db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                result.status = false;
+                result.message = e.InnerException != null ? e.InnerException.Message ?? e.Message : e.Message;
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult GetSpecContent(string ID, string LangID)
         {
             AjaxResult result = new AjaxResult();
