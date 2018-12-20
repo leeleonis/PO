@@ -14,14 +14,15 @@ namespace PurchaseOrderSys.Controllers
         // GET: DispatchWarehouse
         public ActionResult Index()
         {
-
             var Warehouse = db.Warehouse.Where(x => x.IsEnable);
             return View(Warehouse);
         }
         public ActionResult Create()
         {
           
-            ViewBag.Warehouse3PList = new PurchaseOrderSys.Api.Winit_API().Warehouse3P();
+            ViewBag.Warehouse3PList = new Api.Winit_API().Warehouse3P();
+            ViewBag.SCList = new Api.SC_API().SCList();
+            ViewBag.SCList = new Api.Shipping_API().ShippingList();
             return View();
         }
         [HttpPost]
