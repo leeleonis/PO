@@ -46,7 +46,6 @@ namespace PurchaseOrderSys.Models
         public virtual DbSet<DirectLine> DirectLine { get; set; }
         public virtual DbSet<Menu> Menu { get; set; }
         public virtual DbSet<MenuLang> MenuLang { get; set; }
-        public virtual DbSet<ShippingMethod> ShippingMethod { get; set; }
         public virtual DbSet<Sku_Attribute> Sku_Attribute { get; set; }
         public virtual DbSet<SkuAttribute> SkuAttribute { get; set; }
         public virtual DbSet<SkuAttributeLang> SkuAttributeLang { get; set; }
@@ -59,5 +58,6 @@ namespace PurchaseOrderSys.Models
         public virtual DbSet<CreditMemo> CreditMemo { get; set; }
         public virtual DbSet<PurchaseSKU> PurchaseSKU { get; set; }
         public virtual DbSet<WarehouseSummary> WarehouseSummary { get; set; }
+        public virtual DbSet<ShippingMethod> ShippingMethod { get; set; }
     }
 }

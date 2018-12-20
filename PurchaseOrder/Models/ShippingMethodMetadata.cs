@@ -1,11 +1,12 @@
-using System;
+using System; 
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// ShippingMethod class
     /// </summary>
@@ -28,6 +29,14 @@ namespace PurchaseOrderSys.Models
     
     		    
     		/// <summary>
+    		/// Is Direct Line
+    		/// </summary>        
+    	    [Display(Name = "ShippingMethod_IsDirectLine", ResourceType = typeof(App_GlobalResources.Resource))]
+            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public bool  IsDirectLine { get; set; }
+    
+    		    
+    		/// <summary>
     		/// ID
     		/// </summary>        
     	    [Display(Name = "ShippingMethod_ID", ResourceType = typeof(App_GlobalResources.Resource))]
@@ -39,25 +48,37 @@ namespace PurchaseOrderSys.Models
     		/// Name
     		/// </summary>        
     	    [Display(Name = "ShippingMethod_Name", ResourceType = typeof(App_GlobalResources.Resource))]
-            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  Name { get; set; }
     
     		    
     		/// <summary>
-    		/// Carrier
+    		/// Carrier ID
     		/// </summary>        
-    	    [Display(Name = "ShippingMethod_Carrier", ResourceType = typeof(App_GlobalResources.Resource))]
-            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public int  Carrier { get; set; }
+    	    [Display(Name = "ShippingMethod_CarrierID", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  CarrierID { get; set; }
     
     		    
     		/// <summary>
-    		/// API
+    		/// Method Type
     		/// </summary>        
-    	    [Display(Name = "ShippingMethod_API", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "ShippingMethod_MethodType", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  MethodType { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// In Box
+    		/// </summary>        
+    	    [Display(Name = "ShippingMethod_InBox", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public int  API { get; set; }
+    		public bool  InBox { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Box Type
+    		/// </summary>        
+    	    [Display(Name = "ShippingMethod_BoxType", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  BoxType { get; set; }
     
     		    
     		/// <summary>
@@ -69,46 +90,6 @@ namespace PurchaseOrderSys.Models
     
     		    
     		/// <summary>
-    		/// Service Type
-    		/// </summary>        
-    	    [Display(Name = "ShippingMethod_ServiceType", ResourceType = typeof(App_GlobalResources.Resource))]
-            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public int  ServiceType { get; set; }
-    
-    		    
-    		/// <summary>
-    		/// Package Type
-    		/// </summary>        
-    	    [Display(Name = "ShippingMethod_PackageType", ResourceType = typeof(App_GlobalResources.Resource))]
-            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public int  PackageType { get; set; }
-    
-    		    
-    		/// <summary>
-    		/// Is Export
-    		/// </summary>        
-    	    [Display(Name = "ShippingMethod_IsExport", ResourceType = typeof(App_GlobalResources.Resource))]
-            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public bool  IsExport { get; set; }
-    
-    		    
-    		/// <summary>
-    		/// Is Battery
-    		/// </summary>        
-    	    [Display(Name = "ShippingMethod_IsBattery", ResourceType = typeof(App_GlobalResources.Resource))]
-            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public bool  IsBattery { get; set; }
-    
-    		    
-    		/// <summary>
-    		/// Is Box
-    		/// </summary>        
-    	    [Display(Name = "ShippingMethod_IsBox", ResourceType = typeof(App_GlobalResources.Resource))]
-            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public bool  IsBox { get; set; }
-    
-    		    
-    		/// <summary>
     		/// Printer Name
     		/// </summary>        
     	    [Display(Name = "ShippingMethod_PrinterName", ResourceType = typeof(App_GlobalResources.Resource))]
@@ -117,38 +98,110 @@ namespace PurchaseOrderSys.Models
     
     		    
     		/// <summary>
-    		/// Create By
+    		/// Is Export
     		/// </summary>        
-    	    [Display(Name = "ShippingMethod_CreateBy", ResourceType = typeof(App_GlobalResources.Resource))]
-            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public string  CreateBy { get; set; }
+    	    [Display(Name = "ShippingMethod_IsExport", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<bool>  IsExport { get; set; }
     
     		    
     		/// <summary>
-    		/// Create At
+    		/// Is Battery
     		/// </summary>        
-    	    [Display(Name = "ShippingMethod_CreateAt", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "ShippingMethod_IsBattery", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<bool>  IsBattery { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Country Data
+    		/// </summary>        
+    	    [Display(Name = "ShippingMethod_CountryData", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  CountryData { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Sync On
+    		/// </summary>        
+    	    [Display(Name = "ShippingMethod_SyncOn", ResourceType = typeof(App_GlobalResources.Resource))]
             [UIHint("DateTime")]
-            [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public System.DateTime  CreateAt { get; set; }
+    		public Nullable<System.DateTime>  SyncOn { get; set; }
     
     		    
     		/// <summary>
-    		/// Update By
+    		/// Contact Name
     		/// </summary>        
-    	    [Display(Name = "ShippingMethod_UpdateBy", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "ShippingMethod_ContactName", ResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public string  UpdateBy { get; set; }
+    		public string  ContactName { get; set; }
     
     		    
     		/// <summary>
-    		/// Update At
+    		/// Conpany Name
     		/// </summary>        
-    	    [Display(Name = "ShippingMethod_UpdateAt", ResourceType = typeof(App_GlobalResources.Resource))]
-            [UIHint("DateTime")]
-    		public Nullable<System.DateTime>  UpdateAt { get; set; }
+    	    [Display(Name = "ShippingMethod_ConpanyName", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  ConpanyName { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Phone Number
+    		/// </summary>        
+    	    [Display(Name = "ShippingMethod_PhoneNumber", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  PhoneNumber { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Country Name
+    		/// </summary>        
+    	    [Display(Name = "ShippingMethod_CountryName", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  CountryName { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Country Code
+    		/// </summary>        
+    	    [Display(Name = "ShippingMethod_CountryCode", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(3, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  CountryCode { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// City
+    		/// </summary>        
+    	    [Display(Name = "ShippingMethod_City", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  City { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Street Line1
+    		/// </summary>        
+    	    [Display(Name = "ShippingMethod_StreetLine1", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  StreetLine1 { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Street Line2
+    		/// </summary>        
+    	    [Display(Name = "ShippingMethod_StreetLine2", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  StreetLine2 { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// State Name
+    		/// </summary>        
+    	    [Display(Name = "ShippingMethod_StateName", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  StateName { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Postal Code
+    		/// </summary>        
+    	    [Display(Name = "ShippingMethod_PostalCode", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  PostalCode { get; set; }
     
     		    
     	}

@@ -334,21 +334,29 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="IsEnable" Type="bit" Nullable="false" />
+          <Property Name="IsDirectLine" Type="bit" Nullable="false" />
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Carrier" Type="int" Nullable="false" />
-          <Property Name="API" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="CarrierID" Type="int" />
+          <Property Name="MethodType" Type="int" />
+          <Property Name="InBox" Type="bit" Nullable="false" />
+          <Property Name="BoxType" Type="int" />
           <Property Name="DirectLine" Type="int" Nullable="false" />
-          <Property Name="ServiceType" Type="int" Nullable="false" />
-          <Property Name="PackageType" Type="int" Nullable="false" />
-          <Property Name="IsExport" Type="bit" Nullable="false" />
-          <Property Name="IsBattery" Type="bit" Nullable="false" />
-          <Property Name="IsBox" Type="bit" Nullable="false" />
           <Property Name="PrinterName" Type="nvarchar" MaxLength="50" />
-          <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="CreateAt" Type="datetime" Nullable="false" />
-          <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
-          <Property Name="UpdateAt" Type="datetime" />
+          <Property Name="IsExport" Type="bit" />
+          <Property Name="IsBattery" Type="bit" />
+          <Property Name="CountryData" Type="nvarchar(max)" />
+          <Property Name="SyncOn" Type="datetime" />
+          <Property Name="ContactName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ConpanyName" Type="nvarchar" MaxLength="50" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="CountryName" Type="nvarchar" MaxLength="50" />
+          <Property Name="CountryCode" Type="nvarchar" MaxLength="3" />
+          <Property Name="City" Type="nvarchar" MaxLength="50" />
+          <Property Name="StreetLine1" Type="nvarchar(max)" />
+          <Property Name="StreetLine2" Type="nvarchar(max)" />
+          <Property Name="StateName" Type="nvarchar" MaxLength="50" />
+          <Property Name="PostalCode" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="SKU">
           <Key>
@@ -358,7 +366,7 @@
           <Property Name="SkuID" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Type" Type="tinyint" Nullable="false" />
           <Property Name="ParentSku" Type="nvarchar" MaxLength="50" />
-          <Property Name="ParentKit" Type="nvarchar" MaxLength="50" />
+          <Property Name="ParentShadow" Type="nvarchar" MaxLength="50" />
           <Property Name="Condition" Type="int" Nullable="false" />
           <Property Name="Category" Type="int" Nullable="false" />
           <Property Name="Brand" Type="int" Nullable="false" />
@@ -395,7 +403,7 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="IsEnable" Type="bit" Nullable="false" />
-          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Type" Type="int" Nullable="false" />
           <Property Name="Property" Type="tinyint" Nullable="false" />
           <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
@@ -787,42 +795,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ShippingMethod_API">
-          <End Role="API" Type="Self.API" Multiplicity="1" />
-          <End Role="ShippingMethod" Type="Self.ShippingMethod" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="API">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="ShippingMethod">
-              <PropertyRef Name="API" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ShippingMethod_Carrier">
-          <End Role="Carrier" Type="Self.Carrier" Multiplicity="1" />
-          <End Role="ShippingMethod" Type="Self.ShippingMethod" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Carrier">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="ShippingMethod">
-              <PropertyRef Name="Carrier" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ShippingMethod_DirectLine">
-          <End Role="DirectLine" Type="Self.DirectLine" Multiplicity="1" />
-          <End Role="ShippingMethod" Type="Self.ShippingMethod" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="DirectLine">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="ShippingMethod">
-              <PropertyRef Name="DirectLine" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Sku_Attribute_Sku">
           <End Role="SKU" Type="Self.SKU" Multiplicity="1" />
           <End Role="Sku_Attribute" Type="Self.Sku_Attribute" Multiplicity="*" />
@@ -1114,18 +1086,6 @@
             <End Role="TransferSKU" EntitySet="TransferSKU" />
             <End Role="SerialsLlist" EntitySet="SerialsLlist" />
           </AssociationSet>
-          <AssociationSet Name="FK_ShippingMethod_API" Association="Self.FK_ShippingMethod_API">
-            <End Role="API" EntitySet="API" />
-            <End Role="ShippingMethod" EntitySet="ShippingMethod" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ShippingMethod_Carrier" Association="Self.FK_ShippingMethod_Carrier">
-            <End Role="Carrier" EntitySet="Carrier" />
-            <End Role="ShippingMethod" EntitySet="ShippingMethod" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ShippingMethod_DirectLine" Association="Self.FK_ShippingMethod_DirectLine">
-            <End Role="DirectLine" EntitySet="DirectLine" />
-            <End Role="ShippingMethod" EntitySet="ShippingMethod" />
-          </AssociationSet>
           <AssociationSet Name="FK_Sku_Attribute_Sku" Association="Self.FK_Sku_Attribute_Sku">
             <End Role="SKU" EntitySet="SKU" />
             <End Role="Sku_Attribute" EntitySet="Sku_Attribute" />
@@ -1261,7 +1221,6 @@
           <EntitySet Name="DirectLine" EntityType="PurchaseOrderModel.DirectLine" />
           <EntitySet Name="Menu" EntityType="PurchaseOrderModel.Menu" />
           <EntitySet Name="MenuLang" EntityType="PurchaseOrderModel.MenuLang" />
-          <EntitySet Name="ShippingMethod" EntityType="PurchaseOrderModel.ShippingMethod" />
           <EntitySet Name="Sku_Attribute" EntityType="PurchaseOrderModel.Sku_Attribute" />
           <EntitySet Name="SkuAttribute" EntityType="PurchaseOrderModel.SkuAttribute" />
           <EntitySet Name="SkuAttributeLang" EntityType="PurchaseOrderModel.SkuAttributeLang" />
@@ -1272,21 +1231,9 @@
             <End Role="AdminGroup" EntitySet="AdminGroup" />
             <End Role="AdminUser" EntitySet="AdminUser" />
           </AssociationSet>
-          <AssociationSet Name="FK_ShippingMethod_API" Association="PurchaseOrderModel.FK_ShippingMethod_API">
-            <End Role="API" EntitySet="API" />
-            <End Role="ShippingMethod" EntitySet="ShippingMethod" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ShippingMethod_Carrier" Association="PurchaseOrderModel.FK_ShippingMethod_Carrier">
-            <End Role="Carrier" EntitySet="Carrier" />
-            <End Role="ShippingMethod" EntitySet="ShippingMethod" />
-          </AssociationSet>
           <AssociationSet Name="FK_ConditionLang_Condition" Association="PurchaseOrderModel.FK_ConditionLang_Condition">
             <End Role="Condition" EntitySet="Condition" />
             <End Role="ConditionLang" EntitySet="ConditionLang" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ShippingMethod_DirectLine" Association="PurchaseOrderModel.FK_ShippingMethod_DirectLine">
-            <End Role="DirectLine" EntitySet="DirectLine" />
-            <End Role="ShippingMethod" EntitySet="ShippingMethod" />
           </AssociationSet>
           <AssociationSet Name="FK_Menu_Menu" Association="PurchaseOrderModel.FK_Menu_Menu">
             <End Role="Menu" EntitySet="Menu" />
@@ -1370,6 +1317,7 @@
             <End Role="Warehouse" EntitySet="Warehouse" />
             <End Role="WarehouseSummary" EntitySet="WarehouseSummary" />
           </AssociationSet>
+          <EntitySet Name="ShippingMethod" EntityType="PurchaseOrderModel.ShippingMethod" />
           </EntityContainer>
         <EntityType Name="PurchaseOrder">
           <Key>
@@ -1780,7 +1728,6 @@
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="ShippingMethod" Relationship="PurchaseOrderModel.FK_ShippingMethod_API" FromRole="API" ToRole="ShippingMethod" />
         </EntityType>
         <EntityType Name="Auth">
           <Key>
@@ -1817,7 +1764,6 @@
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="ShippingMethod" Relationship="PurchaseOrderModel.FK_ShippingMethod_Carrier" FromRole="Carrier" ToRole="ShippingMethod" />
         </EntityType>
         <EntityType Name="Condition">
           <Key>
@@ -1876,7 +1822,6 @@
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="ShippingMethod" Relationship="PurchaseOrderModel.FK_ShippingMethod_DirectLine" FromRole="DirectLine" ToRole="ShippingMethod" />
         </EntityType>
         <EntityType Name="Menu">
           <Key>
@@ -1907,30 +1852,6 @@
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Menu" Relationship="PurchaseOrderModel.FK_MenuLang_Menu" FromRole="MenuLang" ToRole="Menu" />
-        </EntityType>
-        <EntityType Name="ShippingMethod">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Carrier" Type="Int32" Nullable="false" />
-          <Property Name="API" Type="Int32" Nullable="false" />
-          <Property Name="DirectLine" Type="Int32" Nullable="false" />
-          <Property Name="ServiceType" Type="Int32" Nullable="false" />
-          <Property Name="PackageType" Type="Int32" Nullable="false" />
-          <Property Name="IsExport" Type="Boolean" Nullable="false" />
-          <Property Name="IsBattery" Type="Boolean" Nullable="false" />
-          <Property Name="IsBox" Type="Boolean" Nullable="false" />
-          <Property Name="PrinterName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="GetAPI" Relationship="PurchaseOrderModel.FK_ShippingMethod_API" FromRole="ShippingMethod" ToRole="API" />
-          <NavigationProperty Name="GetCarrier" Relationship="PurchaseOrderModel.FK_ShippingMethod_Carrier" FromRole="ShippingMethod" ToRole="Carrier" />
-          <NavigationProperty Name="GetDirectLine" Relationship="PurchaseOrderModel.FK_ShippingMethod_DirectLine" FromRole="ShippingMethod" ToRole="DirectLine" />
         </EntityType>
         <EntityType Name="Sku_Attribute">
           <Key>
@@ -2037,30 +1958,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ShippingMethod_API">
-          <End Type="PurchaseOrderModel.API" Role="API" Multiplicity="1" />
-          <End Type="PurchaseOrderModel.ShippingMethod" Role="ShippingMethod" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="API">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="ShippingMethod">
-              <PropertyRef Name="API" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ShippingMethod_Carrier">
-          <End Type="PurchaseOrderModel.Carrier" Role="Carrier" Multiplicity="1" />
-          <End Type="PurchaseOrderModel.ShippingMethod" Role="ShippingMethod" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Carrier">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="ShippingMethod">
-              <PropertyRef Name="Carrier" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_ConditionLang_Condition">
           <End Type="PurchaseOrderModel.Condition" Role="Condition" Multiplicity="1" />
           <End Type="PurchaseOrderModel.ConditionLang" Role="ConditionLang" Multiplicity="*" />
@@ -2070,18 +1967,6 @@
             </Principal>
             <Dependent Role="ConditionLang">
               <PropertyRef Name="ConditionID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ShippingMethod_DirectLine">
-          <End Type="PurchaseOrderModel.DirectLine" Role="DirectLine" Multiplicity="1" />
-          <End Type="PurchaseOrderModel.ShippingMethod" Role="ShippingMethod" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="DirectLine">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="ShippingMethod">
-              <PropertyRef Name="DirectLine" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2216,6 +2101,7 @@
           <NavigationProperty Name="SkuType" Relationship="PurchaseOrderModel.FK_Sku_SkuType" FromRole="SKU" ToRole="SkuType" />
           <NavigationProperty Name="SkuLang" Relationship="PurchaseOrderModel.FK_SkuLang_Sku" FromRole="SKU" ToRole="SkuLang" />
           <NavigationProperty Name="SkuPicture" Relationship="PurchaseOrderModel.FK_SkuPicture_Sku" FromRole="SKU" ToRole="SkuPicture" />
+          <Property Name="ParentShadow" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_Sku_Brand">
           <End Type="PurchaseOrderModel.Brand" Role="Brand" Multiplicity="1" />
@@ -2450,6 +2336,35 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="ShippingMethod">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
+          <Property Name="IsDirectLine" Type="Boolean" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CarrierID" Type="Int32" />
+          <Property Name="MethodType" Type="Int32" />
+          <Property Name="InBox" Type="Boolean" Nullable="false" />
+          <Property Name="BoxType" Type="Int32" />
+          <Property Name="DirectLine" Type="Int32" Nullable="false" />
+          <Property Name="PrinterName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsExport" Type="Boolean" />
+          <Property Name="IsBattery" Type="Boolean" />
+          <Property Name="CountryData" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SyncOn" Type="DateTime" Precision="3" />
+          <Property Name="ContactName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ConpanyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CountryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CountryCode" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StreetLine1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="StreetLine2" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="StateName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PostalCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2839,28 +2754,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ShippingMethod">
-            <EntityTypeMapping TypeName="PurchaseOrderModel.ShippingMethod">
-              <MappingFragment StoreEntitySet="ShippingMethod">
-                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
-                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
-                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
-                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-                <ScalarProperty Name="PrinterName" ColumnName="PrinterName" />
-                <ScalarProperty Name="IsBox" ColumnName="IsBox" />
-                <ScalarProperty Name="IsBattery" ColumnName="IsBattery" />
-                <ScalarProperty Name="IsExport" ColumnName="IsExport" />
-                <ScalarProperty Name="PackageType" ColumnName="PackageType" />
-                <ScalarProperty Name="ServiceType" ColumnName="ServiceType" />
-                <ScalarProperty Name="DirectLine" ColumnName="DirectLine" />
-                <ScalarProperty Name="API" ColumnName="API" />
-                <ScalarProperty Name="Carrier" ColumnName="Carrier" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Sku_Attribute">
             <EntityTypeMapping TypeName="PurchaseOrderModel.Sku_Attribute">
               <MappingFragment StoreEntitySet="Sku_Attribute">
@@ -2978,6 +2871,7 @@
           <EntitySetMapping Name="SKU">
             <EntityTypeMapping TypeName="PurchaseOrderModel.SKU">
               <MappingFragment StoreEntitySet="SKU">
+                <ScalarProperty Name="ParentShadow" ColumnName="ParentShadow" />
                 <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
                 <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
                 <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
@@ -2990,7 +2884,6 @@
                 <ScalarProperty Name="Brand" ColumnName="Brand" />
                 <ScalarProperty Name="Category" ColumnName="Category" />
                 <ScalarProperty Name="Condition" ColumnName="Condition" />
-                <ScalarProperty Name="ParentKit" ColumnName="ParentKit" />
                 <ScalarProperty Name="ParentSku" ColumnName="ParentSku" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="SkuID" ColumnName="SkuID" />
@@ -3068,6 +2961,36 @@
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="WarehouseID" ColumnName="WarehouseID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ShippingMethod">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.ShippingMethod">
+              <MappingFragment StoreEntitySet="ShippingMethod">
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="StateName" ColumnName="StateName" />
+                <ScalarProperty Name="StreetLine2" ColumnName="StreetLine2" />
+                <ScalarProperty Name="StreetLine1" ColumnName="StreetLine1" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="ConpanyName" ColumnName="ConpanyName" />
+                <ScalarProperty Name="ContactName" ColumnName="ContactName" />
+                <ScalarProperty Name="SyncOn" ColumnName="SyncOn" />
+                <ScalarProperty Name="CountryData" ColumnName="CountryData" />
+                <ScalarProperty Name="IsBattery" ColumnName="IsBattery" />
+                <ScalarProperty Name="IsExport" ColumnName="IsExport" />
+                <ScalarProperty Name="PrinterName" ColumnName="PrinterName" />
+                <ScalarProperty Name="DirectLine" ColumnName="DirectLine" />
+                <ScalarProperty Name="BoxType" ColumnName="BoxType" />
+                <ScalarProperty Name="InBox" ColumnName="InBox" />
+                <ScalarProperty Name="MethodType" ColumnName="MethodType" />
+                <ScalarProperty Name="CarrierID" ColumnName="CarrierID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IsDirectLine" ColumnName="IsDirectLine" />
                 <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
               </MappingFragment>
             </EntityTypeMapping>

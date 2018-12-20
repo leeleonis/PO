@@ -15,24 +15,28 @@ namespace PurchaseOrderSys.Models
     public partial class ShippingMethod
     {
         public bool IsEnable { get; set; }
+        public bool IsDirectLine { get; set; }
         public int ID { get; set; }
         public string Name { get; set; }
-        public int Carrier { get; set; }
-        public int API { get; set; }
+        public Nullable<int> CarrierID { get; set; }
+        public Nullable<int> MethodType { get; set; }
+        public bool InBox { get; set; }
+        public Nullable<int> BoxType { get; set; }
         public int DirectLine { get; set; }
-        public int ServiceType { get; set; }
-        public int PackageType { get; set; }
-        public bool IsExport { get; set; }
-        public bool IsBattery { get; set; }
-        public bool IsBox { get; set; }
         public string PrinterName { get; set; }
-        public string CreateBy { get; set; }
-        public System.DateTime CreateAt { get; set; }
-        public string UpdateBy { get; set; }
-        public Nullable<System.DateTime> UpdateAt { get; set; }
-    
-        public virtual API GetAPI { get; set; }
-        public virtual Carrier GetCarrier { get; set; }
-        public virtual DirectLine GetDirectLine { get; set; }
+        public Nullable<bool> IsExport { get; set; }
+        public Nullable<bool> IsBattery { get; set; }
+        public string CountryData { get; set; }
+        public Nullable<System.DateTime> SyncOn { get; set; }
+        public string ContactName { get; set; }
+        public string ConpanyName { get; set; }
+        public string PhoneNumber { get; set; }
+        public string CountryName { get; set; }
+        public string CountryCode { get; set; }
+        public string City { get; set; }
+        public string StreetLine1 { get; set; }
+        public string StreetLine2 { get; set; }
+        public string StateName { get; set; }
+        public string PostalCode { get; set; }
     }
 }

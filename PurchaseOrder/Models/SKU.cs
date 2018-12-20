@@ -40,6 +40,7 @@ namespace PurchaseOrderSys.Models
         public System.DateTime CreateAt { get; set; }
         public string UpdateBy { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }
+        public string ParentShadow { get; set; }
     
         public virtual Brand GetBrand { get; set; }
         public virtual Condition GetCondition { get; set; }
