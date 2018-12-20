@@ -126,16 +126,16 @@ var Datagrid = function (title, idField, url, queryParams, pageSize = 100) {
     }
 
     this.setInputText = function (ID, field, value) {
-        return "<input type='text' class='form-control input-sm' id='" + field + "' value='" + $.trim(value) + "' onchange='onDataChange(" + ID + ")'>";
+        return "<input type='text' class='form-control input-sm' id='" + field + "' value='" + $.trim(value) + "' onchange='onDataChange(\"" + ID + "\")'>";
     };
 
     this.setDropdown = function (ID, field, option, value) {
-        return "<select class='form-control input-sm' id='" + field + "' onchange='onDataChange(" + ID + ")'>" + this.setSelectOption(option, value) + "</select>";
+        return "<select class='form-control input-sm' id='" + field + "' onchange='onDataChange(\"" + ID + "\")'>" + this.setSelectOption(option, value) + "</select>";
     };
 
     this.setCheckBox = function (ID, field, value) {
         var name = field;
-        return "<input type='checkbox' class='form-control' id='" + name + "' " + (value ? "checked" : "") + " onchange='onDataChange(" + ID + ")'>"
+        return "<input type='checkbox' class='form-control' id='" + name + "' " + (value ? "checked" : "") + " onchange='onDataChange(\"" + ID + "\")'>"
     };
 
     this.setSelectOption = function (optionList, value) {

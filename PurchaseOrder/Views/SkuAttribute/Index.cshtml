@@ -64,12 +64,12 @@
                 }, {
                     field: "Type", title: "@Html.DisplayNameFor(model => model.Type)", width: 150, align: "center", sortable: false,
                     formatter: function (value, row, index) {
-                        return website.IsEmpty(row.IsFilter) ? datagrid.setDropdown(row.ID, this.field, selectOption['SkuAttributeType'], value) : value;
+                        return website.IsEmpty(row.IsFilter) ? datagrid.setDropdown(row.ID, this.field, selectOption['SkuAttributeType'], value.toString()) : value;
                     }
                 }, {
                     field: "Property", title: "@Html.DisplayNameFor(model => model.Property)", width: 150, align: "center", sortable: false,
                     formatter: function (value, row, index) {
-                        return website.IsEmpty(row.IsFilter) ? datagrid.setDropdown(row.ID, this.field, selectOption['SkuAttributeProperty'], value) : value;
+                        return website.IsEmpty(row.IsFilter) ? datagrid.setDropdown(row.ID, this.field, selectOption['SkuAttributeProperty'], value.toString()) : value;
                     }
                 }, {
                     field: "Save", title: "Save", width: 90, align: "center", sortable: false,

@@ -4,8 +4,8 @@
     <link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
     <link href="~/Content/themes/icon.css" rel="stylesheet" />
     <style>
-        #list-kit tr td {
-            vertical-align: middle;
+        table tr td {
+            vertical-align: middle!important;
         }
     </style>
 }
@@ -140,7 +140,7 @@
                                             @Html.HiddenFor(model => model.Status)
                                         </fieldset>
 
-                                        <div class="smart-form form-group">
+                                        <fieldset class="smart-form form-group">
                                             <header>eBay Title</header>
                                             <fieldset>
                                                 @{
@@ -148,7 +148,7 @@
                                                     Dictionary<int, string> eBayTitle = !string.IsNullOrEmpty(Model.eBayTitle) ? JsonConvert.DeserializeObject<Dictionary<int, string>>(Model.eBayTitle) : new Dictionary<int, string> { };
                                                     foreach (var title in EnumData.eBayTitle())
                                                     {
-                                                        <section class="col col-sm-4">
+                                                        <section class="col col-sm-6 col-lg-4">
                                                             @Html.Label(title.Value)
                                                             <label class="input">
                                                                 @{ string name = string.Format("eBayTitle[{0}]", i++); }
@@ -159,7 +159,7 @@
                                                     }
                                                 }
                                             </fieldset>
-                                        </div>
+                                        </fieldset>
 
                                         @if (Model.Type.Equals((byte)EnumData.SkuType.Variation))
                                         {
@@ -251,10 +251,31 @@
                                             </fieldset>
                                         }
 
-                                        <fieldset>
+                                        <fieldset class="">
+                                            <legend>Package Content</legend>
+
+                                            <div class="col-sm-12 col-lg-6">
+                                                <div class="table-responsive col-sm-12">
+                                                    <table class="table table-bordered table-striped text-center">
+                                                        <thead>
+                                                            <tr>
+                                                                <th width="45%" class="text-center">Content</th>
+                                                                <th width="45%" class="text-center">Model</th>
+                                                                <th width="10%" class="text-center">Html</th>
+                                                            </tr>
+                                                        </thead>
+
+                                                        <tbody id="list-content">
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+
+                                        <fieldset class="">
                                             <legend>Shadows</legend>
 
-                                            <div class="col-sm-6">
+                                            <div class="col-sm-12 col-lg-6">
                                                 <div class="table-responsive col-sm-12">
                                                     <table class="table table-bordered table-striped text-center">
                                                         <thead>
@@ -278,7 +299,7 @@
                                             </div>
                                         </fieldset>
 
-                                        <fieldset>
+                                        <fieldset class="">
                                             <legend>Linked</legend>
 
                                         </fieldset>
@@ -380,7 +401,7 @@
                 <thead>
                     <tr>
                         <th data-options="field:'ck', checkbox:true, width:'5%', align:'center'"></th>
-                        <th data-options="field:'ID', width:'20%', align:'center'">SKU</th>
+                        <th data-options="field:'SkuID', width:'20%', align:'center'">SKU</th>
                         <th data-options="field:'Name', width:'75%', align:'center'">品名</th>
                     </tr>
                 </thead>
@@ -420,7 +441,7 @@
         $('.tab-pane').eq(hash.substr(1)).addClass('active');
 
         var $parentBtn = $('#btn-parent'), $parentDialog = $('#dialog-parent'), $filterSearch = $('#search-filter'), $skuTable = $('#table-sku');
-        var $variationList = $('#list-variation'), $kitList = $('#list-kit'), $attributeList = $("#list-attribute"), $attributeTypeList = $('#list-attributeType');
+        var $variationList = $('#list-variation'), $kitList = $('#list-kit'), $contentList = $('#list-content'), $attributeList = $("#list-attribute"), $attributeTypeList = $('#list-attributeType');
 
         $(document).ready(function () {
             CKEDITOR.replace('Description', { height: '500px' });
@@ -441,6 +462,8 @@
                         if (!website.IsEmpty(response.data.KitList)) {
                             $kitList.html(response.data.KitList);
                         }
+
+                        $contentList.html(response.data.ContentList);
                         $attributeList.html(response.data.AttributeList);
                     } else {
                         alert(response.message);
@@ -476,7 +499,7 @@
 
                 if (rows.length != 1) return alert('請選擇一個品號!');
 
-                $('#ParentSku').val(rows[0].ID);
+                $('#ParentSku').val(rows[0].SkuID);
 
                 $parentDialog.dialog('close');
             });

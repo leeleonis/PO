@@ -74,7 +74,16 @@ namespace PurchaseOrderSys.Controllers
                 foreach (SKU childSku in variationList)
                 {
                     childSku.ParentSku = sku.SkuID;
-                    db.Entry(childSku).State = EntityState.Modified;
+                    childSku.UpdateAt = sku.CreateAt;
+                    childSku.UpdateBy = sku.CreateBy;
+
+                    if (!db.SKU.Any(s => s.SkuID.Equals(childSku.SkuID + "_var") && s.ParentShadow.Equals(childSku.SkuID)))
+                    {
+                        using (StockKeepingUnit SKU = new StockKeepingUnit())
+                        {
+                            SKU.CreateSkuShadow(childSku);
+                        }
+                    }
                 }
 
                 db.SaveChanges();
@@ -108,7 +117,7 @@ namespace PurchaseOrderSys.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(SKU updateData, SkuLang langData, List<Dictionary<string, string>> eBayTitle, int[] DiverseAttribute, Sku_Attribute[] VariationValue, Sku_Attribute[] AttributeValue, KitSku[] KitSku, HttpPostedFileBase picture)
+        public ActionResult Edit(SKU updateData, SkuLang langData, List<Dictionary<string, string>> eBayTitle, int[] DiverseAttribute, Sku_Attribute[] VariationValue, KitSku[] KitSku, Sku_PackageContent[] PackageContent, Sku_Attribute[] AttributeValue, HttpPostedFileBase picture)
         {
             SKU sku = db.SKU.Find(updateData.SkuID);
             if (sku == null) return HttpNotFound();
@@ -153,7 +162,6 @@ namespace PurchaseOrderSys.Controllers
                                     updateAttr.Value = skuAttr.Value;
                                     updateAttr.UpdateAt = sku.UpdateAt.Value;
                                     updateAttr.UpdateBy = sku.UpdateBy;
-                                    db.Entry(updateAttr).State = EntityState.Modified;
                                 }
                                 else
                                 {
@@ -168,29 +176,20 @@ namespace PurchaseOrderSys.Controllers
                             SKU newSku;
                             using (StockKeepingUnit SKU = new StockKeepingUnit())
                             {
-                                newSku = new SKU()
-                                {
-                                    IsEnable = true,
-                                    Type = (byte)EnumData.SkuType.Single,
-                                    ParentSku = sku.SkuID,
-                                    Condition = 1,
-                                    Category = sku.Category,
-                                    Brand = sku.Brand,
-                                    Status = (byte)EnumData.SkuStatus.Inactive,
-                                    CreateAt = sku.UpdateAt.Value,
-                                    CreateBy = sku.UpdateBy
-                                };
+                                newSku = SKU.SkuInherit(sku, "", (byte)EnumData.SkuType.Single);
+                                newSku.ParentSku = sku.SkuID;
+                                newSku.CreateAt = sku.UpdateAt.Value;
+                                newSku.CreateBy = sku.UpdateBy;
 
                                 SkuLang newLang = new SkuLang()
                                 {
                                     LangID = langData.LangID,
                                     Name = langData.Name,
-                                    Model = langData.Model,
-                                    CreateAt = sku.UpdateAt.Value,
-                                    CreateBy = sku.UpdateBy
+                                    Model = langData.Model
                                 };
 
                                 newSku = SKU.CreateSku(newSku, newLang);
+                                SKU.CreateSkuShadow(newSku);
                             }
 
                             db.Sku_Attribute.AddRange(sku.Sku_Attribute.Where(a => !a.IsDiverse).Select(a => new Sku_Attribute()
@@ -221,6 +220,49 @@ namespace PurchaseOrderSys.Controllers
                     }
                 }
 
+                db.SaveChanges();
+            }
+
+            if (KitSku != null && KitSku.Any())
+            {
+                foreach (var kit in KitSku)
+                {
+                    if (sku.GetKit.Any(k => k.Sku.Equals(kit.Sku)))
+                    {
+                        var updateKit = sku.GetKit.First(k => k.Sku.Equals(kit.Sku));
+                        updateKit.Qty = kit.Qty;
+                        updateKit.UpdateAt = sku.UpdateAt.Value;
+                        updateKit.UpdateBy = sku.UpdateBy;
+                    }
+                    else
+                    {
+                        kit.CreateAt = sku.UpdateAt.Value;
+                        kit.CreateBy = sku.UpdateBy;
+                        db.KitSku.Add(kit);
+                    }
+                }
+                db.SaveChanges();
+            }
+
+            if (PackageContent != null && PackageContent.Any())
+            {
+                foreach (var content in PackageContent)
+                {
+                    var contentModel = sku.Sku_PackageContent.FirstOrDefault(c => c.ItemID.Equals(content.ItemID) && c.LangID.Equals(content.LangID));
+                    if (contentModel != null)
+                    {
+                        contentModel.Model = content.Model;
+                        contentModel.Html = content.Html;
+                        content.UpdateAt = sku.UpdateAt;
+                        content.UpdateBy = sku.UpdateBy;
+                    }
+                    else
+                    {
+                        content.CreateAt = sku.UpdateAt.Value;
+                        content.CreateBy = sku.UpdateBy;
+                        sku.Sku_PackageContent.Add(content);
+                    }
+                }
                 db.SaveChanges();
             }
 
@@ -275,28 +317,6 @@ namespace PurchaseOrderSys.Controllers
                     db.Entry(updateAttr).State = EntityState.Modified;
                 }
 
-                db.SaveChanges();
-            }
-
-            if (KitSku != null && KitSku.Any())
-            {
-                foreach (var kit in KitSku)
-                {
-                    if (sku.GetKit.Any(k => k.Sku.Equals(kit.Sku)))
-                    {
-                        var updateKit = sku.GetKit.First(k => k.Sku.Equals(kit.Sku));
-                        updateKit.Qty = kit.Qty;
-                        updateKit.UpdateAt = sku.UpdateAt.Value;
-                        updateKit.UpdateBy = sku.UpdateBy;
-                        db.Entry(updateKit).State = EntityState.Modified;
-                    }
-                    else
-                    {
-                        kit.CreateAt = sku.UpdateAt.Value;
-                        kit.CreateBy = sku.UpdateBy;
-                        db.KitSku.Add(kit);
-                    }
-                }
                 db.SaveChanges();
             }
 
@@ -510,6 +530,7 @@ namespace PurchaseOrderSys.Controllers
                     Name = s.SkuLang.Any(l => l.LangID.Equals(LangID)) ? s.SkuLang.First(l => l.LangID.Equals(LangID)).Name : "",
                     s.Condition,
                     s.Category,
+                    s.Brand,
                     s.UPC,
                     s.EAN,
                     s.Replenishable,
@@ -599,6 +620,7 @@ namespace PurchaseOrderSys.Controllers
                 langData?.SpecContent,
                 VariationList = sku.Type.Equals((byte)EnumData.SkuType.Variation) ? RenderViewToString(ControllerContext, "_VariationAttribute", sku, viewData) : "",
                 KitList = sku.Type.Equals((byte)EnumData.SkuType.Kit) ? RenderViewToString(ControllerContext, "_SkuKit", sku, viewData) : "",
+                ContentList = RenderViewToString(ControllerContext, "_PackageContent", sku, viewData),
                 AttributeList = RenderViewToString(ControllerContext, "_SingleAttribute", sku, viewData)
             };
 
