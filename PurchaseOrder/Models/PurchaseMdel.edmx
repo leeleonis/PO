@@ -689,17 +689,6 @@
           <Property Name="DefaultDispatch" Type="bit" />
           <Property Name="DefaultRMA" Type="bit" />
         </EntityType>
-        <EntityType Name="WarehouseSummary">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="IsEnable" Type="bit" Nullable="false" />
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="WarehouseID" Type="int" Nullable="false" />
-          <Property Name="Type" Type="nvarchar" MaxLength="10" Nullable="false" />
-          <Property Name="Val" Type="nvarchar" MaxLength="50" />
-          <Property Name="Url" Type="text" />
-        </EntityType>
         <EntityType Name="WarehouseUser">
           <Key>
             <PropertyRef Name="ID" />
@@ -1558,11 +1547,6 @@
             <End Role="SKU" EntitySet="SKU" />
             <End Role="KitSku" EntitySet="KitSku" />
           </AssociationSet>
-          <EntitySet Name="WarehouseSummary" EntityType="PurchaseOrderModel.WarehouseSummary" />
-          <AssociationSet Name="FK_WarehouseSummary_Warehouse" Association="PurchaseOrderModel.FK_WarehouseSummary_Warehouse">
-            <End Role="Warehouse" EntitySet="Warehouse" />
-            <End Role="WarehouseSummary" EntitySet="WarehouseSummary" />
-          </AssociationSet>
           <EntitySet Name="ShippingMethod" EntityType="PurchaseOrderModel.ShippingMethod" />
           </EntityContainer>
         <EntityType Name="PurchaseOrder">
@@ -2351,7 +2335,6 @@
           <NavigationProperty Name="SkuLang" Relationship="PurchaseOrderModel.FK_SkuLang_Sku" FromRole="SKU" ToRole="SkuLang" />
           <NavigationProperty Name="SkuPicture" Relationship="PurchaseOrderModel.FK_SkuPicture_Sku" FromRole="SKU" ToRole="SkuPicture" />
           <NavigationProperty Name="Sku_PackageContent" Relationship="PurchaseOrderModel.FK_Sku_PackageContent_SKU" FromRole="SKU" ToRole="Sku_PackageContent" />
-          <Property Name="ParentShadow" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_Sku_Brand">
           <End Type="PurchaseOrderModel.Brand" Role="Brand" Multiplicity="1" />
@@ -2761,42 +2744,6 @@
             </Principal>
             <Dependent Role="PackageContent">
               <PropertyRef Name="TypeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_KitSku_Sku1">
-          <End Type="PurchaseOrderModel.SKU" Role="SKU" Multiplicity="1" />
-          <End Type="PurchaseOrderModel.KitSku" Role="KitSku" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SKU">
-              <PropertyRef Name="SkuID" />
-            </Principal>
-            <Dependent Role="KitSku">
-              <PropertyRef Name="ParentKit" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="WarehouseSummary">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="WarehouseID" Type="Int32" Nullable="false" />
-          <Property Name="Type" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="Val" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Url" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Warehouse" Relationship="PurchaseOrderModel.FK_WarehouseSummary_Warehouse" FromRole="WarehouseSummary" ToRole="Warehouse" />
-        </EntityType>
-        <Association Name="FK_WarehouseSummary_Warehouse">
-          <End Type="PurchaseOrderModel.Warehouse" Role="Warehouse" Multiplicity="1" />
-          <End Type="PurchaseOrderModel.WarehouseSummary" Role="WarehouseSummary" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Warehouse">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="WarehouseSummary">
-              <PropertyRef Name="WarehouseID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
