@@ -558,6 +558,7 @@
           <Property Name="Name" Type="nvarchar" MaxLength="200" />
           <Property Name="Model" Type="nvarchar" MaxLength="50" />
           <Property Name="Description" Type="text" />
+          <Property Name="PackageContent" Type="text" />
           <Property Name="SpecContent" Type="text" />
           <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="CreateAt" Type="datetime" Nullable="false" />
@@ -696,7 +697,7 @@
           <Property Name="IsEnable" Type="bit" Nullable="false" />
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="WarehouseID" Type="int" Nullable="false" />
-          <Property Name="Type" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Type" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Val" Type="nvarchar" MaxLength="50" />
           <Property Name="Url" Type="text" />
         </EntityType>
@@ -1858,8 +1859,8 @@
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="SKU1" Relationship="PurchaseOrderModel.FK_KitSku_Sku" FromRole="KitSku" ToRole="SKU" />
-          <NavigationProperty Name="SKU2" Relationship="PurchaseOrderModel.FK_KitSku_Sku1" FromRole="KitSku" ToRole="SKU" />
+          <NavigationProperty Name="GetSku" Relationship="PurchaseOrderModel.FK_KitSku_Sku" FromRole="KitSku" ToRole="SKU" />
+          <NavigationProperty Name="ParentSku" Relationship="PurchaseOrderModel.FK_KitSku_Sku1" FromRole="KitSku" ToRole="SKU" />
         </EntityType>
         <EntityType Name="Menu">
           <Key>
@@ -2084,10 +2085,9 @@
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="Brand1" Relationship="PurchaseOrderModel.FK_Sku_Brand" FromRole="SKU" ToRole="Brand" />
-          <NavigationProperty Name="Condition1" Relationship="PurchaseOrderModel.FK_Sku_Condition" FromRole="SKU" ToRole="Condition" />
-          <NavigationProperty Name="GetKit" Relationship="PurchaseOrderModel.FK_KitSku_Sku" FromRole="SKU" ToRole="KitSku" />
-          <NavigationProperty Name="KitSku1" Relationship="PurchaseOrderModel.FK_KitSku_Sku1" FromRole="SKU" ToRole="KitSku" />
+          <NavigationProperty Name="GetBrand" Relationship="PurchaseOrderModel.FK_Sku_Brand" FromRole="SKU" ToRole="Brand" />
+          <NavigationProperty Name="GetCondition" Relationship="PurchaseOrderModel.FK_Sku_Condition" FromRole="SKU" ToRole="Condition" />
+          <NavigationProperty Name="GetKit" Relationship="PurchaseOrderModel.FK_KitSku_Sku1" FromRole="SKU" ToRole="KitSku" />
           <NavigationProperty Name="Sku_Attribute" Relationship="PurchaseOrderModel.FK_Sku_Attribute_Sku" FromRole="SKU" ToRole="Sku_Attribute" />
           <NavigationProperty Name="Sku_PackageContent" Relationship="PurchaseOrderModel.FK_Sku_PackageContent_SKU" FromRole="SKU" ToRole="Sku_PackageContent" />
           <NavigationProperty Name="SkuType" Relationship="PurchaseOrderModel.FK_Sku_SkuType" FromRole="SKU" ToRole="SkuType" />
@@ -2186,6 +2186,7 @@
           <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="Model" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="PackageContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="SpecContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
@@ -2207,7 +2208,7 @@
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="SKU1" Relationship="PurchaseOrderModel.FK_SkuPicture_Sku" FromRole="SkuPicture" ToRole="SKU" />
+          <NavigationProperty Name="GetSku" Relationship="PurchaseOrderModel.FK_SkuPicture_Sku" FromRole="SkuPicture" ToRole="SKU" />
         </EntityType>
         <EntityType Name="SkuType">
           <Key>
@@ -2341,7 +2342,7 @@
           <Property Name="IsEnable" Type="Boolean" Nullable="false" />
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="WarehouseID" Type="Int32" Nullable="false" />
-          <Property Name="Type" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Val" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Url" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Warehouse" Relationship="PurchaseOrderModel.FK_WarehouseSummary_Warehouse" FromRole="WarehouseSummary" ToRole="Warehouse" />
@@ -3416,6 +3417,7 @@
           <EntitySetMapping Name="SkuLang">
             <EntityTypeMapping TypeName="PurchaseOrderModel.SkuLang">
               <MappingFragment StoreEntitySet="SkuLang">
+                <ScalarProperty Name="PackageContent" ColumnName="PackageContent" />
                 <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
                 <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
                 <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />

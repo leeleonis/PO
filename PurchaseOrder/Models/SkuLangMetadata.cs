@@ -60,6 +60,12 @@ namespace PurchaseOrderSys.Models
     	    [Display(Name = "SkuLang_Description", ResourceType = typeof(App_GlobalResources.Resource))]
     		public string  Description { get; set; }
 
+            /// <summary>
+            /// PackageContent
+            /// </summary>        
+            [AllowHtml]
+            [Display(Name = "SkuLang_PackageContent", ResourceType = typeof(App_GlobalResources.Resource))]
+            public string PackageContent { get; set; }
 
             /// <summary>
             /// Spec Content
