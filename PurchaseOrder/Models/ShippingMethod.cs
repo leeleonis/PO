@@ -38,5 +38,7 @@ namespace PurchaseOrderSys.Models
         public string StreetLine2 { get; set; }
         public string StateName { get; set; }
         public string PostalCode { get; set; }
+    
+        public virtual Carriers Carriers { get; set; }
     }
 }

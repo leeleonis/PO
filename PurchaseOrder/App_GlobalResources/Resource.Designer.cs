@@ -2869,7 +2869,7 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
-        ///   查詢類似 &gt;&gt;&gt;&gt;&gt;&gt;&gt; 833044545a3ad9230e03e50d1ef5f4914a486aec 的當地語系化字串。
+        ///   查詢類似  的當地語系化字串。
         /// </summary>
         public static string Sku_PackageContent_UpdateAt {
             get {
@@ -4080,6 +4080,60 @@ namespace PurchaseOrderSys.App_GlobalResources {
         public static string Warehouse_WinitWarehouse {
             get {
                 return ResourceManager.GetString("Warehouse_WinitWarehouse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ID 的當地語系化字串。
+        /// </summary>
+        public static string WarehouseSummary_ID {
+            get {
+                return ResourceManager.GetString("WarehouseSummary_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 IsEnable 的當地語系化字串。
+        /// </summary>
+        public static string WarehouseSummary_IsEnable {
+            get {
+                return ResourceManager.GetString("WarehouseSummary_IsEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Type 的當地語系化字串。
+        /// </summary>
+        public static string WarehouseSummary_Type {
+            get {
+                return ResourceManager.GetString("WarehouseSummary_Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Url 的當地語系化字串。
+        /// </summary>
+        public static string WarehouseSummary_Url {
+            get {
+                return ResourceManager.GetString("WarehouseSummary_Url", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Val 的當地語系化字串。
+        /// </summary>
+        public static string WarehouseSummary_Val {
+            get {
+                return ResourceManager.GetString("WarehouseSummary_Val", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 WarehouseID 的當地語系化字串。
+        /// </summary>
+        public static string WarehouseSummary_WarehouseID {
+            get {
+                return ResourceManager.GetString("WarehouseSummary_WarehouseID", resourceCulture);
             }
         }
         

@@ -249,10 +249,16 @@
     <Compile Include="Models\BrandMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Carrier.cs">
+    <Compile Include="Models\CarrierAPI.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\CarrierMetadata.cs">
+    <Compile Include="Models\CarrierAPIMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Carriers.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CarriersMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CMCreditNote.cs">
@@ -6300,6 +6306,7 @@
     <Content Include="Views\Shared\EditorTemplates\FDate.cshtml" />
     <Content Include="Views\DispatchWarehouse\Index.cshtml" />
     <Content Include="Views\DispatchWarehouse\Create.cshtml" />
+    <Content Include="Views\DispatchWarehouse\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

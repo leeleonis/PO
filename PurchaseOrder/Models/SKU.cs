@@ -18,10 +18,11 @@ namespace PurchaseOrderSys.Models
         public SKU()
         {
             this.GetKit = new HashSet<KitSku>();
+            this.KitSku1 = new HashSet<KitSku>();
             this.Sku_Attribute = new HashSet<Sku_Attribute>();
+            this.Sku_PackageContent = new HashSet<Sku_PackageContent>();
             this.SkuLang = new HashSet<SkuLang>();
             this.SkuPicture = new HashSet<SkuPicture>();
-            this.Sku_PackageContent = new HashSet<Sku_PackageContent>();
         }
     
         public bool IsEnable { get; set; }
@@ -42,18 +43,20 @@ namespace PurchaseOrderSys.Models
         public string UpdateBy { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }
     
-        public virtual Brand GetBrand { get; set; }
-        public virtual Condition GetCondition { get; set; }
+        public virtual Brand Brand1 { get; set; }
+        public virtual Condition Condition1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<KitSku> GetKit { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<KitSku> KitSku1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Sku_Attribute> Sku_Attribute { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Sku_PackageContent> Sku_PackageContent { get; set; }
         public virtual SkuType SkuType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SkuLang> SkuLang { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SkuPicture> SkuPicture { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Sku_PackageContent> Sku_PackageContent { get; set; }
     }
 }

@@ -7,6 +7,7 @@ namespace PurchaseOrderSys.Models
 {
     public static class EnumData
     {
+        public enum CarrierType { Other, DHL, FedEx, UPS, USPS, Winit, IDS, Sendle };
         public enum TimeZone { UTC, EST, TST, PST, GMT, AEST, JST };
         public static Dictionary<TimeZone, string> TimeZoneList()
         {

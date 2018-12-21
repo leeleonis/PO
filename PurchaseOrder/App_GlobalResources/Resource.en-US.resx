@@ -945,4 +945,22 @@
   <data name="Warehouse_DefaultRMA" xml:space="preserve">
     <value>Default RMA</value>
   </data>
+  <data name="WarehouseSummary_IsEnable" xml:space="preserve">
+    <value>IsEnable</value>
+  </data>
+  <data name="WarehouseSummary_ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="WarehouseSummary_WarehouseID" xml:space="preserve">
+    <value>WarehouseID</value>
+  </data>
+  <data name="WarehouseSummary_Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="WarehouseSummary_Val" xml:space="preserve">
+    <value>Val</value>
+  </data>
+  <data name="WarehouseSummary_Url" xml:space="preserve">
+    <value>Url</value>
+  </data>
 </root>

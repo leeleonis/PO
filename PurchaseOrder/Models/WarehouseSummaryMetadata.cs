@@ -49,7 +49,7 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "WarehouseSummary_Type", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-            [MaxLength(10, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  Type { get; set; }
     
     		    

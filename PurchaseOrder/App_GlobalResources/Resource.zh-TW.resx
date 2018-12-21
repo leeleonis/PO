@@ -1485,4 +1485,22 @@
   <data name="Warehouse_DefaultRMA" xml:space="preserve">
     <value>預設退貨倉</value>
   </data>
+  <data name="WarehouseSummary_IsEnable" xml:space="preserve">
+    <value>啟用</value>
+  </data>
+  <data name="WarehouseSummary_ID" xml:space="preserve">
+    <value>流水號</value>
+  </data>
+  <data name="WarehouseSummary_WarehouseID" xml:space="preserve">
+    <value>倉庫流水號</value>
+  </data>
+  <data name="WarehouseSummary_Type" xml:space="preserve">
+    <value>倉庫設定類型</value>
+  </data>
+  <data name="WarehouseSummary_Val" xml:space="preserve">
+    <value>設定值</value>
+  </data>
+  <data name="WarehouseSummary_Url" xml:space="preserve">
+    <value>連線網址</value>
+  </data>
 </root>

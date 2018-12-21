@@ -12,32 +12,27 @@ namespace PurchaseOrderSys.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class AdminUser
+    public partial class CarrierAPI
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public AdminUser()
+        public CarrierAPI()
         {
-            this.WarehouseUser = new HashSet<WarehouseUser>();
+            this.Carriers = new HashSet<Carriers>();
         }
     
         public bool IsEnable { get; set; }
-        public int ID { get; set; }
-        public int Group { get; set; }
+        public bool IsTest { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
-        public string Account { get; set; }
-        public string Password { get; set; }
-        public string ApiUserName { get; set; }
+        public Nullable<byte> Type { get; set; }
+        public string AccountID { get; set; }
+        public string ApiKey { get; set; }
         public string ApiPassword { get; set; }
-        public int TimeZone { get; set; }
-        public string AllowWarehouse { get; set; }
-        public string Auth { get; set; }
-        public string CreateBy { get; set; }
-        public System.DateTime CreateAt { get; set; }
-        public string UpdateBy { get; set; }
-        public Nullable<System.DateTime> UpdateAt { get; set; }
+        public string ApiAccount { get; set; }
+        public string ApiMeter { get; set; }
+        public string ApiHub { get; set; }
     
-        public virtual AdminGroup AdminGroup { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<WarehouseUser> WarehouseUser { get; set; }
+        public virtual ICollection<Carriers> Carriers { get; set; }
     }
 }
