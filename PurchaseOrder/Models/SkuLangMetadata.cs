@@ -1,11 +1,12 @@
-using System;
+using System; 
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Web.Mvc;
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// SkuLang class
     /// </summary>
@@ -60,16 +61,18 @@ namespace PurchaseOrderSys.Models
     	    [Display(Name = "SkuLang_Description", ResourceType = typeof(App_GlobalResources.Resource))]
     		public string  Description { get; set; }
 
+
             /// <summary>
-            /// PackageContent
-            /// </summary>        
+            /// Package Content
+            /// </summary>     
             [AllowHtml]
             [Display(Name = "SkuLang_PackageContent", ResourceType = typeof(App_GlobalResources.Resource))]
-            public string PackageContent { get; set; }
+    		public string  PackageContent { get; set; }
+
 
             /// <summary>
             /// Spec Content
-            /// </summary>        
+            /// </summary>     
             [AllowHtml]
             [Display(Name = "SkuLang_SpecContent", ResourceType = typeof(App_GlobalResources.Resource))]
     		public string  SpecContent { get; set; }

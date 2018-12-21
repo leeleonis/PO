@@ -1430,7 +1430,6 @@
           <EntitySet Name="SkuAttribute" EntityType="PurchaseOrderModel.SkuAttribute" />
           <EntitySet Name="SkuAttributeLang" EntityType="PurchaseOrderModel.SkuAttributeLang" />
           <EntitySet Name="SkuAttributeType" EntityType="PurchaseOrderModel.SkuAttributeType" />
-          <EntitySet Name="SkuLang" EntityType="PurchaseOrderModel.SkuLang" />
           <EntitySet Name="SkuPicture" EntityType="PurchaseOrderModel.SkuPicture" />
           <EntitySet Name="SkuType" EntityType="PurchaseOrderModel.SkuType" />
           <EntitySet Name="SkuTypeLang" EntityType="PurchaseOrderModel.SkuTypeLang" />
@@ -1544,10 +1543,6 @@
             <End Role="SkuType" EntitySet="SkuType" />
             <End Role="SKU" EntitySet="SKU" />
           </AssociationSet>
-          <AssociationSet Name="FK_SkuLang_Sku" Association="PurchaseOrderModel.FK_SkuLang_Sku">
-            <End Role="SKU" EntitySet="SKU" />
-            <End Role="SkuLang" EntitySet="SkuLang" />
-          </AssociationSet>
           <AssociationSet Name="FK_SkuPicture_Sku" Association="PurchaseOrderModel.FK_SkuPicture_Sku">
             <End Role="SKU" EntitySet="SKU" />
             <End Role="SkuPicture" EntitySet="SkuPicture" />
@@ -1601,6 +1596,11 @@
           <AssociationSet Name="FK_ShippingMethod_Carriers" Association="PurchaseOrderModel.FK_ShippingMethod_Carriers">
             <End Role="Carriers" EntitySet="Carriers" />
             <End Role="ShippingMethod" EntitySet="ShippingMethod" />
+          </AssociationSet>
+          <EntitySet Name="SkuLang" EntityType="PurchaseOrderModel.SkuLang" />
+          <AssociationSet Name="FK_SkuLang_Sku" Association="PurchaseOrderModel.FK_SkuLang_Sku">
+            <End Role="SKU" EntitySet="SKU" />
+            <End Role="SkuLang" EntitySet="SkuLang" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="AdminGroup">
@@ -2091,8 +2091,8 @@
           <NavigationProperty Name="Sku_Attribute" Relationship="PurchaseOrderModel.FK_Sku_Attribute_Sku" FromRole="SKU" ToRole="Sku_Attribute" />
           <NavigationProperty Name="Sku_PackageContent" Relationship="PurchaseOrderModel.FK_Sku_PackageContent_SKU" FromRole="SKU" ToRole="Sku_PackageContent" />
           <NavigationProperty Name="SkuType" Relationship="PurchaseOrderModel.FK_Sku_SkuType" FromRole="SKU" ToRole="SkuType" />
-          <NavigationProperty Name="SkuLang" Relationship="PurchaseOrderModel.FK_SkuLang_Sku" FromRole="SKU" ToRole="SkuLang" />
           <NavigationProperty Name="SkuPicture" Relationship="PurchaseOrderModel.FK_SkuPicture_Sku" FromRole="SKU" ToRole="SkuPicture" />
+          <NavigationProperty Name="SkuLang" Relationship="PurchaseOrderModel.FK_SkuLang_Sku" FromRole="SKU" ToRole="SkuLang" />
         </EntityType>
         <EntityType Name="Sku_Attribute">
           <Key>
@@ -2175,25 +2175,6 @@
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
           <NavigationProperty Name="SkuAttribute" Relationship="PurchaseOrderModel.FK_SkuAttribute_SkuAttributeType" FromRole="SkuAttributeType" ToRole="SkuAttribute" />
-        </EntityType>
-        <EntityType Name="SkuLang">
-          <Key>
-            <PropertyRef Name="Sku" />
-            <PropertyRef Name="LangID" />
-          </Key>
-          <Property Name="Sku" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="LangID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Model" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="PackageContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="SpecContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="GetSku" Relationship="PurchaseOrderModel.FK_SkuLang_Sku" FromRole="SkuLang" ToRole="SKU" />
-          <Property Name="PackageContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="SkuPicture">
           <Key>
@@ -2676,18 +2657,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_SkuLang_Sku">
-          <End Type="PurchaseOrderModel.SKU" Role="SKU" Multiplicity="1" />
-          <End Type="PurchaseOrderModel.SkuLang" Role="SkuLang" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SKU">
-              <PropertyRef Name="SkuID" />
-            </Principal>
-            <Dependent Role="SkuLang">
-              <PropertyRef Name="Sku" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_SkuPicture_Sku">
           <End Type="PurchaseOrderModel.SKU" Role="SKU" Multiplicity="1" />
           <End Type="PurchaseOrderModel.SkuPicture" Role="SkuPicture" Multiplicity="*" />
@@ -2870,6 +2839,36 @@
             </Principal>
             <Dependent Role="ShippingMethod">
               <PropertyRef Name="CarrierID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="SkuLang">
+          <Key>
+            <PropertyRef Name="Sku" />
+            <PropertyRef Name="LangID" />
+          </Key>
+          <Property Name="Sku" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LangID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Model" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="PackageContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="SpecContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="GetSku" Relationship="PurchaseOrderModel.FK_SkuLang_Sku" FromRole="SkuLang" ToRole="SKU" />
+        </EntityType>
+        <Association Name="FK_SkuLang_Sku">
+          <End Type="PurchaseOrderModel.SKU" Role="SKU" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.SkuLang" Role="SkuLang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SKU">
+              <PropertyRef Name="SkuID" />
+            </Principal>
+            <Dependent Role="SkuLang">
+              <PropertyRef Name="Sku" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3415,23 +3414,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="SkuLang">
-            <EntityTypeMapping TypeName="PurchaseOrderModel.SkuLang">
-              <MappingFragment StoreEntitySet="SkuLang">
-                <ScalarProperty Name="PackageContent" ColumnName="PackageContent" />
-                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
-                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
-                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
-                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-                <ScalarProperty Name="SpecContent" ColumnName="SpecContent" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Model" ColumnName="Model" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="LangID" ColumnName="LangID" />
-                <ScalarProperty Name="Sku" ColumnName="Sku" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="SkuPicture">
             <EntityTypeMapping TypeName="PurchaseOrderModel.SkuPicture">
               <MappingFragment StoreEntitySet="SkuPicture">
@@ -3615,6 +3597,23 @@
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SkuLang">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.SkuLang">
+              <MappingFragment StoreEntitySet="SkuLang">
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="SpecContent" ColumnName="SpecContent" />
+                <ScalarProperty Name="PackageContent" ColumnName="PackageContent" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="LangID" ColumnName="LangID" />
+                <ScalarProperty Name="Sku" ColumnName="Sku" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
