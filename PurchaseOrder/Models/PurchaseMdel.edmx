@@ -558,6 +558,7 @@
           <Property Name="Name" Type="nvarchar" MaxLength="200" />
           <Property Name="Model" Type="nvarchar" MaxLength="50" />
           <Property Name="Description" Type="text" />
+          <Property Name="PackageContent" Type="text" />
           <Property Name="SpecContent" Type="text" />
           <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="CreateAt" Type="datetime" Nullable="false" />
@@ -696,7 +697,7 @@
           <Property Name="IsEnable" Type="bit" Nullable="false" />
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="WarehouseID" Type="int" Nullable="false" />
-          <Property Name="Type" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Type" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Val" Type="nvarchar" MaxLength="50" />
           <Property Name="Url" Type="text" />
         </EntityType>
@@ -2192,6 +2193,7 @@
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
           <NavigationProperty Name="GetSku" Relationship="PurchaseOrderModel.FK_SkuLang_Sku" FromRole="SkuLang" ToRole="SKU" />
+          <Property Name="PackageContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="SkuPicture">
           <Key>
@@ -2341,7 +2343,7 @@
           <Property Name="IsEnable" Type="Boolean" Nullable="false" />
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="WarehouseID" Type="Int32" Nullable="false" />
-          <Property Name="Type" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Val" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Url" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Warehouse" Relationship="PurchaseOrderModel.FK_WarehouseSummary_Warehouse" FromRole="WarehouseSummary" ToRole="Warehouse" />
@@ -3416,6 +3418,7 @@
           <EntitySetMapping Name="SkuLang">
             <EntityTypeMapping TypeName="PurchaseOrderModel.SkuLang">
               <MappingFragment StoreEntitySet="SkuLang">
+                <ScalarProperty Name="PackageContent" ColumnName="PackageContent" />
                 <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
                 <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
                 <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
