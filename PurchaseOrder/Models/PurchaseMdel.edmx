@@ -2260,8 +2260,8 @@
           <Property Name="Interim" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Carrier" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Tracking" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Warehouse" Relationship="PurchaseOrderModel.FK_Transfer_Warehouse" FromRole="Transfer" ToRole="Warehouse" />
-          <NavigationProperty Name="Warehouse1" Relationship="PurchaseOrderModel.FK_Transfer_Warehouse1" FromRole="Transfer" ToRole="Warehouse" />
+          <NavigationProperty Name="WarehouseFrom" Relationship="PurchaseOrderModel.FK_Transfer_Warehouse" FromRole="Transfer" ToRole="Warehouse" />
+          <NavigationProperty Name="WarehouseTo" Relationship="PurchaseOrderModel.FK_Transfer_Warehouse1" FromRole="Transfer" ToRole="Warehouse" />
           <NavigationProperty Name="TransferSKU" Relationship="PurchaseOrderModel.FK_TransferSKU_Transfer" FromRole="Transfer" ToRole="TransferSKU" />
         </EntityType>
         <EntityType Name="TransferSKU">
@@ -2331,8 +2331,8 @@
           <Property Name="DefaultDispatch" Type="Boolean" />
           <Property Name="DefaultRMA" Type="Boolean" />
           <NavigationProperty Name="PurchaseOrder" Relationship="PurchaseOrderModel.FK_PurchaseOrder_Warehouse" FromRole="Warehouse" ToRole="PurchaseOrder" />
-          <NavigationProperty Name="Transfer" Relationship="PurchaseOrderModel.FK_Transfer_Warehouse" FromRole="Warehouse" ToRole="Transfer" />
-          <NavigationProperty Name="Transfer1" Relationship="PurchaseOrderModel.FK_Transfer_Warehouse1" FromRole="Warehouse" ToRole="Transfer" />
+          <NavigationProperty Name="TransferFrom" Relationship="PurchaseOrderModel.FK_Transfer_Warehouse" FromRole="Warehouse" ToRole="Transfer" />
+          <NavigationProperty Name="TransferTo" Relationship="PurchaseOrderModel.FK_Transfer_Warehouse1" FromRole="Warehouse" ToRole="Transfer" />
           <NavigationProperty Name="WarehouseSummary" Relationship="PurchaseOrderModel.FK_WarehouseSummary_Warehouse" FromRole="Warehouse" ToRole="WarehouseSummary" />
           <NavigationProperty Name="WarehouseUser" Relationship="PurchaseOrderModel.FK_WarehouseUser_Warehouse" FromRole="Warehouse" ToRole="WarehouseUser" />
         </EntityType>
