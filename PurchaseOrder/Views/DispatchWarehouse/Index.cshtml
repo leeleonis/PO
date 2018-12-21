@@ -83,7 +83,7 @@
                                                                         </div>
                                                                     </td>
                                                                     <td><a class='btn btn-default btn-sm' id='Edit' href='@Url.Action("Edit", new { item.ID })'>Edit</a></td>
-                                                                    <td><a class='btn btn-default btn-sm' id='Edit' href='@Url.Action("Delete", new { item.ID })'>Delete</a></td>
+                                                                    <td><a class='btn btn-default btn-sm' id='Edit' href='@Url.Action("Delete", new { item.ID })'  onclick="return confirm('是否確定刪除')">Delete</a></td>
                                                                 </tr>
                                                             }
                                                         }

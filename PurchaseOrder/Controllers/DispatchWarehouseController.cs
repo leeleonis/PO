@@ -41,15 +41,15 @@ namespace PurchaseOrderSys.Controllers
             db.Warehouse.Add(Warehouse);
             if (Shippingmethods!=null&& Shippingmethods.Any())
             {
-                Warehouse.WarehouseSummary.Add(new WarehouseSummary { Val = string.Join(",", Shippingmethods), Type = "Shippingmethods" });
+                Warehouse.WarehouseSummary.Add(new WarehouseSummary { IsEnable=true, Val = string.Join(",", Shippingmethods), Type = "Shippingmethods" });
             }
             if (!string.IsNullOrWhiteSpace(SCID))
             {
-                Warehouse.WarehouseSummary.Add(new WarehouseSummary { Val = SCID, Type = "SCID" });
+                Warehouse.WarehouseSummary.Add(new WarehouseSummary { IsEnable = true, Val = SCID, Type = "SCID" });
             }
-            if (!string.IsNullOrWhiteSpace(SCID))
+            if (!string.IsNullOrWhiteSpace(Warehouse3P))
             {
-                Warehouse.WarehouseSummary.Add(new WarehouseSummary { Val = Warehouse3P, Type = "Warehouse3P" });
+                Warehouse.WarehouseSummary.Add(new WarehouseSummary { IsEnable = true, Val = Warehouse3P, Type = "Warehouse3P" });
             }
             try
             {
@@ -66,7 +66,8 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult Edit(int id)
         {
             ViewBag.Warehouse3PList = new Api.Winit_API().Warehouse3P();
-            ViewBag.SCList = new Api.SC_API().SCList();
+            var SCList = new Api.SC_API().SCList();
+            ViewBag.SCList = SCList;
             var Warehouse = db.Warehouse.Find(id);
             if (Warehouse.WarehouseSummary.Any())
             {
@@ -79,6 +80,18 @@ namespace PurchaseOrderSys.Controllers
                             break;
                         case "SCID":
                             ViewBag.SCID = item.Val;
+                            if (!string.IsNullOrWhiteSpace(item.Val))
+                            {
+                                var dList = SCList.Where(x => x.ID.ToString() == item.Val);
+                                if (dList.Any())
+                                {
+                                    ViewBag.SCName = dList.FirstOrDefault().Name;
+                                    ViewBag.SCType = dList.FirstOrDefault().WarehouseType;
+                                    ViewBag.SCSellable = dList.FirstOrDefault().IsSellAble.ToString();
+                                    ViewBag.SCDefault = dList.FirstOrDefault().IsDefault.ToString();
+                                }
+                            }
+                          
                             break;
                         case "Warehouse3P":
                             ViewBag.Warehouse3P = item.Val;
@@ -89,27 +102,85 @@ namespace PurchaseOrderSys.Controllers
             return View(Warehouse);
         }
         [HttpPost]
-        public ActionResult Edit(Warehouse Warehouse)
+        public ActionResult Edit(Warehouse Warehouse, string[] Shippingmethods, string SCID, string Warehouse3P)
         {
+            var OldWarehouse = db.Warehouse.Find(Warehouse.ID);
+            OldWarehouse.Name = Warehouse.Name;
+            OldWarehouse.Type = Warehouse.Type;
+            OldWarehouse.WinitWarehouse = Warehouse.WinitWarehouse;
+            OldWarehouse.Fulfillable = Warehouse.Fulfillable;
+            OldWarehouse.Location = Warehouse.Location;
+            OldWarehouse.Countries = Warehouse.Countries;
+            OldWarehouse.Marketplace = Warehouse.Marketplace;
+            OldWarehouse.Company = Warehouse.Company;
+            OldWarehouse.DefaultDispatch = Warehouse.DefaultDispatch;
+            OldWarehouse.DefaultRMA = Warehouse.DefaultRMA;
+            OldWarehouse.Address1 = Warehouse.Address1;
+            OldWarehouse.Address2 = Warehouse.Address2;
+            OldWarehouse.City = Warehouse.City;
+            OldWarehouse.State = Warehouse.State;
+            OldWarehouse.Postcode = Warehouse.Postcode;
+            OldWarehouse.Country = Warehouse.Country;
+            OldWarehouse.Phone = Warehouse.Phone;
 
-            return View();
+            OldWarehouse.UpdateBy = UserBy;
+            OldWarehouse.UpdateAt = DateTime.UtcNow;
+
+            if (Shippingmethods != null && Shippingmethods.Any())
+            {
+                foreach (var item in OldWarehouse.WarehouseSummary.Where(x => x.IsEnable && x.Type == "Shippingmethods"))
+                {
+                    item.Val = string.Join(",", Shippingmethods);
+                }
+            }
+            if (!string.IsNullOrWhiteSpace(SCID))
+            {
+                foreach (var item in OldWarehouse.WarehouseSummary.Where(x => x.IsEnable && x.Type == "SCID"))
+                {
+                    item.Val = SCID;
+                }
+            }
+            if (!string.IsNullOrWhiteSpace(Warehouse3P))
+            {
+                foreach (var item in OldWarehouse.WarehouseSummary.Where(x => x.IsEnable && x.Type == "Warehouse3P"))
+                {
+                    item.Val = Warehouse3P;
+                }
+            }
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+            return RedirectToAction("Index");
         }
       
         public ActionResult Delete(int id)
         {
-
-            return View();
+            var Warehouse = db.Warehouse.Find(id);
+            Warehouse.IsEnable = false;
+            Warehouse.UpdateBy = UserBy;
+            Warehouse.UpdateAt = DateTime.UtcNow;
+            db.SaveChanges();
+            return RedirectToAction("Index");
         }
         public ActionResult ShippingMethodData()
         {
             string Shippingmethods = "";
-            Shippingmethods = TempData["Shippingmethods"].ToString();
-
-           var ShippingArray= Shippingmethods.Split(',');
+            if (TempData["Shippingmethods"] != null)
+            {
+                Shippingmethods = TempData["Shippingmethods"].ToString();
+            }
+            var ShippingArray = Shippingmethods.Split(',');
             int total = 0;
             var ShippingList = new Api.Shipping_API().ShippingList();
 
-          
+
 
             List<dynamic> dataList = new List<dynamic>();
             List<dynamic> dataListOut = new List<dynamic>();
@@ -132,7 +203,7 @@ namespace PurchaseOrderSys.Controllers
                     MethodTypeID = m.MethodType,
                     BoxTypeID = m.BoxType,
                     Carrier = ShippingList.data.carrier.Where(x => x.value == m.CarrierID)?.FirstOrDefault().text,
-                    MethodType ="",
+                    MethodType = "",
                     BoxType = "",
                     m.IsExport,
                     m.IsBattery,
@@ -141,30 +212,30 @@ namespace PurchaseOrderSys.Controllers
 
                 try
                 {
- dataListOut.AddRange(dataList.Select(m => new
-                {
-                    m.ID,
-                    m.CarrierType,
-                    m.IsDirectLine,
-                    m.Name,
-                    m.CarrierID,
-                    m.MethodTypeID,
-                    m.BoxTypeID,
-                    m.Carrier,
-                    MethodType = MethodTypeFun(m.MethodTypeID, m.CarrierType, ShippingList),
-                    BoxType = BoxTypeFun(m.BoxTypeID, m.CarrierType, ShippingList),
-                    m.IsExport,
-                    m.IsBattery,
-                    m.InBox,
-                    checkedVal= checkedValFun(ShippingArray, m.ID) 
-                }).ToList());
+                    dataListOut.AddRange(dataList.Select(m => new
+                    {
+                        m.ID,
+                        m.CarrierType,
+                        m.IsDirectLine,
+                        m.Name,
+                        m.CarrierID,
+                        m.MethodTypeID,
+                        m.BoxTypeID,
+                        m.Carrier,
+                        MethodType = MethodTypeFun(m.MethodTypeID, m.CarrierType, ShippingList),
+                        BoxType = BoxTypeFun(m.BoxTypeID, m.CarrierType, ShippingList),
+                        m.IsExport,
+                        m.IsBattery,
+                        m.InBox,
+                        checkedVal = checkedValFun(ShippingArray, m.ID)
+                    }).ToList());
                 }
                 catch (Exception ex)
                 {
 
                     throw;
                 }
-               
+
 
 
 

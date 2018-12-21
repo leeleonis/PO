@@ -53,7 +53,6 @@ namespace PurchaseOrderSys.Models
         public virtual DbSet<SkuAttribute> SkuAttribute { get; set; }
         public virtual DbSet<SkuAttributeLang> SkuAttributeLang { get; set; }
         public virtual DbSet<SkuAttributeType> SkuAttributeType { get; set; }
-        public virtual DbSet<SkuLang> SkuLang { get; set; }
         public virtual DbSet<SkuPicture> SkuPicture { get; set; }
         public virtual DbSet<SkuType> SkuType { get; set; }
         public virtual DbSet<SkuTypeLang> SkuTypeLang { get; set; }
@@ -65,5 +64,6 @@ namespace PurchaseOrderSys.Models
         public virtual DbSet<WarehouseUser> WarehouseUser { get; set; }
         public virtual DbSet<CarrierAPI> CarrierAPI { get; set; }
         public virtual DbSet<Carriers> Carriers { get; set; }
+        public virtual DbSet<SkuLang> SkuLang { get; set; }
     }
 }

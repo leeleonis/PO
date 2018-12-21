@@ -689,6 +689,13 @@
           <Property Name="Company" Type="nvarchar" MaxLength="50" />
           <Property Name="DefaultDispatch" Type="bit" />
           <Property Name="DefaultRMA" Type="bit" />
+          <Property Name="Address1" Type="nvarchar" MaxLength="50" />
+          <Property Name="Address2" Type="nvarchar" MaxLength="50" />
+          <Property Name="City" Type="nvarchar" MaxLength="50" />
+          <Property Name="State" Type="nvarchar" MaxLength="50" />
+          <Property Name="Postcode" Type="nvarchar" MaxLength="50" />
+          <Property Name="Country" Type="nvarchar" MaxLength="50" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="WarehouseSummary">
           <Key>
@@ -2316,6 +2323,13 @@
           <NavigationProperty Name="TransferTo" Relationship="PurchaseOrderModel.FK_Transfer_Warehouse1" FromRole="Warehouse" ToRole="Transfer" />
           <NavigationProperty Name="WarehouseSummary" Relationship="PurchaseOrderModel.FK_WarehouseSummary_Warehouse" FromRole="Warehouse" ToRole="WarehouseSummary" />
           <NavigationProperty Name="WarehouseUser" Relationship="PurchaseOrderModel.FK_WarehouseUser_Warehouse" FromRole="Warehouse" ToRole="WarehouseUser" />
+          <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Postcode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="WarehouseSummary">
           <Key>
@@ -3524,6 +3538,13 @@
           <EntitySetMapping Name="Warehouse">
             <EntityTypeMapping TypeName="PurchaseOrderModel.Warehouse">
               <MappingFragment StoreEntitySet="Warehouse">
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Postcode" ColumnName="Postcode" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
                 <ScalarProperty Name="DefaultRMA" ColumnName="DefaultRMA" />
                 <ScalarProperty Name="DefaultDispatch" ColumnName="DefaultDispatch" />
                 <ScalarProperty Name="Company" ColumnName="Company" />

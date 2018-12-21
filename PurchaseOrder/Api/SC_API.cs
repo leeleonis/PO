@@ -10,6 +10,7 @@ using Microsoft.CSharp;
 using System.CodeDom.Compiler;
 using System.Reflection;
 using System.Web.Mvc;
+using PurchaseOrderSys.SCService;
 
 namespace PurchaseOrderSys.Api
 {
@@ -18,15 +19,13 @@ namespace PurchaseOrderSys.Api
         private string UserName = "tim@weypro.com";
         private string Password = "timfromweypro";
 
-        public  List<SelectListItem> SCList()
+        public Warehouse[] SCList()
         {
-            var SCList = new List<SelectListItem>();
             SCService.SCServiceSoapClient OS_SellerCloud = new SCService.SCServiceSoapClient();
             SCService.AuthHeader OS_AuthHeader = new SCService.AuthHeader { UserName = UserName, Password = Password };
             SCService.ServiceOptions OS_Options = new SCService.ServiceOptions();
             var data = OS_SellerCloud.GetWarehouses(OS_AuthHeader, OS_Options);
-            SCList= data.Select(x => new SelectListItem { Text = x.Name, Value = x.ID.ToString() }).ToList();
-            return SCList;
+            return data;
         }
 
 

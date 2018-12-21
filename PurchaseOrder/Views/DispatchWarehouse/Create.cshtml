@@ -1,5 +1,7 @@
 ﻿@model Warehouse
 @{
+    var WarehouseList = (PurchaseOrderSys.SCService.Warehouse[])ViewBag.SCList;
+    var SCList = WarehouseList.Select(x => new SelectListItem { Text = x.Name, Value = x.ID.ToString() }).ToList();
     ViewBag.title = "Add Warehouse";
     var warehouseTypeDDL = EnumData.warehouseTypeDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var DefaultSelect = PurchaseOrderSys.App_GlobalResources.Resource.DefaultSelect;
@@ -58,21 +60,25 @@
                                             <div class="form-group">
                                                 @Html.Label("SC ID", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownList("SCID", (List<SelectListItem>)ViewBag.SCList, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.DropDownList("SCID", SCList, DefaultSelect, htmlAttributes: new { @class = "form-control" })
                                                 </div>
-                                                @Html.Label("SC Name", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @Html.Label("SC Name", htmlAttributes: new { @class = "control-label col-sm-2" ,@readonly= "readonly"})
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("SCName", new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.Editor("SCName", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                                                 </div>
                                                 @Html.Label("SC Type", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("SCType", new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.Editor("SCType", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                                                 </div>
                                             </div>
                                             <div class="form-group">
+                                                @Html.Label("SC Sellable", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("SCSellable", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                </div>
                                                 @Html.Label("SC Default", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("SCDefault", new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.Editor("SCDefault", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                                                 </div>
                                                 @Html.Label("3P Warehouse", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
@@ -87,9 +93,9 @@
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("Company", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
-                                                @Html.Label("Name", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @Html.Label("Phone", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Name", new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.Editor("Phone", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -120,10 +126,6 @@
                                                 @Html.Label("Country", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("Country", new { htmlAttributes = new { @class = "form-control" } })
-                                                </div>
-                                                @Html.Label("Phone", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Phone", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
                                             </div>
                                         </fieldset>
@@ -213,7 +215,18 @@
                 "info": true,
             });
           
-          
+            $("#SCID").change(function () {
+                var selected = $(this).val();
+                var stringArray = @Html.Raw(Json.Encode(WarehouseList));
+                for (var i = 0; i < stringArray.length; i++) {
+                    if (stringArray[i]["ID"] == selected) {
+                        $("#SCName").val(stringArray[i]["Name"]);
+                        $("#SCType").val(stringArray[i]["WarehouseType"]);
+                        $("#SCDefault").val(stringArray[i]["IsDefault"]); 
+                        $("#SCSellable").val(stringArray[i]["IsSellAble"]);
+                    }
+                }
+            });
         });
 
     </script>

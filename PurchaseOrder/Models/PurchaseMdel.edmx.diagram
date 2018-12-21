@@ -6,7 +6,7 @@
     <edmx:Diagrams>
       <Diagram DiagramId="5872b44f309a44909e8a45ca6f67f469" Name="Diagram1" ZoomLevel="72">
         <EntityTypeShape EntityType="PurchaseOrderModel.AdminGroup" Width="1.5" PointX="11.5" PointY="25.625" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.AdminUser" Width="1.5" PointX="13.75" PointY="24.875" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.AdminUser" Width="1.5" PointX="13.75" PointY="26.5" />
         <EntityTypeShape EntityType="PurchaseOrderModel.API" Width="1.5" PointX="0.75" PointY="7" />
         <EntityTypeShape EntityType="PurchaseOrderModel.Auth" Width="1.5" PointX="2.75" PointY="6" />
         <EntityTypeShape EntityType="PurchaseOrderModel.Brand" Width="1.5" PointX="3.75" PointY="16.125" />
