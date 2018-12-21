@@ -129,7 +129,16 @@ namespace PurchaseOrderSys.Controllers
             if (filter.RelateID.HasValue) CompanyFilter = CompanyFilter.Where(c => c.RelateID.Value.Equals(filter.RelateID.Value));
             if (!string.IsNullOrEmpty(filter.eBayAccountID)) CompanyFilter = CompanyFilter.Where(c => c.eBayAccountID.ToLower().Contains(filter.eBayAccountID.ToLower()));
             if (!string.IsNullOrEmpty(filter.AmazonAccountID)) CompanyFilter = CompanyFilter.Where(c => c.AmazonAccountID.ToLower().Contains(filter.AmazonAccountID.ToLower()));
-            var CompanyList = CompanyFilter.Select(x=>new CompanyVM { }).ToList();
+            var CompanyList = CompanyFilter.Select(x => new CompanyVM {
+                AmazonAccountID = x.AmazonAccountID,
+                CompanyNo = x.CompanyNo,
+                eBayAccountID = x.eBayAccountID,
+                ID = x.ID,
+                Name = x.Name,
+                ShandowSuffix = x.ShandowSuffix,
+                ParentID = x.ParentID,
+                RelateID = x.RelateID
+            }).ToList();
             if (CompanyList.Any())
             {
                 int length = rows;
