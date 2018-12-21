@@ -124,13 +124,11 @@ namespace PurchaseOrderSys.Controllers
 
             sku.eBayTitle = JsonConvert.SerializeObject(eBayTitle.ToDictionary(t => int.Parse(t["misc"]), t => t["title"]));
             SetUpdateData(sku, updateData, EditList);
-            db.Entry(sku).State = EntityState.Modified;
-
+            
             if (sku.SkuLang.Any(l => l.LangID.Equals(langData.LangID)))
             {
                 SkuLang skuLang = sku.SkuLang.First(l => l.LangID.Equals(langData.LangID));
-                SetUpdateData(skuLang, langData, new string[] { "Name", "Model", "Description", "SpecContent" });
-                db.Entry(skuLang).State = EntityState.Modified;
+                SetUpdateData(skuLang, langData, new string[] { "Name", "Model", "Description", "PackageContent", "SpecContent" });
             }
             else
             {
@@ -141,6 +139,14 @@ namespace PurchaseOrderSys.Controllers
             }
 
             db.SaveChanges();
+
+            if (!string.IsNullOrEmpty(sku.ParentSku) && db.SKU.Find(sku.SkuID + "_var") == null)
+            {
+                using (StockKeepingUnit SKU = new StockKeepingUnit())
+                {
+                    SKU.CreateSkuShadow(sku);
+                }
+            }
 
             if (VariationValue != null && VariationValue.Any())
             {
@@ -620,7 +626,7 @@ namespace PurchaseOrderSys.Controllers
                 langData?.SpecContent,
                 VariationList = sku.Type.Equals((byte)EnumData.SkuType.Variation) ? RenderViewToString(ControllerContext, "_VariationAttribute", sku, viewData) : "",
                 KitList = sku.Type.Equals((byte)EnumData.SkuType.Kit) ? RenderViewToString(ControllerContext, "_SkuKit", sku, viewData) : "",
-                ContentList = RenderViewToString(ControllerContext, "_PackageContent", sku, viewData),
+                ContentList = RenderViewToString(ControllerContext, "_Content", sku, viewData),
                 AttributeList = RenderViewToString(ControllerContext, "_SingleAttribute", sku, viewData)
             };
 
@@ -667,6 +673,29 @@ namespace PurchaseOrderSys.Controllers
                 sku.GetKit.Remove(kit);
 
                 db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                result.status = false;
+                result.message = e.InnerException != null ? e.InnerException.Message ?? e.Message : e.Message;
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetPackageContent(string ID, string LangID)
+        {
+            AjaxResult result = new AjaxResult();
+
+            SKU sku = db.SKU.Find(ID);
+
+            try
+            {
+                if (sku == null) throw new Exception("Not found sku!");
+
+                ViewDataDictionary viewData = new ViewDataDictionary() { { "LangID", LangID } };
+
+                result.data = RenderViewToString(ControllerContext, "_PackageContent", sku, viewData);
             }
             catch (Exception e)
             {

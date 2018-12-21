@@ -1,0 +1,20 @@
+﻿@model SKU
+@{
+    int i = 0;
+    string LangID = ViewData["LangID"].ToString();
+    string DefaultLangID = EnumData.DataLangList().First().Key;
+
+    foreach (PackageContent content in Model.SkuType.PackageContent)
+    {
+        var value = Model.Sku_PackageContent.FirstOrDefault(c => c.ItemID.Equals(content.ID) && c.LangID.Equals(LangID)) ?? new Sku_PackageContent() { };
+        string name = string.Format("PackageContent[{0}]", i++);
+        <tr>
+            @Html.Hidden(string.Format("{0}[Sku]", name), Model.SkuID)
+            @Html.Hidden(string.Format("{0}[ItemID]", name), content.ID)
+            @Html.Hidden(string.Format("{0}[LangID]", name), LangID)
+            <td>@content.PackageContentLang.First(l => l.LangID.Equals(content.PackageContentLang.Any(ll => ll.LangID.Equals(LangID)) ? LangID : DefaultLangID)).Name</td>
+            <td>@Html.TextBox(string.Format("{0}[Model]", name), value.Model, new { @class = "form-control" })</td>
+            <td>@Html.BooleanSwitch(string.Format("{0}[Html]", name), (value != null ? value.Html : false))</td>
+        </tr>
+    }
+}

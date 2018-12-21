@@ -22,6 +22,7 @@ namespace PurchaseOrderSys.Models
     
         public int ID { get; set; }
         public Nullable<int> PurchaseSKUID { get; set; }
+        public Nullable<int> PID { get; set; }
         public string SerialsNo { get; set; }
         public Nullable<int> SerialsType { get; set; }
         public string CreateBy { get; set; }
@@ -30,13 +31,12 @@ namespace PurchaseOrderSys.Models
         public Nullable<System.DateTime> UpdateAt { get; set; }
         public string ReceivedBy { get; set; }
         public Nullable<System.DateTime> ReceivedAt { get; set; }
-        public Nullable<int> PID { get; set; }
         public Nullable<int> TransferSKUID { get; set; }
     
+        public virtual PurchaseSKU PurchaseSKU { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SerialsLlist> SerialsLlistC { get; set; }
         public virtual SerialsLlist SerialsLlistP { get; set; }
         public virtual TransferSKU TransferSKU { get; set; }
-        public virtual PurchaseSKU PurchaseSKU { get; set; }
     }
 }

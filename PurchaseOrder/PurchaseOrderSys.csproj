@@ -6300,6 +6300,7 @@
     <Content Include="Views\Shared\EditorTemplates\FDate.cshtml" />
     <Content Include="Views\DispatchWarehouse\Index.cshtml" />
     <Content Include="Views\DispatchWarehouse\Create.cshtml" />
+    <Content Include="Views\Sku\_Content.cshtml" />
     <Content Include="Views\Sku\_PackageContent.cshtml" />
   </ItemGroup>
   <ItemGroup>

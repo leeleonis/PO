@@ -36,8 +36,8 @@ namespace PurchaseOrderSys.Models
         public string UpdateBy { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }
     
+        public virtual AdminGroup AdminGroup { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<WarehouseUser> WarehouseUser { get; set; }
-        public virtual AdminGroup AdminGroup { get; set; }
     }
 }

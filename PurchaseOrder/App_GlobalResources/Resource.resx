@@ -1711,4 +1711,7 @@
   <data name="Warehouse_DefaultRMA" xml:space="preserve">
     <value>Default RMA</value>
   </data>
+  <data name="SkuLang_PackageContent" xml:space="preserve">
+    <value></value>
+  </data>
 </root>

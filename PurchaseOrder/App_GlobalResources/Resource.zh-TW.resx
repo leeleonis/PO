@@ -1485,4 +1485,7 @@
   <data name="Warehouse_DefaultRMA" xml:space="preserve">
     <value>預設退貨倉</value>
   </data>
+  <data name="SkuLang_PackageContent" xml:space="preserve">
+    <value>包裝內容</value>
+  </data>
 </root>

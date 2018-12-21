@@ -19,9 +19,9 @@ namespace PurchaseOrderSys.Models
         {
             this.GetKit = new HashSet<KitSku>();
             this.Sku_Attribute = new HashSet<Sku_Attribute>();
+            this.Sku_PackageContent = new HashSet<Sku_PackageContent>();
             this.SkuLang = new HashSet<SkuLang>();
             this.SkuPicture = new HashSet<SkuPicture>();
-            this.Sku_PackageContent = new HashSet<Sku_PackageContent>();
         }
     
         public bool IsEnable { get; set; }
@@ -48,12 +48,12 @@ namespace PurchaseOrderSys.Models
         public virtual ICollection<KitSku> GetKit { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Sku_Attribute> Sku_Attribute { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Sku_PackageContent> Sku_PackageContent { get; set; }
         public virtual SkuType SkuType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SkuLang> SkuLang { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SkuPicture> SkuPicture { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Sku_PackageContent> Sku_PackageContent { get; set; }
     }
 }

@@ -319,6 +319,20 @@
                                         <hr />
 
                                         <fieldset>
+                                            <legend>Package Content</legend>
+
+                                            <div class="form-group">
+                                                <div class="col-lg-12">
+                                                    <button type="button" class="btn btn-default" onclick="ResetPackageContent()">屬性重置</button>
+                                                </div>
+                                            </div>
+
+                                            @Html.TextArea("PackageContent")
+                                        </fieldset>
+
+                                        <hr />
+
+                                        <fieldset>
                                             <legend>Specification</legend>
 
                                             <div class="form-group">
@@ -445,6 +459,7 @@
 
         $(document).ready(function () {
             CKEDITOR.replace('Description', { height: '500px' });
+            CKEDITOR.replace('PackageContent', { height: '500px' });
             CKEDITOR.replace('SpecContent', { height: '1000px' });
 
             $('#LangID').change(function () {
@@ -453,6 +468,7 @@
                         $('#Name').val(response.data.Name);
                         $('#Models').val(response.data.Models);
                         CKEDITOR.instances['Description'].setData(website.IsEmpty(response.data.Description) ? '' : response.data.Description);
+                        CKEDITOR.instances['PackageContent'].setData(website.IsEmpty(response.data.PackageContent) ? '' : response.data.PackageContent);
                         CKEDITOR.instances['SpecContent'].setData(website.IsEmpty(response.data.SpecContent) ? '' : response.data.SpecContent);
 
                         if (!website.IsEmpty(response.data.VariationList)) {
@@ -706,6 +722,14 @@
                     $(this).find(':text:eq(0)').attr('textboxname', name + '[Sku]');
                     $(this).find('input.textbox-value').attr('name', name + '[Sku]');
                     $(this).find(':text:eq(2)').attr('name', name + '[Qty]');
+                }
+            });
+        }
+        
+        function ResetPackageContent() {
+            website.AjaxUrl('@Url.Action("GetPackageContent", "Sku", new { ID = Model.SkuID })', 'get', { LangID: $('#LangID').val() }).done(function (response) {
+                if (response.status) {
+                    CKEDITOR.instances['PackageContent'].setData(response.data);
                 }
             });
         }

@@ -2869,7 +2869,7 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
-        ///   查詢類似 &gt;&gt;&gt;&gt;&gt;&gt;&gt; 833044545a3ad9230e03e50d1ef5f4914a486aec 的當地語系化字串。
+        ///   查詢類似  的當地語系化字串。
         /// </summary>
         public static string Sku_PackageContent_UpdateAt {
             get {
@@ -3225,6 +3225,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         public static string SkuLang_Name {
             get {
                 return ResourceManager.GetString("SkuLang_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string SkuLang_PackageContent {
+            get {
+                return ResourceManager.GetString("SkuLang_PackageContent", resourceCulture);
             }
         }
         

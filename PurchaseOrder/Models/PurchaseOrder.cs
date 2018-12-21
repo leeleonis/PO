@@ -17,17 +17,18 @@ namespace PurchaseOrderSys.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PurchaseOrder()
         {
-            this.PurchaseNote = new HashSet<PurchaseNote>();
-            this.CreditMemo = new HashSet<CreditMemo>();
-            this.PurchaseSKU = new HashSet<PurchaseSKU>();
             this.CMCreditNote = new HashSet<CMCreditNote>();
             this.CMReplacement = new HashSet<CMReplacement>();
+            this.CreditMemo = new HashSet<CreditMemo>();
+            this.PurchaseNote = new HashSet<PurchaseNote>();
+            this.PurchaseSKU = new HashSet<PurchaseSKU>();
         }
     
         public bool IsEnable { get; set; }
         public int ID { get; set; }
         public Nullable<int> CompanyID { get; set; }
         public Nullable<int> VendorID { get; set; }
+        public string POStatus { get; set; }
         public string POType { get; set; }
         public Nullable<System.DateTime> PODate { get; set; }
         public string ReceiveStatus { get; set; }
@@ -35,38 +36,37 @@ namespace PurchaseOrderSys.Models
         public Nullable<System.DateTime> ShippedDate { get; set; }
         public string Carrier { get; set; }
         public string Tracking { get; set; }
+        public Nullable<System.DateTime> InvoiceDate { get; set; }
+        public string InvoiceNo { get; set; }
+        public string PaymentProof { get; set; }
         public string PaymentStatus { get; set; }
         public Nullable<System.DateTime> PaymentDate { get; set; }
         public Nullable<decimal> PaidAmount { get; set; }
+        public string Warehouse { get; set; }
+        public string Currency { get; set; }
+        public Nullable<decimal> Tax { get; set; }
         public string CreateBy { get; set; }
         public System.DateTime CreateAt { get; set; }
         public string UpdateBy { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }
         public string ReceivedBy { get; set; }
         public Nullable<System.DateTime> ReceivedAt { get; set; }
-        public string POStatus { get; set; }
-        public Nullable<System.DateTime> InvoiceDate { get; set; }
-        public string InvoiceNo { get; set; }
-        public string PaymentProof { get; set; }
-        public string Warehouse { get; set; }
-        public string Currency { get; set; }
-        public Nullable<decimal> Tax { get; set; }
         public Nullable<int> WarehouseID { get; set; }
         public Nullable<decimal> ShippingCost { get; set; }
         public Nullable<decimal> Other { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CMCreditNote> CMCreditNote { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CMReplacement> CMReplacement { get; set; }
         public virtual Company Company { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CreditMemo> CreditMemo { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseNote> PurchaseNote { get; set; }
         public virtual VendorLIst VendorLIst { get; set; }
         public virtual Warehouse Warehouse1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CreditMemo> CreditMemo { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseSKU> PurchaseSKU { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CMCreditNote> CMCreditNote { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CMReplacement> CMReplacement { get; set; }
     }
 }
