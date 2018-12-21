@@ -91,7 +91,7 @@ namespace PurchaseOrderSys
         public Nullable<int> Brand { get; set; }
         public string UPC { get { return upcField; } set { upcField = !string.IsNullOrEmpty(value) ? value.Trim() : value; } }
         public string EAN { get { return eanField; } set { eanField = !string.IsNullOrEmpty(value) ? value.Trim() : value; } }
-        public Nullable<int> Replenishable { get; set; }
-        public Nullable<int> Status { get; set; }
+        public Nullable<bool> Replenishable { get; set; }
+        public Nullable<byte> Status { get; set; }
     }
 }
