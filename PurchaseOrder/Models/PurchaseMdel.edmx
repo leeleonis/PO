@@ -2193,6 +2193,7 @@
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
           <NavigationProperty Name="GetSku" Relationship="PurchaseOrderModel.FK_SkuLang_Sku" FromRole="SkuLang" ToRole="SKU" />
+          <Property Name="PackageContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="SkuPicture">
           <Key>
