@@ -3231,6 +3231,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
+        public static string SkuLang_PackageContent {
+            get {
+                return ResourceManager.GetString("SkuLang_PackageContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
         public static string SkuLang_Sku {
             get {
                 return ResourceManager.GetString("SkuLang_Sku", resourceCulture);

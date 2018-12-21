@@ -24,7 +24,7 @@ namespace PurchaseOrderSys.Models
 
         public void SetSkuData(string sku)
         {
-            skuData =db.SKU.Find(sku);
+            skuData = db.SKU.Find(sku);
         }
 
         public string GetNewSku(int category, int brand)
@@ -36,7 +36,7 @@ namespace PurchaseOrderSys.Models
             {
                 if (db.SKU.Any(s => s.SkuID.StartsWith(category.ToString() + brand.ToString())))
                 {
-                    SKU lastest =db.SKU.AsNoTracking().Where(s => s.SkuID.StartsWith(category.ToString() + brand.ToString())).OrderByDescending(s => s.SkuID).First(s => s.SkuID.Length.Equals(9));
+                    SKU lastest = db.SKU.AsNoTracking().Where(s => s.SkuID.StartsWith(category.ToString() + brand.ToString())).OrderByDescending(s => s.SkuID).First(s => s.SkuID.Length.Equals(9));
                     string oldNumber = string.Join("", lastest.SkuID.Skip(6).Take(3));
                     number = int.Parse(oldNumber, System.Globalization.NumberStyles.HexNumber) + 1;
                 }
@@ -60,41 +60,68 @@ namespace PurchaseOrderSys.Models
             newLang.CreateAt = newSku.CreateAt;
             newLang.CreateBy = newSku.CreateBy;
 
-           db.SKU.Add(newSku);
-            db.SkuLang.Add(newLang);
+            newSku.SkuLang.Add(newLang);
+            db.SKU.Add(newSku);
 
             if (newSku.Type.Equals((byte)EnumData.SkuType.Single) && newSku.Condition.Equals(1))
             {
                 foreach (var condition in db.Condition.Where(c => c.IsEnable && !c.ID.Equals(newSku.Condition)).ToList())
                 {
-                    SKU sku_suffix = new SKU()
-                    {
-                        IsEnable = true,
-                        SkuID = newSku.SkuID + condition.Suffix,
-                        Type = (byte)EnumData.SkuType.Single,
-                        Condition = condition.ID,
-                        Category = newSku.Category,
-                        Brand = newSku.Brand,
-                        Status = (byte)EnumData.SkuStatus.Inactive,
-                        CreateAt = newSku.CreateAt,
-                        CreateBy = newSku.CreateBy
-                    };
+                    SKU sku_suffix = SkuInherit(newSku, newSku.SkuID + condition.Suffix, (byte)EnumData.SkuType.Single);
+                    sku_suffix.Condition = condition.ID;
+                    sku_suffix.CreateAt = newSku.CreateAt;
+                    sku_suffix.CreateBy = newSku.CreateBy;
 
-                   db.SKU.Add(sku_suffix);
-                    db.SkuLang.Add(new SkuLang()
+                    sku_suffix.SkuLang.Add(new SkuLang()
                     {
                         Sku = sku_suffix.SkuID,
                         LangID = newLang.LangID,
                         Name = newLang.Name,
+                        Model = newLang.Model,
                         CreateAt = newLang.CreateAt,
                         CreateBy = newLang.CreateBy
                     });
+
+                    db.SKU.Add(sku_suffix);
                 }
             }
 
-            db.SaveChanges();
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+
+            }
 
             return newSku;
+        }
+
+        public SKU CreateSkuShadow(SKU parentSku)
+        {
+            SKU shadow = SkuInherit(parentSku, parentSku.SkuID + "_var", (byte)EnumData.SkuType.Shadow);
+            shadow.ParentShadow = parentSku.SkuID;
+            shadow.CreateAt = parentSku.UpdateAt.Value;
+            shadow.CreateBy = parentSku.UpdateBy;
+
+            foreach (var lang in parentSku.SkuLang)
+            {
+                shadow.SkuLang.Add(new SkuLang()
+                {
+                    Sku = shadow.SkuID,
+                    LangID = lang.LangID,
+                    Name = lang.Name,
+                    Model = lang.Model,
+                    CreateAt = shadow.CreateAt,
+                    CreateBy = shadow.CreateBy
+                });
+            }
+
+            db.SKU.Add(shadow);
+            db.SaveChanges();
+
+            return shadow;
         }
 
         public List<SKU> GetVariationSku()
@@ -157,6 +184,23 @@ namespace PurchaseOrderSys.Models
             }
 
             return attrIDs.ToArray(); ;
+        }
+
+        public SKU SkuInherit(SKU parentSku, string sku, byte type)
+        {
+            return new SKU()
+            {
+                IsEnable = true,
+                SkuID = sku,
+                Type = type,
+                ParentShadow = parentSku.SkuID,
+                Category = parentSku.Category,
+                Brand = parentSku.Brand,
+                Condition = parentSku.Condition,
+                EAN = parentSku.EAN,
+                UPC = parentSku.UPC,
+                Status = (byte)EnumData.SkuStatus.Inactive
+            };
         }
 
         protected virtual void Dispose(bool disposing)

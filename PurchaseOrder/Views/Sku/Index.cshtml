@@ -126,7 +126,7 @@
 
         function getFilterData() {
             return {
-                ID: $('.filterColumn .s-ID').val(),
+                SkuID: $('.filterColumn .s-skuID').val(),
                 ParentSku: $('.filterColumn .s-parendSku').val(),
                 Name: $('.filterColumn .s-name').val(),
                 Condition: $('.filterColumn .s-condition').val(),
@@ -141,7 +141,7 @@
         function setFilterColumn(filterValue) {
             return {
                 IsFilter: true,
-                SkuID: "<input type='text' class='form-control s-ID' value='" + (!website.IsEmpty(filterValue['ID']) ? filterValue['ID'] : '') + "'>",
+                SkuID: "<input type='text' class='form-control s-skuID' value='" + (!website.IsEmpty(filterValue['SkuID']) ? filterValue['SkuID'] : '') + "'>",
                 ParentSku: "<input type='text' class='form-control s-parentSku' value='" + (!website.IsEmpty(filterValue['ParentSku']) ? filterValue['ParentSku'] : '') + "'>",
                 Name: "<input type='text' class='form-control s-name' value='" + (!website.IsEmpty(filterValue['Name']) ? filterValue['Name'] : '') + "'>",
                 Condition: "<select class='form-control s-condition'><option value=''>全部</option>" + datagrid.setSelectOption(selectOption['SkuCondition'], filterValue['Condition']) + "</select>",
@@ -165,9 +165,10 @@
             var dataList = [];
 
             if (website.IsEmpty(ID)) {
-                var rows = $table.datagrid('getSelections');
+                var rows = $table.datagrid('getChecked');
+                console.log(rows);
                 for (var i in rows) {
-                    index = $table.datagrid('getRowIndex', rows[i].ID) - 1;
+                    index = $table.datagrid('getRowIndex', rows[i].SkuID) - 1;
                     if (!$("button#btn-save:eq(" + index + ")").is("[disabled]")) {
                         dataList.push(setData(rows[i], index));
                         $("button#btn-save:eq(" + index + ")").attr("disabled", "disabled");
@@ -198,9 +199,8 @@
 
         function setData(row, index) {
             return {
-                ID: row.ID,
-                Sku: row.ID,
-                ParentSku: $("input#ParentSku:eq(" + index + ")").val(),
+                SkuID: row.SkuID,
+                ParentSku: row.ParentSku,
                 Name: $("input#Name:eq(" + index + ")").val(),
                 Condition: $("select#Condition:eq(" + index + ")").val(),
                 Category: $("select#Category:eq(" + index + ")").val(),
@@ -208,7 +208,7 @@
                 UPC: $("input#UPC:eq(" + index + ")").val(),
                 EAN: $("input#EAN:eq(" + index + ")").val(),
                 Replenishable: $("input#Replenishable:eq(" + index + ")").prop('checked'),
-                Status: $("select#Type:eq(" + index + ")").val()
+                Status: $("select#Status:eq(" + index + ")").val()
             }
         }
     </script>

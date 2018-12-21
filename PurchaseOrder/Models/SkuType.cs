@@ -20,6 +20,8 @@ namespace PurchaseOrderSys.Models
             this.SKU = new HashSet<SKU>();
             this.SkuTypeLang = new HashSet<SkuTypeLang>();
             this.PackageContent = new HashSet<PackageContent>();
+            this.SKU = new HashSet<SKU>();
+            this.SkuTypeLang = new HashSet<SkuTypeLang>();
         }
     
         public bool IsEnable { get; set; }

@@ -1729,4 +1729,7 @@
   <data name="WarehouseSummary_Url" xml:space="preserve">
     <value>Url</value>
   </data>
+  <data name="SkuLang_PackageContent" xml:space="preserve">
+    <value></value>
+  </data>
 </root>

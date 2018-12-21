@@ -123,7 +123,7 @@ namespace PurchaseOrderSys.Controllers
                 skuType.SkuTypeLang.Add(langData);
             }
 
-            if (PackageContent.Any())
+            if (PackageContent != null && PackageContent.Any())
             {
                 foreach (var content in PackageContent)
                 {

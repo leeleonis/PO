@@ -1,0 +1,54 @@
+﻿@model SKU
+@{
+    string LangID = ViewData["LangID"].ToString();
+    string DefaultLangID = EnumData.DataLangList().First().Key;
+}
+<table border="0" cellpadding="0" cellspacing="0" width="679">
+    <tbody>
+        <tr>
+            <td>
+                <table border="0" cellpadding="0" cellspacing="0" style="border-width: 0px;" width="100%">
+                    <tbody>
+                        <tr>
+                            <td align="left">
+                                <ul>
+                                    <li>
+                                        <p style="margin-top: 6px; margin-bottom: 6px;">
+                                            @{
+                                                var skuLang = Model.SkuLang.First(l => l.LangID.Equals(Model.SkuLang.Any(ll => ll.LangID.Equals(LangID)) ? LangID : DefaultLangID));
+                                            }
+                                            <span style="text-align: left; color: rgb(51, 51, 51); text-transform: none; line-height: 18px; text-indent: 0px; letter-spacing: normal; font-family: Verdana; font-size: 9pt; font-style: normal; font-variant: normal; word-spacing: 0px; float: none; display: inline !important; white-space: normal; background-color: rgb(255, 255, 255); -webkit-text-stroke-width: 0px">
+                                                @(skuLang.Name + (!string.IsNullOrEmpty(skuLang.Model) ? string.Format(" ({0})", skuLang.Model) : "")) x 1
+                                            </span>
+                                        </p>
+                                    </li>
+                                    @{
+                                        var skuContentGroup = Model.Sku_PackageContent.GroupBy(c => c.ItemID).ToDictionary(g => g.Key, g => g.ToList());
+                                        foreach (var content in Model.SkuType.PackageContent)
+                                        {
+                                            if (skuContentGroup.ContainsKey(content.ID))
+                                            {
+                                                var skuContent = skuContentGroup[content.ID].First(g => g.LangID.Equals(skuContentGroup[content.ID].Any(l => l.LangID.Equals(LangID)) ? LangID : DefaultLangID));
+                                                if (skuContent.Html)
+                                                {
+                                                    <li>
+                                                        <p style="margin-top: 6px; margin-bottom: 6px;">
+                                                            <font color="#333333" face="Verdana" style="font-size: 9pt;">
+                                                                @(content.PackageContentLang.First(l => l.LangID.Equals(content.PackageContentLang.Any(ll => ll.LangID.Equals(LangID)) ? LangID : DefaultLangID)).Name)
+                                                                @(!string.IsNullOrEmpty(skuContent.Model) ? string.Format(" ({0})", skuContent.Model) : "") x 1
+                                                            </font>
+                                                        </p>
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    }
+                                </ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
