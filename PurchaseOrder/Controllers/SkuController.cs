@@ -117,7 +117,7 @@ namespace PurchaseOrderSys.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(SKU updateData, SkuLang langData, List<Dictionary<string, string>> eBayTitle, int[] DiverseAttribute, Sku_Attribute[] VariationValue, KitSku[] KitSku, Sku_PackageContent[] PackageContent, Sku_Attribute[] AttributeValue, HttpPostedFileBase picture)
+        public ActionResult Edit(SKU updateData, SkuLang langData, List<Dictionary<string, string>> eBayTitle, int[] DiverseAttribute, Sku_Attribute[] VariationValue, KitSku[] KitSku, Sku_PackageContent[] SkuContent, Sku_Attribute[] AttributeValue, HttpPostedFileBase picture)
         {
             SKU sku = db.SKU.Find(updateData.SkuID);
             if (sku == null) return HttpNotFound();
@@ -250,9 +250,9 @@ namespace PurchaseOrderSys.Controllers
                 db.SaveChanges();
             }
 
-            if (PackageContent != null && PackageContent.Any())
+            if (SkuContent != null && SkuContent.Any())
             {
-                foreach (var content in PackageContent)
+                foreach (var content in SkuContent)
                 {
                     var contentModel = sku.Sku_PackageContent.FirstOrDefault(c => c.ItemID.Equals(content.ItemID) && c.LangID.Equals(content.LangID));
                     if (contentModel != null)
@@ -623,6 +623,7 @@ namespace PurchaseOrderSys.Controllers
                 langData?.Name,
                 langData?.Model,
                 langData?.Description,
+                langData?.PackageContent,
                 langData?.SpecContent,
                 VariationList = sku.Type.Equals((byte)EnumData.SkuType.Variation) ? RenderViewToString(ControllerContext, "_VariationAttribute", sku, viewData) : "",
                 KitList = sku.Type.Equals((byte)EnumData.SkuType.Kit) ? RenderViewToString(ControllerContext, "_SkuKit", sku, viewData) : "",

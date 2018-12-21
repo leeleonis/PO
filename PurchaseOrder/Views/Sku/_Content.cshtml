@@ -7,7 +7,7 @@
     foreach (PackageContent content in Model.SkuType.PackageContent)
     {
         var value = Model.Sku_PackageContent.FirstOrDefault(c => c.ItemID.Equals(content.ID) && c.LangID.Equals(LangID)) ?? new Sku_PackageContent() { };
-        string name = string.Format("PackageContent[{0}]", i++);
+        string name = string.Format("SkuContent[{0}]", i++);
         <tr>
             @Html.Hidden(string.Format("{0}[Sku]", name), Model.SkuID)
             @Html.Hidden(string.Format("{0}[ItemID]", name), content.ID)
