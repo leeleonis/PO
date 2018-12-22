@@ -223,5 +223,21 @@ namespace PurchaseOrderSys.Helpers
 
             return MvcHtmlString.Create(divHtml.ToString());
         }
+        public static MvcHtmlString BCheckBox(this HtmlHelper htmlHelper, string name, object htmlAttributes)
+        {
+            return BCheckBox(htmlHelper,name, false, htmlAttributes);
+        }
+        public static MvcHtmlString BCheckBox(this HtmlHelper htmlHelper, string name,bool isChecked, object htmlAttributes)
+        {
+            string DisplayName = htmlHelper.DisplayName(name).ToHtmlString().Trim();
+            string checkBoxWithHidden = htmlHelper.CheckBox(name, isChecked, htmlAttributes).ToHtmlString().Trim();
+            string pureCheckBox = checkBoxWithHidden.Substring(0, checkBoxWithHidden.IndexOf("<input", 1));
+            TagBuilder labelHtml = new TagBuilder("label");
+            labelHtml.AddCssClass("checkbox-inline");
+            TagBuilder spanHtml = new TagBuilder("span");
+            spanHtml.InnerHtml = DisplayName;
+            labelHtml.InnerHtml = pureCheckBox+ spanHtml;
+            return MvcHtmlString.Create(labelHtml.ToString());
+        }
     }
 }

@@ -3931,7 +3931,34 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
-        ///   查詢類似 Company 的當地語系化字串。
+        ///   查詢類似 Address1 的當地語系化字串。
+        /// </summary>
+        public static string Warehouse_Address1 {
+            get {
+                return ResourceManager.GetString("Warehouse_Address1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Address2 的當地語系化字串。
+        /// </summary>
+        public static string Warehouse_Address2 {
+            get {
+                return ResourceManager.GetString("Warehouse_Address2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 City 的當地語系化字串。
+        /// </summary>
+        public static string Warehouse_City {
+            get {
+                return ResourceManager.GetString("Warehouse_City", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Company Name 的當地語系化字串。
         /// </summary>
         public static string Warehouse_Company {
             get {
@@ -3945,6 +3972,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         public static string Warehouse_Countries {
             get {
                 return ResourceManager.GetString("Warehouse_Countries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Country 的當地語系化字串。
+        /// </summary>
+        public static string Warehouse_Country {
+            get {
+                return ResourceManager.GetString("Warehouse_Country", resourceCulture);
             }
         }
         
@@ -4053,6 +4089,33 @@ namespace PurchaseOrderSys.App_GlobalResources {
         public static string Warehouse_Name {
             get {
                 return ResourceManager.GetString("Warehouse_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Phone 的當地語系化字串。
+        /// </summary>
+        public static string Warehouse_Phone {
+            get {
+                return ResourceManager.GetString("Warehouse_Phone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Postcode 的當地語系化字串。
+        /// </summary>
+        public static string Warehouse_Postcode {
+            get {
+                return ResourceManager.GetString("Warehouse_Postcode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 State 的當地語系化字串。
+        /// </summary>
+        public static string Warehouse_State {
+            get {
+                return ResourceManager.GetString("Warehouse_State", resourceCulture);
             }
         }
         

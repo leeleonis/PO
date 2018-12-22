@@ -866,8 +866,8 @@
     <comment>Marketplace</comment>
   </data>
   <data name="Warehouse_Company" xml:space="preserve">
-    <value>Company</value>
-    <comment>Company</comment>
+    <value>Company Name</value>
+    <comment>Company Name</comment>
   </data>
   <data name="WarehouseUser_IsEnable" xml:space="preserve">
     <value>IsEnable</value>
@@ -1731,5 +1731,26 @@
   </data>
   <data name="SkuLang_PackageContent" xml:space="preserve">
     <value></value>
+  </data>
+  <data name="Warehouse_Address1" xml:space="preserve">
+    <value>Address1</value>
+  </data>
+  <data name="Warehouse_Address2" xml:space="preserve">
+    <value>Address2</value>
+  </data>
+  <data name="Warehouse_City" xml:space="preserve">
+    <value>City</value>
+  </data>
+  <data name="Warehouse_State" xml:space="preserve">
+    <value>State</value>
+  </data>
+  <data name="Warehouse_Postcode" xml:space="preserve">
+    <value>Postcode</value>
+  </data>
+  <data name="Warehouse_Country" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="Warehouse_Phone" xml:space="preserve">
+    <value>Phone</value>
   </data>
 </root>

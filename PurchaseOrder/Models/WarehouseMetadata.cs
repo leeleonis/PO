@@ -1,11 +1,12 @@
-using System;
+using System; 
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// Warehouse class
     /// </summary>
@@ -148,19 +149,79 @@ namespace PurchaseOrderSys.Models
     	    [Display(Name = "Warehouse_Company", ResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  Company { get; set; }
-
-            /// <summary>
-            /// Default Dispatch
-            /// </summary>        
-            [Display(Name = "Warehouse_DefaultDispatch", ResourceType = typeof(App_GlobalResources.Resource))]
-            public Nullable<bool> DefaultDispatch { get; set; }
-
-            /// <summary>
-            /// Default RMA
-            /// </summary>        
-            [Display(Name = "Warehouse_DefaultRMA", ResourceType = typeof(App_GlobalResources.Resource))]
-            public Nullable<bool> DefaultRMA { get; set; }
-        }
+    
+    		    
+    		/// <summary>
+    		/// Default Dispatch
+    		/// </summary>        
+    	    [Display(Name = "Warehouse_DefaultDispatch", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<bool>  DefaultDispatch { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Default RMA
+    		/// </summary>        
+    	    [Display(Name = "Warehouse_DefaultRMA", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<bool>  DefaultRMA { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Address1
+    		/// </summary>        
+    	    [Display(Name = "Warehouse_Address1", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  Address1 { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Address2
+    		/// </summary>        
+    	    [Display(Name = "Warehouse_Address2", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  Address2 { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// City
+    		/// </summary>        
+    	    [Display(Name = "Warehouse_City", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  City { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// State
+    		/// </summary>        
+    	    [Display(Name = "Warehouse_State", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  State { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Postcode
+    		/// </summary>        
+    	    [Display(Name = "Warehouse_Postcode", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  Postcode { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Country
+    		/// </summary>        
+    	    [Display(Name = "Warehouse_Country", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  Country { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Phone
+    		/// </summary>        
+    	    [Display(Name = "Warehouse_Phone", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  Phone { get; set; }
+    
+    		    
+    	}
     }
     
 }

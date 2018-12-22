@@ -38,20 +38,23 @@
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.DropDownListFor(model => model.Type, warehouseTypeDDL, htmlAttributes: new { @class = "form-control" })
                                                 </div>
-                                                @Html.Label("Sellable", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.RadioButton("IsSellable", true, new { htmlAttributes = new { @class = "form-control" } })是
-                                                    @Html.RadioButton("IsSellable", false, new { htmlAttributes = new { @class = "form-control" } })否
-                                                </div>
                                             </div>
                                             <div class="form-group">
-                                                @Html.Label("Default Dispatch", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @Html.Label("Sellable", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("DefaultDispatch", new { htmlAttributes = new { @class = "form-control" } })
+                                                    <label class="radio radio-inline">
+                                                        @Html.RadioButton("IsSellable", true, true, new { @class = "radiobox IsSellable" })
+                                                        <span>是</span>
+                                                    </label>
+                                                    <label class="radio radio-inline">
+                                                        @Html.RadioButton("IsSellable", false, new { @class = "radiobox IsSellable" })
+                                                        <span>否</span>
+                                                    </label>
                                                 </div>
-                                                @Html.Label("Default RMA", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @Html.Label(" ", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("DefaultRMA", new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.BCheckBox("DefaultDispatch", true, new { @class = "checkbox" })
+                                                    @Html.BCheckBox("DefaultRMA", new { @class = "checkbox" })
                                                 </div>
                                             </div>
                                         </fieldset>
@@ -99,11 +102,11 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                @Html.Label("Address 1", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @Html.Label("Address1", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("Address1", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
-                                                @Html.Label("Address 2", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @Html.Label("Address2", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("Address2", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
@@ -129,13 +132,13 @@
                                                 </div>
                                             </div>
                                         </fieldset>
-                                        <fieldset>
+                                        <fieldset id="Availablefieldset">
                                             <legend>Available Shipping methods</legend>
                                             <div class="form-group">
                                                 <table id="DataGridC" class="table table-striped table-bordered">
                                                     <thead>
                                                         <tr>
-                                                            <th><input type="checkbox" /></th>
+                                                            <th></th>
                                                             <th>Available Shipping methods</th>
                                                             <th>Carrier & API</th>
                                                             <th>Carrier Shipping Code</th>
@@ -185,7 +188,7 @@
                         className: 'select-checkbox',
                         orderable: false,
                         render: function (data, type, row, meta) {
-                            return '<input name="Shippingmethods" type="checkbox" value="' + row.ID + '">';
+                            return '<input name="Shippingmethods" class="tablechk" type="checkbox" value="' + row.ID + '">';
                         }
                     },
                     { data: "Name" },
@@ -227,7 +230,73 @@
                     }
                 }
             });
-        });
+            $("#Type").change(function () {
+                var selected = $(this).val();
+                $("#DefaultRMA").prop("disabled", "");
+                $("#DefaultDispatch").prop("disabled", "");
+                $(".IsSellable").prop("disabled", "");
+                if (selected == "Normal") {
 
+                }
+               else if (selected == "RMA") {
+                    $("#DefaultRMA").prop("checked", true);
+                    $("#DefaultDispatch").prop("checked", false);
+                    $(".IsSellable").val(["False"]);
+                    $("#DefaultRMA").prop("disabled", "disabled");
+                    $("#DefaultDispatch").prop("disabled", "disabled");
+                    $(".IsSellable").prop("disabled", "disabled");
+                }
+                else if (selected == "FBA") {
+
+                }
+                else if (selected == "DropShip") {
+                    $("#DefaultDispatch").prop("checked", true);
+                    $("#DefaultRMA").prop("checked", false);
+                    $("#DefaultRMA").prop("disabled", "disabled");
+                    $("#DefaultDispatch").prop("disabled", "disabled");
+                }
+                else if (selected == "Interim") {
+                    $(".IsSellable").val(["False"]);
+                    $(".IsSellable").prop("disabled", "disabled");
+                   
+                }
+                else if (selected == "Winit") {
+
+                }
+                IsSellableChk();
+            });
+            $("#DefaultDispatch").click(function () {
+                check = $(this).is(":checked");
+                if (check) {
+                    $("#DefaultRMA").prop("checked", false);
+                } else {
+                    $("#DefaultRMA").prop("checked", true);
+                }              
+            });
+            $("#DefaultRMA").click(function () {
+                check = $(this).is(":checked");
+                if (check) {
+                    $("#DefaultDispatch").prop("checked", false);
+                } else {
+                    $("#DefaultDispatch").prop("checked", true);
+                }
+            });
+            $(".IsSellable").change(function () {
+                IsSellableChk();
+            });
+        });
+        function IsSellableChk() {
+            var IsSellable = $(".IsSellable:checked").val();
+            if (IsSellable == "False") {
+                $(".tablechk").prop("checked", false);
+                $(".tablechk").prop("disabled", "disabled");
+                //$("#Availablefieldset").hide();
+            }
+            else {
+                //$("#Availablefieldset").show();
+                $(".tablechk").prop("disabled", "");
+            }
+            
+        }
     </script>
 }

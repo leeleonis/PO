@@ -694,7 +694,7 @@
     <value>上架的平台</value>
   </data>
   <data name="Warehouse_Company" xml:space="preserve">
-    <value>供應商</value>
+    <value>公司名稱</value>
   </data>
   <data name="WarehouseUser_IsEnable" xml:space="preserve">
     <value>啟用</value>
@@ -1505,5 +1505,26 @@
   </data>
   <data name="SkuLang_PackageContent" xml:space="preserve">
     <value>包裝內容</value>
+  </data>
+  <data name="Warehouse_Address1" xml:space="preserve">
+    <value>地址1</value>
+  </data>
+  <data name="Warehouse_Address2" xml:space="preserve">
+    <value>地址2</value>
+  </data>
+  <data name="Warehouse_City" xml:space="preserve">
+    <value>市</value>
+  </data>
+  <data name="Warehouse_State" xml:space="preserve">
+    <value>州</value>
+  </data>
+  <data name="Warehouse_Postcode" xml:space="preserve">
+    <value>郵編</value>
+  </data>
+  <data name="Warehouse_Country" xml:space="preserve">
+    <value>國家</value>
+  </data>
+  <data name="Warehouse_Phone" xml:space="preserve">
+    <value>電話</value>
   </data>
 </root>

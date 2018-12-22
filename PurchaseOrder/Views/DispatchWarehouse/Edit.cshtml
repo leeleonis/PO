@@ -39,20 +39,23 @@
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.DropDownListFor(model => model.Type, warehouseTypeDDL, htmlAttributes: new { @class = "form-control" })
                                                 </div>
-                                                @Html.Label("Sellable", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.RadioButton("IsSellable", true, new { htmlAttributes = new { @class = "form-control" } })是
-                                                    @Html.RadioButton("IsSellable", false, new { htmlAttributes = new { @class = "form-control" } })否
-                                                </div>
                                             </div>
                                             <div class="form-group">
-                                                @Html.Label("Default Dispatch", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @Html.Label("Sellable", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("DefaultDispatch", new { htmlAttributes = new { @class = "form-control" } })
+                                                    <label class="radio radio-inline">
+                                                        @Html.RadioButton("IsSellable", true,Model.IsDefault , new { @class = "radiobox IsSellable" })
+                                                        <span>是</span>
+                                                    </label>
+                                                    <label class="radio radio-inline">
+                                                        @Html.RadioButton("IsSellable", false, !Model.IsDefault, new { @class = "radiobox IsSellable" })
+                                                        <span>否</span>
+                                                    </label>
                                                 </div>
-                                                @Html.Label("Default RMA", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @Html.Label(" ", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("DefaultRMA", new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.BCheckBox("DefaultDispatch", true, new { @class = "checkbox" })
+                                                    @Html.BCheckBox("DefaultRMA", new { @class = "checkbox" })
                                                 </div>
                                             </div>
                                         </fieldset>
@@ -136,7 +139,7 @@
                                                 <table id="DataGridC" class="table table-striped table-bordered">
                                                     <thead>
                                                         <tr>
-                                                            <th><input type="checkbox" /></th>
+                                                            <th></th>
                                                             <th>Available Shipping methods</th>
                                                             <th>Carrier & API</th>
                                                             <th>Carrier Shipping Code</th>
@@ -165,13 +168,13 @@
     </section>
 </div>
 @section pagespecific {
-    <script type="text/javascript">
+<script type="text/javascript">
         var hash = window.location.hash;
         $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
         $('.tab-pane').eq(hash.substr(1)).addClass('active');
         var tableID = "#DataGridC";
         $(document).ready(function () {
-             DataGridC = $(tableID).DataTable({
+            DataGridC = $(tableID).DataTable({
                 fixedHeader: {
                     header: true,
                     footer: true
@@ -186,7 +189,15 @@
                         className: 'select-checkbox',
                         orderable: false,
                         render: function (data, type, row, meta) {
-                            return '<input name="Shippingmethods" type="checkbox" value="' + row.ID + '"  ' + row.checkedVal + '  >';
+                            @if (Model.IsDefault)
+                            {
+                                @:return '<input name="Shippingmethods" type="checkbox" value="' + row.ID + '"  ' + row.checkedVal + '  >';
+                            }
+                            else
+                            {
+                                @:return '<input name="Shippingmethods" type="checkbox" value="' + row.ID + '" disabled >';
+                            }
+
                         }
                     },
                     { data: "Name" },
@@ -195,17 +206,14 @@
                     { data: "BoxType" },
                     { data: "IsExport" },
                     { data: "IsBattery" },
-                    { data: "InBox" },
-
+                    { data: "InBox" }
                 ],
                 ajax: {
                     traditional: true,
                     method: "get",//或post，自由決定，影響到Server端用FormCollection取值或Request.QueryString取得DataTables傳遞的資訊
                     url: "@Url.Action("ShippingMethodData")",
                     data: function (d) {
-                        var Skulist = $("#gebruikerId").val();
-                        d.Skulist = Skulist;
-                        $("#gebruikerId").val(null).trigger('change');
+
                     }
                 },
                 serverSide: true,//啟用ServerSide模式
@@ -215,7 +223,7 @@
                 "ordering": false,
                 "info": true,
             });
-         
+
             $("#SCID").change(function () {
                 var selected = $(this).val();
                 var stringArray = @Html.Raw(Json.Encode(WarehouseList));
@@ -223,13 +231,61 @@
                     if (stringArray[i]["ID"] == selected) {
                         $("#SCName").val(stringArray[i]["Name"]);
                         $("#SCType").val(stringArray[i]["WarehouseType"]);
-                        $("#SCDefault").val(stringArray[i]["IsDefault"]); 
+                        $("#SCDefault").val(stringArray[i]["IsDefault"]);
                         $("#SCSellable").val(stringArray[i]["IsSellAble"]);
                     }
                 }
             });
+            $("#Type").change(function () {
+                var selected = $(this).val();
+                $("#DefaultRMA").prop("disabled", "");
+                $("#DefaultDispatch").prop("disabled", "");
+                $(".IsSellable").prop("disabled", "");
+                if (selected == "Normal") {
 
+                }
+                else if (selected == "RMA") {
+                    $("#DefaultRMA").prop("checked", true);
+                    $("#DefaultDispatch").prop("checked", false);
+                    $(".IsSellable").val(["False"]);
+                    $("#DefaultRMA").prop("disabled", "disabled");
+                    $("#DefaultDispatch").prop("disabled", "disabled");
+                    $(".IsSellable").prop("disabled", "disabled");
+                }
+                else if (selected == "FBA") {
+
+                }
+                else if (selected == "DropShip") {
+                    $("#DefaultDispatch").prop("checked", true);
+                    $("#DefaultRMA").prop("checked", false);
+                    $("#DefaultRMA").prop("disabled", "disabled");
+                    $("#DefaultDispatch").prop("disabled", "disabled");
+                }
+                else if (selected == "Interim") {
+                    $(".IsSellable").val(["False"]);
+                    $(".IsSellable").prop("disabled", "disabled");
+
+                }
+                else if (selected == "Winit") {
+
+                }
+            });
+            $("#DefaultDispatch").click(function () {
+                check = $(this).is(":checked");
+                if (check) {
+                    $("#DefaultRMA").prop("checked", false);
+                } else {
+                    $("#DefaultRMA").prop("checked", true);
+                }
+            });
+            $("#DefaultRMA").click(function () {
+                check = $(this).is(":checked");
+                if (check) {
+                    $("#DefaultDispatch").prop("checked", false);
+                } else {
+                    $("#DefaultDispatch").prop("checked", true);
+                }
+            });
         });
-
-    </script>
+</script>
 }
