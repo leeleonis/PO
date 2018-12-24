@@ -22,6 +22,9 @@ namespace PurchaseOrderSys.Controllers
         // GET: DispatchWarehouse
         public ActionResult Index()
         {
+            ViewBag.Warehouse3PList = new Api.Winit_API().Warehouse3P();
+            var SCList = new Api.SC_API().SCList();
+            ViewBag.SCList = SCList;
             var Warehouse = db.Warehouse.Where(x => x.IsEnable);
             return View(Warehouse);
         }
@@ -49,7 +52,7 @@ namespace PurchaseOrderSys.Controllers
             }
             if (!string.IsNullOrWhiteSpace(Warehouse3P))
             {
-                Warehouse.WarehouseSummary.Add(new WarehouseSummary { IsEnable = true, Val = Warehouse3P, Type = "Warehouse3P" });
+                Warehouse.WarehouseSummary.Add(new WarehouseSummary { IsEnable = true, Val = Warehouse3P, Type = "3PWarehouse" });
             }
             try
             {
@@ -93,7 +96,7 @@ namespace PurchaseOrderSys.Controllers
                             }
                           
                             break;
-                        case "Warehouse3P":
+                        case "3PWarehouse":
                             ViewBag.Warehouse3P = item.Val;
                             break;
                     }
@@ -105,23 +108,23 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult Edit(Warehouse Warehouse, string[] Shippingmethods, string SCID, string Warehouse3P)
         {
             var OldWarehouse = db.Warehouse.Find(Warehouse.ID);
-            OldWarehouse.Name = Warehouse.Name;
-            OldWarehouse.Type = Warehouse.Type;
-            OldWarehouse.WinitWarehouse = Warehouse.WinitWarehouse;
-            OldWarehouse.Fulfillable = Warehouse.Fulfillable;
-            OldWarehouse.Location = Warehouse.Location;
-            OldWarehouse.Countries = Warehouse.Countries;
-            OldWarehouse.Marketplace = Warehouse.Marketplace;
-            OldWarehouse.Company = Warehouse.Company;
-            OldWarehouse.DefaultDispatch = Warehouse.DefaultDispatch;
-            OldWarehouse.DefaultRMA = Warehouse.DefaultRMA;
-            OldWarehouse.Address1 = Warehouse.Address1;
-            OldWarehouse.Address2 = Warehouse.Address2;
-            OldWarehouse.City = Warehouse.City;
-            OldWarehouse.State = Warehouse.State;
-            OldWarehouse.Postcode = Warehouse.Postcode;
-            OldWarehouse.Country = Warehouse.Country;
-            OldWarehouse.Phone = Warehouse.Phone;
+            if (!string.IsNullOrWhiteSpace(Warehouse.Name)) OldWarehouse.Name = Warehouse.Name;
+            if (!string.IsNullOrWhiteSpace(Warehouse.Type)) OldWarehouse.Type = Warehouse.Type;
+            if (!string.IsNullOrWhiteSpace(Warehouse.WinitWarehouse)) OldWarehouse.WinitWarehouse = Warehouse.WinitWarehouse;
+            if (!string.IsNullOrWhiteSpace(Warehouse.Fulfillable)) OldWarehouse.Fulfillable = Warehouse.Fulfillable;
+            if (!string.IsNullOrWhiteSpace(Warehouse.Location)) OldWarehouse.Location = Warehouse.Location;
+            if (!string.IsNullOrWhiteSpace(Warehouse.Countries)) OldWarehouse.Countries = Warehouse.Countries;
+            if (!string.IsNullOrWhiteSpace(Warehouse.Marketplace)) OldWarehouse.Marketplace = Warehouse.Marketplace;
+            if (!string.IsNullOrWhiteSpace(Warehouse.Company)) OldWarehouse.Company = Warehouse.Company;
+            if (Warehouse.DefaultDispatch.HasValue) OldWarehouse.DefaultDispatch = Warehouse.DefaultDispatch;
+            if (Warehouse.DefaultRMA.HasValue) OldWarehouse.DefaultRMA = Warehouse.DefaultRMA;
+            if (!string.IsNullOrWhiteSpace(Warehouse.Address1)) OldWarehouse.Address1 = Warehouse.Address1;
+            if (!string.IsNullOrWhiteSpace(Warehouse.Address2)) OldWarehouse.Address2 = Warehouse.Address2;
+            if (!string.IsNullOrWhiteSpace(Warehouse.City)) OldWarehouse.City = Warehouse.City;
+            if (!string.IsNullOrWhiteSpace(Warehouse.State)) OldWarehouse.State = Warehouse.State;
+            if (!string.IsNullOrWhiteSpace(Warehouse.Postcode)) OldWarehouse.Postcode = Warehouse.Postcode;
+            if (!string.IsNullOrWhiteSpace(Warehouse.Country)) OldWarehouse.Country = Warehouse.Country;
+            if (!string.IsNullOrWhiteSpace(Warehouse.Phone)) OldWarehouse.Phone = Warehouse.Phone;
 
             OldWarehouse.UpdateBy = UserBy;
             OldWarehouse.UpdateAt = DateTime.UtcNow;
@@ -142,7 +145,7 @@ namespace PurchaseOrderSys.Controllers
             }
             if (!string.IsNullOrWhiteSpace(Warehouse3P))
             {
-                foreach (var item in OldWarehouse.WarehouseSummary.Where(x => x.IsEnable && x.Type == "Warehouse3P"))
+                foreach (var item in OldWarehouse.WarehouseSummary.Where(x => x.IsEnable && x.Type == "3PWarehouse"))
                 {
                     item.Val = Warehouse3P;
                 }

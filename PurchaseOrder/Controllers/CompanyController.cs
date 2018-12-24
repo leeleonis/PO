@@ -114,6 +114,7 @@ namespace PurchaseOrderSys.Controllers
             db.Company.Remove(company);
             db.SaveChanges();
             return RedirectToAction("Index");
+
         }
 
         public ActionResult GetData(CompanyFilter filter, int page = 1, int rows = 100)
