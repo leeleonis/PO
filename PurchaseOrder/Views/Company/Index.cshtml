@@ -69,6 +69,7 @@
                 }, {
                     field: "ParentID", title: "@Html.DisplayNameFor(model => model.ParentID)", width: 180, align: "center", sortable: false,
                     formatter: function (value, row, index) {
+                        //return value;
                         return website.IsEmpty(row.IsFilter) ? datagrid.setDropdown(row.ID, this.field, selectOption['CompanyOption'], value) : value;
                     }
                 }, {
@@ -171,7 +172,10 @@
                         url: "@Url.Action("Update")",
                         type: "post",
                         data: data,
-                        dataType: "json"
+                        dataType: "json",
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            alert(xhr.responseText);
+                        }
                     });
                 });
 

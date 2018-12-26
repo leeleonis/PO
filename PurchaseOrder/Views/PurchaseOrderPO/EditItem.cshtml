@@ -69,7 +69,7 @@
                                                 <div class="form-group">
                                                     @Html.LabelFor(model => model.POStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.DropDownListFor(model => model.POStatus, POStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.DropDownListFor(model => model.POStatus, POStatusDDL, htmlAttributes: new { @class = "form-control" })
                                                         @Html.ValidationMessageFor(model => model.POStatus, "", new { @class = "text-danger" })
                                                     </div>
                                                     @Html.LabelFor(model => model.InvoiceDate, htmlAttributes: new { @class = "control-label col-sm-2" })
@@ -81,7 +81,7 @@
                                                 <div class="form-group">
                                                     @Html.LabelFor(model => model.POType, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.DropDownListFor(model => model.POType, POTypeDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.DropDownListFor(model => model.POType, POTypeDDL, htmlAttributes: new { @class = "form-control" })
                                                         @Html.ValidationMessageFor(model => model.POType, "", new { @class = "text-danger" })
                                                     </div>
                                                     @Html.LabelFor(model => model.InvoiceNo, htmlAttributes: new { @class = "control-label col-sm-2" })
@@ -104,12 +104,12 @@
                                                 <div class="form-group">
                                                     @Html.LabelFor(model => model.ReceiveStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.DropDownListFor(model => model.ReceiveStatus, ReceiveStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.DropDownListFor(model => model.ReceiveStatus, ReceiveStatusDDL, htmlAttributes: new { @class = "form-control" })
                                                         @Html.ValidationMessageFor(model => model.ReceiveStatus, "", new { @class = "text-danger" })
                                                     </div>
                                                     @Html.LabelFor(model => model.PaymentStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.DropDownListFor(model => model.PaymentStatus, PaymentStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.DropDownListFor(model => model.PaymentStatus, PaymentStatusDDL, htmlAttributes: new { @class = "form-control" })
                                                         @Html.ValidationMessageFor(model => model.PaymentStatus, "", new { @class = "text-danger" })
                                                     </div>
                                                 </div>
@@ -319,7 +319,7 @@
                                                 <div class="form-group">
                                                     @Html.LabelFor(model => model.POStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.DropDownListFor(model => model.POStatus, POStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.DropDownListFor(model => model.POStatus, POStatusDDL, htmlAttributes: new { @class = "form-control" })
                                                         @Html.ValidationMessageFor(model => model.POStatus, "", new { @class = "text-danger" })
                                                     </div>
                                                     @Html.LabelFor(model => model.InvoiceDate, htmlAttributes: new { @class = "control-label col-sm-2" })
@@ -331,7 +331,7 @@
                                                 <div class="form-group">
                                                     @Html.LabelFor(model => model.POType, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.DropDownListFor(model => model.POType, POTypeDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.DropDownListFor(model => model.POType, POTypeDDL, htmlAttributes: new { @class = "form-control" })
                                                         @Html.ValidationMessageFor(model => model.POType, "", new { @class = "text-danger" })
                                                     </div>
                                                     @Html.LabelFor(model => model.InvoiceNo, htmlAttributes: new { @class = "control-label col-sm-2" })
@@ -354,12 +354,12 @@
                                                 <div class="form-group">
                                                     @Html.LabelFor(model => model.ReceiveStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.DropDownListFor(model => model.ReceiveStatus, ReceiveStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.DropDownListFor(model => model.ReceiveStatus, ReceiveStatusDDL, htmlAttributes: new { @class = "form-control" })
                                                         @Html.ValidationMessageFor(model => model.ReceiveStatus, "", new { @class = "text-danger" })
                                                     </div>
                                                     @Html.LabelFor(model => model.PaymentStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.DropDownListFor(model => model.PaymentStatus, PaymentStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.DropDownListFor(model => model.PaymentStatus, PaymentStatusDDL, htmlAttributes: new { @class = "form-control" })
                                                         @Html.ValidationMessageFor(model => model.PaymentStatus, "", new { @class = "text-danger" })
                                                     </div>
                                                 </div>
@@ -750,6 +750,9 @@
                         };
                     }
                 }
+            });
+            $("#PaidAmount").change(function () {
+                DataGridC.draw();
             });
             $("#addsku").click(function () {
                 DataGridC.draw();

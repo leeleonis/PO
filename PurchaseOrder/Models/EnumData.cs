@@ -63,7 +63,7 @@ namespace PurchaseOrderSys.Models
             {
                 { "PurchaseOrder", App_GlobalResources.Resource.POTypePurchaseOrderDDL },
                 { "DropshpOrder", App_GlobalResources.Resource.POTypeDropshpOrderDDL },
-                { "CreditMemo", App_GlobalResources.Resource.POTypeCreditMemoDDL }
+                //{ "CreditMemo", App_GlobalResources.Resource.POTypeCreditMemoDDL }
             };
         }
         /// <summary>

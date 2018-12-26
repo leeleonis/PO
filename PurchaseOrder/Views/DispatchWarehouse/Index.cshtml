@@ -5,6 +5,7 @@
     var Warehouse3PList = (List<SelectListItem>)ViewBag.Warehouse3PList;
     var SCList = SCIDList.Select(x => new SelectListItem { Text = x.Name, Value = x.ID.ToString() }).ToList();
     var ShippingList = new PurchaseOrderSys.Api.Shipping_API().ShippingList();
+    var SummaryList = new List<string> { "Shippingmethods", "3PWarehouse", "Marketplace", "SCID" };
 }
 <style>
     .ediv {
@@ -92,47 +93,91 @@
                                                                         <div>
                                                                             <table class="table table-striped table-bordered">
                                                                                 <tbody>
-                                                                                    @foreach (var Summaryitem in item.WarehouseSummary.Where(x => x.IsEnable))
+                                                                                    @foreach (var Summaryitem in SummaryList)
                                                                                     {
-                                                                                    <tr>
-                                                                                        @if (Summaryitem.Type == "Shippingmethods")
+                                                                                        if (Summaryitem == "Shippingmethods")
                                                                                         {
-                                                                                            <td>Shipping methods:</td>
+                                                                                            var textVal = "none";
+                                                                                            var WarehouseSummary = item.WarehouseSummary.Where(x => x.IsEnable && x.Type == "Shippingmethods");
+                                                                                            if (WarehouseSummary.Any())
+                                                                                            {
+                                                                                                foreach (var WarehouseSummaryitem in WarehouseSummary)
+                                                                                                {
 
-                                                                                            var Valarr = Summaryitem.Val.Split(',');
-                                                                                            var ShippingListName = ShippingList.data.shippingMethod.Where(x => Valarr.Contains(x.value.ToString())).Select(x => x.text);
-                                                                                            var textVal = string.Join(",", ShippingListName);
-
-
-                                                                                            <td title=" @textVal">
-                                                                                                <div class="ediv">
-                                                                                                    @textVal
-                                                                                                </div>
-                                                                                            </td>
-                                                                                        }
-                                                                                        else if (Summaryitem.Type == "SCID")
-                                                                                        {
-                                                                                            <td>SC Warehouse ID</td>
-                                                                                            <td>
-                                                                                                <div class="ediv" title="">
-                                                                                                    @Summaryitem.Val
-                                                                                                </div>
-                                                                                            </td>
-                                                                                        }
-                                                                                        else if (Summaryitem.Type == "3PWarehouse")
-                                                                                        {
-                                                                                            <td>3P Warehouse</td>
-                                                                                            <td>
-                                                                                                @{
-                                                                                                    var Warehouse3Pname = Warehouse3PList.Where(x => Summaryitem.Val.Contains(x.Value)).Select(x => x.Text).ToList();
-                                                                                                    var textVal = string.Join(",", Warehouse3Pname);
+                                                                                                    var Valarr = WarehouseSummaryitem.Val.Split(',');
+                                                                                                    var ShippingListName = ShippingList.data.shippingMethod.Where(x => Valarr.Contains(x.value.ToString())).Select(x => x.text);
+                                                                                                    textVal = string.Join(",", ShippingListName);
+                                                                                                }
+                                                                                            }
+                                                                                            <tr>
+                                                                                                <td>Shipping methods:</td>
+                                                                                                <td title=" @textVal">
                                                                                                     <div class="ediv">
                                                                                                         @textVal
                                                                                                     </div>
-                                                                                                }
-                                                                                            </td>
+                                                                                                </td>
+                                                                                            </tr>
                                                                                         }
-                                                                                    </tr>
+                                                                                        else if (Summaryitem == "3PWarehouse")
+                                                                                        {
+                                                                                            var textVal = "none";
+                                                                                            var WarehouseSummary = item.WarehouseSummary.Where(x => x.IsEnable && x.Type == "3PWarehouse");
+                                                                                            if (WarehouseSummary.Any())
+                                                                                            {
+                                                                                                foreach (var WarehouseSummaryitem in WarehouseSummary)
+                                                                                                {
+
+                                                                                                    var Warehouse3Pname = Warehouse3PList.Where(x => WarehouseSummaryitem.Val.Contains(x.Value)).Select(x => x.Text).ToList();
+                                                                                                    textVal = string.Join(",", Warehouse3Pname);
+                                                                                                }
+                                                                                            }
+                                                                                            <tr>
+                                                                                                <td> 3P Warehouse:</td>
+                                                                                                <td title=" @textVal">
+                                                                                                    <div class="ediv">
+                                                                                                        @textVal
+                                                                                                    </div>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        }
+                                                                                        else if (Summaryitem == "Marketplace")
+                                                                                        {
+                                                                                            var textVal = "none";
+                                                                                            var WarehouseSummary = item.WarehouseSummary.Where(x => x.IsEnable && x.Type == "Marketplace");
+                                                                                            if (WarehouseSummary.Any())
+                                                                                            {
+                                                                                                textVal = string.Join(",", WarehouseSummary.Select(x => x.Val));
+                                                                                            }
+                                                                                            <tr>
+                                                                                                <td> Marketplace:</td>
+                                                                                                <td title=" @textVal">
+                                                                                                    <div class="ediv">
+                                                                                                        @textVal
+                                                                                                    </div>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        }
+                                                                                        else if (Summaryitem == "SCID")
+                                                                                        {
+                                                                                            var textVal = "none";
+                                                                                            var WarehouseSummary = item.WarehouseSummary.Where(x => x.IsEnable && x.Type == "SCID");
+                                                                                            if (WarehouseSummary.Any())
+                                                                                            {
+                                                                                                foreach (var WarehouseSummaryitem in WarehouseSummary)
+                                                                                                {
+
+
+                                                                                                }
+                                                                                            }
+                                                                                            <tr>
+                                                                                                <td> SC Warehouse ID:</td>
+                                                                                                <td title=" @textVal">
+                                                                                                    <div class="ediv">
+                                                                                                        @textVal
+                                                                                                    </div>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        }
                                                                                     }
                                                                                 </tbody>
                                                                             </table>

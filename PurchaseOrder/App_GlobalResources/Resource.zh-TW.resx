@@ -1527,4 +1527,7 @@
   <data name="Warehouse_Phone" xml:space="preserve">
     <value>電話</value>
   </data>
+  <data name="Company_CompanyNo" xml:space="preserve">
+    <value>公司統編</value>
+  </data>
 </root>

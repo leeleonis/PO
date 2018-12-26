@@ -131,25 +131,83 @@ namespace PurchaseOrderSys.Controllers
 
             if (Shippingmethods != null && Shippingmethods.Any())
             {
-                foreach (var item in OldWarehouse.WarehouseSummary.Where(x => x.IsEnable && x.Type == "Shippingmethods"))
+                var WarehouseSummary = OldWarehouse.WarehouseSummary.Where(x => x.IsEnable && x.Type == "Shippingmethods");
+                if (WarehouseSummary.Any())
                 {
-                    item.Val = string.Join(",", Shippingmethods);
+                    foreach (var item in WarehouseSummary)
+                    {
+                        item.Val = string.Join(",", Shippingmethods);
+                    }
+                }
+                else
+                {
+                    OldWarehouse.WarehouseSummary.Add(new WarehouseSummary { IsEnable = true, Val = string.Join(",", Shippingmethods), Type = "Shippingmethods" });
+                }
+
+            }
+            else
+            {
+                var WarehouseSummary = OldWarehouse.WarehouseSummary.Where(x => x.IsEnable && x.Type == "Shippingmethods");
+                if (WarehouseSummary.Any())
+                {
+                    foreach (var item in WarehouseSummary)
+                    {
+                        item.Val = "";
+                    }
                 }
             }
             if (!string.IsNullOrWhiteSpace(SCID))
             {
-                foreach (var item in OldWarehouse.WarehouseSummary.Where(x => x.IsEnable && x.Type == "SCID"))
+                var WarehouseSummary = OldWarehouse.WarehouseSummary.Where(x => x.IsEnable && x.Type == "SCID");
+                if (WarehouseSummary.Any())
                 {
-                    item.Val = SCID;
+                    foreach (var item in WarehouseSummary)
+                    {
+                        item.Val = SCID;
+                    }
+                }
+                else
+                {
+                    OldWarehouse.WarehouseSummary.Add(new WarehouseSummary { IsEnable = true, Val = SCID, Type = "SCID" });
+                }
+            }
+            else
+            {
+                var WarehouseSummary = OldWarehouse.WarehouseSummary.Where(x => x.IsEnable && x.Type == "SCID");
+                if (WarehouseSummary.Any())
+                {
+                    foreach (var item in WarehouseSummary)
+                    {
+                        item.Val = SCID;
+                    }
                 }
             }
             if (!string.IsNullOrWhiteSpace(Warehouse3P))
             {
-                foreach (var item in OldWarehouse.WarehouseSummary.Where(x => x.IsEnable && x.Type == "3PWarehouse"))
+                var WarehouseSummary = OldWarehouse.WarehouseSummary.Where(x => x.IsEnable && x.Type == "3PWarehouse");
+                if (WarehouseSummary.Any())
                 {
-                    item.Val = Warehouse3P;
+                    foreach (var item in WarehouseSummary)
+                    {
+                        item.Val = Warehouse3P;
+                    }
+                }
+                else
+                {
+                    OldWarehouse.WarehouseSummary.Add(new WarehouseSummary { IsEnable = true, Val = Warehouse3P, Type = "3PWarehouse" });
                 }
             }
+            else
+            {
+                var WarehouseSummary = OldWarehouse.WarehouseSummary.Where(x => x.IsEnable && x.Type == "3PWarehouse");
+                if (WarehouseSummary.Any())
+                {
+                    foreach (var item in WarehouseSummary)
+                    {
+                        item.Val = Warehouse3P;
+                    }
+                }
+            }      
             try
             {
                 db.SaveChanges();

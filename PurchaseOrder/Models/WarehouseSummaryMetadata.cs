@@ -57,7 +57,6 @@ namespace PurchaseOrderSys.Models
     		/// Val
     		/// </summary>        
     	    [Display(Name = "WarehouseSummary_Val", ResourceType = typeof(App_GlobalResources.Resource))]
-            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  Val { get; set; }
     
     		    
