@@ -46,7 +46,7 @@ namespace inventorySKU.NetoDeveloper
             return Request<GetItemResponse>("GetItem", request);
         }
 
-        public AddItemResponse UpdateItem(AddItemItem item)
+        public AddItemResponse AddItem(AddItemItem item)
         {
             AddItem request = new AddItem()
             {
@@ -90,6 +90,30 @@ namespace inventorySKU.NetoDeveloper
             };
 
             return Request<GetCategoryResponse>("GetCategory", request);
+        }
+
+        public GetCurrencySettingsResponse GetCurrency()
+        {
+            return Request<GetCurrencySettingsResponse>("GetCurrencySettings", new object() { });
+        }
+
+        public GetPaymentMethodsResponse GetPaymentMethod()
+        {
+            return Request<GetPaymentMethodsResponse>("GetPaymentMethods", new object() { });
+        }
+
+        public GetCustomerResponse GetCustomer()
+        {
+            GetCustomer request = new GetCustomer()
+            {
+                Filter = new GetCustomerFilter()
+                {
+                    Type = new GetCustomerFilterType[] { GetCustomerFilterType.Prospect },
+                    OutputSelector = Enum.GetValues(typeof(GetCustomerFilterOutputSelector)).Cast<GetCustomerFilterOutputSelector>().ToArray()
+                }
+            };
+
+            return Request<GetCustomerResponse>("GetCustomer", request);
         }
     }
 }
