@@ -86,30 +86,37 @@ namespace PurchaseOrderSys.Controllers
             {
                 foreach (var file in VendorInvoice)
                 {
-                    var Url = SaveImg(file);
-                    filter.ImgFile.Add(new ImgFile
+                    if (file != null)
                     {
-                        IsEnable = true,
-                        ImgType = "VendorInvoice",
-                        Url = Url,
-                        CreateBy = UserBy,
-                        CreateAt = DateTime.UtcNow
-                    });
+                        var Url = SaveImg(file);
+                        filter.ImgFile.Add(new ImgFile
+                        {
+                            IsEnable = true,
+                            ImgType = "VendorInvoice",
+                            Url = Url,
+                            CreateBy = UserBy,
+                            CreateAt = DateTime.UtcNow
+                        });
+                    }
+
                 }
             }
             if (PaymentProofList != null && PaymentProofList.Any())
             {
                 foreach (var file in PaymentProofList)
                 {
-                    var Url = SaveImg(file);
-                    filter.ImgFile.Add(new ImgFile
+                    if (file != null)
                     {
-                        IsEnable = true,
-                        ImgType = "PaymentProof",
-                        Url = Url,
-                        CreateBy = UserBy,
-                        CreateAt = DateTime.UtcNow
-                    });
+                        var Url = SaveImg(file);
+                        filter.ImgFile.Add(new ImgFile
+                        {
+                            IsEnable = true,
+                            ImgType = "PaymentProof",
+                            Url = Url,
+                            CreateBy = UserBy,
+                            CreateAt = DateTime.UtcNow
+                        });
+                    }
                 }
             }
 
@@ -382,7 +389,7 @@ namespace PurchaseOrderSys.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditItem(PurchaseOrder filter)
+        public ActionResult EditItem(PurchaseOrder filter, IEnumerable<HttpPostedFileBase> VendorInvoice, IEnumerable<HttpPostedFileBase> PaymentProofList)
         {
             var dt = DateTime.UtcNow;
             var PurchaseOrder = db.PurchaseOrder.Find(filter.ID);
@@ -481,6 +488,43 @@ namespace PurchaseOrderSys.Controllers
                             SKUitem.UpdateBy = UserBy;
                             SKUitem.UpdateAt = dt;
                         }
+                    }
+                }
+            }
+            if (VendorInvoice != null && VendorInvoice.Any())
+            {
+                foreach (var file in VendorInvoice)
+                {
+                    if (file != null)
+                    {
+                        var Url = SaveImg(file);
+                        PurchaseOrder.ImgFile.Add(new ImgFile
+                        {
+                            IsEnable = true,
+                            ImgType = "VendorInvoice",
+                            Url = Url,
+                            CreateBy = UserBy,
+                            CreateAt = DateTime.UtcNow
+                        });
+                    }
+
+                }
+            }
+            if (PaymentProofList != null && PaymentProofList.Any())
+            {
+                foreach (var file in PaymentProofList)
+                {
+                    if (file != null)
+                    {
+                        var Url = SaveImg(file);
+                        PurchaseOrder.ImgFile.Add(new ImgFile
+                        {
+                            IsEnable = true,
+                            ImgType = "PaymentProof",
+                            Url = Url,
+                            CreateBy = UserBy,
+                            CreateAt = DateTime.UtcNow
+                        });
                     }
                 }
             }

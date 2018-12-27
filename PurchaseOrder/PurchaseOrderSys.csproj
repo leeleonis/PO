@@ -5063,6 +5063,7 @@
     <Content Include="Content\css\imgbox.css" />
     <Content Include="Content\css\invoice.min.css" />
     <Content Include="Content\css\jquery.fileupload.css" />
+    <Content Include="Content\css\lightbox.css" />
     <Content Include="Content\css\lockscreen.min.css" />
     <Content Include="Content\css\select2.css" />
     <Content Include="Content\css\select2.min.css" />
@@ -5733,6 +5734,7 @@
     <Content Include="Scripts\libs\jquery-2.0.2.min.js" />
     <Content Include="Scripts\libs\jquery-2.1.1.min.js" />
     <Content Include="Scripts\libs\jquery-ui-1.10.3.min.js" />
+    <Content Include="Scripts\lightbox.js" />
     <Content Include="Scripts\locale\easyui-lang-af.js" />
     <Content Include="Scripts\locale\easyui-lang-am.js" />
     <Content Include="Scripts\locale\easyui-lang-ar.js" />
@@ -6318,6 +6320,7 @@
     <Content Include="Views\Sku\_Content.cshtml" />
     <Content Include="Views\Sku\_PackageContent.cshtml" />
     <Content Include="Views\DispatchWarehouse\Edit.cshtml" />
+    <Content Include="Views\WarehouseInventory\Statement.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

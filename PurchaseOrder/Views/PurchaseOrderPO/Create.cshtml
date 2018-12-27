@@ -339,7 +339,7 @@
                                                 <div class="form-group">
                                                     @Html.LabelFor(model => model.POStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.DropDownListFor(model => model.POStatus, POStatusDDL,  htmlAttributes: new { @class = "form-control" })
+                                                        @Html.DropDownListFor(model => model.POStatus, POStatusDDL, htmlAttributes: new { @class = "form-control" })
                                                         @Html.ValidationMessageFor(model => model.POStatus, "", new { @class = "text-danger" })
                                                     </div>
                                                     @Html.LabelFor(model => model.InvoiceDate, htmlAttributes: new { @class = "control-label col-sm-2" })
@@ -379,12 +379,12 @@
                                                 <div class="form-group">
                                                     @Html.LabelFor(model => model.ReceiveStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.DropDownListFor(model => model.ReceiveStatus, ReceiveStatusDDL,  htmlAttributes: new { @class = "form-control" })
+                                                        @Html.DropDownListFor(model => model.ReceiveStatus, ReceiveStatusDDL, htmlAttributes: new { @class = "form-control" })
                                                         @Html.ValidationMessageFor(model => model.ReceiveStatus, "", new { @class = "text-danger" })
                                                     </div>
                                                     @Html.LabelFor(model => model.PaymentStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.DropDownListFor(model => model.PaymentStatus, ReceiveStatusDDL,  htmlAttributes: new { @class = "form-control" })
+                                                        @Html.DropDownListFor(model => model.PaymentStatus, ReceiveStatusDDL, htmlAttributes: new { @class = "form-control" })
                                                         @Html.ValidationMessageFor(model => model.PaymentStatus, "", new { @class = "text-danger" })
                                                     </div>
                                                 </div>
@@ -579,6 +579,8 @@
     </section>
 </div>
 @section pagespecific {
+    <link href="~/Content/css/lightbox.css" rel="stylesheet" />
+    <script src="~/Scripts/lightbox.js"></script>
     <script type="text/javascript">
         var hash = window.location.hash;
         $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
@@ -711,7 +713,7 @@
                         };
                     }
                 }
-            }); 
+            });
             $("#addsku").click(function () {
                 DataGridC.draw();
             });
@@ -746,7 +748,7 @@
                 DataGridC.draw();
             });
             //$("#VendorInvoice").change(function () {
-               
+
             //});
             $(tableID + ' tbody').on('click', 'td.details-control', function () {
                 var tr = $(this).closest('tr');
@@ -823,7 +825,7 @@
 
             // 建立圖片
             var create_imgcode = function (src) {
-                imgcode += '<img class="img" src="' + src + '">';
+                imgcode += '<a class="aimg" href="' + src + '" data-lightbox="roadtrip"><img class="img" src="' + src + '" /></a>';
             }
 
 
