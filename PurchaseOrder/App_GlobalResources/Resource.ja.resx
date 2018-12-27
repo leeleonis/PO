@@ -252,4 +252,31 @@
   <data name="Company_CompanyNo" xml:space="preserve">
     <value>Company No</value>
   </data>
+  <data name="ImgFile_IsEnable" xml:space="preserve">
+    <value>IsEnable</value>
+  </data>
+  <data name="ImgFile_ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="ImgFile_PurchaseOrderID" xml:space="preserve">
+    <value>PurchaseOrderID</value>
+  </data>
+  <data name="ImgFile_CreditMemoID" xml:space="preserve">
+    <value>CreditMemoID</value>
+  </data>
+  <data name="ImgFile_Url" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="ImgFile_CreateBy" xml:space="preserve">
+    <value>CreateBy</value>
+  </data>
+  <data name="ImgFile_CreateAt" xml:space="preserve">
+    <value>CreateAt</value>
+  </data>
+  <data name="ImgFile_UpdateBy" xml:space="preserve">
+    <value>UpdateBy</value>
+  </data>
+  <data name="ImgFile_UpdateAt" xml:space="preserve">
+    <value>UpdateAt</value>
+  </data>
 </root>

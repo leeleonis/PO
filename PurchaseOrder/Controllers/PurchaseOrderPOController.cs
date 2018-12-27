@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -27,7 +28,7 @@ namespace PurchaseOrderSys.Controllers
             return View(PurchaseOrder);
         }
         [HttpPost]
-        public ActionResult Create(PurchaseOrder filter)
+        public ActionResult Create(PurchaseOrder filter, IEnumerable<HttpPostedFileBase> VendorInvoice, IEnumerable<HttpPostedFileBase> PaymentProofList)
         {
             //var PurchaseOrder = new PurchaseOrder
             //{
@@ -79,6 +80,39 @@ namespace PurchaseOrderSys.Controllers
                     filter.PurchaseNote.Add(item);
                 }
             }
+
+
+            if (VendorInvoice != null && VendorInvoice.Any())
+            {
+                foreach (var file in VendorInvoice)
+                {
+                    var Url = SaveImg(file);
+                    filter.ImgFile.Add(new ImgFile
+                    {
+                        IsEnable = true,
+                        ImgType = "VendorInvoice",
+                        Url = Url,
+                        CreateBy = UserBy,
+                        CreateAt = DateTime.UtcNow
+                    });
+                }
+            }
+            if (PaymentProofList != null && PaymentProofList.Any())
+            {
+                foreach (var file in PaymentProofList)
+                {
+                    var Url = SaveImg(file);
+                    filter.ImgFile.Add(new ImgFile
+                    {
+                        IsEnable = true,
+                        ImgType = "PaymentProof",
+                        Url = Url,
+                        CreateBy = UserBy,
+                        CreateAt = DateTime.UtcNow
+                    });
+                }
+            }
+
             try
             {
                 db.SaveChanges();
@@ -91,6 +125,8 @@ namespace PurchaseOrderSys.Controllers
 
             return RedirectToAction("Index");
         }
+
+       
         public ActionResult GetData(PurchaseOrderPOVM filter, string Type, int? DetailID)
         {
             if (Type == "Master")
