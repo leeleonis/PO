@@ -24,6 +24,13 @@
 
     }
 }
+<style>
+    .img {
+        max-width: 20px;
+        max-height: 20px;
+        margin: 5px;
+    }
+</style>
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -73,7 +80,7 @@
                                                 <div class="form-group">
                                                     @Html.LabelFor(model => model.POStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.DropDownListFor(model => model.POStatus, POStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.DropDownListFor(model => model.POStatus, POStatusDDL, htmlAttributes: new { @class = "form-control" })
                                                         @Html.ValidationMessageFor(model => model.POStatus, "", new { @class = "text-danger" })
                                                     </div>
                                                     @Html.LabelFor(model => model.InvoiceDate, htmlAttributes: new { @class = "control-label col-sm-2" })
@@ -85,7 +92,7 @@
                                                 <div class="form-group">
                                                     @Html.LabelFor(model => model.POType, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.DropDownListFor(model => model.POType, POTypeDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.DropDownListFor(model => model.POType, POTypeDDL, htmlAttributes: new { @class = "form-control" })
                                                         @Html.ValidationMessageFor(model => model.POType, "", new { @class = "text-danger" })
                                                     </div>
                                                     @Html.LabelFor(model => model.InvoiceNo, htmlAttributes: new { @class = "control-label col-sm-2" })
@@ -100,20 +107,25 @@
                                                         @Html.EditorFor(model => model.PODate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
                                                         @Html.ValidationMessageFor(model => model.PODate, "", new { @class = "text-danger" })
                                                     </div>
-                                                    @Html.Label("VendorInvoice", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    @Html.Label("Vendor Invoice", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.Editor("VendorInvoice", new { htmlAttributes = new { @class = "form-control" } })
+                                                        @*@Html.Editor("VendorInvoice", new { htmlAttributes = new { @class = "form-control" } })*@
+                                                        <input type='file' class="ImgFile" name="VendorInvoice" id="VendorInvoice" multiple>
+                                                    </div>
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        <div class="preview" id="VendorInvoicepreview">
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     @Html.LabelFor(model => model.ReceiveStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.DropDownListFor(model => model.ReceiveStatus, ReceiveStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.DropDownListFor(model => model.ReceiveStatus, ReceiveStatusDDL, htmlAttributes: new { @class = "form-control" })
                                                         @Html.ValidationMessageFor(model => model.ReceiveStatus, "", new { @class = "text-danger" })
                                                     </div>
                                                     @Html.LabelFor(model => model.PaymentStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.DropDownListFor(model => model.PaymentStatus, ReceiveStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.DropDownListFor(model => model.PaymentStatus, PaymentStatusDDL, htmlAttributes: new { @class = "form-control" })
                                                         @Html.ValidationMessageFor(model => model.PaymentStatus, "", new { @class = "text-danger" })
                                                     </div>
                                                 </div>
@@ -149,8 +161,12 @@
                                                     </div>
                                                     @Html.LabelFor(model => model.PaymentProof, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.EditorFor(model => model.PaymentProof, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
-                                                        @Html.ValidationMessageFor(model => model.PaymentProof, "", new { @class = "text-danger" })
+                                                        @*@Html.Editor("VendorInvoice", new { htmlAttributes = new { @class = "form-control" } })*@
+                                                        <input type='file' class="ImgFile" name="PaymentProofList" id="PaymentProofList" multiple>
+                                                    </div>
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        <div class="preview" id="PaymentProofListpreview">
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -323,7 +339,7 @@
                                                 <div class="form-group">
                                                     @Html.LabelFor(model => model.POStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.DropDownListFor(model => model.POStatus, POStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.DropDownListFor(model => model.POStatus, POStatusDDL,  htmlAttributes: new { @class = "form-control" })
                                                         @Html.ValidationMessageFor(model => model.POStatus, "", new { @class = "text-danger" })
                                                     </div>
                                                     @Html.LabelFor(model => model.InvoiceDate, htmlAttributes: new { @class = "control-label col-sm-2" })
@@ -335,7 +351,7 @@
                                                 <div class="form-group">
                                                     @Html.LabelFor(model => model.POType, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.DropDownListFor(model => model.POType, POTypeDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.DropDownListFor(model => model.POType, POTypeDDL, htmlAttributes: new { @class = "form-control" })
                                                         @Html.ValidationMessageFor(model => model.POType, "", new { @class = "text-danger" })
                                                     </div>
                                                     @Html.LabelFor(model => model.InvoiceNo, htmlAttributes: new { @class = "control-label col-sm-2" })
@@ -350,20 +366,25 @@
                                                         @Html.EditorFor(model => model.PODate)
                                                         @Html.ValidationMessageFor(model => model.PODate, "", new { @class = "text-danger" })
                                                     </div>
-                                                    @Html.Label("VendorInvoice", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    @Html.Label("Vendor Invoice", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.Editor("VendorInvoice", new { htmlAttributes = new { @class = "form-control" } })
+                                                        @*@Html.Editor("VendorInvoice", new { htmlAttributes = new { @class = "form-control" } })*@
+                                                        <input type='file' class="ImgFile" name="VendorInvoice" id="VendorInvoice" multiple>
+                                                    </div>
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        <div class="preview" id="VendorInvoicepreview">
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     @Html.LabelFor(model => model.ReceiveStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.DropDownListFor(model => model.ReceiveStatus, ReceiveStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.DropDownListFor(model => model.ReceiveStatus, ReceiveStatusDDL,  htmlAttributes: new { @class = "form-control" })
                                                         @Html.ValidationMessageFor(model => model.ReceiveStatus, "", new { @class = "text-danger" })
                                                     </div>
                                                     @Html.LabelFor(model => model.PaymentStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.DropDownListFor(model => model.PaymentStatus, ReceiveStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.DropDownListFor(model => model.PaymentStatus, ReceiveStatusDDL,  htmlAttributes: new { @class = "form-control" })
                                                         @Html.ValidationMessageFor(model => model.PaymentStatus, "", new { @class = "text-danger" })
                                                     </div>
                                                 </div>
@@ -399,8 +420,12 @@
                                                     </div>
                                                     @Html.LabelFor(model => model.PaymentProof, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.EditorFor(model => model.PaymentProof, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
-                                                        @Html.ValidationMessageFor(model => model.PaymentProof, "", new { @class = "text-danger" })
+                                                        @*@Html.Editor("VendorInvoice", new { htmlAttributes = new { @class = "form-control" } })*@
+                                                        <input type='file' class="ImgFile" name="PaymentProofList" id="PaymentProofList" multiple>
+                                                    </div>
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        <div class="preview" id="PaymentProofListpreview">
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -720,6 +745,9 @@
             $("#Tax").change(function () {
                 DataGridC.draw();
             });
+            //$("#VendorInvoice").change(function () {
+               
+            //});
             $(tableID + ' tbody').on('click', 'td.details-control', function () {
                 var tr = $(this).closest('tr');
                 var row = DataGridC.row(tr);
@@ -757,5 +785,60 @@
                 }
             });
         }
+        var Preview = new function () {
+
+            var root = $("#data-form");
+
+            // 連續的圖片編碼
+            var imgcode = '';
+
+            // 選取發生改變
+            this.change_file = function () {
+                root.on("change", ".ImgFile", function () {
+                    show(this);
+                });
+            }
+
+            // 批次圖片，先清空後再插入
+            var show = function (input) {
+                if (input.files && input.files[0]) {
+                    clean(input.ID);
+                    each_img(input.files, input.id);
+                }
+            }
+
+            // 批次讀取，最後再一次寫入
+            var each_img = function (files,ID) {
+
+                $.each(files, function (index, file) {
+                    var src = URL.createObjectURL(file);
+                    create_imgcode(src);
+                });
+
+                // 放置預覽元素後重設
+                root.find("#" + ID + "preview").html(imgcode);
+                reset();
+            }
+
+
+            // 建立圖片
+            var create_imgcode = function (src) {
+                imgcode += '<img class="img" src="' + src + '">';
+            }
+
+
+            // 清空預覽區域
+            var clean = function (ID) {
+                root.find("#" + ID + "preview").empty();
+            }
+
+            // 還原 input[type=file]
+            var reset = function () {
+                imgcode = '';
+                //root.find("#VendorInvoice").val(null);
+            }
+        }
+        // 執行
+        Preview.change_file();
     </script>
 }

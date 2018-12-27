@@ -85,6 +85,9 @@
         <AssociationConnector Association="PurchaseOrderModel.FK_ShippingMethod_Carriers" />
         <EntityTypeShape EntityType="PurchaseOrderModel.SkuLang" Width="1.5" PointX="8.25" PointY="12.125" />
         <AssociationConnector Association="PurchaseOrderModel.FK_SkuLang_Sku" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.ImgFile" Width="1.5" PointX="26.5" PointY="16.125" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_ImgFile_CreditMemo" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_ImgFile_PurchaseOrder" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -263,6 +263,21 @@
           <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
           <Property Name="UpdateAt" Type="datetime" />
         </EntityType>
+        <EntityType Name="ImgFile">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="bit" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PurchaseOrderID" Type="int" />
+          <Property Name="CreditMemoID" Type="int" />
+          <Property Name="Url" Type="ntext" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreateAt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="UpdateAt" Type="datetime" />
+          <Property Name="ImgType" Type="nvarchar" MaxLength="20" Nullable="false" />
+        </EntityType>
         <EntityType Name="KitSku">
           <Key>
             <PropertyRef Name="Sku" />
@@ -705,7 +720,7 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="WarehouseID" Type="int" Nullable="false" />
           <Property Name="Type" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Val" Type="nvarchar" MaxLength="50" />
+          <Property Name="Val" Type="nvarchar(max)" />
           <Property Name="Url" Type="text" />
         </EntityType>
         <EntityType Name="WarehouseUser">
@@ -790,6 +805,30 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="CreditMemo">
+              <PropertyRef Name="PurchaseOrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ImgFile_CreditMemo">
+          <End Role="CreditMemo" Type="Self.CreditMemo" Multiplicity="0..1" />
+          <End Role="ImgFile" Type="Self.ImgFile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CreditMemo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ImgFile">
+              <PropertyRef Name="CreditMemoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ImgFile_PurchaseOrder">
+          <End Role="PurchaseOrder" Type="Self.PurchaseOrder" Multiplicity="0..1" />
+          <End Role="ImgFile" Type="Self.ImgFile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseOrder">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ImgFile">
               <PropertyRef Name="PurchaseOrderID" />
             </Dependent>
           </ReferentialConstraint>
@@ -1217,6 +1256,7 @@
           <EntitySet Name="ConditionLang" EntityType="Self.ConditionLang" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CreditMemo" EntityType="Self.CreditMemo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DirectLine" EntityType="Self.DirectLine" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ImgFile" EntityType="Self.ImgFile" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="KitSku" EntityType="Self.KitSku" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Menu" EntityType="Self.Menu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MenuLang" EntityType="Self.MenuLang" Schema="dbo" store:Type="Tables" />
@@ -1266,6 +1306,14 @@
           <AssociationSet Name="FK_CreditMemo_PurchaseOrder" Association="Self.FK_CreditMemo_PurchaseOrder">
             <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
             <End Role="CreditMemo" EntitySet="CreditMemo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ImgFile_CreditMemo" Association="Self.FK_ImgFile_CreditMemo">
+            <End Role="CreditMemo" EntitySet="CreditMemo" />
+            <End Role="ImgFile" EntitySet="ImgFile" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ImgFile_PurchaseOrder" Association="Self.FK_ImgFile_PurchaseOrder">
+            <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
+            <End Role="ImgFile" EntitySet="ImgFile" />
           </AssociationSet>
           <AssociationSet Name="FK_KitSku_Sku" Association="Self.FK_KitSku_Sku">
             <End Role="SKU" EntitySet="SKU" />
@@ -1609,6 +1657,15 @@
             <End Role="SKU" EntitySet="SKU" />
             <End Role="SkuLang" EntitySet="SkuLang" />
           </AssociationSet>
+          <EntitySet Name="ImgFile" EntityType="PurchaseOrderModel.ImgFile" />
+          <AssociationSet Name="FK_ImgFile_CreditMemo" Association="PurchaseOrderModel.FK_ImgFile_CreditMemo">
+            <End Role="CreditMemo" EntitySet="CreditMemo" />
+            <End Role="ImgFile" EntitySet="ImgFile" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ImgFile_PurchaseOrder" Association="PurchaseOrderModel.FK_ImgFile_PurchaseOrder">
+            <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
+            <End Role="ImgFile" EntitySet="ImgFile" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="AdminGroup">
           <Key>
@@ -1829,6 +1886,7 @@
           <Property Name="ReceivedAt" Type="DateTime" Precision="3" />
           <NavigationProperty Name="PurchaseOrder" Relationship="PurchaseOrderModel.FK_CreditMemo_PurchaseOrder" FromRole="CreditMemo" ToRole="PurchaseOrder" />
           <NavigationProperty Name="PurchaseSKU" Relationship="PurchaseOrderModel.FK_PurchaseSKU_CreditMemo" FromRole="CreditMemo" ToRole="PurchaseSKU" />
+          <NavigationProperty Name="ImgFile" Relationship="PurchaseOrderModel.FK_ImgFile_CreditMemo" FromRole="CreditMemo" ToRole="ImgFile" />
         </EntityType>
         <EntityType Name="DirectLine">
           <Key>
@@ -1984,6 +2042,7 @@
           <NavigationProperty Name="VendorLIst" Relationship="PurchaseOrderModel.FK_PurchaseOrder_VendorLIst" FromRole="PurchaseOrder" ToRole="VendorLIst" />
           <NavigationProperty Name="Warehouse1" Relationship="PurchaseOrderModel.FK_PurchaseOrder_Warehouse" FromRole="PurchaseOrder" ToRole="Warehouse" />
           <NavigationProperty Name="PurchaseSKU" Relationship="PurchaseOrderModel.FK_PurchaseSKU_PurchaseOrder" FromRole="PurchaseOrder" ToRole="PurchaseSKU" />
+          <NavigationProperty Name="ImgFile" Relationship="PurchaseOrderModel.FK_ImgFile_PurchaseOrder" FromRole="PurchaseOrder" ToRole="ImgFile" />
         </EntityType>
         <EntityType Name="PurchaseSKU">
           <Key>
@@ -2339,7 +2398,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="WarehouseID" Type="Int32" Nullable="false" />
           <Property Name="Type" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Val" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Val" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Url" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Warehouse" Relationship="PurchaseOrderModel.FK_WarehouseSummary_Warehouse" FromRole="WarehouseSummary" ToRole="Warehouse" />
         </EntityType>
@@ -2883,6 +2942,47 @@
             </Principal>
             <Dependent Role="SkuLang">
               <PropertyRef Name="Sku" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ImgFile">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PurchaseOrderID" Type="Int32" />
+          <Property Name="CreditMemoID" Type="Int32" />
+          <Property Name="Url" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="CreditMemo" Relationship="PurchaseOrderModel.FK_ImgFile_CreditMemo" FromRole="ImgFile" ToRole="CreditMemo" />
+          <NavigationProperty Name="PurchaseOrder" Relationship="PurchaseOrderModel.FK_ImgFile_PurchaseOrder" FromRole="ImgFile" ToRole="PurchaseOrder" />
+          <Property Name="ImgType" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_ImgFile_CreditMemo">
+          <End Type="PurchaseOrderModel.CreditMemo" Role="CreditMemo" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.ImgFile" Role="ImgFile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CreditMemo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ImgFile">
+              <PropertyRef Name="CreditMemoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ImgFile_PurchaseOrder">
+          <End Type="PurchaseOrderModel.PurchaseOrder" Role="PurchaseOrder" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.ImgFile" Role="ImgFile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseOrder">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ImgFile">
+              <PropertyRef Name="PurchaseOrderID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3635,6 +3735,22 @@
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="LangID" ColumnName="LangID" />
                 <ScalarProperty Name="Sku" ColumnName="Sku" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ImgFile">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.ImgFile">
+              <MappingFragment StoreEntitySet="ImgFile">
+                <ScalarProperty Name="ImgType" ColumnName="ImgType" />
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="CreditMemoID" ColumnName="CreditMemoID" />
+                <ScalarProperty Name="PurchaseOrderID" ColumnName="PurchaseOrderID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

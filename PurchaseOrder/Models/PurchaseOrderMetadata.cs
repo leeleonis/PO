@@ -40,14 +40,16 @@ namespace PurchaseOrderSys.Models
     		/// Company ID
     		/// </summary>        
     	    [Display(Name = "PurchaseOrder_CompanyID", ResourceType = typeof(App_GlobalResources.Resource))]
-    		public Nullable<int>  CompanyID { get; set; }
+            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+            public Nullable<int>  CompanyID { get; set; }
     
     		    
     		/// <summary>
     		/// Vendor ID
     		/// </summary>        
     	    [Display(Name = "PurchaseOrder_VendorID", ResourceType = typeof(App_GlobalResources.Resource))]
-    		public Nullable<int>  VendorID { get; set; }
+            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+            public Nullable<int>  VendorID { get; set; }
     
     		    
     		/// <summary>

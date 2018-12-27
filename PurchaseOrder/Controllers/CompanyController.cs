@@ -114,6 +114,7 @@ namespace PurchaseOrderSys.Controllers
             db.Company.Remove(company);
             db.SaveChanges();
             return RedirectToAction("Index");
+
         }
 
         public ActionResult GetData(CompanyFilter filter, int page = 1, int rows = 100)
@@ -129,15 +130,16 @@ namespace PurchaseOrderSys.Controllers
             if (filter.RelateID.HasValue) CompanyFilter = CompanyFilter.Where(c => c.RelateID.Value.Equals(filter.RelateID.Value));
             if (!string.IsNullOrEmpty(filter.eBayAccountID)) CompanyFilter = CompanyFilter.Where(c => c.eBayAccountID.ToLower().Contains(filter.eBayAccountID.ToLower()));
             if (!string.IsNullOrEmpty(filter.AmazonAccountID)) CompanyFilter = CompanyFilter.Where(c => c.AmazonAccountID.ToLower().Contains(filter.AmazonAccountID.ToLower()));
-            var CompanyList = CompanyFilter.Select(x => new CompanyVM {
+            var CompanyList = CompanyFilter.Select(x => new  {
                 AmazonAccountID = x.AmazonAccountID,
                 CompanyNo = x.CompanyNo,
                 eBayAccountID = x.eBayAccountID,
                 ID = x.ID,
                 Name = x.Name,
                 ShandowSuffix = x.ShandowSuffix,
-                ParentID = x.ParentID,
-                RelateID = x.RelateID
+                ParentID = x.ParentID.ToString(),
+                RelateID = x.RelateID.ToString(),
+                x.CreateAt
             }).ToList();
             if (CompanyList.Any())
             {
@@ -151,8 +153,8 @@ namespace PurchaseOrderSys.Controllers
             return Json(new { total, rows = dataList.ToList() }, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpPost]
-        public ActionResult Update(Company updateData)
+        //[HttpPost]
+        public ActionResult Update(CompanyVM updateData)
         {
             AjaxResult result = new AjaxResult();
 
@@ -165,7 +167,6 @@ namespace PurchaseOrderSys.Controllers
             Company.AmazonAccountID = updateData.AmazonAccountID;
             Company.UpdateAt = DateTime.UtcNow;
             Company.UpdateBy = Session["AdminName"].ToString();
-            db.Entry(Company).State = EntityState.Modified;
             db.SaveChanges();
 
             return Json(result, JsonRequestBehavior.AllowGet);

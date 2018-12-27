@@ -916,6 +916,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查詢類似 Company No 的當地語系化字串。
+        /// </summary>
+        public static string Company_CompanyNo {
+            get {
+                return ResourceManager.GetString("Company_CompanyNo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
         public static string Company_CreateAt {
@@ -1443,6 +1452,87 @@ namespace PurchaseOrderSys.App_GlobalResources {
         public static string GrandTotal {
             get {
                 return ResourceManager.GetString("GrandTotal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CreateAt 的當地語系化字串。
+        /// </summary>
+        public static string ImgFile_CreateAt {
+            get {
+                return ResourceManager.GetString("ImgFile_CreateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CreateBy 的當地語系化字串。
+        /// </summary>
+        public static string ImgFile_CreateBy {
+            get {
+                return ResourceManager.GetString("ImgFile_CreateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CreditMemoID 的當地語系化字串。
+        /// </summary>
+        public static string ImgFile_CreditMemoID {
+            get {
+                return ResourceManager.GetString("ImgFile_CreditMemoID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ID 的當地語系化字串。
+        /// </summary>
+        public static string ImgFile_ID {
+            get {
+                return ResourceManager.GetString("ImgFile_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 IsEnable 的當地語系化字串。
+        /// </summary>
+        public static string ImgFile_IsEnable {
+            get {
+                return ResourceManager.GetString("ImgFile_IsEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 PurchaseOrderID 的當地語系化字串。
+        /// </summary>
+        public static string ImgFile_PurchaseOrderID {
+            get {
+                return ResourceManager.GetString("ImgFile_PurchaseOrderID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UpdateAt 的當地語系化字串。
+        /// </summary>
+        public static string ImgFile_UpdateAt {
+            get {
+                return ResourceManager.GetString("ImgFile_UpdateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UpdateBy 的當地語系化字串。
+        /// </summary>
+        public static string ImgFile_UpdateBy {
+            get {
+                return ResourceManager.GetString("ImgFile_UpdateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Url 的當地語系化字串。
+        /// </summary>
+        public static string ImgFile_Url {
+            get {
+                return ResourceManager.GetString("ImgFile_Url", resourceCulture);
             }
         }
         

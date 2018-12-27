@@ -1527,4 +1527,34 @@
   <data name="Warehouse_Phone" xml:space="preserve">
     <value>電話</value>
   </data>
+  <data name="Company_CompanyNo" xml:space="preserve">
+    <value>公司統編</value>
+  </data>
+  <data name="ImgFile_IsEnable" xml:space="preserve">
+    <value>啟用</value>
+  </data>
+  <data name="ImgFile_ID" xml:space="preserve">
+    <value>流水號</value>
+  </data>
+  <data name="ImgFile_PurchaseOrderID" xml:space="preserve">
+    <value>PO單號</value>
+  </data>
+  <data name="ImgFile_CreditMemoID" xml:space="preserve">
+    <value>CM單號</value>
+  </data>
+  <data name="ImgFile_Url" xml:space="preserve">
+    <value>網址</value>
+  </data>
+  <data name="ImgFile_CreateBy" xml:space="preserve">
+    <value>建立者</value>
+  </data>
+  <data name="ImgFile_CreateAt" xml:space="preserve">
+    <value>建立時間</value>
+  </data>
+  <data name="ImgFile_UpdateBy" xml:space="preserve">
+    <value>修改者</value>
+  </data>
+  <data name="ImgFile_UpdateAt" xml:space="preserve">
+    <value>修改時間</value>
+  </data>
 </root>

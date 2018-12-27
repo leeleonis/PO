@@ -14,6 +14,7 @@ namespace PurchaseOrderSys.Controllers
 {
     public class BaseController : Controller
     {
+        protected string FileUploads = "~/FileUploads";
         protected string UserBy = "test";
         protected PurchaseOrderEntities db = new PurchaseOrderEntities();
         /// <summary>
@@ -45,7 +46,7 @@ namespace PurchaseOrderSys.Controllers
         }
         protected string GetPOTypeName(string POType)
         {
-          return  EnumData.POTypeDDL().Where(x => x.Key == POType)?.FirstOrDefault().Value;
+            return EnumData.POTypeDDL().Where(x => x.Key == POType)?.FirstOrDefault().Value;
         }
         protected string GetVendorName(int? VendorID)
         {
@@ -58,7 +59,7 @@ namespace PurchaseOrderSys.Controllers
             {
                 return "";
             }
-           
+
         }
         protected string GetPOStatusName(string POStatus)
         {
@@ -142,5 +143,31 @@ namespace PurchaseOrderSys.Controllers
                 return sw.GetStringBuilder().ToString();
             }
         }
+        /// <summary>
+        /// 存圖檔
+        /// </summary>
+        /// <param name="file">圖檔</param>
+        /// <returns>回傳路徑</returns>
+        public string SaveImg(HttpPostedFileBase file)
+        {
+            try
+            {
+               
+                var Dirpath = Server.MapPath(FileUploads);
+                if (!Directory.Exists(Dirpath))
+                    Directory.CreateDirectory(Dirpath);
+                string FileExtension = Path.GetExtension(file.FileName);
+                var fileName = Guid.NewGuid().ToString("N") + FileExtension;
+                var path = Path.Combine(Dirpath, fileName);
+                file.SaveAs(path);
+                return fileName;
+            }
+            catch (Exception)
+            {
+                return "Error";
+            }
+
+        }
+
     }
 }
