@@ -61,8 +61,8 @@ namespace PurchaseOrderSys.Models
     		/// Invoice Date
     		/// </summary>        
     	    [Display(Name = "CreditMemo_InvoiceDate", ResourceType = typeof(App_GlobalResources.Resource))]
-            [UIHint("DateTime")]
-    		public Nullable<System.DateTime>  InvoiceDate { get; set; }
+            [UIHint("FDate")]
+            public Nullable<System.DateTime>  InvoiceDate { get; set; }
     
     		    
     		/// <summary>
@@ -94,8 +94,8 @@ namespace PurchaseOrderSys.Models
     		/// CMDate
     		/// </summary>        
     	    [Display(Name = "CreditMemo_CMDate", ResourceType = typeof(App_GlobalResources.Resource))]
-            [UIHint("DateTime")]
-    		public Nullable<System.DateTime>  CMDate { get; set; }
+            [UIHint("FDate")]
+            public Nullable<System.DateTime>  CMDate { get; set; }
     
     		    
     		/// <summary>
@@ -110,8 +110,8 @@ namespace PurchaseOrderSys.Models
     		/// Shipped Date
     		/// </summary>        
     	    [Display(Name = "CreditMemo_ShippedDate", ResourceType = typeof(App_GlobalResources.Resource))]
-            [UIHint("DateTime")]
-    		public Nullable<System.DateTime>  ShippedDate { get; set; }
+            [UIHint("FDate")]
+            public Nullable<System.DateTime>  ShippedDate { get; set; }
     
     		    
     		/// <summary>
@@ -142,8 +142,8 @@ namespace PurchaseOrderSys.Models
     		/// Credit Date
     		/// </summary>        
     	    [Display(Name = "CreditMemo_CreditDate", ResourceType = typeof(App_GlobalResources.Resource))]
-            [UIHint("DateTime")]
-    		public Nullable<System.DateTime>  CreditDate { get; set; }
+            [UIHint("FDate")]
+            public Nullable<System.DateTime>  CreditDate { get; set; }
     
     		    
     		/// <summary>

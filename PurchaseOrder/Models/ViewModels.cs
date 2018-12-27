@@ -33,7 +33,13 @@ namespace PurchaseOrderSys.Models
         public List<string> AuthList { get; set; }
     }
     public class CMVM
-    {
+    {   /// <summary>
+        /// ID
+        /// </summary>        
+        [Display(Name = "CreditMemo_ID", ResourceType = typeof(App_GlobalResources.Resource))]
+        [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+        public int ID { get; set; }
+
         /// <summary>
         /// Purchase Order ID
         /// </summary>        

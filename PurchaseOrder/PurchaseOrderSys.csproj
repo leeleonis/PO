@@ -6326,6 +6326,7 @@
     <Content Include="Views\Sku\_PackageContent.cshtml" />
     <Content Include="Views\DispatchWarehouse\Edit.cshtml" />
     <Content Include="Views\WarehouseInventory\Statement.cshtml" />
+    <Content Include="Views\PurchaseOrderCM\EditItem.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

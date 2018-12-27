@@ -37,6 +37,88 @@ namespace PurchaseOrderSys.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+        public ActionResult EditItem(int ID)
+        {
+            var Warehouselist = db.Warehouse.Where(x => x.IsEnable).Select(x => new SelectListItem { Text = x.Name, Value = x.ID.ToString() }).ToList();
+            ViewBag.Warehouselist = Warehouselist;
+            var CreditMemo = db.CreditMemo.Find(ID);
+            //var cmvm = new CMVM
+            //{
+            //    PurchaseOrderID = CreditMemo.ID,
+            //    CompanyID = CreditMemo.CompanyID,
+            //    VendorID = CreditMemo.VendorID,
+            //    InvoiceDate = CreditMemo.InvoiceDate,
+            //    InvoiceNo = CreditMemo.InvoiceNo,
+            //    ShippedDate = CreditMemo.ShippedDate,
+            //    Carrier = CreditMemo.Carrier,
+            //    Tracking = CreditMemo.Tracking,
+            //    CMType = CreditMemo.CMType,
+            //    WarehouseID = CreditMemo.PurchaseOrder.WarehouseID,
+            //    Tax = CreditMemo.PurchaseOrder.Tax,
+            //    Currency = CreditMemo.PurchaseOrder.Currency
+            //};
+            var dataList = CreditMemo.PurchaseSKU.Select(x => new CMSKUVM
+            {
+                ID = x.ID,
+                ck = x.SkuNo,
+                sk = x.SkuNo,
+                Name = x.Name,
+                SKU = x.SkuNo,
+                VendorSKU = x.VendorSKU,
+                QTYOrdered = x.QTYOrdered,
+                QTYReceived = x.QTYReceived ?? 0,
+                QTYReturned = x.QTYReturned ?? 0,
+                CreditQTY = x.CreditQTY ?? 0,
+                Credit = x.Credit ?? 0,
+                Subtotal = (x.CreditQTY * x.Credit) ?? 0,
+                Model = "L"
+            });
+            Session["CMSkuNumberList"] = dataList.ToList();
+            return View(CreditMemo);
+        }
+        [HttpPost]
+        public ActionResult EditItem(CreditMemo filter, IEnumerable<HttpPostedFileBase> VendorCM)
+        {
+            var CreditMemo = db.CreditMemo.Find(filter.ID);
+            if (filter.CompanyID.HasValue) CreditMemo.CompanyID = filter.CompanyID;
+            if (filter.VendorID.HasValue) CreditMemo.VendorID = filter.VendorID;
+            if (filter.InvoiceDate.HasValue) CreditMemo.InvoiceDate = filter.InvoiceDate;
+            if (!string.IsNullOrWhiteSpace(filter.InvoiceNo)) CreditMemo.InvoiceNo = filter.InvoiceNo;
+            if (!string.IsNullOrWhiteSpace(filter.CMStatus)) CreditMemo.CMStatus = filter.CMStatus;
+            if (!string.IsNullOrWhiteSpace(filter.CMType)) CreditMemo.CMType = filter.CMType;
+            if (filter.CMDate.HasValue) CreditMemo.CMDate = filter.CMDate;
+            if (!string.IsNullOrWhiteSpace(filter.ShippingStatus)) CreditMemo.ShippingStatus = filter.ShippingStatus;
+            if (filter.ShippedDate.HasValue) CreditMemo.ShippedDate = filter.ShippedDate;
+            if (!string.IsNullOrWhiteSpace(filter.Carrier)) CreditMemo.Carrier = filter.Carrier;
+            if (!string.IsNullOrWhiteSpace(filter.Tracking)) CreditMemo.Tracking = filter.Tracking;
+            if (!string.IsNullOrWhiteSpace(filter.CreditStatus)) CreditMemo.CreditStatus = filter.CreditStatus;
+            if (filter.CreditDate.HasValue) CreditMemo.CreditDate = filter.CreditDate;
+            if (filter.CreditAmount.HasValue) CreditMemo.CreditAmount = filter.CreditAmount;
+            CreditMemo.UpdateBy = UserBy;
+            CreditMemo.UpdateAt = DateTime.UtcNow;
+
+            if (VendorCM != null && VendorCM.Any())
+            {
+                foreach (var file in VendorCM)
+                {
+                    if (file != null)
+                    {
+                        var Url = SaveImg(file);
+                        CreditMemo.ImgFile.Add(new ImgFile
+                        {
+                            IsEnable = true,
+                            ImgType = "VendorCM",
+                            Url = Url,
+                            CreateBy = UserBy,
+                            CreateAt = DateTime.UtcNow
+                        });
+                    }
+
+                }
+            }
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
         public ActionResult GetData(CreditMemoVM filter, string Type, int? DetailID)
         {
             if (Type == "Master")

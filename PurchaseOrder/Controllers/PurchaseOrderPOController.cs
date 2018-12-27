@@ -766,7 +766,7 @@ namespace PurchaseOrderSys.Controllers
             return View(cmvm);
         }
         [HttpPost]
-        public ActionResult CreateCM(CreditMemo filter)
+        public ActionResult CreateCM(CreditMemo filter, IEnumerable<HttpPostedFileBase> VendorCM)
         {
             var CreditMemo = new CreditMemo
             {
@@ -809,6 +809,25 @@ namespace PurchaseOrderSys.Controllers
                 foreach (var item in PurchaseSKUlist)
                 {
                     CreditMemo.PurchaseSKU.Add(item);
+                }
+            }
+            if (VendorCM != null && VendorCM.Any())
+            {
+                foreach (var file in VendorCM)
+                {
+                    if (file != null)
+                    {
+                        var Url = SaveImg(file);
+                        CreditMemo.ImgFile.Add(new ImgFile
+                        {
+                            IsEnable = true,
+                            ImgType = "VendorCM",
+                            Url = Url,
+                            CreateBy = UserBy,
+                            CreateAt = DateTime.UtcNow
+                        });
+                    }
+
                 }
             }
             db.SaveChanges();
