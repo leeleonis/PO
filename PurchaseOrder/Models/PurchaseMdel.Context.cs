@@ -66,5 +66,6 @@ namespace PurchaseOrderSys.Models
         public virtual DbSet<Carriers> Carriers { get; set; }
         public virtual DbSet<SkuLang> SkuLang { get; set; }
         public virtual DbSet<ImgFile> ImgFile { get; set; }
+        public virtual DbSet<Currency> Currency { get; set; }
     }
 }

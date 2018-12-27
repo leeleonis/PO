@@ -1783,4 +1783,31 @@
   <data name="ImgFile_UpdateAt" xml:space="preserve">
     <value>UpdateAt</value>
   </data>
+  <data name="Currency_IsDefault" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Currency_ID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Currency_Name" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Currency_Code" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Currency_EXRate" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Currency_CreateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Currency_CreateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Currency_UpdateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Currency_UpdateAt" xml:space="preserve">
+    <value></value>
+  </data>
 </root>

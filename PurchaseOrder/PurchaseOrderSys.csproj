@@ -197,6 +197,7 @@
     <Compile Include="Controllers\BrandController.cs" />
     <Compile Include="Controllers\CompanyController.cs" />
     <Compile Include="Controllers\ConditionController.cs" />
+    <Compile Include="Controllers\CurrencyController.cs" />
     <Compile Include="Controllers\DispatchWarehouseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MainController.cs" />
@@ -295,6 +296,12 @@
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CreditMemoMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Currency.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CurrencyMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DataGridAttribute.cs" />
@@ -6323,6 +6330,11 @@
     <Content Include="Views\Sku\_Content.cshtml" />
     <Content Include="Views\Sku\_PackageContent.cshtml" />
     <Content Include="Views\DispatchWarehouse\Edit.cshtml" />
+    <Content Include="Views\Currency\Create.cshtml" />
+    <Content Include="Views\Currency\Delete.cshtml" />
+    <Content Include="Views\Currency\Details.cshtml" />
+    <Content Include="Views\Currency\Edit.cshtml" />
+    <Content Include="Views\Currency\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -50,7 +50,6 @@ var Datagrid = function (title, idField, url, queryParams, pageSize = 100) {
         url: url,
         queryParams: queryParams,
         width: "100%",
-        height: window.screen.availHeight - 250,
         checkOnSelect: false,
         selectOnCheck: false,
         singleSelect: false,

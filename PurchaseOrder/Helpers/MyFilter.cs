@@ -94,4 +94,13 @@ namespace PurchaseOrderSys
         public Nullable<bool> Replenishable { get; set; }
         public Nullable<byte> Status { get; set; }
     }
+
+    public class CurrencyFilter
+    {
+        private string nameField;
+        public Nullable<int> ID { get; set; }
+        public string Name { get { return this.nameField; } set { nameField = !string.IsNullOrEmpty(value) ? value.Trim() : value; } }
+        public string Code { get; set; }
+        public Nullable<decimal> EXRate { get; set; }
+    }
 }
