@@ -1557,4 +1557,31 @@
   <data name="ImgFile_UpdateAt" xml:space="preserve">
     <value>修改時間</value>
   </data>
+  <data name="Currency_IsDefault" xml:space="preserve">
+    <value>是否預設</value>
+  </data>
+  <data name="Currency_ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="Currency_Name" xml:space="preserve">
+    <value>名稱</value>
+  </data>
+  <data name="Currency_Code" xml:space="preserve">
+    <value>貨幣代碼</value>
+  </data>
+  <data name="Currency_EXRate" xml:space="preserve">
+    <value>匯率</value>
+  </data>
+  <data name="Currency_CreateBy" xml:space="preserve">
+    <value>建立者</value>
+  </data>
+  <data name="Currency_CreateAt" xml:space="preserve">
+    <value>建立時間</value>
+  </data>
+  <data name="Currency_UpdateBy" xml:space="preserve">
+    <value>修改者</value>
+  </data>
+  <data name="Currency_UpdateAt" xml:space="preserve">
+    <value>修改時間</value>
+  </data>
 </root>

@@ -1411,6 +1411,87 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Currency_Code {
+            get {
+                return ResourceManager.GetString("Currency_Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Currency_CreateAt {
+            get {
+                return ResourceManager.GetString("Currency_CreateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Currency_CreateBy {
+            get {
+                return ResourceManager.GetString("Currency_CreateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Currency_EXRate {
+            get {
+                return ResourceManager.GetString("Currency_EXRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Currency_ID {
+            get {
+                return ResourceManager.GetString("Currency_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Currency_IsDefault {
+            get {
+                return ResourceManager.GetString("Currency_IsDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Currency_Name {
+            get {
+                return ResourceManager.GetString("Currency_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Currency_UpdateAt {
+            get {
+                return ResourceManager.GetString("Currency_UpdateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Currency_UpdateBy {
+            get {
+                return ResourceManager.GetString("Currency_UpdateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 AUD 的當地語系化字串。
         /// </summary>
         public static string CurrencyAUD {

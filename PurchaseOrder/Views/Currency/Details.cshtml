@@ -1,0 +1,90 @@
+﻿@model PurchaseOrderSys.Models.Currency
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+</head>
+<body>
+    <div>
+        <h4>Currency</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.IsDefault)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.IsDefault)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Code)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Code)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.EXRate)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EXRate)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.CreateBy)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.CreateBy)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.CreateAt)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.CreateAt)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.UpdateBy)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.UpdateBy)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.UpdateAt)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.UpdateAt)
+            </dd>
+    
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</body>
+</html>
