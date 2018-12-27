@@ -339,10 +339,15 @@
     <Compile Include="Models\Objects\Neto\NetoBase.cs" />
     <Compile Include="Models\Objects\Neto\Schema\AddItem.cs" />
     <Compile Include="Models\Objects\Neto\Schema\AddItemResponse.cs" />
+    <Compile Include="Models\Objects\Neto\Schema\GetAccountingSystemRelatedAccountsResponse.cs" />
     <Compile Include="Models\Objects\Neto\Schema\GetCategory.cs" />
     <Compile Include="Models\Objects\Neto\Schema\GetCategoryResponse.cs" />
+    <Compile Include="Models\Objects\Neto\Schema\GetCurrencySettingsResponse.cs" />
+    <Compile Include="Models\Objects\Neto\Schema\GetCustomer.cs" />
+    <Compile Include="Models\Objects\Neto\Schema\GetCustomerResponse.cs" />
     <Compile Include="Models\Objects\Neto\Schema\GetItem.cs" />
     <Compile Include="Models\Objects\Neto\Schema\GetItemResponse.cs" />
+    <Compile Include="Models\Objects\Neto\Schema\GetPaymentMethodsResponse.cs" />
     <Compile Include="Models\Objects\Neto\Schema\GetWarehouse.cs" />
     <Compile Include="Models\Objects\Neto\Schema\GetWarehouseResponse.cs" />
     <Compile Include="Models\Objects\Neto\Schema\UpdateItem.cs" />
