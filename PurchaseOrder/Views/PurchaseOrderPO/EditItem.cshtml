@@ -109,6 +109,12 @@
                                                         <input type='file' class="ImgFile" name="VendorInvoice" id="VendorInvoice" multiple>
                                                     </div>
                                                     <div class="col-sm-9 col-lg-2">
+                                                        <div class="opreview">
+                                                            @foreach (var item in Model.ImgFile.Where(x => x.IsEnable &&x.ImgType== "VendorInvoice"))
+                                                            {
+                                                                <a class="aimg" href="@item.Url" data-lightbox="roadtrip"><img class="img" src="@item.Url" /></a>
+                                                            }
+                                                        </div>
                                                         <div class="preview" id="VendorInvoicepreview">
                                                         </div>
                                                     </div>
@@ -161,6 +167,12 @@
                                                         <input type='file' class="ImgFile" name="PaymentProofList" id="PaymentProofList" multiple>
                                                     </div>
                                                     <div class="col-sm-9 col-lg-2">
+                                                        <div class="opreview">
+                                                            @foreach (var item in Model.ImgFile.Where(x => x.IsEnable && x.ImgType == "PaymentProof"))
+                                                            {
+                                                                <a class="aimg" href="@item.Url" data-lightbox="roadtrip"><img class="img" src="@item.Url" /></a>
+                                                            }
+                                                        </div>
                                                         <div class="preview" id="PaymentProofListpreview">
                                                         </div>
                                                     </div>
@@ -368,6 +380,12 @@
                                                         <input type='file' class="ImgFile" name="VendorInvoice" id="VendorInvoice" multiple>
                                                     </div>
                                                     <div class="col-sm-9 col-lg-2">
+                                                        <div class="opreview">
+                                                            @foreach (var item in Model.ImgFile.Where(x => x.IsEnable && x.ImgType == "VendorInvoice"))
+                                                            {
+                                                                <a class="aimg" href="@item.Url" data-lightbox="roadtrip"><img class="img" src="@item.Url" /></a>
+                                                            }
+                                                        </div>
                                                         <div class="preview" id="VendorInvoicepreview">
                                                         </div>
                                                     </div>
@@ -418,6 +436,12 @@
                                                     <div class="col-sm-9 col-lg-2">
                                                         @*@Html.Editor("VendorInvoice", new { htmlAttributes = new { @class = "form-control" } })*@
                                                         <input type='file' class="ImgFile" name="PaymentProofList" id="PaymentProofList" multiple>
+                                                    </div>
+                                                    <div class="opreview">
+                                                        @foreach (var item in Model.ImgFile.Where(x => x.IsEnable && x.ImgType == "PaymentProof"))
+                                                        {
+                                                            <a class="aimg" href="@item.Url" data-lightbox="roadtrip"><img class="img" src="@item.Url" /></a>
+                                                        }
                                                     </div>
                                                     <div class="col-sm-9 col-lg-2">
                                                         <div class="preview" id="PaymentProofListpreview">
@@ -581,8 +605,8 @@
     </section>
 </div>
 @section pagespecific {
-    <link href="~/Content/css/imgbox.css" rel="stylesheet" />
-    <script src="~/Scripts/jquery.imgbox.js"></script>
+<link href="~/Content/css/lightbox.css" rel="stylesheet" />
+<script src="~/Scripts/lightbox.js"></script>
     <script type="text/javascript">
         var hash = window.location.hash;
         $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
@@ -879,7 +903,6 @@
                     }
                 });
             });
-            $(".preview").imgbox();
         });
 
         function Calculation(x, type, SKU, oval, ID) {
@@ -960,8 +983,7 @@
 
         // 建立圖片
         var create_imgcode = function (src) {
-            //imgcode += '<img class="img" src="' + src + '">';
-            imgcode += '<a class="aimg" href="' + src + '"><img class="img" src="' + src + '" /></a>';
+            imgcode += '<a class="aimg" href="' + src + '" data-lightbox="roadtrip"><img class="img" src="' + src + '" /></a>';
         }
 
 

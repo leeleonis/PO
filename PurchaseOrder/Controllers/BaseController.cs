@@ -151,8 +151,7 @@ namespace PurchaseOrderSys.Controllers
         public string SaveImg(HttpPostedFileBase file)
         {
             try
-            {
-               
+            {         
                 var Dirpath = Server.MapPath(FileUploads);
                 if (!Directory.Exists(Dirpath))
                     Directory.CreateDirectory(Dirpath);
@@ -160,7 +159,7 @@ namespace PurchaseOrderSys.Controllers
                 var fileName = Guid.NewGuid().ToString("N") + FileExtension;
                 var path = Path.Combine(Dirpath, fileName);
                 file.SaveAs(path);
-                return fileName;
+                return FileUploads.Replace("~", "") + "/" + fileName;
             }
             catch (Exception)
             {
