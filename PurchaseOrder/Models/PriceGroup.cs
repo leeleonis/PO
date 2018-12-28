@@ -12,26 +12,19 @@ namespace PurchaseOrderSys.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Currency
+    public partial class PriceGroup
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Currency()
-        {
-            this.EXRate = 1m;
-            this.NetoGroup = new HashSet<NetoGroup>();
-        }
-    
-        public bool IsDefault { get; set; }
+        public bool IsUsed { get; set; }
         public int ID { get; set; }
-        public string Name { get; set; }
-        public string Code { get; set; }
-        public decimal EXRate { get; set; }
+        public string Sku { get; set; }
+        public string ItemID { get; set; }
+        public Nullable<int> Marketplace { get; set; }
+        public decimal Price { get; set; }
+        public decimal Max { get; set; }
+        public decimal Min { get; set; }
         public string CreateBy { get; set; }
         public System.DateTime CreateAt { get; set; }
         public string UpdateBy { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<NetoGroup> NetoGroup { get; set; }
     }
 }

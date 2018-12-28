@@ -67,5 +67,7 @@ namespace PurchaseOrderSys.Models
         public virtual DbSet<SkuLang> SkuLang { get; set; }
         public virtual DbSet<ImgFile> ImgFile { get; set; }
         public virtual DbSet<Currency> Currency { get; set; }
+        public virtual DbSet<NetoGroup> NetoGroup { get; set; }
+        public virtual DbSet<PriceGroup> PriceGroup { get; set; }
     }
 }

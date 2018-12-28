@@ -1810,4 +1810,70 @@
   <data name="Currency_UpdateAt" xml:space="preserve">
     <value></value>
   </data>
+  <data name="NetoGroup_ID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="NetoGroup_Name" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="NetoGroup_CurrencyCode" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="NetoGroup_MinSpend" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="NetoGroup_SaleCategory" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="NetoGroup_SaleRequire" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="NetoGroup_CreateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="NetoGroup_CreateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="NetoGroup_UpdateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="NetoGroup_UpdateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PriceGroup_IsUsed" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PriceGroup_ID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PriceGroup_Sku" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PriceGroup_ItemID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PriceGroup_Marketplace" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PriceGroup_Price" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PriceGroup_Max" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PriceGroup_Min" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PriceGroup_CreateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PriceGroup_CreateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PriceGroup_UpdateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PriceGroup_UpdateAt" xml:space="preserve">
+    <value></value>
+  </data>
 </root>

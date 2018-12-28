@@ -36,8 +36,8 @@
         <EntityTypeShape EntityType="PurchaseOrderModel.SkuPicture" Width="1.5" PointX="8.25" PointY="23.75" />
         <EntityTypeShape EntityType="PurchaseOrderModel.SkuType" Width="1.5" PointX="3.75" PointY="8.625" />
         <EntityTypeShape EntityType="PurchaseOrderModel.SkuTypeLang" Width="1.5" PointX="6" PointY="0.75" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.Transfer" Width="1.5" PointX="16" PointY="46.375" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.TransferSKU" Width="1.5" PointX="18.25" PointY="46.625" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.Transfer" Width="1.5" PointX="15.625" PointY="32" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.TransferSKU" Width="1.5" PointX="18.75" PointY="32.125" />
         <EntityTypeShape EntityType="PurchaseOrderModel.VendorLIst" Width="1.5" PointX="16.75" PointY="11.625" />
         <EntityTypeShape EntityType="PurchaseOrderModel.Warehouse" Width="1.5" PointX="13.75" PointY="18.375" />
         <EntityTypeShape EntityType="PurchaseOrderModel.WarehouseSummary" Width="1.5" PointX="16" PointY="17.25" />
@@ -88,7 +88,10 @@
         <EntityTypeShape EntityType="PurchaseOrderModel.ImgFile" Width="1.5" PointX="26.5" PointY="16.125" />
         <AssociationConnector Association="PurchaseOrderModel.FK_ImgFile_CreditMemo" />
         <AssociationConnector Association="PurchaseOrderModel.FK_ImgFile_PurchaseOrder" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.Currency" Width="1.5" PointX="0.75" PointY="16.75" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.Currency" Width="1.5" PointX="17" PointY="7.375" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.NetoGroup" Width="1.5" PointX="19.25" PointY="6.25" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_NetoGroup_Currency1" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.PriceGroup" Width="1.5" PointX="0.75" PointY="16.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

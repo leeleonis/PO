@@ -1863,6 +1863,96 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
+        public static string NetoGroup_CreateAt {
+            get {
+                return ResourceManager.GetString("NetoGroup_CreateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string NetoGroup_CreateBy {
+            get {
+                return ResourceManager.GetString("NetoGroup_CreateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string NetoGroup_CurrencyCode {
+            get {
+                return ResourceManager.GetString("NetoGroup_CurrencyCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string NetoGroup_ID {
+            get {
+                return ResourceManager.GetString("NetoGroup_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string NetoGroup_MinSpend {
+            get {
+                return ResourceManager.GetString("NetoGroup_MinSpend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string NetoGroup_Name {
+            get {
+                return ResourceManager.GetString("NetoGroup_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string NetoGroup_SaleCategory {
+            get {
+                return ResourceManager.GetString("NetoGroup_SaleCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string NetoGroup_SaleRequire {
+            get {
+                return ResourceManager.GetString("NetoGroup_SaleRequire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string NetoGroup_UpdateAt {
+            get {
+                return ResourceManager.GetString("NetoGroup_UpdateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string NetoGroup_UpdateBy {
+            get {
+                return ResourceManager.GetString("NetoGroup_UpdateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
         public static string PackageContent_CreateAt {
             get {
                 return ResourceManager.GetString("PackageContent_CreateAt", resourceCulture);
@@ -2091,6 +2181,114 @@ namespace PurchaseOrderSys.App_GlobalResources {
         public static string POTypePurchaseOrderDDL {
             get {
                 return ResourceManager.GetString("POTypePurchaseOrderDDL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string PriceGroup_CreateAt {
+            get {
+                return ResourceManager.GetString("PriceGroup_CreateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string PriceGroup_CreateBy {
+            get {
+                return ResourceManager.GetString("PriceGroup_CreateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string PriceGroup_ID {
+            get {
+                return ResourceManager.GetString("PriceGroup_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string PriceGroup_IsUsed {
+            get {
+                return ResourceManager.GetString("PriceGroup_IsUsed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string PriceGroup_ItemID {
+            get {
+                return ResourceManager.GetString("PriceGroup_ItemID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string PriceGroup_Marketplace {
+            get {
+                return ResourceManager.GetString("PriceGroup_Marketplace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string PriceGroup_Max {
+            get {
+                return ResourceManager.GetString("PriceGroup_Max", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string PriceGroup_Min {
+            get {
+                return ResourceManager.GetString("PriceGroup_Min", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string PriceGroup_Price {
+            get {
+                return ResourceManager.GetString("PriceGroup_Price", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string PriceGroup_Sku {
+            get {
+                return ResourceManager.GetString("PriceGroup_Sku", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string PriceGroup_UpdateAt {
+            get {
+                return ResourceManager.GetString("PriceGroup_UpdateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string PriceGroup_UpdateBy {
+            get {
+                return ResourceManager.GetString("PriceGroup_UpdateBy", resourceCulture);
             }
         }
         

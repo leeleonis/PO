@@ -331,6 +331,21 @@
           <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
           <Property Name="UpdateAt" Type="datetime" />
         </EntityType>
+        <EntityType Name="NetoGroup">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CurrencyCode" Type="int" Nullable="false" />
+          <Property Name="MinSpend" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="SaleCategory" Type="nvarchar" MaxLength="50" />
+          <Property Name="SaleRequire" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreateAt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="UpdateAt" Type="datetime" />
+        </EntityType>
         <EntityType Name="PackageContent">
           <Key>
             <PropertyRef Name="ID" />
@@ -351,6 +366,23 @@
           <Property Name="ItemID" Type="int" Nullable="false" />
           <Property Name="LangID" Type="nvarchar" MaxLength="10" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreateAt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="UpdateAt" Type="datetime" />
+        </EntityType>
+        <EntityType Name="PriceGroup">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsUsed" Type="bit" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Sku" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ItemID" Type="nvarchar" MaxLength="50" />
+          <Property Name="Marketplace" Type="int" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Max" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Min" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="CreateAt" Type="datetime" Nullable="false" />
           <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
@@ -895,6 +927,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_NetoGroup_Currency1">
+          <End Role="Currency" Type="Self.Currency" Multiplicity="1" />
+          <End Role="NetoGroup" Type="Self.NetoGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="NetoGroup">
+              <PropertyRef Name="CurrencyCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_PackageContent_SkuType">
           <End Role="SkuType" Type="Self.SkuType" Multiplicity="1" />
           <End Role="PackageContent" Type="Self.PackageContent" Multiplicity="*" />
@@ -1275,8 +1319,10 @@
           <EntitySet Name="KitSku" EntityType="Self.KitSku" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Menu" EntityType="Self.Menu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MenuLang" EntityType="Self.MenuLang" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NetoGroup" EntityType="Self.NetoGroup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PackageContent" EntityType="Self.PackageContent" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PackageContentLang" EntityType="Self.PackageContentLang" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PriceGroup" EntityType="Self.PriceGroup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PurchaseNote" EntityType="Self.PurchaseNote" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PurchaseOrder" EntityType="Self.PurchaseOrder" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PurchaseSKU" EntityType="Self.PurchaseSKU" Schema="dbo" store:Type="Tables" />
@@ -1345,6 +1391,10 @@
           <AssociationSet Name="FK_MenuLang_Menu" Association="Self.FK_MenuLang_Menu">
             <End Role="Menu" EntitySet="Menu" />
             <End Role="MenuLang" EntitySet="MenuLang" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NetoGroup_Currency1" Association="Self.FK_NetoGroup_Currency1">
+            <End Role="Currency" EntitySet="Currency" />
+            <End Role="NetoGroup" EntitySet="NetoGroup" />
           </AssociationSet>
           <AssociationSet Name="FK_PackageContent_SkuType" Association="Self.FK_PackageContent_SkuType">
             <End Role="SkuType" EntitySet="SkuType" />
@@ -1682,6 +1732,12 @@
             <End Role="ImgFile" EntitySet="ImgFile" />
           </AssociationSet>
           <EntitySet Name="Currency" EntityType="PurchaseOrderModel.Currency" />
+          <EntitySet Name="NetoGroup" EntityType="PurchaseOrderModel.NetoGroup" />
+          <AssociationSet Name="FK_NetoGroup_Currency1" Association="PurchaseOrderModel.FK_NetoGroup_Currency1">
+            <End Role="Currency" EntitySet="Currency" />
+            <End Role="NetoGroup" EntitySet="NetoGroup" />
+          </AssociationSet>
+          <EntitySet Name="PriceGroup" EntityType="PurchaseOrderModel.PriceGroup" />
         </EntityContainer>
         <EntityType Name="AdminGroup">
           <Key>
@@ -3015,6 +3071,52 @@
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="NetoGroup" Relationship="PurchaseOrderModel.FK_NetoGroup_Currency1" FromRole="Currency" ToRole="NetoGroup" />
+        </EntityType>
+        <EntityType Name="NetoGroup">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CurrencyCode" Type="Int32" Nullable="false" />
+          <Property Name="MinSpend" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="SaleCategory" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SaleRequire" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Currency" Relationship="PurchaseOrderModel.FK_NetoGroup_Currency1" FromRole="NetoGroup" ToRole="Currency" />
+        </EntityType>
+        <Association Name="FK_NetoGroup_Currency1">
+          <End Type="PurchaseOrderModel.Currency" Role="Currency" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.NetoGroup" Role="NetoGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="NetoGroup">
+              <PropertyRef Name="CurrencyCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="PriceGroup">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsUsed" Type="Boolean" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Sku" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ItemID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Marketplace" Type="Int32" />
+          <Property Name="Price" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="Max" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="Min" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -3787,7 +3889,6 @@
           <EntitySetMapping Name="Currency">
             <EntityTypeMapping TypeName="PurchaseOrderModel.Currency">
               <MappingFragment StoreEntitySet="Currency">
-                <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
                 <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
                 <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
                 <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
@@ -3796,6 +3897,41 @@
                 <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NetoGroup">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.NetoGroup">
+              <MappingFragment StoreEntitySet="NetoGroup">
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="SaleRequire" ColumnName="SaleRequire" />
+                <ScalarProperty Name="SaleCategory" ColumnName="SaleCategory" />
+                <ScalarProperty Name="MinSpend" ColumnName="MinSpend" />
+                <ScalarProperty Name="CurrencyCode" ColumnName="CurrencyCode" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PriceGroup">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.PriceGroup">
+              <MappingFragment StoreEntitySet="PriceGroup">
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="Min" ColumnName="Min" />
+                <ScalarProperty Name="Max" ColumnName="Max" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Marketplace" ColumnName="Marketplace" />
+                <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+                <ScalarProperty Name="Sku" ColumnName="Sku" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IsUsed" ColumnName="IsUsed" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
