@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WarehouseVM>
+﻿@model WarehouseInventoryVM
 @{
     ViewBag.title = "倉庫庫存";
 }
@@ -28,62 +28,65 @@
                                     <div class="tab-pane" id="hb1">
                                         <fieldset>
                                             <legend>@ViewBag.title</legend>
-                                            <div class="form-group">
-                                                @Html.Label("Company", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Company", new { htmlAttributes = new { @class = "form-control" } })
+                                           
+                                                <div class="form-group">
+                                                    @Html.Label("Company", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("Company", new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>
+                                                    @Html.Label("Fulfillable", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("Fulfillable", new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>
                                                 </div>
-                                                @Html.Label("Fulfillable", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Fulfillable", new { htmlAttributes = new { @class = "form-control" } })
+                                                <div class="form-group">
+                                                    @Html.Label("Warehouse Type", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("WarehouseType", new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>
+                                                    @Html.Label("Awaiting Dispatch", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("Awaiting", new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @Html.Label("Warehouse Type", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Warehouse Type", new { htmlAttributes = new { @class = "form-control" } })
+                                                <div class="form-group">
+                                                    @Html.Label("Fulfillable", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("Fulfillable", new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>
+                                                    @Html.Label("Aggregate", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("Aggregate", new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>
                                                 </div>
-                                                @Html.Label("Awaiting Dispatch", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Awaiting Dispatch", new { htmlAttributes = new { @class = "form-control" } })
+                                                <div class="form-group">
+                                                    @Html.Label("Location", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("Location", new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>
+                                                    @Html.Label("Unfulfillable - Transit", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("UnfulfillableTransit", new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @Html.Label("Fulfillable", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Fulfillable", new { htmlAttributes = new { @class = "form-control" } })
+                                                <div class="form-group">
+                                                    @Html.Label("Countries", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("Countries", new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>
+                                                    @Html.Label("Total Velocity (30 days)", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("TotalVelocity", new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>
                                                 </div>
-                                                @Html.Label("Aggregate", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Aggregate", new { htmlAttributes = new { @class = "form-control" } })
+                                                <div class="form-group">
+                                                    @Html.Label("Marketplace", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("Marketplace", new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @Html.Label("Location", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Location", new { htmlAttributes = new { @class = "form-control" } })
-                                                </div>
-                                                @Html.Label("Unfulfillable - Transit", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("UnfulfillableTransit", new { htmlAttributes = new { @class = "form-control" } })
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @Html.Label("Countries", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Countries", new { htmlAttributes = new { @class = "form-control" } })
-                                                </div>
-                                                @Html.Label("Total Velocity (30 days)", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("TotalVelocity", new { htmlAttributes = new { @class = "form-control" } })
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @Html.Label("Marketplace", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Marketplace", new { htmlAttributes = new { @class = "form-control" } })
-                                                </div>
-                                            </div>
+                                          
+
                                         </fieldset>
                                         <fieldset>
                                             <legend>Search</legend>
@@ -131,15 +134,16 @@
                                                                 <th>Awaiting Dispatch</th>
                                                                 <th>Aggregate</th>
                                                                 <th>Unfulfillable - Transit</th>
-                                                                <th>Inventory Statement</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach (var item in Model)
+                                                            @foreach (var item in Model.WarehouseVM)
                                                             {
                                                                 <tr>
                                                                     <td><input type="checkbox" value="@item.ID"></td>
-                                                                    <td>@item.SKU</td>
+                                                                    <td>
+                                                                        <a class='btn btn-default btn-sm' id='Statement' href='@Url.Action("Statement", new { item.ID })'>@item.SKU</a>
+                                                                    </td>
                                                                     <td>@item.Name</td>
                                                                     <td>@item.Velocity</td>
                                                                     <td>@item.DaysOfSupply</td>
@@ -147,10 +151,6 @@
                                                                     <td>@item.Awaiting</td>
                                                                     <td>@item.Aggregate</td>
                                                                     <td>@item.Unfulfillable</td>
-                                                                    <td>
-                                                                        <a class='btn btn-default btn-sm' id='Statement' href='@Url.Action("Statement", new { item.ID })'>Statement</a>
-                                                                        Statement
-                                                                    </td>
                                                                 </tr>
                                                             }
                                                         </tbody>

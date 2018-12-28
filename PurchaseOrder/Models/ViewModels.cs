@@ -646,6 +646,17 @@ namespace PurchaseOrderSys.Models
         public int? SerialQTY { get; set; }
         public string Model { get; set; }
     }
+    public class WarehouseInventoryVM
+    {
+        public string Company { get; set; }
+        public string WarehouseType { get; set; }
+        public string Fulfillable { get; set; }
+        public string Location { get; set; }
+        public string Countries { get; set; }
+        public string Marketplace { get; set; }
+        public IEnumerable<WarehouseVM> WarehouseVM { get; set; }
+    }
+
     public class WarehouseVM
     {
         public int ID { get; set; }
@@ -666,7 +677,7 @@ namespace PurchaseOrderSys.Models
         /// <summary>
         /// 等待出貨的庫總量
         /// </summary>
-        public decimal Awaiting { get; set; }
+        public int Awaiting { get; set; }
         /// <summary>
         /// 可上架的庫存總數
         /// </summary>
