@@ -342,6 +342,12 @@
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MyModels.cs" />
+    <Compile Include="Models\NetoGroup.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\NetoGroupMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Objects\Neto\NetoApi.cs" />
     <Compile Include="Models\Objects\Neto\NetoBase.cs" />
     <Compile Include="Models\Objects\Neto\Schema\AddItem.cs" />
@@ -369,6 +375,12 @@
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PackageContentMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PriceGroup.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PriceGroupMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PurchaseMdel.Context.cs">
