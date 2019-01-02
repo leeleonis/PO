@@ -32,11 +32,14 @@ namespace PurchaseOrderSys.Models
         public string ReceivedBy { get; set; }
         public Nullable<System.DateTime> ReceivedAt { get; set; }
         public Nullable<int> TransferSKUID { get; set; }
+        public Nullable<int> OrderID { get; set; }
+        public Nullable<int> RMAID { get; set; }
     
         public virtual PurchaseSKU PurchaseSKU { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SerialsLlist> SerialsLlistC { get; set; }
         public virtual SerialsLlist SerialsLlistP { get; set; }
         public virtual TransferSKU TransferSKU { get; set; }
+        public virtual Orders Orders { get; set; }
     }
 }

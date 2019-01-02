@@ -70,5 +70,6 @@ namespace PurchaseOrderSys.Models
         public virtual DbSet<PriceGroup> PriceGroup { get; set; }
         public virtual DbSet<Marketplace> Marketplace { get; set; }
         public virtual DbSet<Company> Company { get; set; }
+        public virtual DbSet<Orders> Orders { get; set; }
     }
 }

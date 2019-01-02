@@ -362,6 +362,62 @@
           <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
           <Property Name="UpdateAt" Type="datetime" />
         </EntityType>
+        <EntityType Name="Orders">
+          <Key>
+            <PropertyRef Name="OrderID" />
+          </Key>
+          <Property Name="OrderID" Type="int" Nullable="false" />
+          <Property Name="ParentOrderID" Type="int" />
+          <Property Name="ClientID" Type="int" />
+          <Property Name="CompanyID" Type="int" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="100" />
+          <Property Name="SiteCode" Type="int" />
+          <Property Name="TimeOfOrder" Type="datetime2" Precision="7" />
+          <Property Name="SubTotal" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ShippingTotal" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="OrderDiscountsTotal" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="GrandTotal" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="StatusCode" Type="int" />
+          <Property Name="PaymentStatus" Type="int" />
+          <Property Name="ShippingStatus" Type="int" />
+          <Property Name="ShipDate" Type="datetime2" Precision="7" />
+          <Property Name="FinalShippingFee" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ShippingAddress" Type="int" />
+          <Property Name="OrderCurrencyCode" Type="int" />
+          <Property Name="OrderSource" Type="int" />
+          <Property Name="OrderSourceOrderId" Type="nvarchar" MaxLength="50" />
+          <Property Name="OrderSourceOrderTotal" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="eBayUserID" Type="nvarchar" MaxLength="50" />
+          <Property Name="eBaySalesRecordNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="ShippingServiceSelected" Type="nvarchar" MaxLength="150" />
+          <Property Name="RushOrder" Type="bit" />
+          <Property Name="InvoicePrinted" Type="bit" />
+          <Property Name="InvoicePrintedDate" Type="datetime2" Precision="7" />
+          <Property Name="ShippingCarrier" Type="nvarchar" MaxLength="50" />
+          <Property Name="ShippingCountry" Type="nvarchar" MaxLength="50" />
+          <Property Name="PackageType" Type="nvarchar" MaxLength="50" />
+          <Property Name="StationID" Type="int" />
+          <Property Name="CustomerServiceStatus" Type="int" />
+          <Property Name="TaxRate" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="TaxTotal" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="GoogleOrderNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsInDispute" Type="bit" />
+          <Property Name="DisputeStartedOn" Type="datetime2" Precision="7" />
+          <Property Name="PaypalFeeTotal" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="PostingFeeTotal" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="FinalValueTotal" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="OrderItemCount" Type="int" />
+          <Property Name="OrderQtyTotal" Type="int" />
+          <Property Name="ShippingWeightTotalOz" Type="int" />
+          <Property Name="IsConfirmed" Type="bit" />
+          <Property Name="ConfirmBy" Type="int" />
+          <Property Name="ConfirmOn" Type="datetime2" Precision="7" />
+          <Property Name="MarkettingSourceID" Type="int" />
+          <Property Name="ShippedBy" Type="int" />
+          <Property Name="Instructions" Type="nvarchar(max)" />
+          <Property Name="SyncOn" Type="datetime" />
+        </EntityType>
         <EntityType Name="PackageContent">
           <Key>
             <PropertyRef Name="ID" />
@@ -500,6 +556,8 @@
           <Property Name="ReceivedBy" Type="nvarchar" MaxLength="50" />
           <Property Name="ReceivedAt" Type="datetime" />
           <Property Name="TransferSKUID" Type="int" />
+          <Property Name="OrderID" Type="int" />
+          <Property Name="RMAID" Type="int" />
         </EntityType>
         <EntityType Name="ShippingMethod">
           <Key>
@@ -1088,6 +1146,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_SerialsLlist_Orders">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="0..1" />
+          <End Role="SerialsLlist" Type="Self.SerialsLlist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="SerialsLlist">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SerialsLlist_PurchaseSKU">
           <End Role="PurchaseSKU" Type="Self.PurchaseSKU" Multiplicity="0..1" />
           <End Role="SerialsLlist" Type="Self.SerialsLlist" Multiplicity="*" />
@@ -1386,6 +1456,7 @@
           <EntitySet Name="Menu" EntityType="Self.Menu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MenuLang" EntityType="Self.MenuLang" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NetoGroup" EntityType="Self.NetoGroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PackageContent" EntityType="Self.PackageContent" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PackageContentLang" EntityType="Self.PackageContentLang" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PriceGroup" EntityType="Self.PriceGroup" Schema="dbo" store:Type="Tables" />
@@ -1505,6 +1576,10 @@
           <AssociationSet Name="FK_PurchaseSKU_PurchaseOrder" Association="Self.FK_PurchaseSKU_PurchaseOrder">
             <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
             <End Role="PurchaseSKU" EntitySet="PurchaseSKU" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SerialsLlist_Orders" Association="Self.FK_SerialsLlist_Orders">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="SerialsLlist" EntitySet="SerialsLlist" />
           </AssociationSet>
           <AssociationSet Name="FK_SerialsLlist_PurchaseSKU" Association="Self.FK_SerialsLlist_PurchaseSKU">
             <End Role="PurchaseSKU" EntitySet="PurchaseSKU" />
@@ -1836,6 +1911,11 @@
           <AssociationSet Name="FK_SKU_Company" Association="PurchaseOrderModel.FK_SKU_Company">
             <End Role="Company" EntitySet="Company" />
             <End Role="SKU" EntitySet="SKU" />
+          </AssociationSet>
+          <EntitySet Name="Orders" EntityType="PurchaseOrderModel.Orders" />
+          <AssociationSet Name="FK_SerialsLlist_Orders" Association="PurchaseOrderModel.FK_SerialsLlist_Orders">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="SerialsLlist" EntitySet="SerialsLlist" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="AdminGroup">
@@ -2251,6 +2331,9 @@
           <NavigationProperty Name="SerialsLlistC" Relationship="PurchaseOrderModel.FK_SerialsLlist_SerialsLlist" FromRole="SerialsLlist" ToRole="SerialsLlist1" />
           <NavigationProperty Name="SerialsLlistP" Relationship="PurchaseOrderModel.FK_SerialsLlist_SerialsLlist" FromRole="SerialsLlist1" ToRole="SerialsLlist" />
           <NavigationProperty Name="TransferSKU" Relationship="PurchaseOrderModel.FK_SerialsLlist_TransferSKU" FromRole="SerialsLlist" ToRole="TransferSKU" />
+          <Property Name="OrderID" Type="Int32" />
+          <Property Name="RMAID" Type="Int32" />
+          <NavigationProperty Name="Orders" Relationship="PurchaseOrderModel.FK_SerialsLlist_Orders" FromRole="SerialsLlist" ToRole="Orders" />
         </EntityType>
         <EntityType Name="ShippingMethod">
           <Key>
@@ -3290,6 +3373,75 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Orders">
+          <Key>
+            <PropertyRef Name="OrderID" />
+          </Key>
+          <Property Name="OrderID" Type="Int32" Nullable="false" />
+          <Property Name="ParentOrderID" Type="Int32" />
+          <Property Name="ClientID" Type="Int32" />
+          <Property Name="CompanyID" Type="Int32" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="UserName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="SiteCode" Type="Int32" />
+          <Property Name="TimeOfOrder" Type="DateTime" Precision="7" />
+          <Property Name="SubTotal" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ShippingTotal" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="OrderDiscountsTotal" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="GrandTotal" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="StatusCode" Type="Int32" />
+          <Property Name="PaymentStatus" Type="Int32" />
+          <Property Name="ShippingStatus" Type="Int32" />
+          <Property Name="ShipDate" Type="DateTime" Precision="7" />
+          <Property Name="FinalShippingFee" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ShippingAddress" Type="Int32" />
+          <Property Name="OrderCurrencyCode" Type="Int32" />
+          <Property Name="OrderSource" Type="Int32" />
+          <Property Name="OrderSourceOrderId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OrderSourceOrderTotal" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="eBayUserID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="eBaySalesRecordNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ShippingServiceSelected" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="RushOrder" Type="Boolean" />
+          <Property Name="InvoicePrinted" Type="Boolean" />
+          <Property Name="InvoicePrintedDate" Type="DateTime" Precision="7" />
+          <Property Name="ShippingCarrier" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ShippingCountry" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PackageType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StationID" Type="Int32" />
+          <Property Name="CustomerServiceStatus" Type="Int32" />
+          <Property Name="TaxRate" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="TaxTotal" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="GoogleOrderNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsInDispute" Type="Boolean" />
+          <Property Name="DisputeStartedOn" Type="DateTime" Precision="7" />
+          <Property Name="PaypalFeeTotal" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="PostingFeeTotal" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="FinalValueTotal" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="OrderItemCount" Type="Int32" />
+          <Property Name="OrderQtyTotal" Type="Int32" />
+          <Property Name="ShippingWeightTotalOz" Type="Int32" />
+          <Property Name="IsConfirmed" Type="Boolean" />
+          <Property Name="ConfirmBy" Type="Int32" />
+          <Property Name="ConfirmOn" Type="DateTime" Precision="7" />
+          <Property Name="MarkettingSourceID" Type="Int32" />
+          <Property Name="ShippedBy" Type="Int32" />
+          <Property Name="Instructions" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SyncOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="SerialsLlist" Relationship="PurchaseOrderModel.FK_SerialsLlist_Orders" FromRole="Orders" ToRole="SerialsLlist" />
+        </EntityType>
+        <Association Name="FK_SerialsLlist_Orders">
+          <End Type="PurchaseOrderModel.Orders" Role="Orders" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.SerialsLlist" Role="SerialsLlist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="SerialsLlist">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3672,6 +3824,8 @@
           <EntitySetMapping Name="SerialsLlist">
             <EntityTypeMapping TypeName="PurchaseOrderModel.SerialsLlist">
               <MappingFragment StoreEntitySet="SerialsLlist">
+                <ScalarProperty Name="RMAID" ColumnName="RMAID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
                 <ScalarProperty Name="TransferSKUID" ColumnName="TransferSKUID" />
                 <ScalarProperty Name="ReceivedAt" ColumnName="ReceivedAt" />
                 <ScalarProperty Name="ReceivedBy" ColumnName="ReceivedBy" />
@@ -4122,6 +4276,63 @@
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.Orders">
+              <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="SyncOn" ColumnName="SyncOn" />
+                <ScalarProperty Name="Instructions" ColumnName="Instructions" />
+                <ScalarProperty Name="ShippedBy" ColumnName="ShippedBy" />
+                <ScalarProperty Name="MarkettingSourceID" ColumnName="MarkettingSourceID" />
+                <ScalarProperty Name="ConfirmOn" ColumnName="ConfirmOn" />
+                <ScalarProperty Name="ConfirmBy" ColumnName="ConfirmBy" />
+                <ScalarProperty Name="IsConfirmed" ColumnName="IsConfirmed" />
+                <ScalarProperty Name="ShippingWeightTotalOz" ColumnName="ShippingWeightTotalOz" />
+                <ScalarProperty Name="OrderQtyTotal" ColumnName="OrderQtyTotal" />
+                <ScalarProperty Name="OrderItemCount" ColumnName="OrderItemCount" />
+                <ScalarProperty Name="FinalValueTotal" ColumnName="FinalValueTotal" />
+                <ScalarProperty Name="PostingFeeTotal" ColumnName="PostingFeeTotal" />
+                <ScalarProperty Name="PaypalFeeTotal" ColumnName="PaypalFeeTotal" />
+                <ScalarProperty Name="DisputeStartedOn" ColumnName="DisputeStartedOn" />
+                <ScalarProperty Name="IsInDispute" ColumnName="IsInDispute" />
+                <ScalarProperty Name="GoogleOrderNumber" ColumnName="GoogleOrderNumber" />
+                <ScalarProperty Name="TaxTotal" ColumnName="TaxTotal" />
+                <ScalarProperty Name="TaxRate" ColumnName="TaxRate" />
+                <ScalarProperty Name="CustomerServiceStatus" ColumnName="CustomerServiceStatus" />
+                <ScalarProperty Name="StationID" ColumnName="StationID" />
+                <ScalarProperty Name="PackageType" ColumnName="PackageType" />
+                <ScalarProperty Name="ShippingCountry" ColumnName="ShippingCountry" />
+                <ScalarProperty Name="ShippingCarrier" ColumnName="ShippingCarrier" />
+                <ScalarProperty Name="InvoicePrintedDate" ColumnName="InvoicePrintedDate" />
+                <ScalarProperty Name="InvoicePrinted" ColumnName="InvoicePrinted" />
+                <ScalarProperty Name="RushOrder" ColumnName="RushOrder" />
+                <ScalarProperty Name="ShippingServiceSelected" ColumnName="ShippingServiceSelected" />
+                <ScalarProperty Name="eBaySalesRecordNumber" ColumnName="eBaySalesRecordNumber" />
+                <ScalarProperty Name="eBayUserID" ColumnName="eBayUserID" />
+                <ScalarProperty Name="OrderSourceOrderTotal" ColumnName="OrderSourceOrderTotal" />
+                <ScalarProperty Name="OrderSourceOrderId" ColumnName="OrderSourceOrderId" />
+                <ScalarProperty Name="OrderSource" ColumnName="OrderSource" />
+                <ScalarProperty Name="OrderCurrencyCode" ColumnName="OrderCurrencyCode" />
+                <ScalarProperty Name="ShippingAddress" ColumnName="ShippingAddress" />
+                <ScalarProperty Name="FinalShippingFee" ColumnName="FinalShippingFee" />
+                <ScalarProperty Name="ShipDate" ColumnName="ShipDate" />
+                <ScalarProperty Name="ShippingStatus" ColumnName="ShippingStatus" />
+                <ScalarProperty Name="PaymentStatus" ColumnName="PaymentStatus" />
+                <ScalarProperty Name="StatusCode" ColumnName="StatusCode" />
+                <ScalarProperty Name="GrandTotal" ColumnName="GrandTotal" />
+                <ScalarProperty Name="OrderDiscountsTotal" ColumnName="OrderDiscountsTotal" />
+                <ScalarProperty Name="ShippingTotal" ColumnName="ShippingTotal" />
+                <ScalarProperty Name="SubTotal" ColumnName="SubTotal" />
+                <ScalarProperty Name="TimeOfOrder" ColumnName="TimeOfOrder" />
+                <ScalarProperty Name="SiteCode" ColumnName="SiteCode" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+                <ScalarProperty Name="ParentOrderID" ColumnName="ParentOrderID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -372,6 +372,12 @@
     <Compile Include="Models\Objects\Neto\Schema\GetWarehouseResponse.cs" />
     <Compile Include="Models\Objects\Neto\Schema\UpdateItem.cs" />
     <Compile Include="Models\Objects\Neto\Schema\UpdateItemResponse.cs" />
+    <Compile Include="Models\Orders.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OrdersMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PackageContent.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
     </Compile>

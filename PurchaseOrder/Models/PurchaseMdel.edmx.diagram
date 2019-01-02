@@ -97,6 +97,8 @@
         <EntityTypeShape EntityType="PurchaseOrderModel.Company" Width="1.5" PointX="11.625" PointY="17.25" />
         <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseOrder_Company" />
         <AssociationConnector Association="PurchaseOrderModel.FK_SKU_Company" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.Orders" Width="1.5" PointX="0.75" PointY="22.375" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_SerialsLlist_Orders" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
