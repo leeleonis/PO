@@ -1,0 +1,103 @@
+﻿@model PurchaseSKU
+@{
+    ViewBag.title = "Serials";
+}
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-xs-12">
+                <div class="jarviswidget" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+
+                        <h2>清單</h2>
+                        <ul class="nav nav-tabs pull-right">
+                            <li><a data-toggle="tab" href="#hb1">@ViewBag.title</a></li>
+                        </ul>
+                    </header>
+
+                    <div>
+                        <div class="widget-body no-padding">
+                            <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="IsEnable" value="True">
+
+                                <div id="content" class="tab-content">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="tab-pane" id="hb1">
+                                        <fieldset>
+                                            <legend>Company:@Model.PurchaseOrder.Company.Name</legend>
+                                        </fieldset>
+                                        <fieldset>
+                                            <legend>@Model.Name</legend>
+                                            <div class="row">
+                                                <article class="col-xs-12">
+                                                    <table id="DataGridC" class="table table-striped table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Serial</th>
+                                                                <th>Order</th>
+                                                                <th>RMA</th>
+                                                                <th>PO</th>
+                                                                <th>CM</th>
+                                                                <th>Warehouse</th>
+                                                                <th>Dispatch Location</th>
+                                                                <th>Value</th>
+                                                                <th>Date</th>
+                                                                <th>History</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach (var item in Model.SerialsLlist)
+                                                            {
+                                                                <tr>
+                                                                    <td>@item.SerialsNo</td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td>@item.PurchaseSKU.PurchaseOrderID</td>
+                                                                    <td>@item.PurchaseSKU.CreditMemoID</td>
+                                                                    <td>@item.PurchaseSKU.PurchaseOrder.Warehouse1.Name</td>
+                                                                    <td></td>
+                                                                    <td>@item.PurchaseSKU.Price</td>
+                                                                    <td>@item.CreateAt</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </article>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+
+                                @*<div class="widget-footer">
+                                        <button type="submit" class="btn btn-primary" id="save">儲存</button>
+                                        <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index")'">返回</button>
+                                    </div>*@
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section pagespecific {
+    <script type="text/javascript">
+        var hash = window.location.hash;
+        $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
+        $('.tab-pane').eq(hash.substr(1)).addClass('active');
+
+        //$('.datepicker').datepicker({
+        //    dateFormat: 'yy-mm-dd'
+        //});
+        $(document).ready(function () {
+
+        });
+    </script>
+}
+
+
+

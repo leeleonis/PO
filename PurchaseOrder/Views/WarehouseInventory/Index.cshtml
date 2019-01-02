@@ -137,8 +137,10 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach (var item in Model.WarehouseVM)
+                                                            @if (Model.WarehouseVM!=null)
                                                             {
+                                                                foreach (var item in Model.WarehouseVM)
+                                                                {
                                                                 <tr>
                                                                     <td><input type="checkbox" value="@item.ID"></td>
                                                                     <td>
@@ -152,6 +154,7 @@
                                                                     <td>@item.Aggregate</td>
                                                                     <td>@item.Unfulfillable</td>
                                                                 </tr>
+                                                                }
                                                             }
                                                         </tbody>
                                                     </table>

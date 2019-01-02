@@ -208,6 +208,7 @@
     <Compile Include="Controllers\SkuAttributeController.cs" />
     <Compile Include="Controllers\SkuAttributeTypeController.cs" />
     <Compile Include="Controllers\SkuController.cs" />
+    <Compile Include="Controllers\SkuSerialsController.cs" />
     <Compile Include="Controllers\SkuTypeController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\TransferController.cs" />
@@ -6351,6 +6352,7 @@
     <Content Include="Views\Currency\Index.cshtml" />
     <Content Include="Views\WarehouseInventory\Statement.cshtml" />
     <Content Include="Views\PurchaseOrderCM\EditItem.cshtml" />
+    <Content Include="Views\SkuSerials\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
