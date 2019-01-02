@@ -19,6 +19,7 @@ namespace PurchaseOrderSys.Models
         {
             this.EXRate = 1m;
             this.NetoGroup = new HashSet<NetoGroup>();
+            this.Marketplace = new HashSet<Marketplace>();
         }
     
         public bool IsDefault { get; set; }
@@ -33,5 +34,7 @@ namespace PurchaseOrderSys.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<NetoGroup> NetoGroup { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Marketplace> Marketplace { get; set; }
     }
 }

@@ -83,19 +83,19 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Brand1.Name)
+            @Html.DisplayNameFor(model => model.GetBrand.Name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Brand1.Name)
+            @Html.DisplayFor(model => model.GetBrand.Name)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Condition1.Name)
+            @Html.DisplayNameFor(model => model.GetCondition.Name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Condition1.Name)
+            @Html.DisplayFor(model => model.GetCondition.Name)
         </dd>
 
         <dt>
@@ -109,6 +109,6 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.SkuID }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

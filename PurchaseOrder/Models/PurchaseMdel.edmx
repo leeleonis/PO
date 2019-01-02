@@ -305,6 +305,22 @@
           <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
           <Property Name="UpdateAt" Type="datetime" />
         </EntityType>
+        <EntityType Name="Marketplace">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="bit" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="50" />
+          <Property Name="GlobalID" Type="nvarchar" MaxLength="50" />
+          <Property Name="CountryCode" Type="nvarchar" MaxLength="4" />
+          <Property Name="CurrencyID" Type="int" />
+          <Property Name="Status" Type="bit" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreateAt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="UpdateAt" Type="datetime" />
+        </EntityType>
         <EntityType Name="Menu">
           <Key>
             <PropertyRef Name="MenuID" />
@@ -520,6 +536,7 @@
           </Key>
           <Property Name="IsEnable" Type="bit" Nullable="false" />
           <Property Name="SkuID" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Company" Type="int" Nullable="false" />
           <Property Name="Type" Type="tinyint" Nullable="false" />
           <Property Name="ParentSku" Type="nvarchar" MaxLength="50" />
           <Property Name="ParentShadow" Type="nvarchar" MaxLength="50" />
@@ -903,6 +920,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Marketplace_Currency">
+          <End Role="Currency" Type="Self.Currency" Multiplicity="0..1" />
+          <End Role="Marketplace" Type="Self.Marketplace" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Marketplace">
+              <PropertyRef Name="CurrencyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Menu_Menu">
           <End Role="Menu" Type="Self.Menu" Multiplicity="0..1" />
           <End Role="Menu1" Type="Self.Menu" Multiplicity="*" />
@@ -960,6 +989,30 @@
             </Principal>
             <Dependent Role="PackageContentLang">
               <PropertyRef Name="ItemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PriceGroup_Marketplace">
+          <End Role="Marketplace" Type="Self.Marketplace" Multiplicity="0..1" />
+          <End Role="PriceGroup" Type="Self.PriceGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Marketplace">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PriceGroup">
+              <PropertyRef Name="Marketplace" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PriceGroup_SKU">
+          <End Role="SKU" Type="Self.SKU" Multiplicity="1" />
+          <End Role="PriceGroup" Type="Self.PriceGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SKU">
+              <PropertyRef Name="SkuID" />
+            </Principal>
+            <Dependent Role="PriceGroup">
+              <PropertyRef Name="Sku" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1116,6 +1169,18 @@
             </Principal>
             <Dependent Role="SKU">
               <PropertyRef Name="Brand" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SKU_Company">
+          <End Role="Company" Type="Self.Company" Multiplicity="1" />
+          <End Role="SKU" Type="Self.SKU" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SKU">
+              <PropertyRef Name="Company" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1317,6 +1382,7 @@
           <EntitySet Name="DirectLine" EntityType="Self.DirectLine" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ImgFile" EntityType="Self.ImgFile" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="KitSku" EntityType="Self.KitSku" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Marketplace" EntityType="Self.Marketplace" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Menu" EntityType="Self.Menu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MenuLang" EntityType="Self.MenuLang" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NetoGroup" EntityType="Self.NetoGroup" Schema="dbo" store:Type="Tables" />
@@ -1384,6 +1450,10 @@
             <End Role="SKU" EntitySet="SKU" />
             <End Role="KitSku" EntitySet="KitSku" />
           </AssociationSet>
+          <AssociationSet Name="FK_Marketplace_Currency" Association="Self.FK_Marketplace_Currency">
+            <End Role="Currency" EntitySet="Currency" />
+            <End Role="Marketplace" EntitySet="Marketplace" />
+          </AssociationSet>
           <AssociationSet Name="FK_Menu_Menu" Association="Self.FK_Menu_Menu">
             <End Role="Menu" EntitySet="Menu" />
             <End Role="Menu1" EntitySet="Menu" />
@@ -1403,6 +1473,14 @@
           <AssociationSet Name="FK_PackageContentLang_PackageContent" Association="Self.FK_PackageContentLang_PackageContent">
             <End Role="PackageContent" EntitySet="PackageContent" />
             <End Role="PackageContentLang" EntitySet="PackageContentLang" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PriceGroup_Marketplace" Association="Self.FK_PriceGroup_Marketplace">
+            <End Role="Marketplace" EntitySet="Marketplace" />
+            <End Role="PriceGroup" EntitySet="PriceGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PriceGroup_SKU" Association="Self.FK_PriceGroup_SKU">
+            <End Role="SKU" EntitySet="SKU" />
+            <End Role="PriceGroup" EntitySet="PriceGroup" />
           </AssociationSet>
           <AssociationSet Name="FK_PurchaseNote_PurchaseOrder" Association="Self.FK_PurchaseNote_PurchaseOrder">
             <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
@@ -1454,6 +1532,10 @@
           </AssociationSet>
           <AssociationSet Name="FK_Sku_Brand" Association="Self.FK_Sku_Brand">
             <End Role="Brand" EntitySet="Brand" />
+            <End Role="SKU" EntitySet="SKU" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SKU_Company" Association="Self.FK_SKU_Company">
+            <End Role="Company" EntitySet="Company" />
             <End Role="SKU" EntitySet="SKU" />
           </AssociationSet>
           <AssociationSet Name="FK_Sku_Condition" Association="Self.FK_Sku_Condition">
@@ -1529,7 +1611,6 @@
           <EntitySet Name="Brand" EntityType="PurchaseOrderModel.Brand" />
           <EntitySet Name="CMCreditNote" EntityType="PurchaseOrderModel.CMCreditNote" />
           <EntitySet Name="CMReplacement" EntityType="PurchaseOrderModel.CMReplacement" />
-          <EntitySet Name="Company" EntityType="PurchaseOrderModel.Company" />
           <EntitySet Name="Condition" EntityType="PurchaseOrderModel.Condition" />
           <EntitySet Name="ConditionLang" EntityType="PurchaseOrderModel.ConditionLang" />
           <EntitySet Name="CreditMemo" EntityType="PurchaseOrderModel.CreditMemo" />
@@ -1578,10 +1659,6 @@
           <AssociationSet Name="FK_CMReplacement_PurchaseOrder" Association="PurchaseOrderModel.FK_CMReplacement_PurchaseOrder">
             <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
             <End Role="CMReplacement" EntitySet="CMReplacement" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PurchaseOrder_Company" Association="PurchaseOrderModel.FK_PurchaseOrder_Company">
-            <End Role="Company" EntitySet="Company" />
-            <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
           </AssociationSet>
           <AssociationSet Name="FK_ConditionLang_Condition" Association="PurchaseOrderModel.FK_ConditionLang_Condition">
             <End Role="Condition" EntitySet="Condition" />
@@ -1738,6 +1815,28 @@
             <End Role="NetoGroup" EntitySet="NetoGroup" />
           </AssociationSet>
           <EntitySet Name="PriceGroup" EntityType="PurchaseOrderModel.PriceGroup" />
+          <EntitySet Name="Marketplace" EntityType="PurchaseOrderModel.Marketplace" />
+          <AssociationSet Name="FK_Marketplace_Currency" Association="PurchaseOrderModel.FK_Marketplace_Currency">
+            <End Role="Currency" EntitySet="Currency" />
+            <End Role="Marketplace" EntitySet="Marketplace" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PriceGroup_Marketplace" Association="PurchaseOrderModel.FK_PriceGroup_Marketplace">
+            <End Role="Marketplace" EntitySet="Marketplace" />
+            <End Role="PriceGroup" EntitySet="PriceGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PriceGroup_SKU" Association="PurchaseOrderModel.FK_PriceGroup_SKU">
+            <End Role="SKU" EntitySet="SKU" />
+            <End Role="PriceGroup" EntitySet="PriceGroup" />
+          </AssociationSet>
+          <EntitySet Name="Company" EntityType="PurchaseOrderModel.Company" />
+          <AssociationSet Name="FK_PurchaseOrder_Company" Association="PurchaseOrderModel.FK_PurchaseOrder_Company">
+            <End Role="Company" EntitySet="Company" />
+            <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SKU_Company" Association="PurchaseOrderModel.FK_SKU_Company">
+            <End Role="Company" EntitySet="Company" />
+            <End Role="SKU" EntitySet="SKU" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="AdminGroup">
           <Key>
@@ -1875,25 +1974,6 @@
           <Property Name="ReceivedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ReceivedAt" Type="DateTime" Precision="3" />
           <NavigationProperty Name="PurchaseOrder" Relationship="PurchaseOrderModel.FK_CMReplacement_PurchaseOrder" FromRole="CMReplacement" ToRole="PurchaseOrder" />
-        </EntityType>
-        <EntityType Name="Company">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ShandowSuffix" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="ParentID" Type="Int32" />
-          <Property Name="RelateID" Type="Int32" />
-          <Property Name="eBayAccountID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AmazonAccountID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
-          <Property Name="CompanyNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="PurchaseOrder" Relationship="PurchaseOrderModel.FK_PurchaseOrder_Company" FromRole="Company" ToRole="PurchaseOrder" />
         </EntityType>
         <EntityType Name="Condition">
           <Key>
@@ -2108,13 +2188,13 @@
           <Property Name="Other" Type="Decimal" Precision="18" Scale="2" />
           <NavigationProperty Name="CMCreditNote" Relationship="PurchaseOrderModel.FK_CMCreditNote_PurchaseOrder" FromRole="PurchaseOrder" ToRole="CMCreditNote" />
           <NavigationProperty Name="CMReplacement" Relationship="PurchaseOrderModel.FK_CMReplacement_PurchaseOrder" FromRole="PurchaseOrder" ToRole="CMReplacement" />
-          <NavigationProperty Name="Company" Relationship="PurchaseOrderModel.FK_PurchaseOrder_Company" FromRole="PurchaseOrder" ToRole="Company" />
           <NavigationProperty Name="CreditMemo" Relationship="PurchaseOrderModel.FK_CreditMemo_PurchaseOrder" FromRole="PurchaseOrder" ToRole="CreditMemo" />
           <NavigationProperty Name="PurchaseNote" Relationship="PurchaseOrderModel.FK_PurchaseNote_PurchaseOrder" FromRole="PurchaseOrder" ToRole="PurchaseNote" />
           <NavigationProperty Name="VendorLIst" Relationship="PurchaseOrderModel.FK_PurchaseOrder_VendorLIst" FromRole="PurchaseOrder" ToRole="VendorLIst" />
           <NavigationProperty Name="Warehouse1" Relationship="PurchaseOrderModel.FK_PurchaseOrder_Warehouse" FromRole="PurchaseOrder" ToRole="Warehouse" />
           <NavigationProperty Name="PurchaseSKU" Relationship="PurchaseOrderModel.FK_PurchaseSKU_PurchaseOrder" FromRole="PurchaseOrder" ToRole="PurchaseSKU" />
           <NavigationProperty Name="ImgFile" Relationship="PurchaseOrderModel.FK_ImgFile_PurchaseOrder" FromRole="PurchaseOrder" ToRole="ImgFile" />
+          <NavigationProperty Name="Company" Relationship="PurchaseOrderModel.FK_PurchaseOrder_Company" FromRole="PurchaseOrder" ToRole="Company" />
         </EntityType>
         <EntityType Name="PurchaseSKU">
           <Key>
@@ -2208,6 +2288,7 @@
           </Key>
           <Property Name="IsEnable" Type="Boolean" Nullable="false" />
           <Property Name="SkuID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Company" Type="Int32" Nullable="false" />
           <Property Name="Type" Type="Byte" Nullable="false" />
           <Property Name="ParentSku" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ParentShadow" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -2231,6 +2312,8 @@
           <NavigationProperty Name="SkuType" Relationship="PurchaseOrderModel.FK_Sku_SkuType" FromRole="SKU" ToRole="SkuType" />
           <NavigationProperty Name="SkuPicture" Relationship="PurchaseOrderModel.FK_SkuPicture_Sku" FromRole="SKU" ToRole="SkuPicture" />
           <NavigationProperty Name="SkuLang" Relationship="PurchaseOrderModel.FK_SkuLang_Sku" FromRole="SKU" ToRole="SkuLang" />
+          <NavigationProperty Name="PriceGroup" Relationship="PurchaseOrderModel.FK_PriceGroup_SKU" FromRole="SKU" ToRole="PriceGroup" />
+          <NavigationProperty Name="GetCompany" Relationship="PurchaseOrderModel.FK_SKU_Company" FromRole="SKU" ToRole="Company" />
         </EntityType>
         <EntityType Name="Sku_Attribute">
           <Key>
@@ -2547,18 +2630,6 @@
             </Principal>
             <Dependent Role="CMReplacement">
               <PropertyRef Name="PurchaseOrderID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PurchaseOrder_Company">
-          <End Type="PurchaseOrderModel.Company" Role="Company" Multiplicity="0..1" />
-          <End Type="PurchaseOrderModel.PurchaseOrder" Role="PurchaseOrder" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Company">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="PurchaseOrder">
-              <PropertyRef Name="CompanyID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3072,6 +3143,7 @@
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
           <NavigationProperty Name="NetoGroup" Relationship="PurchaseOrderModel.FK_NetoGroup_Currency1" FromRole="Currency" ToRole="NetoGroup" />
+          <NavigationProperty Name="Marketplace" Relationship="PurchaseOrderModel.FK_Marketplace_Currency" FromRole="Currency" ToRole="Marketplace" />
         </EntityType>
         <EntityType Name="NetoGroup">
           <Key>
@@ -3117,7 +3189,107 @@
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="GetMarket" Relationship="PurchaseOrderModel.FK_PriceGroup_Marketplace" FromRole="PriceGroup" ToRole="Marketplace" />
+          <NavigationProperty Name="GetSku" Relationship="PurchaseOrderModel.FK_PriceGroup_SKU" FromRole="PriceGroup" ToRole="SKU" />
         </EntityType>
+        <EntityType Name="Marketplace">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FullName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="GlobalID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CountryCode" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="CurrencyID" Type="Int32" />
+          <Property Name="Status" Type="Boolean" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Currency" Relationship="PurchaseOrderModel.FK_Marketplace_Currency" FromRole="Marketplace" ToRole="Currency" />
+          <NavigationProperty Name="PriceGroup" Relationship="PurchaseOrderModel.FK_PriceGroup_Marketplace" FromRole="Marketplace" ToRole="PriceGroup" />
+        </EntityType>
+        <Association Name="FK_Marketplace_Currency">
+          <End Type="PurchaseOrderModel.Currency" Role="Currency" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.Marketplace" Role="Marketplace" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Marketplace">
+              <PropertyRef Name="CurrencyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PriceGroup_Marketplace">
+          <End Type="PurchaseOrderModel.Marketplace" Role="Marketplace" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.PriceGroup" Role="PriceGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Marketplace">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PriceGroup">
+              <PropertyRef Name="Marketplace" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PriceGroup_SKU">
+          <End Type="PurchaseOrderModel.SKU" Role="SKU" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.PriceGroup" Role="PriceGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SKU">
+              <PropertyRef Name="SkuID" />
+            </Principal>
+            <Dependent Role="PriceGroup">
+              <PropertyRef Name="Sku" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ShandowSuffix" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="ParentID" Type="Int32" />
+          <Property Name="RelateID" Type="Int32" />
+          <Property Name="eBayAccountID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AmazonAccountID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <Property Name="CompanyNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PurchaseOrder" Relationship="PurchaseOrderModel.FK_PurchaseOrder_Company" FromRole="Company" ToRole="PurchaseOrder" />
+          <NavigationProperty Name="SKU" Relationship="PurchaseOrderModel.FK_SKU_Company" FromRole="Company" ToRole="SKU" />
+        </EntityType>
+        <Association Name="FK_PurchaseOrder_Company">
+          <End Type="PurchaseOrderModel.Company" Role="Company" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.PurchaseOrder" Role="PurchaseOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PurchaseOrder">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SKU_Company">
+          <End Type="PurchaseOrderModel.Company" Role="Company" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.SKU" Role="SKU" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SKU">
+              <PropertyRef Name="Company" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3257,25 +3429,6 @@
                 <ScalarProperty Name="VendorID" ColumnName="VendorID" />
                 <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
                 <ScalarProperty Name="PurchaseOrderID" ColumnName="PurchaseOrderID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Company">
-            <EntityTypeMapping TypeName="PurchaseOrderModel.Company">
-              <MappingFragment StoreEntitySet="Company">
-                <ScalarProperty Name="CompanyNo" ColumnName="CompanyNo" />
-                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
-                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
-                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
-                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-                <ScalarProperty Name="AmazonAccountID" ColumnName="AmazonAccountID" />
-                <ScalarProperty Name="eBayAccountID" ColumnName="eBayAccountID" />
-                <ScalarProperty Name="RelateID" ColumnName="RelateID" />
-                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
-                <ScalarProperty Name="ShandowSuffix" ColumnName="ShandowSuffix" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
               </MappingFragment>
@@ -3567,6 +3720,7 @@
           <EntitySetMapping Name="SKU">
             <EntityTypeMapping TypeName="PurchaseOrderModel.SKU">
               <MappingFragment StoreEntitySet="SKU">
+                <ScalarProperty Name="Company" ColumnName="Company" />
                 <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
                 <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
                 <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
@@ -3932,6 +4086,42 @@
                 <ScalarProperty Name="Sku" ColumnName="Sku" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="IsUsed" ColumnName="IsUsed" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Marketplace">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.Marketplace">
+              <MappingFragment StoreEntitySet="Marketplace">
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
+                <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
+                <ScalarProperty Name="GlobalID" ColumnName="GlobalID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Company">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.Company">
+              <MappingFragment StoreEntitySet="Company">
+                <ScalarProperty Name="CompanyNo" ColumnName="CompanyNo" />
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="AmazonAccountID" ColumnName="AmazonAccountID" />
+                <ScalarProperty Name="eBayAccountID" ColumnName="eBayAccountID" />
+                <ScalarProperty Name="RelateID" ColumnName="RelateID" />
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="ShandowSuffix" ColumnName="ShandowSuffix" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

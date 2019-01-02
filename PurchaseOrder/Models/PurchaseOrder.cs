@@ -60,7 +60,6 @@ namespace PurchaseOrderSys.Models
         public virtual ICollection<CMCreditNote> CMCreditNote { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CMReplacement> CMReplacement { get; set; }
-        public virtual Company Company { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CreditMemo> CreditMemo { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -71,5 +70,6 @@ namespace PurchaseOrderSys.Models
         public virtual ICollection<PurchaseSKU> PurchaseSKU { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ImgFile> ImgFile { get; set; }
+        public virtual Company Company { get; set; }
     }
 }

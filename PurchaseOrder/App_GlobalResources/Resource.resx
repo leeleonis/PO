@@ -1876,4 +1876,7 @@
   <data name="PriceGroup_UpdateAt" xml:space="preserve">
     <value></value>
   </data>
+  <data name="SKU_Company" xml:space="preserve">
+    <value></value>
+  </data>
 </root>

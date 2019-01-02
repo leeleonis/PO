@@ -1650,4 +1650,7 @@
   <data name="PriceGroup_UpdateAt" xml:space="preserve">
     <value>修改時間</value>
   </data>
+  <data name="SKU_Company" xml:space="preserve">
+    <value>公司</value>
+  </data>
 </root>

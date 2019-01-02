@@ -324,6 +324,12 @@
     <Compile Include="Models\KitSkuMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Marketplace.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MarketplaceMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Menu.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
     </Compile>
@@ -398,6 +404,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PurchaseMdel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\Objects\StockKeepingUnit.cs" />
     <Compile Include="Models\PurchaseNote.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
     </Compile>
@@ -482,7 +489,6 @@
     <Compile Include="Models\Sku_AttributeMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Objects\StockKeepingUnit.cs" />
     <Compile Include="Models\Sku_PackageContent.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
     </Compile>
