@@ -12,7 +12,6 @@
         <EntityTypeShape EntityType="PurchaseOrderModel.Brand" Width="1.5" PointX="3.75" PointY="16.125" />
         <EntityTypeShape EntityType="PurchaseOrderModel.CMCreditNote" Width="1.5" PointX="21.25" PointY="26.25" />
         <EntityTypeShape EntityType="PurchaseOrderModel.CMReplacement" Width="1.5" PointX="21.25" PointY="16.5" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.Company" Width="1.5" PointX="16.75" PointY="24.75" />
         <EntityTypeShape EntityType="PurchaseOrderModel.Condition" Width="1.5" PointX="0.75" PointY="11.875" />
         <EntityTypeShape EntityType="PurchaseOrderModel.ConditionLang" Width="1.5" PointX="3" PointY="12.5" />
         <EntityTypeShape EntityType="PurchaseOrderModel.CreditMemo" Width="1.5" PointX="21.25" PointY="10.125" />
@@ -47,7 +46,6 @@
         <AssociationConnector Association="PurchaseOrderModel.FK_Sku_Brand" />
         <AssociationConnector Association="PurchaseOrderModel.FK_CMCreditNote_PurchaseOrder" />
         <AssociationConnector Association="PurchaseOrderModel.FK_CMReplacement_PurchaseOrder" />
-        <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseOrder_Company" />
         <AssociationConnector Association="PurchaseOrderModel.FK_ConditionLang_Condition" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Sku_Condition" />
         <AssociationConnector Association="PurchaseOrderModel.FK_CreditMemo_PurchaseOrder" />
@@ -92,6 +90,13 @@
         <EntityTypeShape EntityType="PurchaseOrderModel.NetoGroup" Width="1.5" PointX="19.25" PointY="6.25" />
         <AssociationConnector Association="PurchaseOrderModel.FK_NetoGroup_Currency1" />
         <EntityTypeShape EntityType="PurchaseOrderModel.PriceGroup" Width="1.5" PointX="0.75" PointY="16.75" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.Marketplace" Width="1.5" PointX="19.25" PointY="1.25" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_Marketplace_Currency" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_PriceGroup_Marketplace" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_PriceGroup_SKU" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.Company" Width="1.5" PointX="11.625" PointY="17.25" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseOrder_Company" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_SKU_Company" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

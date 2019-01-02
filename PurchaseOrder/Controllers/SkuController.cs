@@ -42,6 +42,7 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult Create()
         {
             var LangID = EnumData.DataLangList().First().Key;
+            ViewBag.Company = db.Company.Where(c => c.IsEnable && !c.ParentID.HasValue).Select(c => new SelectListItem() { Text = c.Name, Value = c.ID.ToString() }).ToList();
             ViewBag.TypeList = Enum.GetValues(typeof(EnumData.SkuType)).Cast<EnumData.SkuType>().Select(t => new SelectListItem() { Text = t.ToString(), Value = ((int)t).ToString() }).ToList();
             ViewBag.Condition = db.Condition.AsNoTracking().Where(c => c.IsEnable).SelectMany(c => c.ConditionLang.Where(l => l.LangID.Equals(LangID))).Select(l => new SelectListItem() { Text = l.Name, Value = l.ConditionID.ToString() });
             ViewBag.Category = db.SkuType.Where(s => s.IsEnable).SelectMany(s => s.SkuTypeLang.Where(l => l.LangID.Equals(LangID))).Select(l => new SelectListItem() { Text = l.Name, Value = l.TypeID.ToString() });
@@ -103,6 +104,7 @@ namespace PurchaseOrderSys.Controllers
             var LangID = EnumData.DataLangList().First().Key;
             ViewBag.LangID = LangID;
             ViewBag.LangList = EnumData.DataLangList().Select(l => new SelectListItem { Text = l.Value, Value = l.Key });
+            ViewBag.Company = db.Company.Where(c => c.IsEnable && !c.ParentID.HasValue).Select(c => new SelectListItem() { Text = c.Name, Value = c.ID.ToString() }).ToList();
             ViewBag.TypeList = Enum.GetValues(typeof(EnumData.SkuType)).Cast<EnumData.SkuType>().Select(t => new SelectListItem() { Text = t.ToString(), Value = ((int)t).ToString() }).ToList();
             ViewBag.Condition = db.Condition.Where(c => c.IsEnable).SelectMany(c => c.ConditionLang.Where(l => l.LangID.Equals(LangID))).Select(l => new SelectListItem() { Text = l.Name, Value = l.ConditionID.ToString() }).ToList();
             ViewBag.Category = db.SkuType.Where(s => s.IsEnable).SelectMany(s => s.SkuTypeLang.Where(l => l.LangID.Equals(LangID))).Select(l => new SelectListItem() { Text = l.Name, Value = l.TypeID.ToString() }).ToList();
@@ -341,6 +343,7 @@ namespace PurchaseOrderSys.Controllers
             var LangID = EnumData.DataLangList().First().Key;
             ViewBag.LangID = langData.LangID;
             ViewBag.LangList = EnumData.DataLangList().Select(l => new SelectListItem { Text = l.Value, Value = l.Key, Selected = l.Key.Equals(langData.LangID) });
+            ViewBag.Company = db.Company.Where(c => c.IsEnable && !c.ParentID.HasValue).Select(c => new SelectListItem() { Text = c.Name, Value = c.ID.ToString() }).ToList();
             ViewBag.TypeList = Enum.GetValues(typeof(EnumData.SkuType)).Cast<EnumData.SkuType>().Select(t => new SelectListItem() { Text = t.ToString(), Value = ((int)t).ToString() }).ToList();
             ViewBag.Condition = db.Condition.Where(c => c.IsEnable).SelectMany(c => c.ConditionLang.Where(l => l.LangID.Equals(LangID))).Select(l => new SelectListItem() { Text = l.Name, Value = l.ConditionID.ToString() });
             ViewBag.Category = db.SkuType.Where(s => s.IsEnable).SelectMany(s => s.SkuTypeLang.Where(l => l.LangID.Equals(LangID))).Select(l => new SelectListItem() { Text = l.Name, Value = l.TypeID.ToString() });

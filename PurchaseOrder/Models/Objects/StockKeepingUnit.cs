@@ -192,6 +192,7 @@ namespace PurchaseOrderSys.Models
             {
                 IsEnable = true,
                 SkuID = sku,
+                Company = parentSku.Company,
                 Type = type,
                 ParentShadow = parentSku.SkuID,
                 Category = parentSku.Category,

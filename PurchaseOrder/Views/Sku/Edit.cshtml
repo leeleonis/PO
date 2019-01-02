@@ -1,4 +1,4 @@
-﻿@model PurchaseOrderSys.Models.SKU
+﻿@model SKU
 @section styles{
     <link href="~/Scripts/plugin/ckeditor/skins/moono/editor.css" rel="stylesheet" />
     <link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
@@ -29,6 +29,7 @@
                             <li><a data-toggle="tab" href="#hb2">Attribute</a></li>
                             <li><a data-toggle="tab" href="#hb3">Editor</a></li>
                             <li><a data-toggle="tab" href="#hb4">Picture</a></li>
+                            <li><a data-toggle="tab" href="#hb5">Price</a></li>
                         </ul>
                     </header>
 
@@ -42,6 +43,13 @@
                                         @Html.LabelFor(model => model.SkuLang.First().LangID, htmlAttributes: new { @class = "control-label col-sm-2" })
                                         <div class="col-sm-9 col-lg-2">
                                             @Html.DropDownList("LangID", (IEnumerable<SelectListItem>)ViewBag.LangList, htmlAttributes: new { @class = "form-control" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Company, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                        <div class="col-sm-9 col-lg-2">
+                                            @Html.DropDownListFor(model => model.Company, null, htmlAttributes: new { @class = "form-control" })
                                         </div>
                                     </div>
 
@@ -265,8 +273,7 @@
                                                             </tr>
                                                         </thead>
 
-                                                        <tbody id="list-content">
-                                                        </tbody>
+                                                        <tbody id="list-content"></tbody>
                                                     </table>
                                                 </div>
                                             </div>

@@ -32,7 +32,6 @@ namespace PurchaseOrderSys.Models
         public virtual DbSet<Brand> Brand { get; set; }
         public virtual DbSet<CMCreditNote> CMCreditNote { get; set; }
         public virtual DbSet<CMReplacement> CMReplacement { get; set; }
-        public virtual DbSet<Company> Company { get; set; }
         public virtual DbSet<Condition> Condition { get; set; }
         public virtual DbSet<ConditionLang> ConditionLang { get; set; }
         public virtual DbSet<CreditMemo> CreditMemo { get; set; }
@@ -69,5 +68,7 @@ namespace PurchaseOrderSys.Models
         public virtual DbSet<Currency> Currency { get; set; }
         public virtual DbSet<NetoGroup> NetoGroup { get; set; }
         public virtual DbSet<PriceGroup> PriceGroup { get; set; }
+        public virtual DbSet<Marketplace> Marketplace { get; set; }
+        public virtual DbSet<Company> Company { get; set; }
     }
 }

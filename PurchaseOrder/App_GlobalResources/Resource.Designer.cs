@@ -3123,6 +3123,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
+        public static string SKU_Company {
+            get {
+                return ResourceManager.GetString("SKU_Company", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
         public static string SKU_Condition {
             get {
                 return ResourceManager.GetString("SKU_Condition", resourceCulture);
