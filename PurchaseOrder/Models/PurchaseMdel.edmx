@@ -174,6 +174,7 @@
           <Property Name="RelateID" Type="int" />
           <Property Name="eBayAccountID" Type="nvarchar" MaxLength="50" />
           <Property Name="AmazonAccountID" Type="nvarchar" MaxLength="50" />
+          <Property Name="CurrencyID" Type="int" Nullable="false" />
           <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="CreateAt" Type="datetime" Nullable="false" />
           <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
@@ -314,7 +315,9 @@
           <Property Name="FullName" Type="nvarchar" MaxLength="50" />
           <Property Name="GlobalID" Type="nvarchar" MaxLength="50" />
           <Property Name="CountryCode" Type="nvarchar" MaxLength="4" />
+          <Property Name="CompanyID" Type="int" />
           <Property Name="CurrencyID" Type="int" />
+          <Property Name="NetoGroup" Type="int" />
           <Property Name="Status" Type="bit" />
           <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="CreateAt" Type="datetime" Nullable="false" />
@@ -353,7 +356,7 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="CurrencyCode" Type="int" Nullable="false" />
+          <Property Name="CurrencyID" Type="int" Nullable="false" />
           <Property Name="MinSpend" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="SaleCategory" Type="nvarchar" MaxLength="50" />
           <Property Name="SaleRequire" Type="decimal" Precision="18" Scale="2" Nullable="false" />
@@ -906,6 +909,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Company_Currency">
+          <End Role="Currency" Type="Self.Currency" Multiplicity="1" />
+          <End Role="Company" Type="Self.Company" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Company">
+              <PropertyRef Name="CurrencyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ConditionLang_Condition">
           <End Role="Condition" Type="Self.Condition" Multiplicity="1" />
           <End Role="ConditionLang" Type="Self.ConditionLang" Multiplicity="*" />
@@ -978,6 +993,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Marketplace_Company">
+          <End Role="Company" Type="Self.Company" Multiplicity="0..1" />
+          <End Role="Marketplace" Type="Self.Marketplace" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Marketplace">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Marketplace_Currency">
           <End Role="Currency" Type="Self.Currency" Multiplicity="0..1" />
           <End Role="Marketplace" Type="Self.Marketplace" Multiplicity="*" />
@@ -987,6 +1014,18 @@
             </Principal>
             <Dependent Role="Marketplace">
               <PropertyRef Name="CurrencyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Marketplace_NetoGroup">
+          <End Role="NetoGroup" Type="Self.NetoGroup" Multiplicity="0..1" />
+          <End Role="Marketplace" Type="Self.Marketplace" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NetoGroup">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Marketplace">
+              <PropertyRef Name="NetoGroup" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1014,7 +1053,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_NetoGroup_Currency1">
+        <Association Name="FK_NetoGroup_Currency">
           <End Role="Currency" Type="Self.Currency" Multiplicity="1" />
           <End Role="NetoGroup" Type="Self.NetoGroup" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1022,7 +1061,7 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="NetoGroup">
-              <PropertyRef Name="CurrencyCode" />
+              <PropertyRef Name="CurrencyID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1497,6 +1536,10 @@
             <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
             <End Role="CMReplacement" EntitySet="CMReplacement" />
           </AssociationSet>
+          <AssociationSet Name="FK_Company_Currency" Association="Self.FK_Company_Currency">
+            <End Role="Currency" EntitySet="Currency" />
+            <End Role="Company" EntitySet="Company" />
+          </AssociationSet>
           <AssociationSet Name="FK_ConditionLang_Condition" Association="Self.FK_ConditionLang_Condition">
             <End Role="Condition" EntitySet="Condition" />
             <End Role="ConditionLang" EntitySet="ConditionLang" />
@@ -1521,8 +1564,16 @@
             <End Role="SKU" EntitySet="SKU" />
             <End Role="KitSku" EntitySet="KitSku" />
           </AssociationSet>
+          <AssociationSet Name="FK_Marketplace_Company" Association="Self.FK_Marketplace_Company">
+            <End Role="Company" EntitySet="Company" />
+            <End Role="Marketplace" EntitySet="Marketplace" />
+          </AssociationSet>
           <AssociationSet Name="FK_Marketplace_Currency" Association="Self.FK_Marketplace_Currency">
             <End Role="Currency" EntitySet="Currency" />
+            <End Role="Marketplace" EntitySet="Marketplace" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Marketplace_NetoGroup" Association="Self.FK_Marketplace_NetoGroup">
+            <End Role="NetoGroup" EntitySet="NetoGroup" />
             <End Role="Marketplace" EntitySet="Marketplace" />
           </AssociationSet>
           <AssociationSet Name="FK_Menu_Menu" Association="Self.FK_Menu_Menu">
@@ -1533,7 +1584,7 @@
             <End Role="Menu" EntitySet="Menu" />
             <End Role="MenuLang" EntitySet="MenuLang" />
           </AssociationSet>
-          <AssociationSet Name="FK_NetoGroup_Currency1" Association="Self.FK_NetoGroup_Currency1">
+          <AssociationSet Name="FK_NetoGroup_Currency" Association="Self.FK_NetoGroup_Currency">
             <End Role="Currency" EntitySet="Currency" />
             <End Role="NetoGroup" EntitySet="NetoGroup" />
           </AssociationSet>
@@ -1885,10 +1936,6 @@
           </AssociationSet>
           <EntitySet Name="Currency" EntityType="PurchaseOrderModel.Currency" />
           <EntitySet Name="NetoGroup" EntityType="PurchaseOrderModel.NetoGroup" />
-          <AssociationSet Name="FK_NetoGroup_Currency1" Association="PurchaseOrderModel.FK_NetoGroup_Currency1">
-            <End Role="Currency" EntitySet="Currency" />
-            <End Role="NetoGroup" EntitySet="NetoGroup" />
-          </AssociationSet>
           <EntitySet Name="PriceGroup" EntityType="PurchaseOrderModel.PriceGroup" />
           <EntitySet Name="Marketplace" EntityType="PurchaseOrderModel.Marketplace" />
           <AssociationSet Name="FK_Marketplace_Currency" Association="PurchaseOrderModel.FK_Marketplace_Currency">
@@ -1916,6 +1963,22 @@
           <AssociationSet Name="FK_SerialsLlist_Orders" Association="PurchaseOrderModel.FK_SerialsLlist_Orders">
             <End Role="Orders" EntitySet="Orders" />
             <End Role="SerialsLlist" EntitySet="SerialsLlist" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Company_Currency" Association="PurchaseOrderModel.FK_Company_Currency">
+            <End Role="Currency" EntitySet="Currency" />
+            <End Role="Company" EntitySet="Company" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NetoGroup_Currency" Association="PurchaseOrderModel.FK_NetoGroup_Currency">
+            <End Role="Currency" EntitySet="Currency" />
+            <End Role="NetoGroup" EntitySet="NetoGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Marketplace_NetoGroup" Association="PurchaseOrderModel.FK_Marketplace_NetoGroup">
+            <End Role="NetoGroup" EntitySet="NetoGroup" />
+            <End Role="Marketplace" EntitySet="Marketplace" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Marketplace_Company" Association="PurchaseOrderModel.FK_Marketplace_Company">
+            <End Role="Company" EntitySet="Company" />
+            <End Role="Marketplace" EntitySet="Marketplace" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="AdminGroup">
@@ -3225,8 +3288,9 @@
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="NetoGroup" Relationship="PurchaseOrderModel.FK_NetoGroup_Currency1" FromRole="Currency" ToRole="NetoGroup" />
           <NavigationProperty Name="Marketplace" Relationship="PurchaseOrderModel.FK_Marketplace_Currency" FromRole="Currency" ToRole="Marketplace" />
+          <NavigationProperty Name="Company" Relationship="PurchaseOrderModel.FK_Company_Currency" FromRole="Currency" ToRole="Company" />
+          <NavigationProperty Name="NetoGroup" Relationship="PurchaseOrderModel.FK_NetoGroup_Currency" FromRole="Currency" ToRole="NetoGroup" />
         </EntityType>
         <EntityType Name="NetoGroup">
           <Key>
@@ -3234,7 +3298,7 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CurrencyCode" Type="Int32" Nullable="false" />
+          <Property Name="CurrencyID" Type="Int32" Nullable="false" />
           <Property Name="MinSpend" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="SaleCategory" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="SaleRequire" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
@@ -3242,20 +3306,9 @@
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="Currency" Relationship="PurchaseOrderModel.FK_NetoGroup_Currency1" FromRole="NetoGroup" ToRole="Currency" />
+          <NavigationProperty Name="Currency" Relationship="PurchaseOrderModel.FK_NetoGroup_Currency" FromRole="NetoGroup" ToRole="Currency" />
+          <NavigationProperty Name="Marketplace" Relationship="PurchaseOrderModel.FK_Marketplace_NetoGroup" FromRole="NetoGroup" ToRole="Marketplace" />
         </EntityType>
-        <Association Name="FK_NetoGroup_Currency1">
-          <End Type="PurchaseOrderModel.Currency" Role="Currency" Multiplicity="1" />
-          <End Type="PurchaseOrderModel.NetoGroup" Role="NetoGroup" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Currency">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="NetoGroup">
-              <PropertyRef Name="CurrencyCode" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="PriceGroup">
           <Key>
             <PropertyRef Name="ID" />
@@ -3284,7 +3337,9 @@
           <Property Name="FullName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="GlobalID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CountryCode" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyID" Type="Int32" />
           <Property Name="CurrencyID" Type="Int32" />
+          <Property Name="NetoGroup" Type="Int32" />
           <Property Name="Status" Type="Boolean" />
           <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
@@ -3292,6 +3347,8 @@
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Currency" Relationship="PurchaseOrderModel.FK_Marketplace_Currency" FromRole="Marketplace" ToRole="Currency" />
           <NavigationProperty Name="PriceGroup" Relationship="PurchaseOrderModel.FK_PriceGroup_Marketplace" FromRole="Marketplace" ToRole="PriceGroup" />
+          <NavigationProperty Name="GetNetoGroup" Relationship="PurchaseOrderModel.FK_Marketplace_NetoGroup" FromRole="Marketplace" ToRole="NetoGroup" />
+          <NavigationProperty Name="Company" Relationship="PurchaseOrderModel.FK_Marketplace_Company" FromRole="Marketplace" ToRole="Company" />
         </EntityType>
         <Association Name="FK_Marketplace_Currency">
           <End Type="PurchaseOrderModel.Currency" Role="Currency" Multiplicity="0..1" />
@@ -3348,6 +3405,9 @@
           <Property Name="CompanyNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="PurchaseOrder" Relationship="PurchaseOrderModel.FK_PurchaseOrder_Company" FromRole="Company" ToRole="PurchaseOrder" />
           <NavigationProperty Name="SKU" Relationship="PurchaseOrderModel.FK_SKU_Company" FromRole="Company" ToRole="SKU" />
+          <Property Name="CurrencyID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Currency" Relationship="PurchaseOrderModel.FK_Company_Currency" FromRole="Company" ToRole="Currency" />
+          <NavigationProperty Name="Marketplace" Relationship="PurchaseOrderModel.FK_Marketplace_Company" FromRole="Company" ToRole="Marketplace" />
         </EntityType>
         <Association Name="FK_PurchaseOrder_Company">
           <End Type="PurchaseOrderModel.Company" Role="Company" Multiplicity="0..1" />
@@ -3439,6 +3499,54 @@
             </Principal>
             <Dependent Role="SerialsLlist">
               <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Company_Currency">
+          <End Type="PurchaseOrderModel.Currency" Role="Currency" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.Company" Role="Company" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Company">
+              <PropertyRef Name="CurrencyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_NetoGroup_Currency">
+          <End Type="PurchaseOrderModel.Currency" Role="Currency" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.NetoGroup" Role="NetoGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="NetoGroup">
+              <PropertyRef Name="CurrencyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Marketplace_NetoGroup">
+          <End Type="PurchaseOrderModel.NetoGroup" Role="NetoGroup" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.Marketplace" Role="Marketplace" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NetoGroup">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Marketplace">
+              <PropertyRef Name="NetoGroup" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Marketplace_Company">
+          <End Type="PurchaseOrderModel.Company" Role="Company" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.Marketplace" Role="Marketplace" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Marketplace">
+              <PropertyRef Name="CompanyID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4212,6 +4320,7 @@
           <EntitySetMapping Name="NetoGroup">
             <EntityTypeMapping TypeName="PurchaseOrderModel.NetoGroup">
               <MappingFragment StoreEntitySet="NetoGroup">
+                <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
                 <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
                 <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
                 <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
@@ -4219,7 +4328,6 @@
                 <ScalarProperty Name="SaleRequire" ColumnName="SaleRequire" />
                 <ScalarProperty Name="SaleCategory" ColumnName="SaleCategory" />
                 <ScalarProperty Name="MinSpend" ColumnName="MinSpend" />
-                <ScalarProperty Name="CurrencyCode" ColumnName="CurrencyCode" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
@@ -4246,6 +4354,8 @@
           <EntitySetMapping Name="Marketplace">
             <EntityTypeMapping TypeName="PurchaseOrderModel.Marketplace">
               <MappingFragment StoreEntitySet="Marketplace">
+                <ScalarProperty Name="NetoGroup" ColumnName="NetoGroup" />
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
                 <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
                 <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
                 <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
@@ -4263,6 +4373,7 @@
           <EntitySetMapping Name="Company">
             <EntityTypeMapping TypeName="PurchaseOrderModel.Company">
               <MappingFragment StoreEntitySet="Company">
+                <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
                 <ScalarProperty Name="CompanyNo" ColumnName="CompanyNo" />
                 <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
                 <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />

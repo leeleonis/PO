@@ -3,11 +3,6 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-using System; 
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
 
 namespace PurchaseOrderSys.Models
 {
@@ -43,12 +38,11 @@ namespace PurchaseOrderSys.Models
     
     		    
     		/// <summary>
-    		/// Currency Code
+    		/// Currency ID
     		/// </summary>        
-    	    [Display(Name = "NetoGroup_CurrencyCode", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "NetoGroup_CurrencyID", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-            [MaxLength(3, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public string  CurrencyCode { get; set; }
+    		public int  CurrencyID { get; set; }
     
     		    
     		/// <summary>

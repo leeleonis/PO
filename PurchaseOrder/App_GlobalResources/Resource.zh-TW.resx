@@ -1590,7 +1590,7 @@
   <data name="NetoGroup_Name" xml:space="preserve">
     <value>名稱</value>
   </data>
-  <data name="NetoGroup_CurrencyCode" xml:space="preserve">
+  <data name="NetoGroup_CurrencyID" xml:space="preserve">
     <value>貨幣</value>
   </data>
   <data name="NetoGroup_MinSpend" xml:space="preserve">
@@ -1652,5 +1652,8 @@
   </data>
   <data name="SKU_Company" xml:space="preserve">
     <value>公司</value>
+  </data>
+  <data name="Company_CurrencyID" xml:space="preserve">
+    <value>幣別</value>
   </data>
 </root>

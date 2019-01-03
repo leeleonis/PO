@@ -945,6 +945,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
+        public static string Company_CurrencyID {
+            get {
+                return ResourceManager.GetString("Company_CurrencyID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
         public static string Company_eBayAccountID {
             get {
                 return ResourceManager.GetString("Company_eBayAccountID", resourceCulture);
@@ -1881,9 +1890,9 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string NetoGroup_CurrencyCode {
+        public static string NetoGroup_CurrencyID {
             get {
-                return ResourceManager.GetString("NetoGroup_CurrencyCode", resourceCulture);
+                return ResourceManager.GetString("NetoGroup_CurrencyID", resourceCulture);
             }
         }
         

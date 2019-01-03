@@ -25,7 +25,7 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "Currency_IsDefault", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public byte  IsDefault { get; set; }
+    		public bool  IsDefault { get; set; }
     
     		    
     		/// <summary>

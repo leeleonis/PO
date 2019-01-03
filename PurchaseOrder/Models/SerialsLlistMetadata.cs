@@ -1,11 +1,12 @@
-using System;
+using System; 
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// SerialsLlist class
     /// </summary>
@@ -32,6 +33,13 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "SerialsLlist_PurchaseSKUID", ResourceType = typeof(App_GlobalResources.Resource))]
     		public Nullable<int>  PurchaseSKUID { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// PID
+    		/// </summary>        
+    	    [Display(Name = "SerialsLlist_PID", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  PID { get; set; }
     
     		    
     		/// <summary>
@@ -101,17 +109,24 @@ namespace PurchaseOrderSys.Models
     
     		    
     		/// <summary>
-    		/// PID
-    		/// </summary>        
-    	    [Display(Name = "SerialsLlist_PID", ResourceType = typeof(App_GlobalResources.Resource))]
-    		public Nullable<int>  PID { get; set; }
-    
-    		    
-    		/// <summary>
     		/// Transfer SKUID
     		/// </summary>        
     	    [Display(Name = "SerialsLlist_TransferSKUID", ResourceType = typeof(App_GlobalResources.Resource))]
     		public Nullable<int>  TransferSKUID { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Order ID
+    		/// </summary>        
+    	    [Display(Name = "SerialsLlist_OrderID", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  OrderID { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// RMAID
+    		/// </summary>        
+    	    [Display(Name = "SerialsLlist_RMAID", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  RMAID { get; set; }
     
     		    
     	}

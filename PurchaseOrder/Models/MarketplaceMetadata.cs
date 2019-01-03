@@ -109,6 +109,20 @@ namespace PurchaseOrderSys.Models
     		public Nullable<System.DateTime>  UpdateAt { get; set; }
     
     		    
+    		/// <summary>
+    		/// Company ID
+    		/// </summary>        
+    	    [Display(Name = "Marketplace_CompanyID", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  CompanyID { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Neto Group
+    		/// </summary>        
+    	    [Display(Name = "Marketplace_NetoGroup", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  NetoGroup { get; set; }
+    
+    		    
     	}
     }
     
