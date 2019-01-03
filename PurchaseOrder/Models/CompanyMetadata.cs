@@ -1,13 +1,12 @@
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+using System; 
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// Company class
     /// </summary>
@@ -117,15 +116,25 @@ namespace PurchaseOrderSys.Models
     	    [Display(Name = "Company_UpdateAt", ResourceType = typeof(App_GlobalResources.Resource))]
             [UIHint("DateTime")]
     		public Nullable<System.DateTime>  UpdateAt { get; set; }
-
-
-            /// <summary>
-            /// Company No
-            /// </summary>        
-            [Display(Name = "Company_CompanyNo", ResourceType = typeof(App_GlobalResources.Resource))]
+    
+    		    
+    		/// <summary>
+    		/// Company No
+    		/// </summary>        
+    	    [Display(Name = "Company_CompanyNo", ResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(20, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  CompanyNo { get; set; }
-        }
+    
+    		    
+    		/// <summary>
+    		/// Currency ID
+    		/// </summary>        
+    	    [Display(Name = "Company_CurrencyID", ResourceType = typeof(App_GlobalResources.Resource))]
+            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public int  CurrencyID { get; set; }
+    
+    		    
+    	}
     }
     
 }

@@ -14,9 +14,15 @@ namespace PurchaseOrderSys.Models
     
     public partial class NetoGroup
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public NetoGroup()
+        {
+            this.Marketplace = new HashSet<Marketplace>();
+        }
+    
         public int ID { get; set; }
         public string Name { get; set; }
-        public int CurrencyCode { get; set; }
+        public int CurrencyID { get; set; }
         public decimal MinSpend { get; set; }
         public string SaleCategory { get; set; }
         public decimal SaleRequire { get; set; }
@@ -26,5 +32,7 @@ namespace PurchaseOrderSys.Models
         public Nullable<System.DateTime> UpdateAt { get; set; }
     
         public virtual Currency Currency { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Marketplace> Marketplace { get; set; }
     }
 }

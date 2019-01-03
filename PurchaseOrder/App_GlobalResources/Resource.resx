@@ -1816,7 +1816,7 @@
   <data name="NetoGroup_Name" xml:space="preserve">
     <value></value>
   </data>
-  <data name="NetoGroup_CurrencyCode" xml:space="preserve">
+  <data name="NetoGroup_CurrencyID" xml:space="preserve">
     <value></value>
   </data>
   <data name="NetoGroup_MinSpend" xml:space="preserve">
@@ -1877,6 +1877,9 @@
     <value></value>
   </data>
   <data name="SKU_Company" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Company_CurrencyID" xml:space="preserve">
     <value></value>
   </data>
 </root>

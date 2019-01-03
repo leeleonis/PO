@@ -25,7 +25,9 @@ namespace PurchaseOrderSys.Models
         public string FullName { get; set; }
         public string GlobalID { get; set; }
         public string CountryCode { get; set; }
+        public Nullable<int> CompanyID { get; set; }
         public Nullable<int> CurrencyID { get; set; }
+        public Nullable<int> NetoGroup { get; set; }
         public Nullable<bool> Status { get; set; }
         public string CreateBy { get; set; }
         public System.DateTime CreateAt { get; set; }
@@ -35,5 +37,7 @@ namespace PurchaseOrderSys.Models
         public virtual Currency Currency { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PriceGroup> PriceGroup { get; set; }
+        public virtual NetoGroup GetNetoGroup { get; set; }
+        public virtual Company Company { get; set; }
     }
 }

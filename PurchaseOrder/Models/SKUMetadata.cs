@@ -38,6 +38,14 @@ namespace PurchaseOrderSys.Models
     
     		    
     		/// <summary>
+    		/// Company
+    		/// </summary>        
+    	    [Display(Name = "SKU_Company", ResourceType = typeof(App_GlobalResources.Resource))]
+            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public int  Company { get; set; }
+    
+    		    
+    		/// <summary>
     		/// Type
     		/// </summary>        
     	    [Display(Name = "SKU_Type", ResourceType = typeof(App_GlobalResources.Resource))]
