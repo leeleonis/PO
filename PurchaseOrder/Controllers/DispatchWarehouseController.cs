@@ -21,7 +21,7 @@ namespace PurchaseOrderSys.Controllers
     {
         // GET: DispatchWarehouse
         public ActionResult Index()
-        {
+        {      
             ViewBag.Warehouse3PList = new Api.Winit_API().Warehouse3P();
             var SCList = new Api.SC_API().SCList();
             ViewBag.SCList = SCList;

@@ -771,6 +771,7 @@ namespace PurchaseOrderSys.Controllers
             var CreditMemo = new CreditMemo
             {
                 IsEnable = true,
+                PurchaseOrderID= filter.PurchaseOrderID,
                 CompanyID = filter.CompanyID,
                 VendorID = filter.VendorID,
                 InvoiceDate = filter.InvoiceDate,

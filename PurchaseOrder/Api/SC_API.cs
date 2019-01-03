@@ -11,7 +11,7 @@ using System.CodeDom.Compiler;
 using System.Reflection;
 using System.Web.Mvc;
 using PurchaseOrderSys.SCService;
-
+using PurchaseOrderSys.SCInventoryService;
 namespace PurchaseOrderSys.Api
 {
     public class SC_API
@@ -21,13 +21,32 @@ namespace PurchaseOrderSys.Api
 
         public Warehouse[] SCList()
         {
-            SCService.SCServiceSoapClient OS_SellerCloud = new SCService.SCServiceSoapClient();
+            SCServiceSoapClient OS_SellerCloud = new SCServiceSoapClient();
             SCService.AuthHeader OS_AuthHeader = new SCService.AuthHeader { UserName = UserName, Password = Password };
             SCService.ServiceOptions OS_Options = new SCService.ServiceOptions();
             var data = OS_SellerCloud.GetWarehouses(OS_AuthHeader, OS_Options);
             return data;
         }
+        public IEnumerable<Models.SkuInventoryVM> SCInventoryService(string SkuNo)
+        {
+            var SkuInventoryVMLit = new List<Models.SkuInventoryVM>();
+            var SCList = new SC_API().SCList();
+            var SCInventoryServiceSoapClient = new SCInventoryServiceSoapClient();
+            SCInventoryService.AuthHeader OS_AuthHeader = new SCInventoryService.AuthHeader { UserName = UserName, Password = Password };
+            foreach (var item in SCList)
+            {
+                var data = SCInventoryServiceSoapClient.GetInventory(OS_AuthHeader, SkuNo, item.ID);
+                SkuInventoryVMLit.Add(new Models.SkuInventoryVM
+                {
+                    ID = item.ID,
+                    Type = item.WarehouseType.ToString(),
+                    Warehouse = item.Name,
+                    Available = data.AvailQty
 
+                });
+            }
+            return SkuInventoryVMLit;
+        }
 
         /// < summary> 
         /// 動態呼叫web服務 

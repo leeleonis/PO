@@ -62,5 +62,27 @@ namespace PurchaseOrderSys.Controllers
         {
             return View();
         }
+        public ActionResult Serials(int ID)
+        {
+            var PurchaseSKU = db.PurchaseSKU.Find(ID);
+            return View(PurchaseSKU);
+        }
+        public ActionResult Inventory(int ID)
+        {
+            var PurchaseSKU = db.PurchaseSKU.Find(ID);
+
+            var SCInventoryService = new Api.SC_API().SCInventoryService(PurchaseSKU.SkuNo);
+            return View(SCInventoryService);
+        }
+        public ActionResult Purchasing(int ID)
+        {
+            var PurchaseSKU = db.PurchaseSKU.Find(ID);
+            return View(PurchaseSKU);
+        }
+        public ActionResult GetHistory(string ID)
+        {
+            var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == ID).OrderByDescending(x => x.CreateAt);
+            return View(SerialsLlist);
+        }
     }
 }

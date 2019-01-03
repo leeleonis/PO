@@ -657,6 +657,41 @@ namespace PurchaseOrderSys.Models
         public IEnumerable<WarehouseVM> WarehouseVM { get; set; }
     }
 
+    public class SkuInventoryVM
+    {
+        /// <summary>
+        /// 倉庫的 ID
+        /// </summary>
+        public int ID { get; set; }
+        /// <summary>
+        /// 倉庫名稱
+        /// </summary>
+        public string Warehouse { get; set; }
+        /// <summary>
+        /// 倉庫的性質 (Normal, FBA, DropShip, Interim)
+        /// </summary>
+        public string Type { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public int Available { get; set; }
+        public string Awaiting { get; set; }
+        public string Aggregate { get; set; }
+        public string Unfulfillable { get; set; }
+        /// <summary>
+        /// 各個倉庫的庫存數
+        /// </summary>
+        public int Total { get; set; }
+        /// <summary>
+        /// 該序號/單品的價值. 算法為 SKU tab (Purchasing) 裡的 PO cost - CM Cost = Value.
+        /// </summary>
+        public decimal Value { get; set; }
+    }
+
+  
+
+
+
     public class WarehouseVM
     {
         public int ID { get; set; }

@@ -184,6 +184,11 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Connected Services\SCInventoryService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Connected Services\SCService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -547,6 +552,43 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Connected Services\SCInventoryService\PurchaseOrderSys.SCInventoryService.AuthenticateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCInventoryService\PurchaseOrderSys.SCInventoryService.GetInventoryResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCInventoryService\PurchaseOrderSys.SCInventoryService.GetInventoryResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCInventoryService\PurchaseOrderSys.SCInventoryService.ProductActiveListingType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCInventoryService\PurchaseOrderSys.SCInventoryService.ProductActiveListing_ALLResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCInventoryService\PurchaseOrderSys.SCInventoryService.ProductActiveListing_ListProductsByChannelResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCInventoryService\PurchaseOrderSys.SCInventoryService.ProductWarehouseInventory_GetResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCInventoryService\PurchaseOrderSys.SCInventoryService.UpdateInventoryResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCInventoryService\PurchaseOrderSys.SCInventoryService.UserAccount.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCInventoryService\PurchaseOrderSys.SCInventoryService.Users_GetCurrentUserDetailsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Connected Services\SCInventoryService\SCInventoryService.disco" />
+    <None Include="Connected Services\SCInventoryService\configuration91.svcinfo" />
+    <None Include="Connected Services\SCInventoryService\configuration.svcinfo" />
+    <None Include="Connected Services\SCInventoryService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.AddImageResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
@@ -5083,6 +5125,7 @@
     <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.WebSiteProductCategory.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
+    <None Include="Connected Services\SCInventoryService\SCInventoryService.wsdl" />
     <None Include="Connected Services\SCService\scservice.disco" />
     <None Include="Connected Services\SCService\configuration91.svcinfo" />
     <None Include="Connected Services\SCService\configuration.svcinfo" />
@@ -6364,12 +6407,16 @@
     <Content Include="Views\Currency\Index.cshtml" />
     <Content Include="Views\WarehouseInventory\Statement.cshtml" />
     <Content Include="Views\PurchaseOrderCM\EditItem.cshtml" />
-    <Content Include="Views\SkuSerials\Index.cshtml" />
+    <Content Include="Views\WarehouseInventory\Serials.cshtml" />
+    <Content Include="Views\WarehouseInventory\GetHistory.cshtml" />
+    <Content Include="Views\WarehouseInventory\Inventory.cshtml" />
+    <Content Include="Views\WarehouseInventory\Purchasing.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Filters\" />
     <Folder Include="Views\Base\" />
+    <Folder Include="Views\SkuSerials\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -6425,6 +6472,7 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\SCInventoryService\" />
     <WCFMetadataStorage Include="Connected Services\SCService\" />
   </ItemGroup>
   <PropertyGroup>

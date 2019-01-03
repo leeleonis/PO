@@ -134,6 +134,7 @@
                                                                 <th>Awaiting Dispatch</th>
                                                                 <th>Aggregate</th>
                                                                 <th>Unfulfillable - Transit</th>
+                                                                <th></th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -143,9 +144,7 @@
                                                                 {
                                                                 <tr>
                                                                     <td><input type="checkbox" value="@item.ID"></td>
-                                                                    <td>
-                                                                        <a class='btn btn-default btn-sm' id='Statement' href='@Url.Action("Statement", new { item.ID })'>@item.SKU</a>
-                                                                    </td>
+                                                                    <td>@item.ID</td>
                                                                     <td>@item.Name</td>
                                                                     <td>@item.Velocity</td>
                                                                     <td>@item.DaysOfSupply</td>
@@ -153,6 +152,12 @@
                                                                     <td>@item.Awaiting</td>
                                                                     <td>@item.Aggregate</td>
                                                                     <td>@item.Unfulfillable</td>
+                                                                    <td>
+                                                                        <a class='btn btn-default btn-sm' href='@Url.Action("Statement", new { item.ID })'>Statement</a>
+                                                                        <a class='btn btn-default btn-sm' href='@Url.Action("Serials", new { item.ID })'>Serials</a>
+                                                                        <a class='btn btn-default btn-sm' href='@Url.Action("Inventory", new { item.ID })'>Inventory</a>
+                                                                        <a class='btn btn-default btn-sm' href='@Url.Action("Purchasing", new { item.ID })'>Purchasing</a>
+                                                                    </td>
                                                                 </tr>
                                                                 }
                                                             }

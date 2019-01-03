@@ -1,0 +1,783 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://api.sellercloud.com/" xmlns:s1="http://www.bvsoftware.com/bvc2004/schemas/2004/05/17/Membership/UserAccount" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:s2="urn:ebay:apis:eBLBaseComponents" xmlns:s3="http://www.bvsoftware.com/bvc2004/schemas/2004/05/17/Contacts/Address" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://api.sellercloud.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://api.sellercloud.com/">
+      <s:import namespace="http://www.bvsoftware.com/bvc2004/schemas/2004/05/17/Membership/UserAccount" />
+      <s:element name="Authenticate">
+        <s:complexType />
+      </s:element>
+      <s:element name="AuthenticateResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="AuthenticateResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AuthHeader" type="tns:AuthHeader" />
+      <s:complexType name="AuthHeader">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ApplicationName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ApplicationVersion" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DeviceID" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="ValidateDeviceID" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+        </s:sequence>
+        <s:anyAttribute />
+      </s:complexType>
+      <s:element name="Users_GetCurrentUserDetails">
+        <s:complexType />
+      </s:element>
+      <s:element name="Users_GetCurrentUserDetailsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Users_GetCurrentUserDetailsResult" type="s1:UserAccount" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateInventory">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="req" type="tns:ArrayOfUpdateInventoryRequest" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfUpdateInventoryRequest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="UpdateInventoryRequest" nillable="true" type="tns:UpdateInventoryRequest" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="UpdateInventoryRequest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ProductID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="WarehouseName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Qty" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="InventoryDate" type="s:dateTime" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="UpdateInventoryResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="UpdateInventoryResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetInventory">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ProductID" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="WarehouseID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetInventoryResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetInventoryResult" type="tns:GetInventoryResponseType" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="GetInventoryResponseType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ProductID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="WarehouseName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="AvailQty" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="PhysicalQty" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="InventoryDate" type="s:dateTime" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="ProductActiveListing_ListProductsByChannel">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="CompanyID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="channel" type="tns:OrderSource" />
+            <s:element minOccurs="1" maxOccurs="1" name="pageNumber" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:simpleType name="OrderSource">
+        <s:restriction base="s:string">
+          <s:enumeration value="Local_Store" />
+          <s:enumeration value="eBayOrder" />
+          <s:enumeration value="eBaySingleItem" />
+          <s:enumeration value="Yahoo" />
+          <s:enumeration value="Amazon" />
+          <s:enumeration value="PriceGrabber" />
+          <s:enumeration value="Website" />
+          <s:enumeration value="Buy" />
+          <s:enumeration value="NewEggMall" />
+          <s:enumeration value="Magento" />
+          <s:enumeration value="QuickBooks" />
+          <s:enumeration value="RMS" />
+          <s:enumeration value="Cart32" />
+          <s:enumeration value="Sears" />
+          <s:enumeration value="FBA" />
+          <s:enumeration value="Wholesale" />
+          <s:enumeration value="Overstock" />
+          <s:enumeration value="NewEggdotcom" />
+          <s:enumeration value="Etsy" />
+          <s:enumeration value="Bonanza" />
+          <s:enumeration value="PriceFalls" />
+          <s:enumeration value="Wayfair" />
+          <s:enumeration value="UnbeatableSale" />
+          <s:enumeration value="VendorCentral" />
+          <s:enumeration value="Hayneedle" />
+          <s:enumeration value="SmartBargains" />
+          <s:enumeration value="uBid" />
+          <s:enumeration value="ATGStores" />
+          <s:enumeration value="StacksAndStacks" />
+          <s:enumeration value="Sharkstores" />
+          <s:enumeration value="BestBuy" />
+          <s:enumeration value="Kohls" />
+          <s:enumeration value="Staples" />
+          <s:enumeration value="OneStopPlus" />
+          <s:enumeration value="Meijer" />
+          <s:enumeration value="Sonsi" />
+          <s:enumeration value="Walmart" />
+          <s:enumeration value="HSN" />
+          <s:enumeration value="NewEgg_Business" />
+          <s:enumeration value="KMart" />
+          <s:enumeration value="Wish" />
+          <s:enumeration value="SPRichards" />
+          <s:enumeration value="FingerHut" />
+          <s:enumeration value="Groupon" />
+          <s:enumeration value="Walmart_Marketplace" />
+          <s:enumeration value="Evine" />
+          <s:enumeration value="PriceMinister" />
+          <s:enumeration value="GS" />
+          <s:enumeration value="DrugStore" />
+          <s:enumeration value="MercadoLibre" />
+          <s:enumeration value="JET" />
+          <s:enumeration value="ElevenMain" />
+          <s:enumeration value="SearsVendor" />
+          <s:enumeration value="Choxi" />
+          <s:enumeration value="TradeMe" />
+          <s:enumeration value="Tanga" />
+          <s:enumeration value="Target" />
+          <s:enumeration value="GrouponMarketplace" />
+          <s:enumeration value="Reverb" />
+          <s:enumeration value="BedBathAndBeyond" />
+          <s:enumeration value="Dropship_Central" />
+          <s:enumeration value="DSW" />
+          <s:enumeration value="Houzz" />
+          <s:enumeration value="Gilt" />
+          <s:enumeration value="BestBuyDS" />
+          <s:enumeration value="TopHatter" />
+          <s:enumeration value="HomeDepot" />
+          <s:enumeration value="MassGenie" />
+          <s:enumeration value="Cdiscount" />
+          <s:enumeration value="GrouponGateway" />
+          <s:enumeration value="SBN" />
+          <s:enumeration value="GoogleExpress" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="ProductActiveListing_ListProductsByChannelResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ProductActiveListing_ListProductsByChannelResult" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="ServiceOptions" type="tns:ServiceOptions" />
+      <s:complexType name="ServiceOptions">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="AlwaysRecalculateWeight" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="CalculateWeightIgnoreZeroWeightProducts" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="AllowAnyProductShippingMethods" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="FetchUserDefinedColumnsForProducts" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="FetchUserDefinedColumnsForOrder" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="SkipBundleItemQtyUpdating" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="DoNotGetClientUser" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="SkipCWAShippingRules" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="DontIncludePORMAImages" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="IncludeClientUserAddressBook" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="SaveOrderPackageDimensions" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="IncludeClientUserDocuments" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="IncludeOrderTargetInfo" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="IncludeWalmartOrderSpecificData" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="SkipProductMetadata" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="IncludePODetails" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="CreateNewProducts" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="SplitItems" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="PaymentNotNeeded" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="DebugInfo" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="DoNotDownloadImageData" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="BulkWipeRelationships" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="BulkDeleteShadows" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="BulkResetOffsetQty" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="UseCache" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="DontNeedCompanyProfile" type="s:boolean" />
+        </s:sequence>
+        <s:anyAttribute />
+      </s:complexType>
+      <s:element name="ProductActiveListing_ALL">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="CompanyID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="pageNumber" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ProductActiveListing_ALLResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ProductActiveListing_ALLResult" type="tns:ArrayOfProductActiveListingType" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfProductActiveListingType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ProductActiveListingType" nillable="true" type="tns:ProductActiveListingType" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ProductActiveListingType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ProductID" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Channel" type="tns:OrderSource" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="ProductWarehouseInventory_Get">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="WarehouseID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="pageNumber" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ProductWarehouseInventory_GetResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ProductWarehouseInventory_GetResult" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.bvsoftware.com/bvc2004/schemas/2004/05/17/Membership/UserAccount">
+      <s:import namespace="urn:ebay:apis:eBLBaseComponents" />
+      <s:import namespace="http://www.bvsoftware.com/bvc2004/schemas/2004/05/17/Contacts/Address" />
+      <s:complexType name="UserAccount">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="AccountLocked" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="AccountLockedUntil" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="AccountLockedReason" type="s1:AccountLockedReasonType" />
+          <s:element minOccurs="1" maxOccurs="1" name="PasswordLastChangedOn" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="MiddleInitial" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ImportSourceUniqueID" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="CurrentLoginDate" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="LastLoginFromIP" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsWholeSaleUser" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="AccountActivatedOn" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="AccountActivated" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="ActivationCode" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="ClientID" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="LastSellerCompanyID" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="OptinDate" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="Optin" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="Unsubscribed" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="CompanyID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="PaypalLastName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PaypalFirstName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PaypalAccountID" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="PaypalAccountVerified" type="s1:PaypalAccountVerifiedStatus" />
+          <s:element minOccurs="1" maxOccurs="1" name="eBayFeedbackScore" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="eBayIDVerified" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="eBayGoodStanding" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="eBayEIASToken" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="eBayFeedbackRatingStar" type="s2:FeedbackRatingStarCodeType" />
+          <s:element minOccurs="1" maxOccurs="1" name="eBayNewUser" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="eBayPayPalAccountLevel" type="s2:PayPalAccountLevelCodeType" />
+          <s:element minOccurs="1" maxOccurs="1" name="eBayPayPalAccountStatus" type="s2:PayPalAccountStatusCodeType" />
+          <s:element minOccurs="1" maxOccurs="1" name="eBayPayPalAccountType" type="s2:PayPalAccountTypeCodeType" />
+          <s:element minOccurs="1" maxOccurs="1" name="eBayPositiveFeedbackPercent" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="eBayRegistrationDate" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="eBayUserStatus" type="s2:UserStatusCodeType" />
+          <s:element minOccurs="0" maxOccurs="1" name="eBayUserID" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="eBayUserIDLastChanged" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="eBayUserIDChanged" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="UserSource" type="s1:UserSource" />
+          <s:element minOccurs="1" maxOccurs="1" name="UserType" type="s1:UserType" />
+          <s:element minOccurs="1" maxOccurs="1" name="ID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FirstName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LastName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Salt" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Addresses">
+            <s:complexType>
+              <s:sequence>
+                <s:element minOccurs="0" maxOccurs="unbounded" name="Address" nillable="true" type="s3:Address" />
+              </s:sequence>
+            </s:complexType>
+          </s:element>
+          <s:element minOccurs="1" maxOccurs="1" name="TaxExempt" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="Email" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="CreationDate" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="LastLoginDate" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="PasswordHint" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Comment" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="PricingLevel" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="AccountLockedReasonType">
+        <s:restriction base="s:string">
+          <s:enumeration value="None" />
+          <s:enumeration value="Password_Max_Retries" />
+          <s:enumeration value="InActive_For_Long_Time" />
+          <s:enumeration value="Other" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="PaypalAccountVerifiedStatus">
+        <s:restriction base="s:string">
+          <s:enumeration value="Unverified" />
+          <s:enumeration value="Verified" />
+          <s:enumeration value="ManuallyVerified" />
+          <s:enumeration value="Suspicious" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="UserSource">
+        <s:restriction base="s:string">
+          <s:enumeration value="None" />
+          <s:enumeration value="eBay" />
+          <s:enumeration value="Yahoo" />
+          <s:enumeration value="Amazon" />
+          <s:enumeration value="Cart32" />
+          <s:enumeration value="SilverSpeck" />
+          <s:enumeration value="NewEggDotCom" />
+          <s:enumeration value="Arcust" />
+          <s:enumeration value="Wayfair" />
+          <s:enumeration value="Spree" />
+          <s:enumeration value="UnbeatableSale" />
+          <s:enumeration value="Bonanza" />
+          <s:enumeration value="VendorCentral" />
+          <s:enumeration value="Hayneedle" />
+          <s:enumeration value="ATGStores" />
+          <s:enumeration value="StacksAndStacks" />
+          <s:enumeration value="Walmart" />
+          <s:enumeration value="KMart" />
+          <s:enumeration value="ConnectWise" />
+          <s:enumeration value="SearsVendor" />
+          <s:enumeration value="Choxi" />
+          <s:enumeration value="DSW" />
+          <s:enumeration value="Gilt" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="UserType">
+        <s:restriction base="s:string">
+          <s:enumeration value="NONE" />
+          <s:enumeration value="WEB_USER" />
+          <s:enumeration value="EMPLOYEE" />
+        </s:restriction>
+      </s:simpleType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="urn:ebay:apis:eBLBaseComponents">
+      <s:simpleType name="FeedbackRatingStarCodeType">
+        <s:restriction base="s:string">
+          <s:enumeration value="None" />
+          <s:enumeration value="Yellow" />
+          <s:enumeration value="Blue" />
+          <s:enumeration value="Turquoise" />
+          <s:enumeration value="Purple" />
+          <s:enumeration value="Red" />
+          <s:enumeration value="Green" />
+          <s:enumeration value="YellowShooting" />
+          <s:enumeration value="TurquoiseShooting" />
+          <s:enumeration value="PurpleShooting" />
+          <s:enumeration value="RedShooting" />
+          <s:enumeration value="GreenShooting" />
+          <s:enumeration value="SilverShooting" />
+          <s:enumeration value="CustomCode" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="PayPalAccountLevelCodeType">
+        <s:restriction base="s:string">
+          <s:enumeration value="Unverified" />
+          <s:enumeration value="InternationalUnverified" />
+          <s:enumeration value="Verified" />
+          <s:enumeration value="InternationalVerified" />
+          <s:enumeration value="Trusted" />
+          <s:enumeration value="Unknown" />
+          <s:enumeration value="Invalid" />
+          <s:enumeration value="CustomCode" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="PayPalAccountStatusCodeType">
+        <s:restriction base="s:string">
+          <s:enumeration value="Active" />
+          <s:enumeration value="Closed" />
+          <s:enumeration value="HighRestricted" />
+          <s:enumeration value="LowRestricted" />
+          <s:enumeration value="Locked" />
+          <s:enumeration value="CustomCode" />
+          <s:enumeration value="WireOff" />
+          <s:enumeration value="Unknown" />
+          <s:enumeration value="Invalid" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="PayPalAccountTypeCodeType">
+        <s:restriction base="s:string">
+          <s:enumeration value="Personal" />
+          <s:enumeration value="Premier" />
+          <s:enumeration value="Business" />
+          <s:enumeration value="Unknown" />
+          <s:enumeration value="Invalid" />
+          <s:enumeration value="CustomCode" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="UserStatusCodeType">
+        <s:restriction base="s:string">
+          <s:enumeration value="Unknown" />
+          <s:enumeration value="Suspended" />
+          <s:enumeration value="Confirmed" />
+          <s:enumeration value="Unconfirmed" />
+          <s:enumeration value="Ghost" />
+          <s:enumeration value="InMaintenance" />
+          <s:enumeration value="Deleted" />
+          <s:enumeration value="CreditCardVerify" />
+          <s:enumeration value="AccountOnHold" />
+          <s:enumeration value="Merged" />
+          <s:enumeration value="RegistrationCodeMailOut" />
+          <s:enumeration value="TermPending" />
+          <s:enumeration value="UnconfirmedHalfOptIn" />
+          <s:enumeration value="CreditCardVerifyHalfOptIn" />
+          <s:enumeration value="UnconfirmedPassport" />
+          <s:enumeration value="CreditCardVerifyPassport" />
+          <s:enumeration value="UnconfirmedExpress" />
+          <s:enumeration value="Guest" />
+          <s:enumeration value="CustomCode" />
+        </s:restriction>
+      </s:simpleType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.bvsoftware.com/bvc2004/schemas/2004/05/17/Contacts/Address">
+      <s:complexType name="Address">
+        <s:complexContent mixed="false">
+          <s:extension base="s3:BusinessEntityBase">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="IsShippingAddress" type="s:boolean" />
+              <s:element minOccurs="1" maxOccurs="1" name="IsBillingAddress" type="s:boolean" />
+              <s:element minOccurs="1" maxOccurs="1" name="AddressClassification" type="s3:AddressClassificationType" />
+              <s:element minOccurs="0" maxOccurs="1" name="Notes" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="HomePhone" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="EmailAddress" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="AddressStatus" type="s3:AddressStatus" />
+              <s:element minOccurs="1" maxOccurs="1" name="AddressSource" type="s3:AddressSource" />
+              <s:element minOccurs="1" maxOccurs="1" name="ID" type="s:int" />
+              <s:element minOccurs="0" maxOccurs="1" name="FirstName" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="MiddleInitial" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="LastName" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="CompanyName" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="StreetLine1" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="StreetLine2" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="City" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="StateName" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="StateCode" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="PostalCode" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="CountryName" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="CountryCode" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="PhoneNumber" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="FaxNumber" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="WebSiteURL" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="BusinessEntityBase" abstract="true" />
+      <s:simpleType name="AddressClassificationType">
+        <s:restriction base="s:string">
+          <s:enumeration value="None" />
+          <s:enumeration value="Residential" />
+          <s:enumeration value="Commercial" />
+          <s:enumeration value="Other" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="AddressStatus">
+        <s:restriction base="s:string">
+          <s:enumeration value="Unknown" />
+          <s:enumeration value="None" />
+          <s:enumeration value="Confirmed" />
+          <s:enumeration value="UnConfirmed" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="AddressSource">
+        <s:restriction base="s:string">
+          <s:enumeration value="LocalSite" />
+          <s:enumeration value="eBay" />
+          <s:enumeration value="Paypal" />
+          <s:enumeration value="Yahoo" />
+          <s:enumeration value="Amazon" />
+          <s:enumeration value="Buy_Com" />
+          <s:enumeration value="NewEgg" />
+          <s:enumeration value="Magento" />
+          <s:enumeration value="Sears" />
+          <s:enumeration value="CWA" />
+        </s:restriction>
+      </s:simpleType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="AuthenticateSoapIn">
+    <wsdl:part name="parameters" element="tns:Authenticate" />
+  </wsdl:message>
+  <wsdl:message name="AuthenticateSoapOut">
+    <wsdl:part name="parameters" element="tns:AuthenticateResponse" />
+  </wsdl:message>
+  <wsdl:message name="AuthenticateAuthHeader">
+    <wsdl:part name="AuthHeader" element="tns:AuthHeader" />
+  </wsdl:message>
+  <wsdl:message name="Users_GetCurrentUserDetailsSoapIn">
+    <wsdl:part name="parameters" element="tns:Users_GetCurrentUserDetails" />
+  </wsdl:message>
+  <wsdl:message name="Users_GetCurrentUserDetailsSoapOut">
+    <wsdl:part name="parameters" element="tns:Users_GetCurrentUserDetailsResponse" />
+  </wsdl:message>
+  <wsdl:message name="Users_GetCurrentUserDetailsAuthHeader">
+    <wsdl:part name="AuthHeader" element="tns:AuthHeader" />
+  </wsdl:message>
+  <wsdl:message name="UpdateInventorySoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateInventory" />
+  </wsdl:message>
+  <wsdl:message name="UpdateInventorySoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateInventoryResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateInventoryAuthHeader">
+    <wsdl:part name="AuthHeader" element="tns:AuthHeader" />
+  </wsdl:message>
+  <wsdl:message name="GetInventorySoapIn">
+    <wsdl:part name="parameters" element="tns:GetInventory" />
+  </wsdl:message>
+  <wsdl:message name="GetInventorySoapOut">
+    <wsdl:part name="parameters" element="tns:GetInventoryResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetInventoryAuthHeader">
+    <wsdl:part name="AuthHeader" element="tns:AuthHeader" />
+  </wsdl:message>
+  <wsdl:message name="ProductActiveListing_ListProductsByChannelSoapIn">
+    <wsdl:part name="parameters" element="tns:ProductActiveListing_ListProductsByChannel" />
+  </wsdl:message>
+  <wsdl:message name="ProductActiveListing_ListProductsByChannelSoapOut">
+    <wsdl:part name="parameters" element="tns:ProductActiveListing_ListProductsByChannelResponse" />
+  </wsdl:message>
+  <wsdl:message name="ProductActiveListing_ListProductsByChannelAuthHeader">
+    <wsdl:part name="AuthHeader" element="tns:AuthHeader" />
+  </wsdl:message>
+  <wsdl:message name="ProductActiveListing_ListProductsByChannelServiceOptions">
+    <wsdl:part name="ServiceOptions" element="tns:ServiceOptions" />
+  </wsdl:message>
+  <wsdl:message name="ProductActiveListing_ALLSoapIn">
+    <wsdl:part name="parameters" element="tns:ProductActiveListing_ALL" />
+  </wsdl:message>
+  <wsdl:message name="ProductActiveListing_ALLSoapOut">
+    <wsdl:part name="parameters" element="tns:ProductActiveListing_ALLResponse" />
+  </wsdl:message>
+  <wsdl:message name="ProductActiveListing_ALLAuthHeader">
+    <wsdl:part name="AuthHeader" element="tns:AuthHeader" />
+  </wsdl:message>
+  <wsdl:message name="ProductActiveListing_ALLServiceOptions">
+    <wsdl:part name="ServiceOptions" element="tns:ServiceOptions" />
+  </wsdl:message>
+  <wsdl:message name="ProductWarehouseInventory_GetSoapIn">
+    <wsdl:part name="parameters" element="tns:ProductWarehouseInventory_Get" />
+  </wsdl:message>
+  <wsdl:message name="ProductWarehouseInventory_GetSoapOut">
+    <wsdl:part name="parameters" element="tns:ProductWarehouseInventory_GetResponse" />
+  </wsdl:message>
+  <wsdl:message name="ProductWarehouseInventory_GetAuthHeader">
+    <wsdl:part name="AuthHeader" element="tns:AuthHeader" />
+  </wsdl:message>
+  <wsdl:message name="ProductWarehouseInventory_GetServiceOptions">
+    <wsdl:part name="ServiceOptions" element="tns:ServiceOptions" />
+  </wsdl:message>
+  <wsdl:portType name="SCInventoryServiceSoap">
+    <wsdl:operation name="Authenticate">
+      <wsdl:input message="tns:AuthenticateSoapIn" />
+      <wsdl:output message="tns:AuthenticateSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Users_GetCurrentUserDetails">
+      <wsdl:input message="tns:Users_GetCurrentUserDetailsSoapIn" />
+      <wsdl:output message="tns:Users_GetCurrentUserDetailsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateInventory">
+      <wsdl:input message="tns:UpdateInventorySoapIn" />
+      <wsdl:output message="tns:UpdateInventorySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetInventory">
+      <wsdl:input message="tns:GetInventorySoapIn" />
+      <wsdl:output message="tns:GetInventorySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ProductActiveListing_ListProductsByChannel">
+      <wsdl:input message="tns:ProductActiveListing_ListProductsByChannelSoapIn" />
+      <wsdl:output message="tns:ProductActiveListing_ListProductsByChannelSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ProductActiveListing_ALL">
+      <wsdl:input message="tns:ProductActiveListing_ALLSoapIn" />
+      <wsdl:output message="tns:ProductActiveListing_ALLSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ProductWarehouseInventory_Get">
+      <wsdl:input message="tns:ProductWarehouseInventory_GetSoapIn" />
+      <wsdl:output message="tns:ProductWarehouseInventory_GetSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="SCInventoryServiceSoap" type="tns:SCInventoryServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Authenticate">
+      <soap:operation soapAction="http://api.sellercloud.com/Authenticate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:AuthenticateAuthHeader" part="AuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Users_GetCurrentUserDetails">
+      <soap:operation soapAction="http://api.sellercloud.com/Users_GetCurrentUserDetails" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:Users_GetCurrentUserDetailsAuthHeader" part="AuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateInventory">
+      <soap:operation soapAction="http://api.sellercloud.com/UpdateInventory" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:UpdateInventoryAuthHeader" part="AuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetInventory">
+      <soap:operation soapAction="http://api.sellercloud.com/GetInventory" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:GetInventoryAuthHeader" part="AuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProductActiveListing_ListProductsByChannel">
+      <soap:operation soapAction="http://api.sellercloud.com/ProductActiveListing_ListProductsByChannel" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:ProductActiveListing_ListProductsByChannelAuthHeader" part="AuthHeader" use="literal" />
+        <soap:header message="tns:ProductActiveListing_ListProductsByChannelServiceOptions" part="ServiceOptions" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProductActiveListing_ALL">
+      <soap:operation soapAction="http://api.sellercloud.com/ProductActiveListing_ALL" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:ProductActiveListing_ALLAuthHeader" part="AuthHeader" use="literal" />
+        <soap:header message="tns:ProductActiveListing_ALLServiceOptions" part="ServiceOptions" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProductWarehouseInventory_Get">
+      <soap:operation soapAction="http://api.sellercloud.com/ProductWarehouseInventory_Get" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:ProductWarehouseInventory_GetAuthHeader" part="AuthHeader" use="literal" />
+        <soap:header message="tns:ProductWarehouseInventory_GetServiceOptions" part="ServiceOptions" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="SCInventoryServiceSoap12" type="tns:SCInventoryServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Authenticate">
+      <soap12:operation soapAction="http://api.sellercloud.com/Authenticate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:AuthenticateAuthHeader" part="AuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Users_GetCurrentUserDetails">
+      <soap12:operation soapAction="http://api.sellercloud.com/Users_GetCurrentUserDetails" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:Users_GetCurrentUserDetailsAuthHeader" part="AuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateInventory">
+      <soap12:operation soapAction="http://api.sellercloud.com/UpdateInventory" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:UpdateInventoryAuthHeader" part="AuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetInventory">
+      <soap12:operation soapAction="http://api.sellercloud.com/GetInventory" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:GetInventoryAuthHeader" part="AuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProductActiveListing_ListProductsByChannel">
+      <soap12:operation soapAction="http://api.sellercloud.com/ProductActiveListing_ListProductsByChannel" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:ProductActiveListing_ListProductsByChannelAuthHeader" part="AuthHeader" use="literal" />
+        <soap12:header message="tns:ProductActiveListing_ListProductsByChannelServiceOptions" part="ServiceOptions" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProductActiveListing_ALL">
+      <soap12:operation soapAction="http://api.sellercloud.com/ProductActiveListing_ALL" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:ProductActiveListing_ALLAuthHeader" part="AuthHeader" use="literal" />
+        <soap12:header message="tns:ProductActiveListing_ALLServiceOptions" part="ServiceOptions" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProductWarehouseInventory_Get">
+      <soap12:operation soapAction="http://api.sellercloud.com/ProductWarehouseInventory_Get" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:ProductWarehouseInventory_GetAuthHeader" part="AuthHeader" use="literal" />
+        <soap12:header message="tns:ProductWarehouseInventory_GetServiceOptions" part="ServiceOptions" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SCInventoryService">
+    <wsdl:port name="SCInventoryServiceSoap" binding="tns:SCInventoryServiceSoap">
+      <soap:address location="http://dm.ws.sellercloud.com/SCInventoryService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="SCInventoryServiceSoap12" binding="tns:SCInventoryServiceSoap12">
+      <soap12:address location="http://dm.ws.sellercloud.com/SCInventoryService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
