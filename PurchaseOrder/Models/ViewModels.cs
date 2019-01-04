@@ -656,6 +656,96 @@ namespace PurchaseOrderSys.Models
         public string Marketplace { get; set; }
         public IEnumerable<WarehouseVM> WarehouseVM { get; set; }
     }
+    public class SkuPurchasingVM
+    {
+
+        public string Company { get; set; }
+        public string SKU { get; set; }
+        public string SKUName { get; set; }
+
+        /// <summary>
+        /// 查詢所選擇的倉庫庫存相關資料
+        /// </summary>
+        public string Inventory { get; set; }
+        /// <summary>
+        /// 既有的庫存並且屬於可出貨的
+        /// </summary>
+        public int Fulfillable { get; set; }
+        /// <summary>
+        /// 等待出貨的庫存數量
+        /// </summary>
+        public int AwaitingDispatch { get; set; }
+        /// <summary>
+        /// 可上架的庫存總數
+        /// </summary>
+        public int Aggregate { get; set; }
+        /// <summary>
+        /// 不可銷售的庫存總數,只限於 RMA 倉庫裡的庫存數量
+        /// </summary>
+        public int UnfulfillableRMA { get; set; }
+        /// <summary>
+        /// 不可銷售的庫存總數,只限於 Transit 倉庫裡的庫存數量
+        /// </summary>
+        public int UnfulfillableTransit { get; set; }
+        /// <summary>
+        /// 顯示庫存的總數量 (不包含 Back ordered)
+        /// </summary>
+        public int TotalInventory { get; set; }
+        /// <summary>
+        /// 以下採購單 (PO) 的數量,不列入庫存數, 直到收貨完成為止
+        /// </summary>
+        public int BackOrdered { get; set; }
+        /// <summary>
+        /// 顯示該品號的所代表的單品數量. 預設為 1.
+        /// </summary>
+        public int QTYpercase { get; set; }
+        /// <summary>
+        /// 顯示該產品進貨時一箱的數量. 預設為 1.
+        /// </summary>
+        public int QTYperbox { get; set; }
+        /// <summary>
+        /// 顯示最近期的進貨成本
+        /// </summary>
+        public decimal Latest { get; set; }
+        /// <summary>
+        /// 計算平均現貨的成本
+        /// </summary>
+        public decimal Average { get; set; }
+        /// <summary>
+        /// 顯示歷史紀錄裡的最低進貨成本
+        /// </summary>
+        public decimal Lowest { get; set; }
+        /// <summary>
+        /// 顯示歷史紀錄裡的最高進貨成本
+        /// </summary>
+        public decimal Highest { get; set; }
+
+        /// <summary>
+        /// 依照所輸入的天數而計算這時間內的銷售速度
+        /// </summary>
+        public int Velocity { get; set; }
+        /// <summary>
+        /// 依照所輸入的天數, 算出平均每日已寄出的數量
+        /// </summary>
+        public int AveragefulfilledQTY { get; set; }
+        /// <summary>
+        /// 依照所輸入的天數, 算出平均每日可出貨的庫存數量
+        /// </summary>
+        public int AveragefulfillableQTY { get; set; }
+        /// <summary>
+        /// 依照所輸入的天數, 算出每日平均採購的數量
+        /// </summary>
+        public int AveragePOQTY { get; set; }
+        /// <summary>
+        /// 依照所輸入的天數內, 算出總出貨的數量
+        /// </summary>
+        public int TotalFulfilled { get; set; }
+        /// <summary>
+        /// 依照所輸入的天數內, 算出總採購的數量
+        /// </summary>
+        public int TotalPO { get; set; }
+
+    }
 
     public class SkuInventoryVM
     {
@@ -672,12 +762,21 @@ namespace PurchaseOrderSys.Models
         /// </summary>
         public string Type { get; set; }
         /// <summary>
-        /// 
+        /// 所有/實體庫存
         /// </summary>
         public int Available { get; set; }
-        public string Awaiting { get; set; }
-        public string Aggregate { get; set; }
-        public string Unfulfillable { get; set; }
+        /// <summary>
+        /// 等待出貨的庫存數量
+        /// </summary>
+        public int Awaiting { get; set; }
+        /// <summary>
+        /// 可上架的庫存總數
+        /// </summary>
+        public int Aggregate { get; set; }
+        /// <summary>
+        /// 不可銷售的庫存總數
+        /// </summary>
+        public int Unfulfillable { get; set; }
         /// <summary>
         /// 各個倉庫的庫存數
         /// </summary>

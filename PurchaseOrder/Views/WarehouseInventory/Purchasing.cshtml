@@ -1,7 +1,162 @@
-﻿
+﻿@model SkuPurchasingVM
 @{
-    ViewBag.Title = "Purchasing";
+    ViewBag.title = "Purchasing";
+}
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-xs-12">
+                <div class="jarviswidget" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+
+                        <h2>清單</h2>
+                        <ul class="nav nav-tabs pull-right">
+                            <li><a data-toggle="tab" href="#hb1">@ViewBag.title</a></li>
+                        </ul>
+                    </header>
+
+                    <div>
+                        <div class="widget-body no-padding">
+                            <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="IsEnable" value="True">
+
+                                <div id="content" class="tab-content">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="tab-pane" id="hb1">
+                                        <fieldset>
+                                            <legend>Company:@(Model.Company)</legend>
+                                        </fieldset>
+                                        <fieldset>
+                                            <legend>@(Model.SKU)：@(Model.SKUName)</legend>
+                                            <div class="form-group">
+                                                @Html.Label("Inventory", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("Inventory", new { htmlAttributes = new { @class = "form-control" ,@readonly= "@readonly" } })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.Label("Fulfillable", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("Fulfillable", new { htmlAttributes = new { @class = "form-control", @readonly = "@readonly" } })
+                                                </div>
+                                                @Html.Label("Latest", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("Latest", new { htmlAttributes = new { @class = "form-control", @readonly = "@readonly" } })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.Label("Awaiting dispatch", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("Awaitingdispatch", new { htmlAttributes = new { @class = "form-control", @readonly = "@readonly" } })
+                                                </div>
+                                                @Html.Label("Average (in stock)", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("Average", new { htmlAttributes = new { @class = "form-control", @readonly = "@readonly" } })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.Label("Aggregate", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("Aggregate", new { htmlAttributes = new { @class = "form-control", @readonly = "@readonly" } })
+                                                </div>
+                                                @Html.Label("Lowest (history)", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("Lowest", new { htmlAttributes = new { @class = "form-control", @readonly = "@readonly" } })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.Label("Unfulfillable - RMA", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("UnfulfillableRMA", new { htmlAttributes = new { @class = "form-control", @readonly = "@readonly" } })
+                                                </div>
+                                                @Html.Label("Highest (history)", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("Highest", new { htmlAttributes = new { @class = "form-control", @readonly = "@readonly" } })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.Label("Unfulfillable - Transit", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("UnfulfillableTransit", new { htmlAttributes = new { @class = "form-control", @readonly = "@readonly" } })
+                                                </div>
+                                                @Html.Label("Velocity", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("Velocity", new { htmlAttributes = new { @class = "form-control", @readonly = "@readonly" } })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.Label("Total Inventory", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("TotalInventory", new { htmlAttributes = new { @class = "form-control", @readonly = "@readonly" } })
+                                                </div>
+                                                @Html.Label("Average fulfilled QTY", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("AverageFulfilledQTY", new { htmlAttributes = new { @class = "form-control", @readonly = "@readonly" } })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.Label("Back ordered", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("BackOrdered", new { htmlAttributes = new { @class = "form-control", @readonly = "@readonly" } })
+                                                </div>
+                                                @Html.Label("Average PO QTY", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("AveragePOQTY", new { htmlAttributes = new { @class = "form-control", @readonly = "@readonly" } })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.Label("QTY per case", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("QTYpercase", new { htmlAttributes = new { @class = "form-control", @readonly = "@readonly" } })
+                                                </div>
+                                                @Html.Label("Total fulfilled", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("TotalFulfilled", new { htmlAttributes = new { @class = "form-control", @readonly = "@readonly" } })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.Label("QTY per box", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("QTYperbox", new { htmlAttributes = new { @class = "form-control", @readonly = "@readonly" } })
+                                                </div>
+                                                @Html.Label("Total PO", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("TotalPO", new { htmlAttributes = new { @class = "form-control", @readonly = "@readonly" } })
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+
+                                @*<div class="widget-footer">
+                                        <button type="submit" class="btn btn-primary" id="save">儲存</button>
+                                        <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index")'">返回</button>
+                                    </div>*@
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section pagespecific {
+    <script type="text/javascript">
+        var hash = window.location.hash;
+        $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
+        $('.tab-pane').eq(hash.substr(1)).addClass('active');
+
+        //$('.datepicker').datepicker({
+        //    dateFormat: 'yy-mm-dd'
+        //});
+        $(document).ready(function () {
+
+        });
+    </script>
 }
 
-<h2>Purchasing</h2>
+
 

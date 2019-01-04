@@ -1,4 +1,4 @@
-﻿@model PurchaseSKU
+﻿@model IEnumerable<PurchaseSKU>
 @{
     ViewBag.title = "Serials";
 }
@@ -27,10 +27,10 @@
                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                     <div class="tab-pane" id="hb1">
                                         <fieldset>
-                                            <legend>Company ： @Model.PurchaseOrder.Company.Name</legend>
+                                            <legend>Company ： @(Model.FirstOrDefault()?.PurchaseOrder.Company.Name)</legend>
                                         </fieldset>
                                         <fieldset>
-                                            <legend>@Model.SkuNo ： @Model.Name</legend>
+                                            <legend>@(Model.FirstOrDefault()?.SkuNo) ： @(Model.FirstOrDefault()?.Name)</legend>
                                             <div class="row">
                                                 <article class="col-xs-12">
                                                     <table id="DataGridC" class="table table-striped table-bordered">
@@ -49,33 +49,40 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @if (Model.SerialsLlist != null && Model.SerialsLlist.Any())
+                                                            @if (Model != null && Model.Any())
                                                             {
-                                                                foreach (var SerialsNoitem in Model.SerialsLlist.Select(x=>x.SerialsNo).Distinct())
+                                                                foreach (var Skuitem in Model)
                                                                 {
-                                                                    var SerialsLlist= Model.SerialsLlist.Where(x => x.SerialsNo == SerialsNoitem).ToList();
-                                                                    var Order = SerialsLlist.Where(x => x.OrderID.HasValue).FirstOrDefault()?.OrderID;
-                                                                    var RMA = SerialsLlist.Where(x => x.RMAID.HasValue).FirstOrDefault()?.RMAID;
-                                                                    var PurchaseOrderID= SerialsLlist.Where(x=>x.PurchaseSKU.PurchaseOrderID.HasValue).FirstOrDefault()?.PurchaseSKU.PurchaseOrderID;
-                                                                    var CreditMemoID = SerialsLlist.Where(x => x.PurchaseSKU.CreditMemoID.HasValue).FirstOrDefault()?.PurchaseSKU.CreditMemoID;
-                                                                    var WarehouseName = SerialsLlist.Where(x =>!string.IsNullOrWhiteSpace(x.PurchaseSKU.PurchaseOrder.Warehouse1.Name)).FirstOrDefault()?.PurchaseSKU.PurchaseOrder.Warehouse1.Name;
-                                                                    var Price = SerialsLlist.Where(x => x.PurchaseSKU.Price.HasValue).FirstOrDefault()?.PurchaseSKU.Price;
-                                                                    var CreateAt = SerialsLlist.OrderByDescending(x => x.CreateAt).FirstOrDefault()?.CreateAt;
-                                                                    <tr>
-                                                                    <td>@SerialsNoitem</td>
-                                                                    <td>@Order</td>
-                                                                    <td>@RMA</td>
-                                                                    <td>@PurchaseOrderID</td>
-                                                                    <td>@CreditMemoID</td>
-                                                                    <td>@WarehouseName</td>
-                                                                    <td></td>
-                                                                    <td>@Price</td>
-                                                                    <td>@CreateAt</td>
-                                                                    <td>
-                                                                        <a class='btn btn-default btn-sm GetHistory'  href='@Url.Action("GetHistory", new {ID= SerialsNoitem })'>History</a>
-                                                                    </td>
-                                                                </tr>
+                                                                    if (Skuitem.SerialsLlist != null && Skuitem.SerialsLlist.Any())
+                                                                    {
+                                                                        foreach (var SerialsNoitem in Skuitem.SerialsLlist.Select(x => x.SerialsNo).Distinct())
+                                                                        {
+                                                                            var SerialsLlist = Skuitem.SerialsLlist.Where(x => x.SerialsNo == SerialsNoitem).ToList();
+                                                                            var Order = SerialsLlist.Where(x => x.OrderID.HasValue).FirstOrDefault()?.OrderID;
+                                                                            var RMA = SerialsLlist.Where(x => x.RMAID.HasValue).FirstOrDefault()?.RMAID;
+                                                                            var PurchaseOrderID = SerialsLlist.Where(x => x.PurchaseSKU.PurchaseOrderID.HasValue).FirstOrDefault()?.PurchaseSKU.PurchaseOrderID;
+                                                                            var CreditMemoID = SerialsLlist.Where(x => x.PurchaseSKU.CreditMemoID.HasValue).FirstOrDefault()?.PurchaseSKU.CreditMemoID;
+                                                                            var WarehouseName = SerialsLlist.Where(x => !string.IsNullOrWhiteSpace(x.PurchaseSKU.PurchaseOrder.Warehouse1.Name)).FirstOrDefault()?.PurchaseSKU.PurchaseOrder.Warehouse1.Name;
+                                                                            var Price = SerialsLlist.Where(x => x.PurchaseSKU.Price.HasValue).FirstOrDefault()?.PurchaseSKU.Price;
+                                                                            var CreateAt = SerialsLlist.OrderByDescending(x => x.CreateAt).FirstOrDefault()?.CreateAt;
+                                                                            <tr>
+                                                                                <td>@SerialsNoitem</td>
+                                                                                <td>@Order</td>
+                                                                                <td>@RMA</td>
+                                                                                <td>@PurchaseOrderID</td>
+                                                                                <td>@CreditMemoID</td>
+                                                                                <td>@WarehouseName</td>
+                                                                                <td></td>
+                                                                                <td>@Price</td>
+                                                                                <td>@CreateAt</td>
+                                                                                <td>
+                                                                                    <a class='btn btn-default btn-sm GetHistory' href='@Url.Action("GetHistory", new {ID= SerialsNoitem })'>History</a>
+                                                                                </td>
+                                                                            </tr>
+                                                                        }
+                                                                    }
                                                                 }
+
                                                             }
                                                         </tbody>
                                                     </table>

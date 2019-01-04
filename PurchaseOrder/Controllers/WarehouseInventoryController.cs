@@ -52,9 +52,9 @@ namespace PurchaseOrderSys.Controllers
 
             return View(WarehouseInventoryVM);
         }
-        public ActionResult Statement(int ID)
+        public ActionResult Statement(string SKU)
         {
-            var PurchaseSKU = db.PurchaseSKU.Find(ID);
+            var PurchaseSKU = db.PurchaseSKU.Where(x=>x.SkuNo== SKU);
             return View(PurchaseSKU);
         }
 
@@ -62,22 +62,61 @@ namespace PurchaseOrderSys.Controllers
         {
             return View();
         }
-        public ActionResult Serials(int ID)
+        public ActionResult Serials(string SKU)
         {
-            var PurchaseSKU = db.PurchaseSKU.Find(ID);
+            var PurchaseSKU = db.PurchaseSKU.Where(x => x.SkuNo == SKU);
             return View(PurchaseSKU);
         }
-        public ActionResult Inventory(int ID)
+        public ActionResult Inventory(string SKU)
         {
-            var PurchaseSKU = db.PurchaseSKU.Find(ID);
+            var PurchaseSKU = db.PurchaseSKU.Where(x => x.SkuNo == SKU);
+            //var SCInventoryService = new Api.SC_API().SCInventoryService(PurchaseSKU.SkuNo);
+            //foreach (var item in PurchaseSKU.PurchaseOrder.Warehouse1)
+            //{
 
-            var SCInventoryService = new Api.SC_API().SCInventoryService(PurchaseSKU.SkuNo);
-            return View(SCInventoryService);
-        }
-        public ActionResult Purchasing(int ID)
-        {
-            var PurchaseSKU = db.PurchaseSKU.Find(ID);
+            //}
+
             return View(PurchaseSKU);
+        }
+        public ActionResult Purchasing(string SKU)
+        {
+            var PurchaseSKU = db.PurchaseSKU.Where(x => x.SkuNo == SKU);
+            var SkuPurchasingVM = new SkuPurchasingVM
+            {
+
+                SKU = SKU
+            };
+            if (PurchaseSKU.Any())
+            {
+                SkuPurchasingVM.Company = PurchaseSKU.FirstOrDefault()?.PurchaseOrder.Company.Name;
+                SkuPurchasingVM.SKUName = PurchaseSKU.FirstOrDefault()?.Name;
+                SkuPurchasingVM.Aggregate = 0;
+                SkuPurchasingVM.Fulfillable =0;
+                SkuPurchasingVM.AwaitingDispatch = 0;
+                SkuPurchasingVM.UnfulfillableRMA = 0;
+                SkuPurchasingVM.UnfulfillableTransit = 0;
+                SkuPurchasingVM.TotalInventory = 0;
+                foreach (var PurchaseSKUitem in PurchaseSKU)
+                {
+                    if (PurchaseSKUitem.SerialsLlist.Any())
+                    {
+                        SkuPurchasingVM.Aggregate += PurchaseSKUitem.SerialsLlist.Where(y => !y.SerialsLlistC.Any() && !y.TransferSKUID.HasValue && !y.RMAID.HasValue && y.SerialsType > 0).Sum(y => y.SerialsType).Value;
+                        SkuPurchasingVM.Fulfillable += PurchaseSKUitem.SerialsLlist.Where(y => !y.SerialsLlistC.Any() && !y.TransferSKUID.HasValue && !y.RMAID.HasValue && y.SerialsType > 0).Sum(y => y.SerialsType).Value;
+                        SkuPurchasingVM.UnfulfillableRMA += PurchaseSKUitem.SerialsLlist.Where(y => !y.SerialsLlistC.Any() && !y.TransferSKUID.HasValue && y.RMAID.HasValue).Sum(y => y.SerialsType).Value;
+                        SkuPurchasingVM.UnfulfillableTransit += PurchaseSKUitem.SerialsLlist.Where(y => !y.SerialsLlistC.Any() && y.TransferSKUID.HasValue && !y.RMAID.HasValue).Sum(y => y.SerialsType).Value;
+                        SkuPurchasingVM.TotalInventory += PurchaseSKUitem.SerialsLlist.Where(y => !y.SerialsLlistC.Any() && !y.TransferSKUID.HasValue && !y.RMAID.HasValue).Sum(y => y.SerialsType).Value;
+                    }
+
+                }
+                SkuPurchasingVM.BackOrdered = PurchaseSKU.Sum(x => x.QTYOrdered).Value;
+                SkuPurchasingVM.QTYperbox = 1;
+                SkuPurchasingVM.QTYpercase = 1;
+                SkuPurchasingVM.Latest = PurchaseSKU.OrderByDescending(x => x.CreateAt).FirstOrDefault().Price.Value;
+                SkuPurchasingVM.Average = PurchaseSKU.Average(x => x.Price).Value;
+                SkuPurchasingVM.Lowest = PurchaseSKU.OrderBy(x => x.Price).FirstOrDefault().Price.Value;
+                SkuPurchasingVM.Highest = PurchaseSKU.OrderByDescending(x => x.Price).FirstOrDefault().Price.Value;
+            }
+            return View(SkuPurchasingVM);
         }
         public ActionResult GetHistory(string ID)
         {
