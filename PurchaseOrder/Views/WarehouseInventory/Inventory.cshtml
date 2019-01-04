@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SkuInventoryVM> 
+﻿@model IEnumerable<PurchaseSKU> 
 @{
     ViewBag.title = "Inventory";
 }
@@ -51,15 +51,15 @@
                                                             @foreach (var item in Model)
                                                             {
                                                             <tr>
-                                                                <td>@item.ID</td>
-                                                                <td>@item.Warehouse</td>
-                                                                <td>@item.Type</td>
-                                                                <td>@item.Available</td>
-                                                                <td>@item.Awaiting</td>
-                                                                <td>@item.Awaiting</td>
-                                                                <td>@item.Unfulfillable</td>
-                                                                <td>@item.Total</td>
-                                                                <td>@item.Value</td>
+                                                                <td>@item.PurchaseOrder.Warehouse1.ID</td>
+                                                                <td>@item.PurchaseOrder.Warehouse1.Name</td>
+                                                                <td>@item.PurchaseOrder.Warehouse1.Type</td>
+                                                                <td>@item.SerialsLlist.Where(x=>!x.SerialsLlistC.Any()&&x.SerialsType>0).Sum(x=>x.SerialsType)</td>
+                                                                <td>0</td>
+                                                                <td>0</td>
+                                                                <td>0</td>
+                                                                <td>0</td>
+                                                                <td>0</td>
                                                             </tr>
                                                               
                                                            }

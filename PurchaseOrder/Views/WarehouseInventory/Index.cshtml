@@ -144,7 +144,7 @@
                                                                 {
                                                                 <tr>
                                                                     <td><input type="checkbox" value="@item.ID"></td>
-                                                                    <td>@item.ID</td>
+                                                                    <td>@item.SKU</td>
                                                                     <td>@item.Name</td>
                                                                     <td>@item.Velocity</td>
                                                                     <td>@item.DaysOfSupply</td>
@@ -153,10 +153,10 @@
                                                                     <td>@item.Aggregate</td>
                                                                     <td>@item.Unfulfillable</td>
                                                                     <td>
-                                                                        <a class='btn btn-default btn-sm' href='@Url.Action("Statement", new { item.ID })'>Statement</a>
-                                                                        <a class='btn btn-default btn-sm' href='@Url.Action("Serials", new { item.ID })'>Serials</a>
-                                                                        <a class='btn btn-default btn-sm' href='@Url.Action("Inventory", new { item.ID })'>Inventory</a>
-                                                                        <a class='btn btn-default btn-sm' href='@Url.Action("Purchasing", new { item.ID })'>Purchasing</a>
+                                                                        <a class='btn btn-default btn-sm' href='@Url.Action("Statement", new { item.SKU })'>Statement</a>
+                                                                        <a class='btn btn-default btn-sm' href='@Url.Action("Serials", new { item.SKU })'>Serials</a>
+                                                                        <a class='btn btn-default btn-sm' href='@Url.Action("Inventory", new { item.SKU })'>Inventory</a>
+                                                                        <a class='btn btn-default btn-sm' href='@Url.Action("Purchasing", new { item.SKU })'>Purchasing</a>
                                                                     </td>
                                                                 </tr>
                                                                 }
