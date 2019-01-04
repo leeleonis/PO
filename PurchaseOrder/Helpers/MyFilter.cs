@@ -103,4 +103,26 @@ namespace PurchaseOrderSys
         public string Code { get; set; }
         public Nullable<decimal> EXRate { get; set; }
     }
+
+    public class NetoGroupFilter
+    {
+        private string nameField;
+        public Nullable<int> ID { get; set; }
+        public string Name { get { return this.nameField; } set { nameField = !string.IsNullOrEmpty(value) ? value.Trim() : value; } }
+        public Nullable<decimal> MinSpend { get; set; }
+        public string SaleCategory { get; set; }
+        public Nullable<decimal> SaleRequire { get; set; }
+    }
+
+    public class MarketplaceFilter
+    {
+        private string nameField;
+        public Nullable<int> ID { get; set; }
+        public string FullName { get { return this.nameField; } set { nameField = !string.IsNullOrEmpty(value) ? value.Trim() : value; } }
+        public string GlobalID { get; set; }
+        public string CountryCode { get; set; }
+        public Nullable<int> CompanyID { get; set; }
+        public Nullable<int> CurrencyID { get; set; }
+        public Nullable<int> NetoGroup { get; set; }
+    }
 }

@@ -206,7 +206,9 @@
     <Compile Include="Controllers\DispatchWarehouseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MainController.cs" />
+    <Compile Include="Controllers\MarketplaceController.cs" />
     <Compile Include="Controllers\MenusController.cs" />
+    <Compile Include="Controllers\NetoGroupController.cs" />
     <Compile Include="Controllers\PurchaseOrderCMController.cs" />
     <Compile Include="Controllers\PurchaseOrderPOController.cs" />
     <Compile Include="Controllers\PurchaseSKUController.cs" />
@@ -6411,6 +6413,8 @@
     <Content Include="Views\WarehouseInventory\GetHistory.cshtml" />
     <Content Include="Views\WarehouseInventory\Inventory.cshtml" />
     <Content Include="Views\WarehouseInventory\Purchasing.cshtml" />
+    <Content Include="Views\NetoGroup\Index.cshtml" />
+    <Content Include="Views\Marketplace\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

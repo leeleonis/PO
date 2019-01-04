@@ -5,7 +5,7 @@
     <link href="~/Content/themes/icon.css" rel="stylesheet" />
     <style>
         table tr td {
-            vertical-align: middle!important;
+            vertical-align: middle !important;
         }
     </style>
 }
@@ -394,6 +394,60 @@
                                             </div>
                                         </fieldset>
                                     </div>
+
+                                    <div class="tab-pane" id="hb5">
+                                        <fieldset>
+                                            <legend>Price</legend>
+
+                                            <div class="col-lg-10 col-lg-offset-1">
+                                                <div class="table-responsive col-sm-12">
+                                                    <table class="table table-bordered table-striped text-center">
+                                                        <thead>
+                                                            <tr>
+                                                                <th width="80" class="text-center">Used</th>
+                                                                <th class="text-center">Marketplace</th>
+                                                                <th width="150" class="text-center">Item ID</th>
+                                                                <th width="200" class="text-center">Company</th>
+                                                                <th width="150" class="text-center">Account ID</th>
+                                                                <th width="120" class="text-center">Currency</th>
+                                                                <th width="120" class="text-center">Current Price</th>
+                                                                <th width="120" class="text-center">Manual</th>
+                                                                <th width="80" class="text-center">Max</th>
+                                                                <th width="80" class="text-center">Min</th>
+                                                            </tr>
+                                                        </thead>
+
+                                                        <tbody>
+                                                            @{
+                                                                int priceIndex = 0;
+                                                                var priceGroup = Model.PriceGroup.ToList();
+                                                                foreach (var market in (List<Marketplace>)ViewBag.MarketList)
+                                                                {
+                                                                    string name = string.Format("PriceGroup[{0}]", priceIndex++);
+                                                                    var price = priceGroup.FirstOrDefault(p => p.Marketplace.Value.Equals(market.ID));
+                                                                    <tr>
+                                                                        @Html.Hidden(name + "[ID]", price?.ID ?? 0)
+                                                                        @Html.Hidden(name + "[Sku]", price?.Sku ?? Model.SkuID)
+                                                                        @Html.Hidden(name + "[Marketplace]", price?.Marketplace ?? market.ID)
+                                                                        <td class="no-padding">@Html.BooleanSwitch(name + "[IsUsed]", price?.IsUsed ?? false)</td>
+                                                                        <td>@market.FullName</td>
+                                                                        <td class="no-padding">@Html.TextBox(name + "[ItemID]", price?.ItemID ?? "", new { @class = "form-control" })</td>
+                                                                        <td>@(market.Company?.Name ?? "")</td>
+                                                                        <td>@(market.Company != null ? (!string.IsNullOrEmpty(market.Company.eBayAccountID) ? market.Company.eBayAccountID : market.Company.AmazonAccountID) : "")</td>
+                                                                        <td>@(market.Currency?.Code ?? "")</td>
+                                                                        <td></td>
+                                                                        <td class="no-padding">@Html.TextBox(name + "[Price]", "", new { @class = "form-control" })</td>
+                                                                        <td class="no-padding">@Html.TextBox(name + "[Max]", price?.Max ?? 0, new { @class = "form-control" })</td>
+                                                                        <td class="no-padding">@Html.TextBox(name + "[Min]", price?.Min ?? 0, new { @class = "form-control" })</td>
+                                                                    </tr>
+                                                                }
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
                                 </div>
 
                                 <div class="widget-footer">
@@ -732,7 +786,7 @@
                 }
             });
         }
-        
+
         function ResetPackageContent() {
             website.AjaxUrl('@Url.Action("GetPackageContent", "Sku", new { ID = Model.SkuID })', 'get', { LangID: $('#LangID').val() }).done(function (response) {
                 if (response.status) {

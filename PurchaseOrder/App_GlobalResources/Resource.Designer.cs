@@ -1717,6 +1717,123 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Marketplace_CompanyID {
+            get {
+                return ResourceManager.GetString("Marketplace_CompanyID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Marketplace_CountryCode {
+            get {
+                return ResourceManager.GetString("Marketplace_CountryCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Marketplace_CreateAt {
+            get {
+                return ResourceManager.GetString("Marketplace_CreateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Marketplace_CreateBy {
+            get {
+                return ResourceManager.GetString("Marketplace_CreateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Marketplace_CurrencyID {
+            get {
+                return ResourceManager.GetString("Marketplace_CurrencyID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Marketplace_FullName {
+            get {
+                return ResourceManager.GetString("Marketplace_FullName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Marketplace_GlobalID {
+            get {
+                return ResourceManager.GetString("Marketplace_GlobalID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ID 的當地語系化字串。
+        /// </summary>
+        public static string Marketplace_ID {
+            get {
+                return ResourceManager.GetString("Marketplace_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Marketplace_IsEnable {
+            get {
+                return ResourceManager.GetString("Marketplace_IsEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Marketplace_NetoGroup {
+            get {
+                return ResourceManager.GetString("Marketplace_NetoGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Marketplace_Status {
+            get {
+                return ResourceManager.GetString("Marketplace_Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Marketplace_UpdateAt {
+            get {
+                return ResourceManager.GetString("Marketplace_UpdateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Marketplace_UpdateBy {
+            get {
+                return ResourceManager.GetString("Marketplace_UpdateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 Please enter no more than {1} characters 的當地語系化字串。
         /// </summary>
         public static string MaxLength {

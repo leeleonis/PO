@@ -101,15 +101,18 @@ namespace PurchaseOrderSys.Controllers
             SKU sku = db.SKU.Find(id);
             if (sku == null) return HttpNotFound();
 
+            var companyList = db.Company.AsNoTracking().Where(c => c.IsEnable).ToList();
+
             var LangID = EnumData.DataLangList().First().Key;
             ViewBag.LangID = LangID;
             ViewBag.LangList = EnumData.DataLangList().Select(l => new SelectListItem { Text = l.Value, Value = l.Key });
-            ViewBag.Company = db.Company.Where(c => c.IsEnable && !c.ParentID.HasValue).Select(c => new SelectListItem() { Text = c.Name, Value = c.ID.ToString() }).ToList();
+            ViewBag.Company = companyList.Where(c => !c.ParentID.HasValue).Select(c => new SelectListItem() { Text = c.Name, Value = c.ID.ToString() }).ToList();
             ViewBag.TypeList = Enum.GetValues(typeof(EnumData.SkuType)).Cast<EnumData.SkuType>().Select(t => new SelectListItem() { Text = t.ToString(), Value = ((int)t).ToString() }).ToList();
             ViewBag.Condition = db.Condition.Where(c => c.IsEnable).SelectMany(c => c.ConditionLang.Where(l => l.LangID.Equals(LangID))).Select(l => new SelectListItem() { Text = l.Name, Value = l.ConditionID.ToString() }).ToList();
             ViewBag.Category = db.SkuType.Where(s => s.IsEnable).SelectMany(s => s.SkuTypeLang.Where(l => l.LangID.Equals(LangID))).Select(l => new SelectListItem() { Text = l.Name, Value = l.TypeID.ToString() }).ToList();
             ViewBag.Brand = new SelectList(db.Brand.Where(b => b.IsEnable), "ID", "Name");
-            ViewBag.CompanyList = db.Company.AsNoTracking().Where(c => c.IsEnable).ToList();
+            ViewBag.CompanyList = companyList;
+            ViewBag.MarketList = db.Marketplace.Where(m => m.IsEnable).ToList();
 
             return View(sku);
         }
@@ -119,14 +122,14 @@ namespace PurchaseOrderSys.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(SKU updateData, SkuLang langData, List<Dictionary<string, string>> eBayTitle, int[] DiverseAttribute, Sku_Attribute[] VariationValue, KitSku[] KitSku, Sku_PackageContent[] SkuContent, Sku_Attribute[] AttributeValue, HttpPostedFileBase picture)
+        public ActionResult Edit(SKU updateData, SkuLang langData, List<Dictionary<string, string>> eBayTitle, int[] DiverseAttribute, Sku_Attribute[] VariationValue, KitSku[] KitSku, Sku_PackageContent[] SkuContent, Sku_Attribute[] AttributeValue, HttpPostedFileBase picture, PriceGroup[] PriceGroup)
         {
             SKU sku = db.SKU.Find(updateData.SkuID);
             if (sku == null) return HttpNotFound();
 
             sku.eBayTitle = JsonConvert.SerializeObject(eBayTitle.ToDictionary(t => int.Parse(t["misc"]), t => t["title"]));
             SetUpdateData(sku, updateData, EditList);
-            
+
             if (sku.SkuLang.Any(l => l.LangID.Equals(langData.LangID)))
             {
                 SkuLang skuLang = sku.SkuLang.First(l => l.LangID.Equals(langData.LangID));
@@ -340,6 +343,31 @@ namespace PurchaseOrderSys.Controllers
                 UploadPicture(sku.SkuID, new HttpPostedFileBase[] { picture }, true);
             }
 
+            if (PriceGroup != null && PriceGroup.Any())
+            {
+                foreach(var price in PriceGroup)
+                {
+                    if (!price.ID.Equals(0))
+                    {
+                        var updatePrice = sku.PriceGroup.First(p => p.ID.Equals(price.ID));
+                        updatePrice.IsUsed = price.IsUsed;
+                        updatePrice.ItemID = price.ItemID;
+                        if(!price.Price.Equals(0)) updatePrice.Price = price.Price;
+                        updatePrice.Max = price.Max;
+                        updatePrice.Min = price.Min;
+                        updatePrice.UpdateAt = sku.UpdateAt;
+                        updatePrice.UpdateBy = sku.UpdateBy;
+                    }
+                    else
+                    {
+                        price.CreateAt = sku.UpdateAt.Value;
+                        price.CreateBy = sku.UpdateBy;
+                        sku.PriceGroup.Add(price);
+                    }
+                }
+                db.SaveChanges();
+            }
+
             var LangID = EnumData.DataLangList().First().Key;
             ViewBag.LangID = langData.LangID;
             ViewBag.LangList = EnumData.DataLangList().Select(l => new SelectListItem { Text = l.Value, Value = l.Key, Selected = l.Key.Equals(langData.LangID) });
@@ -350,6 +378,7 @@ namespace PurchaseOrderSys.Controllers
             ViewBag.Brand = new SelectList(db.Brand.Where(b => b.IsEnable), "ID", "Name");
             ViewBag.AttributeTypeList = db.SkuAttributeType.Where(t => t.IsEnable).OrderBy(t => t.Order).ToList();
             ViewBag.CompanyList = db.Company.AsNoTracking().Where(c => c.IsEnable).ToList();
+            ViewBag.MarketList = db.Marketplace.Where(m => m.IsEnable).ToList();
 
             return View(sku);
         }

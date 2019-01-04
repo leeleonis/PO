@@ -131,7 +131,13 @@ namespace PurchaseOrderSys.Controllers
                 total = CurrencyFilter.Count();
                 var results = CurrencyFilter.OrderByDescending(c => c.CreateAt).Skip(start).Take(length).ToList();
 
-                dataList.AddRange(results);
+                dataList.AddRange(results.Select( c => new
+                {
+                    c.ID,
+                    c.Name,
+                    c.Code,
+                    c.EXRate
+                }).ToList());
             }
 
             return Json(new { total, rows = dataList }, JsonRequestBehavior.AllowGet);

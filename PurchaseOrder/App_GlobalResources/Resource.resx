@@ -1882,4 +1882,44 @@
   <data name="Company_CurrencyID" xml:space="preserve">
     <value></value>
   </data>
+  <data name="Marketplace_IsEnable" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Marketplace_ID" xml:space="preserve">
+    <value>ID</value>
+    <comment>ID</comment>
+  </data>
+  <data name="Marketplace_FullName" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Marketplace_GlobalID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Marketplace_CountryCode" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Marketplace_CompanyID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Marketplace_CurrencyID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Marketplace_NetoGroup" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Marketplace_Status" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Marketplace_CreateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Marketplace_CreateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Marketplace_UpdateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Marketplace_UpdateAt" xml:space="preserve">
+    <value></value>
+  </data>
 </root>

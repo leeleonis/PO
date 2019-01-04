@@ -115,6 +115,7 @@ namespace PurchaseOrderSys.Controllers
             string LangID = EnumData.DataLangList().First().Key;
 
             var categroyList = neto.GetCategory().Category.ToList();
+            var conditionList = db.Condition.Where(c => c.IsEnable).ToList();
 
             SKU sku;
             Brand brand;
@@ -161,10 +162,11 @@ namespace PurchaseOrderSys.Controllers
                             {
                                 IsEnable = true,
                                 SkuID = item.SKU,
+                                Company = 163,
                                 ParentSku = item.ParentSKU,
                                 Category = db.SkuType.FirstOrDefault(t => t.NetoID.Value.Equals(categoryID))?.ID ?? 0,
                                 Brand = brand.ID,
-                                Condition = 1,
+                                Condition = CheckCondition(conditionList, item.SKU),
                                 UPC = item.UPC,
                                 Type = (byte)EnumData.SkuType.Single,
                                 eBayTitle = Newtonsoft.Json.JsonConvert.SerializeObject(eBayTitle),
@@ -191,6 +193,8 @@ namespace PurchaseOrderSys.Controllers
                         else
                         {
                             sku = db.SKU.Find(item.SKU);
+                            sku.Company = 163;
+                            sku.Condition = CheckCondition(conditionList, sku.SkuID);
                             sku.Status = Convert.ToByte(item.IsActive);
                             sku.eBayTitle = Newtonsoft.Json.JsonConvert.SerializeObject(eBayTitle);
                             sku.UpdateAt = DateTime.UtcNow;
@@ -216,6 +220,16 @@ namespace PurchaseOrderSys.Controllers
             {
                 string msg = e.Message;
             }
+        }
+
+        private int CheckCondition(List<Condition> conditionList, string sku)
+        {
+            foreach (var condition in conditionList.Where(c => !string.IsNullOrEmpty(c.Suffix)))
+            {
+                if (sku.Contains(condition.Suffix)) return condition.ID;
+            }
+
+            return 1;
         }
 
         public void SkuUpdate(string skuID)

@@ -84,7 +84,7 @@ namespace PurchaseOrderSys.Controllers
         {
             var odataList = db.PurchaseSKU.Where(x => x.PurchaseOrderID == ID).Select(x => new PoSKUVM
             {
-                ID=x.ID,
+                ID = x.ID,
                 ck = x.SkuNo,
                 sk = x.SkuNo,
                 SKU = x.SkuNo,
@@ -109,7 +109,7 @@ namespace PurchaseOrderSys.Controllers
             };
             return Json(returnObj, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult TSkuNumberList(int? draw, int? start, int? length, string[] Skulist,int FromWID)
+        public ActionResult TSkuNumberList(int? draw, int? start, int? length, string[] Skulist, int FromWID)
         {
             var odataList = (List<TranSKUVM>)Session["TSkuNumberList"];
             if (odataList == null)
@@ -219,7 +219,7 @@ namespace PurchaseOrderSys.Controllers
                     var QTYFulfilled = 0;
                     var Price = 0;
                     var Discount = 0;
-                    var Credit =0;
+                    var Credit = 0;
                     item.QTYOrdered = QTYOrdered;
                     item.QTYFulfilled = QTYFulfilled;
                     item.Price = Price;
@@ -244,14 +244,14 @@ namespace PurchaseOrderSys.Controllers
             return Json(returnObj, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public ActionResult SkuNumberListEdit(string SKU,string type ,decimal oval, decimal val,int? ID)
+        public ActionResult SkuNumberListEdit(string SKU, string type, decimal oval, decimal val, int? ID)
         {
             var odataList = (List<PoSKUVM>)Session["SkuNumberList"];
             if (odataList == null)
             {
                 odataList = new List<PoSKUVM>();
             }
-            foreach (var item in odataList.Where(x=>x.ID== ID || x.SKU== SKU))
+            foreach (var item in odataList.Where(x => x.ID == ID || x.SKU == SKU))
             {
                 switch (type)
                 {
@@ -268,7 +268,7 @@ namespace PurchaseOrderSys.Controllers
                         item.QTYOrdered = Convert.ToInt32(val);
                         break;
                 }
-               
+
                 item.DiscountedPrice = (item.Price - item.Discount);
                 item.Subtotal = (item.QTYOrdered * (item.Price - item.Discount));
             }
@@ -309,10 +309,10 @@ namespace PurchaseOrderSys.Controllers
             return Json(new { status = true }, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public ActionResult TSkuNumberListQTY(string SKU,int val)
+        public ActionResult TSkuNumberListQTY(string SKU, int val)
         {
             var odataList = (List<TranSKUVM>)Session["TSkuNumberList"];
-            foreach (var item in odataList.Where(x=>x.SKU== SKU))
+            foreach (var item in odataList.Where(x => x.SKU == SKU))
             {
                 item.QTY = val;
             }
@@ -358,6 +358,17 @@ namespace PurchaseOrderSys.Controllers
                             break;
                         case "SkuStatus":
                             optionList.Add(type, Enum.GetValues(typeof(EnumData.SkuStatus)).Cast<EnumData.SkuStatus>().Select(s => new { text = s.ToString(), value = (byte)s }));
+                            break;
+                        case "Company":
+                            optionList.Add(type, db.Company.Where(c => c.IsEnable).Select(c => new { text = c.Name, value = c.ID.ToString() }));
+                            break;
+                        case "Currency":
+                            optionList.Add(type, db.Currency.Select(c => new { text = c.Code + " - " + c.Name, value = c.ID.ToString() }));
+                            break;
+                        case "NetoGroup":
+                            var netGroupList = new List<object>() { new { text = "Not Choose", value = "" } };
+                            netGroupList.AddRange(db.NetoGroup.Select(c => new { text = c.Name, value = c.ID.ToString() }));
+                            optionList.Add(type, netGroupList);
                             break;
                     }
                 }
