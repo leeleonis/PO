@@ -24,7 +24,6 @@
         <EntityTypeShape EntityType="PurchaseOrderModel.PurchaseNote" Width="1.5" PointX="21.25" PointY="22.875" />
         <EntityTypeShape EntityType="PurchaseOrderModel.PurchaseOrder" Width="1.5" PointX="19" PointY="16.875" />
         <EntityTypeShape EntityType="PurchaseOrderModel.PurchaseSKU" Width="1.5" PointX="23.5" PointY="14.25" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.SerialsLlist" Width="1.5" PointX="25.75" PointY="30.5" />
         <EntityTypeShape EntityType="PurchaseOrderModel.ShippingMethod" Width="1.5" PointX="13.75" PointY="8" />
         <EntityTypeShape EntityType="PurchaseOrderModel.SKU" Width="1.5" PointX="6" PointY="10.875" />
         <EntityTypeShape EntityType="PurchaseOrderModel.Sku_Attribute" Width="1.5" PointX="11.25" PointY="12.125" />
@@ -60,9 +59,6 @@
         <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseOrder_VendorLIst" />
         <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseOrder_Warehouse" />
         <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseSKU_PurchaseOrder" />
-        <AssociationConnector Association="PurchaseOrderModel.FK_SerialsLlist_PurchaseSKU" />
-        <AssociationConnector Association="PurchaseOrderModel.FK_SerialsLlist_SerialsLlist" />
-        <AssociationConnector Association="PurchaseOrderModel.FK_SerialsLlist_TransferSKU" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Sku_Attribute_Sku" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Sku_PackageContent_SKU" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Sku_SkuType" />
@@ -97,11 +93,15 @@
         <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseOrder_Company" />
         <AssociationConnector Association="PurchaseOrderModel.FK_SKU_Company" />
         <EntityTypeShape EntityType="PurchaseOrderModel.Orders" Width="1.5" PointX="0.75" PointY="22.375" />
-        <AssociationConnector Association="PurchaseOrderModel.FK_SerialsLlist_Orders" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Company_Currency" />
         <AssociationConnector Association="PurchaseOrderModel.FK_NetoGroup_Currency" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Marketplace_NetoGroup" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Marketplace_Company" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.SerialsLlist" Width="1.5" PointX="25.75" PointY="22.875" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_SerialsLlist_Orders" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_SerialsLlist_PurchaseSKU" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_SerialsLlist_SerialsLlist" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_SerialsLlist_TransferSKU" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -51,10 +51,10 @@ namespace PurchaseOrderSys.Models
     
     		    
     		/// <summary>
-    		/// Serials Type
+    		/// Serials QTY
     		/// </summary>        
-    	    [Display(Name = "SerialsLlist_SerialsType", ResourceType = typeof(App_GlobalResources.Resource))]
-    		public Nullable<int>  SerialsType { get; set; }
+    	    [Display(Name = "SerialsLlist_SerialsQTY", ResourceType = typeof(App_GlobalResources.Resource))]
+            public Nullable<int> SerialsQTY { get; set; }
     
     		    
     		/// <summary>
@@ -127,6 +127,14 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "SerialsLlist_RMAID", ResourceType = typeof(App_GlobalResources.Resource))]
     		public Nullable<int>  RMAID { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Serials Type
+    		/// </summary>        
+    	    [Display(Name = "SerialsLlist_SerialsType", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+            public string SerialsType { get; set; }
     
     		    
     	}

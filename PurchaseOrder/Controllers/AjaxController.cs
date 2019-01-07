@@ -382,6 +382,67 @@ namespace PurchaseOrderSys.Controllers
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+        [HttpPost]
+        public ActionResult ShipmentByOrder(List<ShipmentOrder> ShipmentOrder)
+        {
+            AjaxResult result = new AjaxResult();
+            foreach (var Serialsitem in ShipmentOrder)
+            {
+                var QTY = 0;
+                if (Serialsitem.QTY > 0)
+                {
+                    QTY = -1 * Serialsitem.QTY;
+                }
+                else
+                {
+                    QTY = Serialsitem.QTY;
+                }
+                var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == Serialsitem.SerialsNo && x.SerialsQTY > 0 && (x.SerialsType == "PO" && x.SerialsType == "TransferIn"));//PO和TransferIn才能出貨
+                var PurchaseSKU = db.PurchaseSKU.Where(x => x.SkuNo == Serialsitem.SkuNo);
+                if (SerialsLlist.Any())
+                {
+                    var nSerials = new SerialsLlist
+                    {
+                        OrderID = Serialsitem.OrderID,
+                        PID = SerialsLlist.FirstOrDefault().PID,
+                        SerialsNo = Serialsitem.SerialsNo,
+                        SerialsType = "Order",
+                        SerialsQTY = QTY,
+                        CreateAt = DateTime.UtcNow,
+                        CreateBy = "APIUser",
+                    };
+                    db.SerialsLlist.Add(nSerials);
+                    db.SaveChanges();
+                }
+                else if (PurchaseSKU.Any())
+                {
+                    var nSerials = new SerialsLlist
+                    {
+                        OrderID = Serialsitem.OrderID,
+                        SerialsNo = Serialsitem.SerialsNo,
+                        SerialsType = "Order",
+                        SerialsQTY = QTY,
+                        CreateAt = DateTime.UtcNow,
+                        CreateBy = "APIUser",
+                    };
+                    db.SerialsLlist.Add(nSerials);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    result.SetError("查無序號及貨號");
+                }    
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+    }
+    public class ShipmentOrder
+    {
+        public int OrderID { get; set; }
+        public string SkuNo { get; set; }
+        public string SerialsNo { get; set; }
+        public int QTY { get; set; }
     }
     internal class AjaxResult
     {

@@ -379,7 +379,7 @@ namespace PurchaseOrderSys.Controllers
             var QTYReceived = 0;
             if (PurchaseSKU.SerialsLlist.Any())
             {
-                QTYReceived = PurchaseSKU.SerialsLlist.Where(x => x.SerialsType == 1).Count();
+                QTYReceived = PurchaseSKU.SerialsLlist.Where(x => x.SerialsQTY == 1).Count();
             }
             else
             {
@@ -590,7 +590,7 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult Saveserials(string serials, int PurchaseSKUID)
         {
             var PurchaseSKU = db.PurchaseSKU.Find(PurchaseSKUID);
-            var SerialsLlistCount = PurchaseSKU.SerialsLlist.Where(x => x.SerialsType == 1 && x.SerialsLlistC.Count() == 0).Count();
+            var SerialsLlistCount = PurchaseSKU.SerialsLlist.Where(x => x.SerialsQTY == 1 && x.SerialsLlistC.Count() == 0).Count();
 
             if (SerialsLlistCount >= PurchaseSKU.QTYOrdered)
             {
@@ -606,7 +606,7 @@ namespace PurchaseOrderSys.Controllers
                     {
                         PurchaseSKUID = PurchaseSKUID,
                         SerialsNo = serials,
-                        SerialsType = 1,
+                        SerialsQTY = 1,
                         ReceivedBy = UserBy,
                         ReceivedAt = dt,
                         CreateBy = UserBy,
@@ -617,7 +617,7 @@ namespace PurchaseOrderSys.Controllers
                     {
                         PurchaseSKUID = PurchaseSKUID,
                         SerialsNo = serials,
-                        SerialsType = -1,
+                        SerialsQTY = -1,
                         ReceivedBy = UserBy,
                         ReceivedAt = dt,
                         CreateBy = UserBy,
@@ -642,14 +642,14 @@ namespace PurchaseOrderSys.Controllers
             else
             {
                 var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials);
-                if (SerialsLlist.Count() == 0 || SerialsLlist.Sum(x => x.SerialsType) == 0)
+                if (SerialsLlist.Count() == 0 || SerialsLlist.Sum(x => x.SerialsQTY) == 0)
                 {
                     var dt = DateTime.UtcNow;
                     var nSerialsLlist = new SerialsLlist
                     {
                         PurchaseSKUID = PurchaseSKUID,
                         SerialsNo = serials,
-                        SerialsType = 1,
+                        SerialsQTY = 1,
                         ReceivedBy = UserBy,
                         ReceivedAt = dt,
                         CreateBy = UserBy,
@@ -889,7 +889,7 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult GetSerialList(int ID)
         {
             var PurchaseSKU = db.PurchaseSKU.Find(ID);
-            var SerialsLlist = PurchaseSKU.SerialsLlist.Where(x => x.SerialsType == 1 && x.SerialsLlistC.Count() == 0).Select(x => x.SerialsNo).ToList();
+            var SerialsLlist = PurchaseSKU.SerialsLlist.Where(x => x.SerialsQTY == 1 && x.SerialsLlistC.Count() == 0).Select(x => x.SerialsNo).ToList();
             var partial = ControlToString("~/Views/PurchaseOrderPO/GetSerialList.cshtml", SerialsLlist);
             //var partial = Engine.Razor.RunCompile(template, "templateKey", null, new { Name = "World" });
             return Json(new { status = true, partial }, JsonRequestBehavior.AllowGet);

@@ -18,19 +18,16 @@ namespace PurchaseOrderSys.Controllers
             var WarehouseInventoryVM = new WarehouseInventoryVM();
             if (PurchaseSKU.Any())
             {
-
-
-
                 var WarehouseVM = PurchaseSKU.Select(x => new WarehouseVM
                 {
                     ID = x.ID,
                     Name = x.Name,
                     SKU = x.SkuNo,
-                    Velocity = x.SerialsLlist.Where(y => y.SerialsType == -1 && !y.TransferSKUID.HasValue && x.CreateAt >= sdt && x.CreateAt <= sdt).Sum(y => y.SerialsType) ?? 0,
+                    Velocity = x.SerialsLlist.Where(y => y.SerialsQTY == -1 && !y.TransferSKUID.HasValue && x.CreateAt >= sdt && x.CreateAt <= sdt).Sum(y => y.SerialsQTY) ?? 0,
                     DaysOfSupply = 0,
                     Aggregate = 0,
                     Awaiting = 0,
-                    Fulfillable = x.QTYOrdered.HasValue ? x.QTYOrdered.Value : x.SerialsLlist.Sum(y => y.SerialsType) ?? 0,
+                    Fulfillable = x.QTYOrdered.HasValue ? x.QTYOrdered.Value : x.SerialsLlist.Sum(y => y.SerialsQTY) ?? 0,
                     Unfulfillable = 0
                 }).ToList();
                 foreach (var item in WarehouseVM)
@@ -45,11 +42,8 @@ namespace PurchaseOrderSys.Controllers
                 WarehouseInventoryVM.Location = "";
                 WarehouseInventoryVM.Countries = "";
                 WarehouseInventoryVM.Marketplace = "";
-
                 WarehouseInventoryVM.WarehouseVM = WarehouseVM;
-
             }
-
             return View(WarehouseInventoryVM);
         }
         public ActionResult Statement(string SKU)
@@ -100,11 +94,11 @@ namespace PurchaseOrderSys.Controllers
                 {
                     if (PurchaseSKUitem.SerialsLlist.Any())
                     {
-                        SkuPurchasingVM.Aggregate += PurchaseSKUitem.SerialsLlist.Where(y => !y.SerialsLlistC.Any() && !y.TransferSKUID.HasValue && !y.RMAID.HasValue && y.SerialsType > 0).Sum(y => y.SerialsType).Value;
-                        SkuPurchasingVM.Fulfillable += PurchaseSKUitem.SerialsLlist.Where(y => !y.SerialsLlistC.Any() && !y.TransferSKUID.HasValue && !y.RMAID.HasValue && y.SerialsType > 0).Sum(y => y.SerialsType).Value;
-                        SkuPurchasingVM.UnfulfillableRMA += PurchaseSKUitem.SerialsLlist.Where(y => !y.SerialsLlistC.Any() && !y.TransferSKUID.HasValue && y.RMAID.HasValue).Sum(y => y.SerialsType).Value;
-                        SkuPurchasingVM.UnfulfillableTransit += PurchaseSKUitem.SerialsLlist.Where(y => !y.SerialsLlistC.Any() && y.TransferSKUID.HasValue && !y.RMAID.HasValue).Sum(y => y.SerialsType).Value;
-                        SkuPurchasingVM.TotalInventory += PurchaseSKUitem.SerialsLlist.Where(y => !y.SerialsLlistC.Any() && !y.TransferSKUID.HasValue && !y.RMAID.HasValue).Sum(y => y.SerialsType).Value;
+                        SkuPurchasingVM.Aggregate += PurchaseSKUitem.SerialsLlist.Where(y => !y.SerialsLlistC.Any() && !y.TransferSKUID.HasValue && !y.RMAID.HasValue && y.SerialsQTY > 0).Sum(y => y.SerialsQTY).Value;
+                        SkuPurchasingVM.Fulfillable += PurchaseSKUitem.SerialsLlist.Where(y => !y.SerialsLlistC.Any() && !y.TransferSKUID.HasValue && !y.RMAID.HasValue && y.SerialsQTY > 0).Sum(y => y.SerialsQTY).Value;
+                        SkuPurchasingVM.UnfulfillableRMA += PurchaseSKUitem.SerialsLlist.Where(y => !y.SerialsLlistC.Any() && !y.TransferSKUID.HasValue && y.RMAID.HasValue).Sum(y => y.SerialsQTY).Value;
+                        SkuPurchasingVM.UnfulfillableTransit += PurchaseSKUitem.SerialsLlist.Where(y => !y.SerialsLlistC.Any() && y.TransferSKUID.HasValue && !y.RMAID.HasValue).Sum(y => y.SerialsQTY).Value;
+                        SkuPurchasingVM.TotalInventory += PurchaseSKUitem.SerialsLlist.Where(y => !y.SerialsLlistC.Any() && !y.TransferSKUID.HasValue && !y.RMAID.HasValue).Sum(y => y.SerialsQTY).Value;
                     }
 
                 }

@@ -123,7 +123,7 @@ namespace PurchaseOrderSys.Controllers
             var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials);//找到序號
             if (SerialsLlist.Any())
             {
-                if (SerialsLlist.Sum(c => c.SerialsType) == 1)
+                if (SerialsLlist.Sum(c => c.SerialsQTY) == 1)
                 {
                     if (PrepVMList[0].QTY > PrepVMList[0].SerialsLlist.Count())
                     {
