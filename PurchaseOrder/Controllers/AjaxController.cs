@@ -425,28 +425,32 @@ namespace PurchaseOrderSys.Controllers
                 {
                     QTY = Serialsitem.QTY;
                 }
-                var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == Serialsitem.SerialsNo && x.SerialsQTY > 0 && (x.SerialsType == "PO" && x.SerialsType == "TransferIn"));//PO和TransferIn才能出貨
+                var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == Serialsitem.SerialsNo && x.SerialsQTY > 0 && (x.SerialsType == "PO" || x.SerialsType == "TransferIn"));//PO和TransferIn才能出貨
                 var PurchaseSKU = db.PurchaseSKU.Where(x => x.SkuNo == Serialsitem.SkuNo);
                 if (SerialsLlist.Any())
                 {
-                    var nSerials = new SerialsLlist
+                    if (SerialsLlist.Sum(x => x.SerialsQTY) > 0)
                     {
-                        OrderID = Serialsitem.OrderID,
-                        PID = SerialsLlist.FirstOrDefault().PID,
-                        SerialsNo = Serialsitem.SerialsNo,
-                        SerialsType = "Order",
-                        SerialsQTY = QTY,
-                        CreateAt = DateTime.UtcNow,
-                        CreateBy = "APIUser",
-                    };
-                    db.SerialsLlist.Add(nSerials);
-                    db.SaveChanges();
+                        var nSerials = new SerialsLlist
+                        {
+                            OrderID = Serialsitem.OrderID,
+                            PID = SerialsLlist.FirstOrDefault().ID,
+                            SerialsNo = Serialsitem.SerialsNo,
+                            SerialsType = "Order",
+                            SerialsQTY = QTY,
+                            CreateAt = DateTime.UtcNow,
+                            CreateBy = "APIUser",
+                        };
+                        db.SerialsLlist.Add(nSerials);
+                        db.SaveChanges();
+                    }
                 }
                 else if (PurchaseSKU.Any())
                 {
                     var nSerials = new SerialsLlist
                     {
                         OrderID = Serialsitem.OrderID,
+                        PID = SerialsLlist.FirstOrDefault().PID,
                         SerialsNo = Serialsitem.SerialsNo,
                         SerialsType = "Order",
                         SerialsQTY = QTY,

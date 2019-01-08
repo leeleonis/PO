@@ -27,10 +27,10 @@ namespace PurchaseOrderSys.Controllers
                     POQTY = x.QTYOrdered.HasValue ? x.QTYOrdered.Value : x.SerialsLlist.Where(y => y.SerialsType == "PO").Sum(y => y.SerialsQTY) ?? 0,//有輸入直接讀輸入，沒輸入計算序號數
 
                     CMQTY = GetCMQty(x),
-                    OrderQTY = x.SerialsLlist.Where(y => y.SerialsType == " Order").Sum(y => y.SerialsQTY).Value,
-                    TransferInQTY = x.SerialsLlist.Where(y => y.SerialsType == " TransferIn").Sum(y => y.SerialsQTY).Value,
-                    TransferOutQTY = x.SerialsLlist.Where(y => y.SerialsType == " TransferOut").Sum(y => y.SerialsQTY).Value,
-                    Velocity = x.SerialsLlist.Where(y => y.SerialsType == " Order" && y.CreateAt >= sdt && y.CreateAt <= sdt).Sum(y => y.SerialsQTY).Value,
+                    OrderQTY = x.SerialsLlist.Sum(y => y.SerialsLlistC.Where(z=>z.SerialsType == "Order").Sum(z=>z.SerialsQTY)).Value,
+                    TransferInQTY = x.SerialsLlist.Where(y => y.SerialsType == "TransferIn").Sum(y => y.SerialsQTY).Value,
+                    TransferOutQTY = x.SerialsLlist.Where(y => y.SerialsType == "TransferOut").Sum(y => y.SerialsQTY).Value,
+                    Velocity = x.SerialsLlist.Sum(y => y.SerialsLlistC.Where(z => z.SerialsType == "Order" && z.CreateAt >= sdt && z.CreateAt <= sdt).Sum(z=>z.SerialsQTY)).Value,
                     DaysOfSupply = 0,
                     Aggregate = 0,//可上架的庫存總數
                     Awaiting = 0,//等待出貨的庫總量
@@ -103,9 +103,9 @@ namespace PurchaseOrderSys.Controllers
                     Total = 0,
                     BackOrdered = item.QTYOrdered ?? 0,
                     CMQTY = GetCMQty(item),
-                    TransferInQTY = item.SerialsLlist.Where(y => y.SerialsType == " TransferIn").Sum(y => y.SerialsQTY).Value,
-                    TransferOutQTY = item.SerialsLlist.Where(y => y.SerialsType == " TransferOut").Sum(y => y.SerialsQTY).Value,
-                    OrderQTY = item.SerialsLlist.Where(y => y.SerialsType == " Order").Sum(y => y.SerialsQTY).Value,
+                    TransferInQTY = item.SerialsLlist.Where(y => y.SerialsType == "TransferIn").Sum(y => y.SerialsQTY).Value,
+                    TransferOutQTY = item.SerialsLlist.Where(y => y.SerialsType == "TransferOut").Sum(y => y.SerialsQTY).Value,
+                    OrderQTY = x.SerialsLlist.Sum(y => y.SerialsLlistC.Where(z => z.SerialsType == "Order").Sum(z => z.SerialsQTY)).Value,
                 });
             }
             foreach (var item in SkuInventoryVM)

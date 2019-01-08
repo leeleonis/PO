@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using inventorySKU.NetoDeveloper;
+using Newtonsoft.Json;
 using PurchaseOrderSys.Models;
 
 namespace PurchaseOrderSys.Controllers
@@ -19,7 +23,6 @@ namespace PurchaseOrderSys.Controllers
         public int MyMoney { get; set; }
 
     }
-
     public class TestController : Controller
     {
         protected PurchaseOrderEntities db = new PurchaseOrderEntities();
@@ -46,7 +49,47 @@ namespace PurchaseOrderSys.Controllers
         {
             return View();
         }
+        public ActionResult TestShipmentByOrder()
+        {
+            using (WebClient webClient = new WebClient())
+            {
+                // 指定 WebClient 編碼
+                webClient.Encoding = Encoding.UTF8;
+                // 指定 WebClient 的 Content-Type header
+                webClient.Headers.Add(HttpRequestHeader.ContentType, "application/json");
+                // 準備寫入的 data
+                var ShipmentOrderlist = new List<ShipmentOrder>();
+                ShipmentOrderlist.Add(new ShipmentOrder { OrderID = 123, SkuNo = "100001001", SerialsNo = "A000000001", QTY = 1 });
+                // 將 data 轉為 json
+                string json = JsonConvert.SerializeObject(ShipmentOrderlist);
+                // 執行 post 動作
+                var result = webClient.UploadString("http://localhost:59290/Ajax/ShipmentByOrder", json);
+                // linqpad 將 post 結果輸出
+            }
 
+
+
+            //using (WebClient wc = new WebClient())
+            //{
+            //    try
+            //    {
+            //        wc.Encoding = Encoding.UTF8;
+
+            //        NameValueCollection nc = new NameValueCollection();
+            //        nc["OrderID"] = SKU;
+            //        nc["SkuNo"] = SCID;
+            //        nc["QTY"] = SCID;
+            //        byte[] bResult = wc.UploadValues(ApiUrl + "Api/GetSkuInventoryQTY", nc);
+            //        string resultXML = Encoding.UTF8.GetString(bResult);
+                   
+            //    }
+            //    catch (WebException ex)
+            //    {
+            //        //throw new Exception("無法連接遠端伺服器");
+            //    }
+            //}
+            return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+        }
         public ActionResult GetData_Full(int draw, int start, int length,//→此三個為DataTables自動傳遞參數
                                                                          //↓以下兩個為表單的查詢條件，請依自己工作需求調整  
          string MyTitle, int? MyMoney)
