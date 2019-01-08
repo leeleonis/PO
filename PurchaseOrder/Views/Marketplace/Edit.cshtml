@@ -1,4 +1,4 @@
-﻿@model inventorySKU.Models.Condition
+﻿@model Marketplace
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -8,9 +8,9 @@
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
 
-                        <h2>新增</h2>
+                        <h2>編輯</h2>
                         <ul class="nav nav-tabs pull-right">
-                            <li><a data-toggle="tab" href="#hb1">狀態資料</a></li>
+                            <li><a data-toggle="tab" href="#hb1">基本資料</a></li>
                         </ul>
                     </header>
 
@@ -24,48 +24,50 @@
                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                     <div class="tab-pane" id="hb1">
                                         <fieldset>
-                                            <legend>狀態資料</legend>
+                                            <legend>基本資料</legend>
 
                                             <div class="form-group">
-                                                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @Html.LabelFor(model => model.FullName, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-3">
-                                                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                                                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                                                    @Html.EditorFor(model => model.FullName, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(model => model.FullName, "", new { @class = "text-danger" })
                                                 </div>
                                             </div>
+
                                             <div class="form-group">
-                                                @Html.LabelFor(model => model.Amazon, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @Html.LabelFor(model => model.GlobalID, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-3">
-                                                    @Html.EditorFor(model => model.Amazon, new { htmlAttributes = new { @class = "form-control" } })
-                                                    @Html.ValidationMessageFor(model => model.Amazon, "", new { @class = "text-danger" })
+                                                    @Html.EditorFor(model => model.GlobalID, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(model => model.GlobalID, "", new { @class = "text-danger" })
                                                 </div>
                                             </div>
+
                                             <div class="form-group">
-                                                @Html.LabelFor(model => model.eBay, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-3">
-                                                    @Html.EditorFor(model => model.eBay, new { htmlAttributes = new { @class = "form-control" } })
-                                                    @Html.ValidationMessageFor(model => model.eBay, "", new { @class = "text-danger" })
+                                                @Html.LabelFor(model => model.CountryCode, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-6 col-lg-2">
+                                                    @Html.EditorFor(model => model.CountryCode, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(model => model.CountryCode, "", new { @class = "text-danger" })
                                                 </div>
                                             </div>
+
                                             <div class="form-group">
-                                                @Html.LabelFor(model => model.Buy_com, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-3">
-                                                    @Html.EditorFor(model => model.Buy_com, new { htmlAttributes = new { @class = "form-control" } })
-                                                    @Html.ValidationMessageFor(model => model.Buy_com, "", new { @class = "text-danger" })
+                                                @Html.LabelFor(model => model.CompanyID, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownList("CompanyID", null, htmlAttributes: new { @class = "form-control" })
                                                 </div>
                                             </div>
+
                                             <div class="form-group">
-                                                @Html.LabelFor(model => model.NewEgg_com, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-3">
-                                                    @Html.EditorFor(model => model.NewEgg_com, new { htmlAttributes = new { @class = "form-control" } })
-                                                    @Html.ValidationMessageFor(model => model.NewEgg_com, "", new { @class = "text-danger" })
+                                                @Html.LabelFor(model => model.CurrencyID, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownList("CurrencyID", null, htmlAttributes: new { @class = "form-control" })
                                                 </div>
                                             </div>
+
                                             <div class="form-group">
-                                                @Html.LabelFor(model => model.Suffix, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-3">
-                                                    @Html.EditorFor(model => model.Suffix, new { htmlAttributes = new { @class = "form-control" } })
-                                                    @Html.ValidationMessageFor(model => model.Suffix, "", new { @class = "text-danger" })
+                                                @Html.LabelFor(model => model.NetoGroup, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownList("NetoGroup", null, htmlAttributes: new { @class = "form-control" })
                                                 </div>
                                             </div>
                                         </fieldset>
@@ -74,7 +76,7 @@
 
                                 <div class="widget-footer">
                                     <button type="submit" class="btn btn-primary" id="save">儲存</button>
-                                    <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index")'">返回</button>
+                                    <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index", "Marketplace")'">返回</button>
                                 </div>
                             </form>
                         </div>

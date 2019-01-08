@@ -1669,7 +1669,7 @@
     <value>全球賣場ID</value>
   </data>
   <data name="Marketplace_CountryCode" xml:space="preserve">
-    <value>國家</value>
+    <value>國家代碼</value>
   </data>
   <data name="Marketplace_CompanyID" xml:space="preserve">
     <value>公司</value>
