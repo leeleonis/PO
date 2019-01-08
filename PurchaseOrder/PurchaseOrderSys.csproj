@@ -6415,6 +6415,8 @@
     <Content Include="Views\WarehouseInventory\Purchasing.cshtml" />
     <Content Include="Views\NetoGroup\Index.cshtml" />
     <Content Include="Views\Marketplace\Index.cshtml" />
+    <Content Include="Views\Marketplace\Create.cshtml" />
+    <Content Include="Views\Marketplace\Edit.cshtml" />
     <Content Include="Views\PurchaseOrderCM\ReturnItems.cshtml" />
     <Content Include="Views\PurchaseOrderCM\Addserials.cshtml" />
   </ItemGroup>

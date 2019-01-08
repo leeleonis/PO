@@ -12,6 +12,7 @@ namespace PurchaseOrderSys.Controllers
 {
     public class MarketplaceController : BaseController
     {
+        private string[] EditList = new string[] { "FullName", "GlobalID", "CountryCode", "CompanyID", "CurrencyID", "NetoGroup" };
         // GET: Marketplace
         public ActionResult Index()
         {
@@ -36,9 +37,9 @@ namespace PurchaseOrderSys.Controllers
         // GET: Marketplace/Create
         public ActionResult Create()
         {
-            ViewBag.CurrencyID = new SelectList(db.Currency, "ID", "Name");
+            ViewBag.CurrencyID = new SelectList(db.Currency.Select(c => new SelectListItem() { Text = c.Code + " - " + c.Name, Value = c.ID.ToString() })).Items;
             ViewBag.NetoGroup = new SelectList(db.NetoGroup, "ID", "Name");
-            ViewBag.CompanyID = new SelectList(db.Company, "ID", "Name");
+            ViewBag.CompanyID = new SelectList(db.Company.Where(c => c.IsEnable), "ID", "Name");
             return View();
         }
 
@@ -47,34 +48,25 @@ namespace PurchaseOrderSys.Controllers
         // 詳細資訊，請參閱 https://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IsEnable,ID,FullName,GlobalID,CountryCode,CompanyID,CurrencyID,NetoGroup,Status,CreateBy,CreateAt,UpdateBy,UpdateAt")] Marketplace marketplace)
+        public ActionResult Create([Bind(Include = "IsEnable,ID,FullName,GlobalID,CountryCode,CompanyID,CurrencyID,NetoGroup")] Marketplace marketplace)
         {
-            if (ModelState.IsValid)
-            {
-                db.Marketplace.Add(marketplace);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
+            marketplace.CreateAt = DateTime.UtcNow;
+            marketplace.CreateBy = Session["AdminName"].ToString();
+            db.Marketplace.Add(marketplace);
+            db.SaveChanges();
 
-            ViewBag.CurrencyID = new SelectList(db.Currency, "ID", "Name", marketplace.CurrencyID);
-            ViewBag.NetoGroup = new SelectList(db.NetoGroup, "ID", "Name", marketplace.NetoGroup);
-            ViewBag.CompanyID = new SelectList(db.Company, "ID", "Name", marketplace.CompanyID);
-            return View(marketplace);
+            return RedirectToAction("Edit", new { id = marketplace.ID });
         }
 
         // GET: Marketplace/Edit/5
         public ActionResult Edit(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
             Marketplace marketplace = db.Marketplace.Find(id);
-            if (marketplace == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.CurrencyID = new SelectList(db.Currency, "ID", "Name", marketplace.CurrencyID);
+            if (marketplace == null) return HttpNotFound();
+
+            ViewBag.CurrencyID = new SelectList(db.Currency.Select(c => new SelectListItem() { Text = c.Code + " - " + c.Name, Value = c.ID.ToString(), Selected = c.ID.Equals(marketplace.CurrencyID.Value) })).Items;
             ViewBag.NetoGroup = new SelectList(db.NetoGroup, "ID", "Name", marketplace.NetoGroup);
             ViewBag.CompanyID = new SelectList(db.Company, "ID", "Name", marketplace.CompanyID);
             return View(marketplace);
@@ -85,15 +77,15 @@ namespace PurchaseOrderSys.Controllers
         // 詳細資訊，請參閱 https://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "IsEnable,ID,FullName,GlobalID,CountryCode,CompanyID,CurrencyID,NetoGroup,Status,CreateBy,CreateAt,UpdateBy,UpdateAt")] Marketplace marketplace)
+        public ActionResult Edit([Bind(Include = "ID,FullName,GlobalID,CountryCode,CompanyID,CurrencyID,NetoGroup")] Marketplace updateData)
         {
-            if (ModelState.IsValid)
-            {
-                db.Entry(marketplace).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            ViewBag.CurrencyID = new SelectList(db.Currency, "ID", "Name", marketplace.CurrencyID);
+            Marketplace marketplace = db.Marketplace.Find(updateData.ID);
+            if (marketplace == null) return HttpNotFound();
+
+            SetEditDatas(marketplace, updateData, EditList);
+            db.SaveChanges();
+
+            ViewBag.CurrencyID = new SelectList(db.Currency.Select(c => new SelectListItem() { Text = c.Code + " - " + c.Name, Value = c.ID.ToString(), Selected = c.ID.Equals(marketplace.CurrencyID.Value) })).Items;
             ViewBag.NetoGroup = new SelectList(db.NetoGroup, "ID", "Name", marketplace.NetoGroup);
             ViewBag.CompanyID = new SelectList(db.Company, "ID", "Name", marketplace.CompanyID);
             return View(marketplace);
@@ -167,7 +159,7 @@ namespace PurchaseOrderSys.Controllers
             AjaxResult result = new AjaxResult();
 
             Marketplace marketpalce = db.Marketplace.Find(updateData.ID);
-            SetUpdateData(marketpalce, updateData, new string[] { "FullName", "GlobalID", "CountryCode", "CompanyID", "CurrencyID", "NetoGroup" });
+            SetUpdateData(marketpalce, updateData, EditList);
             db.SaveChanges();
 
             return Json(result, JsonRequestBehavior.AllowGet);
