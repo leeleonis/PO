@@ -16,16 +16,24 @@
     <tbody>
         @foreach (var item in Model)
         {
-
             <tr>
                 <td>@item.CreateAt</td>
-                <td></td>
-                <td>@item.ID</td>
-                <td>@item.PurchaseSKU.PurchaseOrder.Warehouse1.Name</td>
-                <td>@item.SerialsType</td>
+                @if (item.PurchaseSKU.PurchaseOrder != null)
+                {
+                    <td>@item.PurchaseSKU.PurchaseOrder.POType</td>
+                    <td>@item.ID</td>
+                    <td>@item.PurchaseSKU.PurchaseOrder.Warehouse1.Name</td>
+                }
+                else if (item.PurchaseSKU.CreditMemo != null)
+                {
+                    <td>@item.PurchaseSKU.CreditMemo.CMType</td>
+                    <td>@item.ID</td>
+                    <td>@item.PurchaseSKU.CreditMemo.PurchaseOrder.Warehouse1.Name</td>
+                }
+                <td>@item.SerialsQTY</td>
                 <td>@item.CreateBy</td>
             </tr>
         }
-
     </tbody>
+
 </table>

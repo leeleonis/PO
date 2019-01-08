@@ -2797,6 +2797,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查詢類似 CMID 的當地語系化字串。
+        /// </summary>
+        public static string PurchaseSKU_CreditMemoID {
+            get {
+                return ResourceManager.GetString("PurchaseSKU_CreditMemoID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 Discount 的當地語系化字串。
         /// </summary>
         public static string PurchaseSKU_Discount {
@@ -2892,6 +2901,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         public static string PurchaseSKU_QTYReceived {
             get {
                 return ResourceManager.GetString("PurchaseSKU_QTYReceived", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Returned Qty 的當地語系化字串。
+        /// </summary>
+        public static string PurchaseSKU_QTYReturned {
+            get {
+                return ResourceManager.GetString("PurchaseSKU_QTYReturned", resourceCulture);
             }
         }
         

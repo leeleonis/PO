@@ -119,6 +119,41 @@ namespace PurchaseOrderSys.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+        public ActionResult ReturnItems(int ID)
+        {
+            var CreditMemo = db.CreditMemo.Find(ID);
+            return View(CreditMemo);
+        }
+        [HttpPost]
+        public ActionResult ReturnItems(CreditMemo CreditMemo, List<PostList> QTYReturned)
+        {
+            var oCreditMemo = db.CreditMemo.Find(CreditMemo.ID);
+            if (oCreditMemo.CMType != CreditMemo.CMType)
+            {
+                oCreditMemo.CMType = CreditMemo.CMType;
+            }
+            if (oCreditMemo.InvoiceNo != CreditMemo.InvoiceNo)
+            {
+                oCreditMemo.InvoiceNo = CreditMemo.InvoiceNo;
+            }
+
+            foreach (var QTYReturneditem in QTYReturned)
+            {
+                if (!string.IsNullOrWhiteSpace(QTYReturneditem.val))
+                {
+                    var val = 0;
+                    if (int.TryParse(QTYReturneditem.val, out val))
+                    {
+                        foreach (var item in oCreditMemo.PurchaseSKU.Where(x => x.ID == QTYReturneditem.ID))
+                        {
+                            item.QTYReturned = val;
+                        }
+                    }
+                }
+            }
+            db.SaveChanges();
+            return View(CreditMemo);
+        }
         public ActionResult GetData(CreditMemoVM filter, string Type, int? DetailID)
         {
             if (Type == "Master")
@@ -235,8 +270,8 @@ namespace PurchaseOrderSys.Controllers
                     QTY = x.PurchaseSKU.Sum(y => y.QTYOrdered),
                     GrandTotal = x.PurchaseSKU.Sum(y => (y.QTYOrdered * y.Price)),
                     Balance = x.PurchaseSKU.Sum(y => (y.QTYOrdered * y.Price)),
-                    x.CMStatus, 
-                     
+                    x.CMStatus,
+
                 });
 
                 if (filter.QTY.HasValue)
@@ -252,11 +287,11 @@ namespace PurchaseOrderSys.Controllers
                     dataList = dataList.Where(x => x.Balance == filter.Balance);
                 }
                 total = dataList.Count();
-                return Json(new { total, rows = dataList }, JsonRequestBehavior.AllowGet);
+                return Json(new { total, rows = dataList.OrderByDescending(x => x.ID) }, JsonRequestBehavior.AllowGet);
             }
             else
             {
-                var PurchaseSKU = db.PurchaseSKU.Where(x => x.PurchaseOrderID == DetailID);
+                var PurchaseSKU = db.PurchaseSKU.Where(x => x.PurchaseOrderID == DetailID).OrderByDescending(x => x.ID);
                 return PartialView("Detail", PurchaseSKU);
             }
         }
@@ -309,6 +344,76 @@ namespace PurchaseOrderSys.Controllers
             db.PurchaseSKU.Add(PurchaseSKU);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+        public ActionResult Addserials(int ID)
+        {
+            var PurchaseSKU = db.PurchaseSKU.Find(ID);
+            return View(PurchaseSKU);
+        }
+        [HttpPost]
+        public ActionResult Addserials(int ID, string UPCEAN, DateTime? ShippedDate)
+        {
+            var PurchaseSKU = db.PurchaseSKU.Find(ID);
+            if (!string.IsNullOrEmpty(UPCEAN))
+            {
+                PurchaseSKU.UPCEAN = UPCEAN;
+            }
+            if (ShippedDate.HasValue)
+            {
+                PurchaseSKU.ReceivedDate = ShippedDate;
+            }
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult Saveserials(string serials, int PurchaseSKUID)
+        {
+            var PurchaseSKU = db.PurchaseSKU.Find(PurchaseSKUID);
+            var SerialsLlistCount = PurchaseSKU.SerialsLlist.Where(x => x.SerialsType == "CM").Sum(x => x.SerialsQTY);//計算CM的序號數
+            if (SerialsLlistCount >= PurchaseSKU.QTYReturned)
+            {
+                return Json(new { status = false, Errmsg = "序號數不可大於退貨數" }, JsonRequestBehavior.AllowGet);
+            }
+            var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials);
+            
+            if (!SerialsLlist.Where(x => x.PurchaseSKU.CreditMemoID == PurchaseSKU.CreditMemoID).Any())//檢查序號是否重複，同訂單同序號不能新增
+            {
+                if (SerialsLlist.Sum(x => x.SerialsQTY) > 0)
+                {
+                    var PID = SerialsLlist.Where(x => x.SerialsQTY > 0).FirstOrDefault().ID;
+                    var dt = DateTime.UtcNow;
+                    var nSerialsLlist = new SerialsLlist
+                    {
+                        PurchaseSKUID = PurchaseSKUID,
+                        PID = PID,
+                        SerialsType = "CM",
+                        SerialsNo = serials,
+                        SerialsQTY = -1,
+                        CreateBy = UserBy,
+                        CreateAt = dt
+                    };
+                    db.SerialsLlist.Add(nSerialsLlist);
+
+                    try
+                    {
+                        db.SaveChanges();
+                        return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+                    }
+                    catch (Exception ex)
+                    {
+                        return Json(new { status = false, Errmsg = ex.ToString() }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    return Json(new { status = false, Errmsg = "此序號不在倉庫內" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                return Json(new { status = false, Errmsg = "序號已經存在" }, JsonRequestBehavior.AllowGet);
+            }
+
         }
     }
 }

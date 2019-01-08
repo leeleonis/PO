@@ -1695,4 +1695,10 @@
   <data name="Marketplace_UpdateAt" xml:space="preserve">
     <value>修改時間</value>
   </data>
+  <data name="PurchaseSKU_CreditMemoID" xml:space="preserve">
+    <value>CM單號</value>
+  </data>
+  <data name="PurchaseSKU_QTYReturned" xml:space="preserve">
+    <value>退貨數量</value>
+  </data>
 </root>

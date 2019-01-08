@@ -53,16 +53,24 @@
                                                             {
                                                                 foreach (var Skuitem in Model)
                                                                 {
-                                                                    if (Skuitem.SerialsLlist != null && Skuitem.SerialsLlist.Any())
+                                                                    if (Skuitem.SerialsLlist != null && Skuitem.SerialsLlist.Any(x => x.SerialsType == "PO"))
                                                                     {
-                                                                        foreach (var SerialsNoitem in Skuitem.SerialsLlist.Select(x => x.SerialsNo).Distinct())
+                                                                        foreach (var SerialsNoitem in Skuitem.SerialsLlist.Where(x => x.SerialsType == "PO").Select(x => x.SerialsNo).Distinct())
                                                                         {
                                                                             var SerialsLlist = Skuitem.SerialsLlist.Where(x => x.SerialsNo == SerialsNoitem).ToList();
                                                                             var Order = SerialsLlist.Where(x => x.OrderID.HasValue).FirstOrDefault()?.OrderID;
                                                                             var RMA = SerialsLlist.Where(x => x.RMAID.HasValue).FirstOrDefault()?.RMAID;
                                                                             var PurchaseOrderID = SerialsLlist.Where(x => x.PurchaseSKU.PurchaseOrderID.HasValue).FirstOrDefault()?.PurchaseSKU.PurchaseOrderID;
                                                                             var CreditMemoID = SerialsLlist.Where(x => x.PurchaseSKU.CreditMemoID.HasValue).FirstOrDefault()?.PurchaseSKU.CreditMemoID;
-                                                                            var WarehouseName = SerialsLlist.Where(x => !string.IsNullOrWhiteSpace(x.PurchaseSKU.PurchaseOrder.Warehouse1.Name)).FirstOrDefault()?.PurchaseSKU.PurchaseOrder.Warehouse1.Name;
+                                                                            var WarehouseName = "";
+                                                                            if (Skuitem.PurchaseOrder != null)
+                                                                            {
+                                                                                WarehouseName = Skuitem.PurchaseOrder.Warehouse1.Name;
+                                                                            }
+                                                                            else if (Skuitem.CreditMemo != null)
+                                                                            {
+                                                                                WarehouseName = Skuitem.CreditMemo.PurchaseOrder.Warehouse1.Name;
+                                                                            }
                                                                             var Price = SerialsLlist.Where(x => x.PurchaseSKU.Price.HasValue).FirstOrDefault()?.PurchaseSKU.Price;
                                                                             var CreateAt = SerialsLlist.OrderByDescending(x => x.CreateAt).FirstOrDefault()?.CreateAt;
                                                                             <tr>
@@ -76,13 +84,12 @@
                                                                                 <td>@Price</td>
                                                                                 <td>@CreateAt</td>
                                                                                 <td>
-                                                                                    <a class='btn btn-default btn-sm GetHistory' href='@Url.Action("GetHistory", new {ID= SerialsNoitem })'>History</a>
+                                                                                    <a class='btn btn-default btn-sm GetHistory' href='@Url.Action("GetHistory", new { ID = SerialsNoitem })'>History</a>
                                                                                 </td>
                                                                             </tr>
                                                                         }
                                                                     }
                                                                 }
-
                                                             }
                                                         </tbody>
                                                     </table>

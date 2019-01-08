@@ -590,6 +590,9 @@ namespace PurchaseOrderSys.Models
         public int? QTYReceived { get; set; }
         public int? Balance { get; set; }
         public string Model { get; set; }
+        public string UPCEAN { get; set; }
+        public string Serial { get; set; }
+        public int? SerialQTY { get; set; }
     }
     public class PoSKUVM
     {
@@ -754,6 +757,10 @@ namespace PurchaseOrderSys.Models
         /// </summary>
         public int ID { get; set; }
         /// <summary>
+        /// 倉庫的 SCID
+        /// </summary>
+        public string SCID { get; set; }
+        /// <summary>
         /// 倉庫名稱
         /// </summary>
         public string Warehouse { get; set; }
@@ -785,9 +792,32 @@ namespace PurchaseOrderSys.Models
         /// 該序號/單品的價值. 算法為 SKU tab (Purchasing) 裡的 PO cost - CM Cost = Value.
         /// </summary>
         public decimal Value { get; set; }
-    }
 
-  
+        /// <summary>
+        /// 以下採購單 (PO) 的數量
+        /// </summary>
+        public int BackOrdered { get; set; }
+        /// <summary>
+        /// 已退貨數
+        /// </summary>
+        public int CMQTY { get; set; }
+        /// <summary>
+        /// 移庫入庫數
+        /// </summary>
+        public int TransferInQTY { get; set; }
+        /// <summary>
+        /// 移庫出庫數
+        /// </summary>
+        public int TransferOutQTY { get; set; }
+        /// <summary>
+        /// 已出貨數
+        /// </summary>
+        public int OrderQTY { get; set; }
+        /// <summary>
+        /// 目前PO庫存數
+        /// </summary>
+        public int POQTY { get; set; }
+    }
 
 
 
@@ -800,6 +830,26 @@ namespace PurchaseOrderSys.Models
         /// 顯示30天內的出貨數量
         /// </summary>
         public int Velocity { get; set; }
+        /// <summary>
+        /// 目前PO庫存數
+        /// </summary>
+        public int POQTY { get; set; }
+        /// <summary>
+        /// 已出貨數
+        /// </summary>
+        public int OrderQTY { get; set; }
+        /// <summary>
+        /// 已退貨數
+        /// </summary>
+        public int CMQTY { get; set; }
+        /// <summary>
+        /// 移庫入庫數
+        /// </summary>
+        public int TransferInQTY { get; set; }
+        /// <summary>
+        /// 移庫出庫數
+        /// </summary>
+        public int TransferOutQTY { get; set; }
         /// <summary>
         /// 依照當下庫存數, 算出能維持的天數
         /// </summary>

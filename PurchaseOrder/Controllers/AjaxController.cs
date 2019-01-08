@@ -109,6 +109,34 @@ namespace PurchaseOrderSys.Controllers
             };
             return Json(returnObj, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult GetCMSkuNumberList(int? draw, int? start, int? length, int ID)
+        {
+            var odataList = db.PurchaseSKU.Where(x => x.CreditMemoID == ID).Select(x => new CMSKUVM
+            {
+                ID = x.ID,
+                ck = x.SkuNo,
+                sk = x.SkuNo,
+                SKU = x.SkuNo,
+                Name = x.Name,
+                VendorSKU = x.VendorSKU,
+                UPCEAN = "",
+                QTYOrdered = x.QTYOrdered,
+                QTYReceived = x.QTYReceived,
+                QTYReturned = x.QTYReturned,
+                Serial = x.SerialsLlist.Any() ? "Yes" : "No",
+                SerialQTY = x.SerialsLlist.Count()
+            }).ToList();
+            int recordsTotal = odataList.Count();
+            var returnObj =
+            new
+            {
+                draw = draw,
+                recordsTotal = recordsTotal,
+                recordsFiltered = recordsTotal,
+                data = odataList//分頁後的資料 
+            };
+            return Json(returnObj, JsonRequestBehavior.AllowGet);
+        }
         public ActionResult TSkuNumberList(int? draw, int? start, int? length, string[] Skulist, int FromWID)
         {
             var odataList = (List<TranSKUVM>)Session["TSkuNumberList"];
@@ -431,7 +459,7 @@ namespace PurchaseOrderSys.Controllers
                 else
                 {
                     result.SetError("查無序號及貨號");
-                }    
+                }
             }
 
             return Json(result, JsonRequestBehavior.AllowGet);

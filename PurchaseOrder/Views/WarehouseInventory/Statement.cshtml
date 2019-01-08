@@ -36,6 +36,7 @@
                                                     <table id="DataGridC" class="table table-striped table-bordered">
                                                         <thead>
                                                             <tr>
+                                                                <th></th>
                                                                 <th>SKU</th>
                                                                 <th>Date</th>
                                                                 <th>Supplier</th>
@@ -51,24 +52,45 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach (var skuitem in Model)
-                                                            {
-                                                                foreach (var item in skuitem.SerialsLlist)
+                                                            @{
+                                                                var Aggregate = Model.Sum(x=>x.SerialsLlist.Sum(y=>y.SerialsQTY));
+                                                                var Available = Aggregate;
+                                                                foreach (var skuitem in Model.OrderByDescending(x => x.ID))
                                                                 {
-                                                                    <tr>
-                                                                        <td>@item.PurchaseSKU.SkuNo</td>
-                                                                        <td>@item.CreateAt</td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td>@item.PurchaseSKU.PurchaseOrder.POType</td>
-                                                                        <td>@item.PurchaseSKU.PurchaseOrder.ID</td>
-                                                                        <td>@item.PurchaseSKU.PurchaseOrder.Warehouse1.Name</td>
-                                                                        <td>@item.SerialsNo</td>
-                                                                        <td>@item.SerialsType</td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                    </tr>
+                                                                    var price = skuitem.Price;
+                                                                    foreach (var item in skuitem.SerialsLlist.OrderByDescending(x => x.ID))
+                                                                    {
+
+
+                                                                        <tr>
+                                                                            <td></td>
+                                                                            <td>@item.PurchaseSKU.SkuNo</td>
+                                                                            <td>@item.CreateAt</td>
+                                                                            @if (item.PurchaseSKU.PurchaseOrder != null)
+                                                                            {
+                                                                                <td>@item.PurchaseSKU.PurchaseOrder.VendorLIst.Name</td>
+                                                                                <td></td>
+                                                                                <td>@(item.PurchaseSKU.PurchaseOrder.POType)</td>
+                                                                                <td>@(item.PurchaseSKU.PurchaseOrder.ID)</td>
+                                                                                <td>@(item.PurchaseSKU.PurchaseOrder.Warehouse1.Name)</td>
+                                                                            }
+                                                                            else if (item.PurchaseSKU.CreditMemo != null)
+                                                                        {
+                                                                                <td>@item.PurchaseSKU.CreditMemo.PurchaseOrder.VendorLIst.Name</td>
+                                                                                <td></td>
+                                                                                <td>@(item.PurchaseSKU.CreditMemo.CMType)</td>
+                                                                                <td>@(item.PurchaseSKU.CreditMemo?.ID)</td>
+                                                                                <td>@(item.PurchaseSKU.CreditMemo.PurchaseOrder.Warehouse1.Name)</td>
+                                                                            }
+                                                                            <td>@item.SerialsNo</td>
+                                                                            <td>@item.SerialsQTY</td>
+                                                                            <td>@Aggregate</td>
+                                                                            <td>@Available</td>
+                                                                            <td>$@(Aggregate* price)</td>
+                                                                        </tr>
+                                                                        Aggregate -= item.SerialsQTY.Value;
+                                                                        Available = Aggregate;
+                                                                    }
                                                                 }
                                                             }
                                                         </tbody>

@@ -528,7 +528,16 @@ namespace PurchaseOrderSys.Controllers
                     }
                 }
             }
-            db.SaveChanges();
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+
+                var s = ex.ToString();
+            }
+           
             return RedirectToAction("Index");
         }
 
@@ -590,21 +599,21 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult Saveserials(string serials, int PurchaseSKUID)
         {
             var PurchaseSKU = db.PurchaseSKU.Find(PurchaseSKUID);
-            var SerialsLlistCount = PurchaseSKU.SerialsLlist.Where(x => x.SerialsQTY == 1 && x.SerialsLlistC.Count() == 0).Count();
-
+            var SerialsLlistCount = PurchaseSKU.SerialsLlist.Where(x => x.SerialsType == "PO").Sum(x => x.SerialsQTY);//計算PO的序號數
             if (SerialsLlistCount >= PurchaseSKU.QTYOrdered)
             {
                 return Json(new { status = false, Errmsg = "序號不可大於採購數" }, JsonRequestBehavior.AllowGet);
             }
-            if (PurchaseSKU.PurchaseOrder.POType== "DropshpOrder")
+            if (PurchaseSKU.PurchaseOrder.POType== "DropshpOrder")//直發一入一出
             {
-                var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials);
-                if (SerialsLlist.Count() == 0 )
+                var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials&&x.PurchaseSKU.PurchaseOrderID== PurchaseSKU.PurchaseOrderID);//檢查序號是否重複，同訂單同序號不能新增
+                if (!SerialsLlist.Any() )
                 {
                     var dt = DateTime.UtcNow;
                     var nSerialsLlistIn = new SerialsLlist
                     {
                         PurchaseSKUID = PurchaseSKUID,
+                        SerialsType = "DropshpOrderIn",
                         SerialsNo = serials,
                         SerialsQTY = 1,
                         ReceivedBy = UserBy,
@@ -616,6 +625,7 @@ namespace PurchaseOrderSys.Controllers
                     var nSerialsLlistOut = new SerialsLlist
                     {
                         PurchaseSKUID = PurchaseSKUID,
+                        SerialsType = "DropshpOrderOut",
                         SerialsNo = serials,
                         SerialsQTY = -1,
                         ReceivedBy = UserBy,
@@ -641,13 +651,14 @@ namespace PurchaseOrderSys.Controllers
             }
             else
             {
-                var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials);
-                if (SerialsLlist.Count() == 0 || SerialsLlist.Sum(x => x.SerialsQTY) == 0)
+                var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials && x.PurchaseSKU.PurchaseOrderID == PurchaseSKU.PurchaseOrderID);//檢查序號是否重複，同訂單同序號不能新增
+                if (!SerialsLlist.Any())
                 {
                     var dt = DateTime.UtcNow;
                     var nSerialsLlist = new SerialsLlist
                     {
                         PurchaseSKUID = PurchaseSKUID,
+                        SerialsType = "PO",
                         SerialsNo = serials,
                         SerialsQTY = 1,
                         ReceivedBy = UserBy,

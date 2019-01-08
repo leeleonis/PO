@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Web;
@@ -14,6 +16,8 @@ namespace PurchaseOrderSys.Controllers
 {
     public class BaseController : Controller
     {
+        //protected string ApiUrl = "http://internal.qd.com.tw/";
+        protected string ApiUrl = "http://localhost:49920/";
         protected string FileUploads = "~/FileUploads";
         protected string UserBy = "test";
         protected PurchaseOrderEntities db = new PurchaseOrderEntities();
@@ -167,6 +171,38 @@ namespace PurchaseOrderSys.Controllers
             }
 
         }
+        /// <summary>
+        /// 倉庫等待出貨的庫總量
+        /// </summary>
+        /// <param name="SKU">SKU</param>
+        /// <param name="SCID">SCID</param>
+        /// <returns></returns>
+        public int GetAwaitingCount(string SKU, string SCID)
+        {
+            var count = 0;
+            if (string.IsNullOrWhiteSpace(SCID))
+            {
+                return count;
+            }
+            using (WebClient wc = new WebClient())
+            {
+                try
+                {
+                    wc.Encoding = Encoding.UTF8;
 
+                    NameValueCollection nc = new NameValueCollection();
+                    nc["Sku"] = SKU;
+                    nc["WarehouseID"] = SCID;
+                    byte[] bResult = wc.UploadValues(ApiUrl+ "Api/GetSkuInventoryQTY", nc);
+                    string resultXML = Encoding.UTF8.GetString(bResult);
+                    int.TryParse(resultXML, out count);
+                }
+                catch (WebException ex)
+                {
+                    //throw new Exception("無法連接遠端伺服器");
+                }
+            }
+            return count;
+        }
     }
 }

@@ -1922,4 +1922,10 @@
   <data name="Marketplace_UpdateAt" xml:space="preserve">
     <value></value>
   </data>
+  <data name="PurchaseSKU_CreditMemoID" xml:space="preserve">
+    <value>CMID</value>
+  </data>
+  <data name="PurchaseSKU_QTYReturned" xml:space="preserve">
+    <value>Returned Qty</value>
+  </data>
 </root>

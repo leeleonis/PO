@@ -22,20 +22,20 @@
                                 <input type="hidden" name="IsEnable" value="True">
                                 <div id="content" class="tab-content">
                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                                    @Html.HiddenFor(x=>x.ID)
+                                    @Html.HiddenFor(x => x.ID)
                                     <div class="tab-pane" id="hb1">
                                         <fieldset>
                                             <legend>@ViewBag.title</legend>
                                             <div class="form-group">
-                                                @Html.Label("PO #:", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @Html.Label("CM #:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.EditorFor(x=>Model.PurchaseOrder.ID, new { htmlAttributes = new { @class = "form-control",@readonly= "readonly" } })
+                                                    @Html.EditorFor(x => Model.CreditMemoID, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 @Html.Label("SKU:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.EditorFor(x=>Model.SkuNo, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                    @Html.EditorFor(x => Model.SkuNo, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -45,15 +45,15 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                @Html.Label("Received Date:", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @Html.Label("Shipped Date:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("ReceivedDate", new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.Editor("ShippedDate", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                @Html.Label("QTY Received:", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @Html.Label("QTY Returned:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.EditorFor(x => Model.QTYReceived, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                    @Html.EditorFor(x => Model.QTYReturned, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                                                 </div>
                                             </div>
                                         </fieldset>
@@ -68,10 +68,10 @@
                                                             @Html.Editor("Serial", new { htmlAttributes = new { @class = "form-control" } })
                                                         </div>
                                                     </div>
-                                                    @{ 
-                                                        var SerialsLlist = Model.SerialsLlist.Where(x => x.SerialsType == "PO");
+                                                    @{
+                                                        var SerialsLlist = Model.SerialsLlist.Where(x => x.SerialsType == "CM");
                                                     }
-                                                    <label>Serial # ( <label id="Serialcount">@SerialsLlist.Count()</label> /@(Model.QTYOrdered??0))</label>
+                                                    <label>Serial # ( <label id="Serialcount">@SerialsLlist.Count()</label> /@(Model.QTYOrdered ?? 0))</label>
                                                     <ul style="list-style-type:none;list-style-position: inside;padding-left: 0px;padding-left: 0px;" id="SerialList">
                                                         @foreach (var item in SerialsLlist)
                                                         {
@@ -130,6 +130,6 @@
         });
 
 
-        
+
     </script>
 }

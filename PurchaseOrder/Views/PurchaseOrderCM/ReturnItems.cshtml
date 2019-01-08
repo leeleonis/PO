@@ -1,8 +1,8 @@
-﻿@model PurchaseOrder
+﻿@model CreditMemo
 @{
-    ViewBag.title = "Receiving";
+    ViewBag.title = "Return";
     var dtval = DateTime.UtcNow.ToString("yyyy/MM/dd");
-    var POTypeDDL = EnumData.POTypeDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var CMTypeDDL = EnumData.CMTypeDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var POStatusDDL = EnumData.POStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var VendorDDL = EnumData.VendorDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var CompanyDDL = EnumData.CompanyDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
@@ -13,9 +13,9 @@
 
     if (Model != null)
     {
-        if (Model.PODate.HasValue)
+        if (Model.CreditDate.HasValue)
         {
-            dtval = Model.PODate.Value.ToString("yyyy/MM/dd");
+            dtval = Model.CreditDate.Value.ToString("yyyy/MM/dd");
         }
     }
 }
@@ -50,10 +50,10 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                @Html.LabelFor(model => model.POType, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @Html.LabelFor(model => model.CMType, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownListFor(model => model.POType, POTypeDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
-                                                    @Html.ValidationMessageFor(model => model.POType, "", new { @class = "text-danger" })
+                                                    @Html.DropDownListFor(model => model.CMType, CMTypeDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(model => model.CMType, "", new { @class = "text-danger" })
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -82,7 +82,7 @@
                                                                 <th>Name</th>
                                                                 <th>UPC/EAN</th>
                                                                 <th>QTY Ordered</th>
-                                                                <th>QTY Received</th>
+                                                                <th>QTY Returned</th>
                                                                 <th>Serial</th>
                                                                 <th>Serial QTY</th>
                                                                 <th></th>
@@ -134,12 +134,12 @@
                     { data: "UPCEAN" },
                     { data: "QTYOrdered", render: function (data, type, row) { return data; } },
                     {
-                        data: "QTYReceived", render: function (data, type, row, meta ) {
+                        data: "QTYReturned", render: function (data, type, row, meta ) {
                             if (data == 0 || data == null) {
-                                return '<input class="form-control" type="number"  min="0" max="' + row.QTYOrdered +'" id="QTYReceived[' + row.ID + ']" name="QTYReceived[' + meta.row + '].val" > <input type="hidden" name="QTYReceived[' + meta.row +'].ID" value = ' + row.ID + ' />';
+                                return '<input class="form-control" type="number"   id="QTYReturned[' + row.ID + ']" name="QTYReturned[' + meta.row + '].val" > <input type="hidden" name="QTYReturned[' + meta.row +'].ID" value = ' + row.ID + ' />';
                             }
                             else {
-                                return '<input class="form-control" type="number"  min="0" max="' + row.QTYOrdered +'" id="QTYReceived[' + row.ID + ']" name="QTYReceived[' + meta.row + '].val" value = ' + data + ' > <input type="hidden" name="QTYReceived[' + meta.row +'].ID" value = ' + row.ID + ' />';
+                                return '<input class="form-control" type="number"   id="QTYReturned[' + row.ID + ']" name="QTYReturned[' + meta.row + '].val" value = ' + data + ' > <input type="hidden" name="QTYReturned[' + meta.row +'].ID" value = ' + row.ID + ' />';
                             }
                         }
                     },
@@ -150,13 +150,13 @@
                         orderable: false,
                         render: function (data, type, row) {
                             return "<a href='" + "@Url.Action("Addserials")" + "?ID=" + row.ID + "' class='btn btn-default btn-sm' >Add serials</a> ";
-                        } 
+                        }
                     }
                 ],
                 ajax: {
                     traditional: true,
                     method: "get",//或post，自由決定，影響到Server端用FormCollection取值或Request.QueryString取得DataTables傳遞的資訊
-                    url: "@Url.Action("GetSkuNumberList", "Ajax")",
+                    url: "@Url.Action("GetCMSkuNumberList", "Ajax")",
                     data: function (d) {
                         d.ID =@Model.ID;
                         $("#gebruikerId").val(null).trigger('change');
