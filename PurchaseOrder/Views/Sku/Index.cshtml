@@ -52,7 +52,12 @@
 
             datagrid.dataInit.frozenColumns = [[
                 { field: "ck", checkbox: true },
-                { field: "SkuID", title: "@Html.DisplayNameFor(model => model.SkuID)", width: 120, align: "center", sortable: false, }
+                {
+                    field: "SkuID", title: "@Html.DisplayNameFor(model => model.SkuID)", width: 120, align: "center", sortable: false,
+                    formatter: function (value, row, index) {
+                        return website.IsEmpty(row.IsFilter) ? "<a href='/WarehouseInventory/Inventory/" + value + "'>" + value + "</a>" : value;
+                    }
+                }
             ]];
 
             datagrid.dataInit.columns = [[
