@@ -544,7 +544,7 @@ namespace PurchaseOrderSys.Controllers
 
             var LangID = !string.IsNullOrEmpty(filter.LangID) ? filter.LangID : EnumData.DataLangList().First().Key;
             var SkuFilter = db.SKU.Include(s => s.SkuLang).AsNoTracking().AsQueryable();
-            if (!string.IsNullOrEmpty(filter.ID)) SkuFilter = SkuFilter.Where(s => s.SkuID.Contains(filter.ID));
+            if (!string.IsNullOrEmpty(filter.SkuID)) SkuFilter = SkuFilter.Where(s => s.SkuID.Contains(filter.SkuID));
             if (!string.IsNullOrEmpty(filter.ParentSku)) SkuFilter = SkuFilter.Where(s => s.ParentSku.Contains(filter.ParentSku));
             if (!string.IsNullOrEmpty(filter.Name)) SkuFilter = SkuFilter.Where(s => s.SkuLang.Any(l => l.LangID.Equals(LangID) && l.Name.ToLower().Contains(filter.Name.ToLower())));
             if (filter.Condition.HasValue) SkuFilter = SkuFilter.Where(s => s.Condition.Equals(filter.Condition.Value));

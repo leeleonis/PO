@@ -27,6 +27,7 @@ namespace NetoDeveloper
             request.Headers.Add("NETOAPI_ACTION", action);
             request.Headers.Add("NETOAPI_KEY", API_KEY);
             request.Headers.Add("NETOAPI_USERNAME", API_USERNAME);
+            request.ProtocolVersion = HttpVersion.Version10;
 
             HttpWebResponse httpResponse;
 
