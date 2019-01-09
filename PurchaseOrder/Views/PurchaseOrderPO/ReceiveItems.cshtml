@@ -19,6 +19,13 @@
         }
     }
 }
+<style>
+    .img {
+        max-width: 20px;
+        max-height: 20px;
+        margin: 5px;
+    }
+</style>
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -64,9 +71,20 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                @Html.LabelFor(model => model.InvoiceNo, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @Html.Label("Vendor Invoice", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("VendorInvoice", new { htmlAttributes = new { @class = "form-control" } })
+                                                    @*@Html.Editor("VendorInvoice", new { htmlAttributes = new { @class = "form-control" } })*@
+                                                    <input type='file' class="ImgFile" name="VendorInvoice" id="VendorInvoice" multiple>
+                                                </div>
+                                                <div class="col-sm-9 col-lg-2">
+                                                    <div class="opreview">
+                                                        @foreach (var item in Model.ImgFile.Where(x => x.IsEnable && x.ImgType == "VendorInvoice"))
+                                                        {
+                                                            <a class="aimg" href="@item.Url" data-lightbox="roadtrip"><img class="img" src="@item.Url" /></a>
+                                                        }
+                                                    </div>
+                                                    <div class="preview" id="VendorInvoicepreview">
+                                                    </div>
                                                 </div>
                                             </div>
                                         </fieldset>
@@ -78,6 +96,7 @@
                                                         <thead>
                                                             <tr>
                                                                 <th></th>
+                                                                <th width="20px"></th>
                                                                 <th>SKU</th>
                                                                 <th>Name</th>
                                                                 <th>UPC/EAN</th>
@@ -107,7 +126,13 @@
         </div>
     </section>
 </div>
+<div id="dialog" title="Img">
+    
+</div>
 @section pagespecific {
+    <link href="~/Content/css/lightbox.css" rel="stylesheet" />
+    <script src="~/Scripts/lightbox.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
     <script type="text/javascript">
         var hash = window.location.hash;
         $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
@@ -128,7 +153,14 @@
                         "className": 'details-control',
                         "orderable": false,
                         "data": null,
-                        "defaultContent": '' },
+                        "defaultContent": ''
+                    },
+                    {
+                        data: "", render: function (data, type, row, meta) {
+                            var input = '<a class="btn btn-default btn-sm Imgbtn" valID="' + row.ID + '">Img</a>';
+                            return input
+                        }
+                    },
                     { data: "SKU" },
                     { data: "Name" },
                     { data: "UPCEAN" },
@@ -150,7 +182,7 @@
                         orderable: false,
                         render: function (data, type, row) {
                             return "<a href='" + "@Url.Action("Addserials")" + "?ID=" + row.ID + "' class='btn btn-default btn-sm' >Add serials</a> ";
-                        } 
+                        }
                     }
                 ],
                 ajax: {
@@ -235,6 +267,24 @@
                     tr.addClass('shown');
                 }
             });
+            $("#dialog").dialog({
+                autoOpen: false,
+                width: 800
+            });
+            $("body").on("click", ".Imgbtn", function () {
+                var url = '@Url.Action("GetImg", "Ajax")'
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: { id: $(this).attr("valID"), key: "SKU", ImgType: "ImgType" },
+                    success: function (data) {
+                        $("#dialog").html(data);
+                        $("#dialog").dialog("open");
+                        //$("#dialog").load(data).dialog({ modal: true }).dialog('open');
+                    }
+                });
+                return false;
+            });
         });
         function GetSerialList(d) {
             var div = $('<div style="border:2px blue solid;" />').addClass('loading').text('Loading...');
@@ -255,5 +305,63 @@
             });
             return div;
         }
+        function Success(data) {
+            $("#dialog").dialog("close");
+        }
+        var Preview = new function () {
+
+            var root = $("body");
+
+            // 連續的圖片編碼
+            var imgcode = '';
+
+            // 選取發生改變
+            this.change_file = function () {
+                root.on("change", ".ImgFile", function () {
+                    show(this);
+                });
+            }
+
+            // 批次圖片，先清空後再插入
+            var show = function (input) {
+                if (input.files && input.files[0]) {
+                    clean(input.ID);
+                    each_img(input.files, input.id);
+                }
+            }
+
+            // 批次讀取，最後再一次寫入
+            var each_img = function (files, ID) {
+
+                $.each(files, function (index, file) {
+                    var src = URL.createObjectURL(file);
+                    create_imgcode(src);
+                });
+
+                // 放置預覽元素後重設
+                root.find("#" + ID + "preview").html(imgcode);
+                reset();
+            }
+
+
+            // 建立圖片
+            var create_imgcode = function (src) {
+                imgcode += '<a class="aimg" href="' + src + '" data-lightbox="roadtrip"><img class="img" src="' + src + '" /></a>';
+            }
+
+
+            // 清空預覽區域
+            var clean = function (ID) {
+                root.find("#" + ID + "preview").empty();
+            }
+
+            // 還原 input[type=file]
+            var reset = function () {
+                imgcode = '';
+                //root.find("#VendorInvoice").val(null);
+            }
+        }
+        // 執行
+        Preview.change_file();
     </script>
 }

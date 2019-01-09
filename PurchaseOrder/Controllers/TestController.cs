@@ -65,6 +65,7 @@ namespace PurchaseOrderSys.Controllers
                 // 執行 post 動作
                 var result = webClient.UploadString("http://localhost:59290/Ajax/ShipmentByOrder", json);
                 // linqpad 將 post 結果輸出
+                return Json(new { status = true, result }, JsonRequestBehavior.AllowGet);
             }
 
 
@@ -88,7 +89,7 @@ namespace PurchaseOrderSys.Controllers
             //        //throw new Exception("無法連接遠端伺服器");
             //    }
             //}
-            return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+           
         }
         public ActionResult GetData_Full(int draw, int start, int length,//→此三個為DataTables自動傳遞參數
                                                                          //↓以下兩個為表單的查詢條件，請依自己工作需求調整  

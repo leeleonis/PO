@@ -5810,6 +5810,8 @@
     <Content Include="Scripts\jquery.number.min.js" />
     <Content Include="Scripts\jquery.signalR-2.2.2.js" />
     <Content Include="Scripts\jquery.signalR-2.2.2.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.inline.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
@@ -6419,6 +6421,7 @@
     <Content Include="Views\Marketplace\Edit.cshtml" />
     <Content Include="Views\PurchaseOrderCM\ReturnItems.cshtml" />
     <Content Include="Views\PurchaseOrderCM\Addserials.cshtml" />
+    <Content Include="Views\Ajax\GetImg.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

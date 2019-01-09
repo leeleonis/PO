@@ -669,7 +669,7 @@ namespace PurchaseOrderSys.Models
         /// <summary>
         /// 查詢所選擇的倉庫庫存相關資料
         /// </summary>
-        public string Inventory { get; set; }
+        public int? Inventory { get; set; }
         /// <summary>
         /// 既有的庫存並且屬於可出貨的
         /// </summary>
@@ -748,6 +748,40 @@ namespace PurchaseOrderSys.Models
         /// </summary>
         public int TotalPO { get; set; }
 
+
+        /// <summary>
+        /// 所有/實體庫存
+        /// </summary>
+        public int Available { get; set; }
+        /// <summary>
+        /// 已退貨數
+        /// </summary>
+        public int CMQTY { get; set; }
+        /// <summary>
+        /// 移庫入庫數
+        /// </summary>
+        public int TransferInQTY { get; set; }
+        /// <summary>
+        /// 移庫出庫數
+        /// </summary>
+        public int TransferOutQTY { get; set; }
+        /// <summary>
+        /// 已出貨數
+        /// </summary>
+        public int OrderQTY { get; set; }
+        /// <summary>
+        /// 目前PO庫存數
+        /// </summary>
+        public int POQTY { get; set; }
+        /// <summary>
+        /// RMA數
+        /// </summary>
+        public int RMAQTY { get; set; }
+
+        /// <summary>
+        /// 等待出貨的庫存數量
+        /// </summary>
+        public int Awaiting { get; set; }
     }
 
     public class SkuInventoryVM
@@ -817,6 +851,10 @@ namespace PurchaseOrderSys.Models
         /// 目前PO庫存數
         /// </summary>
         public int POQTY { get; set; }
+        /// <summary>
+        /// RMA數
+        /// </summary>
+        public int RMAQTY { get; set; }
     }
 
 
@@ -1044,5 +1082,11 @@ namespace PurchaseOrderSys.Models
         public string Label { get; set; }
         public string Download { get; set; }
     }
-
+    public class GetImgVM
+    {
+        public int id { get; set; }
+        public string key { get; set; }
+        public string ImgType { get; set; }
+        public List<string> imglist { get; set; }
+    }
 }

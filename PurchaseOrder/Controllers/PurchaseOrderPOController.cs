@@ -389,7 +389,7 @@ namespace PurchaseOrderSys.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditItem(PurchaseOrder filter, IEnumerable<HttpPostedFileBase> VendorInvoice, IEnumerable<HttpPostedFileBase> PaymentProofList)
+        public ActionResult EditItem(PurchaseOrder filter, IEnumerable<HttpPostedFileBase> VendorInvoice, IEnumerable<HttpPostedFileBase> PaymentProofList,bool? saveexit)
         {
             var dt = DateTime.UtcNow;
             var PurchaseOrder = db.PurchaseOrder.Find(filter.ID);
@@ -537,8 +537,14 @@ namespace PurchaseOrderSys.Controllers
 
                 var s = ex.ToString();
             }
-           
-            return RedirectToAction("Index");
+            if (saveexit.HasValue && saveexit.Value)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return RedirectToAction("EditItem", new { filter.ID });
+            }
         }
 
         public ActionResult ReceiveItems(int ID)

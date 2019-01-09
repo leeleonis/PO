@@ -53,7 +53,7 @@
                                                         </thead>
                                                         <tbody>
                                                             @{
-                                                                var Aggregate = Model.Sum(x=>x.SerialsLlist.Sum(y=>y.SerialsQTY));
+                                                                var Aggregate = Model.Sum(x => x.SerialsLlist.Sum(y => y.SerialsQTY));
                                                                 var Available = Aggregate;
                                                                 foreach (var skuitem in Model.OrderByDescending(x => x.ID))
                                                                 {
@@ -75,7 +75,7 @@
                                                                                 <td>@(item.PurchaseSKU.PurchaseOrder.Warehouse1.Name)</td>
                                                                             }
                                                                             else if (item.PurchaseSKU.CreditMemo != null)
-                                                                        {
+                                                                            {
                                                                                 <td>@item.PurchaseSKU.CreditMemo.PurchaseOrder.VendorLIst.Name</td>
                                                                                 <td></td>
                                                                                 <td>@(item.PurchaseSKU.CreditMemo.CMType)</td>
@@ -86,7 +86,7 @@
                                                                             <td>@item.SerialsQTY</td>
                                                                             <td>@Aggregate</td>
                                                                             <td>@Available</td>
-                                                                            <td>$@(Aggregate* price)</td>
+                                                                            <td>$@(Aggregate * price)</td>
                                                                         </tr>
                                                                         Aggregate -= item.SerialsQTY.Value;
                                                                         Available = Aggregate;
@@ -100,11 +100,10 @@
                                         </fieldset>
                                     </div>
                                 </div>
-
-                                @*<div class="widget-footer">
-                                        <button type="submit" class="btn btn-primary" id="save">儲存</button>
-                                        <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index")'">返回</button>
-                                    </div>*@
+                                <div class="widget-footer">
+                                    @*<button type="submit" class="btn btn-primary" id="save">儲存</button>*@
+                                    <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index","DispatchWarehouse")'">返回</button>
+                                </div>
                             </form>
                         </div>
                     </div>

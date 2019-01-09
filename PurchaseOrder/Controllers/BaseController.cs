@@ -196,6 +196,10 @@ namespace PurchaseOrderSys.Controllers
                     byte[] bResult = wc.UploadValues(ApiUrl+ "Api/GetSkuInventoryQTY", nc);
                     string resultXML = Encoding.UTF8.GetString(bResult);
                     int.TryParse(resultXML, out count);
+                    if (count>0)
+                    {
+                        count *= -1;
+                    }
                 }
                 catch (WebException ex)
                 {

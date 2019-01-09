@@ -30,7 +30,7 @@
                                             @*<legend>Company ： @Model.PurchaseOrder.Company.Name</legend>*@
                                         </fieldset>
                                         <fieldset>
-                                           @* <legend>@Model.SkuNo ： @Model.Name</legend>*@
+                                            @* <legend>@Model.SkuNo ： @Model.Name</legend>*@
                                             <div class="row">
                                                 <article class="col-xs-12">
                                                     <table id="DataGridC" class="table table-striped table-bordered">
@@ -72,10 +72,10 @@
                                     </div>
                                 </div>
 
-                                @*<div class="widget-footer">
-                                        <button type="submit" class="btn btn-primary" id="save">儲存</button>
-                                        <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index")'">返回</button>
-                                    </div>*@
+                                <div class="widget-footer">
+                                    @*<button type="submit" class="btn btn-primary" id="save">儲存</button>*@
+                                    <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index","DispatchWarehouse")'">返回</button>
+                                </div>
                             </form>
                         </div>
                     </div>

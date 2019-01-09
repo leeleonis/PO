@@ -292,6 +292,7 @@
           <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
           <Property Name="UpdateAt" Type="datetime" />
           <Property Name="ImgType" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="PurchaseSKUID" Type="int" />
         </EntityType>
         <EntityType Name="KitSku">
           <Key>
@@ -970,6 +971,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ImgFile_PurchaseSKU">
+          <End Role="PurchaseSKU" Type="Self.PurchaseSKU" Multiplicity="0..1" />
+          <End Role="ImgFile" Type="Self.ImgFile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseSKU">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ImgFile">
+              <PropertyRef Name="PurchaseSKUID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_KitSku_Sku">
           <End Role="SKU" Type="Self.SKU" Multiplicity="1" />
           <End Role="KitSku" Type="Self.KitSku" Multiplicity="*" />
@@ -1557,6 +1570,10 @@
             <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
             <End Role="ImgFile" EntitySet="ImgFile" />
           </AssociationSet>
+          <AssociationSet Name="FK_ImgFile_PurchaseSKU" Association="Self.FK_ImgFile_PurchaseSKU">
+            <End Role="PurchaseSKU" EntitySet="PurchaseSKU" />
+            <End Role="ImgFile" EntitySet="ImgFile" />
+          </AssociationSet>
           <AssociationSet Name="FK_KitSku_Sku" Association="Self.FK_KitSku_Sku">
             <End Role="SKU" EntitySet="SKU" />
             <End Role="KitSku" EntitySet="KitSku" />
@@ -1981,6 +1998,10 @@
             <End Role="TransferSKU" EntitySet="TransferSKU" />
             <End Role="SerialsLlist" EntitySet="SerialsLlist" />
           </AssociationSet>
+          <AssociationSet Name="FK_ImgFile_PurchaseSKU" Association="PurchaseOrderModel.FK_ImgFile_PurchaseSKU">
+            <End Role="PurchaseSKU" EntitySet="PurchaseSKU" />
+            <End Role="ImgFile" EntitySet="ImgFile" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="AdminGroup">
           <Key>
@@ -2374,6 +2395,7 @@
           <NavigationProperty Name="CreditMemo" Relationship="PurchaseOrderModel.FK_PurchaseSKU_CreditMemo" FromRole="PurchaseSKU" ToRole="CreditMemo" />
           <NavigationProperty Name="PurchaseOrder" Relationship="PurchaseOrderModel.FK_PurchaseSKU_PurchaseOrder" FromRole="PurchaseSKU" ToRole="PurchaseOrder" />
           <NavigationProperty Name="SerialsLlist" Relationship="PurchaseOrderModel.FK_SerialsLlist_PurchaseSKU" FromRole="PurchaseSKU" ToRole="SerialsLlist" />
+          <NavigationProperty Name="ImgFile" Relationship="PurchaseOrderModel.FK_ImgFile_PurchaseSKU" FromRole="PurchaseSKU" ToRole="ImgFile" />
         </EntityType>
         <EntityType Name="ShippingMethod">
           <Key>
@@ -3191,6 +3213,8 @@
           <NavigationProperty Name="CreditMemo" Relationship="PurchaseOrderModel.FK_ImgFile_CreditMemo" FromRole="ImgFile" ToRole="CreditMemo" />
           <NavigationProperty Name="PurchaseOrder" Relationship="PurchaseOrderModel.FK_ImgFile_PurchaseOrder" FromRole="ImgFile" ToRole="PurchaseOrder" />
           <Property Name="ImgType" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="PurchaseSKUID" Type="Int32" />
+          <NavigationProperty Name="PurchaseSKU" Relationship="PurchaseOrderModel.FK_ImgFile_PurchaseSKU" FromRole="ImgFile" ToRole="PurchaseSKU" />
         </EntityType>
         <Association Name="FK_ImgFile_CreditMemo">
           <End Type="PurchaseOrderModel.CreditMemo" Role="CreditMemo" Multiplicity="0..1" />
@@ -3497,7 +3521,7 @@
           <Property Name="TransferSKUID" Type="Int32" />
           <Property Name="OrderID" Type="Int32" />
           <Property Name="RMAID" Type="Int32" />
-          <Property Name="SerialsType" Type="String" />
+          <Property Name="SerialsType" Type="String" MaxLength="10" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="Orders" Relationship="PurchaseOrderModel.FK_SerialsLlist_Orders" FromRole="SerialsLlist" ToRole="Orders" />
           <NavigationProperty Name="PurchaseSKU" Relationship="PurchaseOrderModel.FK_SerialsLlist_PurchaseSKU" FromRole="SerialsLlist" ToRole="PurchaseSKU" />
           <NavigationProperty Name="SerialsLlistC" Relationship="PurchaseOrderModel.FK_SerialsLlist_SerialsLlist" FromRole="SerialsLlist" ToRole="SerialsLlist1" />
@@ -3549,6 +3573,18 @@
             </Principal>
             <Dependent Role="SerialsLlist">
               <PropertyRef Name="TransferSKUID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ImgFile_PurchaseSKU">
+          <End Type="PurchaseOrderModel.PurchaseSKU" Role="PurchaseSKU" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.ImgFile" Role="ImgFile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseSKU">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ImgFile">
+              <PropertyRef Name="PurchaseSKUID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4271,6 +4307,7 @@
           <EntitySetMapping Name="ImgFile">
             <EntityTypeMapping TypeName="PurchaseOrderModel.ImgFile">
               <MappingFragment StoreEntitySet="ImgFile">
+                <ScalarProperty Name="PurchaseSKUID" ColumnName="PurchaseSKUID" />
                 <ScalarProperty Name="ImgType" ColumnName="ImgType" />
                 <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
                 <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />

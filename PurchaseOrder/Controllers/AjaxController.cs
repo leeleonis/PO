@@ -96,7 +96,7 @@ namespace PurchaseOrderSys.Controllers
                 QTYReceived = x.QTYReceived,
                 QTYReturned = x.QTYReturned,
                 Serial = x.SerialsLlist.Any() ? "Yes" : "No",
-                SerialQTY = x.SerialsLlist.Count()
+                SerialQTY = x.SerialsLlist.Count(),
             }).ToList();
             int recordsTotal = odataList.Count();
             var returnObj =
@@ -425,15 +425,17 @@ namespace PurchaseOrderSys.Controllers
                 {
                     QTY = Serialsitem.QTY;
                 }
-                var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == Serialsitem.SerialsNo && x.SerialsQTY > 0 && (x.SerialsType == "PO" || x.SerialsType == "TransferIn"));//PO和TransferIn才能出貨
+                var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == Serialsitem.SerialsNo);//檢查是否有序號
                 var PurchaseSKU = db.PurchaseSKU.Where(x => x.SkuNo == Serialsitem.SkuNo);
                 if (SerialsLlist.Any())
                 {
+                    SerialsLlist = SerialsLlist.Where(x => x.SerialsQTY > 0 && (x.SerialsType == "PO" || x.SerialsType == "TransferIn") && !x.SerialsLlistC.Any());//PO和TransferIn才能出貨
                     if (SerialsLlist.Sum(x => x.SerialsQTY) > 0)
                     {
                         var nSerials = new SerialsLlist
                         {
                             OrderID = Serialsitem.OrderID,
+                            PurchaseSKUID= SerialsLlist.FirstOrDefault().PurchaseSKUID,
                             PID = SerialsLlist.FirstOrDefault().ID,
                             SerialsNo = Serialsitem.SerialsNo,
                             SerialsType = "Order",
@@ -444,13 +446,21 @@ namespace PurchaseOrderSys.Controllers
                         db.SerialsLlist.Add(nSerials);
                         db.SaveChanges();
                     }
+                    else
+                    {
+                        result.SetError("此序號已經出貨");
+                    }
                 }
                 else if (PurchaseSKU.Any())
                 {
+                    //if (!PurchaseSKU.Where(x=>x.SerialsLlist.Where(y=>y.SerialsNo== Serialsitem.SerialsNo).Any()).Any())
+                    //{
+
+                    //}
                     var nSerials = new SerialsLlist
                     {
                         OrderID = Serialsitem.OrderID,
-                        PID = SerialsLlist.FirstOrDefault().PID,
+                        PurchaseSKUID = PurchaseSKU.FirstOrDefault().ID,
                         SerialsNo = Serialsitem.SerialsNo,
                         SerialsType = "Order",
                         SerialsQTY = QTY,
@@ -468,7 +478,59 @@ namespace PurchaseOrderSys.Controllers
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+        [HttpPost]
+        public ActionResult GetImg(int id, string key, string ImgType)
+        {
+            var GetImgVM = new GetImgVM
+            {
+                id = id,
+                ImgType = ImgType,
+                key = key,
+                imglist = new List<string>()
+            };
+            if (key=="SKU")
+            {
+              var PurchaseSKU=  db.PurchaseSKU.Find(id);
+                if (PurchaseSKU.ImgFile.Any())
+                {
+                    GetImgVM.imglist = PurchaseSKU.ImgFile.Where(x => x.IsEnable && x.ImgType == ImgType).Select(x => x.Url).ToList();
+                }
+            }
+            return View(GetImgVM);
+        }
+        [HttpPost]
+        public ActionResult ImgUpload(int id, string key, string ImgType, IEnumerable<HttpPostedFileBase> ImgFile)
+        {
+            if (key == "SKU")
+            {
+                var PurchaseSKU = db.PurchaseSKU.Find(id);
+                if (ImgFile != null && ImgFile.Any())
+                {
+                    foreach (var file in ImgFile)
+                    {
+                        if (file != null)
+                        {
+                            var Url = SaveImg(file);
+                            PurchaseSKU.ImgFile.Add(new ImgFile
+                            {
+                                IsEnable = true,
+                                ImgType = ImgType,
+                                Url = Url,
+                                CreateBy = UserBy,
+                                CreateAt = DateTime.UtcNow
+                            });
+                        }
+                    }
+                    db.SaveChanges();
+                }
+            }
+
+            return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+            //return RedirectToAction("GetImg", new { id, key, ImgType });
+        }
     }
+
+
     public class ShipmentOrder
     {
         public int OrderID { get; set; }
@@ -476,7 +538,7 @@ namespace PurchaseOrderSys.Controllers
         public string SerialsNo { get; set; }
         public int QTY { get; set; }
     }
-    internal class AjaxResult
+    public class AjaxResult
     {
         public bool status { get; set; }
         public string message { get; set; }

@@ -105,7 +105,7 @@ namespace PurchaseOrderSys.Controllers
             return View(Warehouse);
         }
         [HttpPost]
-        public ActionResult Edit(Warehouse Warehouse, string[] Shippingmethods, string SCID, string Warehouse3P)
+        public ActionResult Edit(Warehouse Warehouse, string[] Shippingmethods, string SCID, string Warehouse3P, bool? saveexit)
         {
             var OldWarehouse = db.Warehouse.Find(Warehouse.ID);
             if (!string.IsNullOrWhiteSpace(Warehouse.Name)) OldWarehouse.Name = Warehouse.Name;
@@ -218,7 +218,14 @@ namespace PurchaseOrderSys.Controllers
                 throw;
             }
 
-            return RedirectToAction("Index");
+            if (saveexit.HasValue && saveexit.Value)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return RedirectToAction("Edit", new { Warehouse.ID });
+            }
         }
       
         public ActionResult Delete(int id)

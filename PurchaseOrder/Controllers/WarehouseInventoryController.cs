@@ -13,7 +13,7 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult Index(int ID)
         {
             var SCID = db.WarehouseSummary.Where(x => x.WarehouseID == ID && x.Type == "SCID").FirstOrDefault().Val;
-            var edt = DateTime.Today;
+            var edt = DateTime.UtcNow;
             var sdt = edt.AddDays(-30);
             var PurchaseSKU = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.Warehouse1.ID == ID).ToList();
             var WarehouseInventoryVM = new WarehouseInventoryVM();
@@ -27,10 +27,10 @@ namespace PurchaseOrderSys.Controllers
                     POQTY = x.QTYOrdered.HasValue ? x.QTYOrdered.Value : x.SerialsLlist.Where(y => y.SerialsType == "PO").Sum(y => y.SerialsQTY) ?? 0,//有輸入直接讀輸入，沒輸入計算序號數
 
                     CMQTY = GetCMQty(x),
-                    OrderQTY = x.SerialsLlist.Sum(y => y.SerialsLlistC.Where(z=>z.SerialsType == "Order").Sum(z=>z.SerialsQTY)).Value,
+                    OrderQTY = x.SerialsLlist.Where(z => z.SerialsType == "Order").Sum(z => z.SerialsQTY).Value,
                     TransferInQTY = x.SerialsLlist.Where(y => y.SerialsType == "TransferIn").Sum(y => y.SerialsQTY).Value,
                     TransferOutQTY = x.SerialsLlist.Where(y => y.SerialsType == "TransferOut").Sum(y => y.SerialsQTY).Value,
-                    Velocity = x.SerialsLlist.Sum(y => y.SerialsLlistC.Where(z => z.SerialsType == "Order" && z.CreateAt >= sdt && z.CreateAt <= sdt).Sum(z=>z.SerialsQTY)).Value,
+                    Velocity = x.SerialsLlist.Where(z => z.SerialsType == "Order" && z.CreateAt >= sdt && z.CreateAt <= sdt).Sum(z => z.SerialsQTY).Value,
                     DaysOfSupply = 0,
                     Aggregate = 0,//可上架的庫存總數
                     Awaiting = 0,//等待出貨的庫總量
@@ -105,7 +105,7 @@ namespace PurchaseOrderSys.Controllers
                     CMQTY = GetCMQty(item),
                     TransferInQTY = item.SerialsLlist.Where(y => y.SerialsType == "TransferIn").Sum(y => y.SerialsQTY).Value,
                     TransferOutQTY = item.SerialsLlist.Where(y => y.SerialsType == "TransferOut").Sum(y => y.SerialsQTY).Value,
-                    OrderQTY = x.SerialsLlist.Sum(y => y.SerialsLlistC.Where(z => z.SerialsType == "Order").Sum(z => z.SerialsQTY)).Value,
+                    OrderQTY = item.SerialsLlist.Where(z => z.SerialsType == "Order").Sum(z => z.SerialsQTY).Value,
                 });
             }
             foreach (var item in SkuInventoryVM)
@@ -123,20 +123,28 @@ namespace PurchaseOrderSys.Controllers
             return PurchaseSKU.PurchaseOrder.Warehouse1?.WarehouseSummary.FirstOrDefault(x => x.Type == "SCID")?.Val;
         }
 
-        public ActionResult Purchasing(string SKU)
+        public ActionResult Purchasing(string SKU,int? Inventory, int? Velocity)
         {
+            var Warehouselist = db.Warehouse.Where(x => x.IsEnable).Select(x => new SelectListItem { Text = x.Name, Value = x.ID.ToString() }).ToList();
+            ViewBag.Warehouselist = Warehouselist;
+            var edt = DateTime.UtcNow;
+            var sdt = edt.AddDays(-30);
             var PurchaseSKU = db.PurchaseSKU.Where(x => x.SkuNo == SKU && x.SerialsLlist.Any(y => y.SerialsType == "PO"));
             var SkuPurchasingVM = new SkuPurchasingVM
             {
-
-                SKU = SKU
+                SKU = SKU,
             };
+            if (Inventory.HasValue)
+            {
+                PurchaseSKU = PurchaseSKU.Where(x => x.PurchaseOrder.WarehouseID == Inventory);
+            }
             if (PurchaseSKU.Any())
             {
+                SkuPurchasingVM.Inventory = Inventory;
                 SkuPurchasingVM.Company = PurchaseSKU.FirstOrDefault()?.PurchaseOrder.Company.Name;
                 SkuPurchasingVM.SKUName = PurchaseSKU.FirstOrDefault()?.Name;
                 SkuPurchasingVM.Aggregate = 0;
-                SkuPurchasingVM.Fulfillable =0;
+                SkuPurchasingVM.Fulfillable = 0;
                 SkuPurchasingVM.AwaitingDispatch = 0;
                 SkuPurchasingVM.UnfulfillableRMA = 0;
                 SkuPurchasingVM.UnfulfillableTransit = 0;
@@ -145,21 +153,37 @@ namespace PurchaseOrderSys.Controllers
                 {
                     if (PurchaseSKUitem.SerialsLlist.Any())
                     {
-                        SkuPurchasingVM.Aggregate += PurchaseSKUitem.SerialsLlist.Where(y => !y.SerialsLlistC.Any() && !y.TransferSKUID.HasValue && !y.RMAID.HasValue && y.SerialsQTY > 0).Sum(y => y.SerialsQTY).Value;
-                        SkuPurchasingVM.Fulfillable += PurchaseSKUitem.SerialsLlist.Where(y => !y.SerialsLlistC.Any() && !y.TransferSKUID.HasValue && !y.RMAID.HasValue && y.SerialsQTY > 0).Sum(y => y.SerialsQTY).Value;
-                        SkuPurchasingVM.UnfulfillableRMA += PurchaseSKUitem.SerialsLlist.Where(y => !y.SerialsLlistC.Any() && !y.TransferSKUID.HasValue && y.RMAID.HasValue).Sum(y => y.SerialsQTY).Value;
-                        SkuPurchasingVM.UnfulfillableTransit += PurchaseSKUitem.SerialsLlist.Where(y => !y.SerialsLlistC.Any() && y.TransferSKUID.HasValue && !y.RMAID.HasValue).Sum(y => y.SerialsQTY).Value;
-                        SkuPurchasingVM.TotalInventory += PurchaseSKUitem.SerialsLlist.Where(y => !y.SerialsLlistC.Any() && !y.TransferSKUID.HasValue && !y.RMAID.HasValue).Sum(y => y.SerialsQTY).Value;
+                        var SCID = PurchaseSKUitem.PurchaseOrder.Warehouse1?.WarehouseSummary.Where(x => x.Type == "SCID").FirstOrDefault().Val;
+                        SkuPurchasingVM.BackOrdered += PurchaseSKUitem.QTYOrdered ?? 0;
+                        SkuPurchasingVM.Awaiting = GetAwaitingCount(SkuPurchasingVM.SKU, SCID);
+                        SkuPurchasingVM.POQTY += PurchaseSKUitem.QTYOrdered.HasValue ? PurchaseSKUitem.QTYOrdered.Value : PurchaseSKUitem.SerialsLlist.Where(y => y.SerialsType == "PO").Sum(y => y.SerialsQTY) ?? 0;//有輸入直接讀輸入，沒輸入計算序號數
+                        SkuPurchasingVM.CMQTY += GetCMQty(PurchaseSKUitem);
+                        SkuPurchasingVM.OrderQTY += PurchaseSKUitem.SerialsLlist.Where(z => z.SerialsType == "Order").Sum(z => z.SerialsQTY).Value;
+                        SkuPurchasingVM.TransferInQTY += PurchaseSKUitem.SerialsLlist.Where(y => y.SerialsType == "TransferIn").Sum(y => y.SerialsQTY).Value;
+                        SkuPurchasingVM.TransferOutQTY += PurchaseSKUitem.SerialsLlist.Where(y => y.SerialsType == "TransferOut").Sum(y => y.SerialsQTY).Value;
+                        SkuPurchasingVM.Velocity += PurchaseSKUitem.SerialsLlist.Where(z => z.SerialsType == "Order" && z.CreateAt >= sdt && z.CreateAt <= sdt).Sum(z => z.SerialsQTY).Value;
+                        SkuPurchasingVM.UnfulfillableRMA += PurchaseSKUitem.SerialsLlist.Where(y => y.SerialsType == "RMA").Sum(y => y.SerialsQTY).Value;
                     }
-
                 }
-                SkuPurchasingVM.BackOrdered = PurchaseSKU.Sum(x => x.QTYOrdered).Value;
+                SkuPurchasingVM.Fulfillable = SkuPurchasingVM.POQTY + SkuPurchasingVM.CMQTY + SkuPurchasingVM.OrderQTY + SkuPurchasingVM.TransferInQTY + SkuPurchasingVM.TransferOutQTY + SkuPurchasingVM.Awaiting;
+                SkuPurchasingVM.Aggregate = SkuPurchasingVM.Available - SkuPurchasingVM.Awaiting;//Aggregate = Fulfillable - Awaiting dispatch
+                SkuPurchasingVM.UnfulfillableTransit = SkuPurchasingVM.TransferInQTY + SkuPurchasingVM.TransferOutQTY;
+                SkuPurchasingVM.TotalInventory = SkuPurchasingVM.POQTY + SkuPurchasingVM.CMQTY + SkuPurchasingVM.OrderQTY + SkuPurchasingVM.TransferInQTY + SkuPurchasingVM.TransferOutQTY;
                 SkuPurchasingVM.QTYperbox = 1;
                 SkuPurchasingVM.QTYpercase = 1;
                 SkuPurchasingVM.Latest = PurchaseSKU.OrderByDescending(x => x.CreateAt).FirstOrDefault().Price.Value;
                 SkuPurchasingVM.Average = PurchaseSKU.Average(x => x.Price).Value;
                 SkuPurchasingVM.Lowest = PurchaseSKU.OrderBy(x => x.Price).FirstOrDefault().Price.Value;
                 SkuPurchasingVM.Highest = PurchaseSKU.OrderByDescending(x => x.Price).FirstOrDefault().Price.Value;
+                if (Velocity.HasValue)
+                {
+                    SkuPurchasingVM.Velocity = Velocity.Value;//公式？
+                    SkuPurchasingVM.AveragefulfilledQTY = 0;//公式？
+                    SkuPurchasingVM.AveragePOQTY = 0;//公式？
+                    SkuPurchasingVM.TotalFulfilled = 0;//公式？
+                    SkuPurchasingVM.TotalPO = 0;//公式？
+                }
+              
             }
             return View(SkuPurchasingVM);
         }

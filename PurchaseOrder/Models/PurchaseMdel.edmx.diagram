@@ -102,6 +102,7 @@
         <AssociationConnector Association="PurchaseOrderModel.FK_SerialsLlist_PurchaseSKU" />
         <AssociationConnector Association="PurchaseOrderModel.FK_SerialsLlist_SerialsLlist" />
         <AssociationConnector Association="PurchaseOrderModel.FK_SerialsLlist_TransferSKU" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_ImgFile_PurchaseSKU" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -77,7 +77,7 @@ namespace PurchaseOrderSys.Controllers
             return View(CreditMemo);
         }
         [HttpPost]
-        public ActionResult EditItem(CreditMemo filter, IEnumerable<HttpPostedFileBase> VendorCM)
+        public ActionResult EditItem(CreditMemo filter, IEnumerable<HttpPostedFileBase> VendorCM, bool? saveexit)
         {
             var CreditMemo = db.CreditMemo.Find(filter.ID);
             if (filter.CompanyID.HasValue) CreditMemo.CompanyID = filter.CompanyID;
@@ -117,7 +117,14 @@ namespace PurchaseOrderSys.Controllers
                 }
             }
             db.SaveChanges();
-            return RedirectToAction("Index");
+            if (saveexit.HasValue && saveexit.Value)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return RedirectToAction("EditItem", new { filter.ID });
+            }
         }
         public ActionResult ReturnItems(int ID)
         {

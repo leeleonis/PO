@@ -106,6 +106,10 @@
                     }]
                 }
             });*@
+            $("#saveexit").on('click', function () {
+                $("form").prepend('<input type="hidden" name="saveexit" value="true" />');
+                $("form").submit();
+            });
             $('#dt_basic tbody td img.detaildables').click(function () {
                 var nTr = this.parentNode.parentNode;
                 if (oTable.fnIsOpen(nTr)) {//判斷是否打開

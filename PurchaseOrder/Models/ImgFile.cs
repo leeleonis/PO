@@ -24,8 +24,10 @@ namespace PurchaseOrderSys.Models
         public string UpdateBy { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }
         public string ImgType { get; set; }
+        public Nullable<int> PurchaseSKUID { get; set; }
     
         public virtual CreditMemo CreditMemo { get; set; }
         public virtual PurchaseOrder PurchaseOrder { get; set; }
+        public virtual PurchaseSKU PurchaseSKU { get; set; }
     }
 }
