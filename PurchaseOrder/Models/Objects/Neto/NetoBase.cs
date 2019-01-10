@@ -20,6 +20,7 @@ namespace NetoDeveloper
         {
             string result = "";
 
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Endpoint_URL);
             request.ContentType = "application/json";
             request.Method = "post";
@@ -27,7 +28,9 @@ namespace NetoDeveloper
             request.Headers.Add("NETOAPI_ACTION", action);
             request.Headers.Add("NETOAPI_KEY", API_KEY);
             request.Headers.Add("NETOAPI_USERNAME", API_USERNAME);
+            request.KeepAlive = false;
             request.ProtocolVersion = HttpVersion.Version10;
+            request.ServicePoint.ConnectionLimit = 1;
 
             HttpWebResponse httpResponse;
 
