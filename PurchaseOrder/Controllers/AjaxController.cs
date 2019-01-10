@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using Newtonsoft.Json;
+using OfficeOpenXml;
 using PurchaseOrderSys.Models;
 
 namespace PurchaseOrderSys.Controllers
@@ -70,19 +71,19 @@ namespace PurchaseOrderSys.Controllers
 
         public ActionResult SkuNumberGet(string Search)
         {
-            var dataList = db.SkuLang.Where(x => x.LangID == "zh-tw" && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
+            var dataList = db.SkuLang.Where(x => x.LangID == "en-US" && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
             return Json(new { items = dataList }, JsonRequestBehavior.AllowGet);
         }
         public ActionResult TSkuNumberGet(string Search, int FromWID)
         {
             var PurchaseSKUList = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.IsEnable && x.PurchaseOrder.WarehouseID == FromWID).Select(x => x.SkuNo);
-            var dataList = db.SkuLang.Where(x => x.LangID == "zh-tw" && PurchaseSKUList.Contains(x.Sku) && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
+            var dataList = db.SkuLang.Where(x => x.LangID == "en-US" && PurchaseSKUList.Contains(x.Sku) && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
             //var dataList = db.SkuLang.Where(x => x.LangID == "zh-tw" && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
             return Json(new { items = dataList }, JsonRequestBehavior.AllowGet);
         }
         public ActionResult GetSkuNumberList(int? draw, int? start, int? length, int ID)
         {
-            var odataList = db.PurchaseSKU.Where(x => x.PurchaseOrderID == ID).Select(x => new PoSKUVM
+            var odataList = db.PurchaseSKU.Where(x => x.PurchaseOrderID == ID && x.IsEnable).Select(x => new PoSKUVM
             {
                 ID = x.ID,
                 ck = x.SkuNo,
@@ -111,7 +112,7 @@ namespace PurchaseOrderSys.Controllers
         }
         public ActionResult GetCMSkuNumberList(int? draw, int? start, int? length, int ID)
         {
-            var odataList = db.PurchaseSKU.Where(x => x.CreditMemoID == ID).Select(x => new CMSKUVM
+            var odataList = db.PurchaseSKU.Where(x => x.CreditMemoID == ID && x.IsEnable).Select(x => new CMSKUVM
             {
                 ID = x.ID,
                 ck = x.SkuNo,
@@ -188,7 +189,7 @@ namespace PurchaseOrderSys.Controllers
             }
             if (Skulist != null && Skulist.Where(x => !string.IsNullOrWhiteSpace(x)).Any())
             {
-                var dataList = db.SkuLang.Where(x => x.LangID == "zh-tw" && Skulist.Contains(x.Sku)).Select(x =>
+                var dataList = db.SkuLang.Where(x => x.LangID == "en-US" && Skulist.Contains(x.Sku)).Select(x =>
                 new CMSKUVM
                 {
                     ck = x.Sku,
@@ -230,7 +231,7 @@ namespace PurchaseOrderSys.Controllers
             }
             if (Skulist != null && Skulist.Where(x => !string.IsNullOrWhiteSpace(x)).Any())
             {
-                var dataList = db.SkuLang.Where(x => x.LangID == "zh-tw" && Skulist.Contains(x.Sku)).Select(x =>
+                var dataList = db.SkuLang.Where(x => x.LangID == "en-US" && Skulist.Contains(x.Sku)).Select(x =>
                 new PoSKUVM
                 {
                     ck = x.Sku,
@@ -279,7 +280,7 @@ namespace PurchaseOrderSys.Controllers
             {
                 odataList = new List<PoSKUVM>();
             }
-            foreach (var item in odataList.Where(x => x.ID == ID || x.SKU == SKU))
+            foreach (var item in odataList.Where(x => (x.ID.HasValue && x.ID != 0 && x.ID == ID) || x.SKU == SKU))
             {
                 switch (type)
                 {
@@ -426,7 +427,7 @@ namespace PurchaseOrderSys.Controllers
                     QTY = Serialsitem.QTY;
                 }
                 var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == Serialsitem.SerialsNo);//檢查是否有序號
-                var PurchaseSKU = db.PurchaseSKU.Where(x => x.SkuNo == Serialsitem.SkuNo);
+                var PurchaseSKU = db.PurchaseSKU.Where(x => x.SkuNo == Serialsitem.SkuNo && x.IsEnable);
                 if (SerialsLlist.Any())
                 {
                     SerialsLlist = SerialsLlist.Where(x => x.SerialsQTY > 0 && (x.SerialsType == "PO" || x.SerialsType == "TransferIn") && !x.SerialsLlistC.Any());//PO和TransferIn才能出貨
@@ -435,7 +436,7 @@ namespace PurchaseOrderSys.Controllers
                         var nSerials = new SerialsLlist
                         {
                             OrderID = Serialsitem.OrderID,
-                            PurchaseSKUID= SerialsLlist.FirstOrDefault().PurchaseSKUID,
+                            PurchaseSKUID = SerialsLlist.FirstOrDefault().PurchaseSKUID,
                             PID = SerialsLlist.FirstOrDefault().ID,
                             SerialsNo = Serialsitem.SerialsNo,
                             SerialsType = "Order",
@@ -488,9 +489,9 @@ namespace PurchaseOrderSys.Controllers
                 key = key,
                 imglist = new List<string>()
             };
-            if (key=="SKU")
+            if (key == "SKU")
             {
-              var PurchaseSKU=  db.PurchaseSKU.Find(id);
+                var PurchaseSKU = db.PurchaseSKU.Find(id);
                 if (PurchaseSKU.ImgFile.Any())
                 {
                     GetImgVM.imglist = PurchaseSKU.ImgFile.Where(x => x.IsEnable && x.ImgType == ImgType).Select(x => x.Url).ToList();
@@ -527,6 +528,108 @@ namespace PurchaseOrderSys.Controllers
 
             return Json(new { status = true }, JsonRequestBehavior.AllowGet);
             //return RedirectToAction("GetImg", new { id, key, ImgType });
+        }
+
+        public ActionResult SerialsExcel(int id, string key)
+        {
+            ViewBag.id = id;
+            ViewBag.id = key;
+            return View();
+        }
+        [HttpPost]
+        public ActionResult UpSerialsExcel(int id, string key, HttpPostedFileBase ExcelFile)
+        {
+            if (key == "Addserials")
+            {
+                var ExcelSerialslist = new List<string>();
+                using (var package = new ExcelPackage(ExcelFile.InputStream))
+                {
+
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
+                    int col = 1;
+
+                    for (int row = 2; worksheet.Cells[row, col].Value != null; row++)
+                    {
+                        ExcelSerialslist.Add(worksheet.Cells[row, col].Value.ToString());
+                    }
+                }
+                var PurchaseSKU = db.PurchaseSKU.Find(id);
+                var QTYOrdered = PurchaseSKU.QTYOrdered;//採購數
+                var SerialsQTYList = PurchaseSKU.SerialsLlist.Where(x => x.SerialsType == "PO");//所有序號
+                var SerialsQTY = SerialsQTYList.Sum(x => x.SerialsQTY);//入庫數
+                if (QTYOrdered >= ExcelSerialslist.Count() + SerialsQTY)
+                {
+                    foreach (var serials in ExcelSerialslist)
+                    {
+                        if (SerialsQTYList.Where(x => x.SerialsNo == serials).Any())
+                        {
+                            return Json(new { status = false, Msg = "序號重複" }, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            if (PurchaseSKU.PurchaseOrder.POType == "DropshpOrder")//直發一入一出
+                            {
+                                var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials && x.PurchaseSKU.PurchaseOrderID == PurchaseSKU.PurchaseOrderID);//檢查序號是否重複，同訂單同序號不能新增
+                                if (!SerialsLlist.Any())
+                                {
+                                    var dt = DateTime.UtcNow;
+                                    var nSerialsLlistIn = new SerialsLlist
+                                    {
+                                        SerialsType = "DropshpOrderIn",
+                                        SerialsNo = serials,
+                                        SerialsQTY = 1,
+                                        ReceivedBy = UserBy,
+                                        ReceivedAt = dt,
+                                        CreateBy = UserBy,
+                                        CreateAt = dt
+                                    };
+                                    PurchaseSKU.SerialsLlist.Add(nSerialsLlistIn);
+                                    var nSerialsLlistOut = new SerialsLlist
+                                    {
+                                        SerialsType = "DropshpOrderOut",
+                                        SerialsNo = serials,
+                                        SerialsQTY = -1,
+                                        ReceivedBy = UserBy,
+                                        ReceivedAt = dt,
+                                        CreateBy = UserBy,
+                                        CreateAt = dt
+                                    };
+                                    nSerialsLlistIn.SerialsLlistC.Add(nSerialsLlistOut);
+                                }
+                            }
+                            else if (PurchaseSKU.PurchaseOrder.POType == "PurchaseOrder")
+                            {
+                                var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials && x.PurchaseSKU.PurchaseOrderID == PurchaseSKU.PurchaseOrderID);//檢查序號是否重複，同訂單同序號不能新增
+                                if (!SerialsLlist.Any())
+                                {
+                                    var dt = DateTime.UtcNow;
+                                    var nSerialsLlist = new SerialsLlist
+                                    {
+                                        SerialsType = "PO",
+                                        SerialsNo = serials,
+                                        SerialsQTY = 1,
+                                        ReceivedBy = UserBy,
+                                        ReceivedAt = dt,
+                                        CreateBy = UserBy,
+                                        CreateAt = dt
+                                    };
+                                    PurchaseSKU.SerialsLlist.Add(nSerialsLlist);
+                                }
+                            }
+                        }
+                    }
+                    db.SaveChanges();
+                    return Json(new { status = true, reload = true }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { status = false, Msg = "序號不可大於採購數" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                return Json(new { status = false, Msg = "參數錯誤" }, JsonRequestBehavior.AllowGet);
+            }
         }
     }
 

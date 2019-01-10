@@ -126,7 +126,7 @@
         </div>
     </section>
 </div>
-<div id="dialog" title="Img">
+<div id="dialog">
     
 </div>
 @section pagespecific {
@@ -181,7 +181,7 @@
                         data: "ck",
                         orderable: false,
                         render: function (data, type, row) {
-                            return "<a href='" + "@Url.Action("Addserials")" + "?ID=" + row.ID + "' class='btn btn-default btn-sm' >Add serials</a> ";
+                            return "<a href='" + "@Url.Action("Addserials")" + "?ID=" + row.ID + "' class='btn btn-default btn-sm' >Add serials</a> <a valID=" + row.ID + " class='btn btn-default btn-sm Excel' >Add by Excel</a>";
                         }
                     }
                 ],
@@ -278,6 +278,25 @@
                     url: url,
                     data: { id: $(this).attr("valID"), key: "SKU", ImgType: "ImgType" },
                     success: function (data) {
+                        $("#dialog").dialog({
+                            title: "Img"
+                        });
+                        $("#dialog").html(data);
+                        $("#dialog").dialog("open");
+                        //$("#dialog").load(data).dialog({ modal: true }).dialog('open');
+                    }
+                });
+                return false;
+            });
+            $("body").on("click", ".Excel", function () {
+                var url = '@Url.Action("SerialsExcel", "Ajax")'
+                $.ajax({
+                    url: url,
+                    data: { id: $(this).attr("valID"), key: "Addserials", ImgType: "ImgType" },
+                    success: function (data) {
+                        $("#dialog").dialog({
+                            title: "Excel"
+                        });
                         $("#dialog").html(data);
                         $("#dialog").dialog("open");
                         //$("#dialog").load(data).dialog({ modal: true }).dialog('open');
@@ -307,6 +326,12 @@
         }
         function Success(data) {
             $("#dialog").dialog("close");
+            if (data.status == false) {
+                alert(data.Msg);
+            }
+            if (data.reload == true) {
+                window.location.reload();
+            }
         }
         var Preview = new function () {
 

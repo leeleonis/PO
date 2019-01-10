@@ -1071,7 +1071,7 @@ namespace PurchaseOrderSys.Models
         public string SKU { get; set; }
         public string Name { get; set; }
         public int? QTY { get; set; }
-        public List<string> SerialsLlist { get; set; }
+        public List<SerialsLlist> SerialsLlist { get; set; }
     }
     public class PrepTable
     {

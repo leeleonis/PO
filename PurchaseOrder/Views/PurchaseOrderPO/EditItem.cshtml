@@ -772,12 +772,14 @@
                     $('tr:eq(9) td:eq(1)', api.table().footer()).html(thousandComma(CMCredit));
                     //Balance:
                     Balance = TotalPaid - GrandTotal + TotalRefunded + CMCredit;
-                    if (Balance < 0) {
-                        $("#PaymentStatus").val("PartiallyPaid");
-                    } else if (Balance > 0) {
-                        $("#PaymentStatus").val("OverPaid");
-                    } else if (Balance == 0) {
-                        $("#PaymentStatus").val("Completed");
+                    if (TotalPaid > 0) {
+                        if (Balance < 0) {
+                            $("#PaymentStatus").val("PartiallyPaid");
+                        } else if (Balance > 0) {
+                            $("#PaymentStatus").val("OverPaid");
+                        } else if (Balance == 0) {
+                            $("#PaymentStatus").val("Completed");
+                        }
                     }
                     $('tr:eq(10) td:eq(1)', api.table().footer()).html(thousandComma(Balance));
                 }

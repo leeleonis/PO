@@ -343,7 +343,7 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult EditItem(int ID, string POTypeVal)
         {
             var PurchaseOrder = db.PurchaseOrder.Find(ID);
-            var dataList = PurchaseOrder.PurchaseSKU.Select(x => new PoSKUVM
+            var dataList = PurchaseOrder.PurchaseSKU.Where(x=>x.IsEnable).Select(x => new PoSKUVM
             {
                 ID = x.ID,
                 ck = x.SkuNo,
@@ -404,6 +404,7 @@ namespace PurchaseOrderSys.Controllers
             PurchaseOrder.InvoiceDate = filter.InvoiceDate;
             PurchaseOrder.InvoiceNo = filter.InvoiceNo;
             PurchaseOrder.PaymentDate = filter.PaymentDate;
+            PurchaseOrder.PaymentStatus = filter.PaymentStatus;
             PurchaseOrder.ShippedDate = filter.ShippedDate;
             PurchaseOrder.PaidAmount = filter.PaidAmount;
             PurchaseOrder.Carrier = filter.Carrier;
@@ -438,7 +439,7 @@ namespace PurchaseOrderSys.Controllers
                 foreach (var item in PurchaseSKUlistE)
                 {
                     var oldPurchaseSKU = PurchaseOrder.PurchaseSKU.Where(x => x.ID == item.ID);
-                    if (oldPurchaseSKU.Any())
+                    if (oldPurchaseSKU.Any() && item.ID != 0)
                     {
                         foreach (var SKUitem in oldPurchaseSKU)
                         {
@@ -488,6 +489,7 @@ namespace PurchaseOrderSys.Controllers
                             SKUitem.UpdateBy = UserBy;
                             SKUitem.UpdateAt = dt;
                         }
+                        //db.SaveChanges();
                     }
                 }
             }
@@ -572,7 +574,7 @@ namespace PurchaseOrderSys.Controllers
                     var val = 0;
                     if (int.TryParse(QTYReceiveditem.val, out val))
                     {
-                        foreach (var item in oPurchaseOrder.PurchaseSKU.Where(x => x.ID == QTYReceiveditem.ID))
+                        foreach (var item in oPurchaseOrder.PurchaseSKU.Where(x => x.ID == QTYReceiveditem.ID && x.IsEnable))
                         {
                             item.QTYReceived = val;
                         }
@@ -585,6 +587,16 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult Addserials(int ID)
         {
             var PurchaseSKU = db.PurchaseSKU.Find(ID);
+            if (string.IsNullOrWhiteSpace(PurchaseSKU.UPCEAN))
+            {
+                var SKUlist = db.SKU.Where(x => x.SkuID == PurchaseSKU.SkuNo).ToList();
+                SKUlist= SKUlist.Where(x => !string.IsNullOrWhiteSpace(x.EAN) || (!string.IsNullOrWhiteSpace(x.UPC) && x.UPC != "Does not apply")).ToList();
+                if (SKUlist.Any())
+                {
+                    PurchaseSKU.UPCEAN = SKUlist.FirstOrDefault().UPC;
+                    db.SaveChanges();
+                }
+            }
             return View(PurchaseSKU);
         }
         [HttpPost]
@@ -600,7 +612,40 @@ namespace PurchaseOrderSys.Controllers
                 PurchaseSKU.ReceivedDate = ReceivedDate;
             }
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Addserials", new { id = ID });
+        }
+        public ActionResult DelSerialsNo(string serials, int PurchaseSKUID)
+        {
+            var PurchaseSKU = db.PurchaseSKU.Find(PurchaseSKUID);
+            var SerialsLlist = PurchaseSKU.SerialsLlist.Where(x => x.SerialsNo == serials && x.SerialsType == "PO");
+            if (SerialsLlist.Any())
+            {
+                SerialsLlist = SerialsLlist.Where(x=>!x.SerialsLlistC.Any());
+                if (SerialsLlist.Any())
+                {
+                    foreach (var item in SerialsLlist.ToList())
+                    {
+                        db.Entry(item).State = System.Data.Entity.EntityState.Deleted;
+                    }
+                    try
+                    {
+                        db.SaveChanges();
+                        return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+                    }
+                    catch (Exception ex)
+                    {
+                        return Json(new { status = false, Errmsg = ex.ToString() }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    return Json(new { status = false, Errmsg = "序號不在倉庫內" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                return Json(new { status = false, Errmsg ="查無序號" }, JsonRequestBehavior.AllowGet);
+            }
         }
         public ActionResult Saveserials(string serials, int PurchaseSKUID)
         {
@@ -639,7 +684,7 @@ namespace PurchaseOrderSys.Controllers
                         CreateBy = UserBy,
                         CreateAt = dt
                     };
-                    db.SerialsLlist.Add(nSerialsLlistOut);
+                    nSerialsLlistIn.SerialsLlistC.Add(nSerialsLlistOut);
                     try
                     {
                         db.SaveChanges();

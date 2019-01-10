@@ -111,7 +111,7 @@ namespace PurchaseOrderSys.Controllers
             var PrepVMList = new List<PrepVM>();
             foreach (var item in oTransfer.TransferSKU)
             {
-                PrepVMList.Add(new PrepVM { SKU = item.SkuNo, Name = item.Name, QTY = item.QTY, SerialsLlist = item.SerialsLlist.Select(x => x.SerialsNo).ToList() });
+                PrepVMList.Add(new PrepVM { SKU = item.SkuNo, Name = item.Name, QTY = item.QTY, SerialsLlist = item.SerialsLlist.ToList() });
             }
             Session["PrepVMList"] = PrepVMList;
             return View(oTransfer);
@@ -119,15 +119,15 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult Saveserials(string serials)
         {
             var PrepVMList = (List<PrepVM>)Session["PrepVMList"];
-            
-            var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials);//找到序號
+
+            var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials && !x.SerialsLlistC.Any() && x.SerialsQTY > 0);//找到序號
             if (SerialsLlist.Any())
             {
                 if (SerialsLlist.Sum(c => c.SerialsQTY) == 1)
                 {
                     if (PrepVMList[0].QTY > PrepVMList[0].SerialsLlist.Count())
                     {
-                        PrepVMList[0].SerialsLlist.Add(serials);
+                        PrepVMList[0].SerialsLlist.Add(SerialsLlist.FirstOrDefault());
                         Session["PrepVMList"] = PrepVMList;
                         return Json(new { status = true }, JsonRequestBehavior.AllowGet);
                     }
@@ -158,7 +158,7 @@ namespace PurchaseOrderSys.Controllers
                     {
                         foreach (var SerialsLlistitem in item.SerialsLlist)
                         {
-                            PrepTableList.Add(new PrepTable { SKU = item.SKU, Name = item.Name, Serial = SerialsLlistitem, QTY = item.QTY + "/" + item.SerialsLlist.Count() });
+                            PrepTableList.Add(new PrepTable { SKU = item.SKU, Name = item.Name, Serial = SerialsLlistitem.SerialsNo, QTY = item.QTY + "/" + item.SerialsLlist.Count() });
                         }
                     }
                     else

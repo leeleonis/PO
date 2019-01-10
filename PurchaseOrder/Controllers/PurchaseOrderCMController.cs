@@ -57,7 +57,7 @@ namespace PurchaseOrderSys.Controllers
             //    Tax = CreditMemo.PurchaseOrder.Tax,
             //    Currency = CreditMemo.PurchaseOrder.Currency
             //};
-            var dataList = CreditMemo.PurchaseSKU.Select(x => new CMSKUVM
+            var dataList = CreditMemo.PurchaseSKU.Where(x => x.IsEnable).Select(x => new CMSKUVM
             {
                 ID = x.ID,
                 ck = x.SkuNo,
