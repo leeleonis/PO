@@ -19,6 +19,7 @@ namespace PurchaseOrderSys.Controllers
             var WarehouseInventoryVM = new WarehouseInventoryVM();
             if (PurchaseSKU.Any())
             {
+                var Awaitinglist = GetAwaitingCount("", SCID);
                 var WarehouseVM = PurchaseSKU.Select(x => new WarehouseVM
                 {
                     ID = x.ID,
@@ -37,22 +38,40 @@ namespace PurchaseOrderSys.Controllers
                     Fulfillable = 0,
                     Unfulfillable = 0
                 }).ToList();
-                foreach (var item in WarehouseVM)
+                var GroupWarehouseVM = WarehouseVM.GroupBy(x => new { x.SKU }).Select(x => new WarehouseVM //SKU數量總計
+                {
+                    ID = x.FirstOrDefault().ID,
+                    Name = x.FirstOrDefault().Name,
+                    SKU = x.Key.SKU,
+                    POQTY = x.Sum(p => p.POQTY),
+                    CMQTY = x.Sum(p => p.CMQTY),
+                    OrderQTY = x.Sum(p => p.OrderQTY),
+                    TransferInQTY = x.Sum(p => p.TransferInQTY),
+                    TransferOutQTY = x.Sum(p => p.TransferOutQTY),
+                    Velocity = x.Sum(p => p.Velocity),
+                    //DaysOfSupply = x.Sum(p => p.DaysOfSupply),
+                    //Aggregate = x.Sum(p => p.Aggregate),
+                    //Awaiting = x.Sum(p => p.Awaiting),
+                    //Fulfillable = x.Sum(p => p.Fulfillable),
+                    //Unfulfillable = x.Sum(p => p.Unfulfillable),
+                }).ToList();
+                foreach (var item in GroupWarehouseVM)
                 {
                     item.Fulfillable = item.POQTY + item.CMQTY + item.OrderQTY + item.TransferInQTY + item.TransferOutQTY;
                     item.Unfulfillable = item.TransferInQTY - item.TransferOutQTY;
-                    item.Awaiting = GetAwaitingCount(item.SKU,SCID);
+                    item.Awaiting = Awaitinglist.Where(x => x.SKU == item.SKU && x.SCID == SCID).FirstOrDefault()?.QTY ?? 0;
                     item.Aggregate = item.Fulfillable - item.Awaiting;//Aggregate = Fulfillable - Awaiting dispatch
                     item.DaysOfSupply = item.Aggregate != 0 && item.Velocity != 0 ? item.Aggregate / item.Velocity / 30 : 0;  //Days of supply 算法: Aggregate / Velocity (30 days) / 30
-                                                                                                                              //item.Fulfillable = item.Awaiting + item.Aggregate; //Fulfillable = Awaiting dispatch + Aggregate 2018/12/28 拿掉公式
+                    //item.Fulfillable = item.Awaiting + item.Aggregate; //Fulfillable = Awaiting dispatch + Aggregate 2018/12/28 拿掉公式
                 }
+               
                 WarehouseInventoryVM.Company = PurchaseSKU.FirstOrDefault().PurchaseOrder.Company.Name;
                 WarehouseInventoryVM.WarehouseType = PurchaseSKU.FirstOrDefault().PurchaseOrder.Warehouse1.Type;
                 WarehouseInventoryVM.Fulfillable = PurchaseSKU.FirstOrDefault().PurchaseOrder.Warehouse1.Fulfillable;
                 WarehouseInventoryVM.Location = PurchaseSKU.FirstOrDefault().PurchaseOrder.Warehouse1.Location;
                 WarehouseInventoryVM.Countries = PurchaseSKU.FirstOrDefault().PurchaseOrder.Warehouse1.Countries;
                 WarehouseInventoryVM.Marketplace = PurchaseSKU.FirstOrDefault().PurchaseOrder.Warehouse1.Marketplace;
-                WarehouseInventoryVM.WarehouseVM = WarehouseVM;
+                WarehouseInventoryVM.WarehouseVM = GroupWarehouseVM;
             }
             return View(WarehouseInventoryVM);
         }
@@ -86,7 +105,8 @@ namespace PurchaseOrderSys.Controllers
         {
             var SkuInventoryVM = new List<SkuInventoryVM>();
             var PurchaseSKU = db.PurchaseSKU.Where(x => x.SkuNo == SKU && x.PurchaseOrderID.HasValue && x.PurchaseOrder.WarehouseID.HasValue);
-
+            //取待出貨
+            var AwaitingCountlist = GetAwaitingCount(SKU, "");
             foreach (var item in PurchaseSKU)
             {
                 SkuInventoryVM.Add(new SkuInventoryVM
@@ -98,7 +118,7 @@ namespace PurchaseOrderSys.Controllers
                     POQTY = item.QTYOrdered.HasValue ? item.QTYOrdered.Value : item.SerialsLlist.Where(y => y.SerialsType == "PO").Sum(y => y.SerialsQTY) ?? 0,//有輸入直接讀輸入，沒輸入計算序號數
                     Available = 0,
                     Aggregate = 0,//可上架的庫存總數
-                    Awaiting = GetAwaitingCount(item.SkuNo, GetSCID(item)),//等待出貨的庫總量
+                   // Awaiting = GetAwaitingCount(item.SkuNo, GetSCID(item)),//等待出貨的庫總量
                     Unfulfillable = 0,
                     Total = 0,
                     BackOrdered = item.QTYOrdered ?? 0,
@@ -108,12 +128,13 @@ namespace PurchaseOrderSys.Controllers
                     OrderQTY = item.SerialsLlist.Where(z => z.SerialsType == "Order").Sum(z => z.SerialsQTY).Value,
                 });
             }
+           
             foreach (var item in SkuInventoryVM)
             {
+                item.Awaiting = AwaitingCountlist.Where(x => x.SKU == SKU && x.SCID == item.SCID).FirstOrDefault()?.QTY ?? 0;
                 item.Available = item.POQTY + item.CMQTY + item.OrderQTY + item.TransferInQTY + item.TransferOutQTY;
                 item.Unfulfillable = item.TransferInQTY - item.TransferOutQTY;
                 item.Aggregate = item.Available - item.Awaiting;//Aggregate = Fulfillable - Awaiting dispatch
-
             }
             return View(SkuInventoryVM);
         }
@@ -140,6 +161,9 @@ namespace PurchaseOrderSys.Controllers
             }
             if (PurchaseSKU.Any())
             {
+                //取待出貨
+                var AwaitingCountlist = GetAwaitingCount(SKU, "");
+
                 SkuPurchasingVM.Inventory = Inventory;
                 SkuPurchasingVM.Company = PurchaseSKU.FirstOrDefault()?.PurchaseOrder.Company.Name;
                 SkuPurchasingVM.SKUName = PurchaseSKU.FirstOrDefault()?.Name;
@@ -155,7 +179,7 @@ namespace PurchaseOrderSys.Controllers
                     {
                         var SCID = PurchaseSKUitem.PurchaseOrder.Warehouse1?.WarehouseSummary.Where(x => x.Type == "SCID").FirstOrDefault().Val;
                         SkuPurchasingVM.BackOrdered += PurchaseSKUitem.QTYOrdered ?? 0;
-                        SkuPurchasingVM.Awaiting = GetAwaitingCount(SkuPurchasingVM.SKU, SCID);
+                        SkuPurchasingVM.Awaiting = AwaitingCountlist.Where(x => x.SKU == SKU && x.SCID == SCID).FirstOrDefault()?.QTY ?? 0;
                         SkuPurchasingVM.POQTY += PurchaseSKUitem.QTYOrdered.HasValue ? PurchaseSKUitem.QTYOrdered.Value : PurchaseSKUitem.SerialsLlist.Where(y => y.SerialsType == "PO").Sum(y => y.SerialsQTY) ?? 0;//有輸入直接讀輸入，沒輸入計算序號數
                         SkuPurchasingVM.CMQTY += GetCMQty(PurchaseSKUitem);
                         SkuPurchasingVM.OrderQTY += PurchaseSKUitem.SerialsLlist.Where(z => z.SerialsType == "Order").Sum(z => z.SerialsQTY).Value;
@@ -165,6 +189,8 @@ namespace PurchaseOrderSys.Controllers
                         SkuPurchasingVM.UnfulfillableRMA += PurchaseSKUitem.SerialsLlist.Where(y => y.SerialsType == "RMA").Sum(y => y.SerialsQTY).Value;
                     }
                 }
+              
+
                 SkuPurchasingVM.Fulfillable = SkuPurchasingVM.POQTY + SkuPurchasingVM.CMQTY + SkuPurchasingVM.OrderQTY + SkuPurchasingVM.TransferInQTY + SkuPurchasingVM.TransferOutQTY + SkuPurchasingVM.Awaiting;
                 SkuPurchasingVM.Aggregate = SkuPurchasingVM.Available - SkuPurchasingVM.Awaiting;//Aggregate = Fulfillable - Awaiting dispatch
                 SkuPurchasingVM.UnfulfillableTransit = SkuPurchasingVM.TransferInQTY + SkuPurchasingVM.TransferOutQTY;

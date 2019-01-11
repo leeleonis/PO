@@ -29,7 +29,8 @@ namespace PurchaseOrderSys
                 "~/scripts/plugin/summernote/summernote.js",
                 "~/scripts/plugin/summernote/summernote-zh-TW.js",
                 "~/scripts/app.min.js",
-                "~/scripts/jquery.number.min.js"
+                "~/scripts/jquery.number.min.js",
+                "~/Scripts/jquery.unobtrusive-ajax.min.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/scripts/full-calendar").Include(

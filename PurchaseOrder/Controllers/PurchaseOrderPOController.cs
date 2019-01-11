@@ -1056,6 +1056,10 @@ namespace PurchaseOrderSys.Controllers
                 return Json(new { status = false, Errmsg }, JsonRequestBehavior.AllowGet);
             }
         }
+        public ActionResult CreateByExcel(int id, HttpPostedFileBase PaymentProofList)
+        {
+            return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+        }
     }
 
 }

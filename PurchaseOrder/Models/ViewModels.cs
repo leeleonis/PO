@@ -1065,7 +1065,14 @@ namespace PurchaseOrderSys.Models
         [Display(Name = "Warehouse_DefaultRMA", ResourceType = typeof(App_GlobalResources.Resource))]
         public bool DefaultRMA { get; set; }
     }
-
+    public class AddSKUserialsVM
+    {
+        public string SKU { get; set; }
+        public string serials { get; set; }
+        public string ProductName { get; set; }
+        public decimal? Price { get; set; }
+        public decimal? Discount { get; set; }
+    }
     public class PrepVM
     {
         public string SKU { get; set; }
@@ -1088,5 +1095,11 @@ namespace PurchaseOrderSys.Models
         public string key { get; set; }
         public string ImgType { get; set; }
         public List<string> imglist { get; set; }
+    }
+    public class AwaitingDispatchVM
+    {
+        public string SCID { get; set; }
+        public string SKU { get; set; }
+        public int QTY { get; set; }
     }
 }

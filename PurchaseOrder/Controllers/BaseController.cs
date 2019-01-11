@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using System.Web.UI;
+using Newtonsoft.Json;
 using PurchaseOrderSys.Models;
 
 namespace PurchaseOrderSys.Controllers
@@ -155,7 +156,7 @@ namespace PurchaseOrderSys.Controllers
         public string SaveImg(HttpPostedFileBase file)
         {
             try
-            {         
+            {
                 var Dirpath = Server.MapPath(FileUploads);
                 if (!Directory.Exists(Dirpath))
                     Directory.CreateDirectory(Dirpath);
@@ -177,36 +178,166 @@ namespace PurchaseOrderSys.Controllers
         /// <param name="SKU">SKU</param>
         /// <param name="SCID">SCID</param>
         /// <returns></returns>
-        public int GetAwaitingCount(string SKU, string SCID)
+        public List<AwaitingDispatchVM> GetAwaitingCount(string SKU, string SCID)
         {
-            var count = 0;
-            if (string.IsNullOrWhiteSpace(SCID))
-            {
-                return count;
-            }
+            var SKUs = new string[] { SKU };
+            var SCIDs = new string[] { SCID };
+            return GetAwaitingCount(SKUs, SCIDs);
+        }
+        /// <summary>
+        /// 倉庫等待出貨的庫總量
+        /// </summary>
+        /// <param name="SKUs">SKU</param>
+        /// <param name="SCIDs">SCID</param>
+        /// <returns></returns>
+        public List<AwaitingDispatchVM> GetAwaitingCount(string[] SKUs, string[] SCIDs)
+        {
+            var AwaitingDispatchList = new List<AwaitingDispatchVM>();
             using (WebClient wc = new WebClient())
             {
                 try
                 {
+                    SKUs = SKUs.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
+                    SCIDs = SCIDs.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
                     wc.Encoding = Encoding.UTF8;
-
                     NameValueCollection nc = new NameValueCollection();
-                    nc["Sku"] = SKU;
-                    nc["WarehouseID"] = SCID;
-                    byte[] bResult = wc.UploadValues(ApiUrl+ "Api/GetSkuInventoryQTY", nc);
-                    string resultXML = Encoding.UTF8.GetString(bResult);
-                    int.TryParse(resultXML, out count);
-                    if (count>0)
+                    if (SCIDs.Any() && SKUs.Any())
                     {
-                        count *= -1;
+                        nc["Skus"] = JsonConvert.SerializeObject(SKUs);
+                        nc["WarehouseIDs"] = JsonConvert.SerializeObject(SCIDs);
                     }
+                    else if (SCIDs.Any())
+                    {
+                        nc["WarehouseIDs"] = JsonConvert.SerializeObject(SCIDs);
+                    }
+                    else if (SKUs.Any())
+                    {
+                        nc["Skus"] = JsonConvert.SerializeObject(SKUs);
+                    }
+                    byte[] bResult = wc.UploadValues(ApiUrl + "Api/GetSkuInventoryQTY", nc);
+                    string resultXML = Encoding.UTF8.GetString(bResult);
+                    AwaitingDispatchList = JsonConvert.DeserializeObject<List<AwaitingDispatchVM>>(resultXML);
+                    //foreach (var item in values)
+                    //{
+                    //    if (item.QTY > 0)
+                    //    {
+                    //        AwaitingDispatchList.Add(new AwaitingDispatchVM
+                    //        {
+                    //            SCID = item.SCID,
+                    //            SKU = item.SKU,
+                    //            QTY = item.QTY * -1
+                    //        });
+                    //    }
+                    //    else
+                    //    {
+                    //        AwaitingDispatchList.Add(new AwaitingDispatchVM
+                    //        {
+                    //            SCID = item.SCID,
+                    //            SKU = item.SKU,
+                    //            QTY = item.QTY
+                    //        });
+                    //    }
+                    //}
                 }
                 catch (WebException ex)
                 {
-                    //throw new Exception("無法連接遠端伺服器");
+
                 }
             }
-            return count;
+            return AwaitingDispatchList;
+        }
+        /// <summary>
+        /// 比對資料，並寫回資料庫
+        /// </summary>
+        /// <param name="PurchaseSKU"></param>
+        /// <param name="ExcelSerialslist">序號</param>
+        /// <param name="POType">POType</param>
+        /// <returns></returns>
+        public string SerialsAddCheck(PurchaseSKU PurchaseSKU, List<string> ExcelSerialslist, string POType)
+        {
+            try
+            {
+
+
+                if (PurchaseSKU.PurchaseOrder != null)
+                {
+                    POType = PurchaseSKU.PurchaseOrder.POType;
+                }
+                var QTYOrdered = PurchaseSKU.QTYOrdered;//採購數
+                var SerialsQTYList = PurchaseSKU.SerialsLlist.Where(x => x.SerialsType == "PO");//所有序號
+                var SerialsQTY = SerialsQTYList.Sum(x => x.SerialsQTY);//入庫數
+                if (QTYOrdered >= ExcelSerialslist.Count() + SerialsQTY)
+                {
+                    foreach (var serials in ExcelSerialslist)
+                    {
+                        if (SerialsQTYList.Where(x => x.SerialsNo == serials).Any())
+                        {
+                            return "序號重複";
+                        }
+                        else
+                        {
+                            if (POType == "DropshpOrder")//直發一入一出
+                            {
+                                var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials && x.PurchaseSKU.PurchaseOrderID == PurchaseSKU.PurchaseOrderID);//檢查序號是否重複，同訂單同序號不能新增
+                                if (!SerialsLlist.Any())
+                                {
+                                    var dt = DateTime.UtcNow;
+                                    var nSerialsLlistIn = new SerialsLlist
+                                    {
+                                        SerialsType = "DropshpOrderIn",
+                                        SerialsNo = serials,
+                                        SerialsQTY = 1,
+                                        ReceivedBy = UserBy,
+                                        ReceivedAt = dt,
+                                        CreateBy = UserBy,
+                                        CreateAt = dt
+                                    };
+                                    PurchaseSKU.SerialsLlist.Add(nSerialsLlistIn);
+                                    var nSerialsLlistOut = new SerialsLlist
+                                    {
+                                        SerialsType = "DropshpOrderOut",
+                                        SerialsNo = serials,
+                                        SerialsQTY = -1,
+                                        ReceivedBy = UserBy,
+                                        ReceivedAt = dt,
+                                        CreateBy = UserBy,
+                                        CreateAt = dt
+                                    };
+                                    nSerialsLlistIn.SerialsLlistC.Add(nSerialsLlistOut);
+                                }
+                            }
+                            else if (POType == "PurchaseOrder")
+                            {
+                                var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials && x.PurchaseSKU.PurchaseOrderID == PurchaseSKU.PurchaseOrderID);//檢查序號是否重複，同訂單同序號不能新增
+                                if (!SerialsLlist.Any())
+                                {
+                                    var dt = DateTime.UtcNow;
+                                    var nSerialsLlist = new SerialsLlist
+                                    {
+                                        SerialsType = "PO",
+                                        SerialsNo = serials,
+                                        SerialsQTY = 1,
+                                        ReceivedBy = UserBy,
+                                        ReceivedAt = dt,
+                                        CreateBy = UserBy,
+                                        CreateAt = dt
+                                    };
+                                    PurchaseSKU.SerialsLlist.Add(nSerialsLlist);
+                                }
+                            }
+                        }
+                    }
+                    return "";
+                }
+                else
+                {
+                    return "序號不可大於採購數";
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.ToString(); 
+            }
         }
     }
 }

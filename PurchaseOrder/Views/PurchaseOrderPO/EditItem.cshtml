@@ -226,6 +226,7 @@
                                                     <div class="col-lg-offset-10">
                                                         <a type="button" href="@Url.Action("CreateCM",new {Model.ID})" class='btn btn-danger btn-sm' id='btn-Add'>Create CM</a>
                                                         <a type="button" href="@Url.Action("ReceiveItems",new {Model.ID})" class='btn btn-danger btn-sm'>Receive Items</a>
+                                                        <a class='btn btn-danger btn-sm Excel' valID=" @Model.ID">Create by Excel</a>
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -496,6 +497,7 @@
                                                         </div>*@
                                                     <div class="col-lg-offset-10">
                                                         <a type="button" href="@Url.Action("CreateCM",new {Model.ID})" class='btn btn-danger btn-sm' id='btn-Add'>Create CM</a>
+                                                        <a class='btn btn-danger btn-sm Excel' valID=" @Model.ID">Create by Excel</a>
                                                         @*<a type="button" href="@Url.Action("ReceiveItems",new {Model.ID})" class='btn btn-danger btn-sm'>Receive Items</a>*@
                                                     </div>
                                                 </div>
@@ -604,6 +606,9 @@
             </article>
         </div>
     </section>
+</div>
+<div id="dialog">
+
 </div>
 @section pagespecific {
 <link href="~/Content/css/lightbox.css" rel="stylesheet" />
@@ -906,6 +911,26 @@
                     }
                 });
             });
+            $("#dialog").dialog({
+                autoOpen: false,
+                width: 800
+            });
+            $("body").on("click", ".Excel", function () {
+                var url = '@Url.Action("SerialsExcel", "Ajax")'
+                $.ajax({
+                    url: url,
+                    data: { id: $(this).attr("valID"), key: "AddSKUserials"},
+                    success: function (data) {
+                        $("#dialog").dialog({
+                            title: "Excel"
+                        });
+                        $("#dialog").html(data);
+                        $("#dialog").dialog("open");
+                        //$("#dialog").load(data).dialog({ modal: true }).dialog('open');
+                    }
+                });
+                return false;
+            });
         });
 
         function Calculation(x, type, SKU, oval, ID) {
@@ -947,7 +972,16 @@
                 }
             });
             return div;
-    }
+        }
+        function Success(data) {
+            $("#dialog").dialog("close");
+            if (data.status == false) {
+                alert(data.Msg);
+            }
+            if (data.reload == true) {
+                window.location.reload();
+            }
+        }
     var Preview = new function () {
 
         var root = $("#data-form");
