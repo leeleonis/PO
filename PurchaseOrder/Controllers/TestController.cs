@@ -257,7 +257,7 @@ namespace PurchaseOrderSys.Controllers
 
                     if (skuList.Item.Any(i => i.Categories[0] == null)) MissCategory.AddRange(skuList.Item.Where(i => i.Categories[0] == null).Select(i => i.SKU).ToArray());
 
-                    skuList = neto.GetItemBySkus(page++, limit);
+                    skuList = page <=5 ? neto.GetItemBySkus(page++, limit) : new NetoDeveloper.GetItemResponse() { Ack = NetoDeveloper.GetItemResponseAck.Error };
                 } while (skuList.Ack == NetoDeveloper.GetItemResponseAck.Success && skuList.Item.Any());
             }
             catch (Exception e)
@@ -284,7 +284,7 @@ namespace PurchaseOrderSys.Controllers
             var sku = db.SKU.Find(skuID);
             var skuLang = sku.SkuLang.First(l => l.LangID.Equals(sku.SkuLang.Any(ll => ll.LangID.Equals(LangID)) ? LangID : sku.SkuLang.First().LangID));
             var skuType = sku.SkuType;
-            var eBayTitle = !string.IsNullOrEmpty(sku.eBayTitle) ? Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<int, string>>(sku.eBayTitle) : new Dictionary<int, string> { };
+            var eBayTitle = !string.IsNullOrEmpty(sku.eBayTitle) ? JsonConvert.DeserializeObject<Dictionary<int, string>>(sku.eBayTitle) : new Dictionary<int, string> { };
 
             var netoSku = neto.GetItemBySku(skuID).Item.First();
             var categories = (NetoDeveloper.GetItemResponseItemCategory[])netoSku.Categories.First().Category;

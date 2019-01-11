@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using inventorySKU.NetoDeveloper;
+using NetoDeveloper;
+
 namespace PurchaseOrderSys.Models
 {
     public class StockKeepingUnit : IDisposable
@@ -9,6 +12,7 @@ namespace PurchaseOrderSys.Models
         protected PurchaseOrderEntities db = new PurchaseOrderEntities();
 
         protected SKU skuData;
+        protected NetoApi netoApi;
 
         #region IDisposable Support
         private bool disposedValue = false; // 偵測多餘的呼叫
@@ -86,14 +90,7 @@ namespace PurchaseOrderSys.Models
                 }
             }
 
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (Exception e)
-            {
-
-            }
+            db.SaveChanges();
 
             return newSku;
         }
@@ -204,6 +201,54 @@ namespace PurchaseOrderSys.Models
             };
         }
 
+        public void UpdateSkuToNeto()
+        {
+            netoApi = new NetoApi();
+            string LangID = EnumData.DataLangList().First().Key;
+
+            var skuLang = skuData.SkuLang.First(l => l.LangID.Equals(LangID));
+            var eBayTitle = !string.IsNullOrEmpty(skuData.eBayTitle) ? Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<int, string>>(skuData.eBayTitle) : new Dictionary<int, string> { };
+
+            var netoSku = netoApi.GetItemBySku(skuData.SkuID).Item.First();
+            var categories = (GetItemResponseItemCategory[])netoSku.Categories.First().Category;
+            var update = new UpdateItemItem()
+            {
+                SKU = skuData.SkuID,
+                ParentSKU = skuData.ParentSku,
+                Brand = skuData.GetBrand.Name,
+                Name = skuLang.Name,
+                Active = Convert.ToBoolean(skuData.Status),
+                ActiveSpecified = true,
+                Description = skuLang.Description,
+                Specifications = skuLang.SpecContent,
+                ModelNumber = skuLang.Model,
+                UPC = skuData.UPC,
+                Type = skuData.SkuType.SkuTypeLang.FirstOrDefault(l => l.LangID.Equals(LangID))?.Name ?? "",
+                Misc01 = skuLang.PackageContent,
+
+                Misc02 = eBayTitle.ContainsKey(2) ? eBayTitle[2] : "",
+                Misc19 = eBayTitle.ContainsKey(19) ? eBayTitle[19] : "",
+                Misc50 = eBayTitle.ContainsKey(50) ? eBayTitle[50] : "",
+                Misc24 = eBayTitle.ContainsKey(24) ? eBayTitle[24] : "",
+                Misc25 = eBayTitle.ContainsKey(25) ? eBayTitle[25] : "",
+                Misc23 = eBayTitle.ContainsKey(23) ? eBayTitle[23] : "",
+                Misc21 = eBayTitle.ContainsKey(21) ? eBayTitle[21] : "",
+                Misc20 = eBayTitle.ContainsKey(20) ? eBayTitle[20] : "",
+                Misc22 = eBayTitle.ContainsKey(22) ? eBayTitle[22] : "",
+
+                PriceGroups = skuData.PriceGroup.Where(p => p.GetMarket.NetoGroup.HasValue)
+                    .Select(p => new UpdateItemItemPriceGroup() { Group = p.GetMarket.GetNetoGroup.Name, Price = p.Price, PriceSpecified = true, MaximumQuantity = p.Max.ToString(), MinimumQuantity = p.Min.ToString() }).ToArray(),
+                Categories = new UpdateItemItemCategory[] { new UpdateItemItemCategory() { CategoryID = skuData.SkuType.NetoID.Value.ToString() } },
+                ItemSpecifics = skuData.Sku_Attribute.Where(a => a.eBay).GroupBy(a => a.AttrID).Where(g => !g.Any(a => a.LangID.Equals(LangID) && !a.eBay)).Select(g => g.First(a => a.LangID.Equals(LangID)))
+                    .Select(g => new UpdateItemItemItemSpecific() { Name = g.SkuAttribute.SkuAttributeLang.First(l => l.LangID.Equals(LangID)).Name, Value = g.Value }).ToArray()
+            };
+        }
+
+        public void CreateSkuToNeto()
+        {
+
+        }
+
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
@@ -238,5 +283,19 @@ namespace PurchaseOrderSys.Models
             // GC.SuppressFinalize(this);
         }
         #endregion
+    }
+
+    public static class OtherMethods
+    {
+        public static T ToEnum<T>(this string value, T defaultValue) where T : struct
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return defaultValue;
+            }
+
+            T result;
+            return Enum.TryParse<T>(value, true, out result) ? result : defaultValue;
+        }
     }
 }
