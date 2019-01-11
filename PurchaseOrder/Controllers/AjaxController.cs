@@ -616,7 +616,7 @@ namespace PurchaseOrderSys.Controllers
                         var SKU = db.SKU.Find(item.Key.SKU);
                         if (SKU == null)
                         {
-                           // return Json(new { status = false, Msg = "SKU：" + item.Key.SKU + "不存在" }, JsonRequestBehavior.AllowGet);
+                            return Json(new { status = false, Msg = "SKU：" + item.Key.SKU + "不存在" }, JsonRequestBehavior.AllowGet);
                         }
                         try
                         {
