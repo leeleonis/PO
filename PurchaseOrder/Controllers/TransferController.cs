@@ -30,9 +30,12 @@ namespace PurchaseOrderSys.Controllers
             Transfer.CreateBy = CreateBy;
             Transfer.CreateAt = CreateAt;
             var odataList = (List<TranSKUVM>)Session["TSkuNumberList"];
-            foreach (var item in odataList)
+            if (odataList != null)
             {
-                Transfer.TransferSKU.Add(new TransferSKU { SkuNo = item.SKU, QTY = item.QTY, CreateBy = CreateBy, CreateAt = CreateAt });
+                foreach (var item in odataList)
+                {
+                    Transfer.TransferSKU.Add(new TransferSKU { SkuNo = item.SKU, QTY = item.QTY, CreateBy = CreateBy, CreateAt = CreateAt });
+                }
             }
             db.Transfer.Add(Transfer);
             db.SaveChanges();
@@ -77,7 +80,8 @@ namespace PurchaseOrderSys.Controllers
             oTransfer.UpdateAt = dt;
 
             var odataList = (List<TranSKUVM>)Session["TSkuNumberList"];
-            foreach (var item in odataList)
+
+            foreach (var item in odataList.Where(x => x.Model == "E"))
             {
                 var TransferSKUList = oTransfer.TransferSKU.Where(x => x.SkuNo == item.SKU);
                 if (TransferSKUList.Any())
@@ -98,6 +102,19 @@ namespace PurchaseOrderSys.Controllers
                 }
 
             }
+            foreach (var item in odataList.Where(x => x.Model == "D"))
+            {
+                var TransferSKUList = oTransfer.TransferSKU.Where(x => x.SkuNo == item.SKU);
+                if (TransferSKUList.Any())
+                {
+                    foreach (var SKUitem in TransferSKUList)
+                    {
+                        SKUitem.IsEnable = false;
+                        SKUitem.UpdateBy = UserBy;
+                        SKUitem.UpdateAt = dt;
+                    }
+                }
+            }
             db.SaveChanges();
             return RedirectToAction("Index");
         }
@@ -116,6 +133,61 @@ namespace PurchaseOrderSys.Controllers
             Session["PrepVMList"] = PrepVMList;
             return View(oTransfer);
         }
+        [HttpPost]
+        public ActionResult Prep(int ID, bool? saveexit)
+        {
+            var CreateBy = UserBy;
+            var CreateAt = DateTime.UtcNow;
+            var PrepVMList = (List<PrepVM>)Session["PrepVMList"];
+            var oTransfer = db.Transfer.Find(ID);
+            foreach (var item in oTransfer.TransferSKU)
+            {
+                foreach (var PrepVM in PrepVMList.Where(x => x.SKU == item.SkuNo))
+                {
+                    var nSerialsLlist = PrepVM.SerialsLlist.Select(x => new SerialsLlist
+                    {
+                        TransferSKUID= item.ID,
+                        PID = x.ID,
+                        CreateAt = CreateAt,
+                        CreateBy = CreateBy,
+                        OrderID = x.OrderID,
+                        PurchaseSKUID = x.PurchaseSKUID,
+                        RMAID = x.RMAID,
+                        SerialsNo = x.SerialsNo,
+                        SerialsQTY = -1,
+                        SerialsType = "TransferOut"
+                    }).ToList();
+                    //db.SerialsLlist.AddRange(nSerialsLlist);
+                    foreach (var Serial in nSerialsLlist)
+                    {
+                        //Serial.PID = Serial.ID;
+                        //Serial.ID = 0;
+                        //Serial.SerialsQTY = -1;
+                        //Serial.SerialsType = "TransferOut";
+                        //Serial.CreateBy = CreateBy;
+                        //Serial.CreateAt = CreateAt;
+                        item.SerialsLlist.Add(Serial);
+                    }
+                }
+            }
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+
+                var s = ex.ToString();
+            }
+            if (saveexit.HasValue && saveexit.Value)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return RedirectToAction("Prep", new { ID });
+            }
+        }
         public ActionResult Saveserials(string serials)
         {
             var PrepVMList = (List<PrepVM>)Session["PrepVMList"];
@@ -123,17 +195,33 @@ namespace PurchaseOrderSys.Controllers
             var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials && !x.SerialsLlistC.Any() && x.SerialsQTY > 0);//找到序號
             if (SerialsLlist.Any())
             {
-                if (SerialsLlist.Sum(c => c.SerialsQTY) == 1)
+                if (SerialsLlist.Where(x => x.SerialsQTY > 0 && !x.SerialsLlistC.Any()).Any())
                 {
-                    if (PrepVMList[0].QTY > PrepVMList[0].SerialsLlist.Count())
+                    var Serial = SerialsLlist.FirstOrDefault();
+                    var PrepVM = PrepVMList.Where(x => x.SKU == Serial.PurchaseSKU.SkuNo).FirstOrDefault();
+                    if (PrepVM != null)
                     {
-                        PrepVMList[0].SerialsLlist.Add(SerialsLlist.FirstOrDefault());
-                        Session["PrepVMList"] = PrepVMList;
-                        return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+                        if (PrepVM.QTY > PrepVM.SerialsLlist.Count())
+                        {
+                            if (!PrepVMList.Where(x => x.SerialsLlist.Where(y => y.SerialsNo == serials).Any()).Any())
+                            {
+                                PrepVM.SerialsLlist.Add(Serial);
+                                Session["PrepVMList"] = PrepVMList;
+                                return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+                            }
+                            else
+                            {
+                                return Json(new { status = false, Errmsg = "序號已在清單" }, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                        else
+                        {
+                            return Json(new { status = false, Errmsg = "移倉數量超過" }, JsonRequestBehavior.AllowGet);
+                        }
                     }
                     else
                     {
-                        return Json(new { status = false, Errmsg = "移倉數量超過" }, JsonRequestBehavior.AllowGet);
+                        return Json(new { status = false, Errmsg = "序號無對應的SKU" }, JsonRequestBehavior.AllowGet);
                     }
                 }
                 else

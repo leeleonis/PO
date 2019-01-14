@@ -133,7 +133,7 @@ namespace PurchaseOrderSys.Models
     		/// Serials Type
     		/// </summary>        
     	    [Display(Name = "SerialsLlist_SerialsType", ResourceType = typeof(App_GlobalResources.Resource))]
-            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(20, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
             public string SerialsType { get; set; }
     
     		    

@@ -154,7 +154,8 @@ namespace PurchaseOrderSys.Controllers
                       sk = x.SkuNo,
                       SKU = x.SkuNo,
                       ProductName = x.Name,
-                      QTY = 0
+                      QTY = 0,
+                      Model = "E"
                   }
                 ).ToList();
                 //foreach (var item in dataList)
@@ -169,6 +170,7 @@ namespace PurchaseOrderSys.Controllers
                 odataList.AddRange(dataList);
                 Session["TSkuNumberList"] = odataList;
             }
+            odataList = odataList.Where(x => x.Model != "D").ToList();
             int recordsTotal = odataList.Count();
             var returnObj =
             new

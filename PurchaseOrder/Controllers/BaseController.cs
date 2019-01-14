@@ -192,52 +192,21 @@ namespace PurchaseOrderSys.Controllers
         /// <returns></returns>
         public List<AwaitingDispatchVM> GetAwaitingCount(string[] SKUs, string[] SCIDs)
         {
+
             var AwaitingDispatchList = new List<AwaitingDispatchVM>();
             using (WebClient wc = new WebClient())
             {
+
                 try
                 {
                     SKUs = SKUs.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
                     SCIDs = SCIDs.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
                     wc.Encoding = Encoding.UTF8;
-                    NameValueCollection nc = new NameValueCollection();
-                    if (SCIDs.Any() && SKUs.Any())
-                    {
-                        nc["Skus"] = JsonConvert.SerializeObject(SKUs);
-                        nc["WarehouseIDs"] = JsonConvert.SerializeObject(SCIDs);
-                    }
-                    else if (SCIDs.Any())
-                    {
-                        nc["WarehouseIDs"] = JsonConvert.SerializeObject(SCIDs);
-                    }
-                    else if (SKUs.Any())
-                    {
-                        nc["Skus"] = JsonConvert.SerializeObject(SKUs);
-                    }
-                    byte[] bResult = wc.UploadValues(ApiUrl + "Api/GetSkuInventoryQTY", nc);
-                    string resultXML = Encoding.UTF8.GetString(bResult);
+                    var nDictionary = new GetSkuInventoryQTYVM { WarehouseIDs = SCIDs, Skus = SKUs };
+                    var dataString = JsonConvert.SerializeObject(nDictionary);
+                    wc.Headers.Add(HttpRequestHeader.ContentType, "application/json");
+                    string resultXML = wc.UploadString(ApiUrl + "Api/GetSkuInventoryQTY", "POST", dataString);
                     AwaitingDispatchList = JsonConvert.DeserializeObject<List<AwaitingDispatchVM>>(resultXML);
-                    //foreach (var item in values)
-                    //{
-                    //    if (item.QTY > 0)
-                    //    {
-                    //        AwaitingDispatchList.Add(new AwaitingDispatchVM
-                    //        {
-                    //            SCID = item.SCID,
-                    //            SKU = item.SKU,
-                    //            QTY = item.QTY * -1
-                    //        });
-                    //    }
-                    //    else
-                    //    {
-                    //        AwaitingDispatchList.Add(new AwaitingDispatchVM
-                    //        {
-                    //            SCID = item.SCID,
-                    //            SKU = item.SKU,
-                    //            QTY = item.QTY
-                    //        });
-                    //    }
-                    //}
                 }
                 catch (WebException ex)
                 {

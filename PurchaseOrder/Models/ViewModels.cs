@@ -550,6 +550,7 @@ namespace PurchaseOrderSys.Models
         public decimal? TotalReceive { get; set; }
         public string TWN { get; set; }
         public string Winit { get; set; }
+        public string Model { get; set; }
     }
     public class CMSKUVM
     {
@@ -1102,4 +1103,11 @@ namespace PurchaseOrderSys.Models
         public string SKU { get; set; }
         public int QTY { get; set; }
     }
+
+    public class GetSkuInventoryQTYVM
+    {
+        public string[] WarehouseIDs { get; set; }
+        public string[] Skus { get; set; }
+    }
+
 }

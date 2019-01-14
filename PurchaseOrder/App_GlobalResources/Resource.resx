@@ -1928,4 +1928,22 @@
   <data name="PurchaseSKU_QTYReturned" xml:space="preserve">
     <value>Returned Qty</value>
   </data>
+  <data name="TransferStatusPendingDDL" xml:space="preserve">
+    <value>Pending</value>
+  </data>
+  <data name="TransferStatusRequestedDDL" xml:space="preserve">
+    <value>Requested</value>
+  </data>
+  <data name="TransferStatusShippedDDL" xml:space="preserve">
+    <value>Shipped</value>
+  </data>
+  <data name="TransferStatusReceivedDDL" xml:space="preserve">
+    <value>Received</value>
+  </data>
+  <data name="TransferStatusCompletedDDL" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+  <data name="TransferSKU_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
 </root>

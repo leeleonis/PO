@@ -117,8 +117,8 @@
                                                                         <td>@item.ID</td>
                                                                         <td>@item.ExternalTra</td>
                                                                         <td>@item.Title</td>
-                                                                        <td>@item.WarehouseFrom.Name</td>
-                                                                        <td>@item.WarehouseTo.Name</td>
+                                                                        <td>@(item.WarehouseFrom?.Name)</td>
+                                                                        <td>@(item.WarehouseTo?.Name)</td>
                                                                         <td>@item.TransferSKU.Sum(x => x.QTY)</td>
                                                                         <td>@item.CreateAt</td>
                                                                         <td>@item.CreateBy</td>

@@ -1,7 +1,14 @@
 ﻿@model IEnumerable<PurchaseSKU>
 @{
     ViewBag.title = "Inventory Statement";
+    var Awaitinglist = (List<AwaitingDispatchVM>)ViewBag.Awaitinglist;
+    var AwaitingConut = Awaitinglist.Sum(x => x.QTY);
 }
+<style>
+    tfoot {
+        display: table-header-group;
+    }
+</style>
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -16,13 +23,11 @@
                             <li><a data-toggle="tab" href="#hb1">@ViewBag.title</a></li>
                         </ul>
                     </header>
-
                     <div>
                         <div class="widget-body no-padding">
                             <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="IsEnable" value="True">
-
                                 <div id="content" class="tab-content">
                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                     <div class="tab-pane" id="hb1">
@@ -51,6 +56,7 @@
                                                                 <th>Value (Available)</th>
                                                             </tr>
                                                         </thead>
+                                                        <tfoot></tfoot>
                                                         <tbody>
                                                             @{
                                                                 var Aggregate = Model.Sum(x => x.SerialsLlist.Sum(y => y.SerialsQTY));
@@ -60,8 +66,6 @@
                                                                     var price = skuitem.Price;
                                                                     foreach (var item in skuitem.SerialsLlist.OrderByDescending(x => x.ID))
                                                                     {
-
-
                                                                         <tr>
                                                                             <td></td>
                                                                             <td>@item.PurchaseSKU.SkuNo</td>
@@ -84,7 +88,7 @@
                                                                             }
                                                                             <td>@item.SerialsNo</td>
                                                                             <td>@item.SerialsQTY</td>
-                                                                            <td>@Aggregate</td>
+                                                                            <td>@(Aggregate - AwaitingConut)</td>
                                                                             <td>@Available</td>
                                                                             <td>$@(Aggregate * price)</td>
                                                                         </tr>
@@ -102,7 +106,7 @@
                                 </div>
                                 <div class="widget-footer">
                                     @*<button type="submit" class="btn btn-primary" id="save">儲存</button>*@
-                                    <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index","DispatchWarehouse")'">返回</button>
+                                    <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index","WarehouseInventory",new {id= ViewBag.WarehouseID})'">返回</button>
                                 </div>
                             </form>
                         </div>
@@ -122,7 +126,29 @@
         //    dateFormat: 'yy-mm-dd'
         //});
         $(document).ready(function () {
+            var tableID = "#DataGridC";
+            $(tableID + " thead tr").clone().appendTo($(tableID + " tfoot"));
+            $(tableID + " tfoot th").each(function () {
+                var title = $(this).text();
+                if (title != "") {
+                    $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+                }
+            });
+            var DataGridC = $(tableID).DataTable({
+                "columnDefs": [{ "orderable": false, "targets": 0 }],
+                "order": []
+            });
 
+            DataGridC.columns().every(function () {
+                var that = this;
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
         });
     </script>
 }

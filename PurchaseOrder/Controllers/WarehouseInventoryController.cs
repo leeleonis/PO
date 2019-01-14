@@ -12,7 +12,9 @@ namespace PurchaseOrderSys.Controllers
         // GET: Warehouse
         public ActionResult Index(int ID)
         {
+           ViewBag. WarehouseID = ID;
             var SCID = db.WarehouseSummary.Where(x => x.WarehouseID == ID && x.Type == "SCID").FirstOrDefault().Val;
+            var AllSKUList = db.SKU.Where(x => x.IsEnable && x.Status == 1).ToList();
             var edt = DateTime.UtcNow;
             var sdt = edt.AddDays(-30);
             var PurchaseSKU = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.Warehouse1.ID == ID).ToList();
@@ -55,6 +57,29 @@ namespace PurchaseOrderSys.Controllers
                     //Fulfillable = x.Sum(p => p.Fulfillable),
                     //Unfulfillable = x.Sum(p => p.Unfulfillable),
                 }).ToList();
+                //把所有的SKU放進去
+                foreach (var item in AllSKUList)
+                {
+                    if (!GroupWarehouseVM.Where(x=>x.SKU== item.SkuID).Any())
+                    {
+                        GroupWarehouseVM.Add(new WarehouseVM {
+                            ID = 0,
+                            Name = item.SkuLang.FirstOrDefault()?.Name,
+                            SKU = item.SkuID,
+                            POQTY = 0,
+                            CMQTY =0,
+                            OrderQTY =0,
+                            TransferInQTY = 0,
+                            TransferOutQTY = 0,
+                            Velocity = 0,
+                            DaysOfSupply = 0,
+                            Aggregate = 0,//可上架的庫存總數
+                            Awaiting = 0,//等待出貨的庫總量
+                            Fulfillable = 0,
+                            Unfulfillable = 0
+                        });
+                    }
+                }
                 foreach (var item in GroupWarehouseVM)
                 {
                     item.Fulfillable = item.POQTY + item.CMQTY + item.OrderQTY + item.TransferInQTY + item.TransferOutQTY;
@@ -71,7 +96,7 @@ namespace PurchaseOrderSys.Controllers
                 WarehouseInventoryVM.Location = PurchaseSKU.FirstOrDefault().PurchaseOrder.Warehouse1.Location;
                 WarehouseInventoryVM.Countries = PurchaseSKU.FirstOrDefault().PurchaseOrder.Warehouse1.Countries;
                 WarehouseInventoryVM.Marketplace = PurchaseSKU.FirstOrDefault().PurchaseOrder.Warehouse1.Marketplace;
-                WarehouseInventoryVM.WarehouseVM = GroupWarehouseVM;
+                WarehouseInventoryVM.WarehouseVM = GroupWarehouseVM.OrderByDescending(x=>x.Fulfillable).ThenByDescending(x=>x.Awaiting);
             }
             return View(WarehouseInventoryVM);
         }
@@ -86,9 +111,11 @@ namespace PurchaseOrderSys.Controllers
             return count;
         }
 
-        public ActionResult Statement(string SKU)
+        public ActionResult Statement(string SKU,int WarehouseID)
         {
+            ViewBag.WarehouseID = WarehouseID;
             var PurchaseSKU = db.PurchaseSKU.Where(x=>x.SkuNo== SKU);
+            ViewBag.Awaitinglist = GetAwaitingCount(SKU, "");
             return View(PurchaseSKU);
         }
 
@@ -96,13 +123,15 @@ namespace PurchaseOrderSys.Controllers
         {
             return View();
         }
-        public ActionResult Serials(string SKU)
+        public ActionResult Serials(string SKU, int WarehouseID)
         {
+            ViewBag.WarehouseID = WarehouseID;
             var PurchaseSKU = db.PurchaseSKU.Where(x => x.SkuNo == SKU);
             return View(PurchaseSKU);
         }
-        public ActionResult Inventory(string SKU)
+        public ActionResult Inventory(string SKU, int WarehouseID)
         {
+            ViewBag.WarehouseID = WarehouseID;
             var SkuInventoryVM = new List<SkuInventoryVM>();
             var PurchaseSKU = db.PurchaseSKU.Where(x => x.SkuNo == SKU && x.PurchaseOrderID.HasValue && x.PurchaseOrder.WarehouseID.HasValue);
             //取待出貨
@@ -128,15 +157,30 @@ namespace PurchaseOrderSys.Controllers
                     OrderQTY = item.SerialsLlist.Where(z => z.SerialsType == "Order").Sum(z => z.SerialsQTY).Value,
                 });
             }
-           
-            foreach (var item in SkuInventoryVM)
+
+            var GroupSkuInventoryVM = SkuInventoryVM.GroupBy(x => new { x.ID }).Select(x => new SkuInventoryVM //SKU數量總計
+            {
+                ID = x.FirstOrDefault().ID,
+                Warehouse = x.FirstOrDefault().Warehouse,
+                Type = x.FirstOrDefault().Type,
+                SCID = x.FirstOrDefault().SCID,
+                BackOrdered = x.Sum(p => p.BackOrdered),
+                POQTY = x.Sum(p => p.POQTY),
+                CMQTY = x.Sum(p => p.CMQTY),
+                OrderQTY = x.Sum(p => p.OrderQTY),
+                TransferInQTY = x.Sum(p => p.TransferInQTY),
+                TransferOutQTY = x.Sum(p => p.TransferOutQTY),
+
+            }).ToList();
+
+            foreach (var item in GroupSkuInventoryVM)
             {
                 item.Awaiting = AwaitingCountlist.Where(x => x.SKU == SKU && x.SCID == item.SCID).FirstOrDefault()?.QTY ?? 0;
                 item.Available = item.POQTY + item.CMQTY + item.OrderQTY + item.TransferInQTY + item.TransferOutQTY;
                 item.Unfulfillable = item.TransferInQTY - item.TransferOutQTY;
                 item.Aggregate = item.Available - item.Awaiting;//Aggregate = Fulfillable - Awaiting dispatch
             }
-            return View(SkuInventoryVM);
+            return View(GroupSkuInventoryVM);
         }
 
         private string GetSCID(PurchaseSKU PurchaseSKU)
@@ -144,8 +188,9 @@ namespace PurchaseOrderSys.Controllers
             return PurchaseSKU.PurchaseOrder.Warehouse1?.WarehouseSummary.FirstOrDefault(x => x.Type == "SCID")?.Val;
         }
 
-        public ActionResult Purchasing(string SKU,int? Inventory, int? Velocity)
+        public ActionResult Purchasing(string SKU,int? Inventory, int? Velocity, int WarehouseID)
         {
+            ViewBag.WarehouseID = WarehouseID;
             var Warehouselist = db.Warehouse.Where(x => x.IsEnable).Select(x => new SelectListItem { Text = x.Name, Value = x.ID.ToString() }).ToList();
             ViewBag.Warehouselist = Warehouselist;
             var edt = DateTime.UtcNow;
@@ -179,7 +224,7 @@ namespace PurchaseOrderSys.Controllers
                     {
                         var SCID = PurchaseSKUitem.PurchaseOrder.Warehouse1?.WarehouseSummary.Where(x => x.Type == "SCID").FirstOrDefault().Val;
                         SkuPurchasingVM.BackOrdered += PurchaseSKUitem.QTYOrdered ?? 0;
-                        SkuPurchasingVM.Awaiting = AwaitingCountlist.Where(x => x.SKU == SKU && x.SCID == SCID).FirstOrDefault()?.QTY ?? 0;
+                        SkuPurchasingVM.Awaiting += AwaitingCountlist.Where(x => x.SKU == SKU && x.SCID == SCID).FirstOrDefault()?.QTY ?? 0;
                         SkuPurchasingVM.POQTY += PurchaseSKUitem.QTYOrdered.HasValue ? PurchaseSKUitem.QTYOrdered.Value : PurchaseSKUitem.SerialsLlist.Where(y => y.SerialsType == "PO").Sum(y => y.SerialsQTY) ?? 0;//有輸入直接讀輸入，沒輸入計算序號數
                         SkuPurchasingVM.CMQTY += GetCMQty(PurchaseSKUitem);
                         SkuPurchasingVM.OrderQTY += PurchaseSKUitem.SerialsLlist.Where(z => z.SerialsType == "Order").Sum(z => z.SerialsQTY).Value;
@@ -191,8 +236,8 @@ namespace PurchaseOrderSys.Controllers
                 }
               
 
-                SkuPurchasingVM.Fulfillable = SkuPurchasingVM.POQTY + SkuPurchasingVM.CMQTY + SkuPurchasingVM.OrderQTY + SkuPurchasingVM.TransferInQTY + SkuPurchasingVM.TransferOutQTY + SkuPurchasingVM.Awaiting;
-                SkuPurchasingVM.Aggregate = SkuPurchasingVM.Available - SkuPurchasingVM.Awaiting;//Aggregate = Fulfillable - Awaiting dispatch
+                SkuPurchasingVM.Fulfillable = SkuPurchasingVM.POQTY + SkuPurchasingVM.CMQTY + SkuPurchasingVM.OrderQTY + SkuPurchasingVM.TransferInQTY + SkuPurchasingVM.TransferOutQTY - SkuPurchasingVM.Awaiting;
+                SkuPurchasingVM.Aggregate = SkuPurchasingVM.Fulfillable - SkuPurchasingVM.Awaiting;//Aggregate = Fulfillable - Awaiting dispatch
                 SkuPurchasingVM.UnfulfillableTransit = SkuPurchasingVM.TransferInQTY + SkuPurchasingVM.TransferOutQTY;
                 SkuPurchasingVM.TotalInventory = SkuPurchasingVM.POQTY + SkuPurchasingVM.CMQTY + SkuPurchasingVM.OrderQTY + SkuPurchasingVM.TransferInQTY + SkuPurchasingVM.TransferOutQTY;
                 SkuPurchasingVM.QTYperbox = 1;

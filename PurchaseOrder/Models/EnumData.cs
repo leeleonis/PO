@@ -94,7 +94,7 @@ namespace PurchaseOrderSys.Models
             };
         }
         /// <summary>
-        /// 付款狀況
+        /// 付款狀態
         /// </summary>
         /// <returns></returns>
         public static Dictionary<string, string> PaymentStatusDDL()
@@ -105,6 +105,21 @@ namespace PurchaseOrderSys.Models
                 { "PartiallyPaid", App_GlobalResources.Resource. PaymentStatusPartiallyPaidDDL },
                 { "Completed", App_GlobalResources.Resource.PaymentStatusCompletedDDL  },
                 { "OverPaid", App_GlobalResources.Resource.PaymentStatusOverPaidDDL  }
+            };
+        }
+        /// <summary>
+        /// Transfer狀態
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<string, string> TransferStatusDDL()
+        {
+            return new Dictionary<string, string>()
+            {
+                { "Pending", App_GlobalResources.Resource.TransferStatusPendingDDL  },
+                { "Requested", App_GlobalResources.Resource.TransferStatusRequestedDDL },
+                { "Shipped", App_GlobalResources.Resource.TransferStatusShippedDDL  },
+                { "Received", App_GlobalResources.Resource.TransferStatusReceivedDDL  },
+                { "Completed", App_GlobalResources.Resource.TransferStatusCompletedDDL  }
             };
         }
         /// <summary>

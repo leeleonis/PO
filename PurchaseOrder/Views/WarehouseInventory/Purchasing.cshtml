@@ -53,7 +53,7 @@
                                             <div class="form-group">
                                                 @Html.Label("Awaiting dispatch", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Awaitingdispatch", new { htmlAttributes = new { @class = "form-control", @readonly = "@readonly" } })
+                                                    @Html.Editor("Awaiting", new { htmlAttributes = new { @class = "form-control", @readonly = "@readonly" } })
                                                 </div>
                                                 @Html.Label("Average (in stock)", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
@@ -136,7 +136,7 @@
 
                                 <div class="widget-footer">
                                     @*<button type="submit" class="btn btn-primary" id="save">儲存</button>*@
-                                    <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index","DispatchWarehouse")'">返回</button>
+                                    <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index","WarehouseInventory",new {id= ViewBag.WarehouseID})'">返回</button>
                                 </div>
                             </form>
                         </div>

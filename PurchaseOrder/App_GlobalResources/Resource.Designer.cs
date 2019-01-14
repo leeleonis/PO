@@ -4219,6 +4219,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查詢類似 Name 的當地語系化字串。
+        /// </summary>
+        public static string TransferSKU_Name {
+            get {
+                return ResourceManager.GetString("TransferSKU_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 QTY 的當地語系化字串。
         /// </summary>
         public static string TransferSKU_QTY {
@@ -4287,6 +4296,51 @@ namespace PurchaseOrderSys.App_GlobalResources {
         public static string TransferSKU_Winit {
             get {
                 return ResourceManager.GetString("TransferSKU_Winit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Completed 的當地語系化字串。
+        /// </summary>
+        public static string TransferStatusCompletedDDL {
+            get {
+                return ResourceManager.GetString("TransferStatusCompletedDDL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Pending 的當地語系化字串。
+        /// </summary>
+        public static string TransferStatusPendingDDL {
+            get {
+                return ResourceManager.GetString("TransferStatusPendingDDL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Received 的當地語系化字串。
+        /// </summary>
+        public static string TransferStatusReceivedDDL {
+            get {
+                return ResourceManager.GetString("TransferStatusReceivedDDL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Requested 的當地語系化字串。
+        /// </summary>
+        public static string TransferStatusRequestedDDL {
+            get {
+                return ResourceManager.GetString("TransferStatusRequestedDDL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Shipped 的當地語系化字串。
+        /// </summary>
+        public static string TransferStatusShippedDDL {
+            get {
+                return ResourceManager.GetString("TransferStatusShippedDDL", resourceCulture);
             }
         }
         

@@ -159,10 +159,10 @@
                                                                         <td>@item.Aggregate</td>
                                                                         <td>@item.Unfulfillable</td>
                                                                         <td>
-                                                                            <a class='btn btn-default btn-sm' href='@Url.Action("Statement", new { item.SKU })'>Statement</a>
-                                                                            <a class='btn btn-default btn-sm' href='@Url.Action("Serials", new { item.SKU })'>Serials</a>
-                                                                            <a class='btn btn-default btn-sm' href='@Url.Action("Inventory", new { item.SKU })'>Inventory</a>
-                                                                            <a class='btn btn-default btn-sm' href='@Url.Action("Purchasing", new { item.SKU })'>Purchasing</a>
+                                                                            <a class='btn btn-default btn-sm' href='@Url.Action("Statement", new { item.SKU,WarehouseID=ViewBag.WarehouseID })'>Statement</a>
+                                                                            <a class='btn btn-default btn-sm' href='@Url.Action("Serials", new { item.SKU,WarehouseID=ViewBag.WarehouseID })'>Serials</a>
+                                                                            <a class='btn btn-default btn-sm' href='@Url.Action("Inventory", new { item.SKU ,WarehouseID=ViewBag.WarehouseID})'>Inventory</a>
+                                                                            <a class='btn btn-default btn-sm' href='@Url.Action("Purchasing", new { item.SKU ,WarehouseID=ViewBag.WarehouseID})'>Purchasing</a>
                                                                         </td>
                                                                     </tr>
                                                                 }
@@ -174,7 +174,6 @@
                                         </fieldset>
                                     </div>
                                 </div>
-
                                 @*<div class="widget-footer">
                                         <button type="submit" class="btn btn-primary" id="save">儲存</button>
                                         <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index")'">返回</button>

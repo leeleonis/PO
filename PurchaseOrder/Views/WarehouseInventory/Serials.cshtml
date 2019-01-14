@@ -2,6 +2,11 @@
 @{
     ViewBag.title = "Serials";
 }
+<style>
+    tfoot {
+        display: table-header-group;
+    }
+</style>
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -48,6 +53,7 @@
                                                                 <th>History</th>
                                                             </tr>
                                                         </thead>
+                                                        <tfoot></tfoot>
                                                         <tbody>
                                                             @if (Model != null && Model.Any())
                                                             {
@@ -101,7 +107,7 @@
 
                                 <div class="widget-footer">
                                     @*<button type="submit" class="btn btn-primary" id="save">儲存</button>*@
-                                    <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index","DispatchWarehouse")'">返回</button>
+                                    <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index","WarehouseInventory",new {id= ViewBag.WarehouseID})'">返回</button>
                                 </div>
                             </form>
                         </div>
@@ -124,6 +130,29 @@
         //    dateFormat: 'yy-mm-dd'
         //});
         $(document).ready(function () {
+            var tableID = "#DataGridC";
+            $(tableID + " thead tr").clone().appendTo($(tableID + " tfoot"));
+            $(tableID + " tfoot th").each(function () {
+                var title = $(this).text();
+                if (title != "") {
+                    $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+                }
+            });
+            var DataGridC = $(tableID).DataTable({
+                "columnDefs": [{ "orderable": false, "targets": 0 }],
+                "order": []
+            });
+
+            DataGridC.columns().every(function () {
+                var that = this;
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
             $("#dialog").dialog({
                 autoOpen: false,
                 width: 800
