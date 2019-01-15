@@ -6,10 +6,12 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using inventorySKU;
 using PurchaseOrderSys.Models;
 
 namespace PurchaseOrderSys.Controllers
 {
+    [CheckSession]
     public class NetoGroupController : BaseController
     {
         // GET: NetoGroup

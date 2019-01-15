@@ -6,13 +6,14 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
+using inventorySKU;
 namespace PurchaseOrderSys.Controllers
 {
+    [CheckSession]
     public class PurchaseOrderPOController : BaseController
     {
         // GET: PurchaseOrder
-        public ActionResult Index(PurchaseOrderPOVM PurchaseOrderPOVM)
+        public ActionResult Index(PurchaseOrderPOVMQ PurchaseOrderPOVM)
         {
             Session["PurchaseOrderPOVM"] = PurchaseOrderPOVM;
             return View(PurchaseOrderPOVM);
@@ -138,7 +139,7 @@ namespace PurchaseOrderSys.Controllers
         {
             if (Type == "Master")
             {
-                var QPurchaseOrderPOVM = (PurchaseOrderPOVM)Session["PurchaseOrderPOVM"];
+                var QPurchaseOrderPOVM = (PurchaseOrderPOVMQ)Session["PurchaseOrderPOVM"];
                 int total = 0;
                 var listPurchaseOrder = db.PurchaseOrder.Where(x => x.IsEnable);
                 //綱頁查詢
@@ -166,17 +167,25 @@ namespace PurchaseOrderSys.Controllers
                 {
                     listPurchaseOrder = listPurchaseOrder.Where(x => x.ID == QPurchaseOrderPOVM.ID);
                 }
-                if (QPurchaseOrderPOVM.PODate.HasValue)
+                if (QPurchaseOrderPOVM.PODateS.HasValue)
                 {
-                    listPurchaseOrder = listPurchaseOrder.Where(x => x.PODate == QPurchaseOrderPOVM.PODate);
+                    listPurchaseOrder = listPurchaseOrder.Where(x => x.PODate >= QPurchaseOrderPOVM.PODateS);
+                }
+                if (QPurchaseOrderPOVM.PODateE.HasValue)
+                {
+                    listPurchaseOrder = listPurchaseOrder.Where(x => x.PODate <= QPurchaseOrderPOVM.PODateE);
                 }
                 if (!string.IsNullOrWhiteSpace( QPurchaseOrderPOVM.POStatus))
                 {
                     listPurchaseOrder = listPurchaseOrder.Where(x => x.POStatus == QPurchaseOrderPOVM.POStatus);
                 }
-                if (QPurchaseOrderPOVM.InvoiceDate.HasValue)
+                if (QPurchaseOrderPOVM.InvoiceDateS.HasValue)
                 {
-                    listPurchaseOrder = listPurchaseOrder.Where(x => x.InvoiceDate == QPurchaseOrderPOVM.InvoiceDate);
+                    listPurchaseOrder = listPurchaseOrder.Where(x => x.InvoiceDate >= QPurchaseOrderPOVM.InvoiceDateS);
+                }
+                if (QPurchaseOrderPOVM.InvoiceDateE.HasValue)
+                {
+                    listPurchaseOrder = listPurchaseOrder.Where(x => x.InvoiceDate <= QPurchaseOrderPOVM.InvoiceDateE);
                 }
                 if (!string.IsNullOrWhiteSpace(QPurchaseOrderPOVM.POType))
                 {
@@ -186,50 +195,59 @@ namespace PurchaseOrderSys.Controllers
                 {
                     listPurchaseOrder = listPurchaseOrder.Where(x => x.InvoiceNo == QPurchaseOrderPOVM.InvoiceNo);
                 }
-                //if (!string.IsNullOrWhiteSpace(QPurchaseOrderPOVM.Creater))
-                //{
-                //    listPurchaseOrder = listPurchaseOrder.Where(x => x.Creater == QPurchaseOrderPOVM.Creater);
-                //}
-                if (QPurchaseOrderPOVM.PaymentDate.HasValue)
+                if (!string.IsNullOrWhiteSpace(QPurchaseOrderPOVM.Creater))
                 {
-                    listPurchaseOrder = listPurchaseOrder.Where(x => x.PaymentDate == QPurchaseOrderPOVM.PaymentDate);
+                    listPurchaseOrder = listPurchaseOrder.Where(x => x.CreateBy == QPurchaseOrderPOVM.Creater);
+                }
+                if (QPurchaseOrderPOVM.PaymentDateS.HasValue)
+                {
+                    listPurchaseOrder = listPurchaseOrder.Where(x => x.PaymentDate >= QPurchaseOrderPOVM.PaymentDateS);
+                }
+                if (QPurchaseOrderPOVM.PaymentDateE.HasValue)
+                {
+                    listPurchaseOrder = listPurchaseOrder.Where(x => x.PaymentDate <= QPurchaseOrderPOVM.PaymentDateE);
                 }
                 if (!string.IsNullOrWhiteSpace(QPurchaseOrderPOVM.PaymentStatus))
                 {
                     listPurchaseOrder = listPurchaseOrder.Where(x => x.PaymentStatus == QPurchaseOrderPOVM.PaymentStatus);
                 }
-                if (QPurchaseOrderPOVM.ReceivedDate.HasValue)
+                if (QPurchaseOrderPOVM.ReceivedDateS.HasValue)
                 {
-                    listPurchaseOrder = listPurchaseOrder.Where(x => x.ReceivedDate == QPurchaseOrderPOVM.ReceivedDate);
+                    listPurchaseOrder = listPurchaseOrder.Where(x => x.ReceivedDate >= QPurchaseOrderPOVM.ReceivedDateS);
+                }
+                if (QPurchaseOrderPOVM.ReceivedDateE.HasValue)
+                {
+                    listPurchaseOrder = listPurchaseOrder.Where(x => x.ReceivedDate <= QPurchaseOrderPOVM.ReceivedDateE);
                 }
                 if (!string.IsNullOrWhiteSpace(QPurchaseOrderPOVM.ReceiveStatus))
                 {
                     listPurchaseOrder = listPurchaseOrder.Where(x => x.ReceiveStatus == QPurchaseOrderPOVM.ReceiveStatus);
                 }
-                //if (!string.IsNullOrWhiteSpace(QPurchaseOrderPOVM.Tracking))
-                //{
-                //    listPurchaseOrder = listPurchaseOrder.Where(x => x.Tracking == QPurchaseOrderPOVM.Tracking);
-                //}
-                //if (!string.IsNullOrWhiteSpace(QPurchaseOrderPOVM.Brand))
-                //{
-                //    listPurchaseOrder = listPurchaseOrder.Where(x => x.Brand == QPurchaseOrderPOVM.Brand);
-                //}
-                //if (!string.IsNullOrWhiteSpace(QPurchaseOrderPOVM.SKU))
-                //{
-                //    listPurchaseOrder = listPurchaseOrder.Where(x => x.SKU == QPurchaseOrderPOVM.SKU);
-                //}
-                //if (!string.IsNullOrWhiteSpace(QPurchaseOrderPOVM.Category))
-                //{
-                //    listPurchaseOrder = listPurchaseOrder.Where(x => x.Category == QPurchaseOrderPOVM.Category);
-                //}
-                //if (!string.IsNullOrWhiteSpace(QPurchaseOrderPOVM.Serial))
-                //{
-                //    listPurchaseOrder = listPurchaseOrder.Where(x => x.Serial == QPurchaseOrderPOVM.Serial);
-                //}
-
-
-
-
+                if (!string.IsNullOrWhiteSpace(QPurchaseOrderPOVM.Tracking))
+                {
+                    listPurchaseOrder = listPurchaseOrder.Where(x => x.Tracking == QPurchaseOrderPOVM.Tracking);
+                }
+                if (!string.IsNullOrWhiteSpace(QPurchaseOrderPOVM.Brand))
+                {
+                    var Brandlist = db.Brand.Where(x => x.Name.Contains(QPurchaseOrderPOVM.Brand)).Select(x => x.ID).ToList();
+                    var skuidlist = db.SKU.Where(x => Brandlist.Contains(x.Brand)).Select(x => x.SkuID).ToList();
+                    listPurchaseOrder = listPurchaseOrder.Where(x => x.PurchaseSKU.Where(y => skuidlist.Contains(y.SkuNo)).Any());
+                }
+                if (!string.IsNullOrWhiteSpace(QPurchaseOrderPOVM.SKU))
+                {
+                    listPurchaseOrder = listPurchaseOrder.Where(x => x.PurchaseSKU.Where(y=>y.SkuNo == QPurchaseOrderPOVM.SKU).Any());
+                }
+                if (!string.IsNullOrWhiteSpace(QPurchaseOrderPOVM.Category))
+                {
+                    var TypeIDlist = db.SkuTypeLang.Where(x => x.Name.Contains(QPurchaseOrderPOVM.Category)).Select(x => x.TypeID).ToList();
+                    var skuidlist = db.SKU.Where(x => TypeIDlist.Contains(x.Category)).Select(x => x.SkuID).ToList();
+                    listPurchaseOrder = listPurchaseOrder.Where(x => x.PurchaseSKU.Where(y => skuidlist.Contains(y.SkuNo)).Any());
+                }
+                if (!string.IsNullOrWhiteSpace(QPurchaseOrderPOVM.Serial))
+                {
+                    var PurchaseSKUID = db.SerialsLlist.Where(x => x.SerialsNo == QPurchaseOrderPOVM.Serial && x.SerialsType == "PO").Select(x => x.PurchaseSKUID).ToList();
+                    listPurchaseOrder = listPurchaseOrder.Where(x => x.PurchaseSKU.Where(y => PurchaseSKUID.Contains(y.ID)).Any());
+                }
                 if (filter.ID.HasValue)
                 {
                     listPurchaseOrder = listPurchaseOrder.Where(x => x.ID == filter.ID);
@@ -256,7 +274,7 @@ namespace PurchaseOrderSys.Controllers
                     x.ID,
                     x.POType,
                     VendorID = x.VendorID.ToString(),
-                    PODate = x.PODate.Value.ToString("yyyy/MM/dd"),
+                    PODate = x.PODate.Value.ToLocalTime().ToString("yyyy/MM/dd"),
                     QTY = x.PurchaseSKU.Sum(y => y.QTYOrdered),
                     GrandTotal = x.PurchaseSKU.Sum(y => (y.QTYOrdered * y.Price)),
                     x.PaidAmount,
@@ -355,11 +373,11 @@ namespace PurchaseOrderSys.Controllers
                 QTYFulfilled = x.QTYFulfilled,
                 QTYReceived = GetQTYReceived(x),
                 QTYReturned = x.QTYReturned,
-                Price = x.Price,
-                Discount = x.Discount,
-                DiscountedPrice = x.DiscountedPrice,
-                Credit = x.Credit,
-                Subtotal = (x.QTYOrdered * (x.Price - x.Discount)),
+                Price = x.Price ?? 0,
+                Discount = x.Discount ?? 0,
+                DiscountedPrice = ((x.Price ?? 0) - (x.Discount ?? 0) - (x.Credit ?? 0)),
+                Credit = x.Credit ?? 0,
+                Subtotal = ((x.QTYOrdered ?? 0) * ((x.Price ?? 0) - (x.Discount ?? 0))),
                 SerialQTY = x.SerialsLlist.Count(),
                 Model = "L"
             });

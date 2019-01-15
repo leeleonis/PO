@@ -256,7 +256,7 @@ namespace PurchaseOrderSys.Controllers
                     item.Price = Price;
                     item.Discount = Discount;
                     item.Credit = Credit;
-                    item.DiscountedPrice = (Price - Discount);
+                    item.DiscountedPrice = (Price - Discount- Credit);
                     item.Subtotal = (QTYOrdered * (Price - Discount));
                 }
                 odataList.AddRange(dataList);
@@ -275,7 +275,7 @@ namespace PurchaseOrderSys.Controllers
             return Json(returnObj, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public ActionResult SkuNumberListEdit(string SKU, string type, decimal oval, decimal val, int? ID)
+        public ActionResult SkuNumberListEdit(string SKU, string type, decimal? oval, decimal? val, int? ID)
         {
             var odataList = (List<PoSKUVM>)Session["SkuNumberList"];
             if (odataList == null)
@@ -300,8 +300,8 @@ namespace PurchaseOrderSys.Controllers
                         break;
                 }
 
-                item.DiscountedPrice = (item.Price - item.Discount);
-                item.Subtotal = (item.QTYOrdered * (item.Price - item.Discount));
+                item.DiscountedPrice = ((item.Price??0 )- (item.Discount ?? 0) - (item.Credit ?? 0));
+                item.Subtotal = ((item.QTYOrdered ?? 0) * ((item.Price ?? 0) - (item.Discount ?? 0)));
             }
             Session["SkuNumberList"] = odataList;
             return Json(new { status = true }, JsonRequestBehavior.AllowGet);

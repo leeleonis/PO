@@ -297,9 +297,27 @@ namespace PurchaseOrderSys.Models
         public decimal? Balance { get; set; }
     }
 
+    public class CreditMemoVMQ : CreditMemoVM
+    {
+        [UIHint("FDate")]
+        public Nullable<System.DateTime> CMDateS { get; set; }
+        [UIHint("FDate")]
+        public Nullable<System.DateTime> CMDateE { get; set; }
+        [UIHint("FDate")]
+        public Nullable<System.DateTime> InvoiceDateS { get; set; }
+        [UIHint("FDate")]
+        public Nullable<System.DateTime> InvoiceDateE { get; set; }
+        [UIHint("FDate")]
+        public Nullable<System.DateTime> CreditDateS { get; set; }
+        [UIHint("FDate")]
+        public Nullable<System.DateTime> CreditDateE { get; set; }
+        [UIHint("FDate")]
+        public Nullable<System.DateTime> ReturnDateS { get; set; }
+        [UIHint("FDate")]
+        public Nullable<System.DateTime> ReturnDateE { get; set; }
+    }                                                          
 
-
-    public class PurchaseOrderPOVM
+public class PurchaseOrderPOVM
     {
         /// <summary>
         /// 採購單號
@@ -446,7 +464,35 @@ namespace PurchaseOrderSys.Models
         [Display(Name = "PurchaseOrder_Tax", ResourceType = typeof(App_GlobalResources.Resource))]
         [MaxLength(10, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
         public decimal? Tax { get; set; }
+
+        public string Creater { get; set; }
+        public string Brand { get; set; }
+        public string Tracking { get; set; }
+        public string Category { get; set; }
+        public string SKU { get; set; }
+        public string Serial { get; set; }
     }
+
+    public class PurchaseOrderPOVMQ : PurchaseOrderPOVM
+    {
+        [UIHint("FDate")]
+        public Nullable<System.DateTime> PODateS { get; set; }
+        [UIHint("FDate")]
+        public Nullable<System.DateTime> PODateE { get; set; }
+        [UIHint("FDate")]
+        public Nullable<System.DateTime> InvoiceDateS { get; set; }
+        [UIHint("FDate")]
+        public Nullable<System.DateTime> InvoiceDateE { get; set; }
+        [UIHint("FDate")]
+        public Nullable<System.DateTime> PaymentDateS { get; set; }
+        [UIHint("FDate")]
+        public Nullable<System.DateTime> PaymentDateE { get; set; }
+        [UIHint("FDate")]
+        public Nullable<System.DateTime> ReceivedDateS { get; set; }
+        [UIHint("FDate")]
+        public Nullable<System.DateTime> ReceivedDateE { get; set; }
+    }
+
     public class PurchaseSKUVM
     {
         /// <summary>

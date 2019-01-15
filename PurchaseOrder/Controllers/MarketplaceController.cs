@@ -6,10 +6,12 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using inventorySKU;
 using PurchaseOrderSys.Models;
 
 namespace PurchaseOrderSys.Controllers
 {
+    [CheckSession]
     public class MarketplaceController : BaseController
     {
         private string[] EditList = new string[] { "FullName", "GlobalID", "CountryCode", "CompanyID", "CurrencyID", "NetoGroup" };

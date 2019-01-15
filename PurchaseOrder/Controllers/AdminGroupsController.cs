@@ -7,12 +7,13 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using inventorySKU;
 using PurchaseOrderSys.Models;
 
 namespace PurchaseOrderSys.Controllers
 {
 
-    //[CheckSession]
+    [CheckSession]
     public class AdminGroupsController : BaseController
     {
         string[] EditList = new string[] { "Name", "Auth" };

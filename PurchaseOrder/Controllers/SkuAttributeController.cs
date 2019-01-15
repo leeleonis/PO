@@ -7,10 +7,11 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Newtonsoft.Json;
+using inventorySKU;
 using PurchaseOrderSys.Models;
 namespace PurchaseOrderSys.Controllers
 {
-    //[CheckSession]
+    [CheckSession]
     public class SkuAttributeController : BaseController
     {
         // GET: SkuAttribute

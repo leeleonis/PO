@@ -227,6 +227,7 @@
     <Compile Include="Controllers\WarehouseInventoryController.cs" />
     <Compile Include="Controllers\WarehouseController.cs" />
     <Compile Include="Controllers\WarehouseUserController.cs" />
+    <Compile Include="Filters\CheckSessionAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -6427,10 +6428,10 @@
     <Content Include="Views\PurchaseOrderCM\Addserials.cshtml" />
     <Content Include="Views\Ajax\GetImg.cshtml" />
     <Content Include="Views\Ajax\SerialsExcel.cshtml" />
+    <Content Include="Views\Shared\EmailPo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Filters\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\SkuSerials\" />
   </ItemGroup>

@@ -88,7 +88,7 @@
                                                                                 <td>@WarehouseName</td>
                                                                                 <td></td>
                                                                                 <td>@Price</td>
-                                                                                <td>@CreateAt</td>
+                                                                                <td>@(CreateAt.Value.ToLocalTime())</td>
                                                                                 <td>
                                                                                     <a class='btn btn-default btn-sm GetHistory' href='@Url.Action("GetHistory", new { ID = SerialsNoitem })'>History</a>
                                                                                 </td>

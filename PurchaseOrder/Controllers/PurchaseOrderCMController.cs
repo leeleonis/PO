@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
+using inventorySKU;
 namespace PurchaseOrderSys.Controllers
 {
+    [CheckSession]
     public class PurchaseOrderCMController : BaseController
     {
         // GET: PurchaseOrder
-        public ActionResult Index(CreditMemoVM CreditMemoVM)
+        public ActionResult Index(CreditMemoVMQ CreditMemoVM)
         {
             Session["CreditMemoVM"] = CreditMemoVM;
             return View(CreditMemoVM);
@@ -165,7 +166,7 @@ namespace PurchaseOrderSys.Controllers
         {
             if (Type == "Master")
             {
-                var QCreditMemoVM = (CreditMemoVM)Session["CreditMemoVM"];
+                var QCreditMemoVM = (CreditMemoVMQ)Session["CreditMemoVM"];
                 int total = 0;
                 var listCreditMemo = db.CreditMemo.AsQueryable();
                 //綱頁查詢
@@ -181,17 +182,25 @@ namespace PurchaseOrderSys.Controllers
                 {
                     listCreditMemo = listCreditMemo.Where(x => x.ID == QCreditMemoVM.ID);
                 }
-                if (QCreditMemoVM.CMDate.HasValue)
+                if (QCreditMemoVM.CMDateS.HasValue)
                 {
-                    listCreditMemo = listCreditMemo.Where(x => x.CMDate == QCreditMemoVM.CMDate);
+                    listCreditMemo = listCreditMemo.Where(x => x.CMDate >= QCreditMemoVM.CMDateS);
+                }
+                if (QCreditMemoVM.CMDateE.HasValue)
+                {
+                    listCreditMemo = listCreditMemo.Where(x => x.CMDate <= QCreditMemoVM.CMDateE);
                 }
                 if (!string.IsNullOrWhiteSpace(QCreditMemoVM.CMStatus))
                 {
                     listCreditMemo = listCreditMemo.Where(x => x.CMStatus == QCreditMemoVM.CMStatus);
                 }
-                if (QCreditMemoVM.InvoiceDate.HasValue)
+                if (QCreditMemoVM.InvoiceDateS.HasValue)
                 {
-                    listCreditMemo = listCreditMemo.Where(x => x.InvoiceDate == QCreditMemoVM.InvoiceDate);
+                    listCreditMemo = listCreditMemo.Where(x => x.InvoiceDate >= QCreditMemoVM.InvoiceDateS);
+                }
+                if (QCreditMemoVM.InvoiceDateE.HasValue)
+                {
+                    listCreditMemo = listCreditMemo.Where(x => x.InvoiceDate <= QCreditMemoVM.InvoiceDateE);
                 }
                 if (!string.IsNullOrWhiteSpace(QCreditMemoVM.CMType))
                 {
@@ -201,46 +210,61 @@ namespace PurchaseOrderSys.Controllers
                 {
                     listCreditMemo = listCreditMemo.Where(x => x.InvoiceNo == QCreditMemoVM.InvoiceNo);
                 }
-                //if (!string.IsNullOrWhiteSpace(QCreditMemoVM.Creater))
-                //{
-                //    listCreditMemo = listCreditMemo.Where(x => x.Creater == QCreditMemoVM.Creater);
-                //}
-                //if (QCreditMemoVM.PaymentDate.HasValue)
-                //{
-                //    listCreditMemo = listCreditMemo.Where(x => x.PaymentDate == QCreditMemoVM.PaymentDate);
-                //}
-                //if (!string.IsNullOrWhiteSpace(QCreditMemoVM.PaymentStatus))
-                //{
-                //    listCreditMemo = listCreditMemo.Where(x => x.PaymentStatus == QCreditMemoVM.PaymentStatus);
-                //}
-                //if (QCreditMemoVM.ReceivedDate.HasValue)
-                //{
-                //    listCreditMemo = listCreditMemo.Where(x => x.ReceivedDate == QCreditMemoVM.ReceivedDate);
-                //}
-                //if (!string.IsNullOrWhiteSpace(QCreditMemoVM.ReceiveStatus))
-                //{
-                //    listCreditMemo = listCreditMemo.Where(x => x.ReceiveStatus == QCreditMemoVM.ReceiveStatus);
-                //}
+                if (!string.IsNullOrWhiteSpace(QCreditMemoVM.Creater))
+                {
+                    listCreditMemo = listCreditMemo.Where(x => x.CreateBy == QCreditMemoVM.Creater);
+                }
+                if (QCreditMemoVM.CreditDateS.HasValue)
+                {
+                    listCreditMemo = listCreditMemo.Where(x => x.CreditDate >= QCreditMemoVM.CreditDateS);
+                }
+                if (QCreditMemoVM.CreditDateE.HasValue)
+                {
+                    listCreditMemo = listCreditMemo.Where(x => x.CreditDate <= QCreditMemoVM.CreditDateE);
+                }
+                if (!string.IsNullOrWhiteSpace(QCreditMemoVM.CreditStatus))
+                {
+                    listCreditMemo = listCreditMemo.Where(x => x.CreditStatus == QCreditMemoVM.CreditStatus);
+                }
+                if (QCreditMemoVM.ReturnDateS.HasValue)
+                {
+                    //listCreditMemo = listCreditMemo.Where(x => x.ReturnDate == QCreditMemoVM.ReturnDate);
+                }
+                if (QCreditMemoVM.ReturnDateE.HasValue)
+                {
+                    //listCreditMemo = listCreditMemo.Where(x => x.ReturnDate == QCreditMemoVM.ReturnDate);
+                }
+                if (!string.IsNullOrWhiteSpace(QCreditMemoVM.ReturnStatus))
+                {
+                    //listCreditMemo = listCreditMemo.Where(x => x.ReturnStatus == QCreditMemoVM.ReturnStatus);
+                }
+                if (!string.IsNullOrWhiteSpace(QCreditMemoVM.Brand))
+                {
+                    var Brandlist = db.Brand.Where(x => x.Name.Contains(QCreditMemoVM.Brand)).Select(x => x.ID).ToList();
+                    var skuidlist = db.SKU.Where(x => Brandlist.Contains(x.Brand)).Select(x => x.SkuID).ToList();
+                    listCreditMemo = listCreditMemo.Where(x => x.PurchaseSKU.Where(y => skuidlist.Contains(y.SkuNo)).Any());
+                }
+
                 if (!string.IsNullOrWhiteSpace(QCreditMemoVM.Tracking))
                 {
                     listCreditMemo = listCreditMemo.Where(x => x.Tracking == QCreditMemoVM.Tracking);
                 }
-                //if (!string.IsNullOrWhiteSpace(QCreditMemoVM.Brand))
-                //{
-                //    listCreditMemo = listCreditMemo.Where(x => x.Brand == QCreditMemoVM.Brand);
-                //}
-                //if (!string.IsNullOrWhiteSpace(QCreditMemoVM.SKU))
-                //{
-                //    listCreditMemo = listCreditMemo.Where(x => x.SKU == QCreditMemoVM.SKU);
-                //}
-                //if (!string.IsNullOrWhiteSpace(QCreditMemoVM.Category))
-                //{
-                //    listCreditMemo = listCreditMemo.Where(x => x.Category == QCreditMemoVM.Category);
-                //}
-                //if (!string.IsNullOrWhiteSpace(QCreditMemoVM.Serial))
-                //{
-                //    listCreditMemo = listCreditMemo.Where(x => x.Serial == QCreditMemoVM.Serial);
-                //}
+                if (!string.IsNullOrWhiteSpace(QCreditMemoVM.Category))
+                {
+                    var TypeIDlist = db.SkuTypeLang.Where(x => x.Name.Contains(QCreditMemoVM.Category)).Select(x => x.TypeID).ToList();
+                    var skuidlist = db.SKU.Where(x => TypeIDlist.Contains(x.Category)).Select(x => x.SkuID).ToList();
+                    listCreditMemo = listCreditMemo.Where(x => x.PurchaseSKU.Where(y => skuidlist.Contains(y.SkuNo)).Any());
+                }
+                if (!string.IsNullOrWhiteSpace(QCreditMemoVM.SKU))
+                {
+                    listCreditMemo = listCreditMemo.Where(x => x.PurchaseSKU.Where(y => y.SkuNo == QCreditMemoVM.SKU).Any());
+                }
+            
+                if (!string.IsNullOrWhiteSpace(QCreditMemoVM.Serial))
+                {
+                    var PurchaseSKUID = db.SerialsLlist.Where(x => x.SerialsNo == QCreditMemoVM.Serial && x.SerialsType == "CM").Select(x => x.PurchaseSKUID).ToList();
+                    listCreditMemo = listCreditMemo.Where(x => x.PurchaseSKU.Where(y => PurchaseSKUID.Contains(y.ID)).Any());
+                }
 
 
 
@@ -273,7 +297,7 @@ namespace PurchaseOrderSys.Controllers
                     x.ID,
                     x.CMType,
                     VendorID = x.VendorID.ToString(),
-                    CMDate = x.CMDate.Value.ToString("yyyy/MM/dd"),
+                    CMDate = x.CMDate.Value.ToLocalTime().ToString("yyyy/MM/dd"),
                     QTY = x.PurchaseSKU.Sum(y => y.QTYOrdered),
                     GrandTotal = x.PurchaseSKU.Sum(y => (y.QTYOrdered * y.Price)),
                     Balance = x.PurchaseSKU.Sum(y => (y.QTYOrdered * y.Price)),

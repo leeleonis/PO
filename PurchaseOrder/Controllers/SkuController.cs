@@ -8,11 +8,12 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Newtonsoft.Json;
+using inventorySKU;
 using PurchaseOrderSys.Models;
 
 namespace PurchaseOrderSys.Controllers
 {
-    //[CheckSession]
+    [CheckSession]
     public class SkuController : BaseController
     {
         readonly string[] EditList = new string[] { "ParentSku", "Condition", "Category", "Brand", "EAN", "UPC", "Replenishable", "Status" };

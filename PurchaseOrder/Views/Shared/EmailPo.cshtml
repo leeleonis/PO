@@ -1,0 +1,32 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>EmailPo</title>
+</head>
+<body>
+    <div>
+        主旨:
+        {PO 公司名稱} PO 採購單 #{PO Number} 給 {Vendor} (日期)
+
+        內容:
+        Hello
+
+        以下是本公司今日採購的內容. 請填入:
+        出貨價 (Price)
+        現哲金額 (Discount)
+        後哲金額 (Credit)
+
+        {table}
+
+        謝謝
+        {PO 公司名稱} Purchasing Team
+    </div>
+</body>
+</html>
