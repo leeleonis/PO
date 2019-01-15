@@ -1,6 +1,6 @@
 ﻿@model Transfer
 @{
-    ViewBag.title = "TransferOut Serials";
+    ViewBag.title = "TransferIn Serials";
 }
 <div id="content">
     <section id="widget-grid" class="">
@@ -48,50 +48,50 @@
                                                                 </thead>
                                                                 <tbody>
                                                                     @*@foreach (var item in Model.TransferSKU)
-                                                                    {
-                                                                        var rowspan = item.SerialsLlist.Count();
-                                                                        if (rowspan == 0)
                                                                         {
-                                                                            <tr>
-                                                                                <td>@item.SkuNo</td>
-                                                                                <td>@item.Name</td>
-                                                                                <td>@item.QTY/@rowspan</td>
-                                                                                <td></td>
-                                                                                <td></td>
-                                                                                <td></td>
-                                                                            </tr>
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            var i = 0;
-                                                                            foreach (var SerialsLlist in item.SerialsLlist)
+                                                                            var rowspan = item.SerialsLlist.Count();
+                                                                            if (rowspan == 0)
                                                                             {
-                                                                                if (i == 0)
+                                                                                <tr>
+                                                                                    <td>@item.SkuNo</td>
+                                                                                    <td>@item.Name</td>
+                                                                                    <td>@item.QTY/@rowspan</td>
+                                                                                    <td></td>
+                                                                                    <td></td>
+                                                                                    <td></td>
+                                                                                </tr>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                var i = 0;
+                                                                                foreach (var SerialsLlist in item.SerialsLlist)
                                                                                 {
-                                                                                    <tr>
-                                                                                        <td rowspan="@rowspan">@item.SkuNo</td>
-                                                                                        <td rowspan="@rowspan">@item.Name</td>
-                                                                                        <td rowspan="@rowspan">@item.QTY/@rowspan</td>
-                                                                                        <td>@SerialsLlist.SerialsNo</td>
-                                                                                        <td>Label</td>
-                                                                                        <td>Download</td>
-                                                                                    </tr>
-                                                                                    i++;
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                    <tr>
-                                                                                        <td>@SerialsLlist.SerialsNo</td>
-                                                                                        <td>Label</td>
-                                                                                        <td>Download</td>
-                                                                                    </tr>
-                                                                                    i++;
+                                                                                    if (i == 0)
+                                                                                    {
+                                                                                        <tr>
+                                                                                            <td rowspan="@rowspan">@item.SkuNo</td>
+                                                                                            <td rowspan="@rowspan">@item.Name</td>
+                                                                                            <td rowspan="@rowspan">@item.QTY/@rowspan</td>
+                                                                                            <td>@SerialsLlist.SerialsNo</td>
+                                                                                            <td>Label</td>
+                                                                                            <td>Download</td>
+                                                                                        </tr>
+                                                                                        i++;
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <tr>
+                                                                                            <td>@SerialsLlist.SerialsNo</td>
+                                                                                            <td>Label</td>
+                                                                                            <td>Download</td>
+                                                                                        </tr>
+                                                                                        i++;
+                                                                                    }
                                                                                 }
                                                                             }
-                                                                        }
-                                                                    }*@
+                                                                        }*@
                                                                 </tbody>
-                                                                </table>
+                                                            </table>
                                                         </div>
                                                     </div>
                                                 </article>
@@ -133,7 +133,7 @@
                 ajax: {
                     traditional: true,
                     method: "get",//或post，自由決定，影響到Server端用FormCollection取值或Request.QueryString取得DataTables傳遞的資訊
-                    url: "@Url.Action("PrepVMList")",
+                    url: "@Url.Action("ReceiveVMList")",
                     data: function (d) {
 
                     }
@@ -154,7 +154,7 @@
                     e.preventDefault();
                     $.ajax({
                         type: "post",
-                        url: "@Url.Action("PrepSaveserials")",
+                        url: "@Url.Action("ReceiveSaveserials")",
                         data: {
                             serials: serials,
                         },

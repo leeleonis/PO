@@ -106,7 +106,7 @@
                     }]
                 }
             });*@
-            $("#saveexit").on('click', function () {
+            $("body").on("click", "#saveexit", function (){
                 $("form").prepend('<input type="hidden" name="saveexit" value="true" />');
                 $("form").submit();
             });

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using inventorySKU;
+using System.Data.Entity;
 namespace PurchaseOrderSys.Controllers
 {
     [CheckSession]
@@ -15,10 +16,10 @@ namespace PurchaseOrderSys.Controllers
         {
            ViewBag. WarehouseID = ID;
             var SCID = db.WarehouseSummary.Where(x => x.WarehouseID == ID && x.Type == "SCID").FirstOrDefault().Val;
-            var AllSKUList = db.SKU.Where(x => x.IsEnable && x.Status == 1).ToList();
+            var AllSKUList = db.SKU.Where(x => x.IsEnable && x.Status == 1).Select(x => new { x.SkuID, x.SkuLang.FirstOrDefault().Name }).ToList();
             var edt = DateTime.UtcNow;
             var sdt = edt.AddDays(-30);
-            var PurchaseSKU = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.Warehouse1.ID == ID).ToList();
+            var PurchaseSKU = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.Warehouse1.ID == ID).Include(x => x.SerialsLlist).ToList();
             var WarehouseInventoryVM = new WarehouseInventoryVM();
             if (PurchaseSKU.Any())
             {
@@ -28,8 +29,7 @@ namespace PurchaseOrderSys.Controllers
                     ID = x.ID,
                     Name = x.Name,
                     SKU = x.SkuNo,
-                    POQTY = x.QTYOrdered.HasValue ? x.QTYOrdered.Value : x.SerialsLlist.Where(y => y.SerialsType == "PO").Sum(y => y.SerialsQTY) ?? 0,//有輸入直接讀輸入，沒輸入計算序號數
-
+                    POQTY = GetPOQty(x), 
                     CMQTY = GetCMQty(x),
                     OrderQTY = x.SerialsLlist.Where(z => z.SerialsType == "Order").Sum(z => z.SerialsQTY).Value,
                     TransferInQTY = x.SerialsLlist.Where(y => y.SerialsType == "TransferIn").Sum(y => y.SerialsQTY).Value,
@@ -65,8 +65,8 @@ namespace PurchaseOrderSys.Controllers
                     {
                         GroupWarehouseVM.Add(new WarehouseVM {
                             ID = 0,
-                            Name = item.SkuLang.FirstOrDefault()?.Name,
                             SKU = item.SkuID,
+                            Name = item.Name,
                             POQTY = 0,
                             CMQTY =0,
                             OrderQTY =0,
@@ -84,7 +84,7 @@ namespace PurchaseOrderSys.Controllers
                 foreach (var item in GroupWarehouseVM)
                 {
                     item.Fulfillable = item.POQTY + item.CMQTY + item.OrderQTY + item.TransferInQTY + item.TransferOutQTY;
-                    item.Unfulfillable = item.TransferInQTY - item.TransferOutQTY;
+                    item.Unfulfillable = item.TransferInQTY + item.TransferOutQTY;
                     item.Awaiting = Awaitinglist.Where(x => x.SKU == item.SKU && x.SCID == SCID).FirstOrDefault()?.QTY ?? 0;
                     item.Aggregate = item.Fulfillable - item.Awaiting;//Aggregate = Fulfillable - Awaiting dispatch
                     item.DaysOfSupply = item.Aggregate != 0 && item.Velocity != 0 ? item.Aggregate / item.Velocity / 30 : 0;  //Days of supply 算法: Aggregate / Velocity (30 days) / 30
@@ -100,6 +100,20 @@ namespace PurchaseOrderSys.Controllers
                 WarehouseInventoryVM.WarehouseVM = GroupWarehouseVM.OrderByDescending(x=>x.Fulfillable).ThenByDescending(x=>x.Awaiting);
             }
             return View(WarehouseInventoryVM);
+        }
+
+        private int GetPOQty(PurchaseSKU PurchaseSKU)
+        {
+            var count = 0;
+            if (PurchaseSKU.QTYFulfilled.HasValue)
+            {
+                count = PurchaseSKU.QTYFulfilled.Value;
+            }
+            else
+            {
+                count = PurchaseSKU.SerialsLlist.Where(y => y.SerialsType == "PO").Sum(y => y.SerialsQTY) ?? 0;//有輸入直接讀輸入，沒輸入計算序號數
+            }
+            return count;
         }
 
         private int GetCMQty(PurchaseSKU PurchaseSKU)
@@ -145,7 +159,7 @@ namespace PurchaseOrderSys.Controllers
                     Warehouse = item.PurchaseOrder.Warehouse1.Name,
                     Type = item.PurchaseOrder.Warehouse1.Type,
                     SCID = GetSCID(item),
-                    POQTY = item.QTYOrdered.HasValue ? item.QTYOrdered.Value : item.SerialsLlist.Where(y => y.SerialsType == "PO").Sum(y => y.SerialsQTY) ?? 0,//有輸入直接讀輸入，沒輸入計算序號數
+                    POQTY = GetPOQty(item),
                     Available = 0,
                     Aggregate = 0,//可上架的庫存總數
                    // Awaiting = GetAwaitingCount(item.SkuNo, GetSCID(item)),//等待出貨的庫總量

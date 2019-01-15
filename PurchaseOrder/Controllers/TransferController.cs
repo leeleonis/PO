@@ -123,23 +123,87 @@ namespace PurchaseOrderSys.Controllers
         {
             return View();
         }
+        public ActionResult Receive(int ID)
+        {
+            var oTransfer = db.Transfer.Find(ID);
+            var ReceiveVMList = new List<TransferItemVM>();
+            foreach (var item in oTransfer.TransferSKU)
+            {
+                ReceiveVMList.Add(new TransferItemVM { SKU = item.SkuNo, Name = item.Name, QTY = item.QTY, SerialsLlist = item.SerialsLlist.Where(x => x.SerialsType == "TransferIn").ToList() });
+            }
+            Session["ReceiveVMList"] = ReceiveVMList;
+            return View(oTransfer);
+        }
+        [HttpPost]
+        public ActionResult Receive(int ID, bool? saveexit)
+        {
+            var CreateBy = UserBy;
+            var CreateAt = DateTime.UtcNow;
+            var ReceiveVMList = (List<TransferItemVM>)Session["ReceiveVMList"];
+            var oTransfer = db.Transfer.Find(ID);
+            foreach (var item in oTransfer.TransferSKU)
+            {
+                foreach (var ReceiveVM in ReceiveVMList.Where(x => x.SKU == item.SkuNo))
+                {
+                    var nSerialsLlist = ReceiveVM.SerialsLlist.Select(x => new SerialsLlist
+                    {
+                        TransferSKUID = item.ID,
+                        PID = x.ID,
+                        CreateAt = CreateAt,
+                        CreateBy = CreateBy,
+                        OrderID = x.OrderID,
+                        PurchaseSKUID = x.PurchaseSKUID,
+                        RMAID = x.RMAID,
+                        SerialsNo = x.SerialsNo,
+                        SerialsQTY = 1,
+                        SerialsType = "TransferIn"
+                    }).ToList();
+                    //db.SerialsLlist.AddRange(nSerialsLlist);
+                    foreach (var Serial in nSerialsLlist)
+                    {
+                        if (!item.SerialsLlist.Where(x => x.SerialsNo == Serial.SerialsNo && x.SerialsType == "TransferIn").Any())
+                        {
+                            item.SerialsLlist.Add(Serial);
+                        }
+                    }
+                }
+            }
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+
+                var s = ex.ToString();
+            }
+            if (saveexit.HasValue && saveexit.Value)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return RedirectToAction("Receive", new { ID });
+            }
+        }
         public ActionResult Prep(int ID)
         {
             var oTransfer = db.Transfer.Find(ID);
-            var PrepVMList = new List<PrepVM>();
+            var PrepVMList = new List<TransferItemVM>();
             foreach (var item in oTransfer.TransferSKU)
             {
-                PrepVMList.Add(new PrepVM { SKU = item.SkuNo, Name = item.Name, QTY = item.QTY, SerialsLlist = item.SerialsLlist.ToList() });
+                PrepVMList.Add(new TransferItemVM { SKU = item.SkuNo, Name = item.Name, QTY = item.QTY, SerialsLlist = item.SerialsLlist.Where(x => x.SerialsType == "TransferOut").ToList() });
             }
             Session["PrepVMList"] = PrepVMList;
             return View(oTransfer);
         }
+
         [HttpPost]
         public ActionResult Prep(int ID, bool? saveexit)
         {
             var CreateBy = UserBy;
             var CreateAt = DateTime.UtcNow;
-            var PrepVMList = (List<PrepVM>)Session["PrepVMList"];
+            var PrepVMList = (List<TransferItemVM>)Session["PrepVMList"];
             var oTransfer = db.Transfer.Find(ID);
             foreach (var item in oTransfer.TransferSKU)
             {
@@ -161,13 +225,10 @@ namespace PurchaseOrderSys.Controllers
                     //db.SerialsLlist.AddRange(nSerialsLlist);
                     foreach (var Serial in nSerialsLlist)
                     {
-                        //Serial.PID = Serial.ID;
-                        //Serial.ID = 0;
-                        //Serial.SerialsQTY = -1;
-                        //Serial.SerialsType = "TransferOut";
-                        //Serial.CreateBy = CreateBy;
-                        //Serial.CreateAt = CreateAt;
-                        item.SerialsLlist.Add(Serial);
+                        if (!item.SerialsLlist.Where(x => x.SerialsNo == Serial.SerialsNo && x.SerialsType == "TransferOut").Any())
+                        {
+                            item.SerialsLlist.Add(Serial);
+                        }
                     }
                 }
             }
@@ -189,9 +250,9 @@ namespace PurchaseOrderSys.Controllers
                 return RedirectToAction("Prep", new { ID });
             }
         }
-        public ActionResult Saveserials(string serials)
+        public ActionResult PrepSaveserials(string serials)
         {
-            var PrepVMList = (List<PrepVM>)Session["PrepVMList"];
+            var PrepVMList = (List<TransferItemVM>)Session["PrepVMList"];
 
             var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials && !x.SerialsLlistC.Any() && x.SerialsQTY > 0);//找到序號
             if (SerialsLlist.Any())
@@ -235,13 +296,83 @@ namespace PurchaseOrderSys.Controllers
                 return Json(new { status = false, Errmsg = "序號不存在，此序號不能移倉" }, JsonRequestBehavior.AllowGet);
             }
         }
+        public ActionResult ReceiveSaveserials(string serials)
+        {
+            var ReceiveVMList = (List<TransferItemVM>)Session["ReceiveVMList"];
+
+            var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials && x.SerialsType == "TransferOut");//找到序號
+            if (SerialsLlist.Any())
+            {
+                var Serial = SerialsLlist.FirstOrDefault();
+                var ReceiveVM = ReceiveVMList.Where(x => x.SKU == Serial.TransferSKU.SkuNo).FirstOrDefault();
+                if (ReceiveVM != null)
+                {
+                    if (ReceiveVM.QTY > ReceiveVM.SerialsLlist.Count())
+                    {
+                        if (!ReceiveVMList.Where(x => x.SerialsLlist.Where(y => y.SerialsNo == serials).Any()).Any())
+                        {
+                            ReceiveVM.SerialsLlist.Add(Serial);
+                            Session["ReceiveVMList"] = ReceiveVMList;
+                            return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            return Json(new { status = false, Errmsg = "序號已在清單" }, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else
+                    {
+                        return Json(new { status = false, Errmsg = "移倉數量超過" }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    return Json(new { status = false, Errmsg = "序號無對應的SKU" }, JsonRequestBehavior.AllowGet);
+                }
+
+            }
+            else
+            {
+                return Json(new { status = false, Errmsg = "序號不存在，此序號不能移倉" }, JsonRequestBehavior.AllowGet);
+            }
+        }
         public ActionResult PrepVMList()
         {
-            var PrepVMList = (List<PrepVM>)Session["PrepVMList"];
+            var PrepVMList = (List<TransferItemVM>)Session["PrepVMList"];
             var PrepTableList = new List<PrepTable>();
             if (PrepVMList != null)
             {
                 foreach (var item in PrepVMList)
+                {
+                    if (item.SerialsLlist.Any())
+                    {
+                        foreach (var SerialsLlistitem in item.SerialsLlist)
+                        {
+                            PrepTableList.Add(new PrepTable { SKU = item.SKU, Name = item.Name, Serial = SerialsLlistitem.SerialsNo, QTY = item.QTY + "/" + item.SerialsLlist.Count() });
+                        }
+                    }
+                    else
+                    {
+                        PrepTableList.Add(new PrepTable { SKU = item.SKU, Name = item.Name, QTY = item.QTY + "/" + item.SerialsLlist.Count() });
+                    }
+                }
+            }
+            int recordsTotal = PrepTableList.Count();
+            var returnObj =
+           new
+           {
+               recordsFiltered = recordsTotal,
+               data = PrepTableList//分頁後的資料 
+           };
+            return Json(returnObj, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult ReceiveVMList()
+        {
+            var ReceiveVMList = (List<TransferItemVM>)Session["ReceiveVMList"];
+            var PrepTableList = new List<PrepTable>();
+            if (ReceiveVMList != null)
+            {
+                foreach (var item in ReceiveVMList)
                 {
                     if (item.SerialsLlist.Any())
                     {

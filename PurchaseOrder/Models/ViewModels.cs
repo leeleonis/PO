@@ -1120,7 +1120,7 @@ public class PurchaseOrderPOVM
         public decimal? Price { get; set; }
         public decimal? Discount { get; set; }
     }
-    public class PrepVM
+    public class TransferItemVM
     {
         public string SKU { get; set; }
         public string Name { get; set; }

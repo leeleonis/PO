@@ -157,7 +157,7 @@ namespace PurchaseOrderSys.Controllers
                       QTY = 0,
                       Model = "E"
                   }
-                ).ToList();
+                ).Distinct().ToList();
                 //foreach (var item in dataList)
                 //{
                 //    var QTYOrdered = RandomVal(100, 1000);
@@ -346,6 +346,7 @@ namespace PurchaseOrderSys.Controllers
             foreach (var item in odataList.Where(x => x.SKU == SKU))
             {
                 item.QTY = val;
+                item.Model = "E";
             }
             Session["TSkuNumberList"] = odataList;
             return Json(new { status = true }, JsonRequestBehavior.AllowGet);

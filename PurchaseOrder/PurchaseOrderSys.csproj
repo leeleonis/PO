@@ -6429,6 +6429,7 @@
     <Content Include="Views\Ajax\GetImg.cshtml" />
     <Content Include="Views\Ajax\SerialsExcel.cshtml" />
     <Content Include="Views\Shared\EmailPo.cshtml" />
+    <Content Include="Views\Transfer\Receive.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
