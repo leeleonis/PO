@@ -8,7 +8,7 @@
     var CMStatusDDL = EnumData.CMStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var ShippingStatusDDL = EnumData.ShippingStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var CreditStatusDDL = EnumData.CreditStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
-    var Warehouselist = (IEnumerable<SelectListItem>)ViewBag.Warehouselist;
+     var Warehouselist = EnumData.WarehouseDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var CurrencyDDL = EnumData.CurrencyDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
 }
 <style>
@@ -60,7 +60,7 @@
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("CompanyNo", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
-                                                @Html.Label("Vendor No", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @Html.Label("Company No", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("VendorNo", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
@@ -255,13 +255,18 @@
                                                                         </div>
                                                                         <div class="col-sm-2 col-lg-2">
                                                                             <ul style="list-style-type:none;list-style-position: inside;padding-left: 0px;padding-left: 0px;" id="textnotelog">
-                                                                                @*@if (Model.cr != null)
-                                                                                    {
-                                                                                        foreach (var item in Model.CreditMemo)
-                                                                                        {
-                                                                                            <li>@(item.CreateBy + "： " + item.CreateAt.ToString("yyyy/MM/dd HH:mm:ss"))</li>
-                                                                                        }
-                                                                                    }*@
+                                                                                @foreach (var item in Model.PurchaseNote)
+                                                                                {
+                                                                                    <li>
+                                                                                        <fieldset>
+                                                                                            <legend>
+                                                                                                @item.Note
+                                                                                                <br />
+                                                                                                @( item.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss") + "；" + item.CreateBy)
+                                                                                            </legend>
+                                                                                        </fieldset>
+                                                                                    </li>
+                                                                                }
                                                                             </ul>
                                                                         </div>
                                                                     </td>
@@ -295,13 +300,18 @@
                                                                         </div>
                                                                         <div class="col-sm-2 col-lg-2">
                                                                             <ul style="list-style-type:none;list-style-position: inside;padding-left: 0px;padding-left: 0px;" id="textnotelog">
-                                                                                @*@if (Model.CreditMemo != null)
-                                                                                    {
-                                                                                        foreach (var item in Model.CreditMemo)
-                                                                                        {
-                                                                                            <li>@(item.CreateBy + "： " + item.CreateAt.ToString("yyyy/MM/dd HH:mm:ss"))</li>
-                                                                                        }
-                                                                                    }*@
+                                                                                @foreach (var item in Model.PurchaseNote)
+                                                                                {
+                                                                                    <li>
+                                                                                        <fieldset>
+                                                                                            <legend>
+                                                                                                @item.Note
+                                                                                                <br />
+                                                                                                @( item.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss") + "；" + item.CreateBy)
+                                                                                            </legend>
+                                                                                        </fieldset>
+                                                                                    </li>
+                                                                                }
                                                                             </ul>
                                                                         </div>
                                                                     </td>
@@ -315,7 +325,7 @@
                                     </div>
                                 </div>
                                 <div class="widget-footer">
-                                    <button type="submit" class="btn btn-primary" id="save">儲存</button>
+                                   <button type="submit" class="btn btn-primary" id="save">儲存</button>
                                     <button type="button" class="btn btn-primary" id="saveexit">儲存並返回</button>
                                     <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index")'">返回</button>
                                 </div>

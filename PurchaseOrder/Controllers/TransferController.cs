@@ -18,8 +18,7 @@ namespace PurchaseOrderSys.Controllers
         }
         public ActionResult Create()
         {
-            var Warehouselist = db.Warehouse.Where(x => x.IsEnable).Select(x => new SelectListItem { Text = x.Name, Value = x.ID.ToString() }).ToList();
-            ViewBag.Warehouselist = Warehouselist;
+
             Session["TSkuNumberList"] = null;
             return View();
         }
@@ -45,8 +44,7 @@ namespace PurchaseOrderSys.Controllers
         }
         public ActionResult Edit(int ID)
         {
-            var Warehouselist = db.Warehouse.Where(x => x.IsEnable).Select(x => new SelectListItem { Text = x.Name, Value = x.ID.ToString() }).ToList();
-            ViewBag.Warehouselist = Warehouselist;
+
             var Transfer = db.Transfer.Find(ID);
             var TranSKUVMList = new List<TranSKUVM>();
             foreach (var item in Transfer.TransferSKU)

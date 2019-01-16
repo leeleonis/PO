@@ -40,8 +40,7 @@ namespace PurchaseOrderSys.Controllers
         }
         public ActionResult EditItem(int ID)
         {
-            var Warehouselist = db.Warehouse.Where(x => x.IsEnable).Select(x => new SelectListItem { Text = x.Name, Value = x.ID.ToString() }).ToList();
-            ViewBag.Warehouselist = Warehouselist;
+           
             var CreditMemo = db.CreditMemo.Find(ID);
             //var cmvm = new CMVM
             //{

@@ -125,6 +125,7 @@ namespace PurchaseOrderSys.Controllers
             Session.Add("WarehouseID", WarehouseId);
             Session.Add("TimeZone", TimeZone);
             Session.Add("Menu", Menu.ToList());
+            UserBy = AdminName;
             return true;
         }
 

@@ -23,7 +23,7 @@
                                         <fieldset>
                                             <legend>@ViewBag.title</legend>
                                             <div class="form-group">
-                                                @Html.Label("Vendor No", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @Html.Label("Company No", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("VendorNo", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
@@ -78,7 +78,7 @@
                                 </div>
 
                                 @*<div class="widget-footer">
-                                    <button type="submit" class="btn btn-primary" id="save">儲存</button>
+                                   <button type="submit" class="btn btn-primary" id="save">儲存</button>
                                     <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index")'">返回</button>
                                 </div>*@
                             </form>

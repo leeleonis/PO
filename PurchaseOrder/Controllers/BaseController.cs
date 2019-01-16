@@ -20,7 +20,7 @@ namespace PurchaseOrderSys.Controllers
         protected string ApiUrl = "http://internal.qd.com.tw/";
         //protected string ApiUrl = "http://localhost:49920/";
         protected string FileUploads = "~/FileUploads";
-        protected string UserBy = "test";
+        public static string UserBy = "test";
         protected PurchaseOrderEntities db = new PurchaseOrderEntities();
         /// <summary>
         /// 設定要更新的欄位

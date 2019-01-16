@@ -676,7 +676,20 @@ namespace PurchaseOrderSys.Controllers
             }
         }
 
-     
+        [HttpPost]
+        public ActionResult GateVendorCurrency(int id)
+        {
+            var VendorLIst = db.VendorLIst.Find(id);
+            if (VendorLIst!=null)
+            {
+                return Json(new { status = true, VendorLIst.Currency, VendorLIst.Tax }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { status = false, Msg = "查無資料" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
     }
 
 

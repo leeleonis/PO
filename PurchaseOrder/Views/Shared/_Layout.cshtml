@@ -69,6 +69,12 @@
     @RenderSection("scripts", required: false)
     @*@MiniProfiler.RenderIncludes()*@
     <script type="text/javascript">
+        window.onload = function () {
+            $("button[type='submit']").click(function () {
+                $(this).prop("disabled", "disabled");
+                $("form").submit();
+            });
+        }
         var thousandComma = function (number) {
             if (number != null) {
                 if (!isNaN(number)) {
@@ -90,6 +96,7 @@
         var oTable;
         $(document).ready(function () {
             $("form").makeValidationInline();
+       
             @*oTable = $('#dt_basic').dataTable({
                 "columnDefs": [{ "orderable": false, "targets": "nosort" }],
                 "order": [],
@@ -108,6 +115,7 @@
             });*@
             $("body").on("click", "#saveexit", function (){
                 $("form").prepend('<input type="hidden" name="saveexit" value="true" />');
+                $(this).prop("disabled", "disabled");
                 $("form").submit();
             });
             $('#dt_basic tbody td img.detaildables').click(function () {

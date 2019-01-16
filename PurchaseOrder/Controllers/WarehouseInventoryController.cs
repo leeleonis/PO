@@ -14,91 +14,92 @@ namespace PurchaseOrderSys.Controllers
         // GET: Warehouse
         public ActionResult Index(int ID)
         {
-           ViewBag. WarehouseID = ID;
+            ViewBag.WarehouseID = ID;
             var SCID = db.WarehouseSummary.Where(x => x.WarehouseID == ID && x.Type == "SCID").FirstOrDefault().Val;
             var AllSKUList = db.SKU.Where(x => x.IsEnable && x.Status == 1).Select(x => new { x.SkuID, x.SkuLang.FirstOrDefault().Name }).ToList();
             var edt = DateTime.UtcNow;
             var sdt = edt.AddDays(-30);
             var PurchaseSKU = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.Warehouse1.ID == ID).Include(x => x.SerialsLlist).ToList();
             var WarehouseInventoryVM = new WarehouseInventoryVM();
-            if (PurchaseSKU.Any())
+
+            var Awaitinglist = GetAwaitingCount("", SCID);
+            var WarehouseVM = PurchaseSKU.Select(x => new WarehouseVM
             {
-                var Awaitinglist = GetAwaitingCount("", SCID);
-                var WarehouseVM = PurchaseSKU.Select(x => new WarehouseVM
+                ID = x.ID,
+                Name = x.Name,
+                SKU = x.SkuNo,
+                POQTY = GetPOQty(x),
+                CMQTY = GetCMQty(x),
+                OrderQTY = x.SerialsLlist.Where(z => z.SerialsType == "Order").Sum(z => z.SerialsQTY).Value,
+                TransferInQTY = x.SerialsLlist.Where(y => y.SerialsType == "TransferIn").Sum(y => y.SerialsQTY).Value,
+                TransferOutQTY = x.SerialsLlist.Where(y => y.SerialsType == "TransferOut").Sum(y => y.SerialsQTY).Value,
+                Velocity = x.SerialsLlist.Where(z => z.SerialsType == "Order" && z.CreateAt >= sdt && z.CreateAt <= sdt).Sum(z => z.SerialsQTY).Value,
+                DaysOfSupply = 0,
+                Aggregate = 0,//可上架的庫存總數
+                Awaiting = 0,//等待出貨的庫總量
+                Fulfillable = 0,
+                Unfulfillable = 0
+            }).ToList();
+
+            var GroupWarehouseVM = WarehouseVM.GroupBy(x => new { x.SKU }).Select(x => new WarehouseVM //SKU數量總計
+            {
+                ID = x.FirstOrDefault().ID,
+                Name = x.FirstOrDefault().Name,
+                SKU = x.Key.SKU,
+                POQTY = x.Sum(p => p.POQTY),
+                CMQTY = x.Sum(p => p.CMQTY),
+                OrderQTY = x.Sum(p => p.OrderQTY),
+                TransferInQTY = x.Sum(p => p.TransferInQTY),
+                TransferOutQTY = x.Sum(p => p.TransferOutQTY),
+                Velocity = x.Sum(p => p.Velocity),
+                //DaysOfSupply = x.Sum(p => p.DaysOfSupply),
+                //Aggregate = x.Sum(p => p.Aggregate),
+                //Awaiting = x.Sum(p => p.Awaiting),
+                //Fulfillable = x.Sum(p => p.Fulfillable),
+                //Unfulfillable = x.Sum(p => p.Unfulfillable),
+            }).ToList();
+            //把所有的SKU放進去
+            foreach (var item in AllSKUList)
+            {
+                if (!GroupWarehouseVM.Where(x => x.SKU == item.SkuID).Any())
                 {
-                    ID = x.ID,
-                    Name = x.Name,
-                    SKU = x.SkuNo,
-                    POQTY = GetPOQty(x), 
-                    CMQTY = GetCMQty(x),
-                    OrderQTY = x.SerialsLlist.Where(z => z.SerialsType == "Order").Sum(z => z.SerialsQTY).Value,
-                    TransferInQTY = x.SerialsLlist.Where(y => y.SerialsType == "TransferIn").Sum(y => y.SerialsQTY).Value,
-                    TransferOutQTY = x.SerialsLlist.Where(y => y.SerialsType == "TransferOut").Sum(y => y.SerialsQTY).Value,
-                    Velocity = x.SerialsLlist.Where(z => z.SerialsType == "Order" && z.CreateAt >= sdt && z.CreateAt <= sdt).Sum(z => z.SerialsQTY).Value,
-                    DaysOfSupply = 0,
-                    Aggregate = 0,//可上架的庫存總數
-                    Awaiting = 0,//等待出貨的庫總量
-                    Fulfillable = 0,
-                    Unfulfillable = 0
-                }).ToList();
-                var GroupWarehouseVM = WarehouseVM.GroupBy(x => new { x.SKU }).Select(x => new WarehouseVM //SKU數量總計
-                {
-                    ID = x.FirstOrDefault().ID,
-                    Name = x.FirstOrDefault().Name,
-                    SKU = x.Key.SKU,
-                    POQTY = x.Sum(p => p.POQTY),
-                    CMQTY = x.Sum(p => p.CMQTY),
-                    OrderQTY = x.Sum(p => p.OrderQTY),
-                    TransferInQTY = x.Sum(p => p.TransferInQTY),
-                    TransferOutQTY = x.Sum(p => p.TransferOutQTY),
-                    Velocity = x.Sum(p => p.Velocity),
-                    //DaysOfSupply = x.Sum(p => p.DaysOfSupply),
-                    //Aggregate = x.Sum(p => p.Aggregate),
-                    //Awaiting = x.Sum(p => p.Awaiting),
-                    //Fulfillable = x.Sum(p => p.Fulfillable),
-                    //Unfulfillable = x.Sum(p => p.Unfulfillable),
-                }).ToList();
-                //把所有的SKU放進去
-                foreach (var item in AllSKUList)
-                {
-                    if (!GroupWarehouseVM.Where(x=>x.SKU== item.SkuID).Any())
+                    GroupWarehouseVM.Add(new WarehouseVM
                     {
-                        GroupWarehouseVM.Add(new WarehouseVM {
-                            ID = 0,
-                            SKU = item.SkuID,
-                            Name = item.Name,
-                            POQTY = 0,
-                            CMQTY =0,
-                            OrderQTY =0,
-                            TransferInQTY = 0,
-                            TransferOutQTY = 0,
-                            Velocity = 0,
-                            DaysOfSupply = 0,
-                            Aggregate = 0,//可上架的庫存總數
-                            Awaiting = 0,//等待出貨的庫總量
-                            Fulfillable = 0,
-                            Unfulfillable = 0
-                        });
-                    }
+                        ID = 0,
+                        SKU = item.SkuID,
+                        Name = item.Name,
+                        POQTY = 0,
+                        CMQTY = 0,
+                        OrderQTY = 0,
+                        TransferInQTY = 0,
+                        TransferOutQTY = 0,
+                        Velocity = 0,
+                        DaysOfSupply = 0,
+                        Aggregate = 0,//可上架的庫存總數
+                        Awaiting = 0,//等待出貨的庫總量
+                        Fulfillable = 0,
+                        Unfulfillable = 0
+                    });
                 }
-                foreach (var item in GroupWarehouseVM)
-                {
-                    item.Fulfillable = item.POQTY + item.CMQTY + item.OrderQTY + item.TransferInQTY + item.TransferOutQTY;
-                    item.Unfulfillable = item.TransferInQTY + item.TransferOutQTY;
-                    item.Awaiting = Awaitinglist.Where(x => x.SKU == item.SKU && x.SCID == SCID).FirstOrDefault()?.QTY ?? 0;
-                    item.Aggregate = item.Fulfillable - item.Awaiting;//Aggregate = Fulfillable - Awaiting dispatch
-                    item.DaysOfSupply = item.Aggregate != 0 && item.Velocity != 0 ? item.Aggregate / item.Velocity / 30 : 0;  //Days of supply 算法: Aggregate / Velocity (30 days) / 30
-                    //item.Fulfillable = item.Awaiting + item.Aggregate; //Fulfillable = Awaiting dispatch + Aggregate 2018/12/28 拿掉公式
-                }
-               
-                WarehouseInventoryVM.Company = PurchaseSKU.FirstOrDefault().PurchaseOrder.Company.Name;
-                WarehouseInventoryVM.WarehouseType = PurchaseSKU.FirstOrDefault().PurchaseOrder.Warehouse1.Type;
-                WarehouseInventoryVM.Fulfillable = PurchaseSKU.FirstOrDefault().PurchaseOrder.Warehouse1.Fulfillable;
-                WarehouseInventoryVM.Location = PurchaseSKU.FirstOrDefault().PurchaseOrder.Warehouse1.Location;
-                WarehouseInventoryVM.Countries = PurchaseSKU.FirstOrDefault().PurchaseOrder.Warehouse1.Countries;
-                WarehouseInventoryVM.Marketplace = PurchaseSKU.FirstOrDefault().PurchaseOrder.Warehouse1.Marketplace;
-                WarehouseInventoryVM.WarehouseVM = GroupWarehouseVM.OrderByDescending(x=>x.Fulfillable).ThenByDescending(x=>x.Awaiting);
             }
+            foreach (var item in GroupWarehouseVM)
+            {
+                item.Fulfillable = item.POQTY + item.CMQTY + item.OrderQTY + item.TransferInQTY + item.TransferOutQTY;
+                item.Unfulfillable = item.TransferInQTY + item.TransferOutQTY;
+                item.Awaiting = Awaitinglist.Where(x => x.SKU == item.SKU && x.SCID == SCID).FirstOrDefault()?.QTY ?? 0;
+                item.Aggregate = item.Fulfillable - item.Awaiting;//Aggregate = Fulfillable - Awaiting dispatch
+                item.DaysOfSupply = item.Aggregate != 0 && item.Velocity != 0 ? item.Aggregate / item.Velocity / 30 : 0;  //Days of supply 算法: Aggregate / Velocity (30 days) / 30
+                                                                                                                          //item.Fulfillable = item.Awaiting + item.Aggregate; //Fulfillable = Awaiting dispatch + Aggregate 2018/12/28 拿掉公式
+            }
+
+            WarehouseInventoryVM.Company = PurchaseSKU.FirstOrDefault()?.PurchaseOrder.Company.Name;
+            WarehouseInventoryVM.WarehouseType = PurchaseSKU.FirstOrDefault()?.PurchaseOrder.Warehouse1.Type;
+            WarehouseInventoryVM.Fulfillable = PurchaseSKU.FirstOrDefault()?.PurchaseOrder.Warehouse1.Fulfillable;
+            WarehouseInventoryVM.Location = PurchaseSKU.FirstOrDefault()?.PurchaseOrder.Warehouse1.Location;
+            WarehouseInventoryVM.Countries = PurchaseSKU.FirstOrDefault()?.PurchaseOrder.Warehouse1.Countries;
+            WarehouseInventoryVM.Marketplace = PurchaseSKU.FirstOrDefault()?.PurchaseOrder.Warehouse1.Marketplace;
+            WarehouseInventoryVM.WarehouseVM = GroupWarehouseVM.OrderByDescending(x => x.Fulfillable).ThenByDescending(x => x.Awaiting);
+
             return View(WarehouseInventoryVM);
         }
 
@@ -206,8 +207,6 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult Purchasing(string SKU,int? Inventory, int? Velocity, int WarehouseID)
         {
             ViewBag.WarehouseID = WarehouseID;
-            var Warehouselist = db.Warehouse.Where(x => x.IsEnable).Select(x => new SelectListItem { Text = x.Name, Value = x.ID.ToString() }).ToList();
-            ViewBag.Warehouselist = Warehouselist;
             var edt = DateTime.UtcNow;
             var sdt = edt.AddDays(-30);
             var PurchaseSKU = db.PurchaseSKU.Where(x => x.SkuNo == SKU && x.SerialsLlist.Any(y => y.SerialsType == "PO"));

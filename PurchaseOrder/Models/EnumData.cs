@@ -45,12 +45,12 @@ namespace PurchaseOrderSys.Models
         /// <returns></returns>
         public static Dictionary<string, string> CurrencyDDL()
         {
-            return new Dictionary<string, string>()
+            var list = new Dictionary<string, string>();
+            using (var db = new PurchaseOrderEntities())
             {
-                { "TWD", App_GlobalResources.Resource.CurrencyTWD },
-                { "AUD", App_GlobalResources.Resource.CurrencyAUD },
-                { "USD", App_GlobalResources.Resource.CurrencyUSD }
-            };
+                list = db.Currency.ToDictionary(y => y.Code, y => y.Code);
+            }
+            return list;
         }
 
         /// <summary>
@@ -122,6 +122,22 @@ namespace PurchaseOrderSys.Models
                 { "Completed", App_GlobalResources.Resource.TransferStatusCompletedDDL  }
             };
         }
+
+        /// <summary>
+        /// 倉庫列表
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<string, string> WarehouseDDL()
+        {
+            var list = new Dictionary<string, string>();
+            using (var db = new PurchaseOrderEntities())
+            {
+                list = db.Warehouse.ToDictionary(y => y.ID.ToString(), y => y.Name);
+                //list = db.VendorLIst.ToDictionary(y => y.ID.ToString(), y => y.VendorNo + "_" + y.Name);
+            }
+            return list;
+        }
+
         /// <summary>
         /// 供應商列表
         /// </summary>
@@ -131,7 +147,8 @@ namespace PurchaseOrderSys.Models
             var list = new Dictionary<string, string>();
             using (var db = new PurchaseOrderEntities())
             {
-                list = db.VendorLIst.ToDictionary(y => y.ID.ToString(), y => y.VendorNo + "_" + y.Name);
+                list = db.VendorLIst.ToDictionary(y => y.ID.ToString(), y => y.Name);
+                //list = db.VendorLIst.ToDictionary(y => y.ID.ToString(), y => y.VendorNo + "_" + y.Name);
             }
             return list;
         }
@@ -144,7 +161,8 @@ namespace PurchaseOrderSys.Models
             var list = new Dictionary<string, string>();
             using (var db = new PurchaseOrderEntities())
             {
-                list = db.Company.ToDictionary(y => y.ID.ToString(), y => y.CompanyNo + "_" + y.Name);
+                list = db.Company.ToDictionary(y => y.ID.ToString(), y => y.Name);
+                //list = db.Company.ToDictionary(y => y.ID.ToString(), y => y.CompanyNo + "_" + y.Name);
             }
             return list;
         }

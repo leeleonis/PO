@@ -8,7 +8,7 @@
     var CMStatusDDL = EnumData.CMStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var ShippingStatusDDL = EnumData.ShippingStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var CreditStatusDDL = EnumData.CreditStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
-    var Warehouselist = (IEnumerable<SelectListItem>)ViewBag.Warehouselist;
+     var Warehouselist = EnumData.WarehouseDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var CurrencyDDL = EnumData.CurrencyDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
 }
 <style>
@@ -60,7 +60,7 @@
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("CompanyNo", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
-                                                @Html.Label("Vendor No", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @Html.Label("Company No", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("VendorNo", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
@@ -168,8 +168,10 @@
                                             <div class="form-group">
                                                 @Html.LabelFor(model => model.Tax, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    <div class="col-sm-2 col-lg-2">
-                                                        @Html.CheckBox("TaxShow", true, new { @class = "form-control" })
+                                                    <div class="col-sm-2 col-lg-1">
+                                                        <div class="checkbox">
+                                                            @Html.CheckBox("TaxShow", true)
+                                                        </div>
                                                     </div>
                                                     <div class="col-sm-10 col-lg-10">
                                                         @Html.EditorFor(model => model.Tax, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
@@ -309,7 +311,7 @@
                                     </div>
                                 </div>
                                 <div class="widget-footer">
-                                    <button type="submit" class="btn btn-primary" id="save">儲存</button>
+                                   <button type="submit" class="btn btn-primary" id="save">儲存</button>
                                     <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index")'">返回</button>
                                 </div>
                             </form>

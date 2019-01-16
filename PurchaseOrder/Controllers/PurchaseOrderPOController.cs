@@ -24,8 +24,6 @@ namespace PurchaseOrderSys.Controllers
             Session["PurchaseNote"] = null;
             var PurchaseOrder = new PurchaseOrder();
             PurchaseOrder.POType = POTypeVal;
-            var Warehouselist = db.Warehouse.Where(x => x.IsEnable).Select(x => new SelectListItem { Text = x.Name, Value = x.ID.ToString() }).ToList();
-            ViewBag.Warehouselist = Warehouselist;
             return View(PurchaseOrder);
         }
         [HttpPost]
@@ -361,7 +359,7 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult EditItem(int ID, string POTypeVal)
         {
             var PurchaseOrder = db.PurchaseOrder.Find(ID);
-            var dataList = PurchaseOrder.PurchaseSKU.Where(x=>x.IsEnable).Select(x => new PoSKUVM
+            var dataList = PurchaseOrder.PurchaseSKU.Where(x => x.IsEnable).Select(x => new PoSKUVM
             {
                 ID = x.ID,
                 ck = x.SkuNo,
@@ -378,17 +376,78 @@ namespace PurchaseOrderSys.Controllers
                 DiscountedPrice = ((x.Price ?? 0) - (x.Discount ?? 0) - (x.Credit ?? 0)),
                 Credit = x.Credit ?? 0,
                 Subtotal = ((x.QTYOrdered ?? 0) * ((x.Price ?? 0) - (x.Discount ?? 0))),
-                SerialQTY = x.SerialsLlist.Count(),
+                SerialQTY = x.SerialsLlist.Where(y => y.SerialsType == "PO").Sum(y => y.SerialsQTY),
                 Model = "L"
             });
             if (!string.IsNullOrWhiteSpace(POTypeVal))
             {
                 PurchaseOrder.POType = POTypeVal;
             }
-
+            if (PurchaseOrder.PaymentStatus!= "Completed")
+            {
+                var PaidAmount = PurchaseOrder.PaidAmount;
+                if (PaidAmount.HasValue)
+                {
+                    var TotalRefunded = 0;
+                    var Total = dataList.Sum(x => x.Subtotal);
+                    var GrandTotal = (Total ?? 0) - (PurchaseOrder.ShippingCost ?? 0) + (PurchaseOrder.Other ?? 0);
+                    var Balance = PaidAmount - GrandTotal + TotalRefunded;
+                    if (Balance == 0)
+                    {
+                        PurchaseOrder.PaymentStatus = "Completed";
+                    }
+                    else if (Balance < 0)
+                    {
+                        PurchaseOrder.PaymentStatus = "PartiallyPaid";
+                    }
+                    else if (Balance > 0)
+                    {
+                        PurchaseOrder.PaymentStatus = "OverPaid";
+                    }
+                    db.SaveChanges();
+                }
+            }
+            var QTYOrdered = PurchaseOrder.PurchaseSKU.Sum(x => x.QTYOrdered);
+            var ReceiveQty = dataList.Sum(x => x.SerialQTY);
+            if (PurchaseOrder.ReceiveStatus != "Completed")
+            {
+                if (QTYOrdered == ReceiveQty && ReceiveQty > 1)
+                {
+                    PurchaseOrder.ReceiveStatus = "Completed";
+                }
+                else if (QTYOrdered > ReceiveQty && ReceiveQty > 1)
+                {
+                    PurchaseOrder.ReceiveStatus = "PartiallyReceived";
+                }
+                else if (QTYOrdered < ReceiveQty && ReceiveQty > 1)
+                {
+                    PurchaseOrder.ReceiveStatus = "OverReceived";
+                }
+                else
+                {
+                    PurchaseOrder.ReceiveStatus = "Pending";
+                }
+                db.SaveChanges();
+            }
+            if (PurchaseOrder.POStatus != "Completed")
+            {
+                if (PurchaseOrder.PaymentStatus == "Completed" && PurchaseOrder.ReceiveStatus == "Completed")
+                {
+                    PurchaseOrder.POStatus = "Completed";
+                }
+                else if (PurchaseOrder.PaymentStatus == "Completed" || PurchaseOrder.ReceiveStatus == "Completed")
+                {
+                    PurchaseOrder.POStatus = "Pending";
+                }
+                else
+                {
+                    PurchaseOrder.POStatus = "Opened";
+                }
+                db.SaveChanges();
+            }
+           
             Session["SkuNumberList"] = dataList.ToList();
-            var Warehouselist = db.Warehouse.Where(x => x.IsEnable).Select(x => new SelectListItem { Text = x.Name, Value = x.ID.ToString() }).ToList();
-            ViewBag.Warehouselist = Warehouselist;
+           
             return View(PurchaseOrder);
         }
 
@@ -675,7 +734,7 @@ namespace PurchaseOrderSys.Controllers
             }
             if (PurchaseSKU.PurchaseOrder.POType== "DropshpOrder")//直發一入一出
             {
-                var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials&&x.PurchaseSKU.PurchaseOrderID== PurchaseSKU.PurchaseOrderID);//檢查序號是否重複，同訂單同序號不能新增
+                var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials&&x.PurchaseSKU.SkuNo== PurchaseSKU.SkuNo);//檢查序號是否重複，同SKU序號不能新增
                 if (!SerialsLlist.Any() )
                 {
                     var dt = DateTime.UtcNow;
@@ -720,7 +779,7 @@ namespace PurchaseOrderSys.Controllers
             }
             else
             {
-                var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials && x.PurchaseSKU.PurchaseOrderID == PurchaseSKU.PurchaseOrderID);//檢查序號是否重複，同訂單同序號不能新增
+                var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials && x.PurchaseSKU.SkuNo == PurchaseSKU.SkuNo);//檢查序號是否重複，同SKU序號不能新增
                 if (!SerialsLlist.Any())
                 {
                     var dt = DateTime.UtcNow;
@@ -758,7 +817,7 @@ namespace PurchaseOrderSys.Controllers
             try
             {
                 var PurchaseNoteList = new List<PurchaseNote>();
-                if (ID.HasValue)
+                if (ID.HasValue && ID != 0)
                 {
                     var PurchaseOrder = db.PurchaseOrder.Find(ID);
                     PurchaseOrder.PurchaseNote.Add(new PurchaseNote { IsEnable = true, Note = Note, CreateAt = DateTime.UtcNow, CreateBy = UserBy });
@@ -776,13 +835,12 @@ namespace PurchaseOrderSys.Controllers
                     PurchaseNoteList.Add(new PurchaseNote { IsEnable = true, Note = Note, CreateAt = DateTime.UtcNow, CreateBy = UserBy });
                     Session["PurchaseNote"] = PurchaseNoteList;
                 }
-                return Json(new { status = true, datalist = PurchaseNoteList.OrderByDescending(x => x.CreateAt).Select(x => new { CreateAt = x.CreateAt.ToString("yyyy/MM/dd HH:mm:ss"), x.CreateBy }).ToList() }, JsonRequestBehavior.AllowGet);
+                return Json(new { status = true, datalist = PurchaseNoteList.OrderByDescending(x => x.CreateAt).Select(x => new { CreateAt = x.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss"), x.CreateBy, x.Note }).ToList() }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
                 return Json(new { status = false, Errmsg = ex.ToString() }, JsonRequestBehavior.AllowGet);
             }
-
         }
         public ActionResult CreatePO()
         {
@@ -808,8 +866,7 @@ namespace PurchaseOrderSys.Controllers
         }
         public ActionResult CreateCM(int ID,string CMTypeVal= "CreditNote")
         {
-            var Warehouselist = db.Warehouse.Where(x => x.IsEnable).Select(x => new SelectListItem { Text = x.Name, Value = x.ID.ToString() }).ToList();
-            ViewBag.Warehouselist = Warehouselist;
+
             var PurchaseOrder = db.PurchaseOrder.Find(ID);
             var cmvm = new CMVM
             {
