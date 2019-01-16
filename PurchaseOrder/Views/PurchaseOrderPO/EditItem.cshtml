@@ -876,7 +876,7 @@
                             $("#textnotelog li").remove();
                             data.datalist.forEach(function (value) {
                                 //$("#textnotelog").append("<li>Appended item</li>");
-                                $("#textnotelog").append("<li><fieldset><legend>" + value.CreateBy + "<br />" + value.CreateAt + "；" + value.Note + "</legend></fieldset></li>");
+                                $("#textnotelog").append("<li><fieldset><legend>" + value.Note + "<br />" + value.CreateAt + "；" + value.CreateBy + "</legend></fieldset></li>");
                             });
                         }
                         else {
