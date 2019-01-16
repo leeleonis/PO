@@ -54,7 +54,7 @@
                 },
                 { field: "Code", title: "@Html.DisplayNameFor(model => model.Code)", width: 100, align: "center", sortable: false },
                 {
-                    field: "EXRate", title: "@Html.DisplayNameFor(model => model.EXRate)", width: 150, align: "center", sortable: false,
+                    field: "EXRate", title: "@Html.DisplayNameFor(model => model.EXRate)／TWD", width: 150, align: "center", sortable: false,
                     formatter: function (value, row, index) {
                         return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
                     }

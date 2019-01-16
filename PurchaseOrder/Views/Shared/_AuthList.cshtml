@@ -14,7 +14,7 @@
     }
     if (ViewBag.Authlist == null)
     {
-        using (InventorySKUEntities db = new InventorySKUEntities())
+        using (PurchaseOrderEntities db = new PurchaseOrderEntities())
         {
             ViewBag.Authlist = db.Auth.ToList();
         }

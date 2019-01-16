@@ -60,7 +60,7 @@
                                             <div class="form-group">
                                                 @Html.LabelFor(model => model.EXRate, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.EditorFor(model => model.EXRate, new { htmlAttributes = new { @class = "form-control", @type = "number", @min = 1 } })
+                                                    @Html.EditorFor(model => model.EXRate, new { htmlAttributes = new { @class = "form-control", @type = "number", @min = 0 } })
                                                     @Html.ValidationMessageFor(model => model.EXRate, "", new { @class = "text-danger" })
                                                 </div>
                                             </div>
