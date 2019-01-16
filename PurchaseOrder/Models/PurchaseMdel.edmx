@@ -476,6 +476,9 @@
           <Property Name="CreateAt" Type="datetime" Nullable="false" />
           <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
           <Property Name="UpdateAt" Type="datetime" />
+          <Property Name="NoteType" Type="nvarchar" MaxLength="20" />
+          <Property Name="CreditMemoID" Type="int" />
+          <Property Name="TransferID" Type="int" />
         </EntityType>
         <EntityType Name="PurchaseOrder">
           <Key>
@@ -562,7 +565,7 @@
           <Property Name="TransferSKUID" Type="int" />
           <Property Name="OrderID" Type="int" />
           <Property Name="RMAID" Type="int" />
-          <Property Name="SerialsType" Type="nvarchar" MaxLength="10" />
+          <Property Name="SerialsType" Type="nvarchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="ShippingMethod">
           <Key>
@@ -1127,6 +1130,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PurchaseNote_CreditMemo">
+          <End Role="CreditMemo" Type="Self.CreditMemo" Multiplicity="0..1" />
+          <End Role="PurchaseNote" Type="Self.PurchaseNote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CreditMemo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PurchaseNote">
+              <PropertyRef Name="CreditMemoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_PurchaseNote_PurchaseOrder">
           <End Role="PurchaseOrder" Type="Self.PurchaseOrder" Multiplicity="0..1" />
           <End Role="PurchaseNote" Type="Self.PurchaseNote" Multiplicity="*" />
@@ -1136,6 +1151,18 @@
             </Principal>
             <Dependent Role="PurchaseNote">
               <PropertyRef Name="PurchaseOrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PurchaseNote_Transfer">
+          <End Role="Transfer" Type="Self.Transfer" Multiplicity="0..1" />
+          <End Role="PurchaseNote" Type="Self.PurchaseNote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Transfer">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PurchaseNote">
+              <PropertyRef Name="TransferID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1622,8 +1649,16 @@
             <End Role="SKU" EntitySet="SKU" />
             <End Role="PriceGroup" EntitySet="PriceGroup" />
           </AssociationSet>
+          <AssociationSet Name="FK_PurchaseNote_CreditMemo" Association="Self.FK_PurchaseNote_CreditMemo">
+            <End Role="CreditMemo" EntitySet="CreditMemo" />
+            <End Role="PurchaseNote" EntitySet="PurchaseNote" />
+          </AssociationSet>
           <AssociationSet Name="FK_PurchaseNote_PurchaseOrder" Association="Self.FK_PurchaseNote_PurchaseOrder">
             <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
+            <End Role="PurchaseNote" EntitySet="PurchaseNote" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PurchaseNote_Transfer" Association="Self.FK_PurchaseNote_Transfer">
+            <End Role="Transfer" EntitySet="Transfer" />
             <End Role="PurchaseNote" EntitySet="PurchaseNote" />
           </AssociationSet>
           <AssociationSet Name="FK_PurchaseOrder_Company" Association="Self.FK_PurchaseOrder_Company">
@@ -2002,6 +2037,14 @@
             <End Role="PurchaseSKU" EntitySet="PurchaseSKU" />
             <End Role="ImgFile" EntitySet="ImgFile" />
           </AssociationSet>
+          <AssociationSet Name="FK_PurchaseNote_CreditMemo" Association="PurchaseOrderModel.FK_PurchaseNote_CreditMemo">
+            <End Role="CreditMemo" EntitySet="CreditMemo" />
+            <End Role="PurchaseNote" EntitySet="PurchaseNote" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PurchaseNote_Transfer" Association="PurchaseOrderModel.FK_PurchaseNote_Transfer">
+            <End Role="Transfer" EntitySet="Transfer" />
+            <End Role="PurchaseNote" EntitySet="PurchaseNote" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="AdminGroup">
           <Key>
@@ -2204,6 +2247,7 @@
           <NavigationProperty Name="PurchaseOrder" Relationship="PurchaseOrderModel.FK_CreditMemo_PurchaseOrder" FromRole="CreditMemo" ToRole="PurchaseOrder" />
           <NavigationProperty Name="PurchaseSKU" Relationship="PurchaseOrderModel.FK_PurchaseSKU_CreditMemo" FromRole="CreditMemo" ToRole="PurchaseSKU" />
           <NavigationProperty Name="ImgFile" Relationship="PurchaseOrderModel.FK_ImgFile_CreditMemo" FromRole="CreditMemo" ToRole="ImgFile" />
+          <NavigationProperty Name="PurchaseNote" Relationship="PurchaseOrderModel.FK_PurchaseNote_CreditMemo" FromRole="CreditMemo" ToRole="PurchaseNote" />
         </EntityType>
         <EntityType Name="DirectLine">
           <Key>
@@ -2316,6 +2360,11 @@
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
           <NavigationProperty Name="PurchaseOrder" Relationship="PurchaseOrderModel.FK_PurchaseNote_PurchaseOrder" FromRole="PurchaseNote" ToRole="PurchaseOrder" />
+          <Property Name="NoteType" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CreditMemoID" Type="Int32" />
+          <Property Name="TransferID" Type="Int32" />
+          <NavigationProperty Name="CreditMemo" Relationship="PurchaseOrderModel.FK_PurchaseNote_CreditMemo" FromRole="PurchaseNote" ToRole="CreditMemo" />
+          <NavigationProperty Name="Transfer" Relationship="PurchaseOrderModel.FK_PurchaseNote_Transfer" FromRole="PurchaseNote" ToRole="Transfer" />
         </EntityType>
         <EntityType Name="PurchaseOrder">
           <Key>
@@ -2610,6 +2659,7 @@
           <NavigationProperty Name="WarehouseFrom" Relationship="PurchaseOrderModel.FK_Transfer_Warehouse" FromRole="Transfer" ToRole="Warehouse" />
           <NavigationProperty Name="WarehouseTo" Relationship="PurchaseOrderModel.FK_Transfer_Warehouse1" FromRole="Transfer" ToRole="Warehouse" />
           <NavigationProperty Name="TransferSKU" Relationship="PurchaseOrderModel.FK_TransferSKU_Transfer" FromRole="Transfer" ToRole="TransferSKU" />
+          <NavigationProperty Name="PurchaseNote" Relationship="PurchaseOrderModel.FK_PurchaseNote_Transfer" FromRole="Transfer" ToRole="PurchaseNote" />
         </EntityType>
         <EntityType Name="TransferSKU">
           <Key>
@@ -3521,7 +3571,7 @@
           <Property Name="TransferSKUID" Type="Int32" />
           <Property Name="OrderID" Type="Int32" />
           <Property Name="RMAID" Type="Int32" />
-          <Property Name="SerialsType" Type="String" MaxLength="10" Unicode="true" FixedLength="false" />
+          <Property Name="SerialsType" Type="String" MaxLength="20" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="Orders" Relationship="PurchaseOrderModel.FK_SerialsLlist_Orders" FromRole="SerialsLlist" ToRole="Orders" />
           <NavigationProperty Name="PurchaseSKU" Relationship="PurchaseOrderModel.FK_SerialsLlist_PurchaseSKU" FromRole="SerialsLlist" ToRole="PurchaseSKU" />
           <NavigationProperty Name="SerialsLlistC" Relationship="PurchaseOrderModel.FK_SerialsLlist_SerialsLlist" FromRole="SerialsLlist" ToRole="SerialsLlist1" />
@@ -3585,6 +3635,30 @@
             </Principal>
             <Dependent Role="ImgFile">
               <PropertyRef Name="PurchaseSKUID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PurchaseNote_CreditMemo">
+          <End Type="PurchaseOrderModel.CreditMemo" Role="CreditMemo" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.PurchaseNote" Role="PurchaseNote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CreditMemo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PurchaseNote">
+              <PropertyRef Name="CreditMemoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PurchaseNote_Transfer">
+          <End Type="PurchaseOrderModel.Transfer" Role="Transfer" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.PurchaseNote" Role="PurchaseNote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Transfer">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PurchaseNote">
+              <PropertyRef Name="TransferID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3887,6 +3961,9 @@
           <EntitySetMapping Name="PurchaseNote">
             <EntityTypeMapping TypeName="PurchaseOrderModel.PurchaseNote">
               <MappingFragment StoreEntitySet="PurchaseNote">
+                <ScalarProperty Name="TransferID" ColumnName="TransferID" />
+                <ScalarProperty Name="CreditMemoID" ColumnName="CreditMemoID" />
+                <ScalarProperty Name="NoteType" ColumnName="NoteType" />
                 <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
                 <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
                 <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />

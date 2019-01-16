@@ -19,6 +19,7 @@ namespace PurchaseOrderSys.Models
         {
             this.PurchaseSKU = new HashSet<PurchaseSKU>();
             this.ImgFile = new HashSet<ImgFile>();
+            this.PurchaseNote = new HashSet<PurchaseNote>();
         }
     
         public bool IsEnable { get; set; }
@@ -50,5 +51,7 @@ namespace PurchaseOrderSys.Models
         public virtual ICollection<PurchaseSKU> PurchaseSKU { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ImgFile> ImgFile { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PurchaseNote> PurchaseNote { get; set; }
     }
 }

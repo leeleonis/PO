@@ -76,6 +76,11 @@ namespace PurchaseOrderSys.Controllers
             {
                 foreach (var item in PurchaseNoteLlist)
                 {
+                    if (item.NoteType != "txt" && item.NoteType != "Url")
+                    {
+                        item.Note = SaveImg(item.Note, item.NoteType);
+                        item.NoteType = "Url";
+                    }
                     filter.PurchaseNote.Add(item);
                 }
             }
@@ -811,6 +816,7 @@ namespace PurchaseOrderSys.Controllers
                 }
             }
         }
+        
         [HttpPost]
         public ActionResult CreatNote(int? ID, string Note)
         {
@@ -820,7 +826,7 @@ namespace PurchaseOrderSys.Controllers
                 if (ID.HasValue && ID != 0)
                 {
                     var PurchaseOrder = db.PurchaseOrder.Find(ID);
-                    PurchaseOrder.PurchaseNote.Add(new PurchaseNote { IsEnable = true, Note = Note, CreateAt = DateTime.UtcNow, CreateBy = UserBy });
+                    PurchaseOrder.PurchaseNote.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = "txt", CreateAt = DateTime.UtcNow, CreateBy = UserBy });
                     db.SaveChanges();
                     PurchaseNoteList = PurchaseOrder.PurchaseNote.ToList();
                 }
@@ -832,10 +838,48 @@ namespace PurchaseOrderSys.Controllers
                         PurchaseNoteList = new List<PurchaseNote>();
                     }
 
-                    PurchaseNoteList.Add(new PurchaseNote { IsEnable = true, Note = Note, CreateAt = DateTime.UtcNow, CreateBy = UserBy });
+                    PurchaseNoteList.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = "txt", CreateAt = DateTime.UtcNow, CreateBy = UserBy });
                     Session["PurchaseNote"] = PurchaseNoteList;
                 }
-                return Json(new { status = true, datalist = PurchaseNoteList.OrderByDescending(x => x.CreateAt).Select(x => new { CreateAt = x.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss"), x.CreateBy, x.Note }).ToList() }, JsonRequestBehavior.AllowGet);
+                return Json(new { status = true, datalist = PurchaseNoteList.OrderByDescending(x => x.CreateAt).Select(x => new { CreateAt = x.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss"), x.CreateBy, x.Note, x.NoteType }).ToList() }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { status = false, Errmsg = ex.ToString() }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        public ActionResult CreatNoteImg(int? ID, HttpPostedFileBase Img)
+        {
+            try
+            {
+                var NoteType = Img.ContentType;
+                var PurchaseNoteList = new List<PurchaseNote>();
+                if (ID.HasValue && ID != 0)
+                {
+                    var Note = SaveImg(Img);
+                    var PurchaseOrder = db.PurchaseOrder.Find(ID);
+                    PurchaseOrder.PurchaseNote.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = "Url", CreateAt = DateTime.UtcNow, CreateBy = UserBy });
+                    db.SaveChanges();
+                    PurchaseNoteList = PurchaseOrder.PurchaseNote.ToList();
+                }
+                else
+                {
+                    MemoryStream target = new MemoryStream();
+
+                    Img.InputStream.CopyTo(target);
+                    byte[] data = target.ToArray();
+                    string Note = Convert.ToBase64String(data, 0, data.Length);
+                    PurchaseNoteList = (List<PurchaseNote>)Session["PurchaseNote"];
+                    if (PurchaseNoteList == null)
+                    {
+                        PurchaseNoteList = new List<PurchaseNote>();
+                    }
+
+                    PurchaseNoteList.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = NoteType, CreateAt = DateTime.UtcNow, CreateBy = UserBy });
+                    Session["PurchaseNote"] = PurchaseNoteList;
+                }
+                return Json(new { status = true, datalist = PurchaseNoteList.OrderByDescending(x => x.CreateAt).Select(x => new { CreateAt = x.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss"), x.CreateBy, x.Note, x.NoteType }).ToList() }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
@@ -866,7 +910,7 @@ namespace PurchaseOrderSys.Controllers
         }
         public ActionResult CreateCM(int ID,string CMTypeVal= "CreditNote")
         {
-
+            Session["CMPurchaseNote"] = null;
             var PurchaseOrder = db.PurchaseOrder.Find(ID);
             var cmvm = new CMVM
             {
@@ -966,6 +1010,19 @@ namespace PurchaseOrderSys.Controllers
                         });
                     }
 
+                }
+            }
+            var CMPurchaseNote = (List<PurchaseNote>)Session["CMPurchaseNote"];
+            if (CMPurchaseNote != null)
+            {
+                foreach (var item in CMPurchaseNote)
+                {
+                    if (item.NoteType != "txt" && item.NoteType != "Url")
+                    {
+                        item.Note = SaveImg(item.Note, item.NoteType);
+                        item.NoteType = "Url";
+                    }
+                    CreditMemo.PurchaseNote.Add(item);
                 }
             }
             db.SaveChanges();

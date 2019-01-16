@@ -18,6 +18,7 @@ namespace PurchaseOrderSys.Models
         public Transfer()
         {
             this.TransferSKU = new HashSet<TransferSKU>();
+            this.PurchaseNote = new HashSet<PurchaseNote>();
         }
     
         public bool IsEnable { get; set; }
@@ -40,5 +41,7 @@ namespace PurchaseOrderSys.Models
         public virtual Warehouse WarehouseTo { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TransferSKU> TransferSKU { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PurchaseNote> PurchaseNote { get; set; }
     }
 }

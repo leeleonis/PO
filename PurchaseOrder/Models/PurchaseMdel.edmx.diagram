@@ -103,6 +103,8 @@
         <AssociationConnector Association="PurchaseOrderModel.FK_SerialsLlist_SerialsLlist" />
         <AssociationConnector Association="PurchaseOrderModel.FK_SerialsLlist_TransferSKU" />
         <AssociationConnector Association="PurchaseOrderModel.FK_ImgFile_PurchaseSKU" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseNote_CreditMemo" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseNote_Transfer" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

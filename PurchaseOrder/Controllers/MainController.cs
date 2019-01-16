@@ -61,7 +61,8 @@ namespace PurchaseOrderSys.Controllers
             }
             else
             {
-                return SetSessionData(false, AdminUser.Name, AdminUser.ApiUserName, AdminUser.ApiPassword, AdminUser.ID, AdminUser.Group, 0, AdminUser.TimeZone, AdminUser.Auth, AdminUser.AdminGroup.Auth);
+                //IsManger先設為 true
+                return SetSessionData(true, AdminUser.Name, AdminUser.ApiUserName, AdminUser.ApiPassword, AdminUser.ID, AdminUser.Group, 0, AdminUser.TimeZone, AdminUser.Auth, AdminUser.AdminGroup.Auth);
             }
 
         }

@@ -264,16 +264,27 @@
                                                                     <td colspan="10" rowspan="10">
                                                                         <div class="col-sm-10 col-lg-8">
                                                                             <textarea rows="20" style="width:100%" id="textnote"></textarea>
-                                                                            <button type="button" id="addnote" style="float:right">Add Note</button>
+                                                                            <button type="button" id="addnote" style="float:right" class="btn btn-default btn-sm">Add Note</button>
+                                                                            <span style="float:right">　</span>
+                                                                            <button type="button" id="UploadImage" style="float:right" class="btn btn-default btn-sm">Upload Image</button>
+                                                                            <input type="file" id="addimg" style="float:right" />
                                                                         </div>
                                                                         <div class="col-sm-2 col-lg-4">
                                                                             <ul style="list-style-type:none;list-style-position: inside;padding-left: 0px;padding-left: 0px;" id="textnotelog">
-                                                                                @foreach (var item in Model.PurchaseNote)
+                                                                                @foreach (var item in Model.PurchaseNote.OrderByDescending(x => x.ID))
                                                                                 {
                                                                                     <li>
                                                                                         <fieldset>
                                                                                             <legend>
-                                                                                                @item.Note
+                                                                                                @if (item.NoteType == "Url")
+                                                                                                {
+                                                                                                    <a class="aimg" href="@item.Note" data-lightbox="roadtrip"><img class="img" src="@item.Note" /></a>
+                                                                                                }
+                                                                                                else
+                                                                                                {
+                                                                                                    @item.Note
+                                                                                                }
+
                                                                                                 <br />
                                                                                                 @( item.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss") + "；" + item.CreateBy)
                                                                                             </legend>
@@ -544,16 +555,27 @@
                                                                     <td colspan="10" rowspan="10">
                                                                         <div class="col-sm-10 col-lg-8">
                                                                             <textarea rows="20" style="width:100%" id="textnote"></textarea>
-                                                                            <button type="button" id="addnote" style="float:right">Add Note</button>
+                                                                            <button type="button" id="addnote" style="float:right" class="btn btn-default btn-sm">Add Note</button>
+                                                                            <span style="float:right">　</span>
+                                                                            <button type="button" id="UploadImage" style="float:right" class="btn btn-default btn-sm">Upload Image</button>
+                                                                            <input type="file" id="addimg" style="float:right" />
                                                                         </div>
                                                                         <div class="col-sm-2 col-lg-4">
                                                                             <ul style="list-style-type:none;list-style-position: inside;padding-left: 0px;padding-left: 0px;" id="textnotelog">
-                                                                                @foreach (var item in Model.PurchaseNote)
+                                                                                @foreach (var item in Model.PurchaseNote.OrderByDescending(x => x.ID))
                                                                                 {
                                                                                     <li>
                                                                                         <fieldset>
                                                                                             <legend>
-                                                                                                @item.Note
+                                                                                                @if (item.NoteType == "Url")
+                                                                                                {
+                                                                                                    <a class="aimg" href="@item.Note" data-lightbox="roadtrip"><img class="img" src="@item.Note" /></a>
+                                                                                                }
+                                                                                                else
+                                                                                                {
+                                                                                                    @item.Note
+                                                                                                }
+
                                                                                                 <br />
                                                                                                 @( item.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss") + "；" + item.CreateBy)
                                                                                             </legend>
@@ -861,6 +883,34 @@
             $("#POType").change(function () {
                 window.location.href = "@Url.Action("EditItem",new { ID=Model.ID})?POTypeVal=" + $(this).val();
             });
+            $("#UploadImage").click(function () {
+                var data = new FormData();
+                data.append("ID", "@Html.DisplayFor(x=>x.ID)");
+                var files = $("#addimg").get(0).files;
+                if (files.length > 0) {
+                    data.append("Img", files[0]);
+                }
+                $.ajax({
+                    traditional: true,
+                    type: "post",
+                    contentType: false,
+                    processData: false,
+                    dataType: "json",
+                    url: "@Url.Action("CreatNoteImg")",
+                    data: data,
+                    success: function (data) {
+                        if (data.status) {
+                            $("#addimg").val("");
+                            $("#textnotelog li").remove();
+                            datalistSet(data);
+
+                        }
+                        else {
+                            alert(data.Errmsg);
+                        }
+                    }
+                });
+            });
             $("#addnote").click(function () {
                 $.ajax({
                     traditional: true,
@@ -874,10 +924,7 @@
                         if (data.status) {
                             $("#textnote").val("");
                             $("#textnotelog li").remove();
-                            data.datalist.forEach(function (value) {
-                                //$("#textnotelog").append("<li>Appended item</li>");
-                                $("#textnotelog").append("<li><fieldset><legend>" + value.Note + "<br />" + value.CreateAt + "；" + value.CreateBy + "</legend></fieldset></li>");
-                            });
+                            datalistSet(data);
                         }
                         else {
                             alert(data.Errmsg);
@@ -1020,6 +1067,22 @@
             if (data.reload == true) {
                 window.location.reload();
             }
+        }
+        function datalistSet(data) {
+            data.datalist.forEach(function (value) {
+                var href = "";
+                if (value.NoteType == "Url") {
+                    href = value.Note;
+                    $("#textnotelog").append("<li><fieldset><legend><a class='aimg' href='" + href + "' data-lightbox='roadtrip'><img class='img' src='" + href + "' /></a><br />" + value.CreateAt + "；" + value.CreateBy + "</legend></fieldset></li>");
+                }
+                else if (value.NoteType == "" || value.NoteType == "txt") {
+                    $("#textnotelog").append("<li><fieldset><legend>" + value.Note + "<br />" + value.CreateAt + "；" + value.CreateBy + "</legend></fieldset></li>");
+                }
+                else {
+                    href = "data:" + value.NoteType + ";base64," + value.Note;
+                    $("#textnotelog").append("<li><fieldset><legend><a class='aimg' href='" + href + "' data-lightbox='roadtrip'><img class='img' src='" + href + "' /></a><br />" + value.CreateAt + "；" + value.CreateBy + "</legend></fieldset></li>");
+                }
+            });
         }
     var Preview = new function () {
 

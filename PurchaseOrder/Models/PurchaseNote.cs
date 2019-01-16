@@ -22,7 +22,12 @@ namespace PurchaseOrderSys.Models
         public System.DateTime CreateAt { get; set; }
         public string UpdateBy { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }
+        public string NoteType { get; set; }
+        public Nullable<int> CreditMemoID { get; set; }
+        public Nullable<int> TransferID { get; set; }
     
         public virtual PurchaseOrder PurchaseOrder { get; set; }
+        public virtual CreditMemo CreditMemo { get; set; }
+        public virtual Transfer Transfer { get; set; }
     }
 }

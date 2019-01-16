@@ -22,6 +22,77 @@ namespace PurchaseOrderSys.Controllers
         protected string FileUploads = "~/FileUploads";
         public static string UserBy = "test";
         protected PurchaseOrderEntities db = new PurchaseOrderEntities();
+
+        [HttpPost]
+        public ActionResult CMCreatNoteImg(int? ID, HttpPostedFileBase Img)
+        {
+            try
+            {
+                var NoteType = Img.ContentType;
+                var CMPurchaseNote = new List<PurchaseNote>();
+                if (ID.HasValue && ID != 0)
+                {
+                    var Note = SaveImg(Img);
+                    var CreditMemo = db.CreditMemo.Find(ID);
+                    CreditMemo.PurchaseNote.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = "Url", CreateAt = DateTime.UtcNow, CreateBy = UserBy });
+                    db.SaveChanges();
+                    CMPurchaseNote = CreditMemo.PurchaseNote.ToList();
+                }
+                else
+                {
+                    MemoryStream target = new MemoryStream();
+
+                    Img.InputStream.CopyTo(target);
+                    byte[] data = target.ToArray();
+                    string Note = Convert.ToBase64String(data, 0, data.Length);
+                    CMPurchaseNote = (List<PurchaseNote>)Session["CMPurchaseNote"];
+                    if (CMPurchaseNote == null)
+                    {
+                        CMPurchaseNote = new List<PurchaseNote>();
+                    }
+
+                    CMPurchaseNote.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = NoteType, CreateAt = DateTime.UtcNow, CreateBy = UserBy });
+                    Session["CMPurchaseNote"] = CMPurchaseNote;
+                }
+                return Json(new { status = true, datalist = CMPurchaseNote.OrderByDescending(x => x.CreateAt).Select(x => new { CreateAt = x.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss"), x.CreateBy, x.Note, x.NoteType }).ToList() }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { status = false, Errmsg = ex.ToString() }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        public ActionResult CMCreatNote(int? ID, string Note)
+        {
+            try
+            {
+                var CMPurchaseNote = new List<PurchaseNote>();
+                if (ID.HasValue && ID != 0)
+                {
+                    var CreditMemo = db.CreditMemo.Find(ID);
+                    CreditMemo.PurchaseNote.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = "txt", CreateAt = DateTime.UtcNow, CreateBy = UserBy });
+                    db.SaveChanges();
+                    CMPurchaseNote = CreditMemo.PurchaseNote.ToList();
+                }
+                else
+                {
+                    CMPurchaseNote = (List<PurchaseNote>)Session["CMPurchaseNote"];
+                    if (CMPurchaseNote == null)
+                    {
+                        CMPurchaseNote = new List<PurchaseNote>();
+                    }
+
+                    CMPurchaseNote.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = "txt", CreateAt = DateTime.UtcNow, CreateBy = UserBy });
+                    Session["CMPurchaseNote"] = CMPurchaseNote;
+                }
+                return Json(new { status = true, datalist = CMPurchaseNote.OrderByDescending(x => x.CreateAt).Select(x => new { CreateAt = x.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss"), x.CreateBy, x.Note, x.NoteType }).ToList() }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { status = false, Errmsg = ex.ToString() }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         /// <summary>
         /// 設定要更新的欄位
         /// </summary>
@@ -149,6 +220,48 @@ namespace PurchaseOrderSys.Controllers
             }
         }
         /// <summary>
+        /// 取得MIME Content Type對應的檔案副檔名
+        /// </summary>
+        /// <param name="mime"></param>
+        /// <returns></returns>
+        private static IEnumerable<string> GetMIMESupportedExt(string mime)
+        {
+            var linq = from item in Microsoft.Win32.Registry.ClassesRoot.GetSubKeyNames()
+                       let key = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(item)
+                       let value = key.GetValue("Content Type")
+                       where value != null && value.ToString().Equals(mime, StringComparison.CurrentCultureIgnoreCase)
+                       select item;
+            return linq;
+        }
+
+
+        /// <summary>
+        /// 存圖檔
+        /// </summary>
+        /// <param name="base64"></param>
+        /// <param name="filetype"></param>
+        /// <returns></returns>
+        public string SaveImg(string base64, string filetype)
+        {
+            try
+            {
+                var FileExtension = GetMIMESupportedExt(filetype).FirstOrDefault() ?? "";
+                var fileBytes = Convert.FromBase64String(base64);
+                var Dirpath = Server.MapPath(FileUploads);
+                if (!Directory.Exists(Dirpath)) Directory.CreateDirectory(Dirpath);
+                var fileName = Guid.NewGuid().ToString("N") + FileExtension;
+                var path = Path.Combine(Dirpath, fileName);
+                FileStream fs = new FileStream(path, FileMode.Create);
+                fs.Write(fileBytes, 0, fileBytes.Length);
+                fs.Close();
+                return FileUploads.Replace("~", "") + "/" + fileName;
+            }
+            catch (Exception)
+            {
+                return "Error";
+            }
+        }
+        /// <summary>
         /// 存圖檔
         /// </summary>
         /// <param name="file">圖檔</param>
@@ -158,8 +271,7 @@ namespace PurchaseOrderSys.Controllers
             try
             {
                 var Dirpath = Server.MapPath(FileUploads);
-                if (!Directory.Exists(Dirpath))
-                    Directory.CreateDirectory(Dirpath);
+                if (!Directory.Exists(Dirpath)) Directory.CreateDirectory(Dirpath);
                 string FileExtension = Path.GetExtension(file.FileName);
                 var fileName = Guid.NewGuid().ToString("N") + FileExtension;
                 var path = Path.Combine(Dirpath, fileName);
@@ -170,7 +282,6 @@ namespace PurchaseOrderSys.Controllers
             {
                 return "Error";
             }
-
         }
         /// <summary>
         /// 倉庫等待出貨的庫總量
