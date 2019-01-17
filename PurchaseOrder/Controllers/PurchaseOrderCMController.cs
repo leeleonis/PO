@@ -79,6 +79,7 @@ namespace PurchaseOrderSys.Controllers
         [HttpPost]
         public ActionResult EditItem(CreditMemo filter, IEnumerable<HttpPostedFileBase> VendorCM, bool? saveexit)
         {
+            var dt = DateTime.UtcNow;
             var CreditMemo = db.CreditMemo.Find(filter.ID);
             if (filter.CompanyID.HasValue) CreditMemo.CompanyID = filter.CompanyID;
             if (filter.VendorID.HasValue) CreditMemo.VendorID = filter.VendorID;
@@ -95,7 +96,7 @@ namespace PurchaseOrderSys.Controllers
             if (filter.CreditDate.HasValue) CreditMemo.CreditDate = filter.CreditDate;
             if (filter.CreditAmount.HasValue) CreditMemo.CreditAmount = filter.CreditAmount;
             CreditMemo.UpdateBy = UserBy;
-            CreditMemo.UpdateAt = DateTime.UtcNow;
+            CreditMemo.UpdateAt = dt;
 
             if (VendorCM != null && VendorCM.Any())
             {
@@ -110,12 +111,78 @@ namespace PurchaseOrderSys.Controllers
                             ImgType = "VendorCM",
                             Url = Url,
                             CreateBy = UserBy,
-                            CreateAt = DateTime.UtcNow
+                            CreateAt = dt
                         });
                     }
 
                 }
             }
+            var CMSkuNumberList = (List<CMSKUVM>)Session["CMSkuNumberList"];
+            if (CMSkuNumberList != null)
+            {
+                var PurchaseSKUE = CMSkuNumberList.Where(x => x.Model == "E").Select(x => new PurchaseSKU
+                {
+                    ID = x.ID.HasValue ? x.ID.Value : 0,
+                    Name = x.Name,
+                    SkuNo= x.SKU,
+                    VendorSKU = string.IsNullOrWhiteSpace(x.VendorSKU) ? x.SKU : x.VendorSKU,
+                    QTYOrdered = x.QTYOrdered,
+                    CreditQTY=x.CreditQTY,
+                    Credit = x.Credit,
+                });
+                foreach (var item in PurchaseSKUE)
+                {
+                    var oldPurchaseSKU = CreditMemo.PurchaseSKU.Where(x => x.IsEnable && x.ID == item.ID);
+                    if (oldPurchaseSKU.Any() && item.ID != 0)
+                    {
+                        foreach (var SKUitem in oldPurchaseSKU)
+                        {
+
+                            if (SKUitem.CreditQTY != item.CreditQTY)
+                            {
+                                SKUitem.CreditQTY = item.CreditQTY;
+                                SKUitem.UpdateBy = UserBy;
+                                SKUitem.UpdateAt = dt;
+                            }
+                            if (SKUitem.Credit != item.Credit)
+                            {
+                                SKUitem.Credit = item.Credit;
+                                SKUitem.UpdateBy = UserBy;
+                                SKUitem.UpdateAt = dt;
+                            }
+                            if (SKUitem.QTYOrdered != item.QTYOrdered)
+                            {
+                                SKUitem.QTYOrdered = item.QTYOrdered;
+                                SKUitem.UpdateBy = UserBy;
+                                SKUitem.UpdateAt = dt;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        item.CreateAt = dt;
+                        item.CreateBy = UserBy;
+                        CreditMemo.PurchaseSKU.Add(item);
+                    }
+                }
+                var PurchaseSKUlistD = CMSkuNumberList.Where(x => x.Model == "D").Select(x => x.ID);
+                foreach (var item in PurchaseSKUlistD)
+                {
+                    var oldPurchaseSKU = CreditMemo.PurchaseSKU.Where(x => x.IsEnable && x.ID == item);
+                    if (oldPurchaseSKU.Any())
+                    {
+                        foreach (var SKUitem in oldPurchaseSKU)
+                        {
+                            SKUitem.IsEnable = false;
+                            SKUitem.UpdateBy = UserBy;
+                            SKUitem.UpdateAt = dt;
+                        }
+                        //db.SaveChanges();
+                    }
+                }
+            }
+
+
             db.SaveChanges();
             if (saveexit.HasValue && saveexit.Value)
             {
@@ -151,7 +218,7 @@ namespace PurchaseOrderSys.Controllers
                     var val = 0;
                     if (int.TryParse(QTYReturneditem.val, out val))
                     {
-                        foreach (var item in oCreditMemo.PurchaseSKU.Where(x => x.ID == QTYReturneditem.ID))
+                        foreach (var item in oCreditMemo.PurchaseSKU.Where(x => x.IsEnable && x.ID == QTYReturneditem.ID))
                         {
                             item.QTYReturned = val;
                         }
@@ -167,7 +234,7 @@ namespace PurchaseOrderSys.Controllers
             {
                 var QCreditMemoVM = (CreditMemoVMQ)Session["CreditMemoVM"];
                 int total = 0;
-                var listCreditMemo = db.CreditMemo.AsQueryable();
+                var listCreditMemo = db.CreditMemo.Where(x => x.IsEnable).AsQueryable();
                 //綱頁查詢
                 if (QCreditMemoVM.CompanyID.HasValue)
                 {
@@ -241,7 +308,7 @@ namespace PurchaseOrderSys.Controllers
                 {
                     var Brandlist = db.Brand.Where(x => x.Name.Contains(QCreditMemoVM.Brand)).Select(x => x.ID).ToList();
                     var skuidlist = db.SKU.Where(x => Brandlist.Contains(x.Brand)).Select(x => x.SkuID).ToList();
-                    listCreditMemo = listCreditMemo.Where(x => x.PurchaseSKU.Where(y => skuidlist.Contains(y.SkuNo)).Any());
+                    listCreditMemo = listCreditMemo.Where(x => x.PurchaseSKU.Where(y => y.IsEnable && skuidlist.Contains(y.SkuNo)).Any());
                 }
 
                 if (!string.IsNullOrWhiteSpace(QCreditMemoVM.Tracking))
@@ -252,17 +319,17 @@ namespace PurchaseOrderSys.Controllers
                 {
                     var TypeIDlist = db.SkuTypeLang.Where(x => x.Name.Contains(QCreditMemoVM.Category)).Select(x => x.TypeID).ToList();
                     var skuidlist = db.SKU.Where(x => TypeIDlist.Contains(x.Category)).Select(x => x.SkuID).ToList();
-                    listCreditMemo = listCreditMemo.Where(x => x.PurchaseSKU.Where(y => skuidlist.Contains(y.SkuNo)).Any());
+                    listCreditMemo = listCreditMemo.Where(x => x.PurchaseSKU.Where(y => y.IsEnable && skuidlist.Contains(y.SkuNo)).Any());
                 }
                 if (!string.IsNullOrWhiteSpace(QCreditMemoVM.SKU))
                 {
-                    listCreditMemo = listCreditMemo.Where(x => x.PurchaseSKU.Where(y => y.SkuNo == QCreditMemoVM.SKU).Any());
+                    listCreditMemo = listCreditMemo.Where(x => x.PurchaseSKU.Where(y => x.IsEnable && y.SkuNo == QCreditMemoVM.SKU).Any());
                 }
             
                 if (!string.IsNullOrWhiteSpace(QCreditMemoVM.Serial))
                 {
                     var PurchaseSKUID = db.SerialsLlist.Where(x => x.SerialsNo == QCreditMemoVM.Serial && x.SerialsType == "CM").Select(x => x.PurchaseSKUID).ToList();
-                    listCreditMemo = listCreditMemo.Where(x => x.PurchaseSKU.Where(y => PurchaseSKUID.Contains(y.ID)).Any());
+                    listCreditMemo = listCreditMemo.Where(x => x.PurchaseSKU.Where(y => y.IsEnable && PurchaseSKUID.Contains(y.ID)).Any());
                 }
 
 
@@ -297,9 +364,9 @@ namespace PurchaseOrderSys.Controllers
                     x.CMType,
                     VendorID = x.VendorID.ToString(),
                     CMDate = x.CMDate.Value.ToLocalTime().ToString("yyyy/MM/dd"),
-                    QTY = x.PurchaseSKU.Sum(y => y.QTYOrdered),
-                    GrandTotal = x.PurchaseSKU.Sum(y => (y.QTYOrdered * y.Price)),
-                    Balance = x.PurchaseSKU.Sum(y => (y.QTYOrdered * y.Price)),
+                    QTY = x.PurchaseSKU.Where(y => y.IsEnable).Sum(y => y.QTYOrdered),
+                    GrandTotal = x.PurchaseSKU.Where(y => y.IsEnable).Sum(y => (y.QTYOrdered * y.Price)),
+                    Balance = x.PurchaseSKU.Where(y => y.IsEnable).Sum(y => (y.QTYOrdered * y.Price)),
                     x.CMStatus,
 
                 });
@@ -321,7 +388,7 @@ namespace PurchaseOrderSys.Controllers
             }
             else
             {
-                var PurchaseSKU = db.PurchaseSKU.Where(x => x.PurchaseOrderID == DetailID).OrderByDescending(x => x.ID);
+                var PurchaseSKU = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrderID == DetailID).OrderByDescending(x => x.ID);
                 return PartialView("Detail", PurchaseSKU);
             }
         }
@@ -406,32 +473,40 @@ namespace PurchaseOrderSys.Controllers
             }
             var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials);
             
-            if (!SerialsLlist.Where(x => x.PurchaseSKU.CreditMemoID == PurchaseSKU.CreditMemoID).Any())//檢查序號是否重複，同訂單同序號不能新增
+            if (!SerialsLlist.Where(x => x.PurchaseSKU.ID == PurchaseSKU.ID).Any())//檢查序號是否重複，同訂單同序號不能新增
             {
                 if (SerialsLlist.Sum(x => x.SerialsQTY) > 0)
                 {
-                    var PID = SerialsLlist.Where(x => x.SerialsQTY > 0).FirstOrDefault().ID;
-                    var dt = DateTime.UtcNow;
-                    var nSerialsLlist = new SerialsLlist
+                    var oSerialsLlist = SerialsLlist.Where(x => x.SerialsQTY > 0 && !x.SerialsLlistC.Any()).OrderByDescending(x => x.ID).FirstOrDefault();
+                    if (oSerialsLlist != null)
                     {
-                        PurchaseSKUID = PurchaseSKUID,
-                        PID = PID,
-                        SerialsType = "CM",
-                        SerialsNo = serials,
-                        SerialsQTY = -1,
-                        CreateBy = UserBy,
-                        CreateAt = dt
-                    };
-                    db.SerialsLlist.Add(nSerialsLlist);
+                        var PID = oSerialsLlist.ID;
+                        var dt = DateTime.UtcNow;
+                        var nSerialsLlist = new SerialsLlist
+                        {
+                            PurchaseSKUID = PurchaseSKUID,
+                            PID = PID,
+                            SerialsType = "CM",
+                            SerialsNo = serials,
+                            SerialsQTY = -1,
+                            CreateBy = UserBy,
+                            CreateAt = dt
+                        };
+                        db.SerialsLlist.Add(nSerialsLlist);
 
-                    try
-                    {
-                        db.SaveChanges();
-                        return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+                        try
+                        {
+                            db.SaveChanges();
+                            return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+                        }
+                        catch (Exception ex)
+                        {
+                            return Json(new { status = false, Errmsg = ex.ToString() }, JsonRequestBehavior.AllowGet);
+                        }
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        return Json(new { status = false, Errmsg = ex.ToString() }, JsonRequestBehavior.AllowGet);
+                        return Json(new { status = false, Errmsg = "此序號不在倉庫內" }, JsonRequestBehavior.AllowGet);
                     }
                 }
                 else

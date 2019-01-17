@@ -69,12 +69,6 @@
     @RenderSection("scripts", required: false)
     @*@MiniProfiler.RenderIncludes()*@
     <script type="text/javascript">
-        window.onload = function () {
-            $("button[type='submit']").click(function () {
-                $(this).prop("disabled", "disabled");
-                $("form").submit();
-            });
-        }
         var thousandComma = function (number) {
             if (number != null) {
                 if (!isNaN(number)) {
@@ -96,7 +90,29 @@
         var oTable;
         $(document).ready(function () {
             $("form").makeValidationInline();
-       
+            $("button[type='submit']").click(function () {
+                $(this).prop("disabled", "disabled");
+                $("form").submit();
+            });
+            $("body").on("change", "input,select", function () {
+                $("button[type='submit']").prop("disabled", false);
+            });
+            $("body").on("click", "input[type='checkbox']", function () {
+                var thead = $(this).closest("thead");
+                if (thead.length > 0) {
+                    var table = $(this).closest("table");
+                    if (table.length > 0) {
+                        var tbody = table.find("tbody")
+                        if (tbody.length > 0) {
+                            var checked = $(this).is(':checked');
+                            var checkboxlist = tbody.find("input[type='checkbox']");
+                            checkboxlist.each(function () {
+                                $(this).prop("checked", checked);
+                            });
+                        }
+                    }
+                }
+            });
             @*oTable = $('#dt_basic').dataTable({
                 "columnDefs": [{ "orderable": false, "targets": "nosort" }],
                 "order": [],

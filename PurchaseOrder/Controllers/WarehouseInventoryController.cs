@@ -17,8 +17,6 @@ namespace PurchaseOrderSys.Controllers
             ViewBag.WarehouseID = ID;
             var SCID = db.WarehouseSummary.Where(x => x.WarehouseID == ID && x.Type == "SCID").FirstOrDefault().Val;
             var AllSKUList = db.SKU.Where(x => x.IsEnable && x.Status == 1).Select(x => new { x.SkuID, x.SkuLang.FirstOrDefault().Name }).ToList();
-            var edt = DateTime.UtcNow;
-            var sdt = edt.AddDays(-30);
             var PurchaseSKU = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.Warehouse1.ID == ID).Include(x => x.SerialsLlist).ToList();
             var WarehouseInventoryVM = new WarehouseInventoryVM();
 
@@ -30,10 +28,10 @@ namespace PurchaseOrderSys.Controllers
                 SKU = x.SkuNo,
                 POQTY = GetPOQty(x),
                 CMQTY = GetCMQty(x),
-                OrderQTY = x.SerialsLlist.Where(z => z.SerialsType == "Order").Sum(z => z.SerialsQTY).Value,
-                TransferInQTY = x.SerialsLlist.Where(y => y.SerialsType == "TransferIn").Sum(y => y.SerialsQTY).Value,
-                TransferOutQTY = x.SerialsLlist.Where(y => y.SerialsType == "TransferOut").Sum(y => y.SerialsQTY).Value,
-                Velocity = x.SerialsLlist.Where(z => z.SerialsType == "Order" && z.CreateAt >= sdt && z.CreateAt <= sdt).Sum(z => z.SerialsQTY).Value,
+                OrderQTY = GetOrderQTY(x),
+                TransferInQTY = GetTransferInQTY(x),
+                TransferOutQTY = GetTransferOutQTY(x),
+                Velocity = GetVelocity(x), 
                 DaysOfSupply = 0,
                 Aggregate = 0,//可上架的庫存總數
                 Awaiting = 0,//等待出貨的庫總量
@@ -102,7 +100,57 @@ namespace PurchaseOrderSys.Controllers
 
             return View(WarehouseInventoryVM);
         }
-
+        /// <summary>
+        /// 取30天內訂單出貨數量
+        /// </summary>
+        /// <param name="PurchaseSKU"></param>
+        /// <returns></returns>
+        private int GetVelocity(PurchaseSKU PurchaseSKU)
+        {
+            var edt = DateTime.UtcNow;
+            var sdt = edt.AddDays(-30);
+            var count = 0;
+            count= PurchaseSKU.SerialsLlist.Where(z => z.SerialsType == "Order" && z.CreateAt >= sdt && z.CreateAt <= sdt).Sum(z => z.SerialsQTY).Value;
+            return count;
+        }
+        /// <summary>
+        /// 取移庫入庫序號數量
+        /// </summary>
+        /// <param name="PurchaseSKU"></param>
+        /// <returns></returns>
+        private int GetTransferOutQTY(PurchaseSKU PurchaseSKU)
+        {
+            var count = 0;
+            count= PurchaseSKU.SerialsLlist.Where(y => y.SerialsType == "TransferOut").Sum(y => y.SerialsQTY).Value;
+            return count;
+        }
+        /// <summary>
+        /// 取移庫出庫序號數量
+        /// </summary>
+        /// <param name="PurchaseSKU"></param>
+        /// <returns></returns>
+        private int GetTransferInQTY(PurchaseSKU PurchaseSKU)
+        {
+            var count = 0;
+            count = PurchaseSKU.SerialsLlist.Where(y => y.SerialsType == "TransferIn").Sum(y => y.SerialsQTY).Value;
+            return count;
+        }
+        /// <summary>
+        /// 取PO採購數量
+        /// </summary>
+        /// <param name="PurchaseSKU"></param>
+        /// <returns></returns>
+        private int GetOrderQTY(PurchaseSKU PurchaseSKU)
+        {
+            var count = 0;
+            count = PurchaseSKU.SerialsLlist.Where(z => z.SerialsType == "Order").Sum(z => z.SerialsQTY).Value;
+            return count;
+        }
+        /// <summary>
+        /// 取PO序號數量
+        /// </summary>
+        /// <param name="PurchaseSKU"></param>
+        /// <returns></returns>
         private int GetPOQty(PurchaseSKU PurchaseSKU)
         {
             var count = 0;
@@ -116,7 +164,11 @@ namespace PurchaseOrderSys.Controllers
             }
             return count;
         }
-
+        /// <summary>
+        /// 取CM序號數量
+        /// </summary>
+        /// <param name="PurchaseSKU"></param>
+        /// <returns></returns>
         private int GetCMQty(PurchaseSKU PurchaseSKU)
         {
             var count = 0;
@@ -130,7 +182,7 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult Statement(string SKU,int WarehouseID)
         {
             ViewBag.WarehouseID = WarehouseID;
-            var PurchaseSKU = db.PurchaseSKU.Where(x=>x.SkuNo== SKU);
+            var PurchaseSKU = db.PurchaseSKU.Where(x => x.IsEnable && x.SkuNo== SKU);
             ViewBag.Awaitinglist = GetAwaitingCount(SKU, "");
             return View(PurchaseSKU);
         }
@@ -142,14 +194,14 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult Serials(string SKU, int WarehouseID)
         {
             ViewBag.WarehouseID = WarehouseID;
-            var PurchaseSKU = db.PurchaseSKU.Where(x => x.SkuNo == SKU);
+            var PurchaseSKU = db.PurchaseSKU.Where(x => x.IsEnable && x.SkuNo == SKU);
             return View(PurchaseSKU);
         }
         public ActionResult Inventory(string SKU, int WarehouseID)
         {
             ViewBag.WarehouseID = WarehouseID;
             var SkuInventoryVM = new List<SkuInventoryVM>();
-            var PurchaseSKU = db.PurchaseSKU.Where(x => x.SkuNo == SKU && x.PurchaseOrderID.HasValue && x.PurchaseOrder.WarehouseID.HasValue);
+            var PurchaseSKU = db.PurchaseSKU.Where(x => x.IsEnable && x.SkuNo == SKU && x.PurchaseOrderID.HasValue && x.PurchaseOrder.WarehouseID.HasValue);
             //取待出貨
             var AwaitingCountlist = GetAwaitingCount(SKU, "");
             foreach (var item in PurchaseSKU)
@@ -163,14 +215,14 @@ namespace PurchaseOrderSys.Controllers
                     POQTY = GetPOQty(item),
                     Available = 0,
                     Aggregate = 0,//可上架的庫存總數
-                   // Awaiting = GetAwaitingCount(item.SkuNo, GetSCID(item)),//等待出貨的庫總量
+                                  // Awaiting = GetAwaitingCount(item.SkuNo, GetSCID(item)),//等待出貨的庫總量
                     Unfulfillable = 0,
                     Total = 0,
                     BackOrdered = item.QTYOrdered ?? 0,
                     CMQTY = GetCMQty(item),
-                    TransferInQTY = item.SerialsLlist.Where(y => y.SerialsType == "TransferIn").Sum(y => y.SerialsQTY).Value,
-                    TransferOutQTY = item.SerialsLlist.Where(y => y.SerialsType == "TransferOut").Sum(y => y.SerialsQTY).Value,
-                    OrderQTY = item.SerialsLlist.Where(z => z.SerialsType == "Order").Sum(z => z.SerialsQTY).Value,
+                    TransferInQTY = GetTransferInQTY(item),
+                    TransferOutQTY = GetTransferOutQTY(item),
+                    OrderQTY = GetOrderQTY(item)
                 });
             }
 
@@ -198,7 +250,11 @@ namespace PurchaseOrderSys.Controllers
             }
             return View(GroupSkuInventoryVM);
         }
-
+        /// <summary>
+        /// 取SCID
+        /// </summary>
+        /// <param name="PurchaseSKU"></param>
+        /// <returns></returns>
         private string GetSCID(PurchaseSKU PurchaseSKU)
         {
             return PurchaseSKU.PurchaseOrder.Warehouse1?.WarehouseSummary.FirstOrDefault(x => x.Type == "SCID")?.Val;
@@ -207,9 +263,7 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult Purchasing(string SKU,int? Inventory, int? Velocity, int WarehouseID)
         {
             ViewBag.WarehouseID = WarehouseID;
-            var edt = DateTime.UtcNow;
-            var sdt = edt.AddDays(-30);
-            var PurchaseSKU = db.PurchaseSKU.Where(x => x.SkuNo == SKU && x.SerialsLlist.Any(y => y.SerialsType == "PO"));
+            var PurchaseSKU = db.PurchaseSKU.Where(x => x.IsEnable && x.SkuNo == SKU && x.SerialsLlist.Any(y => y.SerialsType == "PO"));
             var SkuPurchasingVM = new SkuPurchasingVM
             {
                 SKU = SKU,
@@ -241,10 +295,10 @@ namespace PurchaseOrderSys.Controllers
                         SkuPurchasingVM.Awaiting += AwaitingCountlist.Where(x => x.SKU == SKU && x.SCID == SCID).FirstOrDefault()?.QTY ?? 0;
                         SkuPurchasingVM.POQTY += PurchaseSKUitem.QTYOrdered.HasValue ? PurchaseSKUitem.QTYOrdered.Value : PurchaseSKUitem.SerialsLlist.Where(y => y.SerialsType == "PO").Sum(y => y.SerialsQTY) ?? 0;//有輸入直接讀輸入，沒輸入計算序號數
                         SkuPurchasingVM.CMQTY += GetCMQty(PurchaseSKUitem);
-                        SkuPurchasingVM.OrderQTY += PurchaseSKUitem.SerialsLlist.Where(z => z.SerialsType == "Order").Sum(z => z.SerialsQTY).Value;
-                        SkuPurchasingVM.TransferInQTY += PurchaseSKUitem.SerialsLlist.Where(y => y.SerialsType == "TransferIn").Sum(y => y.SerialsQTY).Value;
-                        SkuPurchasingVM.TransferOutQTY += PurchaseSKUitem.SerialsLlist.Where(y => y.SerialsType == "TransferOut").Sum(y => y.SerialsQTY).Value;
-                        SkuPurchasingVM.Velocity += PurchaseSKUitem.SerialsLlist.Where(z => z.SerialsType == "Order" && z.CreateAt >= sdt && z.CreateAt <= sdt).Sum(z => z.SerialsQTY).Value;
+                        SkuPurchasingVM.OrderQTY += GetOrderQTY(PurchaseSKUitem);
+                        SkuPurchasingVM.TransferInQTY += GetTransferInQTY(PurchaseSKUitem);
+                        SkuPurchasingVM.TransferOutQTY += GetTransferOutQTY(PurchaseSKUitem);
+                        SkuPurchasingVM.Velocity += GetVelocity(PurchaseSKUitem);
                         SkuPurchasingVM.UnfulfillableRMA += PurchaseSKUitem.SerialsLlist.Where(y => y.SerialsType == "RMA").Sum(y => y.SerialsQTY).Value;
                     }
                 }
@@ -272,6 +326,11 @@ namespace PurchaseOrderSys.Controllers
             }
             return View(SkuPurchasingVM);
         }
+        /// <summary>
+        /// 序號清單
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <returns></returns>
         public ActionResult GetHistory(string ID)
         {
             var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == ID).OrderByDescending(x => x.CreateAt);

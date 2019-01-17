@@ -964,6 +964,7 @@
                     },
                     success: function (data) {
                         if (data.status) {
+                            $(tableID + ' thead input[type="checkbox"]').prop("checked", false);
                             DataGridC.draw();
                         }
                         else {
@@ -989,6 +990,7 @@
                     },
                     success: function (data) {
                         if (data.status) {
+                            $(tableID + ' thead input[type="checkbox"]').prop("checked", false);
                             DataGridC.draw();
                         }
                         else {

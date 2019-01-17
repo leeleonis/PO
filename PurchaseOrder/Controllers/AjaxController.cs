@@ -282,7 +282,8 @@ namespace PurchaseOrderSys.Controllers
             {
                 odataList = new List<PoSKUVM>();
             }
-            foreach (var item in odataList.Where(x => (x.ID.HasValue && x.ID != 0 && x.ID == ID) || x.SKU == SKU))
+
+            foreach (var item in odataList.Where(x => ((x.ID.HasValue && x.ID != 0 && x.ID == ID) ||(!x.ID.HasValue && x.ID != 0 && x.SKU == SKU))))
             {
                 switch (type)
                 {
@@ -314,7 +315,7 @@ namespace PurchaseOrderSys.Controllers
             {
                 odataList = new List<CMSKUVM>();
             }
-            foreach (var item in odataList.Where(x => x.ID == ID || x.SKU == SKU))
+            foreach (var item in odataList.Where(x => ((x.ID.HasValue && x.ID != 0 && x.ID == ID) || (!x.ID.HasValue && x.ID != 0 && x.SKU == SKU))))
             {
                 switch (type)
                 {
@@ -418,6 +419,7 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult ShipmentByOrder(List<ShipmentOrder> ShipmentOrder)
         {
             AjaxResult result = new AjaxResult();
+            var NoDataList = new List<string>();
             foreach (var Serialsitem in ShipmentOrder)
             {
                 var QTY = 0;
@@ -476,10 +478,13 @@ namespace PurchaseOrderSys.Controllers
                 }
                 else
                 {
-                    result.SetError("查無序號及貨號");
+                    NoDataList.Add(Serialsitem.OrderID + "：(" + Serialsitem.OrderID + ";" + Serialsitem.SkuNo + ";" + Serialsitem.SerialsNo + ")");
                 }
             }
-
+            if (NoDataList.Any())
+            {
+                result.SetError("查無序號及貨號：" + string.Join(",", NoDataList));
+            }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
@@ -528,7 +533,6 @@ namespace PurchaseOrderSys.Controllers
                     db.SaveChanges();
                 }
             }
-
             return Json(new { status = true }, JsonRequestBehavior.AllowGet);
             //return RedirectToAction("GetImg", new { id, key, ImgType });
         }

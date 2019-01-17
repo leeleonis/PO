@@ -23,6 +23,79 @@ namespace PurchaseOrderSys.Controllers
         public static string UserBy = "test";
         protected PurchaseOrderEntities db = new PurchaseOrderEntities();
 
+        public ActionResult CMRemoveData(string[] IDList)
+        {
+            var Errmsg = "";
+            if (IDList != null && IDList.Any())
+            {
+                var odataList = (List<CMSKUVM>)Session["CMSkuNumberList"];
+                foreach (var item in IDList)
+                {
+                    foreach (var odataListitem in odataList.Where(x => x.ID.ToString() == item || x.SKU == item))
+                    {
+                        if (odataListitem.ID.HasValue)
+                        {
+                            var PurchaseSKU = db.PurchaseSKU.Find(odataListitem.ID);
+                            if (PurchaseSKU.SerialsLlist.Any())
+                            {
+                                Errmsg += "【" + PurchaseSKU.SkuNo + "】已有序號不能刪除；";
+                            }
+                            else
+                            {
+                                odataListitem.Model = "D";
+                            }
+                        }
+                        else
+                        {
+                            odataListitem.Model = "D";
+                        }
+                    }
+                }
+                Session["CMSkuNumberList"] = odataList;
+            }
+            else
+            {
+                Errmsg = "沒有選取SKU";
+            }
+            if (string.IsNullOrWhiteSpace(Errmsg))
+            {
+                return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { status = false, Errmsg }, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
+        public ActionResult EditCMSKUData(string[] IDList)
+        {
+            var Errmsg = "";
+            if (IDList != null && IDList.Any())
+            {
+                var odataList = (List<CMSKUVM>)Session["CMSkuNumberList"];
+                foreach (var item in IDList)
+                {
+                    foreach (var odataListitem in odataList.Where(x => x.ID.ToString() == item || x.SKU == item))
+                    {
+                        odataListitem.Model = "E";
+                    }
+                }
+            }
+            else
+            {
+                Errmsg = "沒有選取SKU";
+            }
+            if (string.IsNullOrWhiteSpace(Errmsg))
+            {
+                return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { status = false, Errmsg }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         [HttpPost]
         public ActionResult CMCreatNoteImg(int? ID, HttpPostedFileBase Img)
         {

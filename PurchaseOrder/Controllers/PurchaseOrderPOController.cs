@@ -234,22 +234,22 @@ namespace PurchaseOrderSys.Controllers
                 {
                     var Brandlist = db.Brand.Where(x => x.Name.Contains(QPurchaseOrderPOVM.Brand)).Select(x => x.ID).ToList();
                     var skuidlist = db.SKU.Where(x => Brandlist.Contains(x.Brand)).Select(x => x.SkuID).ToList();
-                    listPurchaseOrder = listPurchaseOrder.Where(x => x.PurchaseSKU.Where(y => skuidlist.Contains(y.SkuNo)).Any());
+                    listPurchaseOrder = listPurchaseOrder.Where(x => x.PurchaseSKU.Where(y => y.IsEnable && skuidlist.Contains(y.SkuNo)).Any());
                 }
                 if (!string.IsNullOrWhiteSpace(QPurchaseOrderPOVM.SKU))
                 {
-                    listPurchaseOrder = listPurchaseOrder.Where(x => x.PurchaseSKU.Where(y=>y.SkuNo == QPurchaseOrderPOVM.SKU).Any());
+                    listPurchaseOrder = listPurchaseOrder.Where(x => x.PurchaseSKU.Where(y=> y.IsEnable && y.SkuNo == QPurchaseOrderPOVM.SKU).Any());
                 }
                 if (!string.IsNullOrWhiteSpace(QPurchaseOrderPOVM.Category))
                 {
                     var TypeIDlist = db.SkuTypeLang.Where(x => x.Name.Contains(QPurchaseOrderPOVM.Category)).Select(x => x.TypeID).ToList();
                     var skuidlist = db.SKU.Where(x => TypeIDlist.Contains(x.Category)).Select(x => x.SkuID).ToList();
-                    listPurchaseOrder = listPurchaseOrder.Where(x => x.PurchaseSKU.Where(y => skuidlist.Contains(y.SkuNo)).Any());
+                    listPurchaseOrder = listPurchaseOrder.Where(x => x.PurchaseSKU.Where(y => y.IsEnable && skuidlist.Contains(y.SkuNo)).Any());
                 }
                 if (!string.IsNullOrWhiteSpace(QPurchaseOrderPOVM.Serial))
                 {
                     var PurchaseSKUID = db.SerialsLlist.Where(x => x.SerialsNo == QPurchaseOrderPOVM.Serial && x.SerialsType == "PO").Select(x => x.PurchaseSKUID).ToList();
-                    listPurchaseOrder = listPurchaseOrder.Where(x => x.PurchaseSKU.Where(y => PurchaseSKUID.Contains(y.ID)).Any());
+                    listPurchaseOrder = listPurchaseOrder.Where(x => x.PurchaseSKU.Where(y => y.IsEnable && PurchaseSKUID.Contains(y.ID)).Any());
                 }
                 if (filter.ID.HasValue)
                 {
@@ -278,11 +278,11 @@ namespace PurchaseOrderSys.Controllers
                     x.POType,
                     VendorID = x.VendorID.ToString(),
                     PODate = x.PODate.Value.ToLocalTime().ToString("yyyy/MM/dd"),
-                    QTY = x.PurchaseSKU.Sum(y => y.QTYOrdered),
-                    GrandTotal = x.PurchaseSKU.Sum(y => (y.QTYOrdered * y.Price)),
+                    QTY = x.PurchaseSKU.Where(y => y.IsEnable).Sum(y => y.QTYOrdered),
+                    GrandTotal = x.PurchaseSKU.Where(y => y.IsEnable).Sum(y => (y.QTYOrdered * y.Price)),
                     x.PaidAmount,
-                    Balance = x.PurchaseSKU.Sum(y => (y.QTYOrdered * y.Price)),
-                    POStatus = x.POStatus
+                    Balance = x.PurchaseSKU.Where(y => y.IsEnable).Sum(y => (y.QTYOrdered * y.Price)),
+                    x.POStatus
                 });
 
                 if (filter.QTY.HasValue)
@@ -412,7 +412,7 @@ namespace PurchaseOrderSys.Controllers
                     db.SaveChanges();
                 }
             }
-            var QTYOrdered = PurchaseOrder.PurchaseSKU.Sum(x => x.QTYOrdered);
+            var QTYOrdered = PurchaseOrder.PurchaseSKU.Where(x => x.IsEnable).Sum(x => x.QTYOrdered);
             var ReceiveQty = dataList.Sum(x => x.SerialQTY);
             if (PurchaseOrder.ReceiveStatus != "Completed")
             {
@@ -520,7 +520,7 @@ namespace PurchaseOrderSys.Controllers
                 });
                 foreach (var item in PurchaseSKUlistE)
                 {
-                    var oldPurchaseSKU = PurchaseOrder.PurchaseSKU.Where(x => x.ID == item.ID);
+                    var oldPurchaseSKU = PurchaseOrder.PurchaseSKU.Where(x => x.IsEnable && x.ID == item.ID);
                     if (oldPurchaseSKU.Any() && item.ID != 0)
                     {
                         foreach (var SKUitem in oldPurchaseSKU)
@@ -562,7 +562,7 @@ namespace PurchaseOrderSys.Controllers
                 var PurchaseSKUlistD = dataList.Where(x => x.Model == "D").Select(x => x.ID);
                 foreach (var item in PurchaseSKUlistD)
                 {
-                    var oldPurchaseSKU = PurchaseOrder.PurchaseSKU.Where(x => x.ID == item);
+                    var oldPurchaseSKU = PurchaseOrder.PurchaseSKU.Where(x => x.IsEnable && x.ID == item);
                     if (oldPurchaseSKU.Any())
                     {
                         foreach (var SKUitem in oldPurchaseSKU)
@@ -927,7 +927,7 @@ namespace PurchaseOrderSys.Controllers
                 Tax = PurchaseOrder.Tax,
                 Currency= PurchaseOrder.Currency
             };
-            var dataList = PurchaseOrder.PurchaseSKU.Select(x => new CMSKUVM
+            var dataList = PurchaseOrder.PurchaseSKU.Where(x=>x.IsEnable).Select(x => new CMSKUVM
             {
                 ID = x.ID,
                 ck = x.SkuNo,
@@ -1140,33 +1140,6 @@ namespace PurchaseOrderSys.Controllers
             if (IDList != null && IDList.Any())
             {
                 var odataList = (List<PoSKUVM>)Session["SkuNumberList"];
-                foreach (var item in IDList)
-                {
-                    foreach (var odataListitem in odataList.Where(x => x.ID.ToString() == item || x.SKU == item))
-                    {
-                        odataListitem.Model = "E";
-                    }
-                }
-            }
-            else
-            {
-                Errmsg = "沒有選取SKU";
-            }
-            if (string.IsNullOrWhiteSpace(Errmsg))
-            {
-                return Json(new { status = true }, JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
-                return Json(new { status = false, Errmsg }, JsonRequestBehavior.AllowGet);
-            }
-        }
-        public ActionResult EditCMSKUData(string[] IDList)
-        {
-            var Errmsg = "";
-            if (IDList != null && IDList.Any())
-            {
-                var odataList = (List<CMSKUVM>)Session["CMSkuNumberList"];
                 foreach (var item in IDList)
                 {
                     foreach (var odataListitem in odataList.Where(x => x.ID.ToString() == item || x.SKU == item))

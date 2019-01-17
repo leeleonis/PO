@@ -837,6 +837,58 @@
                     tr.addClass('shown');
                 }
             });
+            $("#Removeitems").on("click", function () {
+                var dataList = [];
+                $(DataGridC.$('input[type="checkbox"]:checked').each(function () {
+                    dataList.push($(this).val());
+                }));
+                //for (var i in rows) {
+                //    dataList.push(i);
+                //}
+                $.ajax({
+                    traditional: true,
+                    type: "post",
+                    url: "@Url.Action("RemoveData")",
+                    data: {
+                        IDList: dataList,
+                    },
+                    success: function (data) {
+                        if (data.status) {
+                            $(tableID + ' thead input[type="checkbox"]').prop("checked", false);
+                            DataGridC.draw();
+                        }
+                        else {
+                            alert(data.Errmsg);
+                        }
+                    }
+                });
+            });
+            $("#Edititems").on("click", function () {
+                var dataList = [];
+                $(DataGridC.$('input[type="checkbox"]:checked').each(function () {
+                    dataList.push($(this).val());
+                }));
+                //for (var i in rows) {
+                //    dataList.push(i);
+                //}
+                $.ajax({
+                    traditional: true,
+                    type: "post",
+                    url: "@Url.Action("EditSKUData")",
+                    data: {
+                        IDList: dataList,
+                    },
+                    success: function (data) {
+                        if (data.status) {
+                            $(tableID + ' thead input[type="checkbox"]').prop("checked", false);
+                            DataGridC.draw();
+                        }
+                        else {
+                            alert(data.Errmsg);
+                        }
+                    }
+                });
+            });
         });
         function datalistSet(data) {
             data.datalist.forEach(function (value) {

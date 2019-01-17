@@ -202,33 +202,33 @@
                                                             @if (Model.CMType == "CreditNote")
                                                             {
 
-                                                                <tr>
-                                                                    <th></th>
-                                                                    <th></th>
-                                                                    <th>SKU</th>
-                                                                    <th>Vendor SKU</th>
-                                                                    <th>Name</th>
-                                                                    <th>QTY Ordered</th>
-                                                                    <th>QTY Returned</th>
-                                                                    <th>Credit QTY</th>
-                                                                    <th>Credit</th>
-                                                                    <th>Subtotal (currency)</th>
-                                                                </tr>
+                                                            <tr>
+                                                                <th><input type="checkbox" /></th>
+                                                                <th></th>
+                                                                <th>SKU</th>
+                                                                <th>Vendor SKU</th>
+                                                                <th>Name</th>
+                                                                <th>QTY Ordered</th>
+                                                                <th>QTY Returned</th>
+                                                                <th>Credit QTY</th>
+                                                                <th>Credit</th>
+                                                                <th>Subtotal (currency)</th>
+                                                            </tr>
                                                             }
                                                             else if (Model.CMType == "Replacement")
                                                             {
-                                                                <tr>
-                                                                    <th></th>
-                                                                    <th></th>
-                                                                    <th>SKU</th>
-                                                                    <th>Vendor SKU</th>
-                                                                    <th>Name</th>
-                                                                    <th>QTY Ordered</th>
-                                                                    <th>QTY Returned</th>
-                                                                    <th>Credit QTY</th>
-                                                                    <th>QTY Received</th>
-                                                                    <th>Balance</th>
-                                                                </tr>
+                                                            <tr>
+                                                                <th><input type="checkbox" /></th>
+                                                                <th></th>
+                                                                <th>SKU</th>
+                                                                <th>Vendor SKU</th>
+                                                                <th>Name</th>
+                                                                <th>QTY Ordered</th>
+                                                                <th>QTY Returned</th>
+                                                                <th>Credit QTY</th>
+                                                                <th>QTY Received</th>
+                                                                <th>Balance</th>
+                                                            </tr>
                                                             }
                                                         </thead>
                                                         <tbody></tbody>
@@ -544,6 +544,32 @@
             $("#CMType").on("change", function () {
                 window.location.href = "@Url.Action("CreateCM", new { ID=Model.PurchaseOrderID })?CMTypeVal=" + $(this).val();
             });
+            $("#Removeitems").on("click", function () {
+                var dataList = [];
+                $(DataGridC.$('input[type="checkbox"]:checked').each(function () {
+                    dataList.push($(this).val());
+                }));
+                //for (var i in rows) {
+                //    dataList.push(i);
+                //}
+                $.ajax({
+                    traditional: true,
+                    type: "post",
+                    url: "@Url.Action("CMRemoveData")",
+                    data: {
+                        IDList: dataList,
+                    },
+                    success: function (data) {
+                        if (data.status) {
+                            $(tableID + ' thead input[type="checkbox"]').prop("checked", false);
+                            DataGridC.draw();
+                        }
+                        else {
+                            alert(data.Errmsg);
+                        }
+                    }
+                });
+            });
             $("#Edititems").on("click", function () {
                 var dataList = [];
                 $(DataGridC.$('input[type="checkbox"]:checked').each(function () {
@@ -558,6 +584,7 @@
                     },
                     success: function (data) {
                         if (data.status) {
+                            $(tableID + ' thead input[type="checkbox"]').prop("checked", false);
                             DataGridC.draw();
                         }
                         else {
