@@ -635,6 +635,7 @@
                                 </div>
 
                                 <div class="widget-footer">
+                                    <button type="button" class="btn btn-info" id="POEmail">Email PO to Vendor</button>
                                     <button type="submit" class="btn btn-primary" id="save">儲存</button>
                                     <button type="button" class="btn btn-primary" id="saveexit">儲存並返回</button>
                                     <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index")'">返回</button>
@@ -1015,6 +1016,22 @@
                         $("#dialog").html(data);
                         $("#dialog").dialog("open");
                         //$("#dialog").load(data).dialog({ modal: true }).dialog('open');
+                    }
+                });
+                return false;
+            });
+            $("#POEmail").on("click", function () {
+                var url = '@Url.Action("PoEmail")'
+                $.ajax({
+                    url: url,
+                    data: { id: '@Html.Display("ID")' },
+                    success: function (data) {
+                        if (data.status) {
+                            alert("Email寄送成功")
+                        }
+                        else {
+                            alert("Email寄送失敗：" + data.Msg)
+                        }
                     }
                 });
                 return false;

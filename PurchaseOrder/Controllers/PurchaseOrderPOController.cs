@@ -7,6 +7,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using inventorySKU;
+using PurchaseOrderSys.Helpers;
+using OfficeOpenXml;
+
 namespace PurchaseOrderSys.Controllers
 {
     [CheckSession]
@@ -137,7 +140,7 @@ namespace PurchaseOrderSys.Controllers
             return RedirectToAction("Index");
         }
 
-       
+
         public ActionResult GetData(PurchaseOrderPOVM filter, string Type, int? DetailID)
         {
             if (Type == "Master")
@@ -178,7 +181,7 @@ namespace PurchaseOrderSys.Controllers
                 {
                     listPurchaseOrder = listPurchaseOrder.Where(x => x.PODate <= QPurchaseOrderPOVM.PODateE);
                 }
-                if (!string.IsNullOrWhiteSpace( QPurchaseOrderPOVM.POStatus))
+                if (!string.IsNullOrWhiteSpace(QPurchaseOrderPOVM.POStatus))
                 {
                     listPurchaseOrder = listPurchaseOrder.Where(x => x.POStatus == QPurchaseOrderPOVM.POStatus);
                 }
@@ -238,7 +241,7 @@ namespace PurchaseOrderSys.Controllers
                 }
                 if (!string.IsNullOrWhiteSpace(QPurchaseOrderPOVM.SKU))
                 {
-                    listPurchaseOrder = listPurchaseOrder.Where(x => x.PurchaseSKU.Where(y=> y.IsEnable && y.SkuNo == QPurchaseOrderPOVM.SKU).Any());
+                    listPurchaseOrder = listPurchaseOrder.Where(x => x.PurchaseSKU.Where(y => y.IsEnable && y.SkuNo == QPurchaseOrderPOVM.SKU).Any());
                 }
                 if (!string.IsNullOrWhiteSpace(QPurchaseOrderPOVM.Category))
                 {
@@ -314,7 +317,7 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult GetSelectOption(string[] optionType)
         {
             Dictionary<string, object> optionList = new Dictionary<string, object>();
-            if (optionType !=null)
+            if (optionType != null)
             {
                 foreach (string type in optionType)
                 {
@@ -388,7 +391,7 @@ namespace PurchaseOrderSys.Controllers
             {
                 PurchaseOrder.POType = POTypeVal;
             }
-            if (PurchaseOrder.PaymentStatus!= "Completed")
+            if (PurchaseOrder.PaymentStatus != "Completed")
             {
                 var PaidAmount = PurchaseOrder.PaidAmount;
                 if (PaidAmount.HasValue)
@@ -450,9 +453,9 @@ namespace PurchaseOrderSys.Controllers
                 }
                 db.SaveChanges();
             }
-           
+
             Session["SkuNumberList"] = dataList.ToList();
-           
+
             return View(PurchaseOrder);
         }
 
@@ -471,7 +474,7 @@ namespace PurchaseOrderSys.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditItem(PurchaseOrder filter, IEnumerable<HttpPostedFileBase> VendorInvoice, IEnumerable<HttpPostedFileBase> PaymentProofList,bool? saveexit)
+        public ActionResult EditItem(PurchaseOrder filter, IEnumerable<HttpPostedFileBase> VendorInvoice, IEnumerable<HttpPostedFileBase> PaymentProofList, bool? saveexit)
         {
             var dt = DateTime.UtcNow;
             var PurchaseOrder = db.PurchaseOrder.Find(filter.ID);
@@ -672,7 +675,7 @@ namespace PurchaseOrderSys.Controllers
             if (string.IsNullOrWhiteSpace(PurchaseSKU.UPCEAN))
             {
                 var SKUlist = db.SKU.Where(x => x.SkuID == PurchaseSKU.SkuNo).ToList();
-                SKUlist= SKUlist.Where(x => !string.IsNullOrWhiteSpace(x.EAN) || (!string.IsNullOrWhiteSpace(x.UPC) && x.UPC != "Does not apply")).ToList();
+                SKUlist = SKUlist.Where(x => !string.IsNullOrWhiteSpace(x.EAN) || (!string.IsNullOrWhiteSpace(x.UPC) && x.UPC != "Does not apply")).ToList();
                 if (SKUlist.Any())
                 {
                     PurchaseSKU.UPCEAN = SKUlist.FirstOrDefault().UPC;
@@ -682,7 +685,7 @@ namespace PurchaseOrderSys.Controllers
             return View(PurchaseSKU);
         }
         [HttpPost]
-        public ActionResult Addserials(int ID,string UPCEAN,DateTime? ReceivedDate)
+        public ActionResult Addserials(int ID, string UPCEAN, DateTime? ReceivedDate)
         {
             var PurchaseSKU = db.PurchaseSKU.Find(ID);
             if (!string.IsNullOrEmpty(UPCEAN))
@@ -702,7 +705,7 @@ namespace PurchaseOrderSys.Controllers
             var SerialsLlist = PurchaseSKU.SerialsLlist.Where(x => x.SerialsNo == serials && x.SerialsType == "PO");
             if (SerialsLlist.Any())
             {
-                SerialsLlist = SerialsLlist.Where(x=>!x.SerialsLlistC.Any());
+                SerialsLlist = SerialsLlist.Where(x => !x.SerialsLlistC.Any());
                 if (SerialsLlist.Any())
                 {
                     foreach (var item in SerialsLlist.ToList())
@@ -726,7 +729,7 @@ namespace PurchaseOrderSys.Controllers
             }
             else
             {
-                return Json(new { status = false, Errmsg ="查無序號" }, JsonRequestBehavior.AllowGet);
+                return Json(new { status = false, Errmsg = "查無序號" }, JsonRequestBehavior.AllowGet);
             }
         }
         public ActionResult Saveserials(string serials, int PurchaseSKUID)
@@ -737,10 +740,10 @@ namespace PurchaseOrderSys.Controllers
             {
                 return Json(new { status = false, Errmsg = "序號不可大於採購數" }, JsonRequestBehavior.AllowGet);
             }
-            if (PurchaseSKU.PurchaseOrder.POType== "DropshpOrder")//直發一入一出
+            if (PurchaseSKU.PurchaseOrder.POType == "DropshpOrder")//直發一入一出
             {
-                var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials&&x.PurchaseSKU.SkuNo== PurchaseSKU.SkuNo);//檢查序號是否重複，同SKU序號不能新增
-                if (!SerialsLlist.Any() )
+                var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials && x.PurchaseSKU.SkuNo == PurchaseSKU.SkuNo);//檢查序號是否重複，同SKU序號不能新增
+                if (!SerialsLlist.Any())
                 {
                     var dt = DateTime.UtcNow;
                     var nSerialsLlistIn = new SerialsLlist
@@ -816,7 +819,7 @@ namespace PurchaseOrderSys.Controllers
                 }
             }
         }
-        
+
         [HttpPost]
         public ActionResult CreatNote(int? ID, string Note)
         {
@@ -908,7 +911,7 @@ namespace PurchaseOrderSys.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
-        public ActionResult CreateCM(int ID,string CMTypeVal= "CreditNote")
+        public ActionResult CreateCM(int ID, string CMTypeVal = "CreditNote")
         {
             Session["CMPurchaseNote"] = null;
             var PurchaseOrder = db.PurchaseOrder.Find(ID);
@@ -922,12 +925,12 @@ namespace PurchaseOrderSys.Controllers
                 ShippedDate = PurchaseOrder.ShippedDate,
                 Carrier = PurchaseOrder.Carrier,
                 Tracking = PurchaseOrder.Tracking,
-                CMType= CMTypeVal,
-                WarehouseID= PurchaseOrder.WarehouseID,
+                CMType = CMTypeVal,
+                WarehouseID = PurchaseOrder.WarehouseID,
                 Tax = PurchaseOrder.Tax,
-                Currency= PurchaseOrder.Currency
+                Currency = PurchaseOrder.Currency
             };
-            var dataList = PurchaseOrder.PurchaseSKU.Where(x=>x.IsEnable).Select(x => new CMSKUVM
+            var dataList = PurchaseOrder.PurchaseSKU.Where(x => x.IsEnable).Select(x => new CMSKUVM
             {
                 ID = x.ID,
                 ck = x.SkuNo,
@@ -936,11 +939,11 @@ namespace PurchaseOrderSys.Controllers
                 SKU = x.SkuNo,
                 VendorSKU = x.VendorSKU,
                 QTYOrdered = x.QTYOrdered,
-                QTYReceived = x.QTYReceived?? 0,
+                QTYReceived = x.QTYReceived ?? 0,
                 QTYReturned = x.QTYReturned ?? 0,
-                CreditQTY=x.CreditQTY ?? 0,
+                CreditQTY = x.CreditQTY ?? 0,
                 Credit = x.Credit ?? 0,
-                Subtotal = (x.CreditQTY* x.Credit)??0,
+                Subtotal = (x.CreditQTY * x.Credit) ?? 0,
                 Model = "L"
             });
             Session["CMSkuNumberList"] = dataList.ToList();
@@ -952,7 +955,7 @@ namespace PurchaseOrderSys.Controllers
             var CreditMemo = new CreditMemo
             {
                 IsEnable = true,
-                PurchaseOrderID= filter.PurchaseOrderID,
+                PurchaseOrderID = filter.PurchaseOrderID,
                 CompanyID = filter.CompanyID,
                 VendorID = filter.VendorID,
                 InvoiceDate = filter.InvoiceDate,
@@ -981,10 +984,10 @@ namespace PurchaseOrderSys.Controllers
                     SkuNo = x.SKU,
                     VendorSKU = string.IsNullOrWhiteSpace(x.VendorSKU) ? x.SKU : x.VendorSKU,
                     QTYOrdered = x.QTYOrdered,
-                    QTYReturned=x.QTYReturned,
-                    CreditQTY=x.CreditQTY,
+                    QTYReturned = x.QTYReturned,
+                    CreditQTY = x.CreditQTY,
                     Credit = x.Credit,
-                    QTYReceived=x.QTYReceived,
+                    QTYReceived = x.QTYReceived,
                     CreateBy = UserBy,
                     CreateAt = DateTime.UtcNow
                 });
@@ -1165,6 +1168,105 @@ namespace PurchaseOrderSys.Controllers
         {
             return Json(new { status = true }, JsonRequestBehavior.AllowGet);
         }
-    }
+        public ActionResult PoEmail(int id)
+        {
+            var PurchaseOrder = db.PurchaseOrder.Find(id);
+            var Email = PurchaseOrder.VendorLIst?.Email;
+            var EmailCC = PurchaseOrder.VendorLIst?.EmailCC;
 
+
+            if (string.IsNullOrWhiteSpace(Email))
+            {
+                return Json(new { status = false, Msg = "沒有Email" }, JsonRequestBehavior.AllowGet);
+            }
+            if (string.IsNullOrWhiteSpace(EmailCC))
+            {
+                return Json(new { status = false, Msg = "沒有EmailCC" }, JsonRequestBehavior.AllowGet);
+            }
+            Stream ExcelStream = CreateExcel(PurchaseOrder);
+            string MailFrom = "";
+            string[] MailTos = Email.Split(';');
+            string[] Ccs = EmailCC.Split(';');
+            string MailSub = PurchaseOrder.Company.Name + "  PO 採購單 #" + PurchaseOrder.ID + " 給 " + PurchaseOrder.VendorLIst.Name + " (" + DateTime.Today.ToString("yyyy/MM/dd") + ")";
+            string MailBody = RenderPartialViewToString("~/Views/Shared/EmailPo.cshtml", PurchaseOrder);
+            bool isBodyHtml = true;
+            string[] filePaths = null;
+            List<Tuple<Stream, string>> filePaths2 = new List<Tuple<Stream, string>>();
+            filePaths2.Add(new Tuple<Stream, string>(ExcelStream, "POExcel.xlsx"));
+            bool deleteFileAttachment = false;
+            var status = MyHelps.Mail_Send(MailFrom, MailTos, Ccs, MailSub, MailBody, isBodyHtml, filePaths, filePaths2, deleteFileAttachment);
+
+            return Json(new { status = status }, JsonRequestBehavior.AllowGet);
+        }
+
+        private Stream CreateExcel(PurchaseOrder PurchaseOrder)
+        {
+            var PurchaseSKUlist = PurchaseOrder.PurchaseSKU.Where(x => x.IsEnable);
+            var Price = PurchaseSKUlist.Sum(x => (x.Price * x.QTYOrdered) ?? 0);
+            var Discount = PurchaseSKUlist.Sum(x => (x.Price - x.Discount - x.Credit) ?? 0);
+            var Credit = PurchaseSKUlist.Sum(x => x.Credit ?? 0);
+            //在記憶體中建立一個Excel物件
+            ExcelPackage ep = new ExcelPackage();
+            //加入一個Sheet
+            ep.Workbook.Worksheets.Add("PoList");
+            //取得剛剛加入的Sheet(實體Sheet就叫MySheet)
+            ExcelWorksheet sheet1 = ep.Workbook.Worksheets["PoList"];//取得Sheet1 
+            sheet1.Cells[1, 1].Value = PurchaseOrder.Company.Name + "  PO 採購單 #" + PurchaseOrder.ID + " 給 " + PurchaseOrder.VendorLIst.Name + " (" + DateTime.Today.ToString("yyyy/MM/dd") + ")";
+            sheet1.Cells["A1:J1"].Merge = true;
+            sheet1.Cells[2, 1].Value = "以下是本公司今日採購的內容.請填入:";
+            sheet1.Cells["A2:J2"].Merge = true;
+            sheet1.Cells[3, 1].Value = "出貨價：" + Price.ToString("N2");
+            sheet1.Cells["A3:J3"].Merge = true;
+            sheet1.Cells[4, 1].Value = "現折金額：" + Discount.ToString("N2");
+            sheet1.Cells["A4:J4"].Merge = true;
+            sheet1.Cells[5, 1].Value = "後折金額：" + Credit.ToString("N2");
+            sheet1.Cells["A5:J5"].Merge = true;
+            sheet1.Cells[6, 1].Value = "SKU";
+            sheet1.Cells[6, 2].Value = "Vendor SKU";
+            sheet1.Cells[6, 3].Value = "Name";
+            sheet1.Cells[6, 4].Value = "QTY Ordered";
+            sheet1.Cells[6, 5].Value = "QTY Received";
+            sheet1.Cells[6, 6].Value = "Price";
+            sheet1.Cells[6, 7].Value = "Discount";
+            sheet1.Cells[6, 8].Value = "Credit";
+            sheet1.Cells[6, 9].Value = "Discounted Price";
+            sheet1.Cells[6, 10].Value = "Subtotal(currency)";
+            for (int j = 1; j <= 10; j++)
+            {
+                sheet1.Cells[6, j].AutoFitColumns();
+            }
+
+
+            int i = 7;
+            var NameLen = 0;
+            foreach (var item in PurchaseSKUlist)
+            {
+                var DiscountedPrice = (item.Price - item.Discount - item.Credit) ?? 0;
+                var Subtotal = item.QTYOrdered * (item.Price - item.Discount) ?? 0;
+                
+                sheet1.Cells[i, 1].Value = item.SkuNo;
+                sheet1.Cells[i, 2].Value = item.VendorSKU;
+                sheet1.Cells[i, 3].Value = item.Name;
+                sheet1.Cells[i, 4].Value = item.QTYOrdered;
+                sheet1.Cells[i, 5].Value = item.QTYReceived;
+                sheet1.Cells[i, 6].Value = item.Price.Value.ToString("N2");
+                sheet1.Cells[i, 7].Value = item.Discount;
+                sheet1.Cells[i, 8].Value = item.Credit;
+                sheet1.Cells[i, 9].Value = DiscountedPrice.ToString("N2");
+                sheet1.Cells[i, 10].Value = Subtotal.ToString("N2");
+
+                if (item.Name.Length > NameLen)
+                {
+                    NameLen = item.Name.Length;
+                    for (int j = 1; j <= 10; j++)
+                    {
+                        sheet1.Cells[6, j].AutoFitColumns();
+                    }
+                }
+                i++;
+            }
+            Stream OutputStream = new MemoryStream(ep.GetAsByteArray());
+            return OutputStream;
+        }
+    }
 }

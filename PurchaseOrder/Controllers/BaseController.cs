@@ -23,6 +23,37 @@ namespace PurchaseOrderSys.Controllers
         public static string UserBy = "test";
         protected PurchaseOrderEntities db = new PurchaseOrderEntities();
 
+        protected string RenderPartialViewToString()
+        {
+            return RenderPartialViewToString(null, null);
+        }
+
+        protected string RenderPartialViewToString(string viewName)
+        {
+            return RenderPartialViewToString(viewName, null);
+        }
+
+        protected string RenderPartialViewToString(object model)
+        {
+            return RenderPartialViewToString(null, model);
+        }
+
+        protected string RenderPartialViewToString(string viewName, object model)
+        {
+            if (string.IsNullOrEmpty(viewName))
+                viewName = ControllerContext.RouteData.GetRequiredString("action");
+
+            ViewData.Model = model;
+
+            using (StringWriter sw = new StringWriter())
+            {
+                ViewEngineResult viewResult = ViewEngines.Engines.FindPartialView(ControllerContext, viewName);
+                ViewContext viewContext = new ViewContext(ControllerContext, viewResult.View, ViewData, TempData, sw);
+                viewResult.View.Render(viewContext, sw);
+
+                return sw.GetStringBuilder().ToString();
+            }
+        }
         public ActionResult CMRemoveData(string[] IDList)
         {
             var Errmsg = "";
@@ -410,8 +441,11 @@ namespace PurchaseOrderSys.Controllers
         {
             try
             {
-
-
+                var chkSerialsLlist = db.SerialsLlist.Where(x => ExcelSerialslist.Contains(x.SerialsNo) && x.PurchaseSKU.IsEnable && x.PurchaseSKU.SkuNo == PurchaseSKU.SkuNo).Select(x => x.SerialsNo).ToList();
+                if (chkSerialsLlist.Any())//同SKU不可以重複序號
+                {
+                    return "序號重複：" + string.Join(",", chkSerialsLlist);
+                }
                 if (PurchaseSKU.PurchaseOrder != null)
                 {
                     POType = PurchaseSKU.PurchaseOrder.POType;
@@ -423,60 +457,53 @@ namespace PurchaseOrderSys.Controllers
                 {
                     foreach (var serials in ExcelSerialslist)
                     {
-                        if (SerialsQTYList.Where(x => x.SerialsNo == serials).Any())
+                        if (POType == "DropshpOrder")//直發一入一出
                         {
-                            return "序號重複";
-                        }
-                        else
-                        {
-                            if (POType == "DropshpOrder")//直發一入一出
+                            var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials && x.PurchaseSKU.PurchaseOrderID == PurchaseSKU.PurchaseOrderID);//檢查序號是否重複，同訂單同序號不能新增
+                            if (!SerialsLlist.Any())
                             {
-                                var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials && x.PurchaseSKU.PurchaseOrderID == PurchaseSKU.PurchaseOrderID);//檢查序號是否重複，同訂單同序號不能新增
-                                if (!SerialsLlist.Any())
+                                var dt = DateTime.UtcNow;
+                                var nSerialsLlistIn = new SerialsLlist
                                 {
-                                    var dt = DateTime.UtcNow;
-                                    var nSerialsLlistIn = new SerialsLlist
-                                    {
-                                        SerialsType = "DropshpOrderIn",
-                                        SerialsNo = serials,
-                                        SerialsQTY = 1,
-                                        ReceivedBy = UserBy,
-                                        ReceivedAt = dt,
-                                        CreateBy = UserBy,
-                                        CreateAt = dt
-                                    };
-                                    PurchaseSKU.SerialsLlist.Add(nSerialsLlistIn);
-                                    var nSerialsLlistOut = new SerialsLlist
-                                    {
-                                        SerialsType = "DropshpOrderOut",
-                                        SerialsNo = serials,
-                                        SerialsQTY = -1,
-                                        ReceivedBy = UserBy,
-                                        ReceivedAt = dt,
-                                        CreateBy = UserBy,
-                                        CreateAt = dt
-                                    };
-                                    nSerialsLlistIn.SerialsLlistC.Add(nSerialsLlistOut);
-                                }
+                                    SerialsType = "DropshpOrderIn",
+                                    SerialsNo = serials,
+                                    SerialsQTY = 1,
+                                    ReceivedBy = UserBy,
+                                    ReceivedAt = dt,
+                                    CreateBy = UserBy,
+                                    CreateAt = dt
+                                };
+                                PurchaseSKU.SerialsLlist.Add(nSerialsLlistIn);
+                                var nSerialsLlistOut = new SerialsLlist
+                                {
+                                    SerialsType = "DropshpOrderOut",
+                                    SerialsNo = serials,
+                                    SerialsQTY = -1,
+                                    ReceivedBy = UserBy,
+                                    ReceivedAt = dt,
+                                    CreateBy = UserBy,
+                                    CreateAt = dt
+                                };
+                                nSerialsLlistIn.SerialsLlistC.Add(nSerialsLlistOut);
                             }
-                            else if (POType == "PurchaseOrder")
+                        }
+                        else if (POType == "PurchaseOrder")
+                        {
+                            var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials && x.PurchaseSKU.PurchaseOrderID == PurchaseSKU.PurchaseOrderID);//檢查序號是否重複，同訂單同序號不能新增
+                            if (!SerialsLlist.Any())
                             {
-                                var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials && x.PurchaseSKU.PurchaseOrderID == PurchaseSKU.PurchaseOrderID);//檢查序號是否重複，同訂單同序號不能新增
-                                if (!SerialsLlist.Any())
+                                var dt = DateTime.UtcNow;
+                                var nSerialsLlist = new SerialsLlist
                                 {
-                                    var dt = DateTime.UtcNow;
-                                    var nSerialsLlist = new SerialsLlist
-                                    {
-                                        SerialsType = "PO",
-                                        SerialsNo = serials,
-                                        SerialsQTY = 1,
-                                        ReceivedBy = UserBy,
-                                        ReceivedAt = dt,
-                                        CreateBy = UserBy,
-                                        CreateAt = dt
-                                    };
-                                    PurchaseSKU.SerialsLlist.Add(nSerialsLlist);
-                                }
+                                    SerialsType = "PO",
+                                    SerialsNo = serials,
+                                    SerialsQTY = 1,
+                                    ReceivedBy = UserBy,
+                                    ReceivedAt = dt,
+                                    CreateBy = UserBy,
+                                    CreateAt = dt
+                                };
+                                PurchaseSKU.SerialsLlist.Add(nSerialsLlist);
                             }
                         }
                     }
@@ -484,7 +511,7 @@ namespace PurchaseOrderSys.Controllers
                 }
                 else
                 {
-                    return "序號不可大於採購數";
+                    return PurchaseSKU.SkuNo + "：序號數量超過採購數";
                 }
             }
             catch (Exception ex)

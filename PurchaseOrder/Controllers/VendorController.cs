@@ -47,6 +47,8 @@ namespace PurchaseOrderSys.Controllers
             oVendorLIst.Fax = VendorLIst.Fax;
             oVendorLIst.Currency = VendorLIst.Currency;
             oVendorLIst.Tax = VendorLIst.Tax;
+            oVendorLIst.Email = VendorLIst.Email;
+            oVendorLIst.EmailCC = VendorLIst.EmailCC;
             oVendorLIst.UpdateBy = UserBy;
             oVendorLIst.UpdateAt = DateTime.UtcNow;
             db.SaveChanges();

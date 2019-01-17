@@ -810,6 +810,8 @@
           <Property Name="UpdateAt" Type="datetime" />
           <Property Name="DelBy" Type="nvarchar" MaxLength="50" />
           <Property Name="DelAt" Type="datetime" />
+          <Property Name="Email" Type="ntext" />
+          <Property Name="EmailCC" Type="ntext" />
         </EntityType>
         <EntityType Name="Warehouse">
           <Key>
@@ -2704,6 +2706,8 @@
           <Property Name="DelBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DelAt" Type="DateTime" Precision="3" />
           <NavigationProperty Name="PurchaseOrder" Relationship="PurchaseOrderModel.FK_PurchaseOrder_VendorLIst" FromRole="VendorLIst" ToRole="PurchaseOrder" />
+          <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="EmailCC" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Warehouse">
           <Key>
@@ -4258,6 +4262,8 @@
           <EntitySetMapping Name="VendorLIst">
             <EntityTypeMapping TypeName="PurchaseOrderModel.VendorLIst">
               <MappingFragment StoreEntitySet="VendorLIst">
+                <ScalarProperty Name="EmailCC" ColumnName="EmailCC" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="DelAt" ColumnName="DelAt" />
                 <ScalarProperty Name="DelBy" ColumnName="DelBy" />
                 <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />

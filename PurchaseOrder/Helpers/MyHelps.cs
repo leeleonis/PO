@@ -3,10 +3,14 @@ using PurchaseOrderSys.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net;
+using System.Net.Mail;
 using System.Reflection;
 using System.Resources;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 
@@ -238,6 +242,151 @@ namespace PurchaseOrderSys.Helpers
             spanHtml.InnerHtml = DisplayName;
             labelHtml.InnerHtml = pureCheckBox+ spanHtml;
             return MvcHtmlString.Create(labelHtml.ToString());
+        }
+
+        /// <summary>
+        /// 完整的寄信功能
+        /// </summary>
+        /// <param name="MailFrom">寄信人E-mail Address</param>
+        /// <param name="MailTos">收信人E-mail Address</param>
+        /// <param name="Ccs">副本E-mail Address</param>
+        /// <param name="MailSub">主旨</param>
+        /// <param name="MailBody">信件內容</param>
+        /// <param name="isBodyHtml">是否採用HTML格式</param>
+        /// <param name="filePaths">附檔在WebServer檔案總管路徑</param>
+        /// <param name="filePaths2">附檔組</param>
+        /// <param name="deleteFileAttachment">是否刪除在WebServer上的附件</param>
+        /// <returns>是否成功</returns>
+        public static bool Mail_Send(string MailFrom, string[] MailTos, string[] Ccs, string MailSub, string MailBody, bool isBodyHtml, string[] filePaths, List<Tuple<Stream, string>> filePaths2, bool deleteFileAttachment)
+        {
+            string smtpServer = "smtp.sendgrid.net";
+            int smtpPort = 587;
+            string mailAccount = "azure_d6e7b8a9c9606ce581770e3a9db11a27@azure.com";
+            string mailPwd = "6S2OHhiXob9Q";
+            //string mailAccount = "nexeve";
+            //string mailPwd = "96yVfFZ9a81GqnDYTUebjncIsZe5Rvhnbv1j";
+
+            try
+            {
+                //防呆
+                if (string.IsNullOrEmpty(MailFrom))
+                {//※有些公司的Mail Server會規定寄信人的Domain Name要是該Mail Server的Domain Name
+                    MailFrom = "dispatch-qd@hotmail.com";
+                }
+
+                //建立MailMessage物件
+                MailMessage mms = new MailMessage();
+                //指定一位寄信人MailAddress
+                mms.From = new MailAddress(MailFrom);
+                //信件主旨
+                mms.Subject = MailSub;
+                //信件內容
+                mms.Body = MailBody;
+                //信件內容 是否採用Html格式
+                mms.IsBodyHtml = isBodyHtml;
+
+                if (MailTos != null)//防呆
+                {
+                    for (int i = 0; i < MailTos.Length; i++)
+                    {
+                        //加入信件的收信人(們)address
+                        if (!string.IsNullOrEmpty(MailTos[i].Trim()))
+                        {
+                            mms.To.Add(new MailAddress(MailTos[i].Trim()));
+                        }
+                    }
+                }//End if (MailTos !=null)//防呆
+
+                if (Ccs != null) //防呆
+                {
+                    for (int i = 0; i < Ccs.Length; i++)
+                    {
+                        if (!string.IsNullOrEmpty(Ccs[i].Trim()))
+                        {
+                            //加入信件的副本(們)address
+                            mms.CC.Add(new MailAddress(Ccs[i].Trim()));
+                        }
+                    }
+                }//End if (Ccs!=null) //防呆
+
+                if (filePaths != null)//防呆
+                {//有夾帶檔案
+                    for (int i = 0; i < filePaths.Length; i++)
+                    {
+                        if (!string.IsNullOrEmpty(filePaths[i].Trim()))
+                        {
+                            Attachment file = new Attachment(filePaths[i].Trim());
+                            //加入信件的夾帶檔案
+                            mms.Attachments.Add(file);
+                        }
+                    }
+                }//End if (filePaths!=null)//防呆
+
+                if (filePaths2 != null)
+                {
+                    foreach (var item in filePaths2)
+                    {
+                        Attachment file = new Attachment(item.Item1, item.Item2);
+                        //加入信件的夾帶檔案
+                        mms.Attachments.Add(file);
+                    }
+                }
+
+
+                using (SmtpClient client = new SmtpClient(smtpServer, smtpPort))//或公司、客戶的smtp_server
+                {
+                    if (!string.IsNullOrEmpty(mailAccount) && !string.IsNullOrEmpty(mailPwd))//.config有帳密的話
+                    {
+                        client.Credentials = new NetworkCredential(mailAccount, mailPwd);//寄信帳密
+                    }
+                    client.Send(mms);//寄出一封信
+                }//end using 
+
+                //釋放每個附件，才不會Lock住
+                if (mms.Attachments != null && mms.Attachments.Count > 0)
+                {
+                    for (int i = 0; i < mms.Attachments.Count; i++)
+                    {
+                        mms.Attachments[i].Dispose();
+                        //mms.Attachments[i] = null;
+                    }
+                }
+
+                //是否要刪除附檔
+                if (deleteFileAttachment && filePaths != null && filePaths.Length > 0)
+                {
+
+                    foreach (string filePath in filePaths)
+                    {
+                        File.Delete(filePath.Trim());
+                    }
+
+                }
+
+                return true;//成功
+            }
+            catch (Exception ex)
+            {
+                Log("SendMail", null, ex.InnerException != null && !string.IsNullOrEmpty(ex.InnerException.Message) ? ex.InnerException.Message : ex.Message);
+                return false;//寄失敗
+            }
+        }
+        public static void Log(string tableName, object targetID, string actionName, HttpSessionStateBase session = null)
+        {
+            //lock (ActionLog)
+            //{
+            //    ActionLog.Create(new ActionLog()
+            //    {
+            //        AdminID = (int)get_session("AdminID", session, -1),
+            //        AdminName = (string)get_session("AdminName", session, ""),
+            //        TableName = !string.IsNullOrEmpty(tableName) ? tableName : "",
+            //        TargetID = targetID != null ? targetID.ToString() : "",
+            //        ActionName = !string.IsNullOrEmpty(actionName) ? actionName : "",
+            //        CreateDate = DateTime.UtcNow
+            //    });
+
+            //    ActionLog.SaveChanges();
+            //}
         }
     }
 }

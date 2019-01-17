@@ -586,10 +586,13 @@ namespace PurchaseOrderSys.Controllers
             else if (key == "AddSKUserials")//SKU及序號上傳
             {
                 var PurchaseOrder = db.PurchaseOrder.Find(id);
+                PurchaseOrder.ReceiveStatus = "Pending";
                 using (var package = new ExcelPackage(ExcelFile.InputStream))
                 {
+                    string Err = "";
                     var dt = DateTime.UtcNow;
                     var AddSKUserialsVMList = new List<AddSKUserialsVM>();
+                    var EditSKUserialsVMList = new List<AddSKUserialsVM>();
                     ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
                     for (int row = 2; worksheet.Cells[row, 1].Value != null; row++)
                     {
@@ -600,61 +603,116 @@ namespace PurchaseOrderSys.Controllers
                         decimal.TryParse(worksheet.Cells[row, 4].Value?.ToString(), out Price);
                         var Discount = 0m;
                         decimal.TryParse(worksheet.Cells[row, 5].Value?.ToString(), out Discount);
-                        AddSKUserialsVMList.Add(new AddSKUserialsVM
+                        if (PurchaseOrder.PurchaseSKU.Where(x => x.IsEnable && x.SkuNo == SKU && x.Price == Price).Any())
                         {
-                            Discount = Discount,
-                            Price = Price,
-                            ProductName = ProductName,
-                            serials = serials,
-                            SKU = SKU
-                        });
-
-                    }
-                    var chkserials = AddSKUserialsVMList.GroupBy(x => x.serials).Select(x => new { key = x.Key, count = x.Count() }).Where(x => x.count > 1).ToList();
-                    if (chkserials.Any())
-                    {
-                        var list = chkserials.Select(x => x.key);
-                        return Json(new { status = false, Msg = "序號有有複：" + string.Join(",", list) }, JsonRequestBehavior.AllowGet);
-                    }
-                    var GroupSKU = AddSKUserialsVMList.GroupBy(x => new { x.SKU, x.Price, x.Discount }).Select(x => new { x.Key, QTYOrdered = x.Count(), Groupitem = x.Select(y => y.serials).ToList() }).ToList();
-                    string Err = "";
-                    foreach (var item in GroupSKU)
-                    {
-                        var SKU = db.SKU.Find(item.Key.SKU);
-                        if (SKU == null)
-                        {
-                            return Json(new { status = false, Msg = "SKU：" + item.Key.SKU + "不存在" }, JsonRequestBehavior.AllowGet);
+                            EditSKUserialsVMList.Add(new AddSKUserialsVM
+                            {
+                                Discount = Discount,
+                                Price = Price,
+                                ProductName = ProductName,
+                                serials = serials,
+                                SKU = SKU
+                            });
                         }
-                        try
+                        else
                         {
-                            var nPurchaseSKU = new PurchaseSKU
+                            AddSKUserialsVMList.Add(new AddSKUserialsVM
                             {
-                                IsEnable = true,
-                                SkuNo = item.Key.SKU,
-                                VendorSKU = item.Key.SKU,
-                                Name = SKU?.SkuLang.FirstOrDefault()?.Name,
-                                Price = item.Key.Price,
-                                Discount = item.Key.Discount,
-                                QTYOrdered = item.QTYOrdered,
-                                CreateBy = UserBy,
-                                CreateAt = dt
+                                Discount = Discount,
+                                Price = Price,
+                                ProductName = ProductName,
+                                serials = serials,
+                                SKU = SKU
+                            });
+                        }
+                    }
+                    #region 直接匯入序號
 
-                            };
-                            //比對資料，並寫回資料庫
-                            Err = SerialsAddCheck(nPurchaseSKU, item.Groupitem, PurchaseOrder.POType);
-                            if (!string.IsNullOrWhiteSpace(Err))
+                    if (EditSKUserialsVMList.Any())
+                    {
+                        var Editchkserials = EditSKUserialsVMList.GroupBy(x => x.serials).Select(x => new { key = x.Key, count = x.Count() }).Where(x => x.count > 1).ToList();
+                        if (Editchkserials.Any())
+                        {
+                            var list = Editchkserials.Select(x => x.key);
+                            return Json(new { status = false, Msg = "序號有複：" + string.Join(",", list) }, JsonRequestBehavior.AllowGet);
+                        }
+                        var EditGroupSKU = EditSKUserialsVMList.GroupBy(x => new { x.SKU, x.Price, x.Discount }).Select(x => new { x.Key, QTYOrdered = x.Count(), Groupitem = x.Select(y => y.serials).ToList() }).ToList();
+                        foreach (var item in EditGroupSKU)
+                        {
+                            var SKU = db.SKU.Find(item.Key.SKU);
+                            if (SKU == null)
                             {
-                                return Json(new { status = false, Msg = Err }, JsonRequestBehavior.AllowGet);
+                                return Json(new { status = false, Msg = "SKU：" + item.Key.SKU + "不存在" }, JsonRequestBehavior.AllowGet);
                             }
-                            PurchaseOrder.PurchaseSKU.Add(nPurchaseSKU);
-                        }
-                        catch (Exception ex)
-                        {
+                            try
+                            {
+                                var oPurchaseSKU = PurchaseOrder.PurchaseSKU.Where(x => x.IsEnable && x.SkuNo == item.Key.SKU && x.Price == item.Key.Price).FirstOrDefault();
+                                //比對資料，並寫回資料庫
+                                Err = SerialsAddCheck(oPurchaseSKU, item.Groupitem, PurchaseOrder.POType);
+                                if (!string.IsNullOrWhiteSpace(Err))
+                                {
+                                    return Json(new { status = false, Msg = Err }, JsonRequestBehavior.AllowGet);
+                                }
+                                // PurchaseOrder.PurchaseSKU.Add(oPurchaseSKU);
+                            }
+                            catch (Exception ex)
+                            {
 
-                            return Json(new { status = false, Msg = ex.ToString() }, JsonRequestBehavior.AllowGet);
-                        }     
-                        
+                                return Json(new { status = false, Msg = ex.ToString() }, JsonRequestBehavior.AllowGet);
+                            }
+                        }
                     }
+                    #endregion
+                    #region 新增
+                    if (AddSKUserialsVMList.Any())
+                    {
+
+                        var Addchkserials = AddSKUserialsVMList.GroupBy(x => x.serials).Select(x => new { key = x.Key, count = x.Count() }).Where(x => x.count > 1).ToList();
+                        if (Addchkserials.Any())
+                        {
+                            var list = Addchkserials.Select(x => x.key);
+                            return Json(new { status = false, Msg = "序號有複：" + string.Join(",", list) }, JsonRequestBehavior.AllowGet);
+                        }
+                        var AddGroupSKU = AddSKUserialsVMList.GroupBy(x => new { x.SKU, x.Price, x.Discount }).Select(x => new { x.Key, QTYOrdered = x.Count(), Groupitem = x.Select(y => y.serials).ToList() }).ToList();
+
+                        foreach (var item in AddGroupSKU)
+                        {
+                            var SKU = db.SKU.Find(item.Key.SKU);
+                            if (SKU == null)
+                            {
+                                return Json(new { status = false, Msg = "SKU：" + item.Key.SKU + "不存在" }, JsonRequestBehavior.AllowGet);
+                            }
+                            try
+                            {
+                                var nPurchaseSKU = new PurchaseSKU
+                                {
+                                    IsEnable = true,
+                                    SkuNo = item.Key.SKU,
+                                    VendorSKU = item.Key.SKU,
+                                    Name = SKU?.SkuLang.FirstOrDefault()?.Name,
+                                    Price = item.Key.Price,
+                                    Discount = item.Key.Discount,
+                                    QTYOrdered = item.QTYOrdered,
+                                    CreateBy = UserBy,
+                                    CreateAt = dt
+
+                                };
+                                //比對資料，並寫回資料庫
+                                Err = SerialsAddCheck(nPurchaseSKU, item.Groupitem, PurchaseOrder.POType);
+                                if (!string.IsNullOrWhiteSpace(Err))
+                                {
+                                    return Json(new { status = false, Msg = Err }, JsonRequestBehavior.AllowGet);
+                                }
+                                PurchaseOrder.PurchaseSKU.Add(nPurchaseSKU);
+                            }
+                            catch (Exception ex)
+                            {
+
+                                return Json(new { status = false, Msg = ex.ToString() }, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                    }
+                    #endregion
                     if (string.IsNullOrWhiteSpace(Err))
                     {
                         try
