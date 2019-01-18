@@ -209,8 +209,6 @@ namespace PurchaseOrderSys.Models
             var skuLang = skuData.SkuLang.First(l => l.LangID.Equals(LangID));
             var eBayTitle = !string.IsNullOrEmpty(skuData.eBayTitle) ? Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<int, string>>(skuData.eBayTitle) : new Dictionary<int, string> { };
 
-            var netoSku = netoApi.GetItemBySku(skuData.SkuID).Item.First();
-            var categories = (GetItemResponseItemCategory[])netoSku.Categories.First().Category;
             var update = new UpdateItemItem()
             {
                 SKU = skuData.SkuID,
@@ -242,6 +240,8 @@ namespace PurchaseOrderSys.Models
                 ItemSpecifics = skuData.Sku_Attribute.Where(a => a.eBay).GroupBy(a => a.AttrID).Where(g => !g.Any(a => a.LangID.Equals(LangID) && !a.eBay)).Select(g => g.First(a => a.LangID.Equals(LangID)))
                     .Select(g => new UpdateItemItemItemSpecific() { Name = g.SkuAttribute.SkuAttributeLang.First(l => l.LangID.Equals(LangID)).Name, Value = g.Value }).ToArray()
             };
+
+            var result = netoApi.UpdateItem(update);
         }
 
         public void CreateSkuToNeto()

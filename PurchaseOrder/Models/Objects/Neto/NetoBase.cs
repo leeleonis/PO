@@ -49,7 +49,6 @@ namespace NetoDeveloper
                 }
 
                 httpResponse = (HttpWebResponse)request.GetResponse();
-                var status = httpResponse.StatusCode;
                 using (StreamReader streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
                     result = streamReader.ReadToEnd();
