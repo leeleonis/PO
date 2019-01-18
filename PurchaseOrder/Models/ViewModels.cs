@@ -1155,5 +1155,19 @@ public class PurchaseOrderPOVM
         public string[] WarehouseIDs { get; set; }
         public string[] Skus { get; set; }
     }
-
+    public class TransferSearchVM
+    {
+        public string Status { get; set; }
+        public string SKU { get; set; }
+        public string Serial { get; set; }
+        public int? From { get; set; }
+        public int? Interim { get; set; }
+        public int? To { get; set; }
+        public int? Transfer { get; set; }
+        public string ExternalTransfer { get; set; }
+        public string Title { get; set; }
+        public string Carrier { get; set; }
+        public string Tracking { get; set; }
+        public IEnumerable <Transfer> Transferlist { get; set; }
+    }
 }

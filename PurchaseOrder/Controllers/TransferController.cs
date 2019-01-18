@@ -11,10 +11,58 @@ namespace PurchaseOrderSys.Controllers
     public class TransferController : BaseController
     {
         // GET: Transfer
-        public ActionResult Index()
+        public ActionResult Index(TransferSearchVM TransferSearchVM)
         {
             var Transferlist = db.Transfer.Where(x => x.IsEnable);
-            return View(Transferlist);
+
+
+            if (!string.IsNullOrWhiteSpace(TransferSearchVM.Status))
+            {
+                Transferlist = Transferlist.Where(x => x.Status == TransferSearchVM.Status);
+            }
+            if (!string.IsNullOrWhiteSpace(TransferSearchVM.SKU))
+            {
+                Transferlist = Transferlist.Where(x => x.TransferSKU.Where(y => y.IsEnable && y.SkuNo == TransferSearchVM.SKU).Any());
+            }
+            if (!string.IsNullOrWhiteSpace(TransferSearchVM.Serial))
+            {
+                Transferlist = Transferlist.Where(x => x.TransferSKU.Where(y => y.IsEnable && y.SerialsLlist.Where(z => z.SerialsNo == TransferSearchVM.Serial).Any()).Any());
+            }
+            if (TransferSearchVM.From.HasValue)
+            {
+                Transferlist = Transferlist.Where(x => x.FromWID == TransferSearchVM.From);
+            }
+            if (TransferSearchVM.Interim.HasValue)
+            {
+                Transferlist = Transferlist.Where(x => x.Interim == TransferSearchVM.Interim);
+            }
+            if (TransferSearchVM.To.HasValue)
+            {
+                Transferlist = Transferlist.Where(x => x.ToWID == TransferSearchVM.To);
+            }
+            if (TransferSearchVM.Transfer.HasValue)
+            {
+                Transferlist = Transferlist.Where(x => x.ID == TransferSearchVM.Transfer);
+            }
+            if (!string.IsNullOrWhiteSpace(TransferSearchVM.ExternalTransfer))
+            {
+                Transferlist = Transferlist.Where(x => x.ExternalTra == TransferSearchVM.ExternalTransfer);
+            }
+            if (!string.IsNullOrWhiteSpace(TransferSearchVM.Title))
+            {
+                Transferlist = Transferlist.Where(x => x.Title == TransferSearchVM.Title);
+            }
+            if (!string.IsNullOrWhiteSpace(TransferSearchVM.Carrier))
+            {
+                Transferlist = Transferlist.Where(x => x.Carrier == TransferSearchVM.Carrier);
+            }
+            if (!string.IsNullOrWhiteSpace(TransferSearchVM.Tracking))
+            {
+                Transferlist = Transferlist.Where(x => x.Tracking == TransferSearchVM.Tracking);
+            }
+            TransferSearchVM.Transferlist = Transferlist;
+
+            return View(TransferSearchVM);
         }
         public ActionResult Create()
         {
@@ -63,7 +111,7 @@ namespace PurchaseOrderSys.Controllers
             return View(Transfer);
         }
         [HttpPost]
-        public ActionResult Edit(Transfer Transfer)
+        public ActionResult Edit(Transfer Transfer, bool? saveexit)
         {
             var dt = DateTime.UtcNow;
             var oTransfer = db.Transfer.Find(Transfer.ID);
@@ -115,7 +163,22 @@ namespace PurchaseOrderSys.Controllers
                 }
             }
             db.SaveChanges();
-            return RedirectToAction("Index");
+            if (saveexit.HasValue && saveexit.Value)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return RedirectToAction("Edit", new { Transfer.ID });
+            }
+        }
+        public ActionResult GetSerialList(int ID)
+        {
+            var TransferSKU = db.TransferSKU.Find(ID);
+            var SerialsLlist = TransferSKU.SerialsLlist.Where(x => x.SerialsQTY == 1 && x.SerialsLlistC.Count() == 0).Select(x => x.SerialsNo).ToList();
+            var partial = ControlToString("~/Views/Transfer/GetSerialList.cshtml", SerialsLlist);
+            //var partial = Engine.Razor.RunCompile(template, "templateKey", null, new { Name = "World" });
+            return Json(new { status = true, partial }, JsonRequestBehavior.AllowGet);
         }
         public ActionResult Delete(int ID)
         {
@@ -394,5 +457,31 @@ namespace PurchaseOrderSys.Controllers
            };
             return Json(returnObj, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult Requst(int ID)
+        {
+            var Transfer = db.Transfer.Find(ID);
+            Transfer.Status = "Requested";
+            Transfer.UpdateBy = UserBy;
+            Transfer.UpdateAt = DateTime.UtcNow;
+            db.SaveChanges();
+
+            return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult Ship(int ID)
+        {
+          
+            return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+        }
+        //public ActionResult GetShippingList(int WarehouseID)
+        //{
+        //    if (TempData["ShippingList"] != null)
+        //    {
+        //        TempData["ShippingList"] = new PurchaseOrderSys.Api.Shipping_API().ShippingList();
+        //    }
+
+
+
+        //    return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+        //}
     }
 }

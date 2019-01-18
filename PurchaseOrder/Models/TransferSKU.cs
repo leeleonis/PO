@@ -35,8 +35,8 @@ namespace PurchaseOrderSys.Models
         public string SkuNo { get; set; }
         public string Name { get; set; }
     
-        public virtual Transfer Transfer { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SerialsLlist> SerialsLlist { get; set; }
+        public virtual Transfer Transfer { get; set; }
     }
 }

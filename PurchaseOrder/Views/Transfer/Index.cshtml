@@ -1,6 +1,9 @@
-﻿@model IEnumerable<Transfer>
+﻿@model TransferSearchVM
 @{
     ViewBag.ptitle = "倉庫轉移";
+    var Warehouselist = EnumData.WarehouseDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var TransferStatusDDL = EnumData.TransferStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var DefaultSelect = PurchaseOrderSys.App_GlobalResources.Resource.DefaultSelect;
 }
 <div id="content">
     <section id="widget-grid" class="">
@@ -22,12 +25,12 @@
                                 <div id="content" class="tab-content">
                                     <div class="tab-pane" id="hb1">
                                         <fieldset>
+                                            <legend>Search</legend>
                                             <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
-                                                <legend>Search</legend>
                                                 <div class="form-group">
                                                     @Html.Label("Status", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.Editor("Status", new { htmlAttributes = new { @class = "form-control" } })
+                                                        @Html.DropDownListFor(model => model.Status, TransferStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
                                                     </div>
                                                     @Html.Label("SKU", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
@@ -35,7 +38,7 @@
                                                     </div>
                                                     @Html.Label("Interim", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.Editor("Interim", new { htmlAttributes = new { @class = "form-control" } })
+                                                        @Html.DropDownListFor(model => model.Interim, Warehouselist, DefaultSelect, htmlAttributes: new { @class = "form-control" })
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -45,11 +48,11 @@
                                                     </div>
                                                     @Html.Label("From", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.Editor("From", new { htmlAttributes = new { @class = "form-control" } })
+                                                        @Html.DropDownListFor(model => model.From, Warehouselist, DefaultSelect, htmlAttributes: new { @class = "form-control" })
                                                     </div>
                                                     @Html.Label("To", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.Editor("To", new { htmlAttributes = new { @class = "form-control" } })
+                                                        @Html.DropDownListFor(model => model.To, Warehouselist, DefaultSelect, htmlAttributes: new { @class = "form-control" })
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -77,7 +80,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-offset-10">
-                                                    <button type="button" id="btn-search" class="btn btn-info btn-lg">Search</button>
+                                                    <button type="submit" id="btn-search" class="btn btn-info btn-lg">Search</button>
                                                 </div>
                                             </form>
                                         </fieldset>
@@ -108,9 +111,9 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @if (Model != null)
+                                                            @if (Model.Transferlist != null)
                                                             {
-                                                                foreach (var item in Model)
+                                                                foreach (var item in Model.Transferlist)
                                                                 {
                                                                     <tr>
                                                                         <td><input type="checkbox" /></td>
@@ -120,7 +123,7 @@
                                                                         <td>@(item.WarehouseFrom?.Name)</td>
                                                                         <td>@(item.WarehouseTo?.Name)</td>
                                                                         <td>@item.TransferSKU.Sum(x => x.QTY)</td>
-                                                                        <td>@item.CreateAt</td>
+                                                                        <td>@item.CreateAt.ToLocalTime()</td>
                                                                         <td>@item.CreateBy</td>
                                                                         <td>@item.Status</td>
                                                                         <td>Download</td>

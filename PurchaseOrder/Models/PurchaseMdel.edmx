@@ -366,6 +366,21 @@
           <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
           <Property Name="UpdateAt" Type="datetime" />
         </EntityType>
+        <!--產生期間發現錯誤:
+警告 6002: 資料表/檢視 'InventorySKU.dbo.OrderLog' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
+        <EntityType Name="OrderLog">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SCID" Type="nvarchar" MaxLength="10" />
+          <Property Name="SkuNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="Qty" Type="int" />
+          <Property Name="State" Type="nvarchar" MaxLength="20" />
+          <Property Name="Date" Type="datetime" />
+          <Property Name="WarehouseID" Type="int" />
+          <Property Name="OrderID" Type="int" />
+        </EntityType>
         <EntityType Name="Orders">
           <Key>
             <PropertyRef Name="OrderID" />
@@ -566,6 +581,7 @@
           <Property Name="OrderID" Type="int" />
           <Property Name="RMAID" Type="int" />
           <Property Name="SerialsType" Type="nvarchar" MaxLength="20" />
+          <Property Name="Memo" Type="ntext" />
         </EntityType>
         <EntityType Name="ShippingMethod">
           <Key>
@@ -766,7 +782,7 @@
           <Property Name="CreateAt" Type="datetime" Nullable="false" />
           <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
           <Property Name="UpdateAt" Type="datetime" />
-          <Property Name="Interim" Type="nvarchar" MaxLength="50" />
+          <Property Name="Interim" Type="int" />
           <Property Name="Carrier" Type="nvarchar" MaxLength="50" />
           <Property Name="Tracking" Type="nvarchar" MaxLength="50" />
         </EntityType>
@@ -1081,6 +1097,18 @@
             </Principal>
             <Dependent Role="NetoGroup">
               <PropertyRef Name="CurrencyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderLog_Warehouse">
+          <End Role="Warehouse" Type="Self.Warehouse" Multiplicity="0..1" />
+          <End Role="OrderLog" Type="Self.OrderLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Warehouse">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrderLog">
+              <PropertyRef Name="WarehouseID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1468,6 +1496,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Transfer_WarehouseInterim">
+          <End Role="Warehouse" Type="Self.Warehouse" Multiplicity="0..1" />
+          <End Role="Transfer" Type="Self.Transfer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Warehouse">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Transfer">
+              <PropertyRef Name="Interim" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_TransferSKU_Transfer">
           <End Role="Transfer" Type="Self.Transfer" Multiplicity="0..1" />
           <End Role="TransferSKU" Type="Self.TransferSKU" Multiplicity="*" />
@@ -1563,6 +1603,18 @@
           <EntitySet Name="Warehouse" EntityType="Self.Warehouse" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WarehouseSummary" EntityType="Self.WarehouseSummary" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WarehouseUser" EntityType="Self.WarehouseUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderLog" EntityType="Self.OrderLog" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [OrderLog].[ID] AS [ID], 
+    [OrderLog].[SCID] AS [SCID], 
+    [OrderLog].[SkuNo] AS [SkuNo], 
+    [OrderLog].[Qty] AS [Qty], 
+    [OrderLog].[State] AS [State], 
+    [OrderLog].[Date] AS [Date], 
+    [OrderLog].[WarehouseID] AS [WarehouseID], 
+    [OrderLog].[OrderID] AS [OrderID]
+    FROM [dbo].[OrderLog] AS [OrderLog]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_AdminUser_AdminGroup" Association="Self.FK_AdminUser_AdminGroup">
             <End Role="AdminGroup" EntitySet="AdminGroup" />
             <End Role="AdminUser" EntitySet="AdminUser" />
@@ -1634,6 +1686,10 @@
           <AssociationSet Name="FK_NetoGroup_Currency" Association="Self.FK_NetoGroup_Currency">
             <End Role="Currency" EntitySet="Currency" />
             <End Role="NetoGroup" EntitySet="NetoGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderLog_Warehouse" Association="Self.FK_OrderLog_Warehouse">
+            <End Role="Warehouse" EntitySet="Warehouse" />
+            <End Role="OrderLog" EntitySet="OrderLog" />
           </AssociationSet>
           <AssociationSet Name="FK_PackageContent_SkuType" Association="Self.FK_PackageContent_SkuType">
             <End Role="SkuType" EntitySet="SkuType" />
@@ -1763,6 +1819,10 @@
             <End Role="Warehouse" EntitySet="Warehouse" />
             <End Role="Transfer" EntitySet="Transfer" />
           </AssociationSet>
+          <AssociationSet Name="FK_Transfer_WarehouseInterim" Association="Self.FK_Transfer_WarehouseInterim">
+            <End Role="Warehouse" EntitySet="Warehouse" />
+            <End Role="Transfer" EntitySet="Transfer" />
+          </AssociationSet>
           <AssociationSet Name="FK_TransferSKU_Transfer" Association="Self.FK_TransferSKU_Transfer">
             <End Role="Transfer" EntitySet="Transfer" />
             <End Role="TransferSKU" EntitySet="TransferSKU" />
@@ -1814,7 +1874,6 @@
           <EntitySet Name="SkuPicture" EntityType="PurchaseOrderModel.SkuPicture" />
           <EntitySet Name="SkuType" EntityType="PurchaseOrderModel.SkuType" />
           <EntitySet Name="SkuTypeLang" EntityType="PurchaseOrderModel.SkuTypeLang" />
-          <EntitySet Name="Transfer" EntityType="PurchaseOrderModel.Transfer" />
           <EntitySet Name="TransferSKU" EntityType="PurchaseOrderModel.TransferSKU" />
           <EntitySet Name="VendorLIst" EntityType="PurchaseOrderModel.VendorLIst" />
           <EntitySet Name="Warehouse" EntityType="PurchaseOrderModel.Warehouse" />
@@ -1928,18 +1987,6 @@
             <End Role="SkuType" EntitySet="SkuType" />
             <End Role="SkuTypeLang" EntitySet="SkuTypeLang" />
           </AssociationSet>
-          <AssociationSet Name="FK_Transfer_Warehouse" Association="PurchaseOrderModel.FK_Transfer_Warehouse">
-            <End Role="Warehouse" EntitySet="Warehouse" />
-            <End Role="Transfer" EntitySet="Transfer" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Transfer_Warehouse1" Association="PurchaseOrderModel.FK_Transfer_Warehouse1">
-            <End Role="Warehouse" EntitySet="Warehouse" />
-            <End Role="Transfer" EntitySet="Transfer" />
-          </AssociationSet>
-          <AssociationSet Name="FK_TransferSKU_Transfer" Association="PurchaseOrderModel.FK_TransferSKU_Transfer">
-            <End Role="Transfer" EntitySet="Transfer" />
-            <End Role="TransferSKU" EntitySet="TransferSKU" />
-          </AssociationSet>
           <AssociationSet Name="FK_WarehouseSummary_Warehouse" Association="PurchaseOrderModel.FK_WarehouseSummary_Warehouse">
             <End Role="Warehouse" EntitySet="Warehouse" />
             <End Role="WarehouseSummary" EntitySet="WarehouseSummary" />
@@ -2043,9 +2090,31 @@
             <End Role="CreditMemo" EntitySet="CreditMemo" />
             <End Role="PurchaseNote" EntitySet="PurchaseNote" />
           </AssociationSet>
+          <EntitySet Name="OrderLog" EntityType="PurchaseOrderModel.OrderLog" />
+          <AssociationSet Name="FK_OrderLog_Warehouse" Association="PurchaseOrderModel.FK_OrderLog_Warehouse">
+            <End Role="Warehouse" EntitySet="Warehouse" />
+            <End Role="OrderLog" EntitySet="OrderLog" />
+          </AssociationSet>
+          <EntitySet Name="Transfer" EntityType="PurchaseOrderModel.Transfer" />
           <AssociationSet Name="FK_PurchaseNote_Transfer" Association="PurchaseOrderModel.FK_PurchaseNote_Transfer">
             <End Role="Transfer" EntitySet="Transfer" />
             <End Role="PurchaseNote" EntitySet="PurchaseNote" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Transfer_Warehouse" Association="PurchaseOrderModel.FK_Transfer_Warehouse">
+            <End Role="Warehouse" EntitySet="Warehouse" />
+            <End Role="Transfer" EntitySet="Transfer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Transfer_Warehouse1" Association="PurchaseOrderModel.FK_Transfer_Warehouse1">
+            <End Role="Warehouse" EntitySet="Warehouse" />
+            <End Role="Transfer" EntitySet="Transfer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TransferSKU_Transfer" Association="PurchaseOrderModel.FK_TransferSKU_Transfer">
+            <End Role="Transfer" EntitySet="Transfer" />
+            <End Role="TransferSKU" EntitySet="TransferSKU" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Transfer_WarehouseInterim" Association="PurchaseOrderModel.FK_Transfer_WarehouseInterim">
+            <End Role="Warehouse" EntitySet="Warehouse" />
+            <End Role="Transfer" EntitySet="Transfer" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="AdminGroup">
@@ -2639,30 +2708,6 @@
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
           <NavigationProperty Name="SkuType" Relationship="PurchaseOrderModel.FK_SkuTypeLang_SkuType" FromRole="SkuTypeLang" ToRole="SkuType" />
         </EntityType>
-        <EntityType Name="Transfer">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ExternalTra" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="FromWID" Type="Int32" />
-          <Property Name="ToWID" Type="Int32" />
-          <Property Name="TotalQTY" Type="Int32" />
-          <Property Name="Status" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
-          <Property Name="Interim" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Carrier" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Tracking" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="WarehouseFrom" Relationship="PurchaseOrderModel.FK_Transfer_Warehouse" FromRole="Transfer" ToRole="Warehouse" />
-          <NavigationProperty Name="WarehouseTo" Relationship="PurchaseOrderModel.FK_Transfer_Warehouse1" FromRole="Transfer" ToRole="Warehouse" />
-          <NavigationProperty Name="TransferSKU" Relationship="PurchaseOrderModel.FK_TransferSKU_Transfer" FromRole="Transfer" ToRole="TransferSKU" />
-          <NavigationProperty Name="PurchaseNote" Relationship="PurchaseOrderModel.FK_PurchaseNote_Transfer" FromRole="Transfer" ToRole="PurchaseNote" />
-        </EntityType>
         <EntityType Name="TransferSKU">
           <Key>
             <PropertyRef Name="ID" />
@@ -2681,8 +2726,8 @@
           <Property Name="Action" Type="Int32" />
           <Property Name="SkuNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Transfer" Relationship="PurchaseOrderModel.FK_TransferSKU_Transfer" FromRole="TransferSKU" ToRole="Transfer" />
           <NavigationProperty Name="SerialsLlist" Relationship="PurchaseOrderModel.FK_SerialsLlist_TransferSKU" FromRole="TransferSKU" ToRole="SerialsLlist" />
+          <NavigationProperty Name="Transfer" Relationship="PurchaseOrderModel.FK_TransferSKU_Transfer" FromRole="TransferSKU" ToRole="Transfer" />
         </EntityType>
         <EntityType Name="VendorLIst">
           <Key>
@@ -2732,8 +2777,6 @@
           <Property Name="DefaultDispatch" Type="Boolean" />
           <Property Name="DefaultRMA" Type="Boolean" />
           <NavigationProperty Name="PurchaseOrder" Relationship="PurchaseOrderModel.FK_PurchaseOrder_Warehouse" FromRole="Warehouse" ToRole="PurchaseOrder" />
-          <NavigationProperty Name="TransferFrom" Relationship="PurchaseOrderModel.FK_Transfer_Warehouse" FromRole="Warehouse" ToRole="Transfer" />
-          <NavigationProperty Name="TransferTo" Relationship="PurchaseOrderModel.FK_Transfer_Warehouse1" FromRole="Warehouse" ToRole="Transfer" />
           <NavigationProperty Name="WarehouseSummary" Relationship="PurchaseOrderModel.FK_WarehouseSummary_Warehouse" FromRole="Warehouse" ToRole="WarehouseSummary" />
           <NavigationProperty Name="WarehouseUser" Relationship="PurchaseOrderModel.FK_WarehouseUser_Warehouse" FromRole="Warehouse" ToRole="WarehouseUser" />
           <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -2743,6 +2786,10 @@
           <Property Name="Postcode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="OrderLog" Relationship="PurchaseOrderModel.FK_OrderLog_Warehouse" FromRole="Warehouse" ToRole="OrderLog" />
+          <NavigationProperty Name="Transfer" Relationship="PurchaseOrderModel.FK_Transfer_Warehouse" FromRole="Warehouse" ToRole="Transfer" />
+          <NavigationProperty Name="Transfer1" Relationship="PurchaseOrderModel.FK_Transfer_Warehouse1" FromRole="Warehouse" ToRole="Transfer" />
+          <NavigationProperty Name="Transfer2" Relationship="PurchaseOrderModel.FK_Transfer_WarehouseInterim" FromRole="Warehouse" ToRole="Transfer" />
         </EntityType>
         <EntityType Name="WarehouseSummary">
           <Key>
@@ -3093,42 +3140,6 @@
             </Principal>
             <Dependent Role="SkuTypeLang">
               <PropertyRef Name="TypeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Transfer_Warehouse">
-          <End Type="PurchaseOrderModel.Warehouse" Role="Warehouse" Multiplicity="0..1" />
-          <End Type="PurchaseOrderModel.Transfer" Role="Transfer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Warehouse">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Transfer">
-              <PropertyRef Name="FromWID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Transfer_Warehouse1">
-          <End Type="PurchaseOrderModel.Warehouse" Role="Warehouse" Multiplicity="0..1" />
-          <End Type="PurchaseOrderModel.Transfer" Role="Transfer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Warehouse">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Transfer">
-              <PropertyRef Name="ToWID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_TransferSKU_Transfer">
-          <End Type="PurchaseOrderModel.Transfer" Role="Transfer" Multiplicity="0..1" />
-          <End Type="PurchaseOrderModel.TransferSKU" Role="TransferSKU" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Transfer">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="TransferSKU">
-              <PropertyRef Name="TransferID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3581,6 +3592,7 @@
           <NavigationProperty Name="SerialsLlistC" Relationship="PurchaseOrderModel.FK_SerialsLlist_SerialsLlist" FromRole="SerialsLlist" ToRole="SerialsLlist1" />
           <NavigationProperty Name="SerialsLlistP" Relationship="PurchaseOrderModel.FK_SerialsLlist_SerialsLlist" FromRole="SerialsLlist1" ToRole="SerialsLlist" />
           <NavigationProperty Name="TransferSKU" Relationship="PurchaseOrderModel.FK_SerialsLlist_TransferSKU" FromRole="SerialsLlist" ToRole="TransferSKU" />
+          <Property Name="Memo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_SerialsLlist_Orders">
           <End Type="PurchaseOrderModel.Orders" Role="Orders" Multiplicity="0..1" />
@@ -3654,6 +3666,57 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="OrderLog">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SCID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="SkuNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Qty" Type="Int32" />
+          <Property Name="State" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Date" Type="DateTime" Precision="3" />
+          <Property Name="WarehouseID" Type="Int32" />
+          <Property Name="OrderID" Type="Int32" />
+          <NavigationProperty Name="Warehouse" Relationship="PurchaseOrderModel.FK_OrderLog_Warehouse" FromRole="OrderLog" ToRole="Warehouse" />
+        </EntityType>
+        <Association Name="FK_OrderLog_Warehouse">
+          <End Type="PurchaseOrderModel.Warehouse" Role="Warehouse" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.OrderLog" Role="OrderLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Warehouse">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrderLog">
+              <PropertyRef Name="WarehouseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Transfer">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ExternalTra" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FromWID" Type="Int32" />
+          <Property Name="ToWID" Type="Int32" />
+          <Property Name="TotalQTY" Type="Int32" />
+          <Property Name="Status" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <Property Name="Interim" Type="Int32" />
+          <Property Name="Carrier" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Tracking" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PurchaseNote" Relationship="PurchaseOrderModel.FK_PurchaseNote_Transfer" FromRole="Transfer" ToRole="PurchaseNote" />
+          <NavigationProperty Name="WarehouseFrom" Relationship="PurchaseOrderModel.FK_Transfer_Warehouse" FromRole="Transfer" ToRole="Warehouse" />
+          <NavigationProperty Name="WarehouseTo" Relationship="PurchaseOrderModel.FK_Transfer_Warehouse1" FromRole="Transfer" ToRole="Warehouse" />
+          <NavigationProperty Name="TransferSKU" Relationship="PurchaseOrderModel.FK_TransferSKU_Transfer" FromRole="Transfer" ToRole="TransferSKU" />
+          <NavigationProperty Name="WarehouseInterim" Relationship="PurchaseOrderModel.FK_Transfer_WarehouseInterim" FromRole="Transfer" ToRole="Warehouse" />
+        </EntityType>
         <Association Name="FK_PurchaseNote_Transfer">
           <End Type="PurchaseOrderModel.Transfer" Role="Transfer" Multiplicity="0..1" />
           <End Type="PurchaseOrderModel.PurchaseNote" Role="PurchaseNote" Multiplicity="*" />
@@ -3663,6 +3726,54 @@
             </Principal>
             <Dependent Role="PurchaseNote">
               <PropertyRef Name="TransferID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Transfer_Warehouse">
+          <End Type="PurchaseOrderModel.Warehouse" Role="Warehouse" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.Transfer" Role="Transfer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Warehouse">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Transfer">
+              <PropertyRef Name="FromWID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Transfer_Warehouse1">
+          <End Type="PurchaseOrderModel.Warehouse" Role="Warehouse" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.Transfer" Role="Transfer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Warehouse">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Transfer">
+              <PropertyRef Name="ToWID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TransferSKU_Transfer">
+          <End Type="PurchaseOrderModel.Transfer" Role="Transfer" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.TransferSKU" Role="TransferSKU" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Transfer">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TransferSKU">
+              <PropertyRef Name="TransferID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Transfer_WarehouseInterim">
+          <End Type="PurchaseOrderModel.Warehouse" Role="Warehouse" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.Transfer" Role="Transfer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Warehouse">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Transfer">
+              <PropertyRef Name="Interim" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4218,27 +4329,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Transfer">
-            <EntityTypeMapping TypeName="PurchaseOrderModel.Transfer">
-              <MappingFragment StoreEntitySet="Transfer">
-                <ScalarProperty Name="Tracking" ColumnName="Tracking" />
-                <ScalarProperty Name="Carrier" ColumnName="Carrier" />
-                <ScalarProperty Name="Interim" ColumnName="Interim" />
-                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
-                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
-                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
-                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="TotalQTY" ColumnName="TotalQTY" />
-                <ScalarProperty Name="ToWID" ColumnName="ToWID" />
-                <ScalarProperty Name="FromWID" ColumnName="FromWID" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="ExternalTra" ColumnName="ExternalTra" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="TransferSKU">
             <EntityTypeMapping TypeName="PurchaseOrderModel.TransferSKU">
               <MappingFragment StoreEntitySet="TransferSKU">
@@ -4552,6 +4642,7 @@
           <EntitySetMapping Name="SerialsLlist">
             <EntityTypeMapping TypeName="PurchaseOrderModel.SerialsLlist">
               <MappingFragment StoreEntitySet="SerialsLlist">
+                <ScalarProperty Name="Memo" ColumnName="Memo" />
                 <ScalarProperty Name="SerialsType" ColumnName="SerialsType" />
                 <ScalarProperty Name="RMAID" ColumnName="RMAID" />
                 <ScalarProperty Name="OrderID" ColumnName="OrderID" />
@@ -4567,6 +4658,41 @@
                 <ScalarProperty Name="PID" ColumnName="PID" />
                 <ScalarProperty Name="PurchaseSKUID" ColumnName="PurchaseSKUID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderLog">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.OrderLog">
+              <MappingFragment StoreEntitySet="OrderLog">
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="WarehouseID" ColumnName="WarehouseID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="SkuNo" ColumnName="SkuNo" />
+                <ScalarProperty Name="SCID" ColumnName="SCID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Transfer">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.Transfer">
+              <MappingFragment StoreEntitySet="Transfer">
+                <ScalarProperty Name="Tracking" ColumnName="Tracking" />
+                <ScalarProperty Name="Carrier" ColumnName="Carrier" />
+                <ScalarProperty Name="Interim" ColumnName="Interim" />
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="TotalQTY" ColumnName="TotalQTY" />
+                <ScalarProperty Name="ToWID" ColumnName="ToWID" />
+                <ScalarProperty Name="FromWID" ColumnName="FromWID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="ExternalTra" ColumnName="ExternalTra" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

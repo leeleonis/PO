@@ -300,4 +300,79 @@
   <data name="TransferStatusCompletedDDL" xml:space="preserve">
     <value>Completed</value>
   </data>
+  <data name="TransferSKU_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="OrderLog_ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="OrderLog_SCID" xml:space="preserve">
+    <value>SCID</value>
+  </data>
+  <data name="OrderLog_SkuNo" xml:space="preserve">
+    <value>SkuNo</value>
+  </data>
+  <data name="OrderLog_Qty" xml:space="preserve">
+    <value>Qty</value>
+  </data>
+  <data name="OrderLog_State" xml:space="preserve">
+    <value>State</value>
+  </data>
+  <data name="OrderLog_Date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="OrderLog_WarehouseID" xml:space="preserve">
+    <value>WarehouseID</value>
+  </data>
+  <data name="OrderLog_OrderID" xml:space="preserve">
+    <value>OrderID</value>
+  </data>
+  <data name="SerialsLlist_ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="SerialsLlist_PurchaseSKUID" xml:space="preserve">
+    <value>PurchaseSKUID</value>
+  </data>
+  <data name="SerialsLlist_PID" xml:space="preserve">
+    <value>PID</value>
+  </data>
+  <data name="SerialsLlist_SerialsNo" xml:space="preserve">
+    <value>SerialsNo</value>
+  </data>
+  <data name="SerialsLlist_SerialsQTY" xml:space="preserve">
+    <value>SerialsQTY</value>
+  </data>
+  <data name="SerialsLlist_CreateBy" xml:space="preserve">
+    <value>CreateBy</value>
+  </data>
+  <data name="SerialsLlist_CreateAt" xml:space="preserve">
+    <value>CreateAt</value>
+  </data>
+  <data name="SerialsLlist_UpdateBy" xml:space="preserve">
+    <value>UpdateBy</value>
+  </data>
+  <data name="SerialsLlist_UpdateAt" xml:space="preserve">
+    <value>UpdateAt</value>
+  </data>
+  <data name="SerialsLlist_ReceivedBy" xml:space="preserve">
+    <value>ReceivedBy</value>
+  </data>
+  <data name="SerialsLlist_ReceivedAt" xml:space="preserve">
+    <value>ReceivedAt</value>
+  </data>
+  <data name="SerialsLlist_TransferSKUID" xml:space="preserve">
+    <value>TransferSKUID</value>
+  </data>
+  <data name="SerialsLlist_OrderID" xml:space="preserve">
+    <value>OrderID</value>
+  </data>
+  <data name="SerialsLlist_RMAID" xml:space="preserve">
+    <value>RMAID</value>
+  </data>
+  <data name="SerialsLlist_SerialsType" xml:space="preserve">
+    <value>SerialsType</value>
+  </data>
+  <data name="SerialsLlist_Memo" xml:space="preserve">
+    <value>Memo</value>
+  </data>
 </root>

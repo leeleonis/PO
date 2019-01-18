@@ -54,7 +54,6 @@ namespace PurchaseOrderSys.Models
         public virtual DbSet<SkuPicture> SkuPicture { get; set; }
         public virtual DbSet<SkuType> SkuType { get; set; }
         public virtual DbSet<SkuTypeLang> SkuTypeLang { get; set; }
-        public virtual DbSet<Transfer> Transfer { get; set; }
         public virtual DbSet<TransferSKU> TransferSKU { get; set; }
         public virtual DbSet<VendorLIst> VendorLIst { get; set; }
         public virtual DbSet<Warehouse> Warehouse { get; set; }
@@ -71,5 +70,7 @@ namespace PurchaseOrderSys.Models
         public virtual DbSet<Company> Company { get; set; }
         public virtual DbSet<Orders> Orders { get; set; }
         public virtual DbSet<SerialsLlist> SerialsLlist { get; set; }
+        public virtual DbSet<OrderLog> OrderLog { get; set; }
+        public virtual DbSet<Transfer> Transfer { get; set; }
     }
 }

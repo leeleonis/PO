@@ -1,10 +1,16 @@
 ﻿@model Transfer
 @{
     ViewBag.ptitle = "Transfer Summary";
-     var Warehouselist = EnumData.WarehouseDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var Warehouselist = EnumData.WarehouseDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var TransferStatusDDL = EnumData.TransferStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var DefaultSelect = PurchaseOrderSys.App_GlobalResources.Resource.DefaultSelect;
+    var ShippingList = new PurchaseOrderSys.Api.Shipping_API().ShippingList().data.shippingMethod.Select(x => new SelectListItem { Text = x.text, Value = x.value.ToString() }).ToList();
 }
+<style>
+    .error {
+        background-color: red !important;
+    }
+</style>
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -51,7 +57,7 @@
                                                 </div>
                                                 @Html.Label("Interim:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Interim", new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.DropDownList("Interim", Warehouselist, DefaultSelect, htmlAttributes: new { @class = "form-control" })
                                                 </div>
                                                 @Html.Label("To", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
@@ -61,7 +67,7 @@
                                             <div class="form-group">
                                                 @Html.Label("Carrier:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Carrier", new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.DropDownList("Carrier", ShippingList, DefaultSelect, htmlAttributes: new { @class = "form-control" })
                                                 </div>
                                                 @Html.Label("Tracking:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
@@ -77,11 +83,11 @@
                                             <legend></legend>
                                             <div class="form-group">
                                                 <div class="col-sm-9  col-lg-8">
-                                                    <a type="button" href="@Url.Action("Prep",new { Model.ID})" class='btn btn-default btn-sm' id='btn-Add'>Prep</a>
-                                                    <a type="button" href="@Url.Action("Receive",new { Model.ID})" class='btn btn-default btn-sm' id='btn-Add'>Receive</a>
+                                                    <a type="button" href="@Url.Action("Prep",new { Model.ID})" class='btn btn-default btn-sm' id='Prep'>Prep</a>
+                                                    <a type="button" href="@Url.Action("Requst",new { Model.ID})" class='btn btn-default btn-sm' id='Requst'>Requst</a>
+                                                    <a type="button" href="@Url.Action("Ship",new { Model.ID})" class='btn btn-default btn-sm' id='Ship'>Ship</a>
+                                                    <a type="button" href="@Url.Action("Receive",new { Model.ID})" class='btn btn-default btn-sm' id='Receive'>Receive</a>
                                                     @*<a type="button" href="@Url.Action("PrintAWB",new { Model.ID})" class='btn btn-default btn-sm' id='btn-Add'>Print AWB</a>
-                                                    <a type="button" href="@Url.Action("Ship",new { Model.ID})" class='btn btn-default btn-sm' id='btn-Add'>Ship</a>
-                                                    <a type="button" href="@Url.Action("Requst",new { Model.ID})" class='btn btn-default btn-sm' id='btn-Add'>Requst</a>
                                                     <a type="button" href="@Url.Action("Unrequest",new { Model.ID})" class='btn btn-default btn-sm' id='btn-Add'>Unrequest</a>
                                                     <a type="button" href="@Url.Action("Save",new { Model.ID})" class='btn btn-default btn-sm' id='btn-Add'>Save</a>
                                                     <a type="button" href="@Url.Action("Delete",new { Model.ID})" class='btn btn-default btn-sm' id='btn-Add'>Delete</a>*@
@@ -143,7 +149,8 @@
                                     </div>
                                 </div>
                                 <div class="widget-footer">
-                                   <button type="submit" class="btn btn-primary" id="save">儲存</button>
+                                    <button type="submit" class="btn btn-primary" id="save">儲存</button>
+                                    <button type="button" class="btn btn-primary" id="saveexit">儲存並返回</button>
                                     <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index")'">返回</button>
                                 </div>
                             </form>
@@ -187,7 +194,7 @@
                         "defaultContent": '' },
                     { data: "SKU" },
                     { data: "ProductName" },
-                    { data: "QTY", render: function (data, type, row) { return '<input class="form-control" type="text" onchange="TSkuNumberListQTY(this,\'' + row.SKU + '\',' + data + ')"  value = ' +data + ' > '; } },
+                    { data: "QTY", render: function (data, type, row) { return '<input class="form-control Requstchk" type="text" onchange="TSkuNumberListQTY(this,\'' + row.SKU + '\',' + data + ')"  value = ' +data + ' > '; } },
                     { data: "Serial", render: function (data, type, row) { return thousandComma(data); } },
                     { data: "Label", render: function (data, type, row) { return thousandComma(data); }  },
                     { data: "TotalReceive", render: function (data, type, row) { return thousandComma(data); } },
@@ -213,6 +220,21 @@
                 "ordering": false,
                 "info": true,
                 "searching": false, "footerCallback": function (row, data, start, end, display) {
+                }
+            });
+            $(tableID + ' tbody').on('click', 'td.details-control', function () {
+                var tr = $(this).closest('tr');
+                var row = DataGrid.row(tr);
+
+                if (row.child.isShown()) {
+                    // This row is already open - close it
+                    row.child.hide();
+                    tr.removeClass('shown');
+                }
+                else {
+                    // Open this row
+                    row.child(GetSerialList(row.data())).show();
+                    tr.addClass('shown');
                 }
             });
             $("#gebruikerId").select2({
@@ -257,7 +279,63 @@
                     DataGrid.draw();
                 }
             });
+            $("select").change(function () {
+                var FromWID = $("#FromWID").val();
+                var ToWID = $("#ToWID").val();
+                if (FromWID == ToWID) {
+                    if (FromWID != "") {
+                        alert("From 和 To 不可重複");
+                        $(this).val("");
+                    }
+                }
+                if ($(this).attr("id") =="FromWID") {
+
+                }
+            });
+            $("#Requst").click(function () {
+                var Msg = "";
+                $("table").find(".Requstchk").each(function () {
+                    if ($(this).val() < 1) {
+                        $(this).closest("td").addClass("error");
+                        Msg = "Err"
+                    }
+                })
+                if (Msg == "") {
+                    $.ajax({
+                        url: $(this).attr("href"),
+                        success: function (data) {
+                            if (data.status) {
+
+                                window.location.reload();
+                            }
+                            else {
+                                alert(data.Errmsg)
+                            }
+                        }
+                    })
+                }
+                return false;
+            });
         });
+        function GetSerialList(d) {
+            var div = $('<div style="border:2px blue solid;" />').addClass('loading').text('Loading...');
+            $.ajax({
+                type: "post",
+                url: "@Url.Action("GetSerialList")",
+                data: {
+                    ID: d.ID
+                },
+                success: function (data) {
+                    if (data.status) {
+                        div.html(data.partial).removeClass('loading');
+                    }
+                    else {
+                        val = data.Errmsg;
+                    }
+                }
+            });
+            return div;
+        }
         function TSkuNumberListQTY(x,SKU) {
             $.ajax({
                 type: "post",

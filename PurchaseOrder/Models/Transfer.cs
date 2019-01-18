@@ -17,8 +17,8 @@ namespace PurchaseOrderSys.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Transfer()
         {
-            this.TransferSKU = new HashSet<TransferSKU>();
             this.PurchaseNote = new HashSet<PurchaseNote>();
+            this.TransferSKU = new HashSet<TransferSKU>();
         }
     
         public bool IsEnable { get; set; }
@@ -33,15 +33,16 @@ namespace PurchaseOrderSys.Models
         public System.DateTime CreateAt { get; set; }
         public string UpdateBy { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }
-        public string Interim { get; set; }
+        public Nullable<int> Interim { get; set; }
         public string Carrier { get; set; }
         public string Tracking { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PurchaseNote> PurchaseNote { get; set; }
         public virtual Warehouse WarehouseFrom { get; set; }
         public virtual Warehouse WarehouseTo { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TransferSKU> TransferSKU { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PurchaseNote> PurchaseNote { get; set; }
+        public virtual Warehouse WarehouseInterim { get; set; }
     }
 }

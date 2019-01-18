@@ -12,13 +12,18 @@ namespace PurchaseOrderSys.Controllers
     public class WarehouseInventoryController : BaseController
     {
         // GET: Warehouse
-        public ActionResult Index(int ID)
+        public ActionResult Index(int ID,string Product, int? FulfillableMin,int? FulfillableMax)
         {
             ViewBag.WarehouseID = ID;
             var SCID = db.WarehouseSummary.Where(x => x.WarehouseID == ID && x.Type == "SCID").FirstOrDefault().Val;
             var AllSKUList = db.SKU.Where(x => x.IsEnable && x.Status == 1).Select(x => new { x.SkuID, x.SkuLang.FirstOrDefault().Name }).ToList();
-            var PurchaseSKU = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.Warehouse1.ID == ID).Include(x => x.SerialsLlist).ToList();
+            var PurchaseSKU = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.Warehouse1.ID == ID).Include(x => x.SerialsLlist);
             var WarehouseInventoryVM = new WarehouseInventoryVM();
+
+            if (!string.IsNullOrWhiteSpace(Product))
+            {
+                PurchaseSKU = PurchaseSKU.Where(x => x.SkuNo == Product);
+            }
 
             var Awaitinglist = GetAwaitingCount("", SCID);
             var WarehouseVM = PurchaseSKU.Select(x => new WarehouseVM
@@ -89,7 +94,14 @@ namespace PurchaseOrderSys.Controllers
                 item.DaysOfSupply = item.Aggregate != 0 && item.Velocity != 0 ? item.Aggregate / item.Velocity / 30 : 0;  //Days of supply 算法: Aggregate / Velocity (30 days) / 30
                                                                                                                           //item.Fulfillable = item.Awaiting + item.Aggregate; //Fulfillable = Awaiting dispatch + Aggregate 2018/12/28 拿掉公式
             }
-
+            if (FulfillableMin.HasValue)
+            {
+                GroupWarehouseVM = GroupWarehouseVM.Where(x => x.Aggregate >= FulfillableMin).ToList();
+            }
+            if (FulfillableMax.HasValue)
+            {
+                GroupWarehouseVM = GroupWarehouseVM.Where(x => x.Aggregate <= FulfillableMax).ToList();
+            }
             WarehouseInventoryVM.Company = PurchaseSKU.FirstOrDefault()?.PurchaseOrder.Company.Name;
             WarehouseInventoryVM.WarehouseType = PurchaseSKU.FirstOrDefault()?.PurchaseOrder.Warehouse1.Type;
             WarehouseInventoryVM.Fulfillable = PurchaseSKU.FirstOrDefault()?.PurchaseOrder.Warehouse1.Fulfillable;

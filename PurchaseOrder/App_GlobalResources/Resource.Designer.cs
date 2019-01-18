@@ -2077,6 +2077,78 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查詢類似 Date 的當地語系化字串。
+        /// </summary>
+        public static string OrderLog_Date {
+            get {
+                return ResourceManager.GetString("OrderLog_Date", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ID 的當地語系化字串。
+        /// </summary>
+        public static string OrderLog_ID {
+            get {
+                return ResourceManager.GetString("OrderLog_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 OrderID 的當地語系化字串。
+        /// </summary>
+        public static string OrderLog_OrderID {
+            get {
+                return ResourceManager.GetString("OrderLog_OrderID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Qty 的當地語系化字串。
+        /// </summary>
+        public static string OrderLog_Qty {
+            get {
+                return ResourceManager.GetString("OrderLog_Qty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 SCID 的當地語系化字串。
+        /// </summary>
+        public static string OrderLog_SCID {
+            get {
+                return ResourceManager.GetString("OrderLog_SCID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 SkuNo 的當地語系化字串。
+        /// </summary>
+        public static string OrderLog_SkuNo {
+            get {
+                return ResourceManager.GetString("OrderLog_SkuNo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 State 的當地語系化字串。
+        /// </summary>
+        public static string OrderLog_State {
+            get {
+                return ResourceManager.GetString("OrderLog_State", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 WarehouseID 的當地語系化字串。
+        /// </summary>
+        public static string OrderLog_WarehouseID {
+            get {
+                return ResourceManager.GetString("OrderLog_WarehouseID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
         public static string PackageContent_CreateAt {
@@ -3058,7 +3130,7 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
-        ///   查詢類似 Create At 的當地語系化字串。
+        ///   查詢類似 CreateAt 的當地語系化字串。
         /// </summary>
         public static string SerialsLlist_CreateAt {
             get {
@@ -3085,7 +3157,34 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
-        ///   查詢類似 Purchase SKU ID 的當地語系化字串。
+        ///   查詢類似 Memo 的當地語系化字串。
+        /// </summary>
+        public static string SerialsLlist_Memo {
+            get {
+                return ResourceManager.GetString("SerialsLlist_Memo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 OrderID 的當地語系化字串。
+        /// </summary>
+        public static string SerialsLlist_OrderID {
+            get {
+                return ResourceManager.GetString("SerialsLlist_OrderID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 PID 的當地語系化字串。
+        /// </summary>
+        public static string SerialsLlist_PID {
+            get {
+                return ResourceManager.GetString("SerialsLlist_PID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 PurchaseSKUID 的當地語系化字串。
         /// </summary>
         public static string SerialsLlist_PurchaseSKUID {
             get {
@@ -3094,7 +3193,7 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
-        ///   查詢類似 Received At 的當地語系化字串。
+        ///   查詢類似 ReceivedAt 的當地語系化字串。
         /// </summary>
         public static string SerialsLlist_ReceivedAt {
             get {
@@ -3103,7 +3202,7 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
-        ///   查詢類似 Received By 的當地語系化字串。
+        ///   查詢類似 ReceivedBy 的當地語系化字串。
         /// </summary>
         public static string SerialsLlist_ReceivedBy {
             get {
@@ -3112,7 +3211,16 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
-        ///   查詢類似 Serials No 的當地語系化字串。
+        ///   查詢類似 RMAID 的當地語系化字串。
+        /// </summary>
+        public static string SerialsLlist_RMAID {
+            get {
+                return ResourceManager.GetString("SerialsLlist_RMAID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 SerialsNo 的當地語系化字串。
         /// </summary>
         public static string SerialsLlist_SerialsNo {
             get {
@@ -3121,7 +3229,16 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
-        ///   查詢類似 Serials Type 的當地語系化字串。
+        ///   查詢類似 SerialsQTY 的當地語系化字串。
+        /// </summary>
+        public static string SerialsLlist_SerialsQTY {
+            get {
+                return ResourceManager.GetString("SerialsLlist_SerialsQTY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 SerialsType 的當地語系化字串。
         /// </summary>
         public static string SerialsLlist_SerialsType {
             get {
@@ -3130,7 +3247,16 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
-        ///   查詢類似 Update At 的當地語系化字串。
+        ///   查詢類似 TransferSKUID 的當地語系化字串。
+        /// </summary>
+        public static string SerialsLlist_TransferSKUID {
+            get {
+                return ResourceManager.GetString("SerialsLlist_TransferSKUID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UpdateAt 的當地語系化字串。
         /// </summary>
         public static string SerialsLlist_UpdateAt {
             get {
@@ -3139,7 +3265,7 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
-        ///   查詢類似 Update By 的當地語系化字串。
+        ///   查詢類似 UpdateBy 的當地語系化字串。
         /// </summary>
         public static string SerialsLlist_UpdateBy {
             get {

@@ -384,6 +384,12 @@
     <Compile Include="Models\Objects\Neto\Schema\GetWarehouseResponse.cs" />
     <Compile Include="Models\Objects\Neto\Schema\UpdateItem.cs" />
     <Compile Include="Models\Objects\Neto\Schema\UpdateItemResponse.cs" />
+    <Compile Include="Models\OrderLog.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OrderLogMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Orders.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
     </Compile>
@@ -6430,6 +6436,7 @@
     <Content Include="Views\Ajax\SerialsExcel.cshtml" />
     <Content Include="Views\Shared\EmailPo.cshtml" />
     <Content Include="Views\Transfer\Receive.cshtml" />
+    <Content Include="Views\Transfer\GetSerialList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

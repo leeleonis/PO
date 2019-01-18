@@ -1,7 +1,7 @@
 ﻿@model Transfer
 @{
     ViewBag.ptitle = "Transfer Summary";
-     var Warehouselist = EnumData.WarehouseDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var Warehouselist = EnumData.WarehouseDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var TransferStatusDDL = EnumData.TransferStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var DefaultSelect = PurchaseOrderSys.App_GlobalResources.Resource.DefaultSelect;
 }
@@ -16,7 +16,9 @@
 
                         <h2>@ViewBag.ptitle</h2>
                         <ul class="nav nav-tabs pull-right">
-                            <li><a data-toggle="tab" href="#hb1">@ViewBag.ptitle</a></li>
+                            <li>
+                                <a data-toggle="tab" href="#hb1">@ViewBag.ptitle</a>
+                            </li>
                         </ul>
                     </header>
                     <div>
@@ -31,9 +33,9 @@
                                             <legend>Create</legend>
                                             <div class="form-group">
                                                 @*@Html.Label("Transfer #:", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("ID", new { htmlAttributes = new { @class = "form-control" } })
-                                                </div>*@
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("ID", new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>*@
                                                 @Html.Label("External Transfer #:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("ExternalTra", new { htmlAttributes = new { @class = "form-control" } })
@@ -50,7 +52,7 @@
                                                 </div>
                                                 @Html.Label("Interim:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Interim", new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.DropDownList("Interim", Warehouselist, DefaultSelect, htmlAttributes: new { @class = "form-control" })
                                                 </div>
                                                 @Html.Label("To", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
@@ -92,7 +94,9 @@
                                                         <thead>
                                                             <tr>
                                                                 <th></th>
-                                                                <th><input type="checkbox" /></th>
+                                                                <th>
+                                                                    <input type="checkbox" />
+                                                                </th>
                                                                 <th>SKU</th>
                                                                 <th>Product Name</th>
                                                                 <th>QTY</th>
@@ -107,25 +111,25 @@
                                                         </thead>
                                                         <tbody>
                                                             @*@if (Model != null)
-            {
-                foreach (var item in Model)
-                {
-                    <tr>
-                        <td></td>
-                        <td><input type="checkbox" /></td>
-                        <td>@item.SKUID</td>
-                        <td>@item.PurchaseSKU.Name</td>
-                        <td>@item.QTY</td>
-                        <td>Serial</td>
-                        <td>Label</td>
-                        <td>@item.TotalReceive</td>
-                        <td>@item.TWN</td>
-                        <td>@item.Winit</td>
-                        <td>Download</td>
-                        <td>Action</td>
-                    </tr>
-                }
-            }*@
+                                                                {
+                                                                    foreach (var item in Model)
+                                                                    {
+                                                                        <tr>
+                                                                            <td></td>
+                                                                            <td><input type="checkbox" /></td>
+                                                                            <td>@item.SKUID</td>
+                                                                            <td>@item.PurchaseSKU.Name</td>
+                                                                            <td>@item.QTY</td>
+                                                                            <td>Serial</td>
+                                                                            <td>Label</td>
+                                                                            <td>@item.TotalReceive</td>
+                                                                            <td>@item.TWN</td>
+                                                                            <td>@item.Winit</td>
+                                                                            <td>Download</td>
+                                                                            <td>Action</td>
+                                                                        </tr>
+                                                                    }
+                                                                }*@
                                                         </tbody>
                                                         <tfoot>
                                                             <tr>
@@ -142,7 +146,7 @@
                                     </div>
                                 </div>
                                 <div class="widget-footer">
-                                   <button type="submit" class="btn btn-primary" id="save">儲存</button>
+                                    <button type="submit" class="btn btn-primary" id="save">儲存</button>
                                     <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index")'">返回</button>
                                 </div>
                             </form>
@@ -177,7 +181,7 @@
                         orderable: false,
                         render: function (data, type, obj, meta) {
                             return '<input type="checkbox" value="' + data + '">';
-                        } 
+                        }
                     },
                     {
                         "className": 'details-control',
@@ -205,7 +209,7 @@
                         $("#gebruikerId").val(null).trigger('change');
                     }
                 },
-                serverSide: true,//啟用ServerSide模式  
+                serverSide: true,//啟用ServerSide模式
                 deferLoading: 0, //初始化DataTable時，不發出ajax
                 orderMulti: false,
                 "paging": false,
@@ -254,6 +258,17 @@
                 }
                 else {
                     DataGrid.draw();
+                }
+            });
+            $("select").change(function () {
+                var FromWID = $("#FromWID").val();
+                var ToWID = $("#ToWID").val();
+                
+                if (FromWID == ToWID) {
+                    if (FromWID != "") {
+                        alert("From 和 To 不可重複");
+                        $(this).val("");
+                    }
                 }
             });
         });

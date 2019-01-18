@@ -350,15 +350,15 @@
     <comment>ID</comment>
   </data>
   <data name="SerialsLlist_PurchaseSKUID" xml:space="preserve">
-    <value>Purchase SKU ID</value>
+    <value>PurchaseSKUID</value>
     <comment>Purchase SKU ID</comment>
   </data>
   <data name="SerialsLlist_SerialsNo" xml:space="preserve">
-    <value>Serials No</value>
+    <value>SerialsNo</value>
     <comment>Serials No</comment>
   </data>
   <data name="SerialsLlist_SerialsType" xml:space="preserve">
-    <value>Serials Type</value>
+    <value>SerialsType</value>
     <comment>Serials Type</comment>
   </data>
   <data name="SerialsLlist_CreateBy" xml:space="preserve">
@@ -366,23 +366,23 @@
     <comment>CreateBy</comment>
   </data>
   <data name="SerialsLlist_CreateAt" xml:space="preserve">
-    <value>Create At</value>
+    <value>CreateAt</value>
     <comment>Create At</comment>
   </data>
   <data name="SerialsLlist_UpdateBy" xml:space="preserve">
-    <value>Update By</value>
+    <value>UpdateBy</value>
     <comment>Update By</comment>
   </data>
   <data name="SerialsLlist_UpdateAt" xml:space="preserve">
-    <value>Update At</value>
+    <value>UpdateAt</value>
     <comment>Update At</comment>
   </data>
   <data name="SerialsLlist_ReceivedBy" xml:space="preserve">
-    <value>Received By</value>
+    <value>ReceivedBy</value>
     <comment>Received By</comment>
   </data>
   <data name="SerialsLlist_ReceivedAt" xml:space="preserve">
-    <value>Received At</value>
+    <value>ReceivedAt</value>
     <comment>Received At</comment>
   </data>
   <data name="PurchaseOrder_InvoiceDate" xml:space="preserve">
@@ -1945,5 +1945,47 @@
   </data>
   <data name="TransferSKU_Name" xml:space="preserve">
     <value>Name</value>
+  </data>
+  <data name="OrderLog_ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="OrderLog_SCID" xml:space="preserve">
+    <value>SCID</value>
+  </data>
+  <data name="OrderLog_SkuNo" xml:space="preserve">
+    <value>SkuNo</value>
+  </data>
+  <data name="OrderLog_Qty" xml:space="preserve">
+    <value>Qty</value>
+  </data>
+  <data name="OrderLog_State" xml:space="preserve">
+    <value>State</value>
+  </data>
+  <data name="OrderLog_Date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="OrderLog_WarehouseID" xml:space="preserve">
+    <value>WarehouseID</value>
+  </data>
+  <data name="OrderLog_OrderID" xml:space="preserve">
+    <value>OrderID</value>
+  </data>
+  <data name="SerialsLlist_PID" xml:space="preserve">
+    <value>PID</value>
+  </data>
+  <data name="SerialsLlist_SerialsQTY" xml:space="preserve">
+    <value>SerialsQTY</value>
+  </data>
+  <data name="SerialsLlist_TransferSKUID" xml:space="preserve">
+    <value>TransferSKUID</value>
+  </data>
+  <data name="SerialsLlist_OrderID" xml:space="preserve">
+    <value>OrderID</value>
+  </data>
+  <data name="SerialsLlist_RMAID" xml:space="preserve">
+    <value>RMAID</value>
+  </data>
+  <data name="SerialsLlist_Memo" xml:space="preserve">
+    <value>Memo</value>
   </data>
 </root>

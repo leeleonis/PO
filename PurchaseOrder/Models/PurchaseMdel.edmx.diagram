@@ -21,7 +21,7 @@
         <EntityTypeShape EntityType="PurchaseOrderModel.MenuLang" Width="1.5" PointX="3" PointY="2.5" />
         <EntityTypeShape EntityType="PurchaseOrderModel.PackageContent" Width="1.5" PointX="6" PointY="17.5" />
         <EntityTypeShape EntityType="PurchaseOrderModel.PackageContentLang" Width="1.5" PointX="8.25" PointY="20.5" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.PurchaseNote" Width="1.5" PointX="21.25" PointY="22.875" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.PurchaseNote" Width="1.5" PointX="23.5" PointY="22.625" />
         <EntityTypeShape EntityType="PurchaseOrderModel.PurchaseOrder" Width="1.5" PointX="19" PointY="16.875" />
         <EntityTypeShape EntityType="PurchaseOrderModel.PurchaseSKU" Width="1.5" PointX="23.5" PointY="14.25" />
         <EntityTypeShape EntityType="PurchaseOrderModel.ShippingMethod" Width="1.5" PointX="13.75" PointY="8" />
@@ -34,7 +34,6 @@
         <EntityTypeShape EntityType="PurchaseOrderModel.SkuPicture" Width="1.5" PointX="8.25" PointY="23.75" />
         <EntityTypeShape EntityType="PurchaseOrderModel.SkuType" Width="1.5" PointX="3.75" PointY="8.625" />
         <EntityTypeShape EntityType="PurchaseOrderModel.SkuTypeLang" Width="1.5" PointX="6" PointY="0.75" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.Transfer" Width="1.5" PointX="15.625" PointY="32" />
         <EntityTypeShape EntityType="PurchaseOrderModel.TransferSKU" Width="1.5" PointX="18.75" PointY="32.125" />
         <EntityTypeShape EntityType="PurchaseOrderModel.VendorLIst" Width="1.5" PointX="16.75" PointY="11.625" />
         <EntityTypeShape EntityType="PurchaseOrderModel.Warehouse" Width="1.5" PointX="13.75" PointY="18.375" />
@@ -67,9 +66,6 @@
         <AssociationConnector Association="PurchaseOrderModel.FK_SkuAttribute_SkuAttributeType" />
         <AssociationConnector Association="PurchaseOrderModel.FK_SkuAttributeLang_SkuAttribute" />
         <AssociationConnector Association="PurchaseOrderModel.FK_SkuTypeLang_SkuType" />
-        <AssociationConnector Association="PurchaseOrderModel.FK_Transfer_Warehouse" />
-        <AssociationConnector Association="PurchaseOrderModel.FK_Transfer_Warehouse1" />
-        <AssociationConnector Association="PurchaseOrderModel.FK_TransferSKU_Transfer" />
         <AssociationConnector Association="PurchaseOrderModel.FK_WarehouseSummary_Warehouse" />
         <AssociationConnector Association="PurchaseOrderModel.FK_WarehouseUser_Warehouse" />
         <AssociationConnector Association="PurchaseOrderModel.FK_PackageContent_SkuType" />
@@ -104,7 +100,14 @@
         <AssociationConnector Association="PurchaseOrderModel.FK_SerialsLlist_TransferSKU" />
         <AssociationConnector Association="PurchaseOrderModel.FK_ImgFile_PurchaseSKU" />
         <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseNote_CreditMemo" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.OrderLog" Width="1.5" PointX="16" PointY="24.375" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_OrderLog_Warehouse" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.Transfer" Width="1.5" PointX="16" PointY="28.5" />
         <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseNote_Transfer" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_Transfer_Warehouse" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_Transfer_Warehouse1" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_TransferSKU_Transfer" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_Transfer_WarehouseInterim" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

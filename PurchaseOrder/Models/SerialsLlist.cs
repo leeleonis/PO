@@ -35,6 +35,7 @@ namespace PurchaseOrderSys.Models
         public Nullable<int> OrderID { get; set; }
         public Nullable<int> RMAID { get; set; }
         public string SerialsType { get; set; }
+        public string Memo { get; set; }
     
         public virtual Orders Orders { get; set; }
         public virtual PurchaseSKU PurchaseSKU { get; set; }

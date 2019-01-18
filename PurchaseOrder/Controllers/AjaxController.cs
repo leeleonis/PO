@@ -416,6 +416,27 @@ namespace PurchaseOrderSys.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
+        public ActionResult OrderLogList(List<OrderLog> OrderLog)
+        {
+            AjaxResult result = new AjaxResult();
+            if (OrderLog.Any())
+            {
+                var SCIDList = db.WarehouseSummary.Where(x => x.IsEnable && x.Type == "SCID").Select(x => new { x.WarehouseID, SCID = x.Val }).ToList();
+                foreach (var item in OrderLog)
+                {
+                    if (!item.WarehouseID.HasValue)
+                    {
+                        item.WarehouseID = SCIDList.Where(x => x.SCID == item.SCID).FirstOrDefault()?.WarehouseID;
+                    }
+                }
+                db.OrderLog.AddRange(OrderLog);
+                db.SaveChanges();
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
         public ActionResult ShipmentByOrder(List<ShipmentOrder> ShipmentOrder)
         {
             AjaxResult result = new AjaxResult();
