@@ -661,7 +661,7 @@
         var tableID = "#DataGridC";
         var DataGridC;
         $(document).ready(function () {
-             DataGridC = $(tableID).DataTable({
+            DataGridC = $(tableID).DataTable({
                 fixedHeader: {
                     header: true,
                     footer: true
@@ -830,6 +830,24 @@
                     $('tr:eq(10) td:eq(1)', api.table().footer()).html(thousandComma(Balance));
                 }
             });
+            //DataGridC.on("click", "th.select-checkbox", function () {
+            //    if ($("th.select-checkbox").hasClass("selected")) {
+            //        DataGridC.rows().deselect();
+            //        $("th.select-checkbox").removeClass("selected");
+            //    } else {
+            //        DataGridC.rows().select();
+            //        $("th.select-checkbox").addClass("selected");
+            //    }
+            //}).on("select deselect", function () {
+            //    ("Some selection or deselection going on")
+            //    if (DataGridC.rows({
+            //        selected: true
+            //    }).count() !== example.rows().count()) {
+            //        $("th.select-checkbox").removeClass("selected");
+            //    } else {
+            //        $("th.select-checkbox").addClass("selected");
+            //    }
+            //});
             $("#gebruikerId").select2({
                 minimumInputLength: 1,
                 placeholder: "Search",

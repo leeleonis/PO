@@ -164,11 +164,7 @@
                                                                                             var WarehouseSummary = item.WarehouseSummary.Where(x => x.IsEnable && x.Type == "SCID");
                                                                                             if (WarehouseSummary.Any())
                                                                                             {
-                                                                                                foreach (var WarehouseSummaryitem in WarehouseSummary)
-                                                                                                {
-
-
-                                                                                                }
+                                                                                                textVal = WarehouseSummary.FirstOrDefault().Val;
                                                                                             }
                                                                                             <tr>
                                                                                                 <td> SC Warehouse ID:</td>

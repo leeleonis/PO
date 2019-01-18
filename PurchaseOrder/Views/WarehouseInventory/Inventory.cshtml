@@ -57,18 +57,16 @@
                                                             @foreach (var item in Model)
                                                             {
                                                                 <tr>
-
                                                                     <td>@(item.ID)</td>
                                                                     <td>@(item.Warehouse)</td>
                                                                     <td>@(item.Type)</td>
                                                                     <td>@item.Available</td>
                                                                     <td>@item.Awaiting</td>
                                                                     <td>@item.Aggregate</td>
-                                                                    <td>@item.TransferOutQTY</td>
-                                                                    <td>0</td>
-                                                                    <td>0</td>
+                                                                    <td>@item.Unfulfillable</td>
+                                                                    <td>@item.Total</td>
+                                                                    <td>@item.Value</td>
                                                                 </tr>
-
                                                             }
                                                         </tbody>
                                                     </table>

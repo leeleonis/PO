@@ -154,7 +154,7 @@ namespace PurchaseOrderSys.Controllers
         private int GetPOQty(PurchaseSKU PurchaseSKU)
         {
             var count = 0;
-            if (PurchaseSKU.QTYFulfilled.HasValue)
+            if (PurchaseSKU.QTYFulfilled.HasValue && PurchaseSKU.QTYFulfilled > 0)
             {
                 count = PurchaseSKU.QTYFulfilled.Value;
             }
@@ -217,12 +217,13 @@ namespace PurchaseOrderSys.Controllers
                     Aggregate = 0,//可上架的庫存總數
                                   // Awaiting = GetAwaitingCount(item.SkuNo, GetSCID(item)),//等待出貨的庫總量
                     Unfulfillable = 0,
-                    Total = 0,
+                    Total = PurchaseSKU.Sum(x => x.SerialsLlist.Sum(t => t.SerialsQTY)) ?? 0,
                     BackOrdered = item.QTYOrdered ?? 0,
                     CMQTY = GetCMQty(item),
                     TransferInQTY = GetTransferInQTY(item),
                     TransferOutQTY = GetTransferOutQTY(item),
-                    OrderQTY = GetOrderQTY(item)
+                    OrderQTY = GetOrderQTY(item),
+                    Value = GetValue(item)
                 });
             }
 
@@ -245,11 +246,22 @@ namespace PurchaseOrderSys.Controllers
             {
                 item.Awaiting = AwaitingCountlist.Where(x => x.SKU == SKU && x.SCID == item.SCID).FirstOrDefault()?.QTY ?? 0;
                 item.Available = item.POQTY + item.CMQTY + item.OrderQTY + item.TransferInQTY + item.TransferOutQTY;
-                item.Unfulfillable = item.TransferInQTY - item.TransferOutQTY;
+                item.Unfulfillable = item.TransferInQTY + item.TransferOutQTY;
                 item.Aggregate = item.Available - item.Awaiting;//Aggregate = Fulfillable - Awaiting dispatch
             }
             return View(GroupSkuInventoryVM);
         }
+
+        /// <summary>
+        /// 該序號/單品的價值
+        /// </summary>
+        /// <param name="PurchaseSKU"></param>
+        /// <returns></returns>
+        private Decimal GetValue(PurchaseSKU PurchaseSKU)
+        {
+            return (PurchaseSKU.Price - PurchaseSKU.Discount) ?? 0;
+        }
+
         /// <summary>
         /// 取SCID
         /// </summary>
