@@ -62,7 +62,7 @@ namespace NetoDeveloper
 
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Item", Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public UpdateItemResponseItem[] Item
+        public dynamic Item
         {
             get
             {
@@ -70,7 +70,18 @@ namespace NetoDeveloper
             }
             set
             {
-                this.itemField = value;
+                switch (value.GetType().Name)
+                {
+                    case "JObject":
+                        this.itemField = new UpdateItemResponseItem[] { value.ToObject<UpdateItemResponseItem>() };
+                        break;
+                    case "JArray":
+                        this.itemField = value.ToObject<UpdateItemResponseItem[]>();
+                        break;
+                    default:
+                        var nVal = value;
+                        break;
+                }
             }
         }
 

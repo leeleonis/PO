@@ -276,51 +276,12 @@ namespace PurchaseOrderSys.Controllers
             return 1;
         }
 
-        public void SkuUpdate(string skuID)
+        public void SkuUpdate(string Sku)
         {
-            NetoApi neto = new NetoApi();
-            string LangID = EnumData.DataLangList().First().Key;
-
-            var sku = db.SKU.Find(skuID);
-            var skuLang = sku.SkuLang.First(l => l.LangID.Equals(sku.SkuLang.Any(ll => ll.LangID.Equals(LangID)) ? LangID : sku.SkuLang.First().LangID));
-            var skuType = sku.SkuType;
-            var eBayTitle = !string.IsNullOrEmpty(sku.eBayTitle) ? JsonConvert.DeserializeObject<Dictionary<int, string>>(sku.eBayTitle) : new Dictionary<int, string> { };
-
-            var netoSku = neto.GetItemBySku(skuID).Item.First();
-            var categories = (NetoDeveloper.GetItemResponseItemCategory[])netoSku.Categories.First().Category;
-            var update = new NetoDeveloper.UpdateItemItem()
-            {
-                Active = Convert.ToBoolean(sku.Status),
-                ActiveSpecified = true,
-                Approved = netoSku.Approved,
-                ApprovedSpecified = netoSku.ApprovedSpecified,
-                InventoryID = netoSku.InventoryID,
-                SKU = sku.SkuID,
-                Brand = sku.GetBrand.Name,
-                Categories = categories.Select(c => new NetoDeveloper.UpdateItemItemCategory() { CategoryID = c.CategoryID, Priority = c.Priority }).ToArray(),
-                CostPrice = 0,
-                DefaultPrice = 0,
-                PromotionPrice = 0,
-                Name = skuLang.Name,
-                Model = skuLang.Name,
-                ModelNumber = skuLang.Model,
-                Description = skuLang.Description,
-                Specifications = skuLang.SpecContent,
-                ParentSKU = sku.ParentSku,
-                UPC = sku.UPC,
-                Type = skuType.SkuTypeLang.First(l => l.LangID.Equals(skuType.SkuTypeLang.Any(ll => ll.LangID.Equals(LangID)) ? LangID : sku.SkuLang.First().LangID)).Name,
-
-                Misc01 = skuLang.PackageContent,
-                Misc02 = eBayTitle.ContainsKey(2) ? eBayTitle[2] : "",
-                Misc19 = eBayTitle.ContainsKey(19) ? eBayTitle[19] : "",
-                Misc50 = eBayTitle.ContainsKey(50) ? eBayTitle[50] : "",
-                Misc24 = eBayTitle.ContainsKey(24) ? eBayTitle[24] : "",
-                Misc25 = eBayTitle.ContainsKey(25) ? eBayTitle[25] : "",
-                Misc23 = eBayTitle.ContainsKey(23) ? eBayTitle[23] : "",
-                Misc21 = eBayTitle.ContainsKey(21) ? eBayTitle[21] : "",
-                Misc20 = eBayTitle.ContainsKey(20) ? eBayTitle[20] : "",
-                Misc22 = eBayTitle.ContainsKey(22) ? eBayTitle[22] : ""
-            };
+            StockKeepingUnit SKU = new StockKeepingUnit(Sku);
+            SKU.UpdateSkuToNeto();
+            var netoApi = new NetoApi();
+            var skuData = netoApi.GetItemBySku(Sku);
         }
 
         public void GetCustomer()
