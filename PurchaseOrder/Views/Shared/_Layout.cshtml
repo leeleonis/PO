@@ -93,6 +93,7 @@
         }
         var oTable;
         $(document).ready(function () {
+            $("form").validate(); 
             $("form").makeValidationInline();
             $("button[type='submit']").click(function () {
                 $(this).prop("disabled", "disabled");

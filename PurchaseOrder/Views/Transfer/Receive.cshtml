@@ -46,50 +46,7 @@
                                                                         <th>Download</th>
                                                                     </tr>
                                                                 </thead>
-                                                                <tbody>
-                                                                    @*@foreach (var item in Model.TransferSKU)
-                                                                        {
-                                                                            var rowspan = item.SerialsLlist.Count();
-                                                                            if (rowspan == 0)
-                                                                            {
-                                                                                <tr>
-                                                                                    <td>@item.SkuNo</td>
-                                                                                    <td>@item.Name</td>
-                                                                                    <td>@item.QTY/@rowspan</td>
-                                                                                    <td></td>
-                                                                                    <td></td>
-                                                                                    <td></td>
-                                                                                </tr>
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                var i = 0;
-                                                                                foreach (var SerialsLlist in item.SerialsLlist)
-                                                                                {
-                                                                                    if (i == 0)
-                                                                                    {
-                                                                                        <tr>
-                                                                                            <td rowspan="@rowspan">@item.SkuNo</td>
-                                                                                            <td rowspan="@rowspan">@item.Name</td>
-                                                                                            <td rowspan="@rowspan">@item.QTY/@rowspan</td>
-                                                                                            <td>@SerialsLlist.SerialsNo</td>
-                                                                                            <td>Label</td>
-                                                                                            <td>Download</td>
-                                                                                        </tr>
-                                                                                        i++;
-                                                                                    }
-                                                                                    else
-                                                                                    {
-                                                                                        <tr>
-                                                                                            <td>@SerialsLlist.SerialsNo</td>
-                                                                                            <td>Label</td>
-                                                                                            <td>Download</td>
-                                                                                        </tr>
-                                                                                        i++;
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }*@
+                                                                <tbody>     
                                                                 </tbody>
                                                             </table>
                                                         </div>
@@ -100,8 +57,8 @@
                                     </div>
                                 </div>
                                 <div class="widget-footer">
-                                   <button type="submit" class="btn btn-primary" id="save">儲存</button>
-                                    @*<button type="button" class="btn btn-primary" id="saveexit">儲存並返回</button>*@
+                                    <button type="submit" class="btn btn-primary" id="save">儲存</button>
+                                    <button type="button" class="btn btn-primary" id="saveexit">儲存並返回</button>
                                     <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index")'">返回</button>
                                 </div>
                             </form>

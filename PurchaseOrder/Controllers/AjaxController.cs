@@ -499,7 +499,7 @@ namespace PurchaseOrderSys.Controllers
                 }
                 else
                 {
-                    NoDataList.Add(Serialsitem.OrderID + "：(" + Serialsitem.OrderID + ";" + Serialsitem.SkuNo + ";" + Serialsitem.SerialsNo + ")");
+                    NoDataList.Add(Serialsitem.OrderID + "：(SKU：" + Serialsitem.SkuNo + ";Serial：" + Serialsitem.SerialsNo + ")");
                 }
             }
             if (NoDataList.Any())

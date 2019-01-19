@@ -112,17 +112,17 @@ namespace PurchaseOrderSys.Controllers
         }
         [HttpPost]
         public ActionResult Edit(Transfer Transfer, bool? saveexit)
-        {
+        {          
             var dt = DateTime.UtcNow;
             var oTransfer = db.Transfer.Find(Transfer.ID);
-            oTransfer.ExternalTra = Transfer.ExternalTra;
-            oTransfer.Title = Transfer.Title;
-            oTransfer.FromWID = Transfer.FromWID;
-            oTransfer.ToWID = Transfer.ToWID;
-            oTransfer.Status = Transfer.Status;
-            oTransfer.Interim = Transfer.Interim;
-            oTransfer.Carrier = Transfer.Carrier;
-            oTransfer.Tracking = Transfer.Tracking;
+            if (!string.IsNullOrWhiteSpace(Transfer.ExternalTra)) oTransfer.ExternalTra = Transfer.ExternalTra;
+            if (!string.IsNullOrWhiteSpace(Transfer.Title)) oTransfer.Title = Transfer.Title;
+            if (Transfer.FromWID.HasValue) oTransfer.FromWID = Transfer.FromWID;
+            if (Transfer.ToWID.HasValue) oTransfer.ToWID = Transfer.ToWID;
+            if (!string.IsNullOrWhiteSpace(Transfer.Status)) oTransfer.Status = Transfer.Status;
+            if (Transfer.Interim.HasValue) oTransfer.Interim = Transfer.Interim;
+            if (!string.IsNullOrWhiteSpace(Transfer.Carrier)) oTransfer.Carrier = Transfer.Carrier;
+            if (!string.IsNullOrWhiteSpace(Transfer.Tracking)) oTransfer.Tracking = Transfer.Tracking;
             oTransfer.UpdateBy = UserBy;
             oTransfer.UpdateAt = dt;
 
@@ -304,7 +304,7 @@ namespace PurchaseOrderSys.Controllers
             }
             if (saveexit.HasValue && saveexit.Value)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Edit", new { ID });
             }
             else
             {
@@ -457,10 +457,18 @@ namespace PurchaseOrderSys.Controllers
            };
             return Json(returnObj, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult Requst(int ID)
+        public ActionResult Requested(int ID)
         {
             var Transfer = db.Transfer.Find(ID);
-            Transfer.Status = "Requested";
+            if (Transfer.Status == "Pending")
+            {
+                Transfer.Status = "Requested";
+            }
+            else
+            {
+                Transfer.Status = "Pending";
+            }
+           
             Transfer.UpdateBy = UserBy;
             Transfer.UpdateAt = DateTime.UtcNow;
             db.SaveChanges();
@@ -469,8 +477,14 @@ namespace PurchaseOrderSys.Controllers
         }
         public ActionResult Ship(int ID)
         {
-          
-            return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+            var Transfer= db.Transfer.Find(ID);
+            Transfer.Status = "Shipped";
+            Transfer.UpdateBy = UserBy;
+            Transfer.UpdateAt = DateTime.UtcNow;
+            db.SaveChanges();
+
+            return RedirectToAction("Edit", new { ID });
+            //return Json(new { status = true }, JsonRequestBehavior.AllowGet);
         }
         //public ActionResult GetShippingList(int WarehouseID)
         //{

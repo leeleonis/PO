@@ -17,12 +17,12 @@ namespace PurchaseOrderSys.Controllers
             ViewBag.WarehouseID = ID;
             var SCID = db.WarehouseSummary.Where(x => x.WarehouseID == ID && x.Type == "SCID").FirstOrDefault().Val;
             var AllSKUList = db.SKU.Where(x => x.IsEnable && x.Status == 1).Select(x => new { x.SkuID, x.SkuLang.FirstOrDefault().Name }).ToList();
-            var PurchaseSKU = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.Warehouse1.ID == ID).Include(x => x.SerialsLlist);
+            var PurchaseSKU = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.Warehouse1.ID == ID).Include(x => x.SerialsLlist).ToList();
             var WarehouseInventoryVM = new WarehouseInventoryVM();
 
             if (!string.IsNullOrWhiteSpace(Product))
             {
-                PurchaseSKU = PurchaseSKU.Where(x => x.SkuNo == Product);
+                PurchaseSKU = PurchaseSKU.Where(x => x.SkuNo == Product).ToList();
             }
 
             var Awaitinglist = GetAwaitingCount("", SCID);

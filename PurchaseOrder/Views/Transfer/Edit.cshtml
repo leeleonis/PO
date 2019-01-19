@@ -5,6 +5,8 @@
     var TransferStatusDDL = EnumData.TransferStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var DefaultSelect = PurchaseOrderSys.App_GlobalResources.Resource.DefaultSelect;
     var ShippingList = new PurchaseOrderSys.Api.Shipping_API().ShippingList().data.shippingMethod.Select(x => new SelectListItem { Text = x.text, Value = x.value.ToString() }).ToList();
+    var disabled = "disabled";
+    var TStatus = Model.Status;
 }
 <style>
     .error {
@@ -43,35 +45,35 @@
                                                 </div>
                                                 @Html.Label("External Transfer #:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("ExternalTra", new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.Editor("ExternalTra", new { htmlAttributes = new { @class = "form-control "+ TStatus, disabled } })
                                                 </div>
                                                 @Html.Label("Status:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownListFor(model => model.Status, TransferStatusDDL, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.DropDownListFor(model => model.Status, TransferStatusDDL, htmlAttributes: new { @class = "form-control " + TStatus, disabled })
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 @Html.Label("From:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownList("FromWID", Warehouselist, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.DropDownList("FromWID", Warehouselist, DefaultSelect, htmlAttributes: new { @class = "form-control "+ TStatus, disabled })
                                                 </div>
                                                 @Html.Label("Interim:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownList("Interim", Warehouselist, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.DropDownList("Interim", Warehouselist, DefaultSelect, htmlAttributes: new { @class = "form-control "+ TStatus, disabled })
                                                 </div>
                                                 @Html.Label("To", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownList("ToWID", Warehouselist, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.DropDownList("ToWID", Warehouselist, DefaultSelect, htmlAttributes: new { @class = "form-control "+ TStatus, disabled })
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 @Html.Label("Carrier:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownList("Carrier", ShippingList, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.DropDownList("Carrier", ShippingList, DefaultSelect, htmlAttributes: new { @class = "form-control "+ TStatus, disabled })
                                                 </div>
                                                 @Html.Label("Tracking:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Tracking", new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.Editor("Tracking", new { htmlAttributes = new { @class = "form-control "+ TStatus, disabled } })
                                                 </div>
                                                 @Html.Label("Title", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
@@ -83,14 +85,35 @@
                                             <legend></legend>
                                             <div class="form-group">
                                                 <div class="col-sm-9  col-lg-8">
-                                                    <a type="button" href="@Url.Action("Prep",new { Model.ID})" class='btn btn-default btn-sm' id='Prep'>Prep</a>
-                                                    <a type="button" href="@Url.Action("Requst",new { Model.ID})" class='btn btn-default btn-sm' id='Requst'>Requst</a>
-                                                    <a type="button" href="@Url.Action("Ship",new { Model.ID})" class='btn btn-default btn-sm' id='Ship'>Ship</a>
-                                                    <a type="button" href="@Url.Action("Receive",new { Model.ID})" class='btn btn-default btn-sm' id='Receive'>Receive</a>
-                                                    @*<a type="button" href="@Url.Action("PrintAWB",new { Model.ID})" class='btn btn-default btn-sm' id='btn-Add'>Print AWB</a>
-                                                    <a type="button" href="@Url.Action("Unrequest",new { Model.ID})" class='btn btn-default btn-sm' id='btn-Add'>Unrequest</a>
-                                                    <a type="button" href="@Url.Action("Save",new { Model.ID})" class='btn btn-default btn-sm' id='btn-Add'>Save</a>
-                                                    <a type="button" href="@Url.Action("Delete",new { Model.ID})" class='btn btn-default btn-sm' id='btn-Add'>Delete</a>*@
+                                                    @if (Model.Status == "Pending")
+                                                    {
+                                                        <a type="button" href="@Url.Action("Requested",new { Model.ID})" class='btn btn-default btn-sm' id='Request'>Request</a>
+                                                    }
+                                                    else if (Model.Status == "Requested")
+                                                    {
+                                                        <a type="button" href="@Url.Action("Prep",new { Model.ID})" class='btn btn-default btn-sm' id='Prep'>Prep</a>
+                                                        <a type="button" href="@Url.Action("Requested",new { Model.ID})" class='btn btn-default btn-sm' id='Request'>UnRequest</a>
+                                                        <a type="button" href="@Url.Action("PrintAWB",new { Model.ID})" class='btn btn-default btn-sm' id='PrintAWB'>Print AWB</a>
+                                                        <a type="button" href="@Url.Action("Ship",new { Model.ID})" class='btn btn-default btn-sm' id='Ship'>Ship</a>
+                                                    }
+                                                    else if (Model.Status == "Shipped")
+                                                    {
+                                                        <a type="button" href="@Url.Action("Receive",new { Model.ID})" class='btn btn-default btn-sm' id='Receive'>Receive</a>
+
+                                                    }
+                                                    else if (Model.Status == "Received")
+                                                    {
+
+
+                                                    }
+                                                    else if (Model.Status == "Completed")
+                                                    {
+
+                                                    }
+                                                    @*
+        <a type="button" href="@Url.Action("Unrequest",new { Model.ID})" class='btn btn-default btn-sm' id='btn-Add'>Unrequest</a>
+        <a type="button" href="@Url.Action("Save",new { Model.ID})" class='btn btn-default btn-sm' id='btn-Add'>Save</a>
+        <a type="button" href="@Url.Action("Delete",new { Model.ID})" class='btn btn-default btn-sm' id='btn-Add'>Delete</a>*@
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -134,14 +157,17 @@
                                                                     }
                                                                 }*@
                                                         </tbody>
-                                                        <tfoot>
-                                                            <tr>
-                                                                <td colspan="10">
-                                                                    <select id="gebruikerId" name="gebruikerId" class=" form-control" style="width:50%"></select>
-                                                                    <button type="button" id="addsku">Add SKU</button>
-                                                                </td>
-                                                            </tr>
-                                                        </tfoot>
+                                                        @if (Model.Status == "Pending")
+                                                        {
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <td colspan="10">
+                                                                        <select id="gebruikerId" name="gebruikerId" class=" form-control" style="width:50%"></select>
+                                                                        <button type="button" id="addsku">Add SKU</button>
+                                                                    </td>
+                                                                </tr>
+                                                            </tfoot>
+                                                        }
                                                     </table>
                                                 </article>
                                             </div>
@@ -169,6 +195,7 @@
         var DataGrid;
         var tableID = "#DataGrid";
         $(document).ready(function () {
+            $(".Pending").prop("disabled", false);
              DataGrid = $(tableID).DataTable({
                 fixedHeader: {
                     header: true,
@@ -194,7 +221,14 @@
                         "defaultContent": '' },
                     { data: "SKU" },
                     { data: "ProductName" },
-                    { data: "QTY", render: function (data, type, row) { return '<input class="form-control Requstchk" type="text" onchange="TSkuNumberListQTY(this,\'' + row.SKU + '\',' + data + ')"  value = ' +data + ' > '; } },
+                    @if (Model.Status== "Pending")
+                    {
+                        @:{ data: "QTY", render: function (data, type, row) { return '<input class="form-control" type="text" onchange="TSkuNumberListQTY(this,\'' + row.SKU + '\',' + data + ')"  value = ' + data + ' > '; } },
+                    }
+                    else
+                    {
+                        @: { data: "QTY", render: function(data, type, row) { return data; } },
+                    }
                     { data: "Serial", render: function (data, type, row) { return thousandComma(data); } },
                     { data: "Label", render: function (data, type, row) { return thousandComma(data); }  },
                     { data: "TotalReceive", render: function (data, type, row) { return thousandComma(data); } },
@@ -219,7 +253,8 @@
                 "paging": false,
                 "ordering": false,
                 "info": true,
-                "searching": false, "footerCallback": function (row, data, start, end, display) {
+                 "searching": false,
+                 "footerCallback": function (row, data, start, end, display) {
                 }
             });
             $(tableID + ' tbody').on('click', 'td.details-control', function () {
@@ -292,31 +327,34 @@
 
                 }
             });
-            $("#Requst").click(function () {
+            $("#Request").click(function () {
                 var Msg = "";
-                $("table").find(".Requstchk").each(function () {
+                $("table").find("input[type='text']").each(function () {
                     if ($(this).val() < 1) {
                         $(this).closest("td").addClass("error");
                         Msg = "Err"
                     }
                 })
                 if (Msg == "") {
-                    $.ajax({
-                        url: $(this).attr("href"),
-                        success: function (data) {
-                            if (data.status) {
-
-                                window.location.reload();
-                            }
-                            else {
-                                alert(data.Errmsg)
-                            }
-                        }
-                    })
+                    ajaxpost(this)
                 }
                 return false;
             });
         });
+        function ajaxpost(e) {
+            $.ajax({
+                url: $(e).attr("href"),
+                success: function (data) {
+                    if (data.status) {
+
+                        window.location.reload();
+                    }
+                    else {
+                        alert(data.Errmsg)
+                    }
+                }
+            })
+        }
         function GetSerialList(d) {
             var div = $('<div style="border:2px blue solid;" />').addClass('loading').text('Loading...');
             $.ajax({
