@@ -366,8 +366,6 @@
           <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
           <Property Name="UpdateAt" Type="datetime" />
         </EntityType>
-        <!--產生期間發現錯誤:
-警告 6002: 資料表/檢視 'InventorySKU.dbo.OrderLog' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
         <EntityType Name="OrderLog">
           <Key>
             <PropertyRef Name="ID" />
@@ -1578,6 +1576,7 @@
           <EntitySet Name="Menu" EntityType="Self.Menu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MenuLang" EntityType="Self.MenuLang" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NetoGroup" EntityType="Self.NetoGroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderLog" EntityType="Self.OrderLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PackageContent" EntityType="Self.PackageContent" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PackageContentLang" EntityType="Self.PackageContentLang" Schema="dbo" store:Type="Tables" />
@@ -1603,18 +1602,6 @@
           <EntitySet Name="Warehouse" EntityType="Self.Warehouse" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WarehouseSummary" EntityType="Self.WarehouseSummary" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WarehouseUser" EntityType="Self.WarehouseUser" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="OrderLog" EntityType="Self.OrderLog" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [OrderLog].[ID] AS [ID], 
-    [OrderLog].[SCID] AS [SCID], 
-    [OrderLog].[SkuNo] AS [SkuNo], 
-    [OrderLog].[Qty] AS [Qty], 
-    [OrderLog].[State] AS [State], 
-    [OrderLog].[Date] AS [Date], 
-    [OrderLog].[WarehouseID] AS [WarehouseID], 
-    [OrderLog].[OrderID] AS [OrderID]
-    FROM [dbo].[OrderLog] AS [OrderLog]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="FK_AdminUser_AdminGroup" Association="Self.FK_AdminUser_AdminGroup">
             <End Role="AdminGroup" EntitySet="AdminGroup" />
             <End Role="AdminUser" EntitySet="AdminUser" />

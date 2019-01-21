@@ -419,7 +419,11 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult OrderLogList(List<OrderLog> OrderLog)
         {
             AjaxResult result = new AjaxResult();
-            if (OrderLog.Any())
+
+            //OrderLog = new List<OrderLog>();
+            //OrderLog.Add(new OrderLog { OrderID = 5563222, SCID = "109", SkuNo = "106008065", Qty = 1, State = "Completed", Date = DateTime.UtcNow });
+
+            if (OrderLog != null && OrderLog.Any())
             {
                 var SCIDList = db.WarehouseSummary.Where(x => x.IsEnable && x.Type == "SCID").Select(x => new { x.WarehouseID, SCID = x.Val }).ToList();
                 foreach (var item in OrderLog)
@@ -428,11 +432,24 @@ namespace PurchaseOrderSys.Controllers
                     {
                         item.WarehouseID = SCIDList.Where(x => x.SCID == item.SCID).FirstOrDefault()?.WarehouseID;
                     }
+                    //db.OrderLog.Add(new OrderLog
+                    //{
+                    //    Date = item.Date,
+                    //    OrderID = item.OrderID,
+                    //    Qty = item.Qty,
+                    //    SCID = item.SCID,
+                    //    SkuNo = item.SkuNo,
+                    //    State = item.State,
+                    //    WarehouseID = item.WarehouseID
+                    //});
                 }
                 db.OrderLog.AddRange(OrderLog);
                 db.SaveChanges();
             }
-
+            else
+            {
+                result.SetError("沒有資料");
+            }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
