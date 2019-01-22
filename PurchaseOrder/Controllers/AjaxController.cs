@@ -398,7 +398,7 @@ namespace PurchaseOrderSys.Controllers
                             optionList.Add(type, db.SkuTypeLang.AsNoTracking().Where(l => l.LangID.Equals(LangID)).Select(l => new { text = l.Name, value = l.TypeID.ToString() }));
                             break;
                         case "SkuStatus":
-                            optionList.Add(type, Enum.GetValues(typeof(EnumData.SkuStatus)).Cast<EnumData.SkuStatus>().Select(s => new { text = s.ToString(), value = (byte)s }));
+                            optionList.Add(type, Enum.GetValues(typeof(EnumData.SkuStatus)).Cast<EnumData.SkuStatus>().Select(s => new { text = s.ToString(), value = ((byte)s).ToString() }));
                             break;
                         case "Company":
                             optionList.Add(type, db.Company.Where(c => c.IsEnable).Select(c => new { text = c.Name, value = c.ID.ToString() }));

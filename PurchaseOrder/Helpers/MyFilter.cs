@@ -92,6 +92,8 @@ namespace PurchaseOrderSys
         public string UPC { get { return upcField; } set { upcField = !string.IsNullOrEmpty(value) ? value.Trim() : value; } }
         public string EAN { get { return eanField; } set { eanField = !string.IsNullOrEmpty(value) ? value.Trim() : value; } }
         public Nullable<bool> Replenishable { get; set; }
+        public Nullable<bool> SerialTracking { get; set; }
+        public Nullable<bool> Battery { get; set; }
         public Nullable<byte> Status { get; set; }
     }
 

@@ -16,7 +16,7 @@ namespace PurchaseOrderSys.Controllers
     [CheckSession]
     public class SkuController : BaseController
     {
-        readonly string[] EditList = new string[] { "ParentSku", "Condition", "Category", "Brand", "EAN", "UPC", "Replenishable", "Status" };
+        readonly string[] EditList = new string[] { "ParentSku", "Condition", "Category", "Brand", "EAN", "UPC", "Replenishable", "SerailTracking", "Battery", "Status" };
 
         // GET: Sku
         public ActionResult Index()
@@ -553,6 +553,8 @@ namespace PurchaseOrderSys.Controllers
             if (!string.IsNullOrEmpty(filter.UPC)) SkuFilter = SkuFilter.Where(s => s.UPC.Contains(filter.UPC));
             if (!string.IsNullOrEmpty(filter.EAN)) SkuFilter = SkuFilter.Where(s => s.EAN.Contains(filter.EAN));
             if (filter.Replenishable.HasValue) SkuFilter = SkuFilter.Where(s => s.Replenishable.Equals(filter.Replenishable.Value));
+            if (filter.SerialTracking.HasValue) SkuFilter = SkuFilter.Where(s => s.SerialTracking.Equals(filter.SerialTracking.Value));
+            if (filter.Battery.HasValue) SkuFilter = SkuFilter.Where(s => s.Battery.Equals(filter.Battery.Value));
             if (filter.Status.HasValue) SkuFilter = SkuFilter.Where(s => s.Status.Equals(filter.Status.Value));
 
             if (SkuFilter.Any())
@@ -573,6 +575,8 @@ namespace PurchaseOrderSys.Controllers
                     s.UPC,
                     s.EAN,
                     s.Replenishable,
+                    s.SerialTracking,
+                    s.Battery,
                     s.Status
                 }).ToList());
             }
