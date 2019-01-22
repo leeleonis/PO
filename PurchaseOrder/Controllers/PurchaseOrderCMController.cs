@@ -16,6 +16,171 @@ namespace PurchaseOrderSys.Controllers
             Session["CreditMemoVM"] = CreditMemoVM;
             return View(CreditMemoVM);
         }
+        public ActionResult CreateCM(int ID, int[] Skulist, string CMTypeVal = "CreditNote")
+        {
+            Session["CMPurchaseNote"] = null;
+            Session["CMSkuNumberList"] = null;
+            var PurchaseOrder = db.PurchaseOrder.Find(ID);
+            var cmvm = new CMVM
+            {
+                PurchaseOrderID = PurchaseOrder.ID,
+                CompanyID = PurchaseOrder.CompanyID,
+                VendorID = PurchaseOrder.VendorID,
+                InvoiceDate = PurchaseOrder.InvoiceDate,
+                InvoiceNo = PurchaseOrder.InvoiceNo,
+                ShippedDate = PurchaseOrder.ShippedDate,
+                Carrier = PurchaseOrder.Carrier,
+                Tracking = PurchaseOrder.Tracking,
+                CMType = CMTypeVal,
+                WarehouseID = PurchaseOrder.WarehouseID,
+                Tax = PurchaseOrder.Tax,
+                Currency = PurchaseOrder.Currency
+            };
+            var PurchaseSKUList = PurchaseOrder.PurchaseSKU.Where(x => x.IsEnable);
+            if (Skulist != null && Skulist.Any())
+            {
+                PurchaseSKUList = PurchaseSKUList.Where(x => Skulist.Contains(x.ID));
+            }
+            var dataList = PurchaseSKUList.Select(x => new CMSKUVM
+            {
+                ID = x.ID,
+                ck = x.SkuNo,
+                sk = x.SkuNo,
+                Name = x.Name,
+                SKU = x.SkuNo,
+                VendorSKU = x.VendorSKU,
+                QTYOrdered = x.QTYOrdered,
+                QTYReceived = x.QTYReceived ?? 0,
+                QTYReturned = x.QTYReturned ?? 0,
+                CreditQTY = x.CreditQTY ?? 0,
+                Credit = x.Credit ?? 0,
+                Subtotal = (x.CreditQTY * x.Credit) ?? 0,
+                Model = "L"
+            });
+            Session["CMSkuNumberList"] = dataList.ToList();
+            return View(cmvm);
+        }
+        [HttpPost]
+        public ActionResult CreateCM(CreditMemo filter, IEnumerable<HttpPostedFileBase> VendorCM)
+        {
+            var CreditMemo = new CreditMemo
+            {
+                IsEnable = true,
+                PurchaseOrderID = filter.PurchaseOrderID,
+                CompanyID = filter.CompanyID,
+                VendorID = filter.VendorID,
+                InvoiceDate = filter.InvoiceDate,
+                InvoiceNo = filter.InvoiceNo,
+                CMDate = filter.CMDate ?? DateTime.Today,
+                CMStatus = filter.CMStatus,
+                CMType = filter.CMType,
+                ShippingStatus = filter.ShippingStatus,
+                ShippedDate = filter.ShippedDate,
+                Carrier = filter.Carrier,
+                Tracking = filter.Tracking,
+                CreditStatus = filter.CreditStatus,
+                CreditDate = filter.CreditDate,
+                CreditAmount = filter.CreditAmount,
+                CreateBy = UserBy,
+                CreateAt = DateTime.UtcNow
+            };
+            db.CreditMemo.Add(CreditMemo);
+            var dataList = (List<CMSKUVM>)Session["CMSkuNumberList"];
+            if (dataList != null)
+            {
+                var PurchaseSKUlist = dataList.Select(x => new PurchaseSKU
+                {
+                    IsEnable = true,
+                    Name = x.Name,
+                    SkuNo = x.SKU,
+                    VendorSKU = string.IsNullOrWhiteSpace(x.VendorSKU) ? x.SKU : x.VendorSKU,
+                    QTYOrdered = x.QTYOrdered,
+                    QTYReturned = x.QTYReturned,
+                    CreditQTY = x.CreditQTY,
+                    Credit = x.Credit,
+                    QTYReceived = x.QTYReceived,
+                    CreateBy = UserBy,
+                    CreateAt = DateTime.UtcNow
+                });
+                foreach (var item in PurchaseSKUlist)
+                {
+                    CreditMemo.PurchaseSKU.Add(item);
+                }
+            }
+            if (VendorCM != null && VendorCM.Any())
+            {
+                foreach (var file in VendorCM)
+                {
+                    if (file != null)
+                    {
+                        var Url = SaveImg(file);
+                        CreditMemo.ImgFile.Add(new ImgFile
+                        {
+                            IsEnable = true,
+                            ImgType = "VendorCM",
+                            Url = Url,
+                            CreateBy = UserBy,
+                            CreateAt = DateTime.UtcNow
+                        });
+                    }
+
+                }
+            }
+            var CMPurchaseNote = (List<PurchaseNote>)Session["CMPurchaseNote"];
+            if (CMPurchaseNote != null)
+            {
+                foreach (var item in CMPurchaseNote)
+                {
+                    if (item.NoteType != "txt" && item.NoteType != "Url")
+                    {
+                        item.Note = SaveImg(item.Note, item.NoteType);
+                        item.NoteType = "Url";
+                    }
+                    CreditMemo.PurchaseNote.Add(item);
+                }
+            }
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+        [HttpPost]
+        public ActionResult DeleteData(int[] IDList)
+        {
+            var Msg = new List<string>();
+            var UpdateAt = DateTime.UtcNow;
+            foreach (var ID in IDList)
+            {
+                var CreditMemo = db.CreditMemo.Find(ID);
+                if (CreditMemo.CMStatus == "Opened")
+                {
+                    CreditMemo.IsEnable = false;
+                    CreditMemo.UpdateAt = UpdateAt;
+                    CreditMemo.UpdateBy = UserBy;
+                    foreach (var item in CreditMemo.PurchaseSKU)
+                    {
+
+                        if (item.SerialsLlist.Any())
+                        {
+                            Msg.Add(item.SkuNo);
+                        }
+                        else
+                        {
+                            item.IsEnable = false;
+                            item.UpdateAt = UpdateAt;
+                            item.UpdateBy = UserBy;
+                        }
+                    }
+                }
+            }
+            if (!Msg.Any())
+            {
+                db.SaveChanges();
+                return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { status = false, Msg = "下列SKU有序號：" + string.Join(";", Msg) }, JsonRequestBehavior.AllowGet);
+            }
+        }
         public ActionResult Create()
         {
             return View();
@@ -67,7 +232,7 @@ namespace PurchaseOrderSys.Controllers
                 VendorSKU = x.VendorSKU,
                 QTYOrdered = x.QTYOrdered,
                 QTYReceived = x.QTYReceived ?? 0,
-                QTYReturned = x.QTYReturned ?? 0,
+                QTYReturned = x.QTYReturned.HasValue && x.QTYReturned > 0 ? x.QTYReturned.Value : x.SerialsLlist.Where(y => y.SerialsType == "CM").Sum(y => y.SerialsQTY) * -1,
                 CreditQTY = x.CreditQTY ?? 0,
                 Credit = x.Credit ?? 0,
                 Subtotal = (x.CreditQTY * x.Credit) ?? 0,
@@ -442,7 +607,7 @@ namespace PurchaseOrderSys.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
-        public ActionResult Addserials(int ID)
+        public ActionResult Addserials(int? ID)
         {
             var PurchaseSKU = db.PurchaseSKU.Find(ID);
             return View(PurchaseSKU);
@@ -462,12 +627,44 @@ namespace PurchaseOrderSys.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
-
+        public ActionResult DelSerialsNo(string serials, int PurchaseSKUID)
+        {
+            var PurchaseSKU = db.PurchaseSKU.Find(PurchaseSKUID);
+            var SerialsLlist = PurchaseSKU.SerialsLlist.Where(x => x.SerialsNo == serials && x.SerialsType == "CM");
+            if (SerialsLlist.Any())
+            {
+                SerialsLlist = SerialsLlist.Where(x => !x.SerialsLlistC.Any());
+                if (SerialsLlist.Any())
+                {
+                    foreach (var item in SerialsLlist.ToList())
+                    {
+                        db.Entry(item).State = System.Data.Entity.EntityState.Deleted;
+                    }
+                    try
+                    {
+                        db.SaveChanges();
+                        return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+                    }
+                    catch (Exception ex)
+                    {
+                        return Json(new { status = false, Errmsg = ex.ToString() }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    return Json(new { status = false, Errmsg = "序號不在倉庫內" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                return Json(new { status = false, Errmsg = "查無序號" }, JsonRequestBehavior.AllowGet);
+            }
+        }
         public ActionResult Saveserials(string serials, int PurchaseSKUID)
         {
             var PurchaseSKU = db.PurchaseSKU.Find(PurchaseSKUID);
             var SerialsLlistCount = PurchaseSKU.SerialsLlist.Where(x => x.SerialsType == "CM").Sum(x => x.SerialsQTY);//計算CM的序號數
-            if (SerialsLlistCount >= PurchaseSKU.QTYReturned)
+            if (SerialsLlistCount >= PurchaseSKU.QTYOrdered)
             {
                 return Json(new { status = false, Errmsg = "序號數不可大於退貨數" }, JsonRequestBehavior.AllowGet);
             }
@@ -477,36 +674,42 @@ namespace PurchaseOrderSys.Controllers
             {
                 if (SerialsLlist.Sum(x => x.SerialsQTY) > 0)
                 {
-                    var oSerialsLlist = SerialsLlist.Where(x => x.SerialsQTY > 0 && !x.SerialsLlistC.Any()).OrderByDescending(x => x.ID).FirstOrDefault();
-                    if (oSerialsLlist != null)
+                    if (SerialsLlist.Where(x => x.PurchaseSKU.SkuNo == PurchaseSKU.SkuNo).Any())
                     {
-                        var PID = oSerialsLlist.ID;
-                        var dt = DateTime.UtcNow;
-                        var nSerialsLlist = new SerialsLlist
+                        var oSerialsLlist = SerialsLlist.Where(x => x.PurchaseSKU.SkuNo == PurchaseSKU.SkuNo && x.SerialsQTY > 0 && !x.SerialsLlistC.Any()).OrderByDescending(x => x.ID).FirstOrDefault();
+                        if (oSerialsLlist != null)
                         {
-                            PurchaseSKUID = PurchaseSKUID,
-                            PID = PID,
-                            SerialsType = "CM",
-                            SerialsNo = serials,
-                            SerialsQTY = -1,
-                            CreateBy = UserBy,
-                            CreateAt = dt
-                        };
-                        db.SerialsLlist.Add(nSerialsLlist);
-
-                        try
-                        {
-                            db.SaveChanges();
-                            return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+                            var PID = oSerialsLlist.ID;
+                            var dt = DateTime.UtcNow;
+                            var nSerialsLlist = new SerialsLlist
+                            {
+                                PurchaseSKUID = PurchaseSKUID,
+                                PID = PID,
+                                SerialsType = "CM",
+                                SerialsNo = serials,
+                                SerialsQTY = -1,
+                                CreateBy = UserBy,
+                                CreateAt = dt
+                            };
+                            db.SerialsLlist.Add(nSerialsLlist);
+                            try
+                            {
+                                db.SaveChanges();
+                                return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+                            }
+                            catch (Exception ex)
+                            {
+                                return Json(new { status = false, Errmsg = ex.ToString() }, JsonRequestBehavior.AllowGet);
+                            }
                         }
-                        catch (Exception ex)
+                        else
                         {
-                            return Json(new { status = false, Errmsg = ex.ToString() }, JsonRequestBehavior.AllowGet);
+                            return Json(new { status = false, Errmsg = "此序號不在倉庫內" }, JsonRequestBehavior.AllowGet);
                         }
                     }
                     else
                     {
-                        return Json(new { status = false, Errmsg = "此序號不在倉庫內" }, JsonRequestBehavior.AllowGet);
+                        return Json(new { status = false, Errmsg = "此序號不屬於這個SKU" }, JsonRequestBehavior.AllowGet);
                     }
                 }
                 else
@@ -518,7 +721,6 @@ namespace PurchaseOrderSys.Controllers
             {
                 return Json(new { status = false, Errmsg = "序號已經存在" }, JsonRequestBehavior.AllowGet);
             }
-
         }
     }
 }

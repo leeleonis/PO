@@ -129,7 +129,7 @@
                                                 @Html.LabelFor(model => model.CreditAmount, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.EditorFor(model => model.CreditAmount, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
-                                                    @Html.ValidationMessageFor(model => model.CreditAmount, "", new { @class = "text-danger" })
+                                                    @Html.ValidationMessageFor(model => model.CreditAmount, "", new { @class = "text-danger changed" })
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -179,7 +179,7 @@
                                                     </div>
                                                     <div class="col-sm-10 col-lg-10">
                                                         @Html.EditorFor(model => model.PurchaseOrder.Tax, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
-                                                        @Html.ValidationMessageFor(model => model.PurchaseOrder.Tax, "", new { @class = "text-danger" })
+                                                        @Html.ValidationMessageFor(model => model.PurchaseOrder.Tax, "", new { @class = "text-danger changed" })
                                                     </div>
 
 
@@ -201,50 +201,48 @@
                                         <fieldset>
                                             <div class="row">
                                                 <article class="col-xs-12">
-                                                    <table id="DataGridC" class="table table-bordered table-striped text-center dataTable no-footer">
+                                                    <table id="DataGridC" class="table table-striped table-bordered">
                                                         <thead>
                                                             @if (Model.CMType == "CreditNote")
                                                             {
 
-                                                            <tr>
-                                                                <th><input type="checkbox" /></th>
-                                                                <th></th>
-                                                                <th>SKU</th>
-                                                                <th>Vendor SKU</th>
-                                                                <th>Name</th>
-                                                                <th>QTY Ordered</th>
-                                                                <th>QTY Returned</th>
-                                                                <th>Credit QTY</th>
-                                                                <th>Credit</th>
-                                                                <th>Subtotal (currency)</th>
-                                                            </tr>
+                                                                <tr>
+                                                                    <th><input type="checkbox" /></th>
+                                                                    <th></th>
+                                                                    <th>SKU</th>
+                                                                    <th>Vendor SKU</th>
+                                                                    <th>Name</th>
+                                                                    <th>QTY Ordered</th>
+                                                                    <th>QTY Returned</th>
+                                                                    <th>Credit QTY</th>
+                                                                    <th>Credit</th>
+                                                                    <th>Subtotal (currency)</th>
+                                                                </tr>
                                                             }
                                                             else if (Model.CMType == "Replacement")
                                                             {
-                                                            <tr>
-                                                                <th><input type="checkbox" /></th>
-                                                                <th></th>
-                                                                <th>SKU</th>
-                                                                <th>Vendor SKU</th>
-                                                                <th>Name</th>
-                                                                <th>QTY Ordered</th>
-                                                                <th>QTY Returned</th>
-                                                                <th>Credit QTY</th>
-                                                                <th>QTY Received</th>
-                                                                <th>Balance</th>
-                                                            </tr>
+                                                                <tr>
+                                                                    <th><input type="checkbox" /></th>
+                                                                    <th></th>
+                                                                    <th>SKU</th>
+                                                                    <th>Vendor SKU</th>
+                                                                    <th>Name</th>
+                                                                    <th>QTY Ordered</th>
+                                                                    <th>QTY Returned</th>
+                                                                    <th>Credit QTY</th>
+                                                                    <th>QTY Received</th>
+                                                                    <th>Balance</th>
+                                                                </tr>
                                                             }
                                                         </thead>
                                                         <tbody></tbody>
                                                         <tfoot>
-                                                            @*<tr>
-                                                                    <td colspan="8">
-                                                                        <select id="gebruikerId" name="gebruikerId" class="form-control" style="width:50%"></select>
-                                                                        <button type="button" id="addsku">Add SKU</button>
-                                                                    </td>
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                </tr>*@
+                                                            <tr>
+                                                                <td colspan="10">
+                                                                    <select id="gebruikerId" name="gebruikerId" class="form-control" style="width:50%"></select>
+                                                                    <button type="button" id="addsku">Add SKU</button>
+                                                                </td>
+                                                            </tr>
                                                             @if (Model.CMType == "CreditNote")
                                                             {
                                                                 <tr>
@@ -453,6 +451,7 @@
                     data: function (d) {
                         var Skulist = $("#gebruikerId").val();
                         d.Skulist = Skulist;
+                        d.PurchaseOrderID =@Html.DisplayFor(x => x.PurchaseOrderID);
                         $("#gebruikerId").val(null).trigger('change');
                     }
                 },
@@ -477,23 +476,35 @@
                    @: };
                     ////Total
                    @: total = api.column(9).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
-                   @: $('tr:eq(0) td:eq(2)', api.table().footer()).html(thousandComma(total));//Total
+                   @: $('tr:eq(1) td:eq(2)', api.table().footer()).html(thousandComma(total));//Total
                     //Tax:
-                   @: var TaxVal = $("#Tax").val();
+                   @: var TaxVal = $("#PurchaseOrder_Tax").val();
                    @: Tax = total - (total / (1 + TaxVal / 100));
-                   @: $('tr:eq(1) td:eq(1)', api.table().footer()).html(thousandComma(Tax));//TotalDiscount
+                   @: $('tr:eq(2) td:eq(1)', api.table().footer()).html(thousandComma(Tax));//TotalDiscount
                     //Grand Total:
                    @: GrandTotal = total;
-                   @: $('tr:eq(2) td:eq(1)', api.table().footer()).html(thousandComma(GrandTotal));
+                   @: $('tr:eq(3) td:eq(1)', api.table().footer()).html(thousandComma(GrandTotal));
                     //Credit Paid:
                    @: CreditPaid = 0;
-                   @: $('tr:eq(3) td:eq(1)', api.table().footer()).html(thousandComma(CreditPaid));
+                   @: $('tr:eq(4) td:eq(1)', api.table().footer()).html(thousandComma(CreditPaid));
                     //Balance:
-                  @:  Balance = GrandTotal - CreditPaid;
-                  @:  $('tr:eq(4) td:eq(1)', api.table().footer()).html(thousandComma(Balance));
+                  @: var Balance = CreditPaid - GrandTotal;
+                  @: $('tr:eq(5) td:eq(1)', api.table().footer()).html(thousandComma(Balance));
 
+                           @:if (Balance < 0)
+                           @:{
+                           @:$("#CreditStatus").val("OverCredited");
+                           @:}
+                           @:else if (Balance > 0)
+                           @:{
+                           @:$("#CreditStatus").val("PartiallyCredited");
+                           @:}
+                           @:else if (Balance == 0)
+                           @:{
+                           @:$("#CreditStatus").val("Completed");
+                           @:}
+                        }
                     }
-                }
             });
             $(tableID + ' tbody').on('click', 'td.details-control', function () {
                 var tr = $(this).closest('tr');
@@ -610,6 +621,33 @@
                         }
                     }
                 });
+            });
+            $("#addsku").click(function () {
+                DataGridC.draw();
+            });
+            $("#gebruikerId").select2({
+                minimumInputLength: 1,
+                placeholder: "Search",
+                allowClear: true,
+                multiple: true,
+                ajax: {
+                    url: "@Url.Action("CMSkuNumberGet", "Ajax")",
+                    dataType: 'json',
+                    delay: 0,
+                    data: function (term) {
+                        return {
+                            Search: term.term
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data.items
+                        };
+                    }
+                }
+            });
+            $(".changed").change(function () {
+                DataGridC.draw();
             });
         });
           function Calculation(x, type, SKU, oval, ID) {

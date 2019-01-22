@@ -158,21 +158,23 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $("#CreateCM").on("click", function () {
-                var dataList = [];
-                var rows = $table.datagrid('getSelections');
-                for (var i in rows) {
-                    dataList.push("ID=" + rows[i].ID);
+                var msg = "是否建立所有SKU的CM單"; 
+                if (confirm(msg) == true) {
+                    var dataList = [];
+                    var rows = $table.datagrid('getSelections');
+                    for (var i in rows) {
+                        dataList.push("ID=" + rows[i].ID);
+                    }
+                    if (dataList.length == 1) {
+                        document.location.href = "@Url.Action("CreateCM", "PurchaseOrderCM")?" + dataList.join("&");
+                    }
+                    else if (dataList.length > 1) {
+                        alert("只能選擇一筆PO單號" + dataList);
+                    }
+                    else {
+                        alert("請勾選PO單號");
+                    }
                 }
-                if (dataList.length == 1) {
-                    document.location.href = "@Url.Action("CreateCM")?" + dataList.join("&");
-                }
-                else if (dataList.length > 1) {
-                    alert("只能選擇一筆PO單號" + dataList);
-                }
-                else {
-                    alert("請勾選PO單號");
-                }
-
             });
             $("#Copy").on("click", function () {
                 var dataList = [];
@@ -200,21 +202,29 @@
                 for (var i in rows) {
                     dataList.push(rows[i].ID);
                 }
-                var DeleteOK = confirm('是否確定刪除' + dataList);
-                if (DeleteOK) {
-                    $.ajax({
-                        traditional: true,
-                        type: "post",
-                        url: "@Url.Action("DeleteData")",
-                        data: {
-                            IDList: dataList,
-                        },
-                        success: function (data) {
-                            if (data.status) {
-                                dataInit();
+                if (dataList.length > 0) {
+                    var DeleteOK = confirm('是否確定刪除' + dataList);
+                    if (DeleteOK) {
+                        $.ajax({
+                            traditional: true,
+                            type: "post",
+                            url: "@Url.Action("DeleteData")",
+                            data: {
+                                IDList: dataList,
+                            },
+                            success: function (data) {
+                                if (data.status) {
+                                    dataInit();
+                                }
+                                else {
+                                    alert(data.Msg);
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
+                }
+                else {
+                    alert("請勾選PO單號");
                 }
             });
         });

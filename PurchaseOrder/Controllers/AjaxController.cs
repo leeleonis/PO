@@ -81,6 +81,13 @@ namespace PurchaseOrderSys.Controllers
             //var dataList = db.SkuLang.Where(x => x.LangID == "zh-tw" && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
             return Json(new { items = dataList }, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult CMSkuNumberGet(string Search,int PurchaseOrderID)
+        {
+            var PurchaseSKUList = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.IsEnable && x.PurchaseOrderID == PurchaseOrderID && x.SerialsLlist.Sum(y => y.SerialsQTY) > 0).Select(x => x.SkuNo);
+            var dataList = db.SkuLang.Where(x => x.LangID == "en-US" && PurchaseSKUList.Contains(x.Sku) && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
+            //var dataList = db.SkuLang.Where(x => x.LangID == "zh-tw" && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
+            return Json(new { items = dataList }, JsonRequestBehavior.AllowGet);
+        }
         public ActionResult GetSkuNumberList(int? draw, int? start, int? length, int ID)
         {
             var odataList = db.PurchaseSKU.Where(x => x.PurchaseOrderID == ID && x.IsEnable).Select(x => new PoSKUVM
@@ -182,24 +189,25 @@ namespace PurchaseOrderSys.Controllers
             };
             return Json(returnObj, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult CMSkuNumberList(int? draw, int? start, int? length, string[] Skulist)
+        public ActionResult CMSkuNumberList(int? draw, int? start, int? length, string[] Skulist,int PurchaseOrderID)
         {
-            var odataList = (List<CMSKUVM>)Session["CMSkuNumberList"];
+            var odataList = (List<CMSKUVM>)Session["CMSkuNumberList"];       
             if (odataList == null)
             {
                 odataList = new List<CMSKUVM>();
             }
             if (Skulist != null && Skulist.Where(x => !string.IsNullOrWhiteSpace(x)).Any())
             {
-                var dataList = db.SkuLang.Where(x => x.LangID == "en-US" && Skulist.Contains(x.Sku)).Select(x =>
+                var PoSKUList = db.PurchaseOrder.Find(PurchaseOrderID).PurchaseSKU.Where(x => x.IsEnable && Skulist.Contains(x.SkuNo)).ToList();
+                var dataList = PoSKUList.Select(x =>
                 new CMSKUVM
                 {
-                    ck = x.Sku,
-                    sk = x.Sku,
-                    SKU = x.Sku,
+                    ck = x.SkuNo,
+                    sk = x.SkuNo,
+                    SKU = x.SkuNo,
                     Name = x.Name,
-                    VendorSKU = "",
-                    QTYOrdered = 0,
+                    VendorSKU = x.VendorSKU,
+                    QTYOrdered = x.QTYOrdered,
                     QTYReceived = 0,
                     QTYReturned = 0,
                     CreditQTY = 0,

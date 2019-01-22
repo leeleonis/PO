@@ -75,7 +75,7 @@
                                                     <ul style="list-style-type:none;list-style-position: inside;padding-left: 0px;padding-left: 0px;" id="SerialList">
                                                         @foreach (var item in SerialsLlist)
                                                         {
-                                                            <li>@item.SerialsNo</li>
+                                                            <li><button type="button" class="glyphicon glyphicon-remove btn-danger delserials" val="@item.SerialsNo"></button>@item.SerialsNo</li>
                                                         }
                                                     </ul>
                                                 </article>
@@ -116,7 +116,7 @@
                         },
                         success: function (data) {
                             if (data.status) {
-                                $("#SerialList").prepend("<li>" + serials + "</li>");
+                                $("#SerialList").prepend("<li><button type='button' class='glyphicon glyphicon-remove btn-danger'></button>" + serials + "</li>");
                                 $("#Serialcount").text($("#SerialList li").length);
                                 $("#Serial").val("");
                             }
@@ -126,6 +126,28 @@
                         }
                     });
                 }
+            });
+            $("body").on("click", ".delserials", function () {
+                var serials = $(this).attr("val");
+                if (confirm("是否確定刪除：" + serials)) {
+                    $.ajax({
+                        type: "post",
+                        url: "@Url.Action("DelSerialsNo")",
+                        data: {
+                            serials: serials,
+                            PurchaseSKUID: @Model.ID
+                        },
+                        success: function (data) {
+                            if (data.status) {
+                                window.location.reload();
+                            }
+                            else {
+                                alert(data.Errmsg);
+                            }
+                        }
+                    });
+                }
+                return false;
             });
         });
 

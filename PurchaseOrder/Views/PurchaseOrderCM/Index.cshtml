@@ -137,8 +137,7 @@
                     }
                 </div>
                 <div class="action-button table-cell ">
-                    @*<a type="button" class="btn btn-default btn-sm btn-block" id="CreateCM" href="@Url.Action("Create")">Create CM</a>
-                    <a type="button" class="btn btn-default btn-sm btn-block" id="CreateCM">Create CM</a>*@
+                    <a type="button" class="btn btn-default btn-sm btn-block" id="CreateCM">Create CM</a>
                 </div>
             </div>
         </div>
@@ -201,21 +200,28 @@
                 for (var i in rows) {
                     dataList.push(rows[i].ID);
                 }
-                var DeleteOK = confirm('是否確定刪除' + dataList);
-                if (DeleteOK) {
-                    $.ajax({
-                        traditional: true,
-                        type: "post",
-                        url: "@Url.Action("DeleteData")",
-                        data: {
-                            IDList: dataList,
-                        },
-                        success: function (data) {
-                            if (data.status) {
-                                dataInit();
+                if (dataList.length > 0) {
+                    var DeleteOK = confirm('是否確定刪除' + dataList);
+                    if (DeleteOK) {
+                        $.ajax({
+                            traditional: true,
+                            type: "post",
+                            url: "@Url.Action("DeleteData")",
+                            data: {
+                                IDList: dataList,
+                            },
+                            success: function (data) {
+                                if (data.status) {
+                                    dataInit();
+                                } else {
+                                    alert(data.Msg)
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
+                }
+                else {
+                    alert("請勾選CM單號");
                 }
             });
         });

@@ -8,7 +8,7 @@
     var CMStatusDDL = EnumData.CMStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var ShippingStatusDDL = EnumData.ShippingStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var CreditStatusDDL = EnumData.CreditStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
-     var Warehouselist = EnumData.WarehouseDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var Warehouselist = EnumData.WarehouseDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var CurrencyDDL = EnumData.CurrencyDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
 }
 <style>
@@ -23,7 +23,6 @@
         <div class="row">
             <article class="col-xs-12">
                 <div class="jarviswidget" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
-
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
 
@@ -32,14 +31,12 @@
                             <li><a data-toggle="tab" href="#hb1">@ViewBag.title</a></li>
                         </ul>
                     </header>
-
                     <div>
                         <div class="widget-body no-padding">
                             <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
                                 @Html.AntiForgeryToken()
                                 @Html.HiddenFor(model => model.PurchaseOrderID)
                                 <input type="hidden" name="IsEnable" value="True">
-
                                 <div id="content" class="tab-content">
                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                     <div class="tab-pane" id="hb1">
@@ -68,7 +65,7 @@
                                             <div class="form-group">
                                                 @Html.LabelFor(model => model.CMStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownListFor(model => model.CMStatus, CMStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.DropDownListFor(model => model.CMStatus, CMStatusDDL,  htmlAttributes: new { @class = "form-control" })
                                                     @Html.ValidationMessageFor(model => model.CMStatus, "", new { @class = "text-danger" })
                                                 </div>
                                                 @Html.LabelFor(model => model.InvoiceDate, htmlAttributes: new { @class = "control-label col-sm-2" })
@@ -197,51 +194,49 @@
                                         <fieldset>
                                             <div class="row">
                                                 <article class="col-xs-12">
-                                                    <table id="DataGridC" class="table table-bordered table-striped text-center dataTable no-footer">
+                                                    <table id="DataGridC" class="table table-striped table-bordered">
                                                         <thead>
-                                                            @if (Model.CMType == "CreditNote")
+                                                            @if (Model == null || Model.CMType == "CreditNote")
                                                             {
 
-                                                            <tr>
-                                                                <th><input type="checkbox" /></th>
-                                                                <th></th>
-                                                                <th>SKU</th>
-                                                                <th>Vendor SKU</th>
-                                                                <th>Name</th>
-                                                                <th>QTY Ordered</th>
-                                                                <th>QTY Returned</th>
-                                                                <th>Credit QTY</th>
-                                                                <th>Credit</th>
-                                                                <th>Subtotal (currency)</th>
-                                                            </tr>
+                                                                <tr>
+                                                                    <th><input type="checkbox" /></th>
+                                                                    <th></th>
+                                                                    <th>SKU</th>
+                                                                    <th>Vendor SKU</th>
+                                                                    <th>Name</th>
+                                                                    <th>QTY Ordered</th>
+                                                                    <th>QTY Returned</th>
+                                                                    <th>Credit QTY</th>
+                                                                    <th>Credit</th>
+                                                                    <th>Subtotal (currency)</th>
+                                                                </tr>
                                                             }
                                                             else if (Model.CMType == "Replacement")
                                                             {
-                                                            <tr>
-                                                                <th><input type="checkbox" /></th>
-                                                                <th></th>
-                                                                <th>SKU</th>
-                                                                <th>Vendor SKU</th>
-                                                                <th>Name</th>
-                                                                <th>QTY Ordered</th>
-                                                                <th>QTY Returned</th>
-                                                                <th>Credit QTY</th>
-                                                                <th>QTY Received</th>
-                                                                <th>Balance</th>
-                                                            </tr>
+                                                                <tr>
+                                                                    <th><input type="checkbox" /></th>
+                                                                    <th></th>
+                                                                    <th>SKU</th>
+                                                                    <th>Vendor SKU</th>
+                                                                    <th>Name</th>
+                                                                    <th>QTY Ordered</th>
+                                                                    <th>QTY Returned</th>
+                                                                    <th>Credit QTY</th>
+                                                                    <th>QTY Received</th>
+                                                                    <th>Balance</th>
+                                                                </tr>
                                                             }
                                                         </thead>
                                                         <tbody></tbody>
                                                         <tfoot>
-                                                            @*<tr>
-                                                                    <td colspan="8">
-                                                                        <select id="gebruikerId" name="gebruikerId" class="form-control" style="width:50%"></select>
-                                                                        <button type="button" id="addsku">Add SKU</button>
-                                                                    </td>
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                </tr>*@
-                                                            @if (Model.CMType == "CreditNote")
+                                                            <tr>
+                                                                <td colspan="10">
+                                                                    <select id="gebruikerId" name="gebruikerId" class="form-control" style="width:50%"></select>
+                                                                    <button type="button" id="addsku">Add SKU</button>
+                                                                </td>
+                                                            </tr>
+                                                            @if (Model == null || Model.CMType == "CreditNote")
                                                             {
                                                                 <tr>
                                                                     <td colspan="8" rowspan="5">
@@ -254,7 +249,7 @@
                                                                         </div>
                                                                         <div class="col-sm-2 col-lg-4">
                                                                             <ul style="list-style-type:none;list-style-position: inside;padding-left: 0px;padding-left: 0px;" id="textnotelog">
-                                                                                @if (Model.PurchaseNote != null)
+                                                                                @if (Model != null && Model.PurchaseNote != null)
                                                                                 {
                                                                                     foreach (var item in Model.PurchaseNote)
                                                                                     {
@@ -417,7 +412,7 @@
                             }
                         }
                     },
-                    @if (Model.CMType == "CreditNote")
+                    @if (Model == null || Model.CMType == "CreditNote")
                     {
                         @: { data: "Credit", render: function (data, type, row) { if (row.Model == "E") { return '<input class="form-control" type="text" onchange="Calculation(this,\'Credit\',\'' + row.SKU + '\',' + data + ',' + row.ID + ')"  value = ' + thousandComma(data) + '  > '; } else { return data; } } },
                         @:{ data: "Subtotal", render: function (data, type, row) { return thousandComma(data); } }
@@ -435,6 +430,7 @@
                     data: function (d) {
                         var Skulist = $("#gebruikerId").val();
                         d.Skulist = Skulist;
+                        d.PurchaseOrderID=@Html.DisplayFor(x => x.PurchaseOrderID);
                         $("#gebruikerId").val(null).trigger('change');
                     }
                 },
@@ -446,7 +442,7 @@
                 "info": true,
                 "searching": false,
                 "footerCallback": function (row, data, start, end, display) {
-                    @if (Model.CMType == "CreditNote")
+                    @if (Model == null || Model.CMType == "CreditNote")
                     {
                         @:var api = this.api(), data;
                        // Remove the formatting to get integer data for summation
@@ -492,7 +488,7 @@
                     tr.addClass('shown');
                 }
             });
-                        $("#UploadImage").click(function () {
+            $("#UploadImage").click(function () {
                 var data = new FormData();
                 data.append("ID", "@Html.DisplayFor(x=>x.ID)");
                 var files = $("#addimg").get(0).files;
@@ -542,7 +538,7 @@
                 });
             });
             $("#CMType").on("change", function () {
-                window.location.href = "@Url.Action("CreateCM", new { ID=Model.PurchaseOrderID })?CMTypeVal=" + $(this).val();
+                window.location.href = "@Url.Action("CreateCM")?CMTypeVal=" + $(this).val();
             });
             $("#Removeitems").on("click", function () {
                 var dataList = [];
@@ -592,6 +588,31 @@
                         }
                     }
                 });
+            });
+            $("#addsku").click(function () {
+                DataGridC.draw();
+            });
+            $("#gebruikerId").select2({
+                minimumInputLength: 1,
+                placeholder: "Search",
+                allowClear: true,
+                multiple: true,
+                ajax: {
+                    url: "@Url.Action("CMSkuNumberGet", "Ajax")",
+                    dataType: 'json',
+                    delay: 0,
+                    data: function (term) {
+                        return {
+                            Search: term.term,
+                            PurchaseOrderID:@Html.DisplayFor(x=>x.PurchaseOrderID)
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data.items
+                        };
+                    }
+                }
             });
         });
           function Calculation(x, type, SKU, oval, ID) {

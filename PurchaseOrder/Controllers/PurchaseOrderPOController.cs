@@ -464,7 +464,7 @@ namespace PurchaseOrderSys.Controllers
             var QTYReceived = 0;
             if (PurchaseSKU.SerialsLlist.Any())
             {
-                QTYReceived = PurchaseSKU.SerialsLlist.Where(x => x.SerialsQTY == 1).Count();
+                QTYReceived = PurchaseSKU.SerialsLlist.Where(x => x.SerialsType == "PO").Sum(x => x.SerialsQTY).Value;
             }
             else
             {
@@ -911,126 +911,6 @@ namespace PurchaseOrderSys.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
-        public ActionResult CreateCM(int ID, string CMTypeVal = "CreditNote")
-        {
-            Session["CMPurchaseNote"] = null;
-            var PurchaseOrder = db.PurchaseOrder.Find(ID);
-            var cmvm = new CMVM
-            {
-                PurchaseOrderID = PurchaseOrder.ID,
-                CompanyID = PurchaseOrder.CompanyID,
-                VendorID = PurchaseOrder.VendorID,
-                InvoiceDate = PurchaseOrder.InvoiceDate,
-                InvoiceNo = PurchaseOrder.InvoiceNo,
-                ShippedDate = PurchaseOrder.ShippedDate,
-                Carrier = PurchaseOrder.Carrier,
-                Tracking = PurchaseOrder.Tracking,
-                CMType = CMTypeVal,
-                WarehouseID = PurchaseOrder.WarehouseID,
-                Tax = PurchaseOrder.Tax,
-                Currency = PurchaseOrder.Currency
-            };
-            var dataList = PurchaseOrder.PurchaseSKU.Where(x => x.IsEnable).Select(x => new CMSKUVM
-            {
-                ID = x.ID,
-                ck = x.SkuNo,
-                sk = x.SkuNo,
-                Name = x.Name,
-                SKU = x.SkuNo,
-                VendorSKU = x.VendorSKU,
-                QTYOrdered = x.QTYOrdered,
-                QTYReceived = x.QTYReceived ?? 0,
-                QTYReturned = x.QTYReturned ?? 0,
-                CreditQTY = x.CreditQTY ?? 0,
-                Credit = x.Credit ?? 0,
-                Subtotal = (x.CreditQTY * x.Credit) ?? 0,
-                Model = "L"
-            });
-            Session["CMSkuNumberList"] = dataList.ToList();
-            return View(cmvm);
-        }
-        [HttpPost]
-        public ActionResult CreateCM(CreditMemo filter, IEnumerable<HttpPostedFileBase> VendorCM)
-        {
-            var CreditMemo = new CreditMemo
-            {
-                IsEnable = true,
-                PurchaseOrderID = filter.PurchaseOrderID,
-                CompanyID = filter.CompanyID,
-                VendorID = filter.VendorID,
-                InvoiceDate = filter.InvoiceDate,
-                InvoiceNo = filter.InvoiceNo,
-                CMDate = filter.CMDate ?? DateTime.Today,
-                CMStatus = filter.CMStatus,
-                CMType = filter.CMType,
-                ShippingStatus = filter.ShippingStatus,
-                ShippedDate = filter.ShippedDate,
-                Carrier = filter.Carrier,
-                Tracking = filter.Tracking,
-                CreditStatus = filter.CreditStatus,
-                CreditDate = filter.CreditDate,
-                CreditAmount = filter.CreditAmount,
-                CreateBy = UserBy,
-                CreateAt = DateTime.UtcNow
-            };
-            db.CreditMemo.Add(CreditMemo);
-            var dataList = (List<CMSKUVM>)Session["CMSkuNumberList"];
-            if (dataList != null)
-            {
-                var PurchaseSKUlist = dataList.Select(x => new PurchaseSKU
-                {
-                    IsEnable = true,
-                    Name = x.Name,
-                    SkuNo = x.SKU,
-                    VendorSKU = string.IsNullOrWhiteSpace(x.VendorSKU) ? x.SKU : x.VendorSKU,
-                    QTYOrdered = x.QTYOrdered,
-                    QTYReturned = x.QTYReturned,
-                    CreditQTY = x.CreditQTY,
-                    Credit = x.Credit,
-                    QTYReceived = x.QTYReceived,
-                    CreateBy = UserBy,
-                    CreateAt = DateTime.UtcNow
-                });
-                foreach (var item in PurchaseSKUlist)
-                {
-                    CreditMemo.PurchaseSKU.Add(item);
-                }
-            }
-            if (VendorCM != null && VendorCM.Any())
-            {
-                foreach (var file in VendorCM)
-                {
-                    if (file != null)
-                    {
-                        var Url = SaveImg(file);
-                        CreditMemo.ImgFile.Add(new ImgFile
-                        {
-                            IsEnable = true,
-                            ImgType = "VendorCM",
-                            Url = Url,
-                            CreateBy = UserBy,
-                            CreateAt = DateTime.UtcNow
-                        });
-                    }
-
-                }
-            }
-            var CMPurchaseNote = (List<PurchaseNote>)Session["CMPurchaseNote"];
-            if (CMPurchaseNote != null)
-            {
-                foreach (var item in CMPurchaseNote)
-                {
-                    if (item.NoteType != "txt" && item.NoteType != "Url")
-                    {
-                        item.Note = SaveImg(item.Note, item.NoteType);
-                        item.NoteType = "Url";
-                    }
-                    CreditMemo.PurchaseNote.Add(item);
-                }
-            }
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
         [HttpPost]
         public ActionResult CopyData(int[] IDList)
         {
@@ -1071,6 +951,7 @@ namespace PurchaseOrderSys.Controllers
         [HttpPost]
         public ActionResult DeleteData(int[] IDList)
         {
+            var Msg = new List<string>();
             var UpdateAt = DateTime.UtcNow;
             foreach (var ID in IDList)
             {
@@ -1078,9 +959,30 @@ namespace PurchaseOrderSys.Controllers
                 PurchaseOrder.IsEnable = false;
                 PurchaseOrder.UpdateAt = UpdateAt;
                 PurchaseOrder.UpdateBy = UserBy;
+                foreach (var item in PurchaseOrder.PurchaseSKU)
+                {
+
+                    if (item.SerialsLlist.Any())
+                    {
+                        Msg.Add(item.SkuNo);
+                    }
+                    else
+                    {
+                        item.IsEnable = false;
+                        item.UpdateAt = UpdateAt;
+                        item.UpdateBy = UserBy;
+                    }
+                }
             }
-            db.SaveChanges();
-            return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+            if (!Msg.Any())
+            {
+                db.SaveChanges();
+                return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { status = false, Msg = "下列SKU有序號：" + string.Join(";", Msg) }, JsonRequestBehavior.AllowGet);
+            }
         }
         //[HttpPost]
         public ActionResult GetSerialList(int ID)

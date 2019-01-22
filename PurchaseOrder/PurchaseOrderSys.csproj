@@ -6324,7 +6324,7 @@
     <Content Include="Views\PurchaseSKU\CreateItem.cshtml" />
     <Content Include="Views\PurchaseOrderCM\Index.cshtml" />
     <Content Include="Views\PurchaseOrderPO\CreatePO.cshtml" />
-    <Content Include="Views\PurchaseOrderPO\CreateCM.cshtml" />
+    <Content Include="Views\PurchaseOrderCM\CreateCM.cshtml" />
     <Content Include="Views\Warehouse\Index.cshtml" />
     <Content Include="Views\Test\Index.cshtml" />
     <Content Include="Views\PurchaseOrderPO\EditItem.cshtml" />

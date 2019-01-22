@@ -48,8 +48,8 @@
                         <div class="widget-body no-padding">
                             <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
                                 @Html.AntiForgeryToken()
-                                <input type="hidden" name="IsEnable" value="True">
                                 @Html.HiddenFor(x => x.ID)
+                                <input type="hidden" name="IsEnable" value="True">
                                 <div id="content" class="tab-content">
                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                     @if (Model.POType == "PurchaseOrder")
@@ -740,8 +740,8 @@
                     }
                 }
             });
-              $("#VendorID").click(function () {
-                  var url = '@Url.Action("GateVendorCurrency", "Ajax")'
+            $("#VendorID").click(function () {
+                var url = '@Url.Action("GateVendorCurrency", "Ajax")'
                 $.ajax({
                     traditional: true,
                     type: "post",

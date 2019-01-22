@@ -226,7 +226,7 @@
                                                         <button type="button" id="Removeitems">Remove items</button>
                                                     </div>
                                                     <div class="col-lg-offset-10">
-                                                        <a type="button" href="@Url.Action("CreateCM",new {Model.ID})" class='btn btn-danger btn-sm' id='btn-Add'>Create CM</a>
+                                                        <a class='btn btn-danger btn-sm' id='CreateCM'>Create CM</a>
                                                         <a type="button" href="@Url.Action("ReceiveItems",new {Model.ID})" class='btn btn-danger btn-sm'>Receive Items</a>
                                                         <a class='btn btn-danger btn-sm Excel' valID=" @Model.ID">Create by Excel</a>
                                                     </div>
@@ -517,7 +517,7 @@
                                                             <button type="button" id="Removeitems">Remove items</button>
                                                         </div>*@
                                                     <div class="col-lg-offset-10">
-                                                        <a type="button" href="@Url.Action("CreateCM",new {Model.ID})" class='btn btn-danger btn-sm' id='btn-Add'>Create CM</a>
+                                                        <a class='btn btn-danger btn-sm' id='CreateCM'>Create CM</a>
                                                         <a class='btn btn-danger btn-sm Excel' valID=" @Model.ID">Create by Excel</a>
                                                         @*<a type="button" href="@Url.Action("ReceiveItems",new {Model.ID})" class='btn btn-danger btn-sm'>Receive Items</a>*@
                                                     </div>
@@ -1054,6 +1054,20 @@
                 });
                 return false;
             });
+            $("#CreateCM").on("click", function () {
+                var dataList = [];
+                $(DataGridC.$('input[type="checkbox"]:checked').each(function () {
+                    dataList.push("Skulist=" + $(this).val());
+                }));
+                if (dataList.length > 0) {
+                    document.location.href = "@Url.Action("CreateCM", "PurchaseOrderCM",new { ID=Model.ID })?" + dataList.join("&");
+                }
+                else {
+                    alert("請勾選SKU");
+                }
+
+            });
+
         });
 
         function Calculation(x, type, SKU, oval, ID) {
