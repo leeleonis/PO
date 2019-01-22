@@ -3375,6 +3375,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
+        public static string SKU_Battery {
+            get {
+                return ResourceManager.GetString("SKU_Battery", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
         public static string SKU_Brand {
             get {
                 return ResourceManager.GetString("SKU_Brand", resourceCulture);
@@ -3558,6 +3567,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         public static string SKU_Replenishable {
             get {
                 return ResourceManager.GetString("SKU_Replenishable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string SKU_SerialTracking {
+            get {
+                return ResourceManager.GetString("SKU_SerialTracking", resourceCulture);
             }
         }
         

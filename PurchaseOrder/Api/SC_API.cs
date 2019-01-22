@@ -27,6 +27,7 @@ namespace PurchaseOrderSys.Api
             var data = OS_SellerCloud.GetWarehouses(OS_AuthHeader, OS_Options);
             return data;
         }
+
         public IEnumerable<Models.SkuInventoryVM> SCInventoryService(string SkuNo)
         {
             var SkuInventoryVMLit = new List<Models.SkuInventoryVM>();
@@ -59,6 +60,7 @@ namespace PurchaseOrderSys.Api
         {
             return SC_API.InvokeWebService(url, null, methodname, args);
         }
+
         /// < summary> 
         /// 動態呼叫web服務 
         /// </summary> 
@@ -121,6 +123,7 @@ namespace PurchaseOrderSys.Api
                 throw new Exception(ex.InnerException.Message, new Exception(ex.InnerException.StackTrace));
             }
         }
+
         private static string GetWsClassName(string wsUrl)
         {
             string[] parts = wsUrl.Split('/');

@@ -25,7 +25,7 @@
         <EntityTypeShape EntityType="PurchaseOrderModel.PurchaseOrder" Width="1.5" PointX="19" PointY="16.875" />
         <EntityTypeShape EntityType="PurchaseOrderModel.PurchaseSKU" Width="1.5" PointX="23.5" PointY="14.25" />
         <EntityTypeShape EntityType="PurchaseOrderModel.ShippingMethod" Width="1.5" PointX="13.75" PointY="8" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.SKU" Width="1.5" PointX="6" PointY="10.875" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.SKU" Width="1.5" PointX="6" PointY="9.375" />
         <EntityTypeShape EntityType="PurchaseOrderModel.Sku_Attribute" Width="1.5" PointX="11.25" PointY="12.125" />
         <EntityTypeShape EntityType="PurchaseOrderModel.Sku_PackageContent" Width="1.5" PointX="8.25" PointY="16.25" />
         <EntityTypeShape EntityType="PurchaseOrderModel.SkuAttribute" Width="1.5" PointX="9" PointY="4.25" />

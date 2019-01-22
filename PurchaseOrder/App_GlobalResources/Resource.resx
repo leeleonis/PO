@@ -1988,4 +1988,10 @@
   <data name="SerialsLlist_Memo" xml:space="preserve">
     <value>Memo</value>
   </data>
+  <data name="SKU_SerialTracking" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SKU_Battery" xml:space="preserve">
+    <value></value>
+  </data>
 </root>

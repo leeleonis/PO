@@ -1761,4 +1761,10 @@
   <data name="SerialsLlist_Memo" xml:space="preserve">
     <value>序號註記</value>
   </data>
+  <data name="SKU_SerialTracking" xml:space="preserve">
+    <value>序號管理</value>
+  </data>
+  <data name="SKU_Battery" xml:space="preserve">
+    <value>電池</value>
+  </data>
 </root>

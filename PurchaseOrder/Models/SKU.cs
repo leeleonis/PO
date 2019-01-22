@@ -37,6 +37,8 @@ namespace PurchaseOrderSys.Models
         public string EAN { get; set; }
         public string UPC { get; set; }
         public bool Replenishable { get; set; }
+        public bool SerialTracking { get; set; }
+        public bool Battery { get; set; }
         public byte Status { get; set; }
         public string eBayTitle { get; set; }
         public string CreateBy { get; set; }
