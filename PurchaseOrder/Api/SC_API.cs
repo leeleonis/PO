@@ -28,6 +28,26 @@ namespace PurchaseOrderSys.Api
             return data;
         }
 
+        public Product[] LoadProducts(string[] ProductIDs)
+        {
+            SCServiceSoapClient OS_SellerCloud = new SCServiceSoapClient();
+            SCService.AuthHeader OS_AuthHeader = new SCService.AuthHeader { UserName = UserName, Password = Password };
+            SCService.ServiceOptions OS_Options = new SCService.ServiceOptions();
+
+            Product[] data = OS_SellerCloud.LoadProducts(OS_AuthHeader, OS_Options, ProductIDs);
+            return data;
+        }
+
+        public Product[] GetProductsRaw(string[] ProductIDs)
+        {
+            SCServiceSoapClient OS_SellerCloud = new SCServiceSoapClient();
+            SCService.AuthHeader OS_AuthHeader = new SCService.AuthHeader { UserName = UserName, Password = Password };
+            SCService.ServiceOptions OS_Options = new SCService.ServiceOptions();
+
+            Product[] data = OS_SellerCloud.GetProductsRaw(OS_AuthHeader, OS_Options, ProductIDs);
+            return data;
+        }
+
         public IEnumerable<Models.SkuInventoryVM> SCInventoryService(string SkuNo)
         {
             var SkuInventoryVMLit = new List<Models.SkuInventoryVM>();

@@ -82,14 +82,14 @@ namespace PurchaseOrderSys.Controllers
             //        nc["QTY"] = SCID;
             //        byte[] bResult = wc.UploadValues(ApiUrl + "Api/GetSkuInventoryQTY", nc);
             //        string resultXML = Encoding.UTF8.GetString(bResult);
-                   
+
             //    }
             //    catch (WebException ex)
             //    {
             //        //throw new Exception("無法連接遠端伺服器");
             //    }
             //}
-           
+
         }
         public ActionResult GetData_Full(int draw, int start, int length,//→此三個為DataTables自動傳遞參數
                                                                          //↓以下兩個為表單的查詢條件，請依自己工作需求調整  
@@ -257,7 +257,7 @@ namespace PurchaseOrderSys.Controllers
 
                     if (skuList.Item.Any(i => i.Categories[0] == null)) MissCategory.AddRange(skuList.Item.Where(i => i.Categories[0] == null).Select(i => i.SKU).ToArray());
 
-                    skuList = page <=5 ? neto.GetItemBySkus(page++, limit) : new NetoDeveloper.GetItemResponse() { Ack = NetoDeveloper.GetItemResponseAck.Error };
+                    skuList = page <= 5 ? neto.GetItemBySkus(page++, limit) : new NetoDeveloper.GetItemResponse() { Ack = NetoDeveloper.GetItemResponseAck.Error };
                 } while (skuList.Ack == NetoDeveloper.GetItemResponseAck.Success && skuList.Item.Any());
             }
             catch (Exception e)
@@ -284,10 +284,34 @@ namespace PurchaseOrderSys.Controllers
             var skuData = netoApi.GetItemBySku(Sku);
         }
 
-        public void GetCustomer()
+        public void GetProductsData()
         {
-            NetoApi neto = new NetoApi();
-            var customerList = neto.GetCustomer();
+            Api.SC_API SC_Api = new Api.SC_API();
+
+            int page = 0, num = 500;
+            try
+            {
+                var ProductIDs = db.SKU.AsNoTracking().OrderBy(s => s.SkuID).Select(s => s.SkuID).ToArray();
+                SCService.Product[] productList = SC_Api.GetProductsRaw(ProductIDs.Skip(num * page++).Take(num).ToArray());
+                do
+                {
+                    var IDs = productList.Select(p => p.ID).ToArray();
+                    foreach (var Sku in db.SKU.Where(s => IDs.Contains(s.SkuID)))
+                    {
+                        var update = productList.First(p => p.ID.Equals(Sku.SkuID));
+                        Sku.Replenishable = update.Replenishable;
+                        Sku.SerialTracking = update.RequireSerialNumberScanWhileShipping;
+                    }
+
+                    db.SaveChanges();
+                    productList = SC_Api.GetProductsRaw(ProductIDs.Skip(num * page++).Take(num).ToArray());
+                } while (productList.Any());
+            }
+            catch (Exception e)
+            {
+
+            }
+            //var data1 = SC_Api.LoadProducts(ProductIDs).Select(p => new { p.ID, p.RequireSerialNumberScanWhileShipping, p.Replenishable }).ToList();
         }
     }
 }

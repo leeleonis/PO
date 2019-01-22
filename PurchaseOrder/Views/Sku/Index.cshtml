@@ -156,6 +156,7 @@
         }
 
         function setFilterColumn(filterValue) {
+            console.log(filterValue);
             return {
                 IsFilter: true,
                 SkuID: "<input type='text' class='form-control s-skuID' value='" + (!website.IsEmpty(filterValue['SkuID']) ? filterValue['SkuID'] : '') + "'>",
