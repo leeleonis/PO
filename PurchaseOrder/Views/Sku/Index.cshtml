@@ -93,6 +93,16 @@
                         return website.IsEmpty(row.IsFilter) ? datagrid.setCheckBox(row.SkuID, this.field, value) : value;
                     }
                 }, {
+                    field: "SerialTracking", title: "@Html.DisplayNameFor(model => model.SerialTracking)", width: 100, align: "center", sortable: false,
+                    formatter: function (value, row, index) {
+                        return website.IsEmpty(row.IsFilter) ? datagrid.setCheckBox(row.SkuID, this.field, value) : value;
+                    }
+                }, {
+                    field: "Battery", title: "@Html.DisplayNameFor(model => model.Battery)", width: 80, align: "center", sortable: false,
+                    formatter: function (value, row, index) {
+                        return website.IsEmpty(row.IsFilter) ? datagrid.setCheckBox(row.SkuID, this.field, value) : value;
+                    }
+                }, {
                     field: "Status", title: "@Html.DisplayNameFor(model => model.Status)", width: 100, align: "center", sortable: false,
                     formatter: function (value, row, index) {
                         return website.IsEmpty(row.IsFilter) ? datagrid.setDropdown(row.SkuID, this.field, selectOption['SkuStatus'], value) : value;
@@ -139,6 +149,8 @@
                 UPC: $('.filterColumn .s-UPC').val(),
                 EAN: $('.filterColumn .s-EAN').val(),
                 Replenishable: $('.filterColumn .s-replenishable').val(),
+                SerialTracking: $('.filterColumn .s-serialTracking').val(),
+                Battery: $('.filterColumn .s-battery').val(),
                 Status: $('.filterColumn .s-status').val()
             };
         }
@@ -154,6 +166,8 @@
                 UPC: "<input type='text' class='form-control s-UPC' value='" + (!website.IsEmpty(filterValue['UPC']) ? filterValue['UPC'] : '') + "'>",
                 EAN: "<input type='text' class='form-control s-EAN' value='" + (!website.IsEmpty(filterValue['EAN']) ? filterValue['EAN'] : '') + "'>",
                 Replenishable: "<select class='form-control s-replenishable'><option value=''>全部</option>" + datagrid.setSelectOption(selectOption['Replenishable'], filterValue['Replenishable']) + "</select>",
+                SerialTracking: "<select class='form-control s-serialTracking'><option value=''>全部</option>" + datagrid.setSelectOption(selectOption['Replenishable'], filterValue['SerialTracking']) + "</select>",
+                Battery: "<select class='form-control s-battery'><option value=''>全部</option>" + datagrid.setSelectOption(selectOption['Replenishable'], filterValue['Battery']) + "</select>",
                 Status: "<select class='form-control s-status'><option value=''>全部</option>" + datagrid.setSelectOption(selectOption['SkuStatus'], filterValue['Status']) + "</select>",
                 Save: "<button type='button' class='btn btn-default btn-sm' onclick='SaveData()'>SAVE ALL</button>"
             };
@@ -213,6 +227,8 @@
                 UPC: $("input#UPC:eq(" + index + ")").val(),
                 EAN: $("input#EAN:eq(" + index + ")").val(),
                 Replenishable: $("input#Replenishable:eq(" + index + ")").prop('checked'),
+                SerialTracking: $("input#SerialTracking:eq(" + index + ")").prop('checked'),
+                Battery: $("input#Battery:eq(" + index + ")").prop('checked'),
                 Status: $("select#Status:eq(" + index + ")").val()
             }
         }

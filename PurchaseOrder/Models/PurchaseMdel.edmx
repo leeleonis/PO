@@ -626,6 +626,8 @@
           <Property Name="EAN" Type="nvarchar" MaxLength="50" />
           <Property Name="UPC" Type="nvarchar" MaxLength="50" />
           <Property Name="Replenishable" Type="bit" Nullable="false" />
+          <Property Name="SerialTracking" Type="bit" Nullable="false" />
+          <Property Name="Battery" Type="bit" Nullable="false" />
           <Property Name="Status" Type="tinyint" Nullable="false" />
           <Property Name="eBayTitle" Type="text" />
           <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
@@ -2550,6 +2552,8 @@
           <Property Name="EAN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UPC" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Replenishable" Type="Boolean" Nullable="false" />
+          <Property Name="SerialTracking" Type="Boolean" Nullable="false" />
+          <Property Name="Battery" Type="Boolean" Nullable="false" />
           <Property Name="Status" Type="Byte" Nullable="false" />
           <Property Name="eBayTitle" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -4179,6 +4183,8 @@
           <EntitySetMapping Name="SKU">
             <EntityTypeMapping TypeName="PurchaseOrderModel.SKU">
               <MappingFragment StoreEntitySet="SKU">
+                <ScalarProperty Name="Battery" ColumnName="Battery" />
+                <ScalarProperty Name="SerialTracking" ColumnName="SerialTracking" />
                 <ScalarProperty Name="Company" ColumnName="Company" />
                 <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
                 <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
