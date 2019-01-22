@@ -1256,6 +1256,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PurchaseSKU_SKU">
+          <End Role="SKU" Type="Self.SKU" Multiplicity="1" />
+          <End Role="PurchaseSKU" Type="Self.PurchaseSKU" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SKU">
+              <PropertyRef Name="SkuID" />
+            </Principal>
+            <Dependent Role="PurchaseSKU">
+              <PropertyRef Name="SkuNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SerialsLlist_Orders">
           <End Role="Orders" Type="Self.Orders" Multiplicity="0..1" />
           <End Role="SerialsLlist" Type="Self.SerialsLlist" Multiplicity="*" />
@@ -1508,6 +1520,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_TransferSKU_SKU">
+          <End Role="SKU" Type="Self.SKU" Multiplicity="1" />
+          <End Role="TransferSKU" Type="Self.TransferSKU" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SKU">
+              <PropertyRef Name="SkuID" />
+            </Principal>
+            <Dependent Role="TransferSKU">
+              <PropertyRef Name="SkuNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_TransferSKU_Transfer">
           <End Role="Transfer" Type="Self.Transfer" Multiplicity="0..1" />
           <End Role="TransferSKU" Type="Self.TransferSKU" Multiplicity="*" />
@@ -1728,6 +1752,10 @@
             <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
             <End Role="PurchaseSKU" EntitySet="PurchaseSKU" />
           </AssociationSet>
+          <AssociationSet Name="FK_PurchaseSKU_SKU" Association="Self.FK_PurchaseSKU_SKU">
+            <End Role="SKU" EntitySet="SKU" />
+            <End Role="PurchaseSKU" EntitySet="PurchaseSKU" />
+          </AssociationSet>
           <AssociationSet Name="FK_SerialsLlist_Orders" Association="Self.FK_SerialsLlist_Orders">
             <End Role="Orders" EntitySet="Orders" />
             <End Role="SerialsLlist" EntitySet="SerialsLlist" />
@@ -1811,6 +1839,10 @@
           <AssociationSet Name="FK_Transfer_WarehouseInterim" Association="Self.FK_Transfer_WarehouseInterim">
             <End Role="Warehouse" EntitySet="Warehouse" />
             <End Role="Transfer" EntitySet="Transfer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TransferSKU_SKU" Association="Self.FK_TransferSKU_SKU">
+            <End Role="SKU" EntitySet="SKU" />
+            <End Role="TransferSKU" EntitySet="TransferSKU" />
           </AssociationSet>
           <AssociationSet Name="FK_TransferSKU_Transfer" Association="Self.FK_TransferSKU_Transfer">
             <End Role="Transfer" EntitySet="Transfer" />
@@ -2104,6 +2136,14 @@
           <AssociationSet Name="FK_Transfer_WarehouseInterim" Association="PurchaseOrderModel.FK_Transfer_WarehouseInterim">
             <End Role="Warehouse" EntitySet="Warehouse" />
             <End Role="Transfer" EntitySet="Transfer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PurchaseSKU_SKU" Association="PurchaseOrderModel.FK_PurchaseSKU_SKU">
+            <End Role="SKU" EntitySet="SKU" />
+            <End Role="PurchaseSKU" EntitySet="PurchaseSKU" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TransferSKU_SKU" Association="PurchaseOrderModel.FK_TransferSKU_SKU">
+            <End Role="SKU" EntitySet="SKU" />
+            <End Role="TransferSKU" EntitySet="TransferSKU" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="AdminGroup">
@@ -2505,6 +2545,7 @@
           <NavigationProperty Name="PurchaseOrder" Relationship="PurchaseOrderModel.FK_PurchaseSKU_PurchaseOrder" FromRole="PurchaseSKU" ToRole="PurchaseOrder" />
           <NavigationProperty Name="SerialsLlist" Relationship="PurchaseOrderModel.FK_SerialsLlist_PurchaseSKU" FromRole="PurchaseSKU" ToRole="SerialsLlist" />
           <NavigationProperty Name="ImgFile" Relationship="PurchaseOrderModel.FK_ImgFile_PurchaseSKU" FromRole="PurchaseSKU" ToRole="ImgFile" />
+          <NavigationProperty Name="SKU" Relationship="PurchaseOrderModel.FK_PurchaseSKU_SKU" FromRole="PurchaseSKU" ToRole="SKU" />
         </EntityType>
         <EntityType Name="ShippingMethod">
           <Key>
@@ -2570,6 +2611,8 @@
           <NavigationProperty Name="SkuLang" Relationship="PurchaseOrderModel.FK_SkuLang_Sku" FromRole="SKU" ToRole="SkuLang" />
           <NavigationProperty Name="PriceGroup" Relationship="PurchaseOrderModel.FK_PriceGroup_SKU" FromRole="SKU" ToRole="PriceGroup" />
           <NavigationProperty Name="GetCompany" Relationship="PurchaseOrderModel.FK_SKU_Company" FromRole="SKU" ToRole="Company" />
+          <NavigationProperty Name="PurchaseSKU" Relationship="PurchaseOrderModel.FK_PurchaseSKU_SKU" FromRole="SKU" ToRole="PurchaseSKU" />
+          <NavigationProperty Name="TransferSKU" Relationship="PurchaseOrderModel.FK_TransferSKU_SKU" FromRole="SKU" ToRole="TransferSKU" />
         </EntityType>
         <EntityType Name="Sku_Attribute">
           <Key>
@@ -2719,6 +2762,7 @@
           <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="SerialsLlist" Relationship="PurchaseOrderModel.FK_SerialsLlist_TransferSKU" FromRole="TransferSKU" ToRole="SerialsLlist" />
           <NavigationProperty Name="Transfer" Relationship="PurchaseOrderModel.FK_TransferSKU_Transfer" FromRole="TransferSKU" ToRole="Transfer" />
+          <NavigationProperty Name="SKU" Relationship="PurchaseOrderModel.FK_TransferSKU_SKU" FromRole="TransferSKU" ToRole="SKU" />
         </EntityType>
         <EntityType Name="VendorLIst">
           <Key>
@@ -3765,6 +3809,30 @@
             </Principal>
             <Dependent Role="Transfer">
               <PropertyRef Name="Interim" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PurchaseSKU_SKU">
+          <End Type="PurchaseOrderModel.SKU" Role="SKU" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.PurchaseSKU" Role="PurchaseSKU" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SKU">
+              <PropertyRef Name="SkuID" />
+            </Principal>
+            <Dependent Role="PurchaseSKU">
+              <PropertyRef Name="SkuNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TransferSKU_SKU">
+          <End Type="PurchaseOrderModel.SKU" Role="SKU" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.TransferSKU" Role="TransferSKU" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SKU">
+              <PropertyRef Name="SkuID" />
+            </Principal>
+            <Dependent Role="TransferSKU">
+              <PropertyRef Name="SkuNo" />
             </Dependent>
           </ReferentialConstraint>
         </Association>

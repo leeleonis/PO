@@ -23,6 +23,8 @@ namespace PurchaseOrderSys.Models
             this.SkuPicture = new HashSet<SkuPicture>();
             this.SkuLang = new HashSet<SkuLang>();
             this.PriceGroup = new HashSet<PriceGroup>();
+            this.PurchaseSKU = new HashSet<PurchaseSKU>();
+            this.TransferSKU = new HashSet<TransferSKU>();
         }
     
         public bool IsEnable { get; set; }
@@ -62,5 +64,9 @@ namespace PurchaseOrderSys.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PriceGroup> PriceGroup { get; set; }
         public virtual Company GetCompany { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PurchaseSKU> PurchaseSKU { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TransferSKU> TransferSKU { get; set; }
     }
 }

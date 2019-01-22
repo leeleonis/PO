@@ -108,6 +108,8 @@
         <AssociationConnector Association="PurchaseOrderModel.FK_Transfer_Warehouse1" />
         <AssociationConnector Association="PurchaseOrderModel.FK_TransferSKU_Transfer" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Transfer_WarehouseInterim" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseSKU_SKU" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_TransferSKU_SKU" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
