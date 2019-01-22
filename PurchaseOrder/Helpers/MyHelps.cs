@@ -134,7 +134,7 @@ namespace PurchaseOrderSys.Helpers
         /// <param name="edititem">是否顯修改按鈕</param>
         /// <param name="delitem">是否顯示刪除按鈕</param>
         /// <returns></returns>
-        public static MvcHtmlString DataGridFor<TModel, TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression,string DataGridName,  bool checkbox, string title, string idField ,bool additem, bool edititem, bool delitem, bool showchilds)
+        public static MvcHtmlString DataGridFor<TModel, TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression,string DataGridName,  bool checkbox, string title, string idField ,bool additem, bool edititem, bool delitem,bool saveitem, bool showchilds)
         {
             ModelMetadata metadata = ModelMetadata.FromLambdaExpression(expression, html.ViewData);
             var DataGridModels = new DataGridModels();
@@ -145,6 +145,7 @@ namespace PurchaseOrderSys.Helpers
             DataGridModels.additem = additem;
             DataGridModels.edititem = edititem;
             DataGridModels.delitem = delitem;
+            DataGridModels.saveitem = saveitem;
             DataGridModels.showchilds = showchilds;
             DataGridModels.DataGridItems = new List<DataGridItemsModels>();
             try

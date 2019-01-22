@@ -1,6 +1,6 @@
 ﻿@model DataGridModels
 @{
-    var optionType = String.Join(",", Model.DataGridItems.Where(x => !string.IsNullOrWhiteSpace(x.columnsType) && x.columnsType== "select").Select(x => "'" + x.field + "DDL'"));
+    var optionType = String.Join(",", Model.DataGridItems.Where(x => !string.IsNullOrWhiteSpace(x.columnsType) && (x.columnsType== "select"|| x.columnsType == "OptionVal")).Select(x => "'" + x.field + "DDL'"));
 }
 <style>
     .DetailTable {
@@ -34,7 +34,26 @@
         }
         @foreach (var item in Model.DataGridItems.Where(x => x.frozen == true))
         {
-            @:{ field: "@item.field", title: "@item.title", width: @item.width, align: "@item.align", sortable: @item.sortable },
+            if (Model.saveitem && Model.edititem)
+            {
+                @:{ field: "@item.field", title: "@item.title", width: @item.width, align: "@item.align", sortable: @item.sortable },
+            }
+            else
+            {
+              @:{
+              @:    field: "@item.field", title: "@item.title", width: @item.width, align: "@item.align", sortable: @item.sortable , formatter: function (value, row, index) {
+              @:        if (website.IsEmpty(row.IsFilter))
+              @:        {
+              @:            return "<a  href='@Url.Action("EditItem")?ID=" + row.ID + "' >" + row.ID+"</a>";
+              @:        }
+              @:        else
+              @:        {
+              @:            return value;
+              @:        }
+              @:    }
+              @:},
+            }
+
         }
         ]];
 
@@ -47,7 +66,14 @@
             {
                 if (item.columnsType == "select")
                 {
-                    @:formatter: function (value, row, index) { return website.IsEmpty(row.IsFilter) ? datagrid.setDropdown(row.ID, this.field, selectOption['@(item.field+"DDL")'], value) : value; }
+                    if (Model.saveitem && Model.edititem)
+                    {
+                        @:formatter: function (value, row, index) { return website.IsEmpty(row.IsFilter) ? datagrid.setDropdown(row.ID, this.field, selectOption['@(item.field + "DDL")'], value) : value; }
+                    }
+                    else
+                    {
+                        @:formatter: function (value, row, index) { return website.IsEmpty(row.IsFilter) ? datagrid.setDropdownDisabled(row.ID, this.field, selectOption['@(item.field + "DDL")'], value) : value; }
+                    }
                 }
                 else
                 {
@@ -56,16 +82,22 @@
             }
             @:},
         }
-            {
-                field: "Save", title: "Save", width: 90, align: "center", sortable: false,
-                formatter: function (value, row, index) {
-                    if (website.IsEmpty(row.IsFilter)) {
-                        return "<button type='button' class='btn btn-default btn-sm' id='btn-save' onclick='SaveData(" + row.ID + ")' disabled>SAVE</button>";
-                    } else {
-                        return value;
-                    }
-                }
-            },
+
+        @if (Model.saveitem)
+        {
+
+            @:{
+            @:    field: "Save", title: "Save", width: 90, align: "center", sortable: false,
+            @:        formatter: function (value, row, index) {
+            @:        if (website.IsEmpty(row.IsFilter)) {
+            @:            return "<button type='button' class='btn btn-default btn-sm' id='btn-save' onclick='SaveData(" + row.ID + ")' disabled>SAVE</button>";
+            @:        } else {
+            @:            return value;
+            @:        }
+            @:    }
+            @:},
+        }
+
             @if (Model.additem)
             {
               @:{
@@ -99,7 +131,7 @@
         ]];
 
         @if (Model.showchilds)
-        {  
+        {
             @:datagrid.dataInit.view = detailview;
             @:datagrid.dataInit.detailFormatter = function (index, row) { return '<div class="itemList"></div>'; };
             @:datagrid.dataInit.onExpandRow = function (index, row)
@@ -132,8 +164,19 @@
             displayMsg: "顯示 {from} 到 {to} 筆資料，共 {total} 筆資料"
         });
         $table.datagrid('uncheckAll');
-    }
 
+        $(".datagrid-row").find("select").prop("disabled", "disabled");
+    }
+    function GetOptionVal(selectOption, value) {
+        var val = value;
+        $.each(selectOption, function () {
+            if (this.value === value) {
+                val= this.text;
+            }
+            return val;
+        });
+
+    }
         function getFilterData() {
             return {
                  @foreach (var item in Model.DataGridItems)

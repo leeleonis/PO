@@ -154,7 +154,7 @@
     </section>
 </div>
 @section pagespecific {
-    @Html.DataGridFor(x => Model, "#DataGrid", true, "CreditMemoList", "ID", false, true, false, false)
+    @Html.DataGridFor(x => Model, "#DataGrid", true, "CreditMemoList", "ID", false, false, false, false, false)
     <script type="text/javascript">
         $(document).ready(function () {
             $("#CreateCM").on("click", function () {

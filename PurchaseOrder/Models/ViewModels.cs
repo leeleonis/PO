@@ -411,6 +411,13 @@ public class PurchaseOrderPOVM
         public int? QTY { get; set; }
 
         /// <summary>
+        /// 入庫數量
+        /// </summary>
+        [Display(Name = "PurchaseSKU_QTYReceived", ResourceType = typeof(App_GlobalResources.Resource))]
+        [DataGrid(Align = "center", Widths = 150, ColumnsType = "input")]
+        public int? QTYReceived { get; set; }
+
+        /// <summary>
         /// 採購總金額
         /// </summary>
         [Display(Name = "GrandTotal", ResourceType = typeof(App_GlobalResources.Resource))]

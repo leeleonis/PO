@@ -48,6 +48,10 @@ namespace PurchaseOrderSys.Models
         /// </summary>
         public bool delitem { get; set; }
         /// <summary>
+        /// 是否顯示儲存按鈕
+        /// </summary>
+        public bool saveitem { get; set; }
+        /// <summary>
         /// 顯示子表
         /// </summary>
         public bool showchilds { get; set; }

@@ -205,7 +205,7 @@ namespace PurchaseOrderSys.Controllers
         }
         public ActionResult EditItem(int ID)
         {
-           
+
             var CreditMemo = db.CreditMemo.Find(ID);
             //var cmvm = new CMVM
             //{
@@ -238,6 +238,40 @@ namespace PurchaseOrderSys.Controllers
                 Subtotal = (x.CreditQTY * x.Credit) ?? 0,
                 Model = "L"
             });
+            if (CreditMemo.ShippingStatus != "Completed")
+            {
+                var QTYOrderedSum = dataList.Sum(x => x.QTYOrdered);
+                var QTYReturnedSum = dataList.Sum(x => x.QTYReturned);
+                if (QTYReturnedSum == 0)
+                {
+                    CreditMemo.ShippingStatus = "Pending";
+                }
+                else if (QTYOrderedSum == QTYReturnedSum)
+                {
+                    CreditMemo.ShippingStatus = "Completed";
+                }
+                else if (QTYOrderedSum > QTYReturnedSum)
+                {
+                    CreditMemo.ShippingStatus = "PartiallyReturned";
+                }
+                else if (QTYOrderedSum < QTYReturnedSum)
+                {
+                    CreditMemo.ShippingStatus = "OverShipped";
+                }
+                db.SaveChanges();
+            }
+            if (CreditMemo.CMStatus != "Completed")
+            {
+                if (CreditMemo.ShippingStatus == "Completed" && CreditMemo.CreditStatus == "Completed")
+                {
+                    CreditMemo.CMStatus = "Completed";
+                }
+                else
+                {
+                    CreditMemo.CMStatus = "Pending";
+                }
+                db.SaveChanges();
+            }
             Session["CMSkuNumberList"] = dataList.ToList();
             return View(CreditMemo);
         }
@@ -392,6 +426,15 @@ namespace PurchaseOrderSys.Controllers
             }
             db.SaveChanges();
             return View(CreditMemo);
+        }
+        [HttpPost]
+        public ActionResult GetSerialList(int ID)
+        {
+            var PurchaseSKU = db.PurchaseSKU.Find(ID);
+            var SerialsLlist = PurchaseSKU.SerialsLlist.Where(x => x.SerialsType == "CM").Select(x => x.SerialsNo).ToList();
+            var partial = ControlToString("~/Views/Shared/GetSerialList.cshtml", SerialsLlist);
+            //var partial = Engine.Razor.RunCompile(template, "templateKey", null, new { Name = "World" });
+            return Json(new { status = true, partial }, JsonRequestBehavior.AllowGet);
         }
         public ActionResult GetData(CreditMemoVM filter, string Type, int? DetailID)
         {

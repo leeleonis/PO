@@ -282,6 +282,7 @@ namespace PurchaseOrderSys.Controllers
                     VendorID = x.VendorID.ToString(),
                     PODate = x.PODate.Value.ToLocalTime().ToString("yyyy/MM/dd"),
                     QTY = x.PurchaseSKU.Where(y => y.IsEnable).Sum(y => y.QTYOrdered),
+                    QTYReceived = x.PurchaseSKU.Where(y => y.IsEnable).Sum(y => GetQTYReceived(y)),
                     GrandTotal = x.PurchaseSKU.Where(y => y.IsEnable).Sum(y => (y.QTYOrdered * y.Price)),
                     x.PaidAmount,
                     Balance = x.PurchaseSKU.Where(y => y.IsEnable).Sum(y => (y.QTYOrdered * y.Price)),
@@ -984,12 +985,12 @@ namespace PurchaseOrderSys.Controllers
                 return Json(new { status = false, Msg = "下列SKU有序號：" + string.Join(";", Msg) }, JsonRequestBehavior.AllowGet);
             }
         }
-        //[HttpPost]
+        [HttpPost]
         public ActionResult GetSerialList(int ID)
         {
             var PurchaseSKU = db.PurchaseSKU.Find(ID);
-            var SerialsLlist = PurchaseSKU.SerialsLlist.Where(x => x.SerialsQTY == 1 && x.SerialsLlistC.Count() == 0).Select(x => x.SerialsNo).ToList();
-            var partial = ControlToString("~/Views/PurchaseOrderPO/GetSerialList.cshtml", SerialsLlist);
+            var SerialsLlist = PurchaseSKU.SerialsLlist.Where(x => x.SerialsType == "PO").Select(x => x.SerialsNo).ToList();
+            var partial = ControlToString("~/Views/Shared/GetSerialList.cshtml", SerialsLlist);
             //var partial = Engine.Razor.RunCompile(template, "templateKey", null, new { Name = "World" });
             return Json(new { status = true, partial }, JsonRequestBehavior.AllowGet);
         }

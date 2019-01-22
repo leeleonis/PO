@@ -441,6 +441,7 @@ namespace PurchaseOrderSys.Controllers
                         {
                             item.WarehouseID = SCIDList.Where(x => x.SCID == item.SCID).FirstOrDefault()?.WarehouseID;
                         }
+                        //item.Date = item.Date.Value.ToUniversalTime();
                         //db.OrderLog.Add(new OrderLog
                         //{
                         //    Date = item.Date,

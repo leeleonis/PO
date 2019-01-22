@@ -5171,6 +5171,10 @@
     <Content Include="Content\fonts\fontawesome4.2\fontawesome-webfont.svg" />
     <Content Include="Content\fonts\fontawesome4.2\readme.txt" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\images\close.png" />
+    <Content Include="Content\images\loading.gif" />
+    <Content Include="Content\images\next.png" />
+    <Content Include="Content\images\prev.png" />
     <Content Include="Content\img\ajax-loader.gif" />
     <Content Include="Content\img\alpha.png" />
     <Content Include="Content\img\arrow_down.png" />
@@ -6330,7 +6334,7 @@
     <Content Include="Views\PurchaseOrderPO\EditItem.cshtml" />
     <Content Include="Views\PurchaseOrderPO\ReceiveItems.cshtml" />
     <Content Include="Views\PurchaseOrderPO\Addserials.cshtml" />
-    <Content Include="Views\PurchaseOrderPO\GetSerialList.cshtml" />
+    <Content Include="Views\Shared\GetSerialList.cshtml" />
     <Content Include="Views\Vendor\Index.cshtml" />
     <Content Include="Views\Vendor\Create.cshtml" />
     <Content Include="Views\Vendor\Edit.cshtml" />
