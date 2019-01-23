@@ -34,7 +34,7 @@
         var $table = $("#DataGrid"), datagrid;
 
         $(function () {
-            var data = { optionType: ['SkuCondition', 'SkuType', 'Replenishable', 'SkuStatus'] };
+            var data = { optionType: ['SkuType', 'Replenishable', 'SkuStatus'] };
 
             website.AjaxUrl("@Url.Action("GetSelectOption", "Ajax")", 'post', data).done(function (response) {
                 if (response.status) {
@@ -55,7 +55,7 @@
                 {
                     field: "SkuID", title: "@Html.DisplayNameFor(model => model.SkuID)", width: 120, align: "center", sortable: false,
                     formatter: function (value, row, index) {
-                        return website.IsEmpty(row.IsFilter) ? "<a href='/WarehouseInventory/Inventory/" + value + "'>" + value + "</a>" : value;
+                        return website.IsEmpty(row.IsFilter) ? "<a href='/Sku/edit/" + value + "'>" + value + "</a>" : value;
                     }
                 }
             ]];
@@ -66,11 +66,6 @@
                     field: "Name", title: "@Html.DisplayNameFor(model => model.SkuLang.First().Name)", width: 500, align: "center", sortable: false,
                     formatter: function (value, row, index) {
                         return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.SkuID, this.field, value) : value;
-                    }
-                }, {
-                    field: "Condition", title: "@Html.DisplayNameFor(model => model.Condition)", width: 220, align: "center", sortable: false,
-                    formatter: function (value, row, index) {
-                        return website.IsEmpty(row.IsFilter) ? datagrid.setDropdown(row.SkuID, this.field, selectOption['SkuCondition'], value.toString()) : value;
                     }
                 }, {
                     field: "Category", title: "@Html.DisplayNameFor(model => model.Category)", width: 200, align: "center", sortable: false,
@@ -116,13 +111,6 @@
                             return value;
                         }
                     }
-                }, {
-                    field: "Action", title: "Action", width: 90, align: "center", sortable: false,
-                    formatter: function (value, row, index) {
-                        if (website.IsEmpty(row.IsFilter)) {
-                            return "<a class='btn btn-default btn-sm' href='@Url.Action("Edit", "Sku")/" + row.SkuID + "'>EDIT</button>";
-                        }
-                    }
                 }
             ]];
 
@@ -144,7 +132,6 @@
                 SkuID: $('.filterColumn .s-skuID').val(),
                 ParentSku: $('.filterColumn .s-parentSku').val(),
                 Name: $('.filterColumn .s-name').val(),
-                Condition: $('.filterColumn .s-condition').val(),
                 Category: $('.filterColumn .s-category').val(),
                 UPC: $('.filterColumn .s-UPC').val(),
                 EAN: $('.filterColumn .s-EAN').val(),
@@ -162,7 +149,6 @@
                 SkuID: "<input type='text' class='form-control s-skuID' value='" + (!website.IsEmpty(filterValue['SkuID']) ? filterValue['SkuID'] : '') + "'>",
                 ParentSku: "<input type='text' class='form-control s-parentSku' value='" + (!website.IsEmpty(filterValue['ParentSku']) ? filterValue['ParentSku'] : '') + "'>",
                 Name: "<input type='text' class='form-control s-name' value='" + (!website.IsEmpty(filterValue['Name']) ? filterValue['Name'] : '') + "'>",
-                Condition: "<select class='form-control s-condition'><option value=''>全部</option>" + datagrid.setSelectOption(selectOption['SkuCondition'], filterValue['Condition']) + "</select>",
                 Category: "<select class='form-control s-category'><option value=''>全部</option>" + datagrid.setSelectOption(selectOption['SkuType'], filterValue['Category']) + "</select>",
                 UPC: "<input type='text' class='form-control s-UPC' value='" + (!website.IsEmpty(filterValue['UPC']) ? filterValue['UPC'] : '') + "'>",
                 EAN: "<input type='text' class='form-control s-EAN' value='" + (!website.IsEmpty(filterValue['EAN']) ? filterValue['EAN'] : '') + "'>",
@@ -222,7 +208,7 @@
                 SkuID: row.SkuID,
                 ParentSku: row.ParentSku,
                 Name: $("input#Name:eq(" + index + ")").val(),
-                Condition: $("select#Condition:eq(" + index + ")").val(),
+                Condition: row.Condition,
                 Category: $("select#Category:eq(" + index + ")").val(),
                 Brand: row.Brand,
                 UPC: $("input#UPC:eq(" + index + ")").val(),
