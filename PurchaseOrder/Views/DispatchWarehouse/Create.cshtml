@@ -53,7 +53,7 @@
                                                 </div>
                                                 @Html.Label(" ", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.BCheckBox("DefaultDispatch", true, new { @class = "checkbox" })
+                                                    @Html.BCheckBox("DefaultDispatch", new { @class = "checkbox" })
                                                     @Html.BCheckBox("DefaultRMA", new { @class = "checkbox" })
                                                 </div>
                                             </div>
@@ -176,6 +176,7 @@
         $('.tab-pane').eq(hash.substr(1)).addClass('active');
         var tableID = "#DataGridC";
         $(document).ready(function () {
+            DefaultType();
              DataGridC = $(tableID).DataTable({
                 fixedHeader: {
                     header: true,
@@ -233,61 +234,51 @@
                     }
                 }
             });
-            $("#Type").change(function () {
-                var selected = $(this).val();
-                $("#DefaultRMA").prop("disabled", "");
-                $("#DefaultDispatch").prop("disabled", "");
-                $(".IsSellable").prop("disabled", "");
-                if (selected == "Normal") {
-
-                }
-               else if (selected == "RMA") {
-                    $("#DefaultRMA").prop("checked", true);
-                    $("#DefaultDispatch").prop("checked", false);
-                    $(".IsSellable").val(["False"]);
-                    $("#DefaultRMA").prop("disabled", "disabled");
-                    $("#DefaultDispatch").prop("disabled", "disabled");
-                    $(".IsSellable").prop("disabled", "disabled");
-                }
-                else if (selected == "FBA") {
-
-                }
-                else if (selected == "DropShip") {
-                    $("#DefaultDispatch").prop("checked", true);
-                    $("#DefaultRMA").prop("checked", false);
-                    $("#DefaultRMA").prop("disabled", "disabled");
-                    $("#DefaultDispatch").prop("disabled", "disabled");
-                }
-                else if (selected == "Interim") {
-                    $(".IsSellable").val(["False"]);
-                    $(".IsSellable").prop("disabled", "disabled");
-                   
-                }
-                else if (selected == "Winit") {
-
-                }
-                IsSellableChk();
+            $("#Type").change(function () {              
+                DefaultType();
             });
             $("#DefaultDispatch").click(function () {
                 check = $(this).is(":checked");
                 if (check) {
                     $("#DefaultRMA").prop("checked", false);
-                } else {
-                    $("#DefaultRMA").prop("checked", true);
-                }              
+                }         
             });
             $("#DefaultRMA").click(function () {
                 check = $(this).is(":checked");
                 if (check) {
                     $("#DefaultDispatch").prop("checked", false);
-                } else {
-                    $("#DefaultDispatch").prop("checked", true);
                 }
             });
             $(".IsSellable").change(function () {
                 IsSellableChk();
             });
         });
+        function DefaultType() {
+            var selected = $("#Type").val();
+            $("#DefaultRMA").prop("disabled", "");
+            $("#DefaultDispatch").prop("disabled", "");
+            $("#DefaultRMA").prop("checked", false);
+            $("#DefaultDispatch").prop("checked", false);
+            $(".IsSellable").prop("disabled", "");
+            if (selected == "Normal" || selected == "FBA" || selected == "DropShip") {
+                $("#DefaultRMA").prop("disabled", "disabled");
+            }
+            else if (selected == "RMA") {
+                $(".IsSellable").val(["False"]);
+                $("#DefaultDispatch").prop("disabled", "disabled");
+                $(".IsSellable").prop("disabled", "disabled");
+            }
+            else if (selected == "Interim") {
+                $("#DefaultRMA").prop("disabled", "disabled");
+                $("#DefaultDispatch").prop("disabled", "disabled");
+                $(".IsSellable").val(["False"]);
+                $(".IsSellable").prop("disabled", "disabled");
+            }
+            else if (selected == "Winit") {
+
+            }
+            IsSellableChk();
+        }
         function IsSellableChk() {
             var IsSellable = $(".IsSellable:checked").val();
             if (IsSellable == "False") {

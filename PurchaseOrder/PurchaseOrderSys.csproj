@@ -216,6 +216,7 @@
     <Compile Include="Controllers\PurchaseOrderCMController.cs" />
     <Compile Include="Controllers\PurchaseOrderPOController.cs" />
     <Compile Include="Controllers\PurchaseSKUController.cs" />
+    <Compile Include="Controllers\RMAController.cs" />
     <Compile Include="Controllers\SkuAttributeController.cs" />
     <Compile Include="Controllers\SkuAttributeTypeController.cs" />
     <Compile Include="Controllers\SkuController.cs" />
@@ -6441,6 +6442,7 @@
     <Content Include="Views\Shared\EmailPo.cshtml" />
     <Content Include="Views\Transfer\Receive.cshtml" />
     <Content Include="Views\Transfer\GetSerialList.cshtml" />
+    <Content Include="Views\RMA\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -16,7 +16,7 @@ namespace PurchaseOrderSys.Controllers
     [CheckSession]
     public class SkuController : BaseController
     {
-        readonly string[] EditList = new string[] { "ParentSku", "Condition", "Category", "Brand", "EAN", "UPC", "Replenishable", "SerailTracking", "Battery", "Status" };
+        readonly string[] EditList = new string[] { "ParentSku", "Condition", "Category", "Brand", "EAN", "UPC", "Replenishable", "SerialTracking", "Battery", "Status" };
 
         // GET: Sku
         public ActionResult Index()

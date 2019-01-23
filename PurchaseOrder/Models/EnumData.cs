@@ -237,14 +237,42 @@ namespace PurchaseOrderSys.Models
         }
         /// <summary>
         /// 倉庫權限
-        /// </summary>
+        /// </summary>@
         /// <returns></returns>
         public static Dictionary<string, string> WarehousePurviewDLL()
         {
             var list = new Dictionary<string, string> { { "Requested", "Requested" }, { "Shipped", "Shipped" }, { "Received", "Received" } };
             return list;
         }
-
+        /// <summary>
+        /// RMA狀態
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<string, string> RMAStatusDDL()
+        {
+            return new Dictionary<string, string>()
+            {
+                { "Open", "Open" },
+                { "Authorized", "Authorized" },
+                { "Received", "Received" },
+                { "Fraud", "Fraud"},
+                { "Closed", "Closed"}
+            };
+        }
+        /// <summary>
+        /// RMA狀態 內部的動作
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<string, string> RMAActionDDL()
+        {
+            return new Dictionary<string, string>()
+            {
+                { "None", "None" },
+                { "Refund", "Refund" },
+                { "Replacement", "Replacement" },
+                { "Repair", "Repair"}
+            };
+        }
         public static Dictionary<int, string> eBayTitle()
         {
             return new Dictionary<int, string>()
