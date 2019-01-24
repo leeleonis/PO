@@ -1080,4 +1080,55 @@
   <data name="SerialsLlist_Memo" xml:space="preserve">
     <value>Memo</value>
   </data>
+  <data name="RMA_IsEnable" xml:space="preserve">
+    <value>IsEnable</value>
+  </data>
+  <data name="RMA_ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="RMA_OrderID" xml:space="preserve">
+    <value>OrderID</value>
+  </data>
+  <data name="RMA_SourceID" xml:space="preserve">
+    <value>SourceID</value>
+  </data>
+  <data name="RMA_CompanyID" xml:space="preserve">
+    <value>CompanyID</value>
+  </data>
+  <data name="RMA_WarehouseID" xml:space="preserve">
+    <value>WarehouseID</value>
+  </data>
+  <data name="RMA_Country" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="RMA_Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="RMA_Action" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="RMA_Reason" xml:space="preserve">
+    <value>Reason</value>
+  </data>
+  <data name="RMA_ReturnTracking" xml:space="preserve">
+    <value>ReturnTracking</value>
+  </data>
+  <data name="RMA_CreateBy" xml:space="preserve">
+    <value>CreateBy</value>
+  </data>
+  <data name="RMA_CreateAt" xml:space="preserve">
+    <value>CreateAt</value>
+  </data>
+  <data name="RMA_UpdateBy" xml:space="preserve">
+    <value>UpdateBy</value>
+  </data>
+  <data name="RMA_UpdateAt" xml:space="preserve">
+    <value>UpdateAt</value>
+  </data>
+  <data name="RMA_Carrier" xml:space="preserve">
+    <value>Carrier</value>
+  </data>
+  <data name="RMA_Channel" xml:space="preserve">
+    <value>Channel</value>
+  </data>
 </root>

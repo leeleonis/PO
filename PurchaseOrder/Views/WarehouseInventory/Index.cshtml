@@ -136,7 +136,7 @@
                                                     <table id="DataGridC" class="table table-striped table-bordered">
                                                         <thead>
                                                             <tr>
-                                                                <th></th>
+                                                                <th><input type="checkbox" /></th>
                                                                 <th>SKU</th>
                                                                 <th width="30%">Name</th>
                                                                 <th>Velocity (30 days)</th>
@@ -208,6 +208,9 @@
                 var title = $(this).text();
                 if (title != "") {
                     $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+                }
+                else {
+                    $(this).html('');
                 }
             });
             var DataGridC = $(tableID).DataTable({

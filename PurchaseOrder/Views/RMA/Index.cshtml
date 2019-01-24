@@ -1,7 +1,164 @@
-﻿
-@{
-    ViewBag.Title = "Index";
-}
+﻿@model RMAVM
+    @{
+        ViewBag.ptitle = "RMA";
+        var Warehouselist = EnumData.WarehouseDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+        var RMAStatusDDL = EnumData.RMAStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+        var DefaultSelect = PurchaseOrderSys.App_GlobalResources.Resource.DefaultSelect;
+    }
+    <style>
+        tfoot {
+            display: table-header-group;
+        }
+    </style>
+    <div id="content">
+        <section id="widget-grid" class="">
+            <div class="row">
+                <article class="col-xs-12">
+                    <div class="jarviswidget" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
 
-<h2>Index</h2>
+                        <header>
+                            <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+
+                            <h2>@ViewBag.ptitle</h2>
+                            <ul class="nav nav-tabs pull-right">
+                                <li><a data-toggle="tab" href="#hb1">@ViewBag.ptitle</a></li>
+                            </ul>
+                        </header>
+
+                        <div>
+                            <div class="widget-body no-padding">
+                                <div id="content" class="tab-content">
+                                    <div class="tab-pane" id="hb1">
+                                        <fieldset>
+                                            <legend>Search</legend>
+                                            <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
+                                                <div class="form-group">
+                                                    @Html.Label("CompanyID", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.DropDownListFor(model => model.CompanyID, Warehouselist, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                    </div>
+                                                    @Html.Label("Channel", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.DropDownListFor(model => model.Channel, Warehouselist, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                    </div>
+                                                    @Html.Label("Country", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.DropDownListFor(model => model.Country, Warehouselist, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.Label("SourceID", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("SourceID", new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>
+                                                    @Html.Label("ID", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("ID", new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-offset-10">
+                                                    <button type="submit" id="btn-search" class="btn btn-info btn-lg">Search</button>
+                                                </div>
+                                            </form>
+                                        </fieldset>
+                                        <fieldset>
+                                            <legend></legend>
+                                            <div class="form-group">
+                                                <div class="col-sm-9  col-lg-offset-11">
+                                                    <a type="button" href="@Url.Action("Create")" class='btn btn-danger btn-sm' id='btn-Add'>Create</a>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <article class="col-xs-12">
+                                                    <table id="DataGrid" class="table table-striped table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th><input type="checkbox" /></th>
+                                                                <th></th>
+                                                                <th>RMA #</th>
+                                                                <th>Order #</th>
+                                                                <th>Return Tracking</th>
+                                                                <th>Return Warehouse</th>
+                                                                <th>Reason</th>
+                                                                <th>Status</th>
+                                                                <th>Created Date</th>
+                                                                <th>Created By</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tfoot></tfoot>
+                                                        <tbody>
+                                                            @if (Model != null && Model.RMAList != null)
+                                                            {
+                                                                foreach (var item in Model.RMAList)
+                                                                {
+                                                                    <tr>
+                                                                        <td><input type="checkbox" /></td>
+                                                                        <td class="details-control"></td>
+                                                                        <td><a class='btn btn-default btn-sm' id='Edit' href='@Url.Action("Edit", new { item.ID })'>@item.ID</a></td>
+                                                                        <td>@item.OrderID</td>
+                                                                        <td>@item.ReturnTracking</td>
+                                                                        <td>@(item.Warehouse?.Name)</td>
+                                                                        <td>@(item.Reason)</td>
+                                                                        <td>@item.Status</td>
+                                                                        <td>@item.CreateAt.ToLocalTime()</td>
+                                                                        <td>@item.CreateBy</td>
+                                                                    </tr>
+                                                                }
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </article>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </div>
+    @section pagespecific {
+        <script type="text/javascript">
+            var hash = window.location.hash;
+            $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
+            $('.tab-pane').eq(hash.substr(1)).addClass('active');
+            $(document).ready(function () {
+                var tableID = "#DataGrid";
+                $(tableID + " thead tr").clone().appendTo($(tableID + " tfoot"));
+                $(tableID + " tfoot th").each(function () {
+                    var title = $(this).text();
+                    if (title != "") {
+                        $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+                    }
+                    else {
+                        $(this).html('');
+                    }
+                });
+                var DataGridC = $(tableID).DataTable({
+                    "columnDefs": [
+                        { "orderable": false, "targets": 0 },
+                        { "orderable": false, "targets": 1, "className": 'details-control' },
+                    ],
+                    "order": []
+                });
+
+                DataGridC.columns().every(function () {
+                    var that = this;
+                    $('input', this.footer()).on('keyup change', function () {
+                        if (that.search() !== this.value) {
+                            that
+                                .search(this.value)
+                                .draw();
+                        }
+                    });
+                });
+            });
+        </script>
+    }
+
+
+
+
 

@@ -1177,4 +1177,8 @@ public class PurchaseOrderPOVM
         public string Tracking { get; set; }
         public IEnumerable <Transfer> Transferlist { get; set; }
     }
+    public class RMAVM:RMA
+    {
+        public IEnumerable<RMA> RMAList { get; set; }
+    }
 }

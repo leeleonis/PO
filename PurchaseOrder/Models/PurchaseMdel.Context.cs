@@ -72,5 +72,6 @@ namespace PurchaseOrderSys.Models
         public virtual DbSet<SerialsLlist> SerialsLlist { get; set; }
         public virtual DbSet<OrderLog> OrderLog { get; set; }
         public virtual DbSet<Transfer> Transfer { get; set; }
+        public virtual DbSet<RMA> RMA { get; set; }
     }
 }

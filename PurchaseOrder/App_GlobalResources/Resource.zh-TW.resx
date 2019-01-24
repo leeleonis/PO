@@ -1767,4 +1767,55 @@
   <data name="SKU_Battery" xml:space="preserve">
     <value>電池</value>
   </data>
+  <data name="RMA_IsEnable" xml:space="preserve">
+    <value>啟用</value>
+  </data>
+  <data name="RMA_ID" xml:space="preserve">
+    <value>RMA 號碼</value>
+  </data>
+  <data name="RMA_OrderID" xml:space="preserve">
+    <value>訂單號碼</value>
+  </data>
+  <data name="RMA_SourceID" xml:space="preserve">
+    <value>源頭訂單的 ID</value>
+  </data>
+  <data name="RMA_CompanyID" xml:space="preserve">
+    <value>訂單所屬的公司</value>
+  </data>
+  <data name="RMA_WarehouseID" xml:space="preserve">
+    <value>退貨的倉庫</value>
+  </data>
+  <data name="RMA_Country" xml:space="preserve">
+    <value>訂單的收件國家</value>
+  </data>
+  <data name="RMA_Status" xml:space="preserve">
+    <value>RMA狀態</value>
+  </data>
+  <data name="RMA_Action" xml:space="preserve">
+    <value>內部的動作</value>
+  </data>
+  <data name="RMA_Reason" xml:space="preserve">
+    <value>退貨的原因</value>
+  </data>
+  <data name="RMA_ReturnTracking" xml:space="preserve">
+    <value>逆物流的運單號</value>
+  </data>
+  <data name="RMA_CreateBy" xml:space="preserve">
+    <value>建立者</value>
+  </data>
+  <data name="RMA_CreateAt" xml:space="preserve">
+    <value>建立時間</value>
+  </data>
+  <data name="RMA_UpdateBy" xml:space="preserve">
+    <value>修改者</value>
+  </data>
+  <data name="RMA_UpdateAt" xml:space="preserve">
+    <value>修改時間</value>
+  </data>
+  <data name="RMA_Carrier" xml:space="preserve">
+    <value>運輸商</value>
+  </data>
+  <data name="RMA_Channel" xml:space="preserve">
+    <value>寄件地址的國家</value>
+  </data>
 </root>

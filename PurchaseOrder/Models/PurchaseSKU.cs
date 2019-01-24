@@ -48,6 +48,7 @@ namespace PurchaseOrderSys.Models
         public Nullable<int> CreditMemoID { get; set; }
         public string UPCEAN { get; set; }
         public Nullable<System.DateTime> ReceivedDate { get; set; }
+        public Nullable<int> RMAID { get; set; }
     
         public virtual CreditMemo CreditMemo { get; set; }
         public virtual PurchaseOrder PurchaseOrder { get; set; }
@@ -56,5 +57,6 @@ namespace PurchaseOrderSys.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ImgFile> ImgFile { get; set; }
         public virtual SKU SKU { get; set; }
+        public virtual RMA RMA { get; set; }
     }
 }
