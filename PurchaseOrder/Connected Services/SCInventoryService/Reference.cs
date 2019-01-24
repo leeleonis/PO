@@ -55,6 +55,16 @@ namespace PurchaseOrderSys.SCInventoryService {
         [System.ServiceModel.OperationContractAttribute(Action="http://api.sellercloud.com/GetInventory", ReplyAction="*")]
         System.Threading.Tasks.Task<PurchaseOrderSys.SCInventoryService.GetInventoryResponse> GetInventoryAsync(PurchaseOrderSys.SCInventoryService.GetInventoryRequest request);
         
+        // CODEGEN: 訊息 GetInventoryMultipleRequest 具有標頭，正在產生訊息合約
+        [System.ServiceModel.OperationContractAttribute(Action="http://api.sellercloud.com/GetInventoryMultiple", ReplyAction="*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(BusinessEntityBase))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Address[]))]
+        PurchaseOrderSys.SCInventoryService.GetInventoryMultipleResponse GetInventoryMultiple(PurchaseOrderSys.SCInventoryService.GetInventoryMultipleRequest1 request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://api.sellercloud.com/GetInventoryMultiple", ReplyAction="*")]
+        System.Threading.Tasks.Task<PurchaseOrderSys.SCInventoryService.GetInventoryMultipleResponse> GetInventoryMultipleAsync(PurchaseOrderSys.SCInventoryService.GetInventoryMultipleRequest1 request);
+        
         // CODEGEN: 訊息 ProductActiveListing_ListProductsByChannelRequest 具有標頭，正在產生訊息合約
         [System.ServiceModel.OperationContractAttribute(Action="http://api.sellercloud.com/ProductActiveListing_ListProductsByChannel", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -854,6 +864,52 @@ namespace PurchaseOrderSys.SCInventoryService {
             set {
                 this.anyAttrField = value;
                 this.RaisePropertyChanged("AnyAttr");
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.3056.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://api.sellercloud.com/")]
+    public partial class GetInventoryMultipleRequest : object, System.ComponentModel.INotifyPropertyChanged {
+        
+        private string productIDField;
+        
+        private int warehouseIDField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        public string ProductID {
+            get {
+                return this.productIDField;
+            }
+            set {
+                this.productIDField = value;
+                this.RaisePropertyChanged("ProductID");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
+        public int WarehouseID {
+            get {
+                return this.warehouseIDField;
+            }
+            set {
+                this.warehouseIDField = value;
+                this.RaisePropertyChanged("WarehouseID");
             }
         }
         
@@ -2712,6 +2768,44 @@ namespace PurchaseOrderSys.SCInventoryService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="GetInventoryMultiple", WrapperNamespace="http://api.sellercloud.com/", IsWrapped=true)]
+    public partial class GetInventoryMultipleRequest1 {
+        
+        [System.ServiceModel.MessageHeaderAttribute(Namespace="http://api.sellercloud.com/")]
+        public PurchaseOrderSys.SCInventoryService.AuthHeader AuthHeader;
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.sellercloud.com/", Order=0)]
+        public PurchaseOrderSys.SCInventoryService.GetInventoryMultipleRequest[] req;
+        
+        public GetInventoryMultipleRequest1() {
+        }
+        
+        public GetInventoryMultipleRequest1(PurchaseOrderSys.SCInventoryService.AuthHeader AuthHeader, PurchaseOrderSys.SCInventoryService.GetInventoryMultipleRequest[] req) {
+            this.AuthHeader = AuthHeader;
+            this.req = req;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="GetInventoryMultipleResponse", WrapperNamespace="http://api.sellercloud.com/", IsWrapped=true)]
+    public partial class GetInventoryMultipleResponse {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://api.sellercloud.com/", Order=0)]
+        public PurchaseOrderSys.SCInventoryService.GetInventoryResponseType[] GetInventoryMultipleResult;
+        
+        public GetInventoryMultipleResponse() {
+        }
+        
+        public GetInventoryMultipleResponse(PurchaseOrderSys.SCInventoryService.GetInventoryResponseType[] GetInventoryMultipleResult) {
+            this.GetInventoryMultipleResult = GetInventoryMultipleResult;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(WrapperName="ProductActiveListing_ListProductsByChannel", WrapperNamespace="http://api.sellercloud.com/", IsWrapped=true)]
     public partial class ProductActiveListing_ListProductsByChannelRequest {
         
@@ -2974,6 +3068,31 @@ namespace PurchaseOrderSys.SCInventoryService {
             inValue.ProductID = ProductID;
             inValue.WarehouseID = WarehouseID;
             return ((PurchaseOrderSys.SCInventoryService.SCInventoryServiceSoap)(this)).GetInventoryAsync(inValue);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        PurchaseOrderSys.SCInventoryService.GetInventoryMultipleResponse PurchaseOrderSys.SCInventoryService.SCInventoryServiceSoap.GetInventoryMultiple(PurchaseOrderSys.SCInventoryService.GetInventoryMultipleRequest1 request) {
+            return base.Channel.GetInventoryMultiple(request);
+        }
+        
+        public PurchaseOrderSys.SCInventoryService.GetInventoryResponseType[] GetInventoryMultiple(PurchaseOrderSys.SCInventoryService.AuthHeader AuthHeader, PurchaseOrderSys.SCInventoryService.GetInventoryMultipleRequest[] req) {
+            PurchaseOrderSys.SCInventoryService.GetInventoryMultipleRequest1 inValue = new PurchaseOrderSys.SCInventoryService.GetInventoryMultipleRequest1();
+            inValue.AuthHeader = AuthHeader;
+            inValue.req = req;
+            PurchaseOrderSys.SCInventoryService.GetInventoryMultipleResponse retVal = ((PurchaseOrderSys.SCInventoryService.SCInventoryServiceSoap)(this)).GetInventoryMultiple(inValue);
+            return retVal.GetInventoryMultipleResult;
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<PurchaseOrderSys.SCInventoryService.GetInventoryMultipleResponse> PurchaseOrderSys.SCInventoryService.SCInventoryServiceSoap.GetInventoryMultipleAsync(PurchaseOrderSys.SCInventoryService.GetInventoryMultipleRequest1 request) {
+            return base.Channel.GetInventoryMultipleAsync(request);
+        }
+        
+        public System.Threading.Tasks.Task<PurchaseOrderSys.SCInventoryService.GetInventoryMultipleResponse> GetInventoryMultipleAsync(PurchaseOrderSys.SCInventoryService.AuthHeader AuthHeader, PurchaseOrderSys.SCInventoryService.GetInventoryMultipleRequest[] req) {
+            PurchaseOrderSys.SCInventoryService.GetInventoryMultipleRequest1 inValue = new PurchaseOrderSys.SCInventoryService.GetInventoryMultipleRequest1();
+            inValue.AuthHeader = AuthHeader;
+            inValue.req = req;
+            return ((PurchaseOrderSys.SCInventoryService.SCInventoryServiceSoap)(this)).GetInventoryMultipleAsync(inValue);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]

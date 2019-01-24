@@ -596,6 +596,9 @@
     <Content Include="Connected Services\SCInventoryService\PurchaseOrderSys.SCInventoryService.Users_GetCurrentUserDetailsResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
+    <Content Include="Connected Services\SCInventoryService\PurchaseOrderSys.SCInventoryService.GetInventoryMultipleResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
     <None Include="Connected Services\SCInventoryService\SCInventoryService.disco" />
     <None Include="Connected Services\SCInventoryService\configuration91.svcinfo" />
     <None Include="Connected Services\SCInventoryService\configuration.svcinfo" />
@@ -5140,6 +5143,48 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <None Include="Connected Services\SCInventoryService\SCInventoryService.wsdl" />
+    <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.GetCurrentUserInfo2Response.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.GetCurrentUserInfoForLogin2Response.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.GetDBVSLocalVersionResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.GetWarehouseLotsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.ProductWarehouseBinLotExpiry_ForProductResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.PutAwayListProduct_Add3Response.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.PutAwayList_PutAway_AndTransfer3Response.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.WarehouseBin_SetDimensResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.WarehouseInventoryTransferRequestDetail_4Response.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.WarehouseInventoryTransferRequestDetail_ForFBARemoval2Response.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.WarehouseInventoryTransferRequest_ShipProducts2Response.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.WarehouseLot.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.WarehouseTransfer_From_BinEnabled_To_NonBinEnabled_WithLotExpiryResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.WarehouseTransfer_From_NonBinEnabled_To_BinEnabled_WithLotExpiryResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
     <None Include="Connected Services\SCService\scservice.disco" />
     <None Include="Connected Services\SCService\configuration91.svcinfo" />
     <None Include="Connected Services\SCService\configuration.svcinfo" />

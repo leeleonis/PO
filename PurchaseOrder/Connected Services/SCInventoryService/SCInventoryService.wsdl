@@ -86,6 +86,36 @@
           <s:element minOccurs="1" maxOccurs="1" name="InventoryDate" type="s:dateTime" />
         </s:sequence>
       </s:complexType>
+      <s:element name="GetInventoryMultiple">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="req" type="tns:ArrayOfGetInventoryMultipleRequest" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfGetInventoryMultipleRequest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="GetInventoryMultipleRequest" nillable="true" type="tns:GetInventoryMultipleRequest" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="GetInventoryMultipleRequest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ProductID" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="WarehouseID" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetInventoryMultipleResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetInventoryMultipleResult" type="tns:ArrayOfGetInventoryResponseType" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfGetInventoryResponseType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="GetInventoryResponseType" nillable="true" type="tns:GetInventoryResponseType" />
+        </s:sequence>
+      </s:complexType>
       <s:element name="ProductActiveListing_ListProductsByChannel">
         <s:complexType>
           <s:sequence>
@@ -554,6 +584,15 @@
   <wsdl:message name="GetInventoryAuthHeader">
     <wsdl:part name="AuthHeader" element="tns:AuthHeader" />
   </wsdl:message>
+  <wsdl:message name="GetInventoryMultipleSoapIn">
+    <wsdl:part name="parameters" element="tns:GetInventoryMultiple" />
+  </wsdl:message>
+  <wsdl:message name="GetInventoryMultipleSoapOut">
+    <wsdl:part name="parameters" element="tns:GetInventoryMultipleResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetInventoryMultipleAuthHeader">
+    <wsdl:part name="AuthHeader" element="tns:AuthHeader" />
+  </wsdl:message>
   <wsdl:message name="ProductActiveListing_ListProductsByChannelSoapIn">
     <wsdl:part name="parameters" element="tns:ProductActiveListing_ListProductsByChannel" />
   </wsdl:message>
@@ -607,6 +646,10 @@
       <wsdl:input message="tns:GetInventorySoapIn" />
       <wsdl:output message="tns:GetInventorySoapOut" />
     </wsdl:operation>
+    <wsdl:operation name="GetInventoryMultiple">
+      <wsdl:input message="tns:GetInventoryMultipleSoapIn" />
+      <wsdl:output message="tns:GetInventoryMultipleSoapOut" />
+    </wsdl:operation>
     <wsdl:operation name="ProductActiveListing_ListProductsByChannel">
       <wsdl:input message="tns:ProductActiveListing_ListProductsByChannelSoapIn" />
       <wsdl:output message="tns:ProductActiveListing_ListProductsByChannelSoapOut" />
@@ -657,6 +700,16 @@
       <wsdl:input>
         <soap:body use="literal" />
         <soap:header message="tns:GetInventoryAuthHeader" part="AuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetInventoryMultiple">
+      <soap:operation soapAction="http://api.sellercloud.com/GetInventoryMultiple" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:GetInventoryMultipleAuthHeader" part="AuthHeader" use="literal" />
       </wsdl:input>
       <wsdl:output>
         <soap:body use="literal" />
@@ -733,6 +786,16 @@
       <wsdl:input>
         <soap12:body use="literal" />
         <soap12:header message="tns:GetInventoryAuthHeader" part="AuthHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetInventoryMultiple">
+      <soap12:operation soapAction="http://api.sellercloud.com/GetInventoryMultiple" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:GetInventoryMultipleAuthHeader" part="AuthHeader" use="literal" />
       </wsdl:input>
       <wsdl:output>
         <soap12:body use="literal" />
