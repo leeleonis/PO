@@ -14,18 +14,11 @@ namespace PurchaseOrderSys.Models
     
     public partial class RMA
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public RMA()
-        {
-            this.PurchaseSKU = new HashSet<PurchaseSKU>();
-        }
-    
         public bool IsEnable { get; set; }
         public int ID { get; set; }
         public Nullable<int> OrderID { get; set; }
         public Nullable<int> SourceID { get; set; }
         public Nullable<int> CompanyID { get; set; }
-        public Nullable<int> WarehouseID { get; set; }
         public string Country { get; set; }
         public string Status { get; set; }
         public string Action { get; set; }
@@ -37,9 +30,7 @@ namespace PurchaseOrderSys.Models
         public Nullable<System.DateTime> UpdateAt { get; set; }
         public string Carrier { get; set; }
         public string Channel { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PurchaseSKU> PurchaseSKU { get; set; }
-        public virtual Warehouse Warehouse { get; set; }
+        public string SourceCaseID { get; set; }
+        public string SCRMA { get; set; }
     }
 }

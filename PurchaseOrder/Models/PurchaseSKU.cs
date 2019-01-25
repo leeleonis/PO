@@ -57,6 +57,5 @@ namespace PurchaseOrderSys.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ImgFile> ImgFile { get; set; }
         public virtual SKU SKU { get; set; }
-        public virtual RMA RMA { get; set; }
     }
 }

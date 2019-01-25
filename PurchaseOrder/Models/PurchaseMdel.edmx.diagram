@@ -110,9 +110,7 @@
         <AssociationConnector Association="PurchaseOrderModel.FK_Transfer_WarehouseInterim" />
         <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseSKU_SKU" />
         <AssociationConnector Association="PurchaseOrderModel.FK_TransferSKU_SKU" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.RMA" Width="1.5" PointX="21.375" PointY="1" />
-        <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseSKU_RMA" />
-        <AssociationConnector Association="PurchaseOrderModel.FK_RMA_Warehouse" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.RMA" Width="1.5" PointX="21.375" PointY="0.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

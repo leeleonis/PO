@@ -58,13 +58,6 @@ namespace PurchaseOrderSys.Models
     
     		    
     		/// <summary>
-    		/// Warehouse ID
-    		/// </summary>        
-    	    [Display(Name = "RMA_WarehouseID", ResourceType = typeof(App_GlobalResources.Resource))]
-    		public Nullable<int>  WarehouseID { get; set; }
-    
-    		    
-    		/// <summary>
     		/// Country
     		/// </summary>        
     	    [Display(Name = "RMA_Country", ResourceType = typeof(App_GlobalResources.Resource))]
