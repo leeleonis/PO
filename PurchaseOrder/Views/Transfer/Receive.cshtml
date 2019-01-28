@@ -113,6 +113,7 @@
                         type: "post",
                         url: "@Url.Action("ReceiveSaveserials")",
                         data: {
+                            id:@Html.Display("id"),
                             serials: serials,
                         },
                         success: function (data) {

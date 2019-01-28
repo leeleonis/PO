@@ -80,7 +80,7 @@ namespace PurchaseOrderSys.Controllers
             var odataList = (List<TranSKUVM>)Session["TSkuNumberList"];
             if (odataList != null)
             {
-                foreach (var item in odataList)
+                foreach (var item in odataList.Where(x => x.Model == "E"))
                 {
                     Transfer.TransferSKU.Add(new TransferSKU { SkuNo = item.SKU, QTY = item.QTY, CreateBy = CreateBy, CreateAt = CreateAt });
                 }
@@ -103,7 +103,8 @@ namespace PurchaseOrderSys.Controllers
                     sk = item.SkuNo,
                     SKU = item.SkuNo,
                     ProductName = item.Name,
-                    QTY = item.QTY
+                    QTY = item.QTY,
+                    Model = "L"
                 });
             }
 
@@ -357,11 +358,21 @@ namespace PurchaseOrderSys.Controllers
                 return Json(new { status = false, Errmsg = "序號不存在，此序號不能移倉" }, JsonRequestBehavior.AllowGet);
             }
         }
-        public ActionResult ReceiveSaveserials(string serials)
+        public ActionResult ReceiveSaveserials(int id, string serials)
         {
             var ReceiveVMList = (List<TransferItemVM>)Session["ReceiveVMList"];
 
-            var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials && x.SerialsType == "TransferOut");//找到序號
+            var SerialsLlist = db.SerialsLlist.Where(x => x.TransferSKU.TransferID == id && x.SerialsNo == serials && !x.SerialsLlistC.Any());
+            if (SerialsLlist.Sum(x => x.SerialsQTY) > 0)//檔序號數量>0
+            {
+                var SkuNolist = ReceiveVMList.Select(x=>x.SKU).Where(s => !string.IsNullOrWhiteSpace(s)).Distinct().ToList();
+                if (SerialsLlist.Where(x=> SkuNolist.Contains(x.TransferSKU.SkuNo)).Any())//檢查是否存在相同的sku而且序號相同
+                {
+                    return Json(new { status = false, Errmsg = "序號已存在，不能重複入庫" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+
+            SerialsLlist = SerialsLlist.Where(x => x.SerialsType == "TransferOut");//找到序號
             if (SerialsLlist.Any())
             {
                 var Serial = SerialsLlist.FirstOrDefault();
@@ -485,6 +496,52 @@ namespace PurchaseOrderSys.Controllers
 
             return RedirectToAction("Edit", new { ID });
             //return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult RemoveData(string[] IDList)
+        {
+            var Errmsg = "";
+            if (IDList != null && IDList.Any())
+            {
+                var odataList = (List<TranSKUVM>)Session["TSkuNumberList"];
+                foreach (var item in IDList)
+                {
+                    foreach (var odataListitem in odataList.Where(x => x.ID.ToString() == item || x.SKU == item))
+                    {
+                        if (odataListitem.ID.HasValue)
+                        {
+
+
+                            var TransferSKU = db.TransferSKU.Find(odataListitem.ID);
+                            if (TransferSKU.SerialsLlist.Any())
+                            {
+                                Errmsg += "【" + TransferSKU.SkuNo + "】已有序號不能刪除；";
+                            }
+                            else
+                            {
+                                odataListitem.Model = "D";
+                            }
+                        }
+                        else
+                        {
+                            odataListitem.Model = "D";
+                        }
+                    }
+                }
+                Session["TSkuNumberList"] = odataList;
+            }
+            else
+            {
+                Errmsg = "沒有選取SKU";
+            }
+            if (string.IsNullOrWhiteSpace(Errmsg))
+            {
+                return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { status = false, Errmsg }, JsonRequestBehavior.AllowGet);
+            }
+
         }
         //public ActionResult GetShippingList(int WarehouseID)
         //{

@@ -537,7 +537,6 @@
           <Property Name="Name" Type="nvarchar" MaxLength="200" />
           <Property Name="PurchaseOrderID" Type="int" />
           <Property Name="CreditMemoID" Type="int" />
-          <Property Name="RMAID" Type="int" />
           <Property Name="SkuNo" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="QTYOrdered" Type="int" />
           <Property Name="QTYFulfilled" Type="int" />
@@ -2572,7 +2571,6 @@
           <NavigationProperty Name="SerialsLlist" Relationship="PurchaseOrderModel.FK_SerialsLlist_PurchaseSKU" FromRole="PurchaseSKU" ToRole="SerialsLlist" />
           <NavigationProperty Name="ImgFile" Relationship="PurchaseOrderModel.FK_ImgFile_PurchaseSKU" FromRole="PurchaseSKU" ToRole="ImgFile" />
           <NavigationProperty Name="SKU" Relationship="PurchaseOrderModel.FK_PurchaseSKU_SKU" FromRole="PurchaseSKU" ToRole="SKU" />
-          <Property Name="RMAID" Type="Int32" />
         </EntityType>
         <EntityType Name="ShippingMethod">
           <Key>
@@ -4238,7 +4236,6 @@
           <EntitySetMapping Name="PurchaseSKU">
             <EntityTypeMapping TypeName="PurchaseOrderModel.PurchaseSKU">
               <MappingFragment StoreEntitySet="PurchaseSKU">
-                <ScalarProperty Name="RMAID" ColumnName="RMAID" />
                 <ScalarProperty Name="ReceivedDate" ColumnName="ReceivedDate" />
                 <ScalarProperty Name="UPCEAN" ColumnName="UPCEAN" />
                 <ScalarProperty Name="CreditMemoID" ColumnName="CreditMemoID" />

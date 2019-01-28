@@ -2,8 +2,10 @@
 @{
     ViewBag.ptitle = "Transfer Summary";
     var Warehouselist = EnumData.WarehouseDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var InterimList = EnumData.InterimDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var TransferStatusDDL = EnumData.TransferStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var DefaultSelect = PurchaseOrderSys.App_GlobalResources.Resource.DefaultSelect;
+    var ShippingList = new PurchaseOrderSys.Api.Shipping_API().ShippingList().data.shippingMethod.Select(x => new SelectListItem { Text = x.text, Value = x.value.ToString() }).ToList();
 }
 <div id="content">
     <section id="widget-grid" class="">
@@ -52,7 +54,7 @@
                                                 </div>
                                                 @Html.Label("Interim:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownList("Interim", Warehouselist, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.DropDownList("Interim", InterimList, DefaultSelect, htmlAttributes: new { @class = "form-control" })
                                                 </div>
                                                 @Html.Label("To", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
@@ -62,7 +64,7 @@
                                             <div class="form-group">
                                                 @Html.Label("Carrier:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Carrier", new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.DropDownList("Carrier", ShippingList, DefaultSelect, htmlAttributes: new { @class = "form-control" })
                                                 </div>
                                                 @Html.Label("Tracking:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
@@ -78,14 +80,14 @@
                                             <legend></legend>
                                             <div class="form-group">
                                                 <div class="col-sm-9  col-lg-8">
-                                                    <a type="button" href="@Url.Action("Prep")" class='btn btn-default btn-sm' id='btn-Add'>Prep</a>
+                                                    @*<a type="button" href="@Url.Action("Prep")" class='btn btn-default btn-sm' id='btn-Add'>Prep</a>
                                                     <a type="button" href="@Url.Action("Receive")" class='btn btn-default btn-sm' id='btn-Add'>Receive</a>
                                                     <a type="button" href="@Url.Action("PrintAWB")" class='btn btn-default btn-sm' id='btn-Add'>Print AWB</a>
                                                     <a type="button" href="@Url.Action("Ship")" class='btn btn-default btn-sm' id='btn-Add'>Ship</a>
                                                     <a type="button" href="@Url.Action("Requst")" class='btn btn-default btn-sm' id='btn-Add'>Requst</a>
-                                                    <a type="button" href="@Url.Action("Unrequest")" class='btn btn-default btn-sm' id='btn-Add'>Unrequest</a>
-                                                    <a type="button" href="@Url.Action("Save")" class='btn btn-default btn-sm' id='btn-Add'>Save</a>
-                                                    <a type="button" href="@Url.Action("Delete")" class='btn btn-default btn-sm' id='btn-Add'>Delete</a>
+                                                    <a type="button" href="@Url.Action("Unrequest")" class='btn btn-default btn-sm' id='btn-Add'>Unrequest</a>*@
+                                                    @*<a type="button" href="@Url.Action("Save")" class='btn btn-default btn-sm' id='btn-Add'>Save</a>*@
+                                                    <a class='btn btn-default btn-sm' id='DeleteSKU'>Delete</a>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -93,10 +95,10 @@
                                                     <table id="DataGrid" class="table table-striped table-bordered">
                                                         <thead>
                                                             <tr>
-                                                                <th></th>
                                                                 <th>
                                                                     <input type="checkbox" />
                                                                 </th>
+                                                                <th></th>
                                                                 <th>SKU</th>
                                                                 <th>Product Name</th>
                                                                 <th>QTY</th>
@@ -210,7 +212,7 @@
                     }
                 },
                 serverSide: true,//啟用ServerSide模式
-                deferLoading: 0, //初始化DataTable時，不發出ajax
+                //deferLoading: 0, //初始化DataTable時，不發出ajax
                 orderMulti: false,
                 "paging": false,
                 "ordering": false,
@@ -259,6 +261,32 @@
                 else {
                     DataGrid.draw();
                 }
+            });
+            $("#DeleteSKU").click(function () {
+                var dataList = [];
+                $(DataGrid.$('input[type="checkbox"]:checked').each(function () {
+                    dataList.push($(this).val());
+                }));
+                //for (var i in rows) {
+                //    dataList.push(i);
+                //}
+                $.ajax({
+                    traditional: true,
+                    type: "post",
+                    url: "@Url.Action("RemoveData")",
+                    data: {
+                        IDList: dataList,
+                    },
+                    success: function (data) {
+                        if (data.status) {
+                            $(tableID + ' thead input[type="checkbox"]').prop("checked", false);
+                            DataGrid.draw();
+                        }
+                        else {
+                            alert(data.Errmsg);
+                        }
+                    }
+                });
             });
             $("select").change(function () {
                 var FromWID = $("#FromWID").val();

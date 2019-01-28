@@ -132,7 +132,21 @@ namespace PurchaseOrderSys.Models
             var list = new Dictionary<string, string>();
             using (var db = new PurchaseOrderEntities())
             {
-                list = db.Warehouse.ToDictionary(y => y.ID.ToString(), y => y.Name);
+                list = db.Warehouse.Where(x=>x.Type!= "Interim").ToDictionary(y => y.ID.ToString(), y => y.Name);
+                //list = db.VendorLIst.ToDictionary(y => y.ID.ToString(), y => y.VendorNo + "_" + y.Name);
+            }
+            return list;
+        }
+        /// <summary>
+        /// Interim倉庫列表
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<string, string> InterimDDL()
+        {
+            var list = new Dictionary<string, string>();
+            using (var db = new PurchaseOrderEntities())
+            {
+                list = db.Warehouse.Where(x => x.Type == "Interim").ToDictionary(y => y.ID.ToString(), y => y.Name);
                 //list = db.VendorLIst.ToDictionary(y => y.ID.ToString(), y => y.VendorNo + "_" + y.Name);
             }
             return list;

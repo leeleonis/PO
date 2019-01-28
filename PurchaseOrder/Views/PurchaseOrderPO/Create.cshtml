@@ -628,7 +628,11 @@
                         className: 'select-checkbox',
                         orderable: false,
                         render: function (data, type, row, meta) {
-                            return '<input type="checkbox" value="' + row.ID + '">';
+                            if (row.ID != null) {
+                                return '<input type="checkbox" value="' + row.ID + '">';
+                            } else {
+                                return '<input type="checkbox" value="' + row.SKU + '">';
+                            }
                         }
                     },
                     {

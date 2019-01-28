@@ -128,7 +128,6 @@ namespace PurchaseOrderSys.Models
     		/// Carrier
     		/// </summary>        
     	    [Display(Name = "Transfer_Carrier", ResourceType = typeof(App_GlobalResources.Resource))]
-            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  Carrier { get; set; }
     

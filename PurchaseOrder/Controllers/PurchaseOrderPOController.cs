@@ -54,7 +54,7 @@ namespace PurchaseOrderSys.Controllers
             var dataList = (List<PoSKUVM>)Session["SkuNumberList"];
             if (dataList != null)
             {
-                var PurchaseSKUlist = dataList.Select(x => new PurchaseSKU
+                var PurchaseSKUlist = dataList.Where(x => x.Model == "E").Select(x => new PurchaseSKU
                 {
                     IsEnable = true,
                     Name = x.Name,

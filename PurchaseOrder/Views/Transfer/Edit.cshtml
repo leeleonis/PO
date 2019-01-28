@@ -2,6 +2,7 @@
 @{
     ViewBag.ptitle = "Transfer Summary";
     var Warehouselist = EnumData.WarehouseDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var InterimList = EnumData.InterimDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var TransferStatusDDL = EnumData.TransferStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var DefaultSelect = PurchaseOrderSys.App_GlobalResources.Resource.DefaultSelect;
     var ShippingList = new PurchaseOrderSys.Api.Shipping_API().ShippingList().data.shippingMethod.Select(x => new SelectListItem { Text = x.text, Value = x.value.ToString() }).ToList();
@@ -55,15 +56,15 @@
                                             <div class="form-group">
                                                 @Html.Label("From:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownList("FromWID", Warehouselist, DefaultSelect, htmlAttributes: new { @class = "form-control "+ TStatus, disabled })
+                                                    @Html.DropDownList("FromWID", Warehouselist, htmlAttributes: new { @class = "form-control "+ TStatus, disabled })
                                                 </div>
                                                 @Html.Label("Interim:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownList("Interim", Warehouselist, DefaultSelect, htmlAttributes: new { @class = "form-control "+ TStatus, disabled })
+                                                    @Html.DropDownList("Interim", Warehouselist,  htmlAttributes: new { @class = "form-control "+ TStatus, disabled })
                                                 </div>
                                                 @Html.Label("To", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownList("ToWID", Warehouselist, DefaultSelect, htmlAttributes: new { @class = "form-control "+ TStatus, disabled })
+                                                    @Html.DropDownList("ToWID", Warehouselist, htmlAttributes: new { @class = "form-control "+ TStatus, disabled })
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -110,6 +111,7 @@
                                                     {
 
                                                     }
+                                                    <a class='btn btn-default btn-sm' id='DeleteSKU'>Delete</a>
                                                     @*
         <a type="button" href="@Url.Action("Unrequest",new { Model.ID})" class='btn btn-default btn-sm' id='btn-Add'>Unrequest</a>
         <a type="button" href="@Url.Action("Save",new { Model.ID})" class='btn btn-default btn-sm' id='btn-Add'>Save</a>
@@ -339,6 +341,32 @@
                     ajaxpost(this)
                 }
                 return false;
+            });
+            $("#DeleteSKU").click(function () {
+                var dataList = [];
+                $(DataGrid.$('input[type="checkbox"]:checked').each(function () {
+                    dataList.push($(this).val());
+                }));
+                //for (var i in rows) {
+                //    dataList.push(i);
+                //}
+                $.ajax({
+                    traditional: true,
+                    type: "post",
+                    url: "@Url.Action("RemoveData")",
+                    data: {
+                        IDList: dataList,
+                    },
+                    success: function (data) {
+                        if (data.status) {
+                            $(tableID + ' thead input[type="checkbox"]').prop("checked", false);
+                            DataGrid.draw();
+                        }
+                        else {
+                            alert(data.Errmsg);
+                        }
+                    }
+                });
             });
         });
         function ajaxpost(e) {

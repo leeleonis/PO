@@ -105,6 +105,7 @@ namespace PurchaseOrderSys.Controllers
                 QTYReturned = x.QTYReturned,
                 Serial = x.SerialsLlist.Any() ? "Yes" : "No",
                 SerialQTY = x.SerialsLlist.Count(),
+                SerialTracking=x.SKU.SerialTracking
             }).ToList();
             int recordsTotal = odataList.Count();
             var returnObj =
@@ -145,39 +146,42 @@ namespace PurchaseOrderSys.Controllers
             };
             return Json(returnObj, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult TSkuNumberList(int? draw, int? start, int? length, string[] Skulist, int FromWID)
+        public ActionResult TSkuNumberList(int? draw, int? start, int? length, string[] Skulist, int? FromWID)
         {
             var odataList = (List<TranSKUVM>)Session["TSkuNumberList"];
             if (odataList == null)
             {
                 odataList = new List<TranSKUVM>();
             }
-            if (Skulist != null && Skulist.Where(x => !string.IsNullOrWhiteSpace(x)).Any())
+            if (FromWID.HasValue)
             {
-                var dataList = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.IsEnable && x.PurchaseOrder.WarehouseID == FromWID && Skulist.Contains(x.SkuNo)).Select(x =>
-                  new TranSKUVM
-                  {
-                      ck = x.SkuNo,
-                      sk = x.SkuNo,
-                      SKU = x.SkuNo,
-                      ProductName = x.Name,
-                      QTY = 0,
-                      Model = "E"
-                  }
-                ).Distinct().ToList();
-                //foreach (var item in dataList)
-                //{
-                //    var QTYOrdered = RandomVal(100, 1000);
-                //    var QTYFulfilled = RandomVal(100, 1000);
-                //    var Price = RandomVal(1000, 30000);
-                //    var Discount = RandomVal(0, 100);
-                //    var Credit = RandomVal(0, 100);
+                if (Skulist != null && Skulist.Where(x => !string.IsNullOrWhiteSpace(x)).Any())
+                {
+                    var dataList = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.IsEnable && x.PurchaseOrder.WarehouseID == FromWID && Skulist.Contains(x.SkuNo)).Select(x =>
+                      new TranSKUVM
+                      {
+                          ck = x.SkuNo,
+                          sk = x.SkuNo,
+                          SKU = x.SkuNo,
+                          ProductName = x.Name,
+                          QTY = 0,
+                          Model = "E"
+                      }
+                    ).Distinct().ToList();
+                    //foreach (var item in dataList)
+                    //{
+                    //    var QTYOrdered = RandomVal(100, 1000);
+                    //    var QTYFulfilled = RandomVal(100, 1000);
+                    //    var Price = RandomVal(1000, 30000);
+                    //    var Discount = RandomVal(0, 100);
+                    //    var Credit = RandomVal(0, 100);
 
-                //}
-                odataList.AddRange(dataList);
-                Session["TSkuNumberList"] = odataList;
+                    //}
+                    odataList.AddRange(dataList);
+                    Session["TSkuNumberList"] = odataList;
+                }
+                odataList = odataList.Where(x => x.Model != "D").ToList();
             }
-            odataList = odataList.Where(x => x.Model != "D").ToList();
             int recordsTotal = odataList.Count();
             var returnObj =
             new
@@ -509,7 +513,7 @@ namespace PurchaseOrderSys.Controllers
                     }
                     else
                     {
-                        result.SetError("此序號已經出貨");
+                        result.SetError(Serialsitem.SerialsNo + "：此序號已經出貨");
                     }
                 }
                 else if (PurchaseSKU.Any())

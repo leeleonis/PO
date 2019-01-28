@@ -49,6 +49,7 @@
                                     <div class="tab-pane" id="hb1">
                                         <fieldset>
                                             <legend>@ViewBag.title</legend>
+                                          
                                             <div class="form-group">
                                                 @Html.Label("PO #:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
@@ -73,6 +74,7 @@
                                             <div class="form-group">
                                                 @Html.Label("Vendor Invoice", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
+                                                    <input class="form-control" type="number" min="0" max="10">
                                                     @*@Html.Editor("VendorInvoice", new { htmlAttributes = new { @class = "form-control" } })*@
                                                     <input type='file' class="ImgFile" name="VendorInvoice" id="VendorInvoice" multiple>
                                                 </div>
@@ -165,12 +167,18 @@
                     { data: "UPCEAN" },
                     { data: "QTYOrdered", render: function (data, type, row) { return data; } },
                     {
-                        data: "QTYReceived", render: function (data, type, row, meta ) {
-                            if (data == 0 || data == null) {
-                                return '<input class="form-control" type="number"  min="0" max="' + row.QTYOrdered +'" id="QTYReceived[' + row.ID + ']" name="QTYReceived[' + meta.row + '].val" > <input type="hidden" name="QTYReceived[' + meta.row +'].ID" value = ' + row.ID + ' />';
+                        data: "QTYReceived", render: function (data, type, row, meta) {
+
+                            if (row.SerialTracking) {
+                                return "";
                             }
                             else {
-                                return '<input class="form-control" type="number"  min="0" max="' + row.QTYOrdered +'" id="QTYReceived[' + row.ID + ']" name="QTYReceived[' + meta.row + '].val" value = ' + data + ' > <input type="hidden" name="QTYReceived[' + meta.row +'].ID" value = ' + row.ID + ' />';
+                                if (data == 0 || data == null) {
+                                    return '<input class="form-control" type="number"  vmin="0" vmax="' + row.QTYOrdered + '" id="QTYReceived[' + meta.row + ']" name="QTYReceived[' + meta.row + '].val" > <input type="hidden" name="QTYReceived[' + meta.row + '].ID" value = ' + row.ID + ' />';
+                                }
+                                else {
+                                    return '<input class="form-control" type="number"  vmin="0" vmax="' + row.QTYOrdered + '" id="QTYReceived[' + meta.row + ']" name="QTYReceived[' + meta.row + '].val" value = ' + data + ' > <input type="hidden" name="QTYReceived[' + meta.row + '].ID" value = ' + row.ID + ' />';
+                                }
                             }
                         }
                     },
@@ -180,7 +188,12 @@
                         data: "ck",
                         orderable: false,
                         render: function (data, type, row) {
-                            return "<a href='" + "@Url.Action("Addserials")" + "?ID=" + row.ID + "' class='btn btn-default btn-sm' >Add serials</a> <a valID=" + row.ID + " class='btn btn-default btn-sm Excel' >Add by Excel</a>";
+                            if (row.SerialTracking) {
+                                return "<a href='" + "@Url.Action("Addserials")" + "?ID=" + row.ID + "' class='btn btn-default btn-sm' >Add serials</a> <a valID=" + row.ID + " class='btn btn-default btn-sm Excel' >Add by Excel</a>";
+                            }
+                            else {
+                                return "";
+                            }
                         }
                     }
                 ],
@@ -302,6 +315,16 @@
                     }
                 });
                 return false;
+            });
+            $("body").on("change", "input[type = 'number']", function () {
+                var val = parseInt($(this).val());
+                var vmin = parseInt($(this).attr("vmin"));
+                var vmax = parseInt($(this).attr("vmax"));
+                if (val < vmin || val > vmax) {
+                    $(this).val("")
+                    $(this).focus();
+                    alert("必須介於 " + vmin + " 到 " + vmax + " 之間")
+                }
             });
         });
         function GetSerialList(d) {

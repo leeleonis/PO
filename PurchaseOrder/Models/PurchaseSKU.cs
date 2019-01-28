@@ -48,7 +48,6 @@ namespace PurchaseOrderSys.Models
         public Nullable<int> CreditMemoID { get; set; }
         public string UPCEAN { get; set; }
         public Nullable<System.DateTime> ReceivedDate { get; set; }
-        public Nullable<int> RMAID { get; set; }
     
         public virtual CreditMemo CreditMemo { get; set; }
         public virtual PurchaseOrder PurchaseOrder { get; set; }

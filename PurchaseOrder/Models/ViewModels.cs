@@ -702,6 +702,10 @@ public class PurchaseOrderPOVM
 
         public int? SerialQTY { get; set; }
         public string Model { get; set; }
+        /// <summary>
+        /// 開啟序號管理
+        /// </summary>
+        public bool SerialTracking { get; set; }
     }
     public class WarehouseInventoryVM
     {
