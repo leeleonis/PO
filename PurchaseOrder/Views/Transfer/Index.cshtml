@@ -123,7 +123,7 @@
                                                                         <td>@item.Title</td>
                                                                         <td>@(item.WarehouseFrom?.Name)</td>
                                                                         <td>@(item.WarehouseTo?.Name)</td>
-                                                                        <td>@item.TransferSKU.Sum(x => x.QTY)</td>
+                                                                        <td>@item.TransferSKU.Where(x=>x.IsEnable).Sum(x => x.QTY)</td>
                                                                         <td>@item.CreateAt.ToLocalTime()</td>
                                                                         <td>@item.CreateBy</td>
                                                                         <td>@item.Status</td>

@@ -2530,7 +2530,7 @@
           <NavigationProperty Name="CreditMemo" Relationship="PurchaseOrderModel.FK_CreditMemo_PurchaseOrder" FromRole="PurchaseOrder" ToRole="CreditMemo" />
           <NavigationProperty Name="PurchaseNote" Relationship="PurchaseOrderModel.FK_PurchaseNote_PurchaseOrder" FromRole="PurchaseOrder" ToRole="PurchaseNote" />
           <NavigationProperty Name="VendorLIst" Relationship="PurchaseOrderModel.FK_PurchaseOrder_VendorLIst" FromRole="PurchaseOrder" ToRole="VendorLIst" />
-          <NavigationProperty Name="Warehouse1" Relationship="PurchaseOrderModel.FK_PurchaseOrder_Warehouse" FromRole="PurchaseOrder" ToRole="Warehouse" />
+          <NavigationProperty Name="WarehousePO" Relationship="PurchaseOrderModel.FK_PurchaseOrder_Warehouse" FromRole="PurchaseOrder" ToRole="Warehouse" />
           <NavigationProperty Name="PurchaseSKU" Relationship="PurchaseOrderModel.FK_PurchaseSKU_PurchaseOrder" FromRole="PurchaseOrder" ToRole="PurchaseSKU" />
           <NavigationProperty Name="ImgFile" Relationship="PurchaseOrderModel.FK_ImgFile_PurchaseOrder" FromRole="PurchaseOrder" ToRole="ImgFile" />
           <NavigationProperty Name="Company" Relationship="PurchaseOrderModel.FK_PurchaseOrder_Company" FromRole="PurchaseOrder" ToRole="Company" />

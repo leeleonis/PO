@@ -82,7 +82,7 @@ namespace PurchaseOrderSys.Controllers
             {
                 foreach (var item in odataList.Where(x => x.Model == "E"))
                 {
-                    Transfer.TransferSKU.Add(new TransferSKU { SkuNo = item.SKU, QTY = item.QTY, CreateBy = CreateBy, CreateAt = CreateAt });
+                    Transfer.TransferSKU.Add(new TransferSKU { IsEnable = true, SkuNo = item.SKU, QTY = item.QTY, CreateBy = CreateBy, CreateAt = CreateAt });
                 }
             }
             db.Transfer.Add(Transfer);
@@ -95,15 +95,18 @@ namespace PurchaseOrderSys.Controllers
 
             var Transfer = db.Transfer.Find(ID);
             var TranSKUVMList = new List<TranSKUVM>();
-            foreach (var item in Transfer.TransferSKU)
+            foreach (var item in Transfer.TransferSKU.Where(x=>x.IsEnable))
             {
                 TranSKUVMList.Add(new TranSKUVM
                 {
+                    ID=item.ID,
                     ck = item.SkuNo,
                     sk = item.SkuNo,
                     SKU = item.SkuNo,
                     ProductName = item.Name,
                     QTY = item.QTY,
+                    TotalReceive = item.SerialsLlist.Where(x => x.SerialsType == "TransferIn").Sum(x => x.SerialsQTY) * -1,
+                     
                     Model = "L"
                 });
             }
@@ -131,7 +134,7 @@ namespace PurchaseOrderSys.Controllers
 
             foreach (var item in odataList.Where(x => x.Model == "E"))
             {
-                var TransferSKUList = oTransfer.TransferSKU.Where(x => x.SkuNo == item.SKU);
+                var TransferSKUList = oTransfer.TransferSKU.Where(x => x.IsEnable && x.SkuNo == item.SKU);
                 if (TransferSKUList.Any())
                 {
                     foreach (var SKUitem in TransferSKUList)
@@ -146,7 +149,7 @@ namespace PurchaseOrderSys.Controllers
                 }
                 else
                 {
-                    oTransfer.TransferSKU.Add(new TransferSKU { SkuNo = item.SKU, Name = item.ProductName, QTY = item.QTY, CreateBy = UserBy, CreateAt = dt });
+                    oTransfer.TransferSKU.Add(new TransferSKU { IsEnable = true, SkuNo = item.SKU, Name = item.ProductName, QTY = item.QTY, CreateBy = UserBy, CreateAt = dt });
                 }
 
             }
@@ -176,7 +179,7 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult GetSerialList(int ID)
         {
             var TransferSKU = db.TransferSKU.Find(ID);
-            var SerialsLlist = TransferSKU.SerialsLlist.Where(x => x.SerialsQTY == 1 && x.SerialsLlistC.Count() == 0).Select(x => x.SerialsNo).ToList();
+            var SerialsLlist = TransferSKU.SerialsLlist.Where(x => x.SerialsType == "TransferOut").Select(x => x.SerialsNo).ToList();
             var partial = ControlToString("~/Views/Transfer/GetSerialList.cshtml", SerialsLlist);
             //var partial = Engine.Razor.RunCompile(template, "templateKey", null, new { Name = "World" });
             return Json(new { status = true, partial }, JsonRequestBehavior.AllowGet);
@@ -252,7 +255,7 @@ namespace PurchaseOrderSys.Controllers
         {
             var oTransfer = db.Transfer.Find(ID);
             var PrepVMList = new List<TransferItemVM>();
-            foreach (var item in oTransfer.TransferSKU)
+            foreach (var item in oTransfer.TransferSKU.Where(x=>x.IsEnable))
             {
                 PrepVMList.Add(new TransferItemVM { SKU = item.SkuNo, Name = item.Name, QTY = item.QTY, SerialsLlist = item.SerialsLlist.Where(x => x.SerialsType == "TransferOut").ToList() });
             }
@@ -267,13 +270,13 @@ namespace PurchaseOrderSys.Controllers
             var CreateAt = DateTime.UtcNow;
             var PrepVMList = (List<TransferItemVM>)Session["PrepVMList"];
             var oTransfer = db.Transfer.Find(ID);
-            foreach (var item in oTransfer.TransferSKU)
+            foreach (var item in oTransfer.TransferSKU.Where(x=>x.IsEnable))
             {
                 foreach (var PrepVM in PrepVMList.Where(x => x.SKU == item.SkuNo))
                 {
                     var nSerialsLlist = PrepVM.SerialsLlist.Select(x => new SerialsLlist
                     {
-                        TransferSKUID= item.ID,
+                        TransferSKUID = item.ID,
                         PID = x.ID,
                         CreateAt = CreateAt,
                         CreateBy = CreateBy,
@@ -282,12 +285,12 @@ namespace PurchaseOrderSys.Controllers
                         RMAID = x.RMAID,
                         SerialsNo = x.SerialsNo,
                         SerialsQTY = -1,
-                        SerialsType = "TransferOut"
+                        SerialsType = "TransferOut"//等待移倉
                     }).ToList();
                     //db.SerialsLlist.AddRange(nSerialsLlist);
                     foreach (var Serial in nSerialsLlist)
                     {
-                        if (!item.SerialsLlist.Where(x => x.SerialsNo == Serial.SerialsNo && x.SerialsType == "TransferOut").Any())
+                        if (!item.SerialsLlist.Where(x => x.SerialsNo == Serial.SerialsNo).Any())
                         {
                             item.SerialsLlist.Add(Serial);
                         }

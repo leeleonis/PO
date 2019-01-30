@@ -902,6 +902,10 @@ public class PurchaseOrderPOVM
         /// </summary>
         public int TransferOutQTY { get; set; }
         /// <summary>
+        /// 待移倉數量
+        /// </summary>
+        public int TransferAwaiting { get; set; }
+        /// <summary>
         /// 已出貨數
         /// </summary>
         public int OrderQTY { get; set; }
@@ -946,6 +950,10 @@ public class PurchaseOrderPOVM
         /// 移庫出庫數
         /// </summary>
         public int TransferOutQTY { get; set; }
+        /// <summary>
+        /// 等待移倉的數量
+        /// </summary>
+        public int TransferAwaiting { get; set; }
         /// <summary>
         /// 依照當下庫存數, 算出能維持的天數
         /// </summary>

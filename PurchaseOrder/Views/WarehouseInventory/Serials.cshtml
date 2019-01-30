@@ -71,11 +71,11 @@
                                                                             var WarehouseName = "";
                                                                             if (Skuitem.PurchaseOrder != null)
                                                                             {
-                                                                                WarehouseName = Skuitem.PurchaseOrder.Warehouse1.Name;
+                                                                                WarehouseName = Skuitem.PurchaseOrder.WarehousePO.Name;
                                                                             }
                                                                             else if (Skuitem.CreditMemo != null)
                                                                             {
-                                                                                WarehouseName = Skuitem.CreditMemo.PurchaseOrder.Warehouse1.Name;
+                                                                                WarehouseName = Skuitem.CreditMemo.PurchaseOrder.WarehousePO.Name;
                                                                             }
                                                                             var Price = SerialsLlist.Where(x => x.PurchaseSKU.Price.HasValue).FirstOrDefault()?.PurchaseSKU.Price;
                                                                             var CreateAt = SerialsLlist.OrderByDescending(x => x.CreateAt).FirstOrDefault()?.CreateAt;

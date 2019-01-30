@@ -157,6 +157,7 @@ namespace PurchaseOrderSys.Controllers
             {
                 if (Skulist != null && Skulist.Where(x => !string.IsNullOrWhiteSpace(x)).Any())
                 {
+                    //從PO單取SKU
                     var dataList = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.IsEnable && x.PurchaseOrder.WarehouseID == FromWID && Skulist.Contains(x.SkuNo)).Select(x =>
                       new TranSKUVM
                       {

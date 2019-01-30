@@ -60,7 +60,7 @@
                                                 </div>
                                                 @Html.Label("Interim:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownList("Interim", Warehouselist,  htmlAttributes: new { @class = "form-control "+ TStatus, disabled })
+                                                    @Html.DropDownList("Interim", InterimList,  htmlAttributes: new { @class = "form-control "+ TStatus, disabled })
                                                 </div>
                                                 @Html.Label("To", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
@@ -88,18 +88,21 @@
                                                 <div class="col-sm-9  col-lg-8">
                                                     @if (Model.Status == "Pending")
                                                     {
-                                                        <a type="button" href="@Url.Action("Requested",new { Model.ID})" class='btn btn-default btn-sm' id='Request'>Request</a>
+                                                        <a type="button" href="@Url.Action("Requested", new { Model.ID })" class='btn btn-default btn-sm' id='Request'>Request</a>
                                                     }
                                                     else if (Model.Status == "Requested")
                                                     {
-                                                        <a type="button" href="@Url.Action("Prep",new { Model.ID})" class='btn btn-default btn-sm' id='Prep'>Prep</a>
-                                                        <a type="button" href="@Url.Action("Requested",new { Model.ID})" class='btn btn-default btn-sm' id='Request'>UnRequest</a>
-                                                        <a type="button" href="@Url.Action("PrintAWB",new { Model.ID})" class='btn btn-default btn-sm' id='PrintAWB'>Print AWB</a>
-                                                        <a type="button" href="@Url.Action("Ship",new { Model.ID})" class='btn btn-default btn-sm' id='Ship'>Ship</a>
+                                                        <a type="button" href="@Url.Action("Prep", new { Model.ID })" class='btn btn-default btn-sm' id='Prep'>Prep</a>
+                                                        <a type="button" href="@Url.Action("Requested", new { Model.ID })" class='btn btn-default btn-sm' id='Request'>UnRequest</a>
+                                                        <a type="button" href="@Url.Action("PrintAWB", new { Model.ID })" class='btn btn-default btn-sm' id='PrintAWB'>Print AWB</a>
+                                                        if (Model.TransferSKU.Where(x => x.SerialsLlist.Where(y => y.SerialsType == "TransferOut").Any()).Any())
+                                                        {
+                                                            <a type="button" href="@Url.Action("Ship", new { Model.ID })" class='btn btn-default btn-sm' id='Ship'>Ship</a>
+                                                        }
                                                     }
                                                     else if (Model.Status == "Shipped")
                                                     {
-                                                        <a type="button" href="@Url.Action("Receive",new { Model.ID})" class='btn btn-default btn-sm' id='Receive'>Receive</a>
+                                                        <a type="button" href="@Url.Action("Receive", new { Model.ID })" class='btn btn-default btn-sm' id='Receive'>Receive</a>
 
                                                     }
                                                     else if (Model.Status == "Received")
@@ -233,7 +236,7 @@
                     }
                     { data: "Serial", render: function (data, type, row) { return thousandComma(data); } },
                     { data: "Label", render: function (data, type, row) { return thousandComma(data); }  },
-                    { data: "TotalReceive", render: function (data, type, row) { return thousandComma(data); } },
+                    { data: "TotalReceive", render: function (data, type, row) { return data; } },
                     { data: "TWN", render: function (data, type, row) { return thousandComma(data); }  },
                     { data: "Winit", render: function (data, type, row) { return thousandComma(data); } }
                 ],

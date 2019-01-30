@@ -3,6 +3,11 @@
     ViewBag.title = "Inventory Statement";
     var Awaitinglist = (List<AwaitingDispatchVM>)ViewBag.Awaitinglist;
     var AwaitingConut = Awaitinglist.Sum(x => x.QTY);
+    var SerialsLlist = new List<SerialsLlist>();
+    foreach (var item in Model)
+    {
+        SerialsLlist.AddRange(item.SerialsLlist.Where(y => !(y.SerialsType == "TransferOut" || y.SerialsType == "TransferIn") || ((y.SerialsType == "TransferOut" || y.SerialsType == "TransferIn") && y.TransferSKU.IsEnable && y.TransferSKU.Transfer.IsEnable)));
+    }
 }
 <style>
     tfoot {
@@ -59,13 +64,12 @@
                                                         <tfoot></tfoot>
                                                         <tbody>
                                                             @{
-                                                                var Aggregate = Model.Sum(x => x.SerialsLlist.Sum(y => y.SerialsQTY));
-                                                                var Available = Aggregate;
-                                                                foreach (var skuitem in Model.OrderByDescending(x => x.ID))
+                                                                var Available = SerialsLlist.Where(x => !(x.SerialsType == "TransferOut" && x.TransferSKU.Transfer.Status == "Requested")).Sum(y => y.SerialsQTY);//實際
+                                                                var Aggregate = SerialsLlist.Sum(y => y.SerialsQTY);//可出貨
+                                                                foreach (var item in SerialsLlist.OrderByDescending(x => x.ID))
                                                                 {
-                                                                    var price = skuitem.Price;
-                                                                    foreach (var item in skuitem.SerialsLlist.OrderByDescending(x => x.ID))
-                                                                    {
+                                                                    var price = item.PurchaseSKU.Price;
+
                                                                         <tr>
                                                                             <td></td>
                                                                             <td>@item.PurchaseSKU.SkuNo</td>
@@ -76,7 +80,7 @@
                                                                                 <td></td>
                                                                                 <td>PO</td>
                                                                                 <td>@(item.PurchaseSKU.PurchaseOrder.ID)</td>
-                                                                                <td>@(item.PurchaseSKU.PurchaseOrder.Warehouse1.Name)</td>
+                                                                                <td>@(item.PurchaseSKU.PurchaseOrder.WarehousePO.Name)</td>
                                                                             }
                                                                             else if (item.SerialsType == "CM")
                                                                             {
@@ -86,7 +90,7 @@
                                                                                     Credit Memo
                                                                                 </td>
                                                                                 <td>@(item.PurchaseSKU.CreditMemo?.ID)</td>
-                                                                                <td>@(item.PurchaseSKU.CreditMemo.PurchaseOrder.Warehouse1.Name)</td>
+                                                                                <td>@(item.PurchaseSKU.CreditMemo.PurchaseOrder.WarehousePO.Name)</td>
                                                                             }
                                                                             else if (item.SerialsType == "Order")
                                                                             {
@@ -94,7 +98,7 @@
                                                                                 <td></td>
                                                                                 <td>Order Dispatch</td>
                                                                                 <td>@(item.OrderID)</td>
-                                                                                <td>@(item.PurchaseSKU.PurchaseOrder.Warehouse1.Name)</td>
+                                                                                <td>@(item.PurchaseSKU.PurchaseOrder.WarehousePO.Name)</td>
                                                                             }
                                                                             else if (item.SerialsType == "TransferOut")
                                                                             {
@@ -126,8 +130,14 @@
                                                                             <td>@Available</td>
                                                                             <td>$@(Aggregate * price)</td>
                                                                         </tr>
+                                                                    if (item.SerialsType == "TransferOut" && item.TransferSKU.Transfer.Status == "Requested")
+                                                                    {
                                                                         Aggregate -= item.SerialsQTY.Value;
-                                                                        Available = Aggregate;
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        Aggregate -= item.SerialsQTY.Value;
+                                                                        Available -= item.SerialsQTY.Value;
                                                                     }
                                                                 }
                                                             }
