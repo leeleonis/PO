@@ -99,14 +99,14 @@ namespace PurchaseOrderSys.Controllers
             {
                 TranSKUVMList.Add(new TranSKUVM
                 {
-                    ID=item.ID,
+                    ID = item.ID,
                     ck = item.SkuNo,
                     sk = item.SkuNo,
                     SKU = item.SkuNo,
                     ProductName = item.Name,
                     QTY = item.QTY,
                     TotalReceive = item.SerialsLlist.Where(x => x.SerialsType == "TransferIn").Sum(x => x.SerialsQTY) * -1,
-                     
+                    Serial = item.SerialsLlist.Where(x => x.SerialsType == "TransferOut").Any() ? "Multi" : "",
                     Model = "L"
                 });
             }
@@ -179,11 +179,30 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult GetSerialList(int ID)
         {
             var TransferSKU = db.TransferSKU.Find(ID);
-            var SerialsLlist = TransferSKU.SerialsLlist.Where(x => x.SerialsType == "TransferOut").Select(x => x.SerialsNo).ToList();
+            var SerialsLlist = TransferSKU.SerialsLlist.Where(x => x.SerialsType == "TransferOut").Select(x => new { x.SerialsNo, Status = GetType(x) }).ToDictionary(x => x.SerialsNo, x => x.Status).ToList();
             var partial = ControlToString("~/Views/Transfer/GetSerialList.cshtml", SerialsLlist);
             //var partial = Engine.Razor.RunCompile(template, "templateKey", null, new { Name = "World" });
             return Json(new { status = true, partial }, JsonRequestBehavior.AllowGet);
         }
+
+        private string GetType(SerialsLlist SerialsLlist)
+        {
+            var returnval = "";
+            if (SerialsLlist.SerialsLlistC.Where(x => x.SerialsType == "TransferIn").Any())
+            {
+                returnval = "已入庫";
+            }
+            else if (SerialsLlist.TransferSKU.Transfer.Status == "Requested")
+            {
+                returnval = "待出庫";
+            }
+            else if (SerialsLlist.TransferSKU.Transfer.Status == "Shipped")
+            {
+                returnval = "已出庫";
+            }
+            return returnval;
+        }
+
         public ActionResult Delete(int ID)
         {
             return View();
@@ -192,7 +211,7 @@ namespace PurchaseOrderSys.Controllers
         {
             var oTransfer = db.Transfer.Find(ID);
             var ReceiveVMList = new List<TransferItemVM>();
-            foreach (var item in oTransfer.TransferSKU)
+            foreach (var item in oTransfer.TransferSKU.Where(x=>x.IsEnable))
             {
                 ReceiveVMList.Add(new TransferItemVM { SKU = item.SkuNo, Name = item.Name, QTY = item.QTY, SerialsLlist = item.SerialsLlist.Where(x => x.SerialsType == "TransferIn").ToList() });
             }
@@ -206,7 +225,7 @@ namespace PurchaseOrderSys.Controllers
             var CreateAt = DateTime.UtcNow;
             var ReceiveVMList = (List<TransferItemVM>)Session["ReceiveVMList"];
             var oTransfer = db.Transfer.Find(ID);
-            foreach (var item in oTransfer.TransferSKU)
+            foreach (var item in oTransfer.TransferSKU.Where(x=>x.IsEnable))
             {
                 foreach (var ReceiveVM in ReceiveVMList.Where(x => x.SKU == item.SkuNo))
                 {
@@ -216,6 +235,8 @@ namespace PurchaseOrderSys.Controllers
                         PID = x.ID,
                         CreateAt = CreateAt,
                         CreateBy = CreateBy,
+                        ReceivedAt = CreateAt,
+                        ReceivedBy = CreateBy,
                         OrderID = x.OrderID,
                         PurchaseSKUID = x.PurchaseSKUID,
                         RMAID = x.RMAID,
@@ -280,6 +301,8 @@ namespace PurchaseOrderSys.Controllers
                         PID = x.ID,
                         CreateAt = CreateAt,
                         CreateBy = CreateBy,
+                        UpdateAt = CreateAt,
+                        UpdateBy = CreateBy,
                         OrderID = x.OrderID,
                         PurchaseSKUID = x.PurchaseSKUID,
                         RMAID = x.RMAID,
@@ -480,6 +503,10 @@ namespace PurchaseOrderSys.Controllers
             }
             else
             {
+                if (Transfer.TransferSKU.Where(x=>x.SerialsLlist.Any()).Any())
+                {
+                    return Json(new { status = false, Errmsg = "已輸入序號，無法修改" }, JsonRequestBehavior.AllowGet);
+                }
                 Transfer.Status = "Pending";
             }
            

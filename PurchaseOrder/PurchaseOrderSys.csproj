@@ -6492,9 +6492,9 @@
     <Content Include="Views\Ajax\SerialsExcel.cshtml" />
     <Content Include="Views\Shared\EmailPo.cshtml" />
     <Content Include="Views\Transfer\Receive.cshtml" />
-    <Content Include="Views\Transfer\GetSerialList.cshtml" />
     <Content Include="Views\RMA\Index.cshtml" />
     <Content Include="Views\RMA\Create.cshtml" />
+    <Content Include="Views\Transfer\GetSerialList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

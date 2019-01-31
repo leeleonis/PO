@@ -1,12 +1,15 @@
-﻿@model IEnumerable<string>
+﻿@model List<KeyValuePair< string, string>>
 @{
     Layout = null;
 }
 <table class="table">
     <thead>
         <tr>
-            <th>
+            <th width="100px">
                 Serial
+            </th>
+            <th>
+                貨況
             </th>
         </tr>
     </thead>
@@ -15,10 +18,13 @@
         {
             <tr>
                 <td>
-
-                    @item
+                    @item.Key
+                </td>
+                <td>
+                    @item.Value
                 </td>
             </tr>
         }
     </tbody>
 </table>
+

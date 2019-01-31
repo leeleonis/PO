@@ -69,67 +69,73 @@
                                                                 foreach (var item in SerialsLlist.OrderByDescending(x => x.ID))
                                                                 {
                                                                     var price = item.PurchaseSKU.Price;
+                                                            <tr>
+                                                                <td></td>
+                                                                <td>@item.PurchaseSKU.SkuNo</td>
+                                                                <td>@item.CreateAt.ToLocalTime()</td>
+                                                                @if (item.SerialsType == "PO")
+                                                                {
+                                                                    <td>@item.PurchaseSKU.PurchaseOrder.VendorLIst.Name</td>
+                                                                    <td></td>
+                                                                    <td>PO</td>
+                                                                    <td>@(item.PurchaseSKU.PurchaseOrder.ID)</td>
+                                                                    <td>@(item.PurchaseSKU.PurchaseOrder.WarehousePO.Name)</td>
+                                                                }
+                                                                else if (item.SerialsType == "CM")
+                                                                {
+                                                                    <td>@item.PurchaseSKU.CreditMemo.PurchaseOrder.VendorLIst.Name</td>
+                                                                    <td></td>
+                                                                    <td>
+                                                                        Credit Memo
+                                                                    </td>
+                                                                    <td>@(item.PurchaseSKU.CreditMemo?.ID)</td>
+                                                                    <td>@(item.PurchaseSKU.CreditMemo.PurchaseOrder.WarehousePO.Name)</td>
+                                                                }
+                                                                else if (item.SerialsType == "Order")
+                                                                {
+                                                                    <td>@item.PurchaseSKU.PurchaseOrder.VendorLIst.Name</td>
+                                                                    <td></td>
+                                                                    <td>Order Dispatch</td>
+                                                                    <td>@(item.OrderID)</td>
+                                                                    <td>@(item.PurchaseSKU.PurchaseOrder.WarehousePO.Name)</td>
+                                                                }
+                                                                else if (item.SerialsType == "TransferOut")
+                                                                {
+                                                                    <td>@item.PurchaseSKU.PurchaseOrder.VendorLIst.Name</td>
+                                                                    <td></td>
+                                                                    if (item.TransferSKU.Transfer.Status == "Requested")
+                                                                    {
+                                                                        <td>Transfer (Wait)</td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>Transfer (Out)</td>
+                                                                    }
+                                                                    <td>@(item.TransferSKU.TransferID)</td>
+                                                                    <td>@(item.TransferSKU.Transfer.WarehouseFrom.Name)</td>
+                                                                }
+                                                                else if (item.SerialsType == "TransferIn")
+                                                                {
+                                                                    <td>@item.PurchaseSKU.PurchaseOrder.VendorLIst.Name</td>
+                                                                    <td></td>
+                                                                    <td>Transfer (In)</td>
+                                                                    <td>@(item.TransferSKU.TransferID)</td>
+                                                                    <td>@(item.TransferSKU.Transfer.WarehouseTo.Name)</td>
+                                                                }
+                                                                else if (item.SerialsType == "RMA")
+                                                                {
 
-                                                                        <tr>
-                                                                            <td></td>
-                                                                            <td>@item.PurchaseSKU.SkuNo</td>
-                                                                            <td>@item.CreateAt.ToLocalTime()</td>
-                                                                            @if (item.SerialsType == "PO")
-                                                                            {
-                                                                                <td>@item.PurchaseSKU.PurchaseOrder.VendorLIst.Name</td>
-                                                                                <td></td>
-                                                                                <td>PO</td>
-                                                                                <td>@(item.PurchaseSKU.PurchaseOrder.ID)</td>
-                                                                                <td>@(item.PurchaseSKU.PurchaseOrder.WarehousePO.Name)</td>
-                                                                            }
-                                                                            else if (item.SerialsType == "CM")
-                                                                            {
-                                                                                <td>@item.PurchaseSKU.CreditMemo.PurchaseOrder.VendorLIst.Name</td>
-                                                                                <td></td>
-                                                                                <td>
-                                                                                    Credit Memo
-                                                                                </td>
-                                                                                <td>@(item.PurchaseSKU.CreditMemo?.ID)</td>
-                                                                                <td>@(item.PurchaseSKU.CreditMemo.PurchaseOrder.WarehousePO.Name)</td>
-                                                                            }
-                                                                            else if (item.SerialsType == "Order")
-                                                                            {
-                                                                                <td>@item.PurchaseSKU.PurchaseOrder.VendorLIst.Name</td>
-                                                                                <td></td>
-                                                                                <td>Order Dispatch</td>
-                                                                                <td>@(item.OrderID)</td>
-                                                                                <td>@(item.PurchaseSKU.PurchaseOrder.WarehousePO.Name)</td>
-                                                                            }
-                                                                            else if (item.SerialsType == "TransferOut")
-                                                                            {
-                                                                                <td>@item.PurchaseSKU.PurchaseOrder.VendorLIst.Name</td>
-                                                                                <td></td>
-                                                                                <td>Transfer (Out)</td>
-                                                                                <td>@(item.TransferSKU.TransferID)</td>
-                                                                                <td>@(item.TransferSKU.Transfer.WarehouseFrom.Name)</td>
-                                                                            }
-                                                                            else if (item.SerialsType == "TransferIn")
-                                                                            {
-                                                                                <td>@item.PurchaseSKU.PurchaseOrder.VendorLIst.Name</td>
-                                                                                <td></td>
-                                                                                <td>Transfer (In)</td>
-                                                                                <td>@(item.TransferSKU.TransferID)</td>
-                                                                                <td>@(item.TransferSKU.Transfer.WarehouseTo.Name)</td>
-                                                                            }
-                                                                            else if (item.SerialsType == "RMA")
-                                                                            {
+                                                                }
+                                                                else if (item.SerialsType == "Change")
+                                                                {
 
-                                                                            }
-                                                                            else if (item.SerialsType == "Change")
-                                                                            {
-
-                                                                            }
-                                                                            <td>@item.SerialsNo</td>
-                                                                            <td>@item.SerialsQTY</td>
-                                                                            <td>@(Aggregate - AwaitingConut)</td>
-                                                                            <td>@Available</td>
-                                                                            <td>$@(Aggregate * price)</td>
-                                                                        </tr>
+                                                                }
+                                                                <td>@item.SerialsNo</td>
+                                                                <td>@item.SerialsQTY</td>
+                                                                <td>@(Aggregate - AwaitingConut)</td>
+                                                                <td>@Available</td>
+                                                                <td>$@(Aggregate * price)</td>
+                                                            </tr>
                                                                     if (item.SerialsType == "TransferOut" && item.TransferSKU.Transfer.Status == "Requested")
                                                                     {
                                                                         Aggregate -= item.SerialsQTY.Value;

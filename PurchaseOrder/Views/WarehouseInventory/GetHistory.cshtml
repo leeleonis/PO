@@ -16,23 +16,35 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>@item.CreateAt</td>
-                @if (item.PurchaseSKU.PurchaseOrder != null)
-                {
-                    <td>@item.PurchaseSKU.PurchaseOrder.POType</td>
-                    <td>@item.ID</td>
-                    <td>@item.PurchaseSKU.PurchaseOrder.WarehousePO.Name</td>
-                }
-                else if (item.PurchaseSKU.CreditMemo != null)
-                {
-                    <td>@item.PurchaseSKU.CreditMemo.CMType</td>
-                    <td>@item.ID</td>
-                    <td>@item.PurchaseSKU.CreditMemo.PurchaseOrder.WarehousePO.Name</td>
-                }
-                <td>@item.SerialsQTY</td>
-                <td>@item.CreateBy</td>
-            </tr>
+        <tr>
+            <td>@item.CreateAt</td>
+            @if (item.SerialsType == "TransferIn")
+            {
+                <td>Transfer(In)</td>
+                <td>@item.ID</td>
+                <td>@item.TransferSKU.Transfer.WarehouseTo.Name</td>
+            }
+            else if (item.SerialsType == "TransferOut")
+            {
+                <td>Transfer(Out)</td>
+                <td>@item.ID</td>
+                <td>@item.PurchaseSKU.PurchaseOrder.WarehousePO.Name</td>
+            }
+            else if (item.SerialsType == "PO")
+            {
+                <td>@item.PurchaseSKU.PurchaseOrder.POType</td>
+                <td>@item.ID</td>
+                <td>@item.PurchaseSKU.PurchaseOrder.WarehousePO.Name</td>
+            }
+            else if (item.SerialsType == "CM")
+            {
+                <td>@item.PurchaseSKU.CreditMemo.CMType</td>
+                <td>@item.ID</td>
+                <td>@item.PurchaseSKU.CreditMemo.PurchaseOrder.WarehousePO.Name</td>
+            }
+            <td>@item.SerialsQTY</td>
+            <td>@item.CreateBy</td>
+        </tr>
         }
     </tbody>
 

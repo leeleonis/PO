@@ -315,9 +315,9 @@ namespace PurchaseOrderSys.Models
         public Nullable<System.DateTime> ReturnDateS { get; set; }
         [UIHint("FDate")]
         public Nullable<System.DateTime> ReturnDateE { get; set; }
-    }                                                          
+    }
 
-public class PurchaseOrderPOVM
+    public class PurchaseOrderPOVM
     {
         /// <summary>
         /// 採購單號
@@ -601,6 +601,8 @@ public class PurchaseOrderPOVM
         /// </summary>
         public int? QTY { get; set; }
         public decimal? TotalReceive { get; set; }
+        public string Serial { get; set; }
+        public string Label { get; set; }
         public string TWN { get; set; }
         public string Winit { get; set; }
         public string Model { get; set; }
@@ -906,6 +908,10 @@ public class PurchaseOrderPOVM
         /// </summary>
         public int TransferAwaiting { get; set; }
         /// <summary>
+        /// 移庫已收貨
+        /// </summary>
+        public int TransferOutCloseQTY { get; set; }
+        /// <summary>
         /// 已出貨數
         /// </summary>
         public int OrderQTY { get; set; }
@@ -950,6 +956,10 @@ public class PurchaseOrderPOVM
         /// 移庫出庫數
         /// </summary>
         public int TransferOutQTY { get; set; }
+        /// <summary>
+        /// 移庫已收貨
+        /// </summary>
+        public int TransferOutCloseQTY { get; set; }
         /// <summary>
         /// 等待移倉的數量
         /// </summary>

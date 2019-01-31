@@ -76,8 +76,13 @@ namespace PurchaseOrderSys.Controllers
         }
         public ActionResult TSkuNumberGet(string Search, int FromWID)
         {
+            var SKUList = new List<string>();
             var PurchaseSKUList = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.IsEnable && x.PurchaseOrder.WarehouseID == FromWID).Select(x => x.SkuNo);
-            var dataList = db.SkuLang.Where(x => x.LangID == "en-US" && PurchaseSKUList.Contains(x.Sku) && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
+            var TransferSKUList = db.TransferSKU.Where(x => x.IsEnable && x.Transfer.IsEnable && x.Transfer.ToWID == FromWID).Select(x => x.SkuNo);//只找移入的SKU
+            SKUList.AddRange(PurchaseSKUList);
+            SKUList.AddRange(TransferSKUList);
+            SKUList = SKUList.Distinct().ToList();
+            var dataList = db.SkuLang.Where(x => x.LangID == "en-US" && SKUList.Contains(x.Sku) && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
             //var dataList = db.SkuLang.Where(x => x.LangID == "zh-tw" && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
             return Json(new { items = dataList }, JsonRequestBehavior.AllowGet);
         }
@@ -158,7 +163,8 @@ namespace PurchaseOrderSys.Controllers
                 if (Skulist != null && Skulist.Where(x => !string.IsNullOrWhiteSpace(x)).Any())
                 {
                     //從PO單取SKU
-                    var dataList = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.IsEnable && x.PurchaseOrder.WarehouseID == FromWID && Skulist.Contains(x.SkuNo)).Select(x =>
+                    var dataList = new List<TranSKUVM>();
+                    dataList.AddRange(db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.IsEnable && x.PurchaseOrder.WarehouseID == FromWID && Skulist.Contains(x.SkuNo)).Select(x =>
                       new TranSKUVM
                       {
                           ck = x.SkuNo,
@@ -167,8 +173,21 @@ namespace PurchaseOrderSys.Controllers
                           ProductName = x.Name,
                           QTY = 0,
                           Model = "E"
-                      }
-                    ).Distinct().ToList();
+                      }).Distinct().ToList());
+                    //從移倉單選取
+                    if (!dataList.Any())
+                    {
+                        dataList.AddRange(db.TransferSKU.Where(x => x.IsEnable && x.Transfer.IsEnable && x.Transfer.ToWID == FromWID && Skulist.Contains(x.SkuNo)).Select(x =>
+                        new TranSKUVM
+                        {
+                            ck = x.SkuNo,
+                            sk = x.SkuNo,
+                            SKU = x.SkuNo,
+                            ProductName = x.Name,
+                            QTY = 0,
+                            Model = "E"
+                        }).Distinct().ToList());
+                    }
                     //foreach (var item in dataList)
                     //{
                     //    var QTYOrdered = RandomVal(100, 1000);

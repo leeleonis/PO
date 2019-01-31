@@ -95,7 +95,7 @@
                                                         <a type="button" href="@Url.Action("Prep", new { Model.ID })" class='btn btn-default btn-sm' id='Prep'>Prep</a>
                                                         <a type="button" href="@Url.Action("Requested", new { Model.ID })" class='btn btn-default btn-sm' id='Request'>UnRequest</a>
                                                         <a type="button" href="@Url.Action("PrintAWB", new { Model.ID })" class='btn btn-default btn-sm' id='PrintAWB'>Print AWB</a>
-                                                        if (Model.TransferSKU.Where(x => x.SerialsLlist.Where(y => y.SerialsType == "TransferOut").Any()).Any())
+                                                        if (Model.TransferSKU.Where(x=>x.IsEnable).Where(x => x.SerialsLlist.Where(y => y.SerialsType == "TransferOut").Any()).Any())
                                                         {
                                                             <a type="button" href="@Url.Action("Ship", new { Model.ID })" class='btn btn-default btn-sm' id='Ship'>Ship</a>
                                                         }
@@ -234,7 +234,7 @@
                     {
                         @: { data: "QTY", render: function(data, type, row) { return data; } },
                     }
-                    { data: "Serial", render: function (data, type, row) { return thousandComma(data); } },
+                    { data: "Serial", render: function (data, type, row) { return data; } },
                     { data: "Label", render: function (data, type, row) { return thousandComma(data); }  },
                     { data: "TotalReceive", render: function (data, type, row) { return data; } },
                     { data: "TWN", render: function (data, type, row) { return thousandComma(data); }  },
