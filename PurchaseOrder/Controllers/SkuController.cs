@@ -83,7 +83,7 @@ namespace PurchaseOrderSys.Controllers
                     {
                         using (StockKeepingUnit SKU = new StockKeepingUnit())
                         {
-                            SKU.CreateSkuShadow(childSku);
+                            SKU.CreateSkuVariation(childSku);
                         }
                     }
                 }
@@ -114,6 +114,11 @@ namespace PurchaseOrderSys.Controllers
             ViewBag.Brand = new SelectList(db.Brand.Where(b => b.IsEnable), "ID", "Name");
             ViewBag.CompanyList = companyList;
             ViewBag.MarketList = db.Marketplace.Where(m => m.IsEnable).ToList();
+
+            var warehouseList = db.Warehouse.Where(w => w.IsEnable).ToList();
+            ViewBag.WarehouseList = warehouseList;
+            ViewBag.PurchaseSku = db.PurchaseSKU.Where(s => s.IsEnable && s.SkuNo.Equals(id)).ToList();
+            ViewBag.AwaitingList = GetAwaitingCount(new string[] { id }, warehouseList.Select(w => w.ID.ToString()).ToArray());
 
             return View(sku);
         }
@@ -150,7 +155,7 @@ namespace PurchaseOrderSys.Controllers
             {
                 using (StockKeepingUnit SKU = new StockKeepingUnit())
                 {
-                    SKU.CreateSkuShadow(sku);
+                    SKU.CreateSkuVariation(sku);
                 }
             }
 
@@ -201,7 +206,7 @@ namespace PurchaseOrderSys.Controllers
                                 };
 
                                 newSku = SKU.CreateSku(newSku, newLang);
-                                SKU.CreateSkuShadow(newSku);
+                                SKU.CreateSkuVariation(newSku);
                             }
 
                             db.Sku_Attribute.AddRange(sku.Sku_Attribute.Where(a => !a.IsDiverse).Select(a => new Sku_Attribute()

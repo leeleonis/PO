@@ -12,6 +12,9 @@
 @{
     string LangID = (string)ViewBag.LangID;
     string DefaultLangID = EnumData.DataLangList().First().Key;
+    var WarehouseList = (List<Warehouse>)ViewBag.WarehouseList;
+    var PurchaseSku = (List<PurchaseSKU>)ViewBag.PurchaseSku;
+    var AwaitingList = (List<AwaitingDispatchVM>)ViewBag.AwaitingList;
 }
 
 <div id="content">
@@ -30,6 +33,11 @@
                             <li><a data-toggle="tab" href="#hb3">Editor</a></li>
                             <li><a data-toggle="tab" href="#hb4">Picture</a></li>
                             <li><a data-toggle="tab" href="#hb5">Price</a></li>
+                            <li><a data-toggle="tab" href="#hb6">Logistics</a></li>
+                            <li><a data-toggle="tab" href="#hb7">Purchasing</a></li>
+                            <li><a data-toggle="tab" href="#hb8">Inventory</a></li>
+                            <li><a data-toggle="tab" href="#hb9">Serials</a></li>
+                            <li><a data-toggle="tab" href="#hb10">Statement</a></li>
                         </ul>
                     </header>
 
@@ -443,7 +451,7 @@
                                                                 <th width="80" class="text-center">Min</th>
                                                             </tr>
                                                         </thead>
-
+                                                        <tfoot></tfoot>
                                                         <tbody>
                                                             @{
                                                                 int priceIndex = 0;
@@ -472,6 +480,152 @@
                                                         </tbody>
                                                     </table>
                                                 </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+
+                                    <div class="tab-pane" id="hb6">
+                                        <fieldset></fieldset>
+                                    </div>
+
+                                    <div class="tab-pane" id="hb7">
+                                        <fieldset></fieldset>
+                                    </div>
+
+                                    <div class="tab-pane" id="hb8">
+                                        <fieldset>
+                                            <div class="jarviswidget jarviswidget-color-blueLight" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-collapsed="false" data-widget-sortable="false">
+                                                <header class="ui-sortable-handle">
+                                                    <span class="widget-icon"> <i class="fa fa-photo"></i> </span>
+                                                    <span class="jarviswidget-loader"><i class="fa fa-refresh fa-spin"></i></span>
+                                                </header>
+
+                                                <!-- widget div-->
+                                                <div>
+                                                    <!-- widget content -->
+                                                    <div class="widget-body">
+                                                        <table class="table table-bordered table-striped text-center">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th width="80" class="text-center">ID</th>
+                                                                    <th class="text-center">Warehouse</th>
+                                                                    <th width="120" class="text-center">Type</th>
+                                                                    <th width="150" class="text-center">Available</th>
+                                                                    <th width="150" class="text-center">Awaiting Dispatch</th>
+                                                                    <th width="150" class="text-center">Aggregate</th>
+                                                                    <th width="150" class="text-center">Unfulfillable - Transit</th>
+                                                                    <th width="150" class="text-center">Total Inventory</th>
+                                                                    <th width="120" class="text-center">Value</th>
+                                                                </tr>
+                                                            </thead>
+
+                                                            <tbody>
+                                                                @foreach (var warehosue in WarehouseList.OrderBy(w => w.Name))
+                                                                {
+                                                                    <tr>
+                                                                        <td>@warehosue.ID</td>
+                                                                        <td>@warehosue.Name</td>
+                                                                        <td>@warehosue.Type</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <!-- end widget content -->
+                                                </div>
+                                                <!-- end widget div -->
+                                            </div>
+                                        </fieldset>
+                                    </div>
+
+                                    <div class="tab-pane" id="hb9">
+                                        <fieldset></fieldset>
+                                    </div>
+
+                                    <div class="tab-pane" id="hb10">
+                                        <fieldset>
+                                            <div class="jarviswidget jarviswidget-color-blueLight" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-collapsed="false" data-widget-sortable="false">
+                                                <header class="ui-sortable-handle">
+                                                    <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                                                    <span class="jarviswidget-loader"><i class="fa fa-refresh fa-spin"></i></span>
+                                                </header>
+
+                                                <!-- widget div-->
+                                                <div class="no-padding">
+                                                    <!-- widget content -->
+                                                    <div class="widget-body">
+                                                        <table class="table table-bordered table-striped text-center" id="table-statement">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th width="8%" class="text-center">SKU</th>
+                                                                    <th width="12%" class="text-center">Date</th>
+                                                                    <th width="12%" class="text-center">Supplier</th>
+                                                                    <th width="10%" class="text-center">Channel</th>
+                                                                    <th width="8%" class="text-center">IS Type</th>
+                                                                    <th width="6%" class="text-center">ID</th>
+                                                                    <th width="8%" class="text-center">Warehouse</th>
+                                                                    <th width="10%" class="text-center">Serial</th>
+                                                                    <th width="6%" class="text-center">QTY</th>
+                                                                    <th width="6%" class="text-center">Balance(Aggregate)</th>
+                                                                    <th width="6%" class="text-center">Balance(Available)</th>
+                                                                    <th width="8%" class="text-center">Value(Available)</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tfoot style="display: table-header-group;"></tfoot>
+                                                            <tbody>
+                                                                @{
+                                                                    var SCList = WarehouseList.Select(w => w.WarehouseSummary.First(s => s.Type.Equals("SCID"))).ToDictionary(s => s.Val, s => s.WarehouseID);
+                                                                    var TypeList = new Dictionary<string, string>() { { "PO", "PO" }, { "CM", "Credit Memo" }, { "Order", "Order Dispatch" }, { "TransferOut", "Transfer (Out)" }, { "TransferIn", "Transfer (In)" }, { "RMA", "" }, { "Change", "" } };
+                                                                    var SerialList = PurchaseSku.SelectMany(sku => sku.SerialsLlist).Where(s => !(s.TransferSKUID.HasValue && (!s.TransferSKU.IsEnable || !s.TransferSKU.Transfer.IsEnable))).OrderByDescending(s => s.ID).Select(s => new
+                                                                    {
+                                                                        SKU = s.PurchaseSKU.SkuNo,
+                                                                        Date = s.CreateAt.ToLocalTime(),
+                                                                        Supplier = s.PurchaseSKU.PurchaseOrder?.VendorLIst.Name ?? s.PurchaseSKU.CreditMemo?.PurchaseOrder.VendorLIst.Name,
+                                                                        Type = TypeList.ContainsKey(s.SerialsType) ? TypeList[s.SerialsType] : "",
+                                                                        ExtendID = s.TransferSKUID ?? s.OrderID ?? s.PurchaseSKU.PurchaseOrderID ?? s.PurchaseSKU.CreditMemoID,
+                                                                        WID = s.SerialsType.Equals("TransferIn") ? s.TransferSKU.Transfer.ToWID.Value : s.PurchaseSKU.PurchaseOrder?.WarehouseID.Value ?? s.PurchaseSKU.CreditMemo?.PurchaseOrder.WarehouseID.Value,
+                                                                        Serial = s.SerialsNo,
+                                                                        QTY = s.SerialsQTY.Value,
+                                                                        Price = s.PurchaseSKU.Price,
+                                                                        Request = s.SerialsType.Equals("TransferOut") && s.TransferSKU.Transfer.Status.Equals("Requested")
+                                                                    }).ToList();
+                                                                    var AwaitingConut = AwaitingList.GroupBy(a => a.SCID, a => a.QTY).ToDictionary(g => SCList[g.Key], g => g.Sum());
+                                                                    var AggregateCount = SerialList.Where(s => !s.Request).GroupBy(s => s.WID, s => s.QTY).ToDictionary(g => g.Key.Value, g => g.Sum());
+                                                                    var AvailableCount = SerialList.GroupBy(s => s.WID, s => s.QTY).ToDictionary(g => g.Key.Value, g => g.Sum());
+                                                                    var TotalValue = SerialList.GroupBy(s => s.WID, s => s.QTY * s.Price).ToDictionary(g => g.Key.Value, g => g.Sum());
+                                                                    foreach (var serial in SerialList)
+                                                                    {
+                                                                        <tr>
+                                                                            <td>@serial.SKU</td>
+                                                                            <td>@serial.Date</td>
+                                                                            <td>@serial.Supplier</td>
+                                                                            <td></td>
+                                                                            <td>@serial.Type</td>
+                                                                            <td>@serial.ExtendID</td>
+                                                                            <td>@(WarehouseList.FirstOrDefault(w => w.ID.Equals(serial.WID))?.Name ?? serial.WID.ToString())</td>
+                                                                            <td>@serial.Serial</td>
+                                                                            <td>@serial.QTY</td>
+                                                                            <td>@(AggregateCount[serial.WID.Value] - (AwaitingConut.ContainsKey(serial.WID.Value) ? AwaitingConut[serial.WID.Value] : 0))</td>
+                                                                            <td>@AvailableCount[serial.WID.Value]</td>
+                                                                            <td>@TotalValue[serial.WID.Value]</td>
+                                                                        </tr>
+                                                                        AggregateCount[serial.WID.Value] -= serial.QTY;
+                                                                        AvailableCount[serial.WID.Value] -= !serial.Request ? serial.QTY : 0;
+                                                                        TotalValue[serial.WID.Value] -= serial.QTY * serial.Price;
+                                                                    }
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <!-- end widget content -->
+                                                </div>
+                                                <!-- end widget div -->
                                             </div>
                                         </fieldset>
                                     </div>
@@ -677,6 +831,21 @@
                         });
                     });
                 }
+            });
+
+            $('#table-statement thead tr').clone().appendTo($('#table-statement tfoot'));
+            var $statementTable = $('#table-statement').DataTable({
+                "columnDefs": [{ "orderable": false, "targets": 0 }],
+                "order": []
+            });
+            $statementTable.columns().every(function () {
+                var that = this;
+                $(that.footer()).html('<input type="text" placeholder="Search" />');
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that.search(this.value).draw();
+                    }
+                });
             });
         });
 

@@ -17,13 +17,16 @@ namespace PurchaseOrderSys.Models
         #region IDisposable Support
         private bool disposedValue = false; // 偵測多餘的呼叫
 
-        public StockKeepingUnit()
-        {
-        }
+        public StockKeepingUnit() { }
 
         public StockKeepingUnit(string sku)
         {
             if (!string.IsNullOrEmpty(sku)) SetSkuData(sku);
+        }
+
+        public StockKeepingUnit(SKU sku)
+        {
+            skuData = sku;
         }
 
         public void SetSkuData(string sku)
@@ -31,6 +34,12 @@ namespace PurchaseOrderSys.Models
             skuData = db.SKU.Find(sku);
         }
 
+        /// <summary>
+        /// 自動產生新Sku
+        /// </summary>
+        /// <param name="category">品項</param>
+        /// <param name="brand">品牌</param>
+        /// <returns></returns>
         public string GetNewSku(int category, int brand)
         {
             int number = 1;
@@ -56,6 +65,12 @@ namespace PurchaseOrderSys.Models
             return string.Format("{0}{1}{2}", category, brand, newNumber);
         }
 
+        /// <summary>
+        /// 建立新Sku
+        /// </summary>
+        /// <param name="newSku">基本資料</param>
+        /// <param name="newLang">語系資料</param>
+        /// <returns></returns>
         public SKU CreateSku(SKU newSku, SkuLang newLang)
         {
             if (string.IsNullOrEmpty(newSku.SkuID)) newSku.SkuID = GetNewSku(newSku.Category, newSku.Brand);
@@ -94,8 +109,12 @@ namespace PurchaseOrderSys.Models
 
             return newSku;
         }
-
-        public SKU CreateSkuShadow(SKU parentSku)
+        /// <summary>
+        /// 建立Sku的Variation
+        /// </summary>
+        /// <param name="parentSku">父類品號資料</param>
+        /// <returns></returns>
+        public SKU CreateSkuVariation(SKU parentSku)
         {
             SKU shadow = SkuInherit(parentSku, parentSku.SkuID + "_var", (byte)EnumData.SkuType.Shadow);
             shadow.ParentShadow = parentSku.SkuID;
@@ -183,6 +202,13 @@ namespace PurchaseOrderSys.Models
             return attrIDs.ToArray(); ;
         }
 
+        /// <summary>
+        /// 繼承Parent Sku的資料
+        /// </summary>
+        /// <param name="parentSku">父類品號資料</param>
+        /// <param name="sku">品號</param>
+        /// <param name="type">品號類型</param>
+        /// <returns></returns>
         public SKU SkuInherit(SKU parentSku, string sku, byte type)
         {
             return new SKU()
@@ -283,19 +309,5 @@ namespace PurchaseOrderSys.Models
             // GC.SuppressFinalize(this);
         }
         #endregion
-    }
-
-    public static class OtherMethods
-    {
-        public static T ToEnum<T>(this string value, T defaultValue) where T : struct
-        {
-            if (string.IsNullOrEmpty(value))
-            {
-                return defaultValue;
-            }
-
-            T result;
-            return Enum.TryParse<T>(value, true, out result) ? result : defaultValue;
-        }
     }
 }
