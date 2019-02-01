@@ -488,6 +488,29 @@
                                         <fieldset></fieldset>
                                     </div>
 
+                                    @{
+                                        var SCList = WarehouseList.Select(w => w.WarehouseSummary.First(s => s.Type.Equals("SCID"))).ToDictionary(s => s.Val, s => s.WarehouseID);
+                                        var TypeList = new Dictionary<string, string>() { { "PO", "PO" }, { "CM", "Credit Memo" }, { "Order", "Order Dispatch" }, { "TransferOut", "Transfer (Out)" }, { "TransferIn", "Transfer (In)" }, { "RMA", "" }, { "Change", "" } };
+                                        var SerialList = PurchaseSku.SelectMany(sku => sku.SerialsLlist).Where(s => !(s.TransferSKUID.HasValue && (!s.TransferSKU.IsEnable || !s.TransferSKU.Transfer.IsEnable))).OrderByDescending(s => s.ID).Select(s => new
+                                        {
+                                            SKU = s.PurchaseSKU.SkuNo,
+                                            Date = s.CreateAt.ToLocalTime(),
+                                            Supplier = s.PurchaseSKU.PurchaseOrder?.VendorLIst.Name ?? s.PurchaseSKU.CreditMemo?.PurchaseOrder.VendorLIst.Name,
+                                            Type = TypeList.ContainsKey(s.SerialsType) ? TypeList[s.SerialsType] : "",
+                                            ExtendID = s.TransferSKUID ?? s.OrderID ?? s.PurchaseSKU.PurchaseOrderID ?? s.PurchaseSKU.CreditMemoID,
+                                            WID = s.SerialsType.Equals("TransferIn") ? s.TransferSKU.Transfer.ToWID.Value : s.PurchaseSKU.PurchaseOrder?.WarehouseID.Value ?? s.PurchaseSKU.CreditMemo?.PurchaseOrder.WarehouseID.Value,
+                                            Serial = s.SerialsNo,
+                                            QTY = s.SerialsQTY.Value,
+                                            Price = s.PurchaseSKU.Price ?? 0,
+                                            Awaiting = s.SerialsType.Equals("TransferOut") && s.TransferSKU.Transfer.Status.Equals("Requested"),
+                                            Shipped = s.SerialsType.Equals("TransferOut") && s.TransferSKU.Transfer.Status.Equals("Shipped")
+                                        }).ToList();
+                                        var AwaitingConut = AwaitingList.Select(a => new { WID = SCList[a.SCID], QTY = a.QTY }).Concat(SerialList.Where(s => s.Awaiting).Select(s => new { WID = s.WID.Value, QTY = Math.Abs(s.QTY) })).GroupBy(a => a.WID, a => a.QTY).ToDictionary(g => g.Key, g => g.Sum());
+                                        var AggregateCount = SerialList.Where(s => !s.Awaiting).GroupBy(s => s.WID.Value, s => s.QTY).ToDictionary(g => g.Key, g => g.Sum() - (AwaitingConut.ContainsKey(g.Key) ? AwaitingConut[g.Key] : 0));
+                                        var AvailableCount = SerialList.Where(s => !s.Awaiting).GroupBy(s => s.WID.Value, s => s.QTY).ToDictionary(g => g.Key, g => g.Sum());
+                                        var TotalValue = SerialList.Where(s => !s.Awaiting).GroupBy(s => s.WID.Value, s => s.QTY * s.Price).ToDictionary(g => g.Key, g => g.Sum());
+                                    }
+
                                     <div class="tab-pane" id="hb7">
                                         <fieldset></fieldset>
                                     </div>
@@ -496,12 +519,12 @@
                                         <fieldset>
                                             <div class="jarviswidget jarviswidget-color-blueLight" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-collapsed="false" data-widget-sortable="false">
                                                 <header class="ui-sortable-handle">
-                                                    <span class="widget-icon"> <i class="fa fa-photo"></i> </span>
+                                                    <span class="widget-icon"> <i class="fa fa-table"></i> </span>
                                                     <span class="jarviswidget-loader"><i class="fa fa-refresh fa-spin"></i></span>
                                                 </header>
 
                                                 <!-- widget div-->
-                                                <div>
+                                                <div class="no-padding">
                                                     <!-- widget content -->
                                                     <div class="widget-body">
                                                         <table class="table table-bordered table-striped text-center">
@@ -520,18 +543,18 @@
                                                             </thead>
 
                                                             <tbody>
-                                                                @foreach (var warehosue in WarehouseList.OrderBy(w => w.Name))
+                                                                @foreach (var warehouse in WarehouseList.OrderBy(w => w.Name))
                                                                 {
                                                                     <tr>
-                                                                        <td>@warehosue.ID</td>
-                                                                        <td>@warehosue.Name</td>
-                                                                        <td>@warehosue.Type</td>
+                                                                        <td>@warehouse.ID</td>
+                                                                        <td>@warehouse.Name</td>
+                                                                        <td>@warehouse.Type</td>
+                                                                        <td>@(AvailableCount.ContainsKey(warehouse.ID) ? AvailableCount[warehouse.ID] : 0)</td>
+                                                                        <td>@(AwaitingConut.ContainsKey(warehouse.ID) ? AwaitingConut[warehouse.ID] : 0)</td>
+                                                                        <td>@(AggregateCount.ContainsKey(warehouse.ID) ? AggregateCount[warehouse.ID] : 0)</td>
                                                                         <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
+                                                                        <td>@(AvailableCount.ContainsKey(warehouse.ID) ? AvailableCount[warehouse.ID] : 0)</td>
+                                                                        <td>@(TotalValue.ContainsKey(warehouse.ID) ? TotalValue[warehouse.ID] : 0)</td>
                                                                     </tr>
                                                                 }
                                                             </tbody>
@@ -580,25 +603,6 @@
                                                             <tfoot style="display: table-header-group;"></tfoot>
                                                             <tbody>
                                                                 @{
-                                                                    var SCList = WarehouseList.Select(w => w.WarehouseSummary.First(s => s.Type.Equals("SCID"))).ToDictionary(s => s.Val, s => s.WarehouseID);
-                                                                    var TypeList = new Dictionary<string, string>() { { "PO", "PO" }, { "CM", "Credit Memo" }, { "Order", "Order Dispatch" }, { "TransferOut", "Transfer (Out)" }, { "TransferIn", "Transfer (In)" }, { "RMA", "" }, { "Change", "" } };
-                                                                    var SerialList = PurchaseSku.SelectMany(sku => sku.SerialsLlist).Where(s => !(s.TransferSKUID.HasValue && (!s.TransferSKU.IsEnable || !s.TransferSKU.Transfer.IsEnable))).OrderByDescending(s => s.ID).Select(s => new
-                                                                    {
-                                                                        SKU = s.PurchaseSKU.SkuNo,
-                                                                        Date = s.CreateAt.ToLocalTime(),
-                                                                        Supplier = s.PurchaseSKU.PurchaseOrder?.VendorLIst.Name ?? s.PurchaseSKU.CreditMemo?.PurchaseOrder.VendorLIst.Name,
-                                                                        Type = TypeList.ContainsKey(s.SerialsType) ? TypeList[s.SerialsType] : "",
-                                                                        ExtendID = s.TransferSKUID ?? s.OrderID ?? s.PurchaseSKU.PurchaseOrderID ?? s.PurchaseSKU.CreditMemoID,
-                                                                        WID = s.SerialsType.Equals("TransferIn") ? s.TransferSKU.Transfer.ToWID.Value : s.PurchaseSKU.PurchaseOrder?.WarehouseID.Value ?? s.PurchaseSKU.CreditMemo?.PurchaseOrder.WarehouseID.Value,
-                                                                        Serial = s.SerialsNo,
-                                                                        QTY = s.SerialsQTY.Value,
-                                                                        Price = s.PurchaseSKU.Price,
-                                                                        Request = s.SerialsType.Equals("TransferOut") && s.TransferSKU.Transfer.Status.Equals("Requested")
-                                                                    }).ToList();
-                                                                    var AwaitingConut = AwaitingList.GroupBy(a => a.SCID, a => a.QTY).ToDictionary(g => SCList[g.Key], g => g.Sum());
-                                                                    var AggregateCount = SerialList.Where(s => !s.Request).GroupBy(s => s.WID, s => s.QTY).ToDictionary(g => g.Key.Value, g => g.Sum());
-                                                                    var AvailableCount = SerialList.GroupBy(s => s.WID, s => s.QTY).ToDictionary(g => g.Key.Value, g => g.Sum());
-                                                                    var TotalValue = SerialList.GroupBy(s => s.WID, s => s.QTY * s.Price).ToDictionary(g => g.Key.Value, g => g.Sum());
                                                                     foreach (var serial in SerialList)
                                                                     {
                                                                         <tr>
@@ -616,8 +620,8 @@
                                                                             <td>@TotalValue[serial.WID.Value]</td>
                                                                         </tr>
                                                                         AggregateCount[serial.WID.Value] -= serial.QTY;
-                                                                        AvailableCount[serial.WID.Value] -= !serial.Request ? serial.QTY : 0;
-                                                                        TotalValue[serial.WID.Value] -= serial.QTY * serial.Price;
+                                                                        AvailableCount[serial.WID.Value] -= !serial.Awaiting ? serial.QTY : 0;
+                                                                        TotalValue[serial.WID.Value] -= !serial.Awaiting ? serial.QTY * serial.Price : 0;
                                                                     }
                                                                 }
                                                             </tbody>
