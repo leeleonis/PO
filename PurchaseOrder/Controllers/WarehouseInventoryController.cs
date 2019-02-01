@@ -16,22 +16,27 @@ namespace PurchaseOrderSys.Controllers
         {
             ViewBag.WarehouseID = ID;
             var Warehouse = db.Warehouse.Find(ID);
-            var SCID = Warehouse.WarehouseSummary.Where(x => x.Type == "SCID").FirstOrDefault().Val;
-            var Awaitinglist = GetAwaitingCount("", SCID);
-            var WarehouseVM = new List<WarehouseVM>();
-            var GroupWarehouseVM =new List<WarehouseVM>();
             var WarehouseInventoryVM = new WarehouseInventoryVM();
-            var AllSKUList = db.SKU.Where(x => x.IsEnable && x.Status == 1).Select(x => new { x.SkuID, x.SkuLang.FirstOrDefault().Name }).ToList();
-
             WarehouseInventoryVM.WarehouseType = Warehouse.Type;
             WarehouseInventoryVM.Fulfillable = Warehouse.Fulfillable;
             WarehouseInventoryVM.Location = Warehouse.Location;
             WarehouseInventoryVM.Countries = Warehouse.Countries;
             WarehouseInventoryVM.Marketplace = Warehouse.Marketplace;
+            WarehouseInventoryVM.Company = Warehouse.Company;
+            WarehouseInventoryVM.WarehouseVM = GetWarehouseVMList(Warehouse, Product, FulfillableMin, FulfillableMax);
+            return View(WarehouseInventoryVM);
+        }
 
+        private IEnumerable<WarehouseVM> GetWarehouseVMList(Warehouse Warehouse, string Product, int? FulfillableMin, int? FulfillableMax)
+        {
+            var SCID = Warehouse.WarehouseSummary.Where(x => x.Type == "SCID").FirstOrDefault().Val;
+            var Awaitinglist = GetAwaitingCount("", SCID);
+            var AllSKUList = db.SKU.Where(x => x.IsEnable && x.Status == 1).Select(x => new { x.SkuID, x.SkuLang.FirstOrDefault().Name }).ToList();
+            var WarehouseVM = new List<WarehouseVM>();
+            var GroupWarehouseVM = new List<WarehouseVM>();
             if (Warehouse.Type == "Interim")
             {
-                var TransferSKU = db.TransferSKU.Where(x => x.IsEnable && x.Transfer.Interim == ID && x.Transfer.Status == "Shipped").Include(x => x.SerialsLlist).ToList();//移倉中
+                var TransferSKU = db.TransferSKU.Where(x => x.IsEnable && x.Transfer.Interim == Warehouse.ID && x.Transfer.Status == "Shipped").Include(x => x.SerialsLlist).ToList();//移倉中
                 if (!string.IsNullOrWhiteSpace(Product))
                 {
                     TransferSKU = TransferSKU.Where(x => x.SkuNo == Product).ToList();
@@ -65,12 +70,12 @@ namespace PurchaseOrderSys.Controllers
             else
             {
                 var NoList = new List<int>();
-                var PurchaseSKU = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.IsEnable && x.PurchaseOrder.WarehousePO.ID == ID).Include(x => x.SerialsLlist).ToList();//PO單
-                var TransferToSKU = db.TransferSKU.Where(x => x.IsEnable && x.Transfer.IsEnable && x.Transfer.ToWID == ID).Include(x => x.SerialsLlist).ToList();//移倉單入庫
-                var TransferFromSKU = db.TransferSKU.Where(x => x.IsEnable && x.Transfer.IsEnable && x.Transfer.FromWID == ID).Include(x => x.SerialsLlist).ToList();//移倉單出庫
-                WarehouseInventoryVM.Company = PurchaseSKU.FirstOrDefault()?.PurchaseOrder.Company.Name;
-
+                var PurchaseSKU = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.IsEnable && x.PurchaseOrder.WarehousePO.ID == Warehouse.ID).Include(x => x.SerialsLlist).ToList();//PO單
+                var TransferToSKU = db.TransferSKU.Where(x => x.IsEnable && x.Transfer.IsEnable && x.Transfer.ToWID == Warehouse.ID).Include(x => x.SerialsLlist).ToList();//移倉單入庫
+                var TransferFromSKU = db.TransferSKU.Where(x => x.IsEnable && x.Transfer.IsEnable && x.Transfer.FromWID == Warehouse.ID).Include(x => x.SerialsLlist).ToList();//移倉單出庫
                
+
+
                 if (!string.IsNullOrWhiteSpace(Product))
                 {
                     PurchaseSKU = PurchaseSKU.Where(x => x.SkuNo == Product).ToList();
@@ -192,11 +197,8 @@ namespace PurchaseOrderSys.Controllers
             {
                 GroupWarehouseVM = GroupWarehouseVM.Where(x => x.Aggregate <= FulfillableMax).ToList();
             }
-            WarehouseInventoryVM.WarehouseVM = GroupWarehouseVM.OrderByDescending(x => x.Fulfillable).ThenByDescending(x => x.Awaiting);
-
-            return View(WarehouseInventoryVM);
+            return GroupWarehouseVM.OrderByDescending(x => x.Fulfillable).ThenByDescending(x => x.Awaiting).ToList();
         }
-
 
         public ActionResult IndexN(int ID, string Product, int? FulfillableMin, int? FulfillableMax)
         {
@@ -562,7 +564,7 @@ namespace PurchaseOrderSys.Controllers
                     TransferInQTY = GetTransferInQTY(item, item.Transfer.WarehouseFrom, NoList),//接入庫當PO
                     //TransferOutQTY = GetTransferOutQTY(item, item.Transfer.WarehouseFrom, NoList),
                     TransferOutCloseQTY = GetTransferOutCloseQTY(item, item.Transfer.WarehouseFrom, NoList),//移倉已入庫
-                    TransferAwaiting = GetTransferAwaiting(item, item.Transfer.WarehouseFrom, NoList),//等待移倉的數量
+                    //TransferAwaiting = GetTransferAwaiting(item, item.Transfer.WarehouseFrom, NoList),//等待移倉的數量
                 });
             }
             var GroupSkuInventoryVM = SkuInventoryVM.GroupBy(x => new { x.ID }).Select(x => new SkuInventoryVM //SKU數量總計
@@ -612,6 +614,36 @@ namespace PurchaseOrderSys.Controllers
         {
             return PurchaseSKU.PurchaseOrder.WarehousePO?.WarehouseSummary.FirstOrDefault(x => x.Type == "SCID")?.Val;
         }
+
+        //public ActionResult Purchasing(string SKU, int? Inventory, int? Velocity, int WarehouseID)
+        //{
+        //    ViewBag.WarehouseID = WarehouseID;
+        //    var PurchaseSKU = db.PurchaseSKU.Where(x => x.IsEnable && x.SkuNo == SKU);
+        //    var SkuPurchasingVM = new SkuPurchasingVM
+        //    {
+        //        SKU = SKU,
+        //    };
+        //    if (Inventory.HasValue)
+        //    {
+        //        var Warehouse = db.Warehouse.Find(Inventory);
+        //        var WarehouseVM = GetWarehouseVMList(Warehouse, SKU, null, null);
+        //        SkuPurchasingVM.Inventory = Inventory;
+        //        SkuPurchasingVM.Company = PurchaseSKU.FirstOrDefault()?.PurchaseOrder.Company.Name;
+        //        SkuPurchasingVM.SKUName = PurchaseSKU.FirstOrDefault()?.Name;
+              
+        //    }
+        //    else
+        //    {
+        //        var Warehouselist = db.Warehouse.Where(x => x.IsEnable);
+        //        foreach (var Warehouse in Warehouselist)
+        //        {
+        //            var WarehouseVM = GetWarehouseVMList(Warehouse, SKU, null, null);
+        //        }
+        //    }
+        //    return View(SkuPurchasingVM);
+        //}
+
+
 
         public ActionResult Purchasing(string SKU,int? Inventory, int? Velocity, int WarehouseID)
         {

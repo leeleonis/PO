@@ -649,6 +649,10 @@ namespace PurchaseOrderSys.Models
         public string UPCEAN { get; set; }
         public string Serial { get; set; }
         public int? SerialQTY { get; set; }
+        /// <summary>
+        /// 開啟序號管理
+        /// </summary>
+        public bool SerialTracking { get; set; }
     }
     public class PoSKUVM
     {
@@ -1164,6 +1168,10 @@ namespace PurchaseOrderSys.Models
         public string Serial { get; set; }
         public string Label { get; set; }
         public string Download { get; set; }
+        /// <summary>
+        /// 開啟序號管理
+        /// </summary>
+        public bool SerialTracking { get; set; }
     }
     public class GetImgVM
     {

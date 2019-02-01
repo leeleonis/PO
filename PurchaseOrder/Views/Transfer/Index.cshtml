@@ -114,7 +114,7 @@
                                                         <tbody>
                                                             @if (Model.Transferlist != null)
                                                             {
-                                                                foreach (var item in Model.Transferlist)
+                                                                foreach (var item in Model.Transferlist.OrderByDescending(x=>x.ID))
                                                                 {
                                                                     <tr>
                                                                         <td><input type="checkbox" /></td>

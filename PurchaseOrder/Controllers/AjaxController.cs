@@ -138,7 +138,8 @@ namespace PurchaseOrderSys.Controllers
                 QTYReceived = x.QTYReceived,
                 QTYReturned = x.QTYReturned,
                 Serial = x.SerialsLlist.Any() ? "Yes" : "No",
-                SerialQTY = x.SerialsLlist.Count()
+                SerialQTY = x.SerialsLlist.Count(),
+                SerialTracking = x.SKU.SerialTracking
             }).ToList();
             int recordsTotal = odataList.Count();
             var returnObj =

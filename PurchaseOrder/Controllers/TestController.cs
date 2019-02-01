@@ -28,16 +28,10 @@ namespace PurchaseOrderSys.Controllers
         protected PurchaseOrderEntities db = new PurchaseOrderEntities();
 
         public TestController()
-        {//在建構子裡新增資料
-            for (int i = 0; i < 300; i++)
-            {
-                this._myRecords.Add(new MyRecord()
-                {
-                    sysid = i + 1,
-                    MyTitle = "MyTitle" + i,
-                    MyMoney = i * 1000
-                });
-            }//end for 
+        {
+            
+           
+
         }
         /// <summary>
         /// DataSource 資料集合，通常為DB裡的資料
@@ -47,6 +41,23 @@ namespace PurchaseOrderSys.Controllers
         // GET: Test
         public ActionResult Index()
         {
+            var SerialsLlist = new List<SerialsLlist>();
+            var POSerialsLlist = new List<SerialsLlist>();
+            var DSerialsLlist = new List<SerialsLlist>();
+            foreach (var PurchaseOrderitem in db.PurchaseOrder.Where(x => x.IsEnable))
+            {
+                foreach (var PurchaseSKUitem in PurchaseOrderitem.PurchaseSKU.Where(x => x.IsEnable && x.SkuNo == "106005422"))
+                {
+                    SerialsLlist.AddRange(PurchaseSKUitem.SerialsLlist);
+                    POSerialsLlist.AddRange(PurchaseSKUitem.SerialsLlist.Where(x => x.SerialsType == "PO"));
+                }
+            }
+            DSerialsLlist.AddRange(SerialsLlist.Except(POSerialsLlist));
+            DSerialsLlist.AddRange(POSerialsLlist.Except(SerialsLlist));
+            if (DSerialsLlist.Any())
+            {
+            }
+
             return View();
         }
         public ActionResult TestShipmentByOrder()

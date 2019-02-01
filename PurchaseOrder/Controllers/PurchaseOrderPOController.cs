@@ -643,6 +643,7 @@ namespace PurchaseOrderSys.Controllers
         [HttpPost]
         public ActionResult ReceiveItems(PurchaseOrder PurchaseOrder, List<PostList> QTYReceived)
         {
+            var UpdateAt = DateTime.UtcNow;
             var oPurchaseOrder = db.PurchaseOrder.Find(PurchaseOrder.ID);
             if (oPurchaseOrder.POType != PurchaseOrder.POType)
             {
@@ -652,7 +653,8 @@ namespace PurchaseOrderSys.Controllers
             {
                 oPurchaseOrder.InvoiceNo = PurchaseOrder.InvoiceNo;
             }
-
+            oPurchaseOrder.UpdateAt = UpdateAt;
+            oPurchaseOrder.UpdateBy = UserBy;
             foreach (var QTYReceiveditem in QTYReceived)
             {
                 if (!string.IsNullOrWhiteSpace(QTYReceiveditem.val))
@@ -663,13 +665,40 @@ namespace PurchaseOrderSys.Controllers
                         foreach (var item in oPurchaseOrder.PurchaseSKU.Where(x => x.ID == QTYReceiveditem.ID && x.IsEnable))
                         {
                             item.QTYReceived = val;
+                            //產生隨機序號
+                            GetFreeSerials(item, UpdateAt);
                         }
                     }
+
                 }
             }
             db.SaveChanges();
             return View(PurchaseOrder);
         }
+
+        private void GetFreeSerials(PurchaseSKU PurchaseSKU, DateTime UpdateAt)
+        {
+            var count = PurchaseSKU.QTYReceived;
+            var SerialsLlistCount = PurchaseSKU.SerialsLlist.Where(x => x.SerialsType == "PO").Count();
+            if (count > SerialsLlistCount)
+            {
+                for (int i = SerialsLlistCount; i < count; i++)
+                {
+                    var dt = DateTime.UtcNow;
+                    PurchaseSKU.SerialsLlist.Add(new SerialsLlist
+                    {
+                        SerialsNo = "POA" +  PurchaseSKU.ID + dt.ToString("MMddHHmmssfff") + i,
+                        SerialsType = "PO",
+                        SerialsQTY = 1,
+                        ReceivedBy = UserBy,
+                        ReceivedAt = UpdateAt,
+                        CreateBy = UserBy,
+                        CreateAt = UpdateAt
+                    });
+                }
+            }
+        }
+
         public ActionResult Addserials(int ID)
         {
             var PurchaseSKU = db.PurchaseSKU.Find(ID);

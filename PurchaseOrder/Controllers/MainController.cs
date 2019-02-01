@@ -15,6 +15,33 @@ namespace PurchaseOrderSys.Controllers
         // GET: Main
         public ActionResult Index()
         {
+            var s0 = db.SerialsLlist.Where(x => x.PurchaseSKU.SkuNo == "106005422" &&(!x.TransferSKUID.HasValue||(x.TransferSKU.IsEnable&&x.TransferSKU.Transfer.IsEnable) && (!x.PurchaseSKU.CreditMemoID.HasValue|| x.PurchaseSKU.CreditMemo.IsEnable))).Sum(x => x.SerialsQTY);
+            var s1 = db.SerialsLlist.Where(x => x.PurchaseSKU.SkuNo == "106005422" && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable).Sum(x => x.SerialsQTY);
+            var s11 = db.SerialsLlist.Where(x => (x.PurchaseSKU.SkuNo == "106005422" && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable) || (x.TransferSKUID.HasValue && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable)).Sum(x => x.SerialsQTY);
+
+
+            var s12 = db.SerialsLlist.Where(x => (x.PurchaseSKU.IsEnable &&x.PurchaseSKU.SkuNo == "106005422" &&  x.PurchaseSKU.PurchaseOrder.IsEnable) ||
+                                                 (x.PurchaseSKU.IsEnable &&x.PurchaseSKU.SkuNo == "106005422" &&  x.PurchaseSKU.CreditMemo.IsEnable) ||
+                                                 (x.TransferSKUID.HasValue &&x.TransferSKU.SkuNo == "106005422" &&  x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable)
+
+           ).Sum(x => x.SerialsQTY);
+
+
+
+
+
+            var s2 = db.SerialsLlist.Where(x => x.PurchaseSKU.SkuNo == "106005422"&&!x.SerialsLlistC.Any()).Sum(x => x.SerialsQTY);
+
+
+            var s13 = db.SerialsLlist.Where(x => x.PurchaseSKU.SkuNo == "106005422" && 
+            (
+            (x.PurchaseSKU.IsEnable && x.PurchaseSKU.CreditMemo.IsEnable) ||
+            (x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable)||
+            (x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable)
+            )).Sum(x => x.SerialsQTY);
+
+
+
             return View();
         }
         //登入

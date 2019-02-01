@@ -635,7 +635,8 @@
                     delay: 0,
                     data: function (term) {
                         return {
-                            Search: term.term
+                            Search: term.term,
+                            PurchaseOrderID:@Html.DisplayFor(x=>x.PurchaseOrderID)
                         };
                     },
                     processResults: function (data) {

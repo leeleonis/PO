@@ -145,13 +145,18 @@
                     { data: "UPCEAN" },
                     { data: "QTYOrdered", render: function (data, type, row) { return data; } },
                     {
-                        data: "QTYReturned", render: function (data, type, row, meta ) {
-                            if (data == 0 || data == null) {
-                                return '<input class="form-control" type="number"   id="QTYReturned[' + row.ID + ']" name="QTYReturned[' + meta.row + '].val" > <input type="hidden" name="QTYReturned[' + meta.row +'].ID" value = ' + row.ID + ' />';
+                        data: "QTYReturned", render: function (data, type, row, meta) {
+                            if (row.SerialTracking) {
+                                return "";
                             }
                             else {
-                                return '<input class="form-control" type="number"   id="QTYReturned[' + row.ID + ']" name="QTYReturned[' + meta.row + '].val" value = ' + data + ' > <input type="hidden" name="QTYReturned[' + meta.row +'].ID" value = ' + row.ID + ' />';
-                            }
+                                if (data == 0 || data == null) {
+                                    return '<input class="form-control" type="number"   id="QTYReturned[' + row.ID + ']" name="QTYReturned[' + meta.row + '].val" > <input type="hidden" name="QTYReturned[' + meta.row + '].ID" value = ' + row.ID + ' />';
+                                }
+                                else {
+                                    return '<input class="form-control" type="number"   id="QTYReturned[' + row.ID + ']" name="QTYReturned[' + meta.row + '].val" value = ' + data + ' > <input type="hidden" name="QTYReturned[' + meta.row + '].ID" value = ' + row.ID + ' />';
+                                }
+                            }  
                         }
                     },
                     { data: "Serial", render: function (data, type, row) { return data; }  },
@@ -160,7 +165,13 @@
                         data: "ck",
                         orderable: false,
                         render: function (data, type, row) {
-                            return "<a href='" + "@Url.Action("Addserials")" + "?ID=" + row.ID + "' class='btn btn-default btn-sm' >Add serials</a> ";
+                            if (row.SerialTracking) {
+                                return "<a href='" + "@Url.Action("Addserials")" + "?ID=" + row.ID + "' class='btn btn-default btn-sm' >Add serials</a> ";
+                            }
+                            else {
+                                return "";
+                            }
+                           
                         }
                     }
                 ],

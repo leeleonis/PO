@@ -359,6 +359,7 @@ namespace PurchaseOrderSys.Controllers
                     }
                     else
                     {
+                        item.IsEnable = true;
                         item.CreateAt = dt;
                         item.CreateBy = UserBy;
                         CreditMemo.PurchaseSKU.Add(item);
@@ -400,6 +401,7 @@ namespace PurchaseOrderSys.Controllers
         [HttpPost]
         public ActionResult ReturnItems(CreditMemo CreditMemo, List<PostList> QTYReturned)
         {
+            var UpdateAt = DateTime.UtcNow;
             var oCreditMemo = db.CreditMemo.Find(CreditMemo.ID);
             if (oCreditMemo.CMType != CreditMemo.CMType)
             {
@@ -409,7 +411,8 @@ namespace PurchaseOrderSys.Controllers
             {
                 oCreditMemo.InvoiceNo = CreditMemo.InvoiceNo;
             }
-
+            oCreditMemo.UpdateAt = UpdateAt;
+            oCreditMemo.UpdateBy = UserBy;
             foreach (var QTYReturneditem in QTYReturned)
             {
                 if (!string.IsNullOrWhiteSpace(QTYReturneditem.val))
@@ -420,6 +423,8 @@ namespace PurchaseOrderSys.Controllers
                         foreach (var item in oCreditMemo.PurchaseSKU.Where(x => x.IsEnable && x.ID == QTYReturneditem.ID))
                         {
                             item.QTYReturned = val;
+                            //隨機序號做CM
+                            CMFreeSerials(item, UpdateAt);
                         }
                     }
                 }
@@ -427,6 +432,32 @@ namespace PurchaseOrderSys.Controllers
             db.SaveChanges();
             return View(CreditMemo);
         }
+
+        private void CMFreeSerials(PurchaseSKU PurchaseSKU, DateTime UpdateAt)
+        {
+
+            var count = PurchaseSKU.QTYReturned ?? 0;
+            var CMSerialsLlistCount = PurchaseSKU.SerialsLlist.Where(x => x.SerialsType == "CM").Count();//CM數
+            if (count > CMSerialsLlistCount)
+            {
+                var NoUseSerialsLlistCount = db.SerialsLlist.Where(x => x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable && !x.SerialsLlistC.Any() && x.PurchaseSKU.SkuNo == PurchaseSKU.SkuNo).Take(count - CMSerialsLlistCount);         
+                foreach (var item in NoUseSerialsLlistCount)
+                {
+                    var nSerialsLlist = new SerialsLlist
+                    {
+                        PurchaseSKUID = item.PurchaseSKUID,
+                        PID = item.ID,
+                        SerialsType = "CM",
+                        SerialsNo = item.SerialsNo,
+                        SerialsQTY = -1,
+                        CreateBy = UserBy,
+                        CreateAt = UpdateAt
+                    };
+                    PurchaseSKU.SerialsLlist.Add(nSerialsLlist);
+                }
+            }
+        }
+
         [HttpPost]
         public ActionResult GetSerialList(int ID)
         {
