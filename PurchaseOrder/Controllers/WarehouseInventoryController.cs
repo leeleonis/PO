@@ -332,7 +332,7 @@ namespace PurchaseOrderSys.Controllers
             if (SKU.GetType().BaseType.Name == typeof(PurchaseSKU).Name)
             {
                 var PurchaseSKU = (PurchaseSKU)SKU;
-                var SerialsLlist = PurchaseSKU.SerialsLlist.Where(y => !NoList.Contains(y.ID) && y.SerialsType == "TransferOut" && y.TransferSKU.IsEnable && y.TransferSKU.Transfer.IsEnable && y.TransferSKU.Transfer.FromWID == Warehouse.ID && y.TransferSKU.Transfer.Status == Status);
+                var SerialsLlist = PurchaseSKU.SerialsLlist.Where(y => !NoList.Contains(y.ID) && y.SerialsType == "TransferOut" && y.TransferSKU.IsEnable && y.TransferSKU.Transfer.IsEnable && y.TransferSKU.Transfer.FromWID == Warehouse.ID && y.TransferSKU.Transfer.Status == Status && !y.SerialsLlistC.Any());
                 count = SerialsLlist.Sum(y => y.SerialsQTY).Value;
             }
             else if (SKU.GetType().BaseType.Name == typeof(TransferSKU).Name)
@@ -346,7 +346,7 @@ namespace PurchaseOrderSys.Controllers
                 SerialsLlist = SerialsLlist.Where(y => y.TransferSKU.Transfer.IsEnable).ToList();
                 SerialsLlist = SerialsLlist.Where(y => y.TransferSKU.Transfer.FromWID == Warehouse.ID).ToList();
                 SerialsLlist = SerialsLlist.Where(y => y.TransferSKU.Transfer.Status == Status).ToList();
-
+                SerialsLlist = SerialsLlist.Where(y => !y.SerialsLlistC.Any()).ToList();
 
 
 
@@ -538,7 +538,7 @@ namespace PurchaseOrderSys.Controllers
                     //TransferInQTY = GetTransferInQTY(item),
                     Value = GetValue(item)
                 });
-                //NoList.AddRange(item.SerialsLlist.Select(x => x.ID));
+                NoList.AddRange(item.SerialsLlist.Select(x => x.ID));
             }
             foreach (var item in TransferSKUTo)
             {
@@ -662,6 +662,7 @@ namespace PurchaseOrderSys.Controllers
             }
             if (PurchaseSKU.Any()|| TransferSKU.Any())
             {
+                var NoList = new List<int>();
                 //取待出貨
                 var AwaitingCountlist = GetAwaitingCount(SKU, "");
 
@@ -682,26 +683,28 @@ namespace PurchaseOrderSys.Controllers
                         SkuPurchasingVM.BackOrdered += PurchaseSKUitem.QTYOrdered ?? 0;
                         SkuPurchasingVM.Awaiting += (AwaitingCountlist.Where(x => x.SKU == SKU && x.SCID == SCID).FirstOrDefault()?.QTY ?? 0) - GetTransferAwaiting(PurchaseSKUitem, PurchaseSKUitem.PurchaseOrder.WarehousePO);
                         SkuPurchasingVM.POQTY += PurchaseSKUitem.QTYOrdered.HasValue ? PurchaseSKUitem.QTYOrdered.Value : PurchaseSKUitem.SerialsLlist.Where(y => y.SerialsType == "PO").Sum(y => y.SerialsQTY) ?? 0;//有輸入直接讀輸入，沒輸入計算序號數
-                        SkuPurchasingVM.CMQTY += GetCMQty(PurchaseSKUitem);
-                        SkuPurchasingVM.OrderQTY += GetOrderQTY(PurchaseSKUitem);
-                        //SkuPurchasingVM.TransferInQTY += GetTransferInQTY(PurchaseSKUitem);
-                        SkuPurchasingVM.TransferOutQTY += GetTransferOutQTY(PurchaseSKUitem, PurchaseSKUitem.PurchaseOrder.WarehousePO);
+                        SkuPurchasingVM.CMQTY += GetCMQty(PurchaseSKUitem, NoList);
+                        SkuPurchasingVM.OrderQTY += GetOrderQTY(PurchaseSKUitem, NoList);
+                        //SkuPurchasingVM.TransferInQTY += GetTransferInQTY(PurchaseSKUitem, NoList);
+                        SkuPurchasingVM.TransferOutQTY += GetTransferOutQTY(PurchaseSKUitem, PurchaseSKUitem.PurchaseOrder.WarehousePO, NoList);
                         SkuPurchasingVM.Velocity += GetVelocity(PurchaseSKUitem);
                         SkuPurchasingVM.UnfulfillableRMA += PurchaseSKUitem.SerialsLlist.Where(y => y.SerialsType == "RMA").Sum(y => y.SerialsQTY).Value;
+                        NoList.AddRange(PurchaseSKUitem.SerialsLlist.Select(x => x.ID));
                     }
                 }
                 foreach (var TransferSKUitem in TransferSKU.Where(x=>x.IsEnable))
                 {
                     if (TransferSKUitem.SerialsLlist.Any())
                     {
-                        SkuPurchasingVM.TransferInQTY += GetTransferInQTY(TransferSKUitem, TransferSKUitem.Transfer.WarehouseTo);
-                        SkuPurchasingVM.Awaiting += (- GetTransferAwaiting(TransferSKUitem, TransferSKUitem.Transfer.WarehouseTo));
-                        SkuPurchasingVM.TransferOutQTY += GetTransferOutQTY(TransferSKUitem, TransferSKUitem.Transfer.WarehouseTo);
+                        SkuPurchasingVM.TransferInQTY += GetTransferInQTY(TransferSKUitem, TransferSKUitem.Transfer.WarehouseTo, NoList);
+                        SkuPurchasingVM.Awaiting += (- GetTransferAwaiting(TransferSKUitem, TransferSKUitem.Transfer.WarehouseTo, NoList));
+                        SkuPurchasingVM.TransferOutQTY += GetTransferOutQTY(TransferSKUitem, TransferSKUitem.Transfer.WarehouseTo, NoList);
+                        NoList.AddRange(TransferSKUitem.SerialsLlist.Select(x => x.ID));
                     }
                 }
                 SkuPurchasingVM.Fulfillable = SkuPurchasingVM.POQTY + SkuPurchasingVM.CMQTY + SkuPurchasingVM.OrderQTY + SkuPurchasingVM.TransferInQTY + SkuPurchasingVM.TransferOutQTY;
                 SkuPurchasingVM.Aggregate = SkuPurchasingVM.Fulfillable - SkuPurchasingVM.Awaiting;//Aggregate = Fulfillable - Awaiting dispatch
-                //SkuPurchasingVM.UnfulfillableTransit = SkuPurchasingVM.TransferInQTY + SkuPurchasingVM.TransferOutQTY;
+                SkuPurchasingVM.UnfulfillableTransit = SkuPurchasingVM.TransferInQTY + SkuPurchasingVM.TransferOutQTY;
                 SkuPurchasingVM.TotalInventory = SkuPurchasingVM.POQTY + SkuPurchasingVM.CMQTY + SkuPurchasingVM.OrderQTY + SkuPurchasingVM.TransferInQTY + SkuPurchasingVM.TransferOutQTY;
                 SkuPurchasingVM.QTYperbox = 1;
                 SkuPurchasingVM.QTYpercase = 1;
