@@ -937,6 +937,10 @@ namespace PurchaseOrderSys.Models
         public string SKU { get; set; }
         public string Name { get; set; }
         /// <summary>
+        /// 訂貨數
+        /// </summary>
+        public int BackOrdered { get; set; }
+        /// <summary>
         /// 顯示30天內的出貨數量
         /// </summary>
         public int Velocity { get; set; }
@@ -988,6 +992,10 @@ namespace PurchaseOrderSys.Models
         /// 不可銷售的庫總量
         /// </summary>
         public int Unfulfillable { get; set; }
+        /// <summary>
+        ///  不可銷售的庫存總數,只限於 RMA 倉庫裡的庫存數量
+        /// </summary>
+        public int UnfulfillableRMA { get; set; }
     }
     public class CompanyVM
     {
