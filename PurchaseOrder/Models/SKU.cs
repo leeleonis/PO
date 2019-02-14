@@ -68,5 +68,6 @@ namespace PurchaseOrderSys.Models
         public virtual ICollection<PurchaseSKU> PurchaseSKU { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TransferSKU> TransferSKU { get; set; }
+        public virtual Logistic Logistic { get; set; }
     }
 }

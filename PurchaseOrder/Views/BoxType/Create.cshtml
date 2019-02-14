@@ -1,0 +1,146 @@
+﻿@model BoxType
+
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-xs-12">
+                <div class="jarviswidget" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+
+                        <h2>新增</h2>
+                        <ul class="nav nav-tabs pull-right">
+                            <li><a data-toggle="tab" href="#hb1">基本資料</a></li>
+                        </ul>
+                    </header>
+
+                    <div>
+                        <div class="widget-body no-padding">
+                            <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
+                                @Html.AntiForgeryToken()
+
+                                <div id="content" class="tab-content">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="tab-pane" id="hb1">
+                                        <fieldset>
+                                            <legend>基本資料</legend>
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-3">
+                                                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Width, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="row">
+                                                    <div class="col-sm-6 col-lg-2">
+                                                        <div class="input-group">
+                                                            @Html.EditorFor(model => model.Width, new { htmlAttributes = new { @class = "form-control" } })
+                                                            <span class="input-group-addon">mm</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3 col-lg-1">
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control" id="Width-inch" readonly />
+                                                            <span class="input-group-addon">inch</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Length, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="row">
+                                                    <div class="col-sm-6 col-lg-2">
+                                                        <div class="input-group">
+                                                            @Html.EditorFor(model => model.Length, new { htmlAttributes = new { @class = "form-control" } })
+                                                            <span class="input-group-addon">mm</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3 col-lg-1">
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control" id="Length-inch" readonly />
+                                                            <span class="input-group-addon">inch</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Height, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="row">
+                                                    <div class="col-sm-6 col-lg-2">
+                                                        <div class="input-group">
+                                                            @Html.EditorFor(model => model.Height, new { htmlAttributes = new { @class = "form-control" } })
+                                                            <span class="input-group-addon">mm</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3 col-lg-1">
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control" id="Height-inch" readonly />
+                                                            <span class="input-group-addon">inch</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Weight, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="row">
+                                                    <div class="col-sm-6 col-lg-2">
+                                                        <div class="input-group">
+                                                            @Html.EditorFor(model => model.Weight, new { htmlAttributes = new { @class = "form-control" } })
+                                                            <span class="input-group-addon">g</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3 col-lg-1">
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control" id="Weight-lbs" readonly />
+                                                            <span class="input-group-addon">lbs</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+
+                                <div class="widget-footer">
+                                    <button type="submit" class="btn btn-primary" id="save">儲存</button>
+                                    <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index", "BoxType")'">返回</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section pagespecific {
+    <script type="text/javascript">
+        var hash = window.location.hash;
+        $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
+        $('.tab-pane').eq(hash.substr(1)).addClass('active');
+
+        $(document).ready(function () {
+            $('div.input-group input.single-line').change(function () {
+                var value;
+                if (!website.IsEmpty($(this).val()) && $.isNumeric($(this).val())) {
+                    value = parseFloat($(this).val());
+                    if ($(this).attr('id') == 'Weight') {
+                        $('#Weight-lbs').val(value * 22 / 10000);
+                    } else {
+                        $('#' + $(this).attr('id') + '-inch').val(value * 3937 / 100000);
+                    }
+                } else {
+                    $(this).val(0);
+                }
+            });
+        });
+    </script>
+}

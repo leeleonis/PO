@@ -203,6 +203,7 @@
     <Compile Include="Controllers\AjaxController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\BoxTypeController.cs" />
     <Compile Include="Controllers\BrandController.cs" />
     <Compile Include="Controllers\CompanyController.cs" />
     <Compile Include="Controllers\ConditionController.cs" />
@@ -256,6 +257,12 @@
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AuthMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\BoxType.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\BoxTypeMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Brand.cs">
@@ -336,6 +343,12 @@
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\KitSkuMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Logistic.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\LogisticMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Marketplace.cs">
@@ -6495,6 +6508,9 @@
     <Content Include="Views\RMA\Index.cshtml" />
     <Content Include="Views\RMA\Create.cshtml" />
     <Content Include="Views\Transfer\GetSerialList.cshtml" />
+    <Content Include="Views\BoxType\Index.cshtml" />
+    <Content Include="Views\BoxType\Create.cshtml" />
+    <Content Include="Views\Sku\_BoxData.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

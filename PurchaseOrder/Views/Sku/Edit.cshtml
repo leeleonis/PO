@@ -485,7 +485,184 @@
                                     </div>
 
                                     <div class="tab-pane" id="hb6">
-                                        <fieldset></fieldset>
+                                        <fieldset>
+                                            <legend>Weight & Dimensions</legend>
+                                            <div class="form-group">
+                                                <div class="col-sm-12 col-lg-6 no-padding">
+                                                    <div class="form-group">
+                                                        @Html.LabelFor(model => model.Logistic.CaseWidth, htmlAttributes: new { @class = "control-label col-sm-2 col-lg-4" })
+                                                        <div class="col-sm-8">
+                                                            <div class="row">
+                                                                <div class="col-sm-8">
+                                                                    <div class="input-group">
+                                                                        @Html.EditorFor(model => model.Logistic.CaseWidth, new { htmlAttributes = new { @class = "form-control", @name = "Logistic[CaseWidth]", @id = "CaseWidth" } })
+                                                                        <span class="input-group-addon">mm</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-4">
+                                                                    <div class="input-group">
+                                                                        <input type="text" class="form-control" id="CaseWidth-inch" readonly />
+                                                                        <span class="input-group-addon">inch</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        @Html.LabelFor(model => model.Logistic.CaseLength, htmlAttributes: new { @class = "control-label col-sm-2 col-lg-4" })
+                                                        <div class="col-sm-8">
+                                                            <div class="row">
+                                                                <div class="col-sm-8">
+                                                                    <div class="input-group">
+                                                                        @Html.EditorFor(model => model.Logistic.CaseLength, new { htmlAttributes = new { @class = "form-control", @name = "Logistic[CaseLength]", @id = "CaseLength" } })
+                                                                        <span class="input-group-addon">mm</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-4">
+                                                                    <div class="input-group">
+                                                                        <input type="text" class="form-control" id="CaseLength-inch" readonly />
+                                                                        <span class="input-group-addon">inch</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        @Html.LabelFor(model => model.Logistic.CaseHeight, htmlAttributes: new { @class = "control-label col-sm-2 col-lg-4" })
+                                                        <div class="col-sm-8">
+                                                            <div class="row">
+                                                                <div class="col-sm-8">
+                                                                    <div class="input-group">
+                                                                        @Html.EditorFor(model => model.Logistic.CaseHeight, new { htmlAttributes = new { @class = "form-control", @name = "Logistic[CaseHeight]", @id = "CaseHeight" } })
+                                                                        <span class="input-group-addon">mm</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-4">
+                                                                    <div class="input-group">
+                                                                        <input type="text" class="form-control" id="CaseHeight-inch" readonly />
+                                                                        <span class="input-group-addon">inch</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        @Html.LabelFor(model => model.Logistic.CaseWeight, htmlAttributes: new { @class = "control-label col-sm-2 col-lg-4" })
+                                                        <div class="col-sm-8">
+                                                            <div class="row">
+                                                                <div class="col-sm-8">
+                                                                    <div class="input-group">
+                                                                        @Html.EditorFor(model => model.Logistic.CaseWeight, new { htmlAttributes = new { @class = "form-control", @name = "Logistic[CaseWeight]", @id = "CaseWeight" } })
+                                                                        <span class="input-group-addon">g</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-4">
+                                                                    <div class="input-group">
+                                                                        <input type="text" class="form-control" id="CaseWeight-lbs" readonly />
+                                                                        <span class="input-group-addon">lbs</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        @Html.LabelFor(model => model.Logistic.ShippingWidth, htmlAttributes: new { @class = "control-label col-sm-2 col-lg-4" })
+                                                        <div class="col-sm-8">
+                                                            <div class="row">
+                                                                <div class="col-sm-8">
+                                                                    <div class="input-group">
+                                                                        @Html.EditorFor(model => model.Logistic.ShippingWidth, new { htmlAttributes = new { @class = "form-control", @name = "Logistic[ShippingWidth]", @id = "ShippingWidth" } })
+                                                                        <span class="input-group-addon">mm</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-4">
+                                                                    <div class="input-group">
+                                                                        <input type="text" class="form-control" id="ShippingWidth-inch" readonly />
+                                                                        <span class="input-group-addon">inch</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        @Html.LabelFor(model => model.Logistic.ShippingLength, htmlAttributes: new { @class = "control-label col-sm-2 col-lg-4" })
+                                                        <div class="col-sm-8">
+                                                            <div class="row">
+                                                                <div class="col-sm-8">
+                                                                    <div class="input-group">
+                                                                        @Html.EditorFor(model => model.Logistic.ShippingLength, new { htmlAttributes = new { @class = "form-control", @name = "Logistic[ShippingLength]", @id = "ShippingLength" } })
+                                                                        <span class="input-group-addon">mm</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-4">
+                                                                    <div class="input-group">
+                                                                        <input type="text" class="form-control" id="ShippingLength-inch" readonly />
+                                                                        <span class="input-group-addon">inch</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        @Html.LabelFor(model => model.Logistic.ShippingHeight, htmlAttributes: new { @class = "control-label col-sm-2 col-lg-4" })
+                                                        <div class="col-sm-8">
+                                                            <div class="row">
+                                                                <div class="col-sm-8">
+                                                                    <div class="input-group">
+                                                                        @Html.EditorFor(model => model.Logistic.ShippingHeight, new { htmlAttributes = new { @class = "form-control", @name = "Logistic[ShippingHeight]", @id = "ShippingHeight" } })
+                                                                        <span class="input-group-addon">mm</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-4">
+                                                                    <div class="input-group">
+                                                                        <input type="text" class="form-control" id="ShippingHeight-inch" readonly />
+                                                                        <span class="input-group-addon">inch</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        @Html.LabelFor(model => model.Logistic.ShippingWeight, htmlAttributes: new { @class = "control-label col-sm-2 col-lg-4" })
+                                                        <div class="col-sm-8">
+                                                            <div class="row">
+                                                                <div class="col-sm-8">
+                                                                    <div class="input-group">
+                                                                        @Html.EditorFor(model => model.Logistic.ShippingWeight, new { htmlAttributes = new { @class = "form-control", @name = "Logistic[ShippingWeight]", @id = "ShippingWeight" } })
+                                                                        <span class="input-group-addon">g</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-4">
+                                                                    <div class="input-group">
+                                                                        <input type="text" class="form-control" id="ShippingWeight-lbs" readonly />
+                                                                        <span class="input-group-addon">lbs</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <hr />
+                                                    <div class="form-group">
+                                                        @Html.LabelFor(model => model.Logistic.BoxID, htmlAttributes: new { @class = "control-label col-sm-2 col-lg-4" })
+                                                        <div class="col-sm-8">
+                                                            @Html.DropDownListFor(model => model.Logistic.BoxID, (List<SelectListItem>)ViewBag.BoxTypeList, htmlAttributes: new { @class = "form-control", @name = "Logistic[BoxID]" })
+                                                        </div>
+
+                                                        <div id="boxData">
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-12 col-lg-5 col-lg-offset-1 no-padding">
+                                                    <input type="file" class="btn btn-default" name="LogisticImg">
+
+                                                    <p class="help-block">圖檔大小不能超過 4MB</p>
+
+                                                    <p class="help-block">
+                                                        @if (!string.IsNullOrEmpty(Model.Logistic?.ImagePath))
+                                                        {
+                                                            <img src="/Uploads/@Model.Logistic.ImagePath" style="max-width:80%;" />
+                                                        }
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </fieldset>
                                     </div>
 
                                     @{
@@ -836,6 +1013,31 @@
                     });
                 }
             });
+
+            $('#hb6').find('div.input-group input.single-line').change(function () {
+                var value, id;
+                if (!website.IsEmpty($(this).val()) && $.isNumeric($(this).val())) {
+                    value = parseFloat($(this).val());
+                    id = $(this).attr('id');
+                    if (id == 'CaseWeight' || id == 'ShippingWeight') {
+                        $('#' + id + '-lbs').val(value * 22 / 10000);
+                    } else {
+                        $('#' + id + '-inch').val(value * 3937 / 100000);
+                    }
+                } else {
+                    $(this).val(0);
+                }
+            }).trigger('change');
+
+            $('#Logistic_BoxID').change(function () {
+                website.AjaxUrl('@Url.Action("GetBoxData", "Sku")', 'get', { ID: $(this).val() }).done(function (response) {
+                    if (response.status) {
+                        $('#boxData').html(response.data);
+                    } else {
+                        alert(response.message);
+                    }
+                })
+            }).trigger('change');;
 
             $('#table-statement thead tr').clone().appendTo($('#table-statement tfoot'));
             var $statementTable = $('#table-statement').DataTable({

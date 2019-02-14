@@ -2045,4 +2045,82 @@
   <data name="RMA_Channel" xml:space="preserve">
     <value>Channel</value>
   </data>
+  <data name="BoxType_ID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="BoxType_Name" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="BoxType_Width" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="BoxType_Length" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="BoxType_Height" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="BoxType_Weight" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="BoxType_CreateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="BoxType_CreateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="BoxType_UpdateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="BoxType_UpdateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Logistic_Sku" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Logistic_BoxID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Logistic_CaseWidth" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Logistic_CaseLength" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Logistic_CaseHeight" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Logistic_CaseWeight" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Logistic_ShippingWidth" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Logistic_ShippingLength" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Logistic_ShippingHeight" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Logistic_ShippingWeight" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Logistic_OriginCountry" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Logistic_ImagePath" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Logistic_CreateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Logistic_CreateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Logistic_UpdateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Logistic_UpdateAt" xml:space="preserve">
+    <value></value>
+  </data>
 </root>

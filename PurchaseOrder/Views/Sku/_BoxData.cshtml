@@ -1,0 +1,72 @@
+﻿@model BoxType
+@Html.LabelFor(model => model.Width, htmlAttributes: new { @class = "control-label col-sm-2 col-lg-4" })
+<div class="col-sm-8">
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="input-group">
+                <input type="text" class="form-control" value="@Model.Width" readonly />
+                <span class="input-group-addon">mm</span>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="input-group">
+                <input type="text" class="form-control" value="@Math.Round(Model.Width * 0.0393700787, 9)" readonly />
+                <span class="input-group-addon">inch</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.LabelFor(model => model.Length, htmlAttributes: new { @class = "control-label col-sm-2 col-lg-4" })
+<div class="col-sm-8">
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="input-group">
+                <input type="text" class="form-control" value="@Model.Length" readonly />
+                <span class="input-group-addon">mm</span>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="input-group">
+                <input type="text" class="form-control" value="@Math.Round(Model.Length * 0.0393700787, 9)" readonly />
+                <span class="input-group-addon">inch</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.LabelFor(model => model.Height, htmlAttributes: new { @class = "control-label col-sm-2 col-lg-4" })
+<div class="col-sm-8">
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="input-group">
+                <input type="text" class="form-control" value="@Model.Height" readonly />
+                <span class="input-group-addon">mm</span>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="input-group">
+                <input type="text" class="form-control" value="@Math.Round(Model.Height * 0.0393700787, 9)" readonly />
+                <span class="input-group-addon">inch</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.LabelFor(model => model.Weight, htmlAttributes: new { @class = "control-label col-sm-2 col-lg-4" })
+<div class="col-sm-8">
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="input-group">
+                <input type="text" class="form-control" value="@Model.Weight" readonly />
+                <span class="input-group-addon">g</span>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="input-group">
+                <input type="text" class="form-control" value="@Math.Round(Model.Weight * 0.00220462262, 9)" readonly />
+                <span class="input-group-addon">lbs</span>
+            </div>
+        </div>
+    </div>
+</div>

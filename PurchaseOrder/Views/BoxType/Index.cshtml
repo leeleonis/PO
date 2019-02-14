@@ -1,0 +1,184 @@
+﻿@model BoxType
+@section styles{
+    <link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
+    <link href="~/Content/themes/icon.css" rel="stylesheet" />
+    <style>
+        .datagrid-btable .filterColumn:first-child td div {
+            padding: 0
+        }
+    </style>
+}
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <div class="table-parent tool-content col-xs-12">
+                <div class="action-button col-xs-2 col-xs-offset-10">
+                    <a class="btn btn-default" href="@Url.Action("Create", "BoxType")">新增</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <article class="col-xs-12">
+                <table id="DataGrid"></table>
+            </article>
+        </div>
+    </section>
+</div>
+@section pagespecific {
+    <script src="~/scripts/jquery.easyui-1.4.3.min.js"></script>
+    <script src="~/scripts/datagrid-detailview.js"></script>
+    <script src="~/scripts/jquery.number.min.js"></script>
+    <script type="text/javascript">
+        var pager, pageSize = 100, selectOption;
+        var $table = $("#DataGrid"), datagrid;
+
+        $(function () {
+            dataInit();
+        });
+
+        function dataInit() {
+            datagrid = new Datagrid("裝箱類型 列表", "ID", "@Url.Action("GetData")");
+
+            datagrid.dataInit.frozenColumns = [[
+                { field: "ck", checkbox: true },
+                { field: "ID", title: "@Html.DisplayNameFor(model => model.ID)", width: 100, align: "center", sortable: false }
+            ]];
+
+            datagrid.dataInit.columns = [[
+                {
+                    field: "Name", title: "@Html.DisplayNameFor(model => model.Name)", width: 200, align: "center", sortable: false,
+                    formatter: function (value, row, index) {
+                        return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
+                    }
+                }, {
+                    field: "Width", title: "@Html.DisplayNameFor(model => model.Width) (mm)", width: 150, align: "center", sortable: false,
+                    formatter: function (value, row, index) {
+                        return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
+                    }
+                }, {
+                    field: "WidthInch", title: "@Html.DisplayNameFor(model => model.Width) (inch)", width: 150, align: "center", sortable: false
+                }, {
+                    field: "Length", title: "@Html.DisplayNameFor(model => model.Length) (mm)", width: 150, align: "center", sortable: false,
+                    formatter: function (value, row, index) {
+                        return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
+                    }
+                }, {
+                    field: "LengthInch", title: "@Html.DisplayNameFor(model => model.Length) (inch)", width: 150, align: "center", sortable: false
+                }, {
+                    field: "Height", title: "@Html.DisplayNameFor(model => model.Height) (mm)", width: 150, align: "center", sortable: false,
+                    formatter: function (value, row, index) {
+                        return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
+                    }
+                }, {
+                    field: "HeightInch", title: "@Html.DisplayNameFor(model => model.Height) (inch)", width: 150, align: "center", sortable: false
+                }, {
+                    field: "Weight", title: "@Html.DisplayNameFor(model => model.Weight) (g)", width: 150, align: "center", sortable: false,
+                    formatter: function (value, row, index) {
+                        return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
+                    }
+                }, {
+                    field: "WeightLbs", title: "@Html.DisplayNameFor(model => model.Width) (lbs)", width: 150, align: "center", sortable: false
+                }, {
+                    field: "Action", title: "Action", width: 80, align: "center", sortable: false,
+                    formatter: function (value, row, index) {
+                        if (website.IsEmpty(row.IsFilter)) {
+                            return "<button type='button' class='btn btn-default btn-sm' id='btn-save' onclick='SaveData(" + row.ID + ")' disabled>SAVE</button>";
+                        } else {
+                            return value;
+                        }
+                    }
+                }
+            ]];
+
+            $table.datagrid(datagrid.dataInit);
+
+            pager = $table.datagrid("getPager");
+            $(pager).pagination({
+                pageSize: pageSize,
+                showPageList: true,
+                pageList: [100, 200, 300, 500],
+                beforePageTest: "第",
+                afterPageTest: "頁，共 {pages} 頁",
+                displayMsg: "顯示 {from} 到 {to} 筆資料，共 {total} 筆資料"
+            });
+        }
+
+        function getFilterData() {
+            return {
+                ID: $('.filterColumn .s-ID').val(),
+                Name: $('.filterColumn .s-name').val(),
+                Width: $('.filterColumn .s-width').val(),
+                Length: $('.filterColumn .s-length').val(),
+                Height: $('.filterColumn .s-height').val(),
+                Weight: $('.filterColumn .s-weight').val()
+            };
+        }
+
+        function setFilterColumn(filterValue) {
+            return {
+                IsFilter: true,
+                ID: "<input type='text' class='form-control s-ID' value='" + (!website.IsEmpty(filterValue['ID']) ? filterValue['ID'] : '') + "'>",
+                Name: "<input type='text' class='form-control s-name' value='" + (!website.IsEmpty(filterValue['Name']) ? filterValue['Name'] : '') + "'>",
+                Width: "<input type='text' class='form-control s-width' value='" + (!website.IsEmpty(filterValue['Width']) ? filterValue['Width'] : '') + "'>",
+                Length: "<input type='text' class='form-control s-length' value='" + (!website.IsEmpty(filterValue['Length']) ? filterValue['Length'] : '') + "'>",
+                Height: "<input type='text' class='form-control s-height' value='" + (!website.IsEmpty(filterValue['Height']) ? filterValue['Height'] : '') + "'>",
+                Weight: "<input type='text' class='form-control s-weight' value='" + (!website.IsEmpty(filterValue['Weight']) ? filterValue['Weight'] : '') + "'>",
+                Action: "<button type='button' class='btn btn-default btn-sm' onclick='SaveData()'>SAVE ALL</button>"
+            };
+        }
+
+        function onDataChange(ID) {
+            var index = $table.datagrid("getRowIndex", ID) - 1;
+
+            $table.datagrid('checkRow', index + 1);
+            $("button#btn-save:eq(" + index + ")").removeAttr("disabled");
+        }
+
+        function SaveData(ID) {
+            var dataList = [];
+
+            if (website.IsEmpty(ID)) {
+                var rows = $table.datagrid('getSelections');
+                for (var i in rows) {
+                    index = $table.datagrid('getRowIndex', rows[i].ID) - 1;
+                    if (!$("button#btn-save:eq(" + index + ")").is("[disabled]")) {
+                        dataList.push(setData(rows[i], index));
+                        $("button#btn-save:eq(" + index + ")").attr("disabled", "disabled");
+                    }
+                }
+            } else {
+                var index = $table.datagrid("getRowIndex", ID) - 1;
+                row = $table.datagrid("getRows")[index + 1];
+                dataList.push(setData(row, index));
+                $("button#btn-save:eq(" + index + ")").attr("disabled", "disabled");
+            }
+
+            if (dataList.length > 0) {
+                dataList.forEach(function (data) {
+                    $.ajax({
+                        url: "@Url.Action("Update")",
+                        type: "post",
+                        data: data,
+                        dataType: "json"
+                    });
+                });
+
+                alert('Success!');
+            };
+
+            $table.datagrid('uncheckAll');
+        }
+
+        function setData(row, index) {
+            return {
+                ID: row.ID,
+                Name: $("input#Name:eq(" + index + ")").val(),
+                Width: $("input#Width:eq(" + index + ")").val(),
+                Length: $("input#Length:eq(" + index + ")").val(),
+                Height: $("input#Height:eq(" + index + ")").val(),
+                Weight: $("input#Weight:eq(" + index + ")").val()
+            }
+        }
+    </script>
+}

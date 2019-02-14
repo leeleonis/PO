@@ -17,6 +17,7 @@ namespace PurchaseOrderSys.Controllers
     public class SkuController : BaseController
     {
         readonly string[] EditList = new string[] { "ParentSku", "Condition", "Category", "Brand", "EAN", "UPC", "Replenishable", "SerialTracking", "Battery", "Status" };
+        readonly string[] LogisticList = new string[] { "BoxID", "CaseWidth", "CaseLength", "CaseHeight", "CaseWeight", "ShippingWidth", "ShippingLength", "ShippingHeight", "ShippingWeight" };
 
         // GET: Sku
         public ActionResult Index()
@@ -114,6 +115,7 @@ namespace PurchaseOrderSys.Controllers
             ViewBag.Brand = new SelectList(db.Brand.Where(b => b.IsEnable), "ID", "Name");
             ViewBag.CompanyList = companyList;
             ViewBag.MarketList = db.Marketplace.Where(m => m.IsEnable).ToList();
+            ViewBag.BoxTypeList = db.BoxType.Select(b => new SelectListItem() { Text = b.Name, Value = b.ID.ToString() }).ToList();
 
             var warehouseList = db.Warehouse.Where(w => w.IsEnable).ToList();
             ViewBag.WarehouseList = warehouseList;
@@ -128,7 +130,7 @@ namespace PurchaseOrderSys.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(SKU updateData, SkuLang langData, List<Dictionary<string, string>> eBayTitle, int[] DiverseAttribute, Sku_Attribute[] VariationValue, KitSku[] KitSku, Sku_PackageContent[] SkuContent, Sku_Attribute[] AttributeValue, HttpPostedFileBase picture, PriceGroup[] PriceGroup)
+        public ActionResult Edit(SKU updateData, SkuLang langData, List<Dictionary<string, string>> eBayTitle, int[] DiverseAttribute, Sku_Attribute[] VariationValue, KitSku[] KitSku, Sku_PackageContent[] SkuContent, Sku_Attribute[] AttributeValue, HttpPostedFileBase picture, PriceGroup[] PriceGroup, Logistic Logistic, HttpPostedFileBase LogisticImg)
         {
             SKU sku = db.SKU.Find(updateData.SkuID);
             if (sku == null) return HttpNotFound();
@@ -147,6 +149,19 @@ namespace PurchaseOrderSys.Controllers
                 langData.CreateAt = sku.UpdateAt.Value;
                 langData.CreateBy = sku.UpdateBy;
                 db.SkuLang.Add(langData);
+            }
+
+            if (sku.Logistic != null)
+            {
+                var logisticData = sku.Logistic;
+                SetUpdateData(logisticData, Logistic, LogisticList);
+            }
+            else
+            {
+                Logistic.Sku = sku.SkuID;
+                Logistic.CreateAt = sku.UpdateAt.Value;
+                Logistic.CreateBy = sku.UpdateBy;
+                db.Logistic.Add(Logistic);
             }
 
             db.SaveChanges();
@@ -351,14 +366,14 @@ namespace PurchaseOrderSys.Controllers
 
             if (PriceGroup != null && PriceGroup.Any())
             {
-                foreach(var price in PriceGroup)
+                foreach (var price in PriceGroup)
                 {
                     if (!price.ID.Equals(0))
                     {
                         var updatePrice = sku.PriceGroup.First(p => p.ID.Equals(price.ID));
                         updatePrice.IsUsed = price.IsUsed;
                         updatePrice.ItemID = price.ItemID;
-                        if(!price.Price.Equals(0)) updatePrice.Price = price.Price;
+                        if (!price.Price.Equals(0)) updatePrice.Price = price.Price;
                         updatePrice.Max = price.Max;
                         updatePrice.Min = price.Min;
                         updatePrice.UpdateAt = sku.UpdateAt;
@@ -374,6 +389,24 @@ namespace PurchaseOrderSys.Controllers
                 db.SaveChanges();
             }
 
+            if (LogisticImg != null && LogisticImg.ContentLength > 0)
+            {
+                var fileExtension = Path.GetExtension(LogisticImg.FileName);
+                var fileName = Guid.NewGuid().ToString() + fileExtension;
+                var filePath = Server.MapPath("~/Uploads/Sku/" + sku.SkuID);
+                if (!Directory.Exists(filePath)) Directory.CreateDirectory(filePath);
+
+                var path = Path.Combine(filePath, fileName);
+                LogisticImg.SaveAs(path);
+
+                if (System.IO.File.Exists(Server.MapPath("~/Uploads/" + sku.Logistic.ImagePath)))
+                {
+                    System.IO.File.Delete(string.Format(Server.MapPath("~/Uploads/" + sku.Logistic.ImagePath)));
+                }
+                sku.Logistic.ImagePath = string.Format("Sku/{0}/{1}", sku.SkuID, fileName);
+                db.SaveChanges();
+            }
+
             var LangID = EnumData.DataLangList().First().Key;
             ViewBag.LangID = langData.LangID;
             ViewBag.LangList = EnumData.DataLangList().Select(l => new SelectListItem { Text = l.Value, Value = l.Key, Selected = l.Key.Equals(langData.LangID) });
@@ -385,6 +418,12 @@ namespace PurchaseOrderSys.Controllers
             ViewBag.AttributeTypeList = db.SkuAttributeType.Where(t => t.IsEnable).OrderBy(t => t.Order).ToList();
             ViewBag.CompanyList = db.Company.AsNoTracking().Where(c => c.IsEnable).ToList();
             ViewBag.MarketList = db.Marketplace.Where(m => m.IsEnable).ToList();
+            ViewBag.BoxTypeList = db.BoxType.Select(b => new SelectListItem() { Text = b.Name, Value = b.ID.ToString() }).ToList();
+
+            var warehouseList = db.Warehouse.Where(w => w.IsEnable).ToList();
+            ViewBag.WarehouseList = warehouseList;
+            ViewBag.PurchaseSku = db.PurchaseSKU.Where(s => s.IsEnable && s.SkuNo.Equals(sku.SkuID)).ToList();
+            ViewBag.AwaitingList = GetAwaitingCount(new string[] { sku.SkuID }, warehouseList.Select(w => w.ID.ToString()).ToArray());
 
             return View(sku);
         }
@@ -771,6 +810,29 @@ namespace PurchaseOrderSys.Controllers
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult GetBoxData(int ID)
+        {
+            AjaxResult result = new AjaxResult();
+
+            BoxType boxType = db.BoxType.Find(ID);
+
+            try
+            {
+                if (boxType == null) throw new Exception("Not found sku!");
+
+                result.data = RenderViewToString(ControllerContext, "_BoxData", boxType);
+            }
+            catch (Exception e)
+            {
+                result.status = false;
+                result.message = e.InnerException != null ? e.InnerException.Message ?? e.Message : e.Message;
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+
 
         protected override void Dispose(bool disposing)
         {

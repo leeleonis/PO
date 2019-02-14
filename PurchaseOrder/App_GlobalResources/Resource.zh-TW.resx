@@ -1818,4 +1818,82 @@
   <data name="RMA_Channel" xml:space="preserve">
     <value>寄件地址的國家</value>
   </data>
+  <data name="BoxType_ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="BoxType_Name" xml:space="preserve">
+    <value>名稱</value>
+  </data>
+  <data name="BoxType_Width" xml:space="preserve">
+    <value>寬</value>
+  </data>
+  <data name="BoxType_Length" xml:space="preserve">
+    <value>長</value>
+  </data>
+  <data name="BoxType_Height" xml:space="preserve">
+    <value>高</value>
+  </data>
+  <data name="BoxType_Weight" xml:space="preserve">
+    <value>重量</value>
+  </data>
+  <data name="BoxType_CreateBy" xml:space="preserve">
+    <value>建立者</value>
+  </data>
+  <data name="BoxType_CreateAt" xml:space="preserve">
+    <value>建立時間</value>
+  </data>
+  <data name="BoxType_UpdateBy" xml:space="preserve">
+    <value>修改者</value>
+  </data>
+  <data name="BoxType_UpdateAt" xml:space="preserve">
+    <value>修改時間</value>
+  </data>
+  <data name="Logistic_Sku" xml:space="preserve">
+    <value>品號</value>
+  </data>
+  <data name="Logistic_BoxID" xml:space="preserve">
+    <value>裝箱類型</value>
+  </data>
+  <data name="Logistic_CaseWidth" xml:space="preserve">
+    <value>Case 寬</value>
+  </data>
+  <data name="Logistic_CaseLength" xml:space="preserve">
+    <value>Case 長</value>
+  </data>
+  <data name="Logistic_CaseHeight" xml:space="preserve">
+    <value>Case 高</value>
+  </data>
+  <data name="Logistic_CaseWeight" xml:space="preserve">
+    <value>Case 重量</value>
+  </data>
+  <data name="Logistic_ShippingWidth" xml:space="preserve">
+    <value>Shipping 寬</value>
+  </data>
+  <data name="Logistic_ShippingLength" xml:space="preserve">
+    <value>Shipping 長</value>
+  </data>
+  <data name="Logistic_ShippingHeight" xml:space="preserve">
+    <value>Shipping 高</value>
+  </data>
+  <data name="Logistic_ShippingWeight" xml:space="preserve">
+    <value>Shipping 重量</value>
+  </data>
+  <data name="Logistic_OriginCountry" xml:space="preserve">
+    <value>生產國家</value>
+  </data>
+  <data name="Logistic_ImagePath" xml:space="preserve">
+    <value>圖片</value>
+  </data>
+  <data name="Logistic_CreateBy" xml:space="preserve">
+    <value>建立者</value>
+  </data>
+  <data name="Logistic_CreateAt" xml:space="preserve">
+    <value>建立時間</value>
+  </data>
+  <data name="Logistic_UpdateBy" xml:space="preserve">
+    <value>修改者</value>
+  </data>
+  <data name="Logistic_UpdateAt" xml:space="preserve">
+    <value>修改時間</value>
+  </data>
 </root>
