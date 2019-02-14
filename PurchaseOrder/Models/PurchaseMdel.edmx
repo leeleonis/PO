@@ -65,6 +65,21 @@
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Value" Type="nvarchar" MaxLength="1" />
         </EntityType>
+        <EntityType Name="BoxType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Width" Type="float" Nullable="false" />
+          <Property Name="Length" Type="float" Nullable="false" />
+          <Property Name="Height" Type="float" Nullable="false" />
+          <Property Name="Weight" Type="float" Nullable="false" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreateAt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="UpdateAt" Type="datetime" />
+        </EntityType>
         <EntityType Name="Brand">
           <Key>
             <PropertyRef Name="ID" />
@@ -302,6 +317,27 @@
           <Property Name="Sku" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="ParentKit" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Qty" Type="int" Nullable="false" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreateAt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="UpdateAt" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Logistic">
+          <Key>
+            <PropertyRef Name="Sku" />
+          </Key>
+          <Property Name="Sku" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="BoxID" Type="int" Nullable="false" />
+          <Property Name="CaseWidth" Type="float" Nullable="false" />
+          <Property Name="CaseLength" Type="float" Nullable="false" />
+          <Property Name="CaseHeight" Type="float" Nullable="false" />
+          <Property Name="CaseWeight" Type="float" Nullable="false" />
+          <Property Name="ShippingWidth" Type="float" Nullable="false" />
+          <Property Name="ShippingLength" Type="float" Nullable="false" />
+          <Property Name="ShippingHeight" Type="float" Nullable="false" />
+          <Property Name="ShippingWeight" Type="float" Nullable="false" />
+          <Property Name="OriginCountry" Type="nvarchar" MaxLength="20" />
+          <Property Name="ImagePath" Type="nvarchar" MaxLength="100" />
           <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="CreateAt" Type="datetime" Nullable="false" />
           <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
@@ -1051,6 +1087,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Logistic_BoxType">
+          <End Role="BoxType" Type="Self.BoxType" Multiplicity="1" />
+          <End Role="Logistic" Type="Self.Logistic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BoxType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Logistic">
+              <PropertyRef Name="BoxID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Logistic_SKU">
+          <End Role="SKU" Type="Self.SKU" Multiplicity="1" />
+          <End Role="Logistic" Type="Self.Logistic" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="SKU">
+              <PropertyRef Name="SkuID" />
+            </Principal>
+            <Dependent Role="Logistic">
+              <PropertyRef Name="Sku" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Marketplace_Company">
           <End Role="Company" Type="Self.Company" Multiplicity="0..1" />
           <End Role="Marketplace" Type="Self.Marketplace" Multiplicity="*" />
@@ -1608,6 +1668,7 @@
           <EntitySet Name="AdminUser" EntityType="Self.AdminUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="API" EntityType="Self.API" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Auth" EntityType="Self.Auth" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BoxType" EntityType="Self.BoxType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Brand" EntityType="Self.Brand" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CarrierAPI" EntityType="Self.CarrierAPI" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Carriers" EntityType="Self.Carriers" Schema="dbo" store:Type="Tables" />
@@ -1621,6 +1682,7 @@
           <EntitySet Name="DirectLine" EntityType="Self.DirectLine" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ImgFile" EntityType="Self.ImgFile" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="KitSku" EntityType="Self.KitSku" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Logistic" EntityType="Self.Logistic" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Marketplace" EntityType="Self.Marketplace" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Menu" EntityType="Self.Menu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MenuLang" EntityType="Self.MenuLang" Schema="dbo" store:Type="Tables" />
@@ -1699,6 +1761,14 @@
           <AssociationSet Name="FK_KitSku_Sku1" Association="Self.FK_KitSku_Sku1">
             <End Role="SKU" EntitySet="SKU" />
             <End Role="KitSku" EntitySet="KitSku" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Logistic_BoxType" Association="Self.FK_Logistic_BoxType">
+            <End Role="BoxType" EntitySet="BoxType" />
+            <End Role="Logistic" EntitySet="Logistic" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Logistic_SKU" Association="Self.FK_Logistic_SKU">
+            <End Role="SKU" EntitySet="SKU" />
+            <End Role="Logistic" EntitySet="Logistic" />
           </AssociationSet>
           <AssociationSet Name="FK_Marketplace_Company" Association="Self.FK_Marketplace_Company">
             <End Role="Company" EntitySet="Company" />
@@ -2170,6 +2240,16 @@
             <End Role="TransferSKU" EntitySet="TransferSKU" />
           </AssociationSet>
           <EntitySet Name="RMA" EntityType="PurchaseOrderModel.RMA" />
+          <EntitySet Name="BoxType" EntityType="PurchaseOrderModel.BoxType" />
+          <EntitySet Name="Logistic" EntityType="PurchaseOrderModel.Logistic" />
+          <AssociationSet Name="FK_Logistic_BoxType" Association="PurchaseOrderModel.FK_Logistic_BoxType">
+            <End Role="BoxType" EntitySet="BoxType" />
+            <End Role="Logistic" EntitySet="Logistic" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Logistic_SKU" Association="PurchaseOrderModel.FK_Logistic_SKU">
+            <End Role="SKU" EntitySet="SKU" />
+            <End Role="Logistic" EntitySet="Logistic" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="AdminGroup">
           <Key>
@@ -2638,6 +2718,7 @@
           <NavigationProperty Name="GetCompany" Relationship="PurchaseOrderModel.FK_SKU_Company" FromRole="SKU" ToRole="Company" />
           <NavigationProperty Name="PurchaseSKU" Relationship="PurchaseOrderModel.FK_PurchaseSKU_SKU" FromRole="SKU" ToRole="PurchaseSKU" />
           <NavigationProperty Name="TransferSKU" Relationship="PurchaseOrderModel.FK_TransferSKU_SKU" FromRole="SKU" ToRole="TransferSKU" />
+          <NavigationProperty Name="Logistic" Relationship="PurchaseOrderModel.FK_Logistic_SKU" FromRole="SKU" ToRole="Logistic" />
         </EntityType>
         <EntityType Name="Sku_Attribute">
           <Key>
@@ -3884,6 +3965,69 @@
           <Property Name="SourceCaseID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="SCRMA" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="BoxType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Width" Type="Double" Nullable="false" />
+          <Property Name="Length" Type="Double" Nullable="false" />
+          <Property Name="Height" Type="Double" Nullable="false" />
+          <Property Name="Weight" Type="Double" Nullable="false" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Logistic" Relationship="PurchaseOrderModel.FK_Logistic_BoxType" FromRole="BoxType" ToRole="Logistic" />
+        </EntityType>
+        <EntityType Name="Logistic">
+          <Key>
+            <PropertyRef Name="Sku" />
+          </Key>
+          <Property Name="Sku" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BoxID" Type="Int32" Nullable="false" />
+          <Property Name="CaseWidth" Type="Double" Nullable="false" />
+          <Property Name="CaseLength" Type="Double" Nullable="false" />
+          <Property Name="CaseHeight" Type="Double" Nullable="false" />
+          <Property Name="CaseWeight" Type="Double" Nullable="false" />
+          <Property Name="ShippingWidth" Type="Double" Nullable="false" />
+          <Property Name="ShippingLength" Type="Double" Nullable="false" />
+          <Property Name="ShippingHeight" Type="Double" Nullable="false" />
+          <Property Name="ShippingWeight" Type="Double" Nullable="false" />
+          <Property Name="OriginCountry" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ImagePath" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="BoxType" Relationship="PurchaseOrderModel.FK_Logistic_BoxType" FromRole="Logistic" ToRole="BoxType" />
+          <NavigationProperty Name="GetSku" Relationship="PurchaseOrderModel.FK_Logistic_SKU" FromRole="Logistic" ToRole="SKU" />
+        </EntityType>
+        <Association Name="FK_Logistic_BoxType">
+          <End Type="PurchaseOrderModel.BoxType" Role="BoxType" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.Logistic" Role="Logistic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BoxType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Logistic">
+              <PropertyRef Name="BoxID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Logistic_SKU">
+          <End Type="PurchaseOrderModel.SKU" Role="SKU" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.Logistic" Role="Logistic" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="SKU">
+              <PropertyRef Name="SkuID" />
+            </Principal>
+            <Dependent Role="Logistic">
+              <PropertyRef Name="Sku" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4826,6 +4970,44 @@
                 <ScalarProperty Name="OrderID" ColumnName="OrderID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BoxType">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.BoxType">
+              <MappingFragment StoreEntitySet="BoxType">
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="Height" ColumnName="Height" />
+                <ScalarProperty Name="Length" ColumnName="Length" />
+                <ScalarProperty Name="Width" ColumnName="Width" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Logistic">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.Logistic">
+              <MappingFragment StoreEntitySet="Logistic">
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="OriginCountry" ColumnName="OriginCountry" />
+                <ScalarProperty Name="ShippingWeight" ColumnName="ShippingWeight" />
+                <ScalarProperty Name="ShippingHeight" ColumnName="ShippingHeight" />
+                <ScalarProperty Name="ShippingLength" ColumnName="ShippingLength" />
+                <ScalarProperty Name="ShippingWidth" ColumnName="ShippingWidth" />
+                <ScalarProperty Name="CaseWeight" ColumnName="CaseWeight" />
+                <ScalarProperty Name="CaseHeight" ColumnName="CaseHeight" />
+                <ScalarProperty Name="CaseLength" ColumnName="CaseLength" />
+                <ScalarProperty Name="CaseWidth" ColumnName="CaseWidth" />
+                <ScalarProperty Name="BoxID" ColumnName="BoxID" />
+                <ScalarProperty Name="Sku" ColumnName="Sku" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

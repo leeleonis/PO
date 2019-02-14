@@ -288,6 +288,96 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
+        public static string BoxType_CreateAt {
+            get {
+                return ResourceManager.GetString("BoxType_CreateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string BoxType_CreateBy {
+            get {
+                return ResourceManager.GetString("BoxType_CreateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string BoxType_Height {
+            get {
+                return ResourceManager.GetString("BoxType_Height", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string BoxType_ID {
+            get {
+                return ResourceManager.GetString("BoxType_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string BoxType_Length {
+            get {
+                return ResourceManager.GetString("BoxType_Length", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string BoxType_Name {
+            get {
+                return ResourceManager.GetString("BoxType_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string BoxType_UpdateAt {
+            get {
+                return ResourceManager.GetString("BoxType_UpdateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string BoxType_UpdateBy {
+            get {
+                return ResourceManager.GetString("BoxType_UpdateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string BoxType_Weight {
+            get {
+                return ResourceManager.GetString("BoxType_Weight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string BoxType_Width {
+            get {
+                return ResourceManager.GetString("BoxType_Width", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
         public static string Brand_CreateAt {
             get {
                 return ResourceManager.GetString("Brand_CreateAt", resourceCulture);
@@ -1713,6 +1803,150 @@ namespace PurchaseOrderSys.App_GlobalResources {
         public static string LoginHeader {
             get {
                 return ResourceManager.GetString("LoginHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Logistic_BoxID {
+            get {
+                return ResourceManager.GetString("Logistic_BoxID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Logistic_CaseHeight {
+            get {
+                return ResourceManager.GetString("Logistic_CaseHeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Logistic_CaseLength {
+            get {
+                return ResourceManager.GetString("Logistic_CaseLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Logistic_CaseWeight {
+            get {
+                return ResourceManager.GetString("Logistic_CaseWeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Logistic_CaseWidth {
+            get {
+                return ResourceManager.GetString("Logistic_CaseWidth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Logistic_CreateAt {
+            get {
+                return ResourceManager.GetString("Logistic_CreateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Logistic_CreateBy {
+            get {
+                return ResourceManager.GetString("Logistic_CreateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Logistic_ImagePath {
+            get {
+                return ResourceManager.GetString("Logistic_ImagePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Logistic_OriginCountry {
+            get {
+                return ResourceManager.GetString("Logistic_OriginCountry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Logistic_ShippingHeight {
+            get {
+                return ResourceManager.GetString("Logistic_ShippingHeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Logistic_ShippingLength {
+            get {
+                return ResourceManager.GetString("Logistic_ShippingLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Logistic_ShippingWeight {
+            get {
+                return ResourceManager.GetString("Logistic_ShippingWeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Logistic_ShippingWidth {
+            get {
+                return ResourceManager.GetString("Logistic_ShippingWidth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Logistic_Sku {
+            get {
+                return ResourceManager.GetString("Logistic_Sku", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Logistic_UpdateAt {
+            get {
+                return ResourceManager.GetString("Logistic_UpdateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Logistic_UpdateBy {
+            get {
+                return ResourceManager.GetString("Logistic_UpdateBy", resourceCulture);
             }
         }
         

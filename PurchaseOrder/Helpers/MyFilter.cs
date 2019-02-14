@@ -127,4 +127,16 @@ namespace PurchaseOrderSys
         public Nullable<int> CurrencyID { get; set; }
         public Nullable<int> NetoGroup { get; set; }
     }
+
+    public class BoxTypeFilter
+    {
+        private string nameField;
+
+        public Nullable<int> ID { get; set; }
+        public string Name { get { return this.nameField; } set { nameField = !string.IsNullOrEmpty(value) ? value.Trim() : value; } }
+        public Nullable<float> Width { get; set; }
+        public Nullable<float> Length { get; set; }
+        public Nullable<float> Height { get; set; }
+        public Nullable<float> Weight { get; set; }
+    }
 }

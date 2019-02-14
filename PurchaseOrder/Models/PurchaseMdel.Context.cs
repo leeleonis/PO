@@ -73,5 +73,7 @@ namespace PurchaseOrderSys.Models
         public virtual DbSet<OrderLog> OrderLog { get; set; }
         public virtual DbSet<Transfer> Transfer { get; set; }
         public virtual DbSet<RMA> RMA { get; set; }
+        public virtual DbSet<BoxType> BoxType { get; set; }
+        public virtual DbSet<Logistic> Logistic { get; set; }
     }
 }
