@@ -103,12 +103,12 @@ namespace PurchaseOrderSys.Controllers
                 SKU = x.SkuNo,
                 Name = x.Name,
                 VendorSKU = x.VendorSKU,
-                UPCEAN = "",
+                UPCEAN = x.UPCEAN,
                 QTYOrdered = x.QTYOrdered,
                 QTYFulfilled = x.QTYFulfilled,
                 QTYReceived = x.QTYReceived,
                 QTYReturned = x.QTYReturned,
-                Serial = x.SerialsLlist.Any() ? "Yes" : "No",
+                Serial = x.SKU.SerialTracking ? "Yes" : "No",
                 SerialQTY = x.SerialsLlist.Count(),
                 SerialTracking=x.SKU.SerialTracking
             }).ToList();
