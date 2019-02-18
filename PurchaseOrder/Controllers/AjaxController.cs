@@ -86,7 +86,7 @@ namespace PurchaseOrderSys.Controllers
             //var dataList = db.SkuLang.Where(x => x.LangID == "zh-tw" && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
             return Json(new { items = dataList }, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult CMSkuNumberGet(string Search,int PurchaseOrderID)
+        public ActionResult CMSkuNumberGet(string Search, int PurchaseOrderID)
         {
             var PurchaseSKUList = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.IsEnable && x.PurchaseOrderID == PurchaseOrderID && x.SerialsLlist.Sum(y => y.SerialsQTY) > 0).Select(x => x.SkuNo);
             var dataList = db.SkuLang.Where(x => x.LangID == "en-US" && PurchaseSKUList.Contains(x.Sku) && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
@@ -110,7 +110,7 @@ namespace PurchaseOrderSys.Controllers
                 QTYReturned = x.QTYReturned,
                 Serial = x.SerialsLlist.Any() ? "Yes" : "No",
                 SerialQTY = x.SerialsLlist.Count(),
-                SerialTracking=x.SKU.SerialTracking
+                SerialTracking = x.SKU.SerialTracking
             }).ToList();
             int recordsTotal = odataList.Count();
             var returnObj =
@@ -214,9 +214,9 @@ namespace PurchaseOrderSys.Controllers
             };
             return Json(returnObj, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult CMSkuNumberList(int? draw, int? start, int? length, string[] Skulist,int PurchaseOrderID)
+        public ActionResult CMSkuNumberList(int? draw, int? start, int? length, string[] Skulist, int PurchaseOrderID)
         {
-            var odataList = (List<CMSKUVM>)Session["CMSkuNumberList"];       
+            var odataList = (List<CMSKUVM>)Session["CMSkuNumberList"];
             if (odataList == null)
             {
                 odataList = new List<CMSKUVM>();
@@ -289,7 +289,7 @@ namespace PurchaseOrderSys.Controllers
                     item.Price = Price;
                     item.Discount = Discount;
                     item.Credit = Credit;
-                    item.DiscountedPrice = (Price - Discount- Credit);
+                    item.DiscountedPrice = (Price - Discount - Credit);
                     item.Subtotal = (QTYOrdered * (Price - Discount));
                 }
                 odataList.AddRange(dataList);
@@ -316,7 +316,7 @@ namespace PurchaseOrderSys.Controllers
                 odataList = new List<PoSKUVM>();
             }
 
-            foreach (var item in odataList.Where(x => ((x.ID.HasValue && x.ID != 0 && x.ID == ID) ||(!x.ID.HasValue && x.ID != 0 && x.SKU == SKU))))
+            foreach (var item in odataList.Where(x => ((x.ID.HasValue && x.ID != 0 && x.ID == ID) || (!x.ID.HasValue && x.ID != 0 && x.SKU == SKU))))
             {
                 switch (type)
                 {
@@ -334,7 +334,7 @@ namespace PurchaseOrderSys.Controllers
                         break;
                 }
 
-                item.DiscountedPrice = ((item.Price??0 )- (item.Discount ?? 0) - (item.Credit ?? 0));
+                item.DiscountedPrice = ((item.Price ?? 0) - (item.Discount ?? 0) - (item.Credit ?? 0));
                 item.Subtotal = ((item.QTYOrdered ?? 0) * ((item.Price ?? 0) - (item.Discount ?? 0)));
             }
             Session["SkuNumberList"] = odataList;
@@ -655,8 +655,8 @@ namespace PurchaseOrderSys.Controllers
 
                         return Json(new { status = false, Msg = ex.ToString() }, JsonRequestBehavior.AllowGet);
                     }
-                  
-                    return Json(new { status = true , reload =true}, JsonRequestBehavior.AllowGet);
+
+                    return Json(new { status = true, reload = true }, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
@@ -822,7 +822,7 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult GateVendorCurrency(int id)
         {
             var VendorLIst = db.VendorLIst.Find(id);
-            if (VendorLIst!=null)
+            if (VendorLIst != null)
             {
                 return Json(new { status = true, VendorLIst.Currency, VendorLIst.Tax }, JsonRequestBehavior.AllowGet);
             }
@@ -832,6 +832,25 @@ namespace PurchaseOrderSys.Controllers
             }
         }
 
+        public ActionResult GetSkuData(string[] IDs)
+        {
+            string LangID = EnumData.DataLangList().First().Key;
+            List<SKU> sku = db.SKU.Where(s => s.IsEnable && IDs.Contains(s.SkuID)).ToList();
+
+            AjaxResult result = new AjaxResult()
+            {
+                status = true,
+                data = sku.Select(s => new
+                {
+                    Sku = s.SkuID,
+                    s.SkuLang.First(l => l.LangID.Equals(LangID)).Name,
+                    Weight = s.Logistic?.ShippingWeight ?? 500,
+                    s.SkuType.HSCode
+                }).ToList()
+            };
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
     }
 
 

@@ -24,6 +24,7 @@ namespace PurchaseOrderSys.Models
     
         public bool IsEnable { get; set; }
         public int ID { get; set; }
+        public string HSCode { get; set; }
         public Nullable<int> NetoID { get; set; }
         public string AttributeGroup { get; set; }
         public string CreateBy { get; set; }
