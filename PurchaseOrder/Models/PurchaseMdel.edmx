@@ -805,6 +805,7 @@
           </Key>
           <Property Name="IsEnable" Type="bit" Nullable="false" />
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="HSCode" Type="nvarchar" MaxLength="50" />
           <Property Name="NetoID" Type="int" />
           <Property Name="AttributeGroup" Type="nvarchar(max)" />
           <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
@@ -2824,6 +2825,7 @@
           </Key>
           <Property Name="IsEnable" Type="Boolean" Nullable="false" />
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="HSCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="NetoID" Type="Int32" />
           <Property Name="AttributeGroup" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -4558,6 +4560,7 @@
           <EntitySetMapping Name="SkuType">
             <EntityTypeMapping TypeName="PurchaseOrderModel.SkuType">
               <MappingFragment StoreEntitySet="SkuType">
+                <ScalarProperty Name="HSCode" ColumnName="HSCode" />
                 <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
                 <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
                 <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />

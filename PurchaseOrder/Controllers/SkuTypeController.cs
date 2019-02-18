@@ -197,10 +197,11 @@ namespace PurchaseOrderSys.Controllers
             List<object> dataList = new List<object>();
 
             var LangID = !string.IsNullOrEmpty(filter.LangID) ? filter.LangID : EnumData.DataLangList().First().Key;
-            var TypeFilter = db.SkuType.Include(a => a.SkuTypeLang).AsQueryable();
-            if (filter.ID.HasValue) TypeFilter = TypeFilter.Where(a => a.ID.Equals(filter.ID.Value));
-            if (!string.IsNullOrEmpty(filter.Name)) TypeFilter = TypeFilter.Where(a => a.SkuTypeLang.Any(l => l.LangID.Equals(LangID) && l.Name.ToLower().Contains(filter.Name.ToLower())));
-            if (filter.NetoID.HasValue) TypeFilter = TypeFilter.Where(a => a.NetoID.Value.Equals(filter.NetoID.Value));
+            var TypeFilter = db.SkuType.Include(t => t.SkuTypeLang).AsQueryable();
+            if (filter.ID.HasValue) TypeFilter = TypeFilter.Where(t => t.ID.Equals(filter.ID.Value));
+            if (!string.IsNullOrEmpty(filter.Name)) TypeFilter = TypeFilter.Where(t => t.SkuTypeLang.Any(l => l.LangID.Equals(LangID) && l.Name.ToLower().Contains(filter.Name.ToLower())));
+            if (filter.NetoID.HasValue) TypeFilter = TypeFilter.Where(t => t.NetoID.Value.Equals(filter.NetoID.Value));
+            if (!string.IsNullOrEmpty(filter.HSCode)) TypeFilter = TypeFilter.Where(t => t.HSCode.ToLower().Contains(filter.HSCode.ToLower()));
 
             if (TypeFilter.Any())
             {
@@ -213,7 +214,8 @@ namespace PurchaseOrderSys.Controllers
                 {
                     a.ID,
                     Name = a.SkuTypeLang.Any(l => l.LangID.Equals(LangID)) ? a.SkuTypeLang.First(l => l.LangID.Equals(LangID)).Name : "",
-                    a.NetoID
+                    a.NetoID,
+                    a.HSCode
                 }).ToList());
             }
 
@@ -226,7 +228,7 @@ namespace PurchaseOrderSys.Controllers
             AjaxResult result = new AjaxResult();
 
             SkuType type = db.SkuType.Find(updateData.ID);
-            SetUpdateData(type, updateData, new string[] { "NetoID" });
+            SetUpdateData(type, updateData, new string[] { "NetoID", "HSCode" });
             db.Entry(type).State = EntityState.Modified;
 
             langData.LangID = EnumData.DataLangList().First().Key;
