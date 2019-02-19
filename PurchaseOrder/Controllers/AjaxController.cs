@@ -832,22 +832,29 @@ namespace PurchaseOrderSys.Controllers
             }
         }
 
-        public ActionResult GetSkuData(string[] IDs)
+        [HttpPost]
+        public ActionResult GetSkuData(List<string> IDs)
         {
-            string LangID = EnumData.DataLangList().First().Key;
-            List<SKU> sku = db.SKU.Where(s => s.IsEnable && IDs.Contains(s.SkuID)).ToList();
+            AjaxResult result = new AjaxResult();
 
-            AjaxResult result = new AjaxResult()
+            try
             {
-                status = true,
-                data = sku.Select(s => new
+                string LangID = EnumData.DataLangList().First().Key;
+                List<SKU> sku = db.SKU.Where(s => s.IsEnable && IDs.Contains(s.SkuID)).ToList();
+
+                result.data = sku.Select(s => new
                 {
                     Sku = s.SkuID,
                     s.SkuLang.First(l => l.LangID.Equals(LangID)).Name,
-                    Weight = s.Logistic?.ShippingWeight ?? 500,
+                    Weight = (s.Logistic?.ShippingWeight ?? 500).ToString(),
                     s.SkuType.HSCode
-                }).ToList()
-            };
+                }).ToList();
+            }
+            catch (Exception e)
+            {
+                result.status = false;
+                result.message = e.InnerException != null && !string.IsNullOrEmpty(e.InnerException.Message) ? e.InnerException.Message : e.Message;
+            }
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
