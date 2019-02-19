@@ -19,11 +19,11 @@ namespace PurchaseOrderSys.Models
         public double CaseWidth { get; set; }
         public double CaseLength { get; set; }
         public double CaseHeight { get; set; }
-        public double CaseWeight { get; set; }
+        public int CaseWeight { get; set; }
         public double ShippingWidth { get; set; }
         public double ShippingLength { get; set; }
         public double ShippingHeight { get; set; }
-        public double ShippingWeight { get; set; }
+        public int ShippingWeight { get; set; }
         public string OriginCountry { get; set; }
         public string ImagePath { get; set; }
         public string CreateBy { get; set; }

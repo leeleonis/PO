@@ -25,7 +25,7 @@ namespace PurchaseOrderSys.Models
         public double Width { get; set; }
         public double Length { get; set; }
         public double Height { get; set; }
-        public double Weight { get; set; }
+        public int Weight { get; set; }
         public string CreateBy { get; set; }
         public System.DateTime CreateAt { get; set; }
         public string UpdateBy { get; set; }

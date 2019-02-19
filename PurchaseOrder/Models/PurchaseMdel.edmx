@@ -3976,7 +3976,7 @@
           <Property Name="Width" Type="Double" Nullable="false" />
           <Property Name="Length" Type="Double" Nullable="false" />
           <Property Name="Height" Type="Double" Nullable="false" />
-          <Property Name="Weight" Type="Double" Nullable="false" />
+          <Property Name="Weight" Type="Int32" Nullable="false" />
           <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -3992,11 +3992,11 @@
           <Property Name="CaseWidth" Type="Double" Nullable="false" />
           <Property Name="CaseLength" Type="Double" Nullable="false" />
           <Property Name="CaseHeight" Type="Double" Nullable="false" />
-          <Property Name="CaseWeight" Type="Double" Nullable="false" />
+          <Property Name="CaseWeight" Type="Int32" Nullable="false" />
           <Property Name="ShippingWidth" Type="Double" Nullable="false" />
           <Property Name="ShippingLength" Type="Double" Nullable="false" />
           <Property Name="ShippingHeight" Type="Double" Nullable="false" />
-          <Property Name="ShippingWeight" Type="Double" Nullable="false" />
+          <Property Name="ShippingWeight" Type="Int32" Nullable="false" />
           <Property Name="OriginCountry" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="ImagePath" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
