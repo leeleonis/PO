@@ -82,14 +82,14 @@
                     { data: "Name" },
                     {
                         data: "QTY"
-                        //, render: function (data, type, row, meta) {
-                        //    if (row.SerialTracking) {
-                        //        return data;
-                        //    }
-                        //    else {
-                        //        return '<input class="form-control" type="number"   id="Prep[' + row.SKU + ']" name="Prep[' + meta.row + '].val"  ><input type="hidden" name="Prep[' + meta.row + '].ID" value = ' + row.SKU + ' />';
-                        //    }
-                        //}
+                        , render: function (data, type, row, meta) {
+                            if (row.SerialTracking) {
+                                return data;
+                            }
+                            else {
+                                return '<input class="form-control" type="number"   id="Prep[' + row.SKU + ']" name="Prep[' + meta.row + '].val"  ><input type="hidden" name="Prep[' + meta.row + '].ID" value = ' + row.SKU + ' />' + data;
+                            }
+                        }
                     },
                     {
                         data: "Serial"
