@@ -1,0 +1,249 @@
+﻿@model SKU
+@{
+    int? Days = ViewData["Days"] as int?;
+    int? WarehouseID = ViewData["WarehouseID"] as int?;
+    var WarehouseList = ViewData["WarehouseList"] as List<Warehouse>;
+    var SerialList = (ViewData["SerialData"] as List<SerialsLlist>).Select(s => new
+    {
+        SKU = s.PurchaseSKU.SkuNo,
+        Date = s.CreateAt.ToLocalTime(),
+        Supplier = s.PurchaseSKU.PurchaseOrder?.VendorLIst.Name ?? s.PurchaseSKU.CreditMemo?.PurchaseOrder.VendorLIst.Name,
+        Type = s.SerialsType,
+        ExtendID = s.TransferSKUID ?? s.OrderID ?? s.PurchaseSKU.PurchaseOrderID ?? s.PurchaseSKU.CreditMemoID ?? 0,
+        WID = s.SerialsType.Equals("TransferIn") ? s.TransferSKU.Transfer.ToWID.Value : s.PurchaseSKU.PurchaseOrder?.WarehouseID.Value ?? s.PurchaseSKU.CreditMemo?.PurchaseOrder.WarehouseID.Value,
+        Serial = s.SerialsNo,
+        QTY = s.SerialsQTY.Value,
+        Price = s.PurchaseSKU.Price ?? 0,
+        Awaiting = s.SerialsType.Equals("TransferOut") && s.TransferSKU.Transfer.Status.Equals("Requested"), //qty = -1
+        Shipped = s.SerialsType.Equals("TransferOut") && s.TransferSKU.Transfer.Status.Equals("Shipped") //qty = -1
+    }).Where(s => !WarehouseID.HasValue || s.WID.Equals(WarehouseID.Value)).ToList();
+    var AwaitingList = ViewData["AwaitingList"] as List<AwaitingDispatchVM>;
+}
+<div class="col-sm-12 col-lg-4">
+    <fieldset>
+        <div class="form-group">
+            <label class="control-label col-sm-6">Fulfillable</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" value="@SerialList.Where(s => !s.Awaiting).Sum(s => s.QTY)" readonly />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-6">Awaiting dispatch</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" value="@(AwaitingList.Sum(a => a.QTY) + SerialList.Where(s => s.Awaiting).Sum(s => Math.Abs(s.QTY)))" readonly />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-6">Aggregate</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" value="@(SerialList.Sum(s => s.QTY) - AwaitingList.Sum(a => a.QTY))" readonly />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-6">Unfulfillable - RMA</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" value="" readonly />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-6">Unfulfillable - Transit</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" value="@SerialList.Where(s => s.Shipped).Sum(s => Math.Abs(s.QTY))" readonly />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-6">Total Inventory</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" value="@SerialList.Where(s => !s.Awaiting || !s.Shipped).Sum(s => s.QTY)" readonly />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-6">Back ordered</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" value="" readonly />
+            </div>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>Cost</legend>
+        <div class="form-group">
+            <label class="control-label col-sm-6">Latest</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" value="@(SerialList.OrderByDescending(s => s.Date).FirstOrDefault(s => s.Type.Equals("PO"))?.Price)" readonly />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-6">Average (in stock)</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" value="@(SerialList.Any() ? SerialList.Where(s => !s.Awaiting).Sum(s => s.Price*s.QTY) / SerialList.Where(s => !s.Awaiting).Sum(s => s.QTY) : 0)" readonly />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-6">Lowest (history)</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" value="@(SerialList.Any() ? SerialList.Where(s => s.Type.Equals("PO")).Min(s => s.Price) : 0)" readonly />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-6">Highest (history)</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" value="@(SerialList.Any() ? SerialList.Where(s => s.Type.Equals("PO")).Max(s => s.Price) : 0)" readonly />
+            </div>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>Velocity</legend>
+        <div class="form-group">
+            <label class="control-label col-sm-6">Days</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" id="days" value="@(Days.ToString() ?? "")" />
+            </div>
+        </div>
+        @{
+            var dayList = new List<int[]>();
+            if (Days.HasValue)
+            {
+                DateTime today = DateTime.Now.Date;
+                do
+                {
+                    dayList.Add(new int[] {
+                        SerialList.Where(s => s.Type.Equals("Order") && s.Date.Date.Equals(today)).Sum(s => Math.Abs(s.QTY)),
+                        SerialList.Where(s => s.Type.Equals("PO") && s.Date.Date.Equals(today)).Sum(s => Math.Abs(s.QTY)),
+                        SerialList.Where(s => !s.Awaiting && today.CompareTo(s.Date.Date) >= 0).Sum(s => s.QTY)
+                    });
+                    today = today.AddDays(-1);
+                } while (DateTime.Now.Date.AddDays(0 - Days.Value).CompareTo(today) < 0);
+            }
+        }
+        <div class="form-group">
+            <label class="control-label col-sm-6">Average fulfilled QTY</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" value="@(Days.HasValue ? (float)dayList.Sum(d => d[0])/Days.Value : 0)" readonly />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-6">Average fulfillable QTY</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" value="@(Days.HasValue ? (float)dayList.Sum(d => d[2])/Days.Value : 0)" readonly />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-6">Average PO QTY</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" value="@(Days.HasValue ? (float)dayList.Sum(d => d[1])/Days.Value : 0)" readonly />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-6">Total fulfilled</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" value="@(Days.HasValue ? dayList.Sum(d => d[0]) : 0)" readonly />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-6">Total PO</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" value="@(Days.HasValue ? dayList.Sum(d => d[1]) : 0)" readonly />
+            </div>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>Vendor Volume Rank</legend>
+        <table class="table table-bordered table-striped text-center">
+            <thead>
+                <tr>
+                    <td width="20%">Rank</td>
+                    <td>Vendor</td>
+                    <td width="20%">Supply QTY</td>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int RankA = 1;
+                    foreach (var vendor in SerialList.Where(s => s.Type.Equals("PO")).GroupBy(s => s.Supplier, s => s.QTY, (key, s) => new { Name = key, QTY = s.Sum() }).OrderByDescending(v => v.QTY))
+                    {
+                        <tr>
+                            <td>@(RankA++)</td>
+                            <td>@vendor.Name</td>
+                            <td>@vendor.QTY</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </fieldset>
+    <fieldset>
+        <legend>Vendor Price Rank</legend>
+        <table class="table table-bordered table-striped text-center">
+            <thead>
+                <tr>
+                    <td width="20%">Rank</td>
+                    <td>Vendor</td>
+                    <td width="20%">Supply QTY</td>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int RankB = 1;
+                    foreach (var vendor in SerialList.Where(s => s.Type.Equals("PO")).GroupBy(s => s.Supplier, (key, g) => new { Name = key, g.OrderByDescending(s => s.Date).First().Price }).OrderByDescending(v => v.Price))
+                    {
+                        <tr>
+                            <td>@(RankB++)</td>
+                            <td>@vendor.Name</td>
+                            <td>@vendor.Price</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </fieldset>
+</div>
+
+<div class="col-sm-12 col-lg-8">
+    <div class="jarviswidget jarviswidget-color-blueLight" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-collapsed="false" data-widget-sortable="false">
+        <header class="ui-sortable-handle">
+            <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+            <span class="jarviswidget-loader"><i class="fa fa-refresh fa-spin"></i></span>
+        </header>
+
+        <!-- widget div-->
+        <div class="no-padding">
+            <!-- widget content -->
+            <div class="widget-body">
+                <table class="table table-bordered table-striped text-center" id="table-purchase">
+                    <thead>
+                        <tr>
+                            <th width="10%" class="text-center">Serial</th>
+                            <th width="10%" class="text-center">PO#</th>
+                            <th width="10%" class="text-center">PO Cost</th>
+                            <th width="10%" class="text-center">CM#</th>
+                            <th width="10%" class="text-center">CM Cost</th>
+                            <th width="20%" class="text-center">Vendor</th>
+                            <th width="10%" class="text-center">Date</th>
+                            <th width="10%" class="text-center">Warehouse</th>
+                            <th width="10%" class="text-center">Value</th>
+                        </tr>
+                    </thead>
+                    <tfoot style="display: table-header-group;"></tfoot>
+                    <tbody>
+                        @foreach (var group in SerialList.GroupBy(s => s.Serial))
+                        {
+                            <tr>
+                                <td>@group.Key</td>
+                                <td>@(group.FirstOrDefault(g => g.Type.Equals("PO"))?.ExtendID.ToString() ?? "")</td>
+                                <td>@(group.FirstOrDefault(g => g.Type.Equals("PO"))?.Price ?? 0)</td>
+                                <td>@(group.FirstOrDefault(g => g.Type.Equals("CM"))?.ExtendID.ToString() ?? "")</td>
+                                <td>@(group.FirstOrDefault(g => g.Type.Equals("CM"))?.Price ?? 0)</td>
+                                <td>@group.OrderByDescending(g => g.Date).First().Supplier</td>
+                                <td>@group.OrderByDescending(g => g.Date).First().Date</td>
+                                <td>@WarehouseList.First(w => w.ID.Equals(group.OrderByDescending(g => g.Date).First().WID)).Name</td>
+                                <td>@((group.FirstOrDefault(g => g.Type.Equals("PO"))?.Price ?? 0) - (group.FirstOrDefault(g => g.Type.Equals("CM"))?.Price ?? 0))</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!-- end widget content -->
+        </div>
+        <!-- end widget div -->
+    </div>
+</div>
