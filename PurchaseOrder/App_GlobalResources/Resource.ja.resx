@@ -426,4 +426,7 @@
   <data name="RMA_Channel" xml:space="preserve">
     <value>Channel</value>
   </data>
+  <data name="RMA_SourceCaseID" xml:space="preserve">
+    <value>Source Case ID</value>
+  </data>
 </root>

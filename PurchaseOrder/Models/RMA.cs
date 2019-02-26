@@ -23,7 +23,7 @@ namespace PurchaseOrderSys.Models
         public bool IsEnable { get; set; }
         public int ID { get; set; }
         public Nullable<int> OrderID { get; set; }
-        public Nullable<int> SourceID { get; set; }
+        public string SourceID { get; set; }
         public Nullable<int> CompanyID { get; set; }
         public string Country { get; set; }
         public string Status { get; set; }
@@ -35,7 +35,7 @@ namespace PurchaseOrderSys.Models
         public string UpdateBy { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }
         public string Carrier { get; set; }
-        public string Channel { get; set; }
+        public Nullable<int> Channel { get; set; }
         public string SourceCaseID { get; set; }
         public string SCRMA { get; set; }
         public Nullable<int> WarehouseID { get; set; }

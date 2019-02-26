@@ -1,8 +1,6 @@
 ﻿@model RMA
 @{
     ViewBag.title = "新增RMA";
-    var DefaultSelect = PurchaseOrderSys.App_GlobalResources.Resource.DefaultSelect;
-    var CompanyDDL = EnumData.CompanyDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
 }
 <div id="content">
     <section id="widget-grid" class="">
@@ -27,13 +25,20 @@
                                         <fieldset>
                                             <legend>@ViewBag.title</legend>
                                             <div class="form-group">
-                                                @Html.LabelFor(model => model.OrderID, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @Html.LabelFor(model => model.OrderID, htmlAttributes: new { @class = "control-label col-sm-1" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownListFor(model => model.OrderID, CompanyDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.Editor("OrderID", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
-                                                @Html.LabelFor(model => model.SourceID, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @Html.LabelFor(model => model.SourceCaseID, htmlAttributes: new { @class = "control-label col-sm-1" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownListFor(model => model.SourceID, CompanyDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.Editor("SourceCaseID", new { htmlAttributes = new { @class = "form-control" } })
+                                                </div>
+                                                @Html.LabelFor(model => model.SourceID, htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("SourceID", new { htmlAttributes = new { @class = "form-control" } })
+                                                </div>
+                                                <div class="col-sm-9 col-lg-2">
+                                                    <button type="button" id="btnsearch" class="btn btn-info btn-lg">Search</button>
                                                 </div>
                                             </div>
                                         </fieldset>
@@ -47,10 +52,13 @@
                                                                 <th>Order</th>
                                                                 <th>SKU</th>
                                                                 <th>Product Name</th>
-                                                                <th>QTY</th>
+                                                                <th>訂單數</th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody></tbody>
+                                                        <tbody>
+
+                                                        </tbody>
+
                                                         <tfoot>
                                                         </tfoot>
                                                     </table>
@@ -72,16 +80,61 @@
     </section>
 </div>
 @section pagespecific {
-    <link href="~/Content/css/lightbox.css" rel="stylesheet" />
-    <script src="~/Scripts/lightbox.js"></script>
     <script type="text/javascript">
         var hash = window.location.hash;
         $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
         $('.tab-pane').eq(hash.substr(1)).addClass('active');
+        var DataGrid;
         var tableID = "#DataGridC";
-        var DataGridC;
         $(document).ready(function () {
-            DataGridC = $(tableID).DataTable({});
+             DataGrid = $(tableID).DataTable({
+                fixedHeader: {
+                    header: true,
+                    footer: true
+                },
+                select: {
+                    style: 'os',
+                    selector: 'td:first-child'
+                },
+                columns: [
+                    {
+                        data: "ck",
+                        className: 'select-checkbox',
+                        orderable: false,
+                        render: function (data, type, obj, meta) {
+                            return '<input type="checkbox" value="' + data + '">';
+                        }
+                    },
+                    { data: "Order" },
+                    { data: "SKU" },
+                    { data: "ProductName" },
+                    { data: "QTY", render: function (data, type, row) { return '<input class="form-control" type="text"   value = ' +data + ' > '; } },
+                ],
+                ajax: {
+                    traditional: true,
+                    method: "get",//或post，自由決定，影響到Server端用FormCollection取值或Request.QueryString取得DataTables傳遞的資訊
+                    url: "@Url.Action("RSkuNumberList")",
+                    data: function (d) {
+                        var OrderID = $("#OrderID").val();
+                        var SourceID = $("#SourceID").val();
+                        var UserID = $("#UserID").val();
+                        d.OrderID = OrderID;
+                        d.SourceID = SourceID;
+                        d.UserID = UserID;
+                    }
+                },
+                serverSide: true,//啟用ServerSide模式
+                deferLoading: 0, //初始化DataTable時，不發出ajax
+                orderMulti: false,
+                "paging": false,
+                "ordering": false,
+                "info": true,
+                "searching": false, "footerCallback": function (row, data, start, end, display) {
+                }
+            });
+            $("#btnsearch").click(function () {
+                DataGrid.draw();
+            });
         });
     </script>
 }

@@ -35,8 +35,8 @@ namespace PurchaseOrderSys.Models
         public string ReceivedBy { get; set; }
         public Nullable<System.DateTime> ReceivedAt { get; set; }
     
-        public virtual RMA RMA { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RMASerialsLlist> RMASerialsLlist { get; set; }
+        public virtual RMA RMA { get; set; }
     }
 }

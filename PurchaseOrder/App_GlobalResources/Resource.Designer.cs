@@ -3472,6 +3472,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string RMA_SourceCaseID {
+            get {
+                return ResourceManager.GetString("RMA_SourceCaseID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 SourceID 的當地語系化字串。
         /// </summary>
         public static string RMA_SourceID {

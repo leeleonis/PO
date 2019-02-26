@@ -603,7 +603,7 @@
           <Property Name="IsEnable" Type="bit" Nullable="false" />
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="OrderID" Type="int" />
-          <Property Name="SourceID" Type="int" />
+          <Property Name="SourceID" Type="nvarchar" MaxLength="50" />
           <Property Name="CompanyID" Type="int" />
           <Property Name="Country" Type="nvarchar" MaxLength="20" />
           <Property Name="Status" Type="nvarchar" MaxLength="20" />
@@ -615,7 +615,7 @@
           <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
           <Property Name="UpdateAt" Type="datetime" />
           <Property Name="Carrier" Type="nvarchar" MaxLength="20" />
-          <Property Name="Channel" Type="nvarchar" MaxLength="20" />
+          <Property Name="Channel" Type="int" />
           <Property Name="SourceCaseID" Type="nvarchar" MaxLength="20" />
           <Property Name="SCRMA" Type="nvarchar" MaxLength="20" />
           <Property Name="WarehouseID" Type="int" />
@@ -2353,7 +2353,6 @@
             <End Role="SKU" EntitySet="SKU" />
             <End Role="TransferSKU" EntitySet="TransferSKU" />
           </AssociationSet>
-          <EntitySet Name="RMA" EntityType="PurchaseOrderModel.RMA" />
           <EntitySet Name="BoxType" EntityType="PurchaseOrderModel.BoxType" />
           <EntitySet Name="Logistic" EntityType="PurchaseOrderModel.Logistic" />
           <AssociationSet Name="FK_Logistic_BoxType" Association="PurchaseOrderModel.FK_Logistic_BoxType">
@@ -2366,14 +2365,6 @@
           </AssociationSet>
           <EntitySet Name="RMASKU" EntityType="PurchaseOrderModel.RMASKU" />
           <EntitySet Name="RMASerialsLlist" EntityType="PurchaseOrderModel.RMASerialsLlist" />
-          <AssociationSet Name="FK_RMA_Warehouse" Association="PurchaseOrderModel.FK_RMA_Warehouse">
-            <End Role="Warehouse" EntitySet="Warehouse" />
-            <End Role="RMA" EntitySet="RMA" />
-          </AssociationSet>
-          <AssociationSet Name="FK_RMASKU_RMA" Association="PurchaseOrderModel.FK_RMASKU_RMA">
-            <End Role="RMA" EntitySet="RMA" />
-            <End Role="RMASKU" EntitySet="RMASKU" />
-          </AssociationSet>
           <AssociationSet Name="FK_RMASerialsLlist_RMASKU" Association="PurchaseOrderModel.FK_RMASerialsLlist_RMASKU">
             <End Role="RMASKU" EntitySet="RMASKU" />
             <End Role="RMASerialsLlist" EntitySet="RMASerialsLlist" />
@@ -2394,6 +2385,15 @@
           <AssociationSet Name="FK_SkuTypeLang_SkuType" Association="PurchaseOrderModel.FK_SkuTypeLang_SkuType">
             <End Role="SkuType" EntitySet="SkuType" />
             <End Role="SkuTypeLang" EntitySet="SkuTypeLang" />
+          </AssociationSet>
+          <EntitySet Name="RMA" EntityType="PurchaseOrderModel.RMA" />
+          <AssociationSet Name="FK_RMA_Warehouse" Association="PurchaseOrderModel.FK_RMA_Warehouse">
+            <End Role="Warehouse" EntitySet="Warehouse" />
+            <End Role="RMA" EntitySet="RMA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RMASKU_RMA" Association="PurchaseOrderModel.FK_RMASKU_RMA">
+            <End Role="RMA" EntitySet="RMA" />
+            <End Role="RMASKU" EntitySet="RMASKU" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="AdminGroup">
@@ -3060,8 +3060,8 @@
           <NavigationProperty Name="Transfer" Relationship="PurchaseOrderModel.FK_Transfer_Warehouse" FromRole="Warehouse" ToRole="Transfer" />
           <NavigationProperty Name="Transfer1" Relationship="PurchaseOrderModel.FK_Transfer_Warehouse1" FromRole="Warehouse" ToRole="Transfer" />
           <NavigationProperty Name="Transfer2" Relationship="PurchaseOrderModel.FK_Transfer_WarehouseInterim" FromRole="Warehouse" ToRole="Transfer" />
-          <NavigationProperty Name="RMA" Relationship="PurchaseOrderModel.FK_RMA_Warehouse" FromRole="Warehouse" ToRole="RMA" />
           <NavigationProperty Name="RMASerialsLlist" Relationship="PurchaseOrderModel.FK_RMASerialsLlist_Warehouse" FromRole="Warehouse" ToRole="RMASerialsLlist" />
+          <NavigationProperty Name="RMA" Relationship="PurchaseOrderModel.FK_RMA_Warehouse" FromRole="Warehouse" ToRole="RMA" />
         </EntityType>
         <EntityType Name="WarehouseSummary">
           <Key>
@@ -4037,32 +4037,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="RMA">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OrderID" Type="Int32" />
-          <Property Name="SourceID" Type="Int32" />
-          <Property Name="CompanyID" Type="Int32" />
-          <Property Name="Country" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Action" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Reason" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="ReturnTracking" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
-          <Property Name="Carrier" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Channel" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="SourceCaseID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="SCRMA" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="WarehouseID" Type="Int32" />
-          <NavigationProperty Name="Warehouse" Relationship="PurchaseOrderModel.FK_RMA_Warehouse" FromRole="RMA" ToRole="Warehouse" />
-          <NavigationProperty Name="RMASKU" Relationship="PurchaseOrderModel.FK_RMASKU_RMA" FromRole="RMA" ToRole="RMASKU" />
-        </EntityType>
         <EntityType Name="BoxType">
           <Key>
             <PropertyRef Name="ID" />
@@ -4144,8 +4118,8 @@
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
           <Property Name="ReceivedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ReceivedAt" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="RMA" Relationship="PurchaseOrderModel.FK_RMASKU_RMA" FromRole="RMASKU" ToRole="RMA" />
           <NavigationProperty Name="RMASerialsLlist" Relationship="PurchaseOrderModel.FK_RMASerialsLlist_RMASKU" FromRole="RMASKU" ToRole="RMASerialsLlist" />
+          <NavigationProperty Name="RMA" Relationship="PurchaseOrderModel.FK_RMASKU_RMA" FromRole="RMASKU" ToRole="RMA" />
         </EntityType>
         <EntityType Name="RMASerialsLlist">
           <Key>
@@ -4170,30 +4144,6 @@
           <NavigationProperty Name="RMASKU" Relationship="PurchaseOrderModel.FK_RMASerialsLlist_RMASKU" FromRole="RMASerialsLlist" ToRole="RMASKU" />
           <NavigationProperty Name="Warehouse" Relationship="PurchaseOrderModel.FK_RMASerialsLlist_Warehouse" FromRole="RMASerialsLlist" ToRole="Warehouse" />
         </EntityType>
-        <Association Name="FK_RMA_Warehouse">
-          <End Type="PurchaseOrderModel.Warehouse" Role="Warehouse" Multiplicity="0..1" />
-          <End Type="PurchaseOrderModel.RMA" Role="RMA" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Warehouse">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="RMA">
-              <PropertyRef Name="WarehouseID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_RMASKU_RMA">
-          <End Type="PurchaseOrderModel.RMA" Role="RMA" Multiplicity="0..1" />
-          <End Type="PurchaseOrderModel.RMASKU" Role="RMASKU" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="RMA">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="RMASKU">
-              <PropertyRef Name="RMAID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_RMASerialsLlist_RMASKU">
           <End Type="PurchaseOrderModel.RMASKU" Role="RMASKU" Multiplicity="0..1" />
           <End Type="PurchaseOrderModel.RMASerialsLlist" Role="RMASerialsLlist" Multiplicity="*" />
@@ -4268,6 +4218,56 @@
             </Principal>
             <Dependent Role="SkuTypeLang">
               <PropertyRef Name="TypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="RMA">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderID" Type="Int32" />
+          <Property Name="SourceID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyID" Type="Int32" />
+          <Property Name="Country" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Action" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Reason" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ReturnTracking" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <Property Name="Carrier" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Channel" Type="Int32" />
+          <Property Name="SourceCaseID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="SCRMA" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="WarehouseID" Type="Int32" />
+          <NavigationProperty Name="Warehouse" Relationship="PurchaseOrderModel.FK_RMA_Warehouse" FromRole="RMA" ToRole="Warehouse" />
+          <NavigationProperty Name="RMASKU" Relationship="PurchaseOrderModel.FK_RMASKU_RMA" FromRole="RMA" ToRole="RMASKU" />
+        </EntityType>
+        <Association Name="FK_RMA_Warehouse">
+          <End Type="PurchaseOrderModel.Warehouse" Role="Warehouse" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.RMA" Role="RMA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Warehouse">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="RMA">
+              <PropertyRef Name="WarehouseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RMASKU_RMA">
+          <End Type="PurchaseOrderModel.RMA" Role="RMA" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.RMASKU" Role="RMASKU" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RMA">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="RMASKU">
+              <PropertyRef Name="RMAID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -5178,31 +5178,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="RMA">
-            <EntityTypeMapping TypeName="PurchaseOrderModel.RMA">
-              <MappingFragment StoreEntitySet="RMA">
-                <ScalarProperty Name="WarehouseID" ColumnName="WarehouseID" />
-                <ScalarProperty Name="SCRMA" ColumnName="SCRMA" />
-                <ScalarProperty Name="SourceCaseID" ColumnName="SourceCaseID" />
-                <ScalarProperty Name="Channel" ColumnName="Channel" />
-                <ScalarProperty Name="Carrier" ColumnName="Carrier" />
-                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
-                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
-                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
-                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-                <ScalarProperty Name="ReturnTracking" ColumnName="ReturnTracking" />
-                <ScalarProperty Name="Reason" ColumnName="Reason" />
-                <ScalarProperty Name="Action" ColumnName="Action" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Country" ColumnName="Country" />
-                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
-                <ScalarProperty Name="SourceID" ColumnName="SourceID" />
-                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="BoxType">
             <EntityTypeMapping TypeName="PurchaseOrderModel.BoxType">
               <MappingFragment StoreEntitySet="BoxType">
@@ -5291,6 +5266,31 @@
                 <ScalarProperty Name="AttributeGroup" ColumnName="AttributeGroup" />
                 <ScalarProperty Name="NetoID" ColumnName="NetoID" />
                 <ScalarProperty Name="HSCode" ColumnName="HSCode" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RMA">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.RMA">
+              <MappingFragment StoreEntitySet="RMA">
+                <ScalarProperty Name="WarehouseID" ColumnName="WarehouseID" />
+                <ScalarProperty Name="SCRMA" ColumnName="SCRMA" />
+                <ScalarProperty Name="SourceCaseID" ColumnName="SourceCaseID" />
+                <ScalarProperty Name="Channel" ColumnName="Channel" />
+                <ScalarProperty Name="Carrier" ColumnName="Carrier" />
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="ReturnTracking" ColumnName="ReturnTracking" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+                <ScalarProperty Name="Action" ColumnName="Action" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+                <ScalarProperty Name="SourceID" ColumnName="SourceID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
               </MappingFragment>

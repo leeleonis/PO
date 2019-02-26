@@ -24,8 +24,8 @@ namespace PurchaseOrderSys.Models
             this.Transfer = new HashSet<Transfer>();
             this.Transfer1 = new HashSet<Transfer>();
             this.Transfer2 = new HashSet<Transfer>();
-            this.RMA = new HashSet<RMA>();
             this.RMASerialsLlist = new HashSet<RMASerialsLlist>();
+            this.RMA = new HashSet<RMA>();
         }
     
         public bool IsEnable { get; set; }
@@ -69,8 +69,8 @@ namespace PurchaseOrderSys.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Transfer> Transfer2 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<RMA> RMA { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RMASerialsLlist> RMASerialsLlist { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RMA> RMA { get; set; }
     }
 }

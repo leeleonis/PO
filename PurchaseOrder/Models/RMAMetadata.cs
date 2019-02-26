@@ -1,11 +1,12 @@
-using System;
+using System; 
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// RMA class
     /// </summary>
@@ -46,7 +47,8 @@ namespace PurchaseOrderSys.Models
     		/// Source ID
     		/// </summary>        
     	    [Display(Name = "RMA_SourceID", ResourceType = typeof(App_GlobalResources.Resource))]
-    		public Nullable<int>  SourceID { get; set; }
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  SourceID { get; set; }
     
     		    
     		/// <summary>
@@ -137,16 +139,39 @@ namespace PurchaseOrderSys.Models
     	    [Display(Name = "RMA_Carrier", ResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(20, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  Carrier { get; set; }
-
-            /// <summary>
-            /// Carrier
-            /// </summary>        
-            [Display(Name = "RMA_Channel", ResourceType = typeof(App_GlobalResources.Resource))]
+    
+    		    
+    		/// <summary>
+    		/// Channel
+    		/// </summary>        
+    	    [Display(Name = "RMA_Channel", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  Channel { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Source Case ID
+    		/// </summary>        
+    	    [Display(Name = "RMA_SourceCaseID", ResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(20, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-            public string Channel { get; set; }
-
-
-        }
+    		public string  SourceCaseID { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// SCRMA
+    		/// </summary>        
+    	    [Display(Name = "RMA_SCRMA", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(20, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  SCRMA { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Warehouse ID
+    		/// </summary>        
+    	    [Display(Name = "RMA_WarehouseID", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  WarehouseID { get; set; }
+    
+    		    
+    	}
     }
     
 }
