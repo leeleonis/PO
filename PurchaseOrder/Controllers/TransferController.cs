@@ -105,7 +105,7 @@ namespace PurchaseOrderSys.Controllers
                     SKU = item.SkuNo,
                     ProductName = item.Name,
                     QTY = item.QTY,
-                    TotalReceive = item.SerialsLlist.Where(x => x.SerialsType == "TransferIn").Sum(x => x.SerialsQTY) * -1,
+                    TotalReceive = item.SerialsLlist.Where(x => x.SerialsType == "TransferIn").Sum(x => x.SerialsQTY) ,
                     Serial = item.SerialsLlist.Where(x => x.SerialsType == "TransferOut").Any() ? "Multi" : "",
                     Model = "L"
                 });
@@ -580,8 +580,6 @@ namespace PurchaseOrderSys.Controllers
                     {
                         if (odataListitem.ID.HasValue)
                         {
-
-
                             var TransferSKU = db.TransferSKU.Find(odataListitem.ID);
                             if (TransferSKU.SerialsLlist.Any())
                             {

@@ -56,7 +56,6 @@ namespace PurchaseOrderSys.Models
         public virtual ICollection<Sku_Attribute> Sku_Attribute { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Sku_PackageContent> Sku_PackageContent { get; set; }
-        public virtual SkuType SkuType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SkuPicture> SkuPicture { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -69,5 +68,6 @@ namespace PurchaseOrderSys.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TransferSKU> TransferSKU { get; set; }
         public virtual Logistic Logistic { get; set; }
+        public virtual SkuType SkuType { get; set; }
     }
 }
