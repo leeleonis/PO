@@ -25,12 +25,13 @@ namespace PurchaseOrderSys.Controllers
         {
             Session["SkuNumberList"] = null;
             Session["PurchaseNote"] = null;
+            ViewBag.SID = DateTime.Now.ToString("HHmmss");
             var PurchaseOrder = new PurchaseOrder();
             PurchaseOrder.POType = POTypeVal;
             return View(PurchaseOrder);
         }
         [HttpPost]
-        public ActionResult Create(PurchaseOrder filter, IEnumerable<HttpPostedFileBase> VendorInvoice, IEnumerable<HttpPostedFileBase> PaymentProofList)
+        public ActionResult Create(PurchaseOrder filter, IEnumerable<HttpPostedFileBase> VendorInvoice, IEnumerable<HttpPostedFileBase> PaymentProofList, string SID)
         {
             //var PurchaseOrder = new PurchaseOrder
             //{
@@ -51,7 +52,7 @@ namespace PurchaseOrderSys.Controllers
             filter.CreateBy = UserBy;
             filter.CreateAt = DateTime.UtcNow;
             db.PurchaseOrder.Add(filter);
-            var dataList = (List<PoSKUVM>)Session["SkuNumberList"];
+            var dataList = (List<PoSKUVM>)Session["SkuNumberList" + SID];
             if (dataList != null)
             {
                 var PurchaseSKUlist = dataList.Where(x => x.Model == "E").Select(x => new PurchaseSKU
@@ -455,7 +456,7 @@ namespace PurchaseOrderSys.Controllers
                 db.SaveChanges();
             }
 
-            Session["SkuNumberList"] = dataList.ToList();
+            Session["SkuNumberList" + ID] = dataList.ToList();
 
             return View(PurchaseOrder);
         }
@@ -505,7 +506,7 @@ namespace PurchaseOrderSys.Controllers
             PurchaseOrder.UpdateBy = UserBy;
             PurchaseOrder.UpdateAt = dt;
 
-            var dataList = (List<PoSKUVM>)Session["SkuNumberList"];
+            var dataList = (List<PoSKUVM>)Session["SkuNumberList" + filter.ID];
             if (dataList != null)
             {
                 var PurchaseSKUlistE = dataList.Where(x => x.Model == "E").Select(x => new PurchaseSKU
@@ -1023,12 +1024,12 @@ namespace PurchaseOrderSys.Controllers
             //var partial = Engine.Razor.RunCompile(template, "templateKey", null, new { Name = "World" });
             return Json(new { status = true, partial }, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult RemoveData(string[] IDList)
+        public ActionResult RemoveData(string[] IDList,string SID)
         {
             var Errmsg = "";
             if (IDList != null && IDList.Any())
             {
-                var odataList = (List<PoSKUVM>)Session["SkuNumberList"];
+                var odataList = (List<PoSKUVM>)Session["SkuNumberList" + SID];
                 foreach (var item in IDList)
                 {
                     foreach (var odataListitem in odataList.Where(x => x.ID.ToString() == item || x.SKU == item))
@@ -1053,7 +1054,7 @@ namespace PurchaseOrderSys.Controllers
                         }
                     }
                 }
-                Session["SkuNumberList"] = odataList;
+                Session["SkuNumberList" + SID] = odataList;
             }
             else
             {
@@ -1069,12 +1070,12 @@ namespace PurchaseOrderSys.Controllers
             }
 
         }
-        public ActionResult EditSKUData(string[] IDList)
+        public ActionResult EditSKUData(string[] IDList,string SID)
         {
             var Errmsg = "";
             if (IDList != null && IDList.Any())
             {
-                var odataList = (List<PoSKUVM>)Session["SkuNumberList"];
+                var odataList = (List<PoSKUVM>)Session["SkuNumberList" + SID];
                 foreach (var item in IDList)
                 {
                     foreach (var odataListitem in odataList.Where(x => x.ID.ToString() == item || x.SKU == item))

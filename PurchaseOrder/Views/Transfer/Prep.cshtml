@@ -125,6 +125,7 @@
                         url: "@Url.Action("PrepSaveserials")",
                         data: {
                             serials: serials,
+                            SID:@Html.Display("SID")
                         },
                         success: function (data) {
                             if (data.status) {

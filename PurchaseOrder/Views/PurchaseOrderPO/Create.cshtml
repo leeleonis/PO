@@ -49,6 +49,7 @@
                             <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
                                 @Html.AntiForgeryToken()
                                 @Html.HiddenFor(x => x.ID)
+                                @Html.Hidden("SID")
                                 <input type="hidden" name="IsEnable" value="True">
                                 <div id="content" class="tab-content">
                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -260,23 +261,23 @@
                                                                             <button type="button" id="UploadImage" style="float:right" class="btn btn-default btn-sm">Upload Image</button>
                                                                             <input type="file" id="addimg" style="float:right" />
                                                                         </div>
-                                                                            <div class="col-sm-2 col-lg-4">
-                                                                                <ul style="list-style-type:none;list-style-position: inside;padding-left: 0px;padding-left: 0px;" id="textnotelog">
-                                                                                    @foreach (var item in Model.PurchaseNote)
-                                                                                    {
-                                                                                        <li>
-                                                                                            <fieldset>
-                                                                                                <legend>
-                                                                                                    @item.Note
-                                                                                                    <br />
-                                                                                                    @( item.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss") + "；" + item.CreateBy)
-                                                                                                </legend>
-                                                                                            </fieldset>
-                                                                                        </li>
-                                                                                    }
-                                                                                </ul>
-                                                                            </div>
-</td>
+                                                                        <div class="col-sm-2 col-lg-4">
+                                                                            <ul style="list-style-type:none;list-style-position: inside;padding-left: 0px;padding-left: 0px;" id="textnotelog">
+                                                                                @foreach (var item in Model.PurchaseNote)
+                                                                                {
+                                                                                    <li>
+                                                                                        <fieldset>
+                                                                                            <legend>
+                                                                                                @item.Note
+                                                                                                <br />
+                                                                                                @( item.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss") + "；" + item.CreateBy)
+                                                                                            </legend>
+                                                                                        </fieldset>
+                                                                                    </li>
+                                                                                }
+                                                                            </ul>
+                                                                        </div>
+                                                                    </td>
                                                                     <td>Total:</td>
                                                                     <td></td>
                                                                 </tr>
@@ -593,7 +594,7 @@
                                 </div>
 
                                 <div class="widget-footer">
-                                   <button type="submit" class="btn btn-primary" id="save">儲存</button>
+                                    <button type="submit" class="btn btn-primary" id="save">儲存</button>
                                     <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index")'">返回</button>
                                 </div>
                             </form>
@@ -665,6 +666,7 @@
                     data: function (d) {
                         var Skulist = $("#gebruikerId").val();
                         d.Skulist = Skulist;
+                        d.SID=@Html.Display("SID"),
                         $("#gebruikerId").val(null).trigger('change');
                     }
                 },
@@ -805,6 +807,7 @@
                     type: "post",
                     url: "@Url.Action("CreatNote")",
                     data: {
+                        SID:@Html.Display("ID"),
                         ID: "@Html.DisplayFor(x=>x.ID)",
                         Note: $("#textnote").val()
                     },
@@ -855,6 +858,7 @@
                     url: "@Url.Action("RemoveData")",
                     data: {
                         IDList: dataList,
+                        SID:@Html.Display("SID"),
                     },
                     success: function (data) {
                         if (data.status) {
@@ -881,6 +885,7 @@
                     url: "@Url.Action("EditSKUData")",
                     data: {
                         IDList: dataList,
+                        SID:@Html.Display("SID")
                     },
                     success: function (data) {
                         if (data.status) {
@@ -915,6 +920,7 @@
                 type: "post",
                 url: "@Url.Action("SkuNumberListEdit", "Ajax")",
                 data: {
+                    SID:@Html.Display("SID"),
                     SKU: SKU,
                     type: type,
                     oval: oval,

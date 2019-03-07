@@ -33,9 +33,9 @@
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("SourceCaseID", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
-                                                @Html.LabelFor(model => model.SourceID, htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                @Html.Label("UserID", htmlAttributes: new { @class = "control-label col-sm-1" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("SourceID", new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.Editor("UserID", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
                                                 <div class="col-sm-9 col-lg-2">
                                                     <button type="button" id="btnsearch" class="btn btn-info btn-lg">Search</button>
@@ -49,6 +49,7 @@
                                                         <thead>
                                                             <tr>
                                                                 <th><input type="checkbox" /></th>
+                                                                <th></th>
                                                                 <th>Order</th>
                                                                 <th>SKU</th>
                                                                 <th>Product Name</th>
@@ -105,10 +106,16 @@
                             return '<input type="checkbox" value="' + data + '">';
                         }
                     },
+                    {
+                        "className": 'details-control',
+                        "orderable": false,
+                        "data": null,
+                        "defaultContent": ''
+                    },
                     { data: "Order" },
                     { data: "SKU" },
                     { data: "ProductName" },
-                    { data: "QTY", render: function (data, type, row) { return '<input class="form-control" type="text"   value = ' +data + ' > '; } },
+                    { data: "QTY"},
                 ],
                 ajax: {
                     traditional: true,
@@ -135,6 +142,40 @@
             $("#btnsearch").click(function () {
                 DataGrid.draw();
             });
+            $(tableID + ' tbody').on('click', 'td.details-control', function () {
+                var tr = $(this).closest('tr');
+                var row = DataGrid.row(tr);
+
+                if (row.child.isShown()) {
+                    // This row is already open - close it
+                    row.child.hide();
+                    tr.removeClass('shown');
+                }
+                else {
+                    // Open this row
+                    row.child(GetSerialList(row.data())).show();
+                    tr.addClass('shown');
+                }
+            });
         });
+        function GetSerialList(d) {
+            var div = $('<div style="border:2px blue solid;" />').addClass('loading').text('Loading...');
+            $.ajax({
+                type: "post",
+                url: "@Url.Action("GetSerialList")",
+                data: {
+                    OrderID: d.Order
+                },
+                success: function (data) {
+                    if (data.status) {
+                        div.html(data.partial).removeClass('loading');
+                    }
+                    else {
+                        val = data.Errmsg;
+                    }
+                }
+            });
+            return div;
+        }
     </script>
 }
