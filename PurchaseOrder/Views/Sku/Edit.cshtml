@@ -36,8 +36,7 @@
                             <li><a data-toggle="tab" href="#hb6">Logistics</a></li>
                             <li><a data-toggle="tab" href="#hb7">Purchasing</a></li>
                             <li><a data-toggle="tab" href="#hb8">Inventory</a></li>
-                            <li><a data-toggle="tab" href="#hb9">Serials</a></li>
-                            <li><a data-toggle="tab" href="#hb10">Statement</a></li>
+                            <li><a data-toggle="tab" href="#hb9">Statement</a></li>
                         </ul>
                     </header>
 
@@ -685,11 +684,29 @@
                                         var AwaitingConut = AwaitingList.Select(a => new { WID = SCList[a.SCID], QTY = a.QTY }).Concat(SerialList.Where(s => s.Awaiting).Select(s => new { WID = s.WID.Value, QTY = Math.Abs(s.QTY) })).GroupBy(a => a.WID, a => a.QTY).ToDictionary(g => g.Key, g => g.Sum());
                                         var AggregateCount = SerialList.Where(s => !s.Awaiting).GroupBy(s => s.WID.Value, s => s.QTY).ToDictionary(g => g.Key, g => g.Sum() - (AwaitingConut.ContainsKey(g.Key) ? AwaitingConut[g.Key] : 0));
                                         var AvailableCount = SerialList.Where(s => !s.Awaiting).GroupBy(s => s.WID.Value, s => s.QTY).ToDictionary(g => g.Key, g => g.Sum());
-                                        var TotalValue = SerialList.Where(s => !s.Awaiting).GroupBy(s => s.WID.Value, s => s.QTY * s.Price).ToDictionary(g => g.Key, g => g.Sum());
+                                        var TransferCount = SerialList.Where(s => s.Shipped).GroupBy(s => s.WID.Value, s => Math.Abs(s.QTY)).ToDictionary(g => g.Key, g => g.Sum());
+                                        var TotalCount = SerialList.Where(s => !s.Awaiting || !s.Shipped).GroupBy(s => s.WID.Value, s => s.QTY).ToDictionary(g => g.Key, g => g.Sum());
+                                        var TotalValue = SerialList.Where(s => !s.Awaiting || !s.Shipped).GroupBy(s => s.WID.Value, s => s.QTY * s.Price).ToDictionary(g => g.Key, g => g.Sum());
                                     }
 
                                     <div class="tab-pane" id="hb7">
-                                        <fieldset></fieldset>
+                                        <fieldset>
+                                            <legend>Purchase & Serial</legend>
+                                            <div class="form-group">
+                                                @Html.Label("Inventory", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-1 col-lg-4">
+                                                    <select class="form-control select2" id="select-warehouse">
+                                                        <option value="">ALL</option>
+                                                        @foreach (var warehouse in WarehouseList)
+                                                        {
+                                                            <option value="@warehouse.ID">@warehouse.Name</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" id="data-purchase">
+                                            </div>
+                                        </fieldset>
                                     </div>
 
                                     <div class="tab-pane" id="hb8">
@@ -729,7 +746,7 @@
                                                                         <td>@(AvailableCount.ContainsKey(warehouse.ID) ? AvailableCount[warehouse.ID] : 0)</td>
                                                                         <td>@(AwaitingConut.ContainsKey(warehouse.ID) ? AwaitingConut[warehouse.ID] : 0)</td>
                                                                         <td>@(AggregateCount.ContainsKey(warehouse.ID) ? AggregateCount[warehouse.ID] : 0)</td>
-                                                                        <td></td>
+                                                                        <td>@(TransferCount.ContainsKey(warehouse.ID) ? TransferCount[warehouse.ID] : 0)</td>
                                                                         <td>@(AvailableCount.ContainsKey(warehouse.ID) ? AvailableCount[warehouse.ID] : 0)</td>
                                                                         <td>@(TotalValue.ContainsKey(warehouse.ID) ? TotalValue[warehouse.ID] : 0)</td>
                                                                     </tr>
@@ -745,10 +762,6 @@
                                     </div>
 
                                     <div class="tab-pane" id="hb9">
-                                        <fieldset></fieldset>
-                                    </div>
-
-                                    <div class="tab-pane" id="hb10">
                                         <fieldset>
                                             <div class="jarviswidget jarviswidget-color-blueLight" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-collapsed="false" data-widget-sortable="false">
                                                 <header class="ui-sortable-handle">
@@ -1036,23 +1049,26 @@
                     } else {
                         alert(response.message);
                     }
-                })
+                });
             }).trigger('change');;
 
-            $('#table-statement thead tr').clone().appendTo($('#table-statement tfoot'));
-            var $statementTable = $('#table-statement').DataTable({
-                "columnDefs": [{ "orderable": false, "targets": 0 }],
-                "order": []
-            });
-            $statementTable.columns().every(function () {
-                var that = this;
-                $(that.footer()).html('<input type="text" placeholder="Search" />');
-                $('input', this.footer()).on('keyup change', function () {
-                    if (that.search() !== this.value) {
-                        that.search(this.value).draw();
+            var $warehouseSelect = $('#select-warehouse').change(function () {
+                var days = !website.IsEmpty($('#days').val()) ? $('#days').val() : "";
+                website.AjaxUrl('@Url.Action("GetPurchaseSerial", "Sku")', 'get', { ID: '@Model.SkuID', WarehouseID: $(this).val(), Days: days }).done(function (response) {
+                    if (response.status) {
+                        $('#data-purchase').html(response.data);
+                        $('#days').change(function () {
+                            $warehouseSelect.trigger('change');
+                        });
+
+                        TableInit('table-purchase');
+                    } else {
+                        alert(response.message);
                     }
                 });
-            });
+            }).trigger('change');
+
+            TableInit('table-statement');
         });
 
         function AttrAdd() {
@@ -1204,5 +1220,22 @@
                 }
             });
         }
+
+        var TableInit = function (id) {
+            $('#' + id + ' thead tr').clone().appendTo($('#' + id + ' tfoot'));
+            var $Table = $('#' + id).DataTable({
+                "columnDefs": [{ "orderable": false, "targets": 0 }],
+                "order": []
+            });
+            $Table.columns().every(function () {
+                var that = this;
+                $(that.footer()).html('<input type="text" placeholder="Search" />');
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that.search(this.value).draw();
+                    }
+                });
+            });
+        };
     </script>
 }

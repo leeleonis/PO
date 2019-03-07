@@ -120,7 +120,7 @@ namespace PurchaseOrderSys.Controllers
             var warehouseList = db.Warehouse.Where(w => w.IsEnable).ToList();
             ViewBag.WarehouseList = warehouseList;
             ViewBag.PurchaseSku = db.PurchaseSKU.Where(s => s.IsEnable && s.SkuNo.Equals(id)).ToList();
-            ViewBag.AwaitingList = GetAwaitingCount(new string[] { id }, warehouseList.Select(w => w.ID.ToString()).ToArray());
+            ViewBag.AwaitingList = GetAwaitingCount(new string[] { id }, warehouseList.SelectMany(w => w.WarehouseSummary.Where(ws => ws.IsEnable && ws.Type.Equals("SCID"))).Select(w => w.Val).ToArray());
 
             return View(sku);
         }
@@ -423,7 +423,7 @@ namespace PurchaseOrderSys.Controllers
             var warehouseList = db.Warehouse.Where(w => w.IsEnable).ToList();
             ViewBag.WarehouseList = warehouseList;
             ViewBag.PurchaseSku = db.PurchaseSKU.Where(s => s.IsEnable && s.SkuNo.Equals(sku.SkuID)).ToList();
-            ViewBag.AwaitingList = GetAwaitingCount(new string[] { sku.SkuID }, warehouseList.Select(w => w.ID.ToString()).ToArray());
+            ViewBag.AwaitingList = GetAwaitingCount(new string[] { sku.SkuID }, warehouseList.SelectMany(w => w.WarehouseSummary.Where(ws => ws.IsEnable && ws.Type.Equals("SCID"))).Select(w => w.Val).ToArray());
 
             return View(sku);
         }
@@ -819,7 +819,7 @@ namespace PurchaseOrderSys.Controllers
 
             try
             {
-                if (boxType == null) throw new Exception("Not found sku!");
+                if (boxType == null) throw new Exception("Not found box!");
 
                 result.data = RenderViewToString(ControllerContext, "_BoxData", boxType);
             }
@@ -832,7 +832,34 @@ namespace PurchaseOrderSys.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult GetPurchaseSerial(string ID, int? WarehouseID, int? Days)
+        {
+            AjaxResult result = new AjaxResult();
 
+            SKU sku = db.SKU.Find(ID);
+
+            try
+            {
+                if (sku == null) throw new Exception("Not found sku!");
+
+                var skuList =  sku.PurchaseSKU.Where(s => s.IsEnable && ((s.PurchaseOrderID.HasValue && s.PurchaseOrder.IsEnable) || (s.CreditMemoID.HasValue && s.CreditMemo.IsEnable))).ToList();
+                var SerialList = skuList.SelectMany(s => s.SerialsLlist).Where(s => !(s.TransferSKUID.HasValue && (!s.TransferSKU.IsEnable || !s.TransferSKU.Transfer.IsEnable))).OrderByDescending(s => s.ID).ToList();
+
+                var warehouseList = db.Warehouse.Where(w => w.IsEnable).OrderBy(w => w.Name).ToList();
+                ViewDataDictionary viewData = new ViewDataDictionary() { { "SerialData", SerialList }, { "WarehouseID", WarehouseID }, { "Days", Days } };
+                viewData.Add("WarehouseList", warehouseList);
+                viewData.Add("AwaitingList", GetAwaitingCount(new string[] { sku.SkuID }, warehouseList.SelectMany(w => w.WarehouseSummary.Where(ws => ws.IsEnable && ws.Type.Equals("SCID"))).Select(w => w.Val).ToArray()));
+
+                result.data = RenderViewToString(ControllerContext, "_PurchaseSerial", sku, viewData);
+            }
+            catch (Exception e)
+            {
+                result.status = false;
+                result.message = e.InnerException != null ? e.InnerException.Message ?? e.Message : e.Message;
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
 
         protected override void Dispose(bool disposing)
         {

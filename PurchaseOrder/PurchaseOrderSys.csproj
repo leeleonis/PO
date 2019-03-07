@@ -6523,6 +6523,7 @@
     <Content Include="Views\BoxType\Index.cshtml" />
     <Content Include="Views\BoxType\Create.cshtml" />
     <Content Include="Views\Sku\_BoxData.cshtml" />
+    <Content Include="Views\Sku\_PurchaseSerial.cshtml" />
     <Content Include="Views\Shared\GetRMASKUList.cshtml" />
   </ItemGroup>
   <ItemGroup>
