@@ -66,18 +66,19 @@ namespace PurchaseOrderSys.Controllers
         }
         public ActionResult Create()
         {
-
-            Session["TSkuNumberList"] = null;
+            var SID = DateTime.Now.ToString("HHmmss");
+            ViewBag.SID = SID;
+            Session["TSkuNumberList" + SID] = null;
             return View();
         }
         [HttpPost]
-        public ActionResult Create(Transfer Transfer)
+        public ActionResult Create(Transfer Transfer, string SID)
         {
             var CreateBy = UserBy;
             var CreateAt = DateTime.UtcNow;
             Transfer.CreateBy = CreateBy;
             Transfer.CreateAt = CreateAt;
-            var odataList = (List<TranSKUVM>)Session["TSkuNumberList"];
+            var odataList = (List<TranSKUVM>)Session["TSkuNumberList" + SID];
             if (odataList != null)
             {
                 foreach (var item in odataList.Where(x => x.Model == "E"))
@@ -87,12 +88,12 @@ namespace PurchaseOrderSys.Controllers
             }
             db.Transfer.Add(Transfer);
             db.SaveChanges();
-            Session["TSkuNumberList"] = null;
+            Session["TSkuNumberList" + SID] = null;
             return RedirectToAction("Index");
         }
         public ActionResult Edit(int ID)
         {
-
+            var SID = ID;
             var Transfer = db.Transfer.Find(ID);
             var TranSKUVMList = new List<TranSKUVM>();
             foreach (var item in Transfer.TransferSKU.Where(x=>x.IsEnable))
@@ -111,11 +112,11 @@ namespace PurchaseOrderSys.Controllers
                 });
             }
 
-            Session["TSkuNumberList"] = TranSKUVMList;
+            Session["TSkuNumberList" + SID] = TranSKUVMList;
             return View(Transfer);
         }
         [HttpPost]
-        public ActionResult Edit(Transfer Transfer, bool? saveexit)
+        public ActionResult Edit(Transfer Transfer, string SID, bool? saveexit)
         {          
             var dt = DateTime.UtcNow;
             var oTransfer = db.Transfer.Find(Transfer.ID);
@@ -130,7 +131,7 @@ namespace PurchaseOrderSys.Controllers
             oTransfer.UpdateBy = UserBy;
             oTransfer.UpdateAt = dt;
 
-            var odataList = (List<TranSKUVM>)Session["TSkuNumberList"];
+            var odataList = (List<TranSKUVM>)Session["TSkuNumberList" + SID];
 
             foreach (var item in odataList.Where(x => x.Model == "E"))
             {
@@ -215,7 +216,7 @@ namespace PurchaseOrderSys.Controllers
             {
                 ReceiveVMList.Add(new TransferItemVM { SKU = item.SkuNo, Name = item.Name, QTY = item.QTY, SerialsLlist = item.SerialsLlist.Where(x => x.SerialsType == "TransferIn").ToList() });
             }
-            Session["ReceiveVMList"] = ReceiveVMList;
+            Session["ReceiveVMList" + ID] = ReceiveVMList;
             return View(oTransfer);
         }
         [HttpPost]
@@ -223,7 +224,7 @@ namespace PurchaseOrderSys.Controllers
         {
             var CreateBy = UserBy;
             var CreateAt = DateTime.UtcNow;
-            var ReceiveVMList = (List<TransferItemVM>)Session["ReceiveVMList"];
+            var ReceiveVMList = (List<TransferItemVM>)Session["ReceiveVMList" + ID];
             var oTransfer = db.Transfer.Find(ID);
             foreach (var item in oTransfer.TransferSKU.Where(x=>x.IsEnable))
             {
@@ -280,7 +281,7 @@ namespace PurchaseOrderSys.Controllers
             {
                 PrepVMList.Add(new TransferItemVM { SKU = item.SkuNo, Name = item.Name, QTY = item.QTY, SerialsLlist = item.SerialsLlist.Where(x => x.SerialsType == "TransferOut").ToList() });
             }
-            Session["PrepVMList"] = PrepVMList;
+            Session["PrepVMList" + ID] = PrepVMList;
             return View(oTransfer);
         }
 
@@ -289,7 +290,7 @@ namespace PurchaseOrderSys.Controllers
         {
             var CreateBy = UserBy;
             var CreateAt = DateTime.UtcNow;
-            var PrepVMList = (List<TransferItemVM>)Session["PrepVMList"];
+            var PrepVMList = (List<TransferItemVM>)Session["PrepVMList" + ID];
             var oTransfer = db.Transfer.Find(ID);
             foreach (var item in oTransfer.TransferSKU.Where(x=>x.IsEnable))
             {
@@ -373,9 +374,9 @@ namespace PurchaseOrderSys.Controllers
                 return RedirectToAction("Prep", new { ID });
             }
         }
-        public ActionResult PrepSaveserials(string serials)
+        public ActionResult PrepSaveserials(string serials, string SID)
         {
-            var PrepVMList = (List<TransferItemVM>)Session["PrepVMList"];
+            var PrepVMList = (List<TransferItemVM>)Session["PrepVMList" + SID];
 
             var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials && !x.SerialsLlistC.Any() && x.SerialsQTY > 0);//找到序號
             if (SerialsLlist.Any())
@@ -391,7 +392,7 @@ namespace PurchaseOrderSys.Controllers
                             if (!PrepVMList.Where(x => x.SerialsLlist.Where(y => y.SerialsNo == serials).Any()).Any())
                             {
                                 PrepVM.SerialsLlist.Add(Serial);
-                                Session["PrepVMList"] = PrepVMList;
+                                Session["PrepVMList" + SID] = PrepVMList;
                                 return Json(new { status = true }, JsonRequestBehavior.AllowGet);
                             }
                             else
@@ -421,8 +422,8 @@ namespace PurchaseOrderSys.Controllers
         }
         public ActionResult ReceiveSaveserials(int id, string serials)
         {
-            var ReceiveVMList = (List<TransferItemVM>)Session["ReceiveVMList"];
-
+            var SID = id;
+            var ReceiveVMList = (List<TransferItemVM>)Session["ReceiveVMList" + SID];
             var SerialsLlist = db.SerialsLlist.Where(x => x.TransferSKU.TransferID == id && x.SerialsNo == serials && !x.SerialsLlistC.Any());
             if (SerialsLlist.Sum(x => x.SerialsQTY) > 0)//檔序號數量>0
             {
@@ -445,7 +446,7 @@ namespace PurchaseOrderSys.Controllers
                         if (!ReceiveVMList.Where(x => x.SerialsLlist.Where(y => y.SerialsNo == serials).Any()).Any())
                         {
                             ReceiveVM.SerialsLlist.Add(Serial);
-                            Session["ReceiveVMList"] = ReceiveVMList;
+                            Session["ReceiveVMList" + SID] = ReceiveVMList;
                             return Json(new { status = true }, JsonRequestBehavior.AllowGet);
                         }
                         else

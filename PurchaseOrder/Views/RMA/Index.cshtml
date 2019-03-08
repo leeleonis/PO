@@ -97,7 +97,7 @@
                                                                         <td><a class='btn btn-default btn-sm' id='Edit' href='@Url.Action("Edit", new { item.ID })'>@item.ID</a></td>
                                                                         <td>@item.OrderID</td>
                                                                         <td>@item.ReturnTracking</td>
-                                                                        <td>Warehouse</td>
+                                                                        <td>@item.Warehouse.Name</td>
                                                                         <td>@(item.Reason)</td>
                                                                         <td>@item.Status</td>
                                                                         <td>@item.CreateAt.ToLocalTime()</td>

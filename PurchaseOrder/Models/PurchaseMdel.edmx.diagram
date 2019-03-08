@@ -110,21 +110,21 @@
         <AssociationConnector Association="PurchaseOrderModel.FK_Transfer_WarehouseInterim" />
         <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseSKU_SKU" />
         <AssociationConnector Association="PurchaseOrderModel.FK_TransferSKU_SKU" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.RMA" Width="1.5" PointX="21.375" PointY="0.75" />
         <EntityTypeShape EntityType="PurchaseOrderModel.BoxType" Width="1.5" PointX="5.75" PointY="22.125" />
         <EntityTypeShape EntityType="PurchaseOrderModel.Logistic" Width="1.5" PointX="3.625" PointY="21.625" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Logistic_BoxType" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Logistic_SKU" />
         <EntityTypeShape EntityType="PurchaseOrderModel.RMASKU" Width="1.5" PointX="23.625" PointY="1.25" />
         <EntityTypeShape EntityType="PurchaseOrderModel.RMASerialsLlist" Width="1.5" PointX="25.875" PointY="11.5" />
-        <AssociationConnector Association="PurchaseOrderModel.FK_RMA_Warehouse" />
-        <AssociationConnector Association="PurchaseOrderModel.FK_RMASKU_RMA" />
         <AssociationConnector Association="PurchaseOrderModel.FK_RMASerialsLlist_RMASKU" />
         <AssociationConnector Association="PurchaseOrderModel.FK_RMASerialsLlist_Warehouse" />
         <EntityTypeShape EntityType="PurchaseOrderModel.SkuType" Width="1.5" PointX="3.875" PointY="8.375" />
         <AssociationConnector Association="PurchaseOrderModel.FK_PackageContent_SkuType" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Sku_SkuType" />
         <AssociationConnector Association="PurchaseOrderModel.FK_SkuTypeLang_SkuType" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.RMA" Width="1.5" PointX="16" PointY="34.625" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_RMA_Warehouse" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_RMASKU_RMA" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

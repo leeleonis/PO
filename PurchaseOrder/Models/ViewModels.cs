@@ -1219,4 +1219,30 @@ namespace PurchaseOrderSys.Models
     {
         public IEnumerable<RMA> RMAList { get; set; }
     }
+
+    public class SKUIData
+    {
+        public string SKU { get; set; }
+        public int QTY { get; set; }
+        public List<string> Serials { get; set; }
+    }
+
+    public class OrderItemData
+    {
+        public int OrderID { get; set; }
+        public int OrderSource { get; set; }
+        public string OrderSourceOrderId { get; set; }
+        public int CompanyID { get; set; }
+        public string CountryCode { get; set; }
+        public List<SKUIData> Items { get; set; }
+        public int WarehouseID { get; set; }
+    }
+    public class RMAModelVM
+    {
+        public int ck { get; set; }
+        public int Order { get; set; }
+        public string SKU { get; set; }
+        public string ProductName { get; set; }
+        public int? QTY { get; set; }
+    }
 }

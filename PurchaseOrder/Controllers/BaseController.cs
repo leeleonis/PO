@@ -54,12 +54,12 @@ namespace PurchaseOrderSys.Controllers
                 return sw.GetStringBuilder().ToString();
             }
         }
-        public ActionResult CMRemoveData(string[] IDList)
+        public ActionResult CMRemoveData(string[] IDList, string SID)
         {
             var Errmsg = "";
             if (IDList != null && IDList.Any())
             {
-                var odataList = (List<CMSKUVM>)Session["CMSkuNumberList"];
+                var odataList = (List<CMSKUVM>)Session["CMSkuNumberList" + SID];
                 foreach (var item in IDList)
                 {
                     foreach (var odataListitem in odataList.Where(x => x.ID.ToString() == item || x.SKU == item))
@@ -82,7 +82,7 @@ namespace PurchaseOrderSys.Controllers
                         }
                     }
                 }
-                Session["CMSkuNumberList"] = odataList;
+                Session["CMSkuNumberList" + SID] = odataList;
             }
             else
             {
@@ -99,12 +99,12 @@ namespace PurchaseOrderSys.Controllers
 
         }
 
-        public ActionResult EditCMSKUData(string[] IDList)
+        public ActionResult EditCMSKUData(string[] IDList, string SID)
         {
             var Errmsg = "";
             if (IDList != null && IDList.Any())
             {
-                var odataList = (List<CMSKUVM>)Session["CMSkuNumberList"];
+                var odataList = (List<CMSKUVM>)Session["CMSkuNumberList" + SID];
                 foreach (var item in IDList)
                 {
                     foreach (var odataListitem in odataList.Where(x => x.ID.ToString() == item || x.SKU == item))
@@ -128,7 +128,7 @@ namespace PurchaseOrderSys.Controllers
         }
 
         [HttpPost]
-        public ActionResult CMCreatNoteImg(int? ID, HttpPostedFileBase Img)
+        public ActionResult CMCreatNoteImg(int? ID, HttpPostedFileBase Img, string SID)
         {
             try
             {
@@ -149,7 +149,7 @@ namespace PurchaseOrderSys.Controllers
                     Img.InputStream.CopyTo(target);
                     byte[] data = target.ToArray();
                     string Note = Convert.ToBase64String(data, 0, data.Length);
-                    CMPurchaseNote = (List<PurchaseNote>)Session["CMPurchaseNote"];
+                    CMPurchaseNote = (List<PurchaseNote>)Session["CMPurchaseNote" + SID];
                     if (CMPurchaseNote == null)
                     {
                         CMPurchaseNote = new List<PurchaseNote>();
@@ -166,7 +166,7 @@ namespace PurchaseOrderSys.Controllers
             }
         }
         [HttpPost]
-        public ActionResult CMCreatNote(int? ID, string Note)
+        public ActionResult CMCreatNote(int? ID, string Note, string SID)
         {
             try
             {
@@ -180,14 +180,14 @@ namespace PurchaseOrderSys.Controllers
                 }
                 else
                 {
-                    CMPurchaseNote = (List<PurchaseNote>)Session["CMPurchaseNote"];
+                    CMPurchaseNote = (List<PurchaseNote>)Session["CMPurchaseNote" + SID];
                     if (CMPurchaseNote == null)
                     {
                         CMPurchaseNote = new List<PurchaseNote>();
                     }
 
                     CMPurchaseNote.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = "txt", CreateAt = DateTime.UtcNow, CreateBy = UserBy });
-                    Session["CMPurchaseNote"] = CMPurchaseNote;
+                    Session["CMPurchaseNote" + SID] = CMPurchaseNote;
                 }
                 return Json(new { status = true, datalist = CMPurchaseNote.OrderByDescending(x => x.CreateAt).Select(x => new { CreateAt = x.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss"), x.CreateBy, x.Note, x.NoteType }).ToList() }, JsonRequestBehavior.AllowGet);
             }

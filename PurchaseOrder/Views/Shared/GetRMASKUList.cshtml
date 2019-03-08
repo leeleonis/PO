@@ -1,0 +1,35 @@
+﻿@model IEnumerable<RMAModelVM>
+@{
+    Layout = null;
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                SKU
+            </th>
+            <th>
+                Product Name
+            </th>
+            <th>
+                QTY
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @item.SKU
+            </td>
+            <td>
+                @item.ProductName
+            </td>
+            <td>
+                @item.QTY
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

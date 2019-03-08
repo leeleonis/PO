@@ -27,6 +27,7 @@
                         <div class="widget-body no-padding">
                             <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
                                 @Html.AntiForgeryToken()
+                                @Html.Hidden("SID")
                                 <input type="hidden" name="IsEnable" value="True">
                                 <div id="content" class="tab-content">
                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -208,6 +209,7 @@
                         var FromWID = $("#FromWID").val();
                         d.Skulist = Skulist;
                         d.FromWID = FromWID;
+                        d.SID=@Html.Display("SID");
                         $("#gebruikerId").val(null).trigger('change');
                     }
                 },
@@ -276,6 +278,7 @@
                     url: "@Url.Action("RemoveData")",
                     data: {
                         IDList: dataList,
+                        SID:@Html.Display("SID")
                     },
                     success: function (data) {
                         if (data.status) {
@@ -305,6 +308,7 @@
                 type: "post",
                 url: "@Url.Action("TSkuNumberListQTY", "Ajax")",
                 data: {
+                    SID:@Html.Display("SID"),
                     SKU: SKU,
                     val: $(x).val(),
                 },

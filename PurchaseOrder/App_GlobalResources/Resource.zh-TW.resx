@@ -1896,4 +1896,7 @@
   <data name="Logistic_UpdateAt" xml:space="preserve">
     <value>修改時間</value>
   </data>
+  <data name="RMA_SourceCaseID" xml:space="preserve">
+    <value>Source Case ID</value>
+  </data>
 </root>

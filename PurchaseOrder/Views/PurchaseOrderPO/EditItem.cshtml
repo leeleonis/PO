@@ -759,6 +759,7 @@
                     data: function (d) {
                         var Skulist = $("#gebruikerId").val();
                         d.Skulist = Skulist;
+                        d.SID=@Html.Display("ID");
                         $("#gebruikerId").val(null).trigger('change');
                     }
                 },
@@ -981,6 +982,7 @@
                     url: "@Url.Action("RemoveData")",
                     data: {
                         IDList: dataList,
+                        SID:@Html.Display("ID"),
                     },
                     success: function (data) {
                         if (data.status) {
@@ -1007,6 +1009,7 @@
                     url: "@Url.Action("EditSKUData")",
                     data: {
                         IDList: dataList,
+                        SID:@Html.Display("ID"),
                     },
                     success: function (data) {
                         if (data.status) {
@@ -1076,6 +1079,7 @@
                 type: "post",
                 url: "@Url.Action("SkuNumberListEdit", "Ajax")",
                 data: {
+                    SID:@Html.Display("ID"),
                     SKU: SKU,
                     type: type,
                     oval: oval,

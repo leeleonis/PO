@@ -20,6 +20,7 @@ namespace PurchaseOrderSys.Controllers
         {
             Session["CMPurchaseNote"] = null;
             Session["CMSkuNumberList"] = null;
+            var SID = DateTime.Now.ToString("HHmmss");
             var PurchaseOrder = db.PurchaseOrder.Find(ID);
             var cmvm = new CMVM
             {
@@ -57,11 +58,11 @@ namespace PurchaseOrderSys.Controllers
                 Subtotal = (x.CreditQTY * x.Credit) ?? 0,
                 Model = "L"
             });
-            Session["CMSkuNumberList"] = dataList.ToList();
+            Session["CMSkuNumberList" + SID] = dataList.ToList();
             return View(cmvm);
         }
         [HttpPost]
-        public ActionResult CreateCM(CreditMemo filter, IEnumerable<HttpPostedFileBase> VendorCM)
+        public ActionResult CreateCM(CreditMemo filter, IEnumerable<HttpPostedFileBase> VendorCM, string SID)
         {
             var CreditMemo = new CreditMemo
             {
@@ -85,7 +86,7 @@ namespace PurchaseOrderSys.Controllers
                 CreateAt = DateTime.UtcNow
             };
             db.CreditMemo.Add(CreditMemo);
-            var dataList = (List<CMSKUVM>)Session["CMSkuNumberList"];
+            var dataList = (List<CMSKUVM>)Session["CMSkuNumberList" + SID];
             if (dataList != null)
             {
                 var PurchaseSKUlist = dataList.Select(x => new PurchaseSKU
@@ -203,7 +204,7 @@ namespace PurchaseOrderSys.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
-        public ActionResult EditItem(int ID)
+        public ActionResult EditItem(int ID, string SID)
         {
 
             var CreditMemo = db.CreditMemo.Find(ID);
@@ -272,11 +273,11 @@ namespace PurchaseOrderSys.Controllers
                 }
                 db.SaveChanges();
             }
-            Session["CMSkuNumberList"] = dataList.ToList();
+            Session["CMSkuNumberList" + SID] = dataList.ToList();
             return View(CreditMemo);
         }
         [HttpPost]
-        public ActionResult EditItem(CreditMemo filter, IEnumerable<HttpPostedFileBase> VendorCM, bool? saveexit)
+        public ActionResult EditItem(CreditMemo filter, IEnumerable<HttpPostedFileBase> VendorCM, string SID, bool? saveexit)
         {
             var dt = DateTime.UtcNow;
             var CreditMemo = db.CreditMemo.Find(filter.ID);
@@ -316,7 +317,7 @@ namespace PurchaseOrderSys.Controllers
 
                 }
             }
-            var CMSkuNumberList = (List<CMSKUVM>)Session["CMSkuNumberList"];
+            var CMSkuNumberList = (List<CMSKUVM>)Session["CMSkuNumberList" + SID];
             if (CMSkuNumberList != null)
             {
                 var PurchaseSKUE = CMSkuNumberList.Where(x => x.Model == "E").Select(x => new PurchaseSKU

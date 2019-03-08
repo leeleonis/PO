@@ -152,9 +152,9 @@ namespace PurchaseOrderSys.Controllers
             };
             return Json(returnObj, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult TSkuNumberList(int? draw, int? start, int? length, string[] Skulist, int? FromWID)
+        public ActionResult TSkuNumberList(int? draw, int? start, int? length, string[] Skulist, int? FromWID, string SID)
         {
-            var odataList = (List<TranSKUVM>)Session["TSkuNumberList"];
+            var odataList = (List<TranSKUVM>)Session["TSkuNumberList" + SID];
             if (odataList == null)
             {
                 odataList = new List<TranSKUVM>();
@@ -199,7 +199,7 @@ namespace PurchaseOrderSys.Controllers
 
                     //}
                     odataList.AddRange(dataList);
-                    Session["TSkuNumberList"] = odataList;
+                    Session["TSkuNumberList" + SID] = odataList;
                 }
                 odataList = odataList.Where(x => x.Model != "D").ToList();
             }
@@ -214,9 +214,9 @@ namespace PurchaseOrderSys.Controllers
             };
             return Json(returnObj, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult CMSkuNumberList(int? draw, int? start, int? length, string[] Skulist, int PurchaseOrderID)
+        public ActionResult CMSkuNumberList(int? draw, int? start, int? length, string[] Skulist, int PurchaseOrderID, string SID)
         {
-            var odataList = (List<CMSKUVM>)Session["CMSkuNumberList"];
+            var odataList = (List<CMSKUVM>)Session["CMSkuNumberList" + SID];
             if (odataList == null)
             {
                 odataList = new List<CMSKUVM>();
@@ -243,7 +243,7 @@ namespace PurchaseOrderSys.Controllers
                 ).ToList();
 
                 odataList.AddRange(dataList);
-                Session["CMSkuNumberList"] = odataList;
+                Session["CMSkuNumberList" + SID] = odataList;
             }
             odataList = odataList.Where(x => x.Model != "D").ToList();
             int recordsTotal = odataList.Count();
@@ -257,9 +257,9 @@ namespace PurchaseOrderSys.Controllers
             };
             return Json(returnObj, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult SkuNumberList(int? draw, int? start, int? length, string[] Skulist)
+        public ActionResult SkuNumberList(int? draw, int? start, int? length,string SID, string[] Skulist)
         {
-            var odataList = (List<PoSKUVM>)Session["SkuNumberList"];
+            var odataList = (List<PoSKUVM>)Session["SkuNumberList" + SID];
             if (odataList == null)
             {
                 odataList = new List<PoSKUVM>();
@@ -293,7 +293,7 @@ namespace PurchaseOrderSys.Controllers
                     item.Subtotal = (QTYOrdered * (Price - Discount));
                 }
                 odataList.AddRange(dataList);
-                Session["SkuNumberList"] = odataList;
+                Session["SkuNumberList" + SID] = odataList;
             }
             odataList = odataList.Where(x => x.Model != "D").ToList();
             int recordsTotal = odataList.Count();
@@ -308,9 +308,9 @@ namespace PurchaseOrderSys.Controllers
             return Json(returnObj, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public ActionResult SkuNumberListEdit(string SKU, string type, decimal? oval, decimal? val, int? ID)
+        public ActionResult SkuNumberListEdit(string SKU, string type, decimal? oval, decimal? val, int? ID,string SID)
         {
-            var odataList = (List<PoSKUVM>)Session["SkuNumberList"];
+            var odataList = (List<PoSKUVM>)Session["SkuNumberList" + SID];
             if (odataList == null)
             {
                 odataList = new List<PoSKUVM>();
@@ -337,13 +337,14 @@ namespace PurchaseOrderSys.Controllers
                 item.DiscountedPrice = ((item.Price ?? 0) - (item.Discount ?? 0) - (item.Credit ?? 0));
                 item.Subtotal = ((item.QTYOrdered ?? 0) * ((item.Price ?? 0) - (item.Discount ?? 0)));
             }
-            Session["SkuNumberList"] = odataList;
+            Session["SkuNumberList" + SID] = odataList;
             return Json(new { status = true }, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
         public ActionResult CMSkuNumberListEdit(string SKU, string type, decimal oval, decimal val, int? ID)
         {
-            var odataList = (List<CMSKUVM>)Session["CMSkuNumberList"];
+            var SID = ID;
+            var odataList = (List<CMSKUVM>)Session["CMSkuNumberList" + SID];
             if (odataList == null)
             {
                 odataList = new List<CMSKUVM>();
@@ -370,19 +371,19 @@ namespace PurchaseOrderSys.Controllers
                 }
                 item.Subtotal = (item.CreditQTY * item.Credit) ?? 0;
             }
-            Session["CMSkuNumberList"] = odataList;
+            Session["CMSkuNumberList" + SID] = odataList;
             return Json(new { status = true }, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public ActionResult TSkuNumberListQTY(string SKU, int val)
+        public ActionResult TSkuNumberListQTY(string SKU, int val, string SID)
         {
-            var odataList = (List<TranSKUVM>)Session["TSkuNumberList"];
+            var odataList = (List<TranSKUVM>)Session["TSkuNumberList" + SID];
             foreach (var item in odataList.Where(x => x.SKU == SKU))
             {
                 item.QTY = val;
                 item.Model = "E";
             }
-            Session["TSkuNumberList"] = odataList;
+            Session["TSkuNumberList" + SID] = odataList;
             return Json(new { status = true }, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
