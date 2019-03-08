@@ -26,6 +26,7 @@ namespace PurchaseOrderSys.Models
         public int ID { get; set; }
         public string HSCode { get; set; }
         public Nullable<int> NetoID { get; set; }
+        public Nullable<int> SCID { get; set; }
         public string AttributeGroup { get; set; }
         public string CreateBy { get; set; }
         public System.DateTime CreateAt { get; set; }

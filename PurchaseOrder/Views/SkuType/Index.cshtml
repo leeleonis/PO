@@ -62,6 +62,11 @@
                         return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
                     }
                 }, {
+                    field: "SCID", title: "@Html.DisplayNameFor(model => model.SCID)", width: 150, align: "center", sortable: false,
+                    formatter: function (value, row, index) {
+                        return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
+                    }
+                }, {
                     field: "Save", title: "Save", width: 90, align: "center", sortable: false,
                     formatter: function (value, row, index) {
                         if (website.IsEmpty(row.IsFilter)) {
@@ -98,7 +103,8 @@
                 ID: $('.filterColumn .s-ID').val(),
                 Name: $('.filterColumn .s-name').val(),
                 HSCode: $('.filterColumn .s-HSCode').val(),
-                NetoID: $('.filterColumn .s-netoID').val()
+                NetoID: $('.filterColumn .s-netoID').val(),
+                SCID: $('.filterColumn .s-SCID').val()
             };
         }
 
@@ -109,6 +115,7 @@
                 Name: "<input type='text' class='form-control s-name' value='" + (!website.IsEmpty(filterValue['Name']) ? filterValue['Name'] : '') + "'>",
                 HSCode: "<input type='text' class='form-control s-HSCode' value='" + (!website.IsEmpty(filterValue['HSCode']) ? filterValue['HSCode'] : '') + "'>",
                 NetoID: "<input type='text' class='form-control s-netoID' value='" + (!website.IsEmpty(filterValue['NetoID']) ? filterValue['NetoID'] : '') + "'>",
+                SCID: "<input type='text' class='form-control s-SCID' value='" + (!website.IsEmpty(filterValue['SCID']) ? filterValue['SCID'] : '') + "'>",
                 Save: "<button type='button' class='btn btn-default btn-sm' onclick='SaveData()'>SAVE ALL</button>"
             };
         }
@@ -161,6 +168,7 @@
                 TypeID: row.ID,
                 Name: $("input#Name:eq(" + index + ")").val(),
                 HSCode: $("input#HSCode:eq(" + index + ")").val(),
+                SCID: $("input#SCID:eq(" + index + ")").val(),
                 NetoID: $("input#NetoID:eq(" + index + ")").val()
             }
         }

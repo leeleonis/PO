@@ -2126,4 +2126,7 @@
   <data name="RMA_SourceCaseID" xml:space="preserve">
     <value></value>
   </data>
+  <data name="SkuType_SCID" xml:space="preserve">
+    <value></value>
+  </data>
 </root>

@@ -100,7 +100,7 @@ namespace PurchaseOrderSys.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,NetoID")] SkuType updateData, [Bind(Include = "LangID,Name")] SkuTypeLang langData, PackageContentLang[] PackageContent, Dictionary<string, int[]> AttributeGroup)
+        public ActionResult Edit([Bind(Include = "ID,NetoID,SCID")] SkuType updateData, [Bind(Include = "LangID,Name")] SkuTypeLang langData, PackageContentLang[] PackageContent, Dictionary<string, int[]> AttributeGroup)
         {
             SkuType skuType = db.SkuType.Find(updateData.ID);
             if (skuType == null) return HttpNotFound();
@@ -201,6 +201,7 @@ namespace PurchaseOrderSys.Controllers
             if (filter.ID.HasValue) TypeFilter = TypeFilter.Where(t => t.ID.Equals(filter.ID.Value));
             if (!string.IsNullOrEmpty(filter.Name)) TypeFilter = TypeFilter.Where(t => t.SkuTypeLang.Any(l => l.LangID.Equals(LangID) && l.Name.ToLower().Contains(filter.Name.ToLower())));
             if (filter.NetoID.HasValue) TypeFilter = TypeFilter.Where(t => t.NetoID.Value.Equals(filter.NetoID.Value));
+            if (filter.SCID.HasValue) TypeFilter = TypeFilter.Where(t => t.SCID.Value.Equals(filter.SCID.Value));
             if (!string.IsNullOrEmpty(filter.HSCode)) TypeFilter = TypeFilter.Where(t => t.HSCode.ToLower().Contains(filter.HSCode.ToLower()));
 
             if (TypeFilter.Any())
@@ -215,6 +216,7 @@ namespace PurchaseOrderSys.Controllers
                     a.ID,
                     Name = a.SkuTypeLang.Any(l => l.LangID.Equals(LangID)) ? a.SkuTypeLang.First(l => l.LangID.Equals(LangID)).Name : "",
                     a.NetoID,
+                    a.SCID,
                     a.HSCode
                 }).ToList());
             }
@@ -228,7 +230,7 @@ namespace PurchaseOrderSys.Controllers
             AjaxResult result = new AjaxResult();
 
             SkuType type = db.SkuType.Find(updateData.ID);
-            SetUpdateData(type, updateData, new string[] { "NetoID", "HSCode" });
+            SetUpdateData(type, updateData, new string[] { "NetoID", "SCID", "HSCode" });
             db.Entry(type).State = EntityState.Modified;
 
             langData.LangID = EnumData.DataLangList().First().Key;

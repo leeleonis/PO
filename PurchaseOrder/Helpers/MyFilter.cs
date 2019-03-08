@@ -71,6 +71,7 @@ namespace PurchaseOrderSys
         public Nullable<int> ID { get; set; }
         public string LangID { get; set; }
         public Nullable<int> NetoID { get; set; }
+        public Nullable<int> SCID { get; set; }
         public string Name { get { return this.nameField; } set { nameField = !string.IsNullOrEmpty(value) ? value.Trim() : value; } }
         public string HSCode { get; set; }
     }
