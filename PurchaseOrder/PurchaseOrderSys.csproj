@@ -159,6 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api\SC_API.cs" />
+    <Compile Include="Api\SC_WebService.cs" />
     <Compile Include="Api\Shipping_API.cs" />
     <Compile Include="Api\Winit_API.cs" />
     <Compile Include="App_GlobalResources\Resource.Designer.cs">

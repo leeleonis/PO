@@ -227,9 +227,9 @@ namespace PurchaseOrderSys.Models
             };
         }
 
-        public void UpdateSkuToNeto()
+        public UpdateItemResponseItem UpdateSkuToNeto()
         {
-            netoApi = new NetoApi();
+            if (netoApi == null) netoApi = new NetoApi();
             string LangID = EnumData.DataLangList().First().Key;
 
             var skuLang = skuData.SkuLang.First(l => l.LangID.Equals(LangID));
@@ -268,12 +268,56 @@ namespace PurchaseOrderSys.Models
             };
 
             var result = netoApi.UpdateItem(update);
+            if (result.Ack.Equals(UpdateItemResponseAck.Success))
+            {
+                return result.Item[0];
+            }
+
+            if (result.Messages.Error.Any())
+            {
+                throw new Exception("Error:" + string.Join(",", result.Messages.Error.Select(e => e.Message + "-" + e.Description).ToArray()));
+            }
+            else
+            {
+                throw new Exception("Waring:" + string.Join(",", result.Messages.Warning.Select(e => e.Message).ToArray()));
+            }
         }
 
-        public void CreateSkuToNeto()
+        public AddItemResponseItem CreateSkuToNeto()
         {
+            if (netoApi == null) netoApi = new NetoApi();
+            string LangID = EnumData.DataLangList().First().Key;
 
+            var skuLang = skuData.SkuLang.First(l => l.LangID.Equals(LangID));
+
+            AddItemItem newItem = new AddItemItem()
+            {
+                SKU = skuData.SkuID,
+                Name = skuLang.Name,
+                Brand = skuData.GetBrand.Name,
+                ModelNumber = skuLang.Model,
+                UPC = skuData.UPC,
+                UPC1 = skuData.EAN,
+                Type = skuData.SkuType.SkuTypeLang.FirstOrDefault(l => l.LangID.Equals(LangID))?.Name ?? "",
+                Categories = new AddItemItemCategory[] { new AddItemItemCategory() { CategoryID = skuData.SkuType.NetoID.Value.ToString() } }
+            };
+
+            var result = netoApi.AddItem(newItem);
+            if (result.Ack.Equals(AddItemResponseAck.Success))
+            {
+                return result.Item[0];
+            }
+
+            if (result.Messages.Error.Any())
+            {
+                throw new Exception("Error:" + string.Join(",", result.Messages.Error.Select(e => e.Message + "-" + e.Description).ToArray()));
+            }
+            else
+            {
+                throw new Exception("Waring:" + string.Join(",", result.Messages.Warning.Select(e => e.Message).ToArray()));
+            }
         }
+
 
         protected virtual void Dispose(bool disposing)
         {
@@ -289,6 +333,7 @@ namespace PurchaseOrderSys.Models
 
                 db = null;
                 skuData = null;
+                netoApi = null;
 
                 disposedValue = true;
             }

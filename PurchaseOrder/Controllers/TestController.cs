@@ -324,5 +324,15 @@ namespace PurchaseOrderSys.Controllers
             }
             //var data1 = SC_Api.LoadProducts(ProductIDs).Select(p => new { p.ID, p.RequireSerialNumberScanWhileShipping, p.Replenishable }).ToList();
         }
+
+        public void GetProductType()
+        {
+            var SC_Api = new SellerCloud_WebService.SC_WebService("tim@weypro.com", "timfromweypro");
+            var ProductTypeList = SC_Api.Get_ProductType(163);
+            foreach(var type in ProductTypeList.OrderBy(t => t.ProductTypeName))
+            {
+                Response.Write(string.Format("{0} - {1}<br/>", type.ID, type.ProductTypeName));
+            }
+        }
     }
 }
