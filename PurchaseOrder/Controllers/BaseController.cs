@@ -132,6 +132,10 @@ namespace PurchaseOrderSys.Controllers
         {
             try
             {
+                if (Img == null)
+                {
+                    return Json(new { status = false, Errmsg = "沒有圖檔" }, JsonRequestBehavior.AllowGet);
+                }
                 var NoteType = Img.ContentType;
                 var CMPurchaseNote = new List<PurchaseNote>();
                 if (ID.HasValue && ID != 0)

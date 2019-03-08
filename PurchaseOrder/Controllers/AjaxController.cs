@@ -341,9 +341,8 @@ namespace PurchaseOrderSys.Controllers
             return Json(new { status = true }, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public ActionResult CMSkuNumberListEdit(string SKU, string type, decimal oval, decimal val, int? ID)
+        public ActionResult CMSkuNumberListEdit(string SKU, string type, decimal oval, decimal val, int? ID,string SID)
         {
-            var SID = ID;
             var odataList = (List<CMSKUVM>)Session["CMSkuNumberList" + SID];
             if (odataList == null)
             {

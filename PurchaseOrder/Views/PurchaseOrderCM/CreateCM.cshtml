@@ -36,6 +36,7 @@
                             <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
                                 @Html.AntiForgeryToken()
                                 @Html.HiddenFor(model => model.PurchaseOrderID)
+                                @Html.Hidden("SID")
                                 <input type="hidden" name="IsEnable" value="True">
                                 <div id="content" class="tab-content">
                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -429,6 +430,7 @@
                     url: "@Url.Action("CMSkuNumberList", "Ajax")",
                     data: function (d) {
                         var Skulist = $("#gebruikerId").val();
+                        d.SID = @Html.Display("SID");
                         d.Skulist = Skulist;
                         d.PurchaseOrderID=@Html.DisplayFor(x => x.PurchaseOrderID);
                         $("#gebruikerId").val(null).trigger('change');
@@ -491,6 +493,7 @@
             $("#UploadImage").click(function () {
                 var data = new FormData();
                 data.append("ID", "@Html.DisplayFor(x=>x.ID)");
+                data.append("SID", "@Html.Display("SID")");
                 var files = $("#addimg").get(0).files;
                 if (files.length > 0) {
                     data.append("Img", files[0]);
@@ -523,6 +526,7 @@
                     url: "@Url.Action("CMCreatNote")",
                     data: {
                         ID: "@Html.DisplayFor(x=>x.ID)",
+                        SID: "@Html.Display("SID")",
                         Note: $("#textnote").val()
                     },
                     success: function (data) {
@@ -553,6 +557,7 @@
                     type: "post",
                     url: "@Url.Action("CMRemoveData")",
                     data: {
+                        SID: "@Html.Display("SID")",
                         IDList: dataList,
                     },
                     success: function (data) {
@@ -576,6 +581,7 @@
                     type: "post",
                     url: "@Url.Action("EditCMSKUData")",
                     data: {
+                        SID: "@Html.Display("SID")",
                         IDList: dataList,
                     },
                     success: function (data) {
@@ -603,6 +609,7 @@
                     delay: 0,
                     data: function (term) {
                         return {
+                            SID: "@Html.Display("SID")",
                             Search: term.term,
                             PurchaseOrderID:@Html.DisplayFor(x=>x.PurchaseOrderID)
                         };
@@ -620,6 +627,7 @@
                 type: "post",
                 url: "@Url.Action("CMSkuNumberListEdit", "Ajax")",
                 data: {
+                    SID: "@Html.Display("SID")",
                     SKU: SKU,
                     type: type,
                     oval: oval,

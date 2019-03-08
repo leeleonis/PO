@@ -449,6 +449,7 @@
                     url: "@Url.Action("CMSkuNumberList", "Ajax")",
                     data: function (d) {
                         var Skulist = $("#gebruikerId").val();
+                        d.SID =@Html.DisplayFor(x => x.ID);
                         d.Skulist = Skulist;
                         d.PurchaseOrderID =@Html.DisplayFor(x => x.PurchaseOrderID);
                         $("#gebruikerId").val(null).trigger('change');
@@ -523,6 +524,7 @@
             $("#UploadImage").click(function () {
                 var data = new FormData();
                 data.append("ID", "@Html.DisplayFor(x=>x.ID)");
+                data.append("SID", "@Html.DisplayFor(x=>x.ID)");
                 var files = $("#addimg").get(0).files;
                 if (files.length > 0) {
                     data.append("Img", files[0]);
@@ -555,6 +557,7 @@
                     url: "@Url.Action("CMCreatNote")",
                     data: {
                         ID: "@Html.DisplayFor(x=>x.ID)",
+                        SID: "@Html.DisplayFor(x=>x.ID)",
                         Note: $("#textnote").val()
                     },
                     success: function (data) {
@@ -586,6 +589,7 @@
                     url: "@Url.Action("CMRemoveData")",
                     data: {
                         IDList: dataList,
+                        SID: "@Html.DisplayFor(x=>x.ID)",
                     },
                     success: function (data) {
                         if (data.status) {
@@ -609,6 +613,7 @@
                     url: "@Url.Action("EditCMSKUData")",
                     data: {
                         IDList: dataList,
+                        SID: "@Html.DisplayFor(x=>x.ID)",
                     },
                     success: function (data) {
                         if (data.status) {
@@ -655,6 +660,7 @@
                 type: "post",
                 url: "@Url.Action("CMSkuNumberListEdit", "Ajax")",
                 data: {
+                    SID: "@Html.DisplayFor(x=>x.ID)",
                     SKU: SKU,
                     type: type,
                     oval: oval,

@@ -569,12 +569,12 @@ namespace PurchaseOrderSys.Controllers
             return RedirectToAction("Edit", new { ID });
             //return Json(new { status = true }, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult RemoveData(string[] IDList)
+        public ActionResult RemoveData(string[] IDList, string SID)
         {
             var Errmsg = "";
             if (IDList != null && IDList.Any())
             {
-                var odataList = (List<TranSKUVM>)Session["TSkuNumberList"];
+                var odataList = (List<TranSKUVM>)Session["TSkuNumberList" + SID];
                 foreach (var item in IDList)
                 {
                     foreach (var odataListitem in odataList.Where(x => x.ID.ToString() == item || x.SKU == item))
@@ -597,7 +597,7 @@ namespace PurchaseOrderSys.Controllers
                         }
                     }
                 }
-                Session["TSkuNumberList"] = odataList;
+                Session["TSkuNumberList" + SID] = odataList;
             }
             else
             {

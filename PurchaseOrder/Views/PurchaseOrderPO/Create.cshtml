@@ -776,6 +776,7 @@
             $("#UploadImage").click(function () {
                 var data = new FormData();
                 data.append("ID", "@Html.DisplayFor(x=>x.ID)");
+                data.append("SID", "@Html.Display("SID")");
                 var files = $("#addimg").get(0).files;
                 if (files.length > 0) {
                     data.append("Img", files[0]);
@@ -807,7 +808,7 @@
                     type: "post",
                     url: "@Url.Action("CreatNote")",
                     data: {
-                        SID:@Html.Display("ID"),
+                        SID:@Html.Display("SID"),
                         ID: "@Html.DisplayFor(x=>x.ID)",
                         Note: $("#textnote").val()
                     },

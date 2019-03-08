@@ -75,7 +75,7 @@ namespace PurchaseOrderSys.Controllers
                     filter.PurchaseSKU.Add(item);
                 }
             }
-            var PurchaseNoteLlist = (List<PurchaseNote>)Session["PurchaseNote"];
+            var PurchaseNoteLlist = (List<PurchaseNote>)Session["PurchaseNote" + SID];
             if (PurchaseNoteLlist != null)
             {
                 foreach (var item in PurchaseNoteLlist)
@@ -852,7 +852,7 @@ namespace PurchaseOrderSys.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreatNote(int? ID, string Note)
+        public ActionResult CreatNote(int? ID,string SID, string Note)
         {
             try
             {
@@ -866,14 +866,14 @@ namespace PurchaseOrderSys.Controllers
                 }
                 else
                 {
-                    PurchaseNoteList = (List<PurchaseNote>)Session["PurchaseNote"];
+                    PurchaseNoteList = (List<PurchaseNote>)Session["PurchaseNote" + SID];
                     if (PurchaseNoteList == null)
                     {
                         PurchaseNoteList = new List<PurchaseNote>();
                     }
 
                     PurchaseNoteList.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = "txt", CreateAt = DateTime.UtcNow, CreateBy = UserBy });
-                    Session["PurchaseNote"] = PurchaseNoteList;
+                    Session["PurchaseNote" + SID] = PurchaseNoteList;
                 }
                 return Json(new { status = true, datalist = PurchaseNoteList.OrderByDescending(x => x.CreateAt).Select(x => new { CreateAt = x.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss"), x.CreateBy, x.Note, x.NoteType }).ToList() }, JsonRequestBehavior.AllowGet);
             }
@@ -883,10 +883,14 @@ namespace PurchaseOrderSys.Controllers
             }
         }
         [HttpPost]
-        public ActionResult CreatNoteImg(int? ID, HttpPostedFileBase Img)
+        public ActionResult CreatNoteImg(int? ID,string SID, HttpPostedFileBase Img)
         {
             try
             {
+                if (Img == null)
+                {
+                    return Json(new { status = false, Errmsg ="沒有圖檔" }, JsonRequestBehavior.AllowGet);
+                }
                 var NoteType = Img.ContentType;
                 var PurchaseNoteList = new List<PurchaseNote>();
                 if (ID.HasValue && ID != 0)
@@ -904,14 +908,14 @@ namespace PurchaseOrderSys.Controllers
                     Img.InputStream.CopyTo(target);
                     byte[] data = target.ToArray();
                     string Note = Convert.ToBase64String(data, 0, data.Length);
-                    PurchaseNoteList = (List<PurchaseNote>)Session["PurchaseNote"];
+                    PurchaseNoteList = (List<PurchaseNote>)Session["PurchaseNote"+ SID];
                     if (PurchaseNoteList == null)
                     {
                         PurchaseNoteList = new List<PurchaseNote>();
                     }
 
                     PurchaseNoteList.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = NoteType, CreateAt = DateTime.UtcNow, CreateBy = UserBy });
-                    Session["PurchaseNote"] = PurchaseNoteList;
+                    Session["PurchaseNote"+ SID] = PurchaseNoteList;
                 }
                 return Json(new { status = true, datalist = PurchaseNoteList.OrderByDescending(x => x.CreateAt).Select(x => new { CreateAt = x.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss"), x.CreateBy, x.Note, x.NoteType }).ToList() }, JsonRequestBehavior.AllowGet);
             }
