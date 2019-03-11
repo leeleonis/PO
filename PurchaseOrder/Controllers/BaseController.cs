@@ -373,18 +373,23 @@ namespace PurchaseOrderSys.Controllers
         /// 存圖檔
         /// </summary>
         /// <param name="file">圖檔</param>
+        /// <param name="UpfileName">資料夾名稱</param> 
         /// <returns>回傳路徑</returns>
-        public string SaveImg(HttpPostedFileBase file)
+        public string SaveImg(HttpPostedFileBase file, string UpfileName = "")
         {
             try
             {
-                var Dirpath = Server.MapPath(FileUploads);
+                if (string.IsNullOrWhiteSpace(UpfileName))
+                {
+                    UpfileName = FileUploads;
+                }
+                var Dirpath = Server.MapPath(UpfileName);
                 if (!Directory.Exists(Dirpath)) Directory.CreateDirectory(Dirpath);
                 string FileExtension = Path.GetExtension(file.FileName);
                 var fileName = Guid.NewGuid().ToString("N") + FileExtension;
                 var path = Path.Combine(Dirpath, fileName);
                 file.SaveAs(path);
-                return FileUploads.Replace("~", "") + "/" + fileName;
+                return UpfileName.Replace("~", "") + "/" + fileName;
             }
             catch (Exception)
             {

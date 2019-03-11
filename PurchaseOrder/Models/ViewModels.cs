@@ -712,6 +712,10 @@ namespace PurchaseOrderSys.Models
         /// 開啟序號管理
         /// </summary>
         public bool SerialTracking { get; set; }
+        /// <summary>
+        /// SKU圖檔路徑
+        /// </summary>
+        public string Url { get; set; }
     }
     public class WarehouseInventoryVM
     {

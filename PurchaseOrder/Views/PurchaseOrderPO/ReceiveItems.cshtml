@@ -21,9 +21,20 @@
 }
 <style>
     .img {
-        max-width: 20px;
-        max-height: 20px;
+        max-width: 500px;
         margin: 5px;
+    }
+    .timg {
+        max-width: 100px;
+    }
+    .Imgbtn {
+        width: 120px;
+        height: 100px;
+        text-align: center;
+        line-height: 90px;
+    }
+    table tbody tr td {
+        vertical-align: middle !important;
     }
 </style>
 <div id="content">
@@ -158,7 +169,13 @@
                     },
                     {
                         data: "", render: function (data, type, row, meta) {
-                            var input = '<a class="btn btn-default btn-sm Imgbtn" valID="' + row.ID + '">Img</a>';
+                            var input = "";
+                            if (row.Url == "" || row.Url == null) {
+                                input = '<a class="btn btn-default btn-sm Imgbtn" valID="' + row.ID + '">upload</a>';
+                            }
+                            else {
+                                input = '<a class="btn btn-default btn-sm Imgbtn" valID="' + row.ID + '"><img class="timg" src="../../Uploads/' + row.Url + '" /></a>';
+                            }
                             return input
                         }
                     },

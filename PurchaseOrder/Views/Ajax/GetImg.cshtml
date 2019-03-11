@@ -2,27 +2,71 @@
 @{
     Layout = null;
 }
-@using (Ajax.BeginForm("ImgUpload", "Ajax", new AjaxOptions { HttpMethod = "Post", InsertionMode = InsertionMode.Replace, UpdateTargetId = "dialog", OnSuccess = "Success" }, new { enctype = "multipart/form-data" }))
+<style>
+    .opreview {
+        display: block;
+        text-align: center;
+    }
+
+    .preview {
+        display: block;
+        text-align: center;
+    }
+</style>
+
+
+@if (Model.imglist.Any())
 {
-    @Html.HiddenFor(x => x.id)
-    @Html.HiddenFor(x => x.ImgType)
-    @Html.HiddenFor(x => x.key)
-    <div class="col-sm-9 col-lg-2">
-        <input type='file' class="ImgFile" name="ImgFile" id="ImgFile" multiple>
-    </div>
-    <div class="col-sm-9 col-lg-2">
-        <div class="preview" id="ImgFilepreview">
-        </div>
-    </div>
-    <div class="col-sm-9 col-lg-2">
+    using (Ajax.BeginForm("ImgUpload", "Ajax", new AjaxOptions { HttpMethod = "Post", InsertionMode = InsertionMode.Replace, UpdateTargetId = "dialog", OnSuccess = "Success", Confirm = "是否確定更新舊有的圖檔？" }, new { enctype = "multipart/form-data" }))
+    {
+        @Html.HiddenFor(x => x.id)
+        @Html.HiddenFor(x => x.ImgType)
+        @Html.HiddenFor(x => x.key)
         <div class="opreview">
             @foreach (var item in Model.imglist)
             {
-                <a class="aimg" href="@item" data-lightbox="roadtrip"><img class="img" src="@item" /></a>
+                <a class="aimg" href="@item" data-lightbox="roadtrip" style="text-align:center"><img class="img" src="@item" /></a>
             }
         </div>
-    </div>
-    <label id="errmsg"></label>
-   <button type="submit" class="btn btn-primary" id="save">儲存</button>
+        <div class="preview" id="ImgFilepreview">
+        </div>
+        <div class="col-sm-9 col-lg-12">
+            <input type='file' class="ImgFile" name="ImgFile" id="ImgFile" multiple>
+        </div>
+        <div class="col-sm-9 col-lg-12">
+            <label id="errmsg"></label>
+        </div>
+        <div class="col-sm-9 col-lg-12">
+            <button type="submit" class="btn btn-primary" id="Imgsave">儲存</button>
+        </div>
+    }
 }
+else
+{
+    using (Ajax.BeginForm("ImgUpload", "Ajax", new AjaxOptions { HttpMethod = "Post", InsertionMode = InsertionMode.Replace, UpdateTargetId = "dialog", OnSuccess = "Success"}, new { enctype = "multipart/form-data" }))
+    {
+        @Html.HiddenFor(x => x.id)
+        @Html.HiddenFor(x => x.ImgType)
+        @Html.HiddenFor(x => x.key)
+        <div class="opreview">
+            @foreach (var item in Model.imglist)
+            {
+                <a class="aimg" href="@item" data-lightbox="roadtrip" style="text-align:center"><img class="img" src="@item" /></a>
+            }
+        </div>
+        <div class="preview" id="ImgFilepreview">
+        </div>
+        <div class="col-sm-9 col-lg-12">
+            <input type='file' class="ImgFile" name="ImgFile" id="ImgFile" multiple>
+        </div>
+        <div class="col-sm-9 col-lg-12">
+            <label id="errmsg"></label>
+        </div>
+        <div class="col-sm-9 col-lg-12">
+            <button type="submit" class="btn btn-primary" id="Imgsave">儲存</button>
+        </div>
+    }
+
+}
+
 
