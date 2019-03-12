@@ -100,7 +100,7 @@
                 }, {
                     field: "Status", title: "@Html.DisplayNameFor(model => model.Status)", width: 100, align: "center", sortable: false,
                     formatter: function (value, row, index) {
-                        return website.IsEmpty(row.IsFilter) ? datagrid.setDropdown(row.SkuID, this.field, selectOption['SkuStatus'], value) : value;
+                        return website.IsEmpty(row.IsFilter) ? datagrid.setDropdown(row.SkuID, this.field, selectOption['SkuStatus'], value.toString()) : value;
                     }
                 }, {
                     field: "Save", title: "Save", width: 90, align: "center", sortable: false,
