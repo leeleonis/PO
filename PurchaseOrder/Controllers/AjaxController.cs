@@ -109,8 +109,9 @@ namespace PurchaseOrderSys.Controllers
                 QTYReceived = x.QTYReceived,
                 QTYReturned = x.QTYReturned,
                 Serial = x.SKU.SerialTracking ? "Yes" : "No",
-                SerialQTY = x.SerialsLlist.Count(),
-                SerialTracking = x.SKU.SerialTracking
+                SerialQTY = x.SerialsLlist.Where(y => y.SerialsType == "PO").Sum(y => y.SerialsQTY),
+                SerialTracking = x.SKU.SerialTracking,
+                Url = x.SKU.Logistic.ImagePath
             }).ToList();
             int recordsTotal = odataList.Count();
             var returnObj =
@@ -580,10 +581,15 @@ namespace PurchaseOrderSys.Controllers
             if (key == "SKU")
             {
                 var PurchaseSKU = db.PurchaseSKU.Find(id);
-                if (PurchaseSKU.ImgFile.Any())
+                //俢改2019/03/11 SKYPE，改成品號內的圖檔
+                if (PurchaseSKU.SKU.Logistic != null)
                 {
-                    GetImgVM.imglist = PurchaseSKU.ImgFile.Where(x => x.IsEnable && x.ImgType == ImgType).Select(x => x.Url).ToList();
+                    GetImgVM.imglist.Add("../../Uploads/" + PurchaseSKU.SKU.Logistic.ImagePath);
                 }
+                //if (PurchaseSKU.ImgFile.Any())
+                //{
+                //    GetImgVM.imglist = PurchaseSKU.ImgFile.Where(x => x.IsEnable && x.ImgType == ImgType).Select(x => x.Url).ToList();
+                //}
             }
             return View(GetImgVM);
         }
@@ -599,21 +605,48 @@ namespace PurchaseOrderSys.Controllers
                     {
                         if (file != null)
                         {
-                            var Url = SaveImg(file);
-                            PurchaseSKU.ImgFile.Add(new ImgFile
+                            //俢改2019/03/11 SKYPE，改成品號內的圖檔
+                            var Url = SaveImg(file, "~/Uploads/Sku/" + PurchaseSKU.SkuNo);
+                            Url = Url.Replace("/Uploads/", "");
+                            if (PurchaseSKU.SKU.Logistic == null)
                             {
-                                IsEnable = true,
-                                ImgType = ImgType,
-                                Url = Url,
-                                CreateBy = UserBy,
-                                CreateAt = DateTime.UtcNow
-                            });
+                                PurchaseSKU.SKU.Logistic = new Logistic
+                                {
+                                    ImagePath = Url,
+                                    BoxID = 1,
+                                    CaseHeight = 0,
+                                    CaseLength = 0,
+                                    CaseWeight = 0,
+                                    CaseWidth = 0,
+                                    ShippingHeight = 0,
+                                    ShippingLength = 0,
+                                    ShippingWeight = 0,
+                                    ShippingWidth = 0,
+                                    CreateBy = UserBy,
+                                    CreateAt = DateTime.UtcNow
+                                };
+                            }
+                            else
+                            {
+                                PurchaseSKU.SKU.Logistic.ImagePath = Url;
+                                PurchaseSKU.SKU.Logistic.UpdateAt = DateTime.UtcNow;
+                                PurchaseSKU.SKU.Logistic.UpdateBy = UserBy;
+                            }
+                            //var Url = SaveImg(file);
+                            //PurchaseSKU.ImgFile.Add(new ImgFile
+                            //{
+                            //    IsEnable = true,
+                            //    ImgType = ImgType,
+                            //    Url = Url,
+                            //    CreateBy = UserBy,
+                            //    CreateAt = DateTime.UtcNow
+                            //});
                         }
                     }
                     db.SaveChanges();
                 }
             }
-            return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+            return Json(new { status = true, reload = true }, JsonRequestBehavior.AllowGet);
             //return RedirectToAction("GetImg", new { id, key, ImgType });
         }
 
