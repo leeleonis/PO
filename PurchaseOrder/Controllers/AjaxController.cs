@@ -95,7 +95,10 @@ namespace PurchaseOrderSys.Controllers
         }
         public ActionResult GetSkuNumberList(int? draw, int? start, int? length, int ID)
         {
-            var odataList = db.PurchaseSKU.Where(x => x.PurchaseOrderID == ID && x.IsEnable).Select(x => new PoSKUVM
+
+            var PurchaseSKU = db.PurchaseSKU.Where(x => x.PurchaseOrderID == ID && x.IsEnable).ToList();
+
+            var odataList = PurchaseSKU.Select(x => new PoSKUVM
             {
                 ID = x.ID,
                 ck = x.SkuNo,
@@ -111,7 +114,8 @@ namespace PurchaseOrderSys.Controllers
                 Serial = x.SKU.SerialTracking ? "Yes" : "No",
                 SerialQTY = x.SerialsLlist.Where(y => y.SerialsType == "PO").Sum(y => y.SerialsQTY),
                 SerialTracking = x.SKU.SerialTracking,
-                Url = x.SKU.Logistic.ImagePath
+                Url = x.SKU.Logistic.ImagePath,
+                Size=GetSize(x)
             }).ToList();
             int recordsTotal = odataList.Count();
             var returnObj =
@@ -124,6 +128,28 @@ namespace PurchaseOrderSys.Controllers
             };
             return Json(returnObj, JsonRequestBehavior.AllowGet);
         }
+        /// <summary>
+        /// 取得產品規格資訊
+        /// </summary>
+        /// <param name="PurchaseSKU">PurchaseSKU</param>
+        /// <returns></returns>
+        private string GetSize(PurchaseSKU PurchaseSKU)
+        {
+            if (PurchaseSKU.SKU.Logistic == null)
+            {
+                return "";
+            }
+            else
+            {
+                var Size = "";
+                Size += "Length：" + PurchaseSKU.SKU.Logistic.ShippingLength + "<br/>";
+                Size += "Width：" + PurchaseSKU.SKU.Logistic.ShippingWidth + "<br/>";
+                Size += "Height：" + PurchaseSKU.SKU.Logistic.ShippingHeight + "<br/>";
+                Size += "Weight：" + PurchaseSKU.SKU.Logistic.ShippingWeight;
+                return Size;
+            }
+        }
+
         public ActionResult GetCMSkuNumberList(int? draw, int? start, int? length, int ID)
         {
             var odataList = db.PurchaseSKU.Where(x => x.CreditMemoID == ID && x.IsEnable).Select(x => new CMSKUVM

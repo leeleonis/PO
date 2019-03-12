@@ -115,8 +115,9 @@
                                                                 <th>UPC/EAN</th>
                                                                 <th>QTY Ordered</th>
                                                                 <th>QTY Received</th>
+                                                                <th>Received Serials</th>
                                                                 <th>Serial</th>
-                                                                <th>Serial QTY</th>
+                                                                <th>Size</th>
                                                                 <th></th>
                                                             </tr>
                                                         </thead>
@@ -179,7 +180,11 @@
                             return input
                         }
                     },
-                    { data: "SKU" },
+                    {
+                        data: "SKU", render: function (data, type, row, meta) {
+                            return "<a  target='_blank' href='" + "@Url.Action("edit", "Sku")" + "?id=" + row.SKU + "#5'>" + row.SKU + "</a>";
+                        }
+                    },
                     { data: "Name" },
                     { data: "UPCEAN" },
                     { data: "QTYOrdered", render: function (data, type, row) { return data; } },
@@ -199,8 +204,9 @@
                             }
                         }
                     },
-                    { data: "Serial", render: function (data, type, row) { return data; }  },
                     { data: "SerialQTY", render: function (data, type, row) { return data; } },
+                    { data: "Serial", render: function (data, type, row) { return data; }  },
+                    { data: "Size" },
                     {
                         data: "ck",
                         orderable: false,

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -295,6 +296,13 @@ namespace PurchaseOrderSys.Models
         [Display(Name = "Balance", ResourceType = typeof(App_GlobalResources.Resource))]
         [DataGrid(Align = "center", Widths = 150, ColumnsType = "input")]
         public decimal? Balance { get; set; }
+
+        /// <summary>
+        /// 採購單號
+        /// </summary>
+        [Display(Name = "PurchaseOrder_ID", ResourceType = typeof(App_GlobalResources.Resource))]
+        [DataGrid(Align = "center", Widths = 150 ,ColumnsType = "input")]
+        public string POID { get; set; }
     }
 
     public class CreditMemoVMQ : CreditMemoVM
@@ -478,6 +486,13 @@ namespace PurchaseOrderSys.Models
         public string Category { get; set; }
         public string SKU { get; set; }
         public string Serial { get; set; }
+
+        /// <summary>
+        ///CM單號
+        /// </summary>
+        [Display(Name = "CreditMemo_ID", ResourceType = typeof(App_GlobalResources.Resource))]
+        [DataGrid(Align = "left", ColumnsType = "input")]
+        public string CMID { get; set; }
     }
 
     public class PurchaseOrderPOVMQ : PurchaseOrderPOVM
@@ -716,6 +731,10 @@ namespace PurchaseOrderSys.Models
         /// SKU圖檔路徑
         /// </summary>
         public string Url { get; set; }
+        /// <summary>
+        /// 規格
+        /// </summary>
+        public string Size { get; set; }
     }
     public class WarehouseInventoryVM
     {

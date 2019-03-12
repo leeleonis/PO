@@ -41,17 +41,27 @@
                                 <div id="content" class="tab-content">
                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                     <div class="tab-pane" id="hb1">
-                                        <h1><b>CM# @Model.ID</b></h1>
+                                        <fieldset>
+                                            <div class="col-sm-9 col-lg-10">
+                                                <h1><b>CM# @Model.ID</b></h1>
+                                            </div>
+                                            <div class="col-sm-9 col-lg-2">
+                                                <h1><b>
+                                                        <a target='_blank' href='@Url.Action("EditItem", "PurchaseOrderPO", new { id = Model.PurchaseOrderID })'> PO# @Model.PurchaseOrderID</a>
+   
+</b></h1>
+                                            </div>
+                                        </fieldset>
                                         <fieldset>
                                             <legend>@ViewBag.title </legend>
                                             <div class="form-group">
                                                 @Html.LabelFor(model => model.CompanyID, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownListFor(model => model.CompanyID, CompanyDDL,  htmlAttributes: new { @class = "form-control" })
+                                                    @Html.DropDownListFor(model => model.CompanyID, CompanyDDL, htmlAttributes: new { @class = "form-control" })
                                                 </div>
                                                 @Html.LabelFor(model => model.VendorID, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownListFor(model => model.VendorID, VendorDDL,  htmlAttributes: new { @class = "form-control" })
+                                                    @Html.DropDownListFor(model => model.VendorID, VendorDDL, htmlAttributes: new { @class = "form-control" })
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -98,12 +108,12 @@
                                             <div class="form-group">
                                                 @Html.LabelFor(model => model.ShippingStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownListFor(model => model.ShippingStatus, ShippingStatusDDL,  htmlAttributes: new { @class = "form-control" })
+                                                    @Html.DropDownListFor(model => model.ShippingStatus, ShippingStatusDDL, htmlAttributes: new { @class = "form-control" })
                                                     @Html.ValidationMessageFor(model => model.ShippingStatus, "", new { @class = "text-danger" })
                                                 </div>
                                                 @Html.LabelFor(model => model.CreditStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownListFor(model => model.CreditStatus, CreditStatusDDL,  htmlAttributes: new { @class = "form-control" })
+                                                    @Html.DropDownListFor(model => model.CreditStatus, CreditStatusDDL, htmlAttributes: new { @class = "form-control" })
                                                     @Html.ValidationMessageFor(model => model.CreditStatus, "", new { @class = "text-danger" })
                                                 </div>
                                             </div>
@@ -159,14 +169,14 @@
                                             <div class="form-group">
                                                 @Html.LabelFor(model => model.PurchaseOrder.WarehouseID, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownListFor(model => model.PurchaseOrder.WarehouseID, Warehouselist,  htmlAttributes: new { @class = "form-control" })
+                                                    @Html.DropDownListFor(model => model.PurchaseOrder.WarehouseID, Warehouselist, htmlAttributes: new { @class = "form-control" })
                                                     @Html.ValidationMessageFor(model => model.PurchaseOrder.WarehouseID, "", new { @class = "text-danger" })
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 @Html.LabelFor(model => model.PurchaseOrder.Currency, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownListFor(model => model.PurchaseOrder.Currency, CurrencyDDL,  htmlAttributes: new { @class = "form-control" })
+                                                    @Html.DropDownListFor(model => model.PurchaseOrder.Currency, CurrencyDDL, htmlAttributes: new { @class = "form-control" })
                                                     @Html.ValidationMessageFor(model => model.PurchaseOrder.Currency, "", new { @class = "text-danger" })
                                                 </div>
                                             </div>
@@ -342,7 +352,7 @@
                                             </div>
                                         </fieldset>
                                     </div>
-                                </div>
+                                    </div>
                                 <div class="widget-footer">
                                    <button type="submit" class="btn btn-primary" id="save">儲存</button>
                                     <button type="button" class="btn btn-primary" id="saveexit">儲存並返回</button>

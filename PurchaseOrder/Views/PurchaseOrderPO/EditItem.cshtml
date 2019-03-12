@@ -63,129 +63,136 @@
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.DropDownListFor(model => model.VendorID, VendorDDL, htmlAttributes: new { @class = "form-control" })
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @Html.Label("Company No", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @Html.LabelFor(model => model.CreditMemo.FirstOrDefault().ID, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("CompanyNo", new { htmlAttributes = new { @class = "form-control" } })
-                                                </div>
-                                                @Html.Label("Vendor No", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("VendorNo", new { htmlAttributes = new { @class = "form-control" } })
+                                                    @foreach (var item in Model.CreditMemo.Where(x => x.IsEnable))
+                                                    {
+                                                        <a target='_blank' href='@Url.Action("EditItem", "PurchaseOrderCM", new { id = item.ID })'>@item.ID</a> @:|
+                                                    }
                                                 </div>
                                             </div>
-                                            <div class="form-group">
-                                                @Html.LabelFor(model => model.POStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownListFor(model => model.POStatus, POStatusDDL, htmlAttributes: new { @class = "form-control" })
-                                                    @Html.ValidationMessageFor(model => model.POStatus, "", new { @class = "text-danger" })
-                                                </div>
-                                                @Html.LabelFor(model => model.InvoiceDate, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.EditorFor(model => model.InvoiceDate)
-                                                    @Html.ValidationMessageFor(model => model.InvoiceDate, "", new { @class = "text-danger" })
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @Html.LabelFor(model => model.POType, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownListFor(model => model.POType, POTypeDDL, htmlAttributes: new { @class = "form-control" })
-                                                    @Html.ValidationMessageFor(model => model.POType, "", new { @class = "text-danger" })
-                                                </div>
-                                                @Html.LabelFor(model => model.InvoiceNo, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.EditorFor(model => model.InvoiceNo, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
-                                                    @Html.ValidationMessageFor(model => model.InvoiceNo, "", new { @class = "text-danger" })
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @Html.LabelFor(model => model.PODate, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.EditorFor(model => model.PODate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "Value", dtval }, { "data-dateformat", "yy/mm/dd" } } })
-                                                    @Html.ValidationMessageFor(model => model.PODate, "", new { @class = "text-danger" })
-                                                </div>
-                                                @Html.Label("Vendor Invoice", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @*@Html.Editor("VendorInvoice", new { htmlAttributes = new { @class = "form-control" } })*@
-                                                    <input type='file' class="ImgFile" name="VendorInvoice" id="VendorInvoice" multiple>
-                                                </div>
-                                                <div class="col-sm-9 col-lg-2">
-                                                    <div class="opreview">
-                                                        @foreach (var item in Model.ImgFile.Where(x => x.IsEnable && x.ImgType == "VendorInvoice"))
-                                                        {
-                                                            <a class="aimg" href="@item.Url" data-lightbox="roadtrip"><img class="img" src="@item.Url" /></a>
-                                                        }
+                                                <div class="form-group">
+                                                    @Html.Label("Company No", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("CompanyNo", new { htmlAttributes = new { @class = "form-control" } })
                                                     </div>
-                                                    <div class="preview" id="VendorInvoicepreview">
+                                                    @Html.Label("Vendor No", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("VendorNo", new { htmlAttributes = new { @class = "form-control" } })
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @Html.LabelFor(model => model.ReceiveStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownListFor(model => model.ReceiveStatus, ReceiveStatusDDL, htmlAttributes: new { @class = "form-control" })
-                                                    @Html.ValidationMessageFor(model => model.ReceiveStatus, "", new { @class = "text-danger" })
-                                                </div>
-                                                @Html.LabelFor(model => model.PaymentStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownListFor(model => model.PaymentStatus, PaymentStatusDDL, htmlAttributes: new { @class = "form-control" })
-                                                    @Html.ValidationMessageFor(model => model.PaymentStatus, "", new { @class = "text-danger" })
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @Html.LabelFor(model => model.ReceivedDate, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.EditorFor(model => model.ReceivedDate)
-                                                    @Html.ValidationMessageFor(model => model.ReceivedDate, "", new { @class = "text-danger" })
-                                                </div>
-                                                @Html.LabelFor(model => model.PaymentDate, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.EditorFor(model => model.PaymentDate)
-                                                    @Html.ValidationMessageFor(model => model.PaymentDate, "", new { @class = "text-danger" })
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @Html.LabelFor(model => model.ShippedDate, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.EditorFor(model => model.ShippedDate)
-                                                    @Html.ValidationMessageFor(model => model.ShippedDate, "", new { @class = "text-danger" })
-                                                </div>
-                                                @Html.LabelFor(model => model.PaidAmount, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.EditorFor(model => model.PaidAmount, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control changed" } } })
-                                                    @Html.ValidationMessageFor(model => model.PaidAmount, "", new { @class = "text-danger" })
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @Html.LabelFor(model => model.Carrier, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.EditorFor(model => model.Carrier, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
-                                                    @Html.ValidationMessageFor(model => model.Carrier, "", new { @class = "text-danger" })
-                                                </div>
-                                                @Html.LabelFor(model => model.PaymentProof, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @*@Html.Editor("VendorInvoice", new { htmlAttributes = new { @class = "form-control" } })*@
-                                                    <input type='file' class="ImgFile" name="PaymentProofList" id="PaymentProofList" multiple>
-                                                </div>
-                                                <div class="col-sm-9 col-lg-2">
-                                                    <div class="opreview">
-                                                        @foreach (var item in Model.ImgFile.Where(x => x.IsEnable && x.ImgType == "PaymentProof"))
-                                                        {
-                                                            <a class="aimg" href="@item.Url" data-lightbox="roadtrip"><img class="img" src="@item.Url" /></a>
-                                                        }
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.POStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.DropDownListFor(model => model.POStatus, POStatusDDL, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.POStatus, "", new { @class = "text-danger" })
                                                     </div>
-                                                    <div class="preview" id="PaymentProofListpreview">
+                                                    @Html.LabelFor(model => model.InvoiceDate, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.EditorFor(model => model.InvoiceDate)
+                                                        @Html.ValidationMessageFor(model => model.InvoiceDate, "", new { @class = "text-danger" })
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @Html.LabelFor(model => model.Tracking, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.EditorFor(model => model.Tracking, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
-                                                    @Html.ValidationMessageFor(model => model.Tracking, "", new { @class = "text-danger" })
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.POType, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.DropDownListFor(model => model.POType, POTypeDDL, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.POType, "", new { @class = "text-danger" })
+                                                    </div>
+                                                    @Html.LabelFor(model => model.InvoiceNo, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.EditorFor(model => model.InvoiceNo, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                                        @Html.ValidationMessageFor(model => model.InvoiceNo, "", new { @class = "text-danger" })
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </fieldset>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.PODate, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.EditorFor(model => model.PODate, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control datepicker " }, { "Value", dtval }, { "data-dateformat", "yy/mm/dd" } } })
+                                                        @Html.ValidationMessageFor(model => model.PODate, "", new { @class = "text-danger" })
+                                                    </div>
+                                                    @Html.Label("Vendor Invoice", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @*@Html.Editor("VendorInvoice", new { htmlAttributes = new { @class = "form-control" } })*@
+                                                        <input type='file' class="ImgFile" name="VendorInvoice" id="VendorInvoice" multiple>
+                                                    </div>
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        <div class="opreview">
+                                                            @foreach (var item in Model.ImgFile.Where(x => x.IsEnable && x.ImgType == "VendorInvoice"))
+                                                            {
+                                                                <a class="aimg" href="@item.Url" data-lightbox="roadtrip"><img class="img" src="@item.Url" /></a>
+                                                            }
+                                                        </div>
+                                                        <div class="preview" id="VendorInvoicepreview">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.ReceiveStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.DropDownListFor(model => model.ReceiveStatus, ReceiveStatusDDL, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.ReceiveStatus, "", new { @class = "text-danger" })
+                                                    </div>
+                                                    @Html.LabelFor(model => model.PaymentStatus, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.DropDownListFor(model => model.PaymentStatus, PaymentStatusDDL, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.PaymentStatus, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.ReceivedDate, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.EditorFor(model => model.ReceivedDate)
+                                                        @Html.ValidationMessageFor(model => model.ReceivedDate, "", new { @class = "text-danger" })
+                                                    </div>
+                                                    @Html.LabelFor(model => model.PaymentDate, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.EditorFor(model => model.PaymentDate)
+                                                        @Html.ValidationMessageFor(model => model.PaymentDate, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.ShippedDate, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.EditorFor(model => model.ShippedDate)
+                                                        @Html.ValidationMessageFor(model => model.ShippedDate, "", new { @class = "text-danger" })
+                                                    </div>
+                                                    @Html.LabelFor(model => model.PaidAmount, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.EditorFor(model => model.PaidAmount, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control changed" } } })
+                                                        @Html.ValidationMessageFor(model => model.PaidAmount, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.Carrier, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.EditorFor(model => model.Carrier, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                                        @Html.ValidationMessageFor(model => model.Carrier, "", new { @class = "text-danger" })
+                                                    </div>
+                                                    @Html.LabelFor(model => model.PaymentProof, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @*@Html.Editor("VendorInvoice", new { htmlAttributes = new { @class = "form-control" } })*@
+                                                        <input type='file' class="ImgFile" name="PaymentProofList" id="PaymentProofList" multiple>
+                                                    </div>
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        <div class="opreview">
+                                                            @foreach (var item in Model.ImgFile.Where(x => x.IsEnable && x.ImgType == "PaymentProof"))
+                                                            {
+                                                                <a class="aimg" href="@item.Url" data-lightbox="roadtrip"><img class="img" src="@item.Url" /></a>
+                                                            }
+                                                        </div>
+                                                        <div class="preview" id="PaymentProofListpreview">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.Tracking, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.EditorFor(model => model.Tracking, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                                        @Html.ValidationMessageFor(model => model.Tracking, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+</fieldset>
                                         <fieldset>
                                             <legend>Items Ordered</legend>
                                             <div class="form-group">
@@ -690,7 +697,11 @@
                         "orderable": false,
                         "data": null,
                         "defaultContent": '' },
-                    { data: "SKU" },
+                   {
+                        data: "SKU", render: function (data, type, row, meta) {
+                            return "<a  target='_blank' href='" + "@Url.Action("edit", "Sku")" + "?id=" + row.SKU + "#6' class='btn btn-default btn-sm' >" + row.SKU + "</a>";
+                        }
+                    },
                     { data: "VendorSKU" },
                     { data: "Name" },
                     {

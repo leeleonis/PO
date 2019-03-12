@@ -205,7 +205,7 @@ namespace PurchaseOrderSys.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
-        public ActionResult EditItem(int ID, string SID)
+        public ActionResult EditItem(int ID)
         {
 
             var CreditMemo = db.CreditMemo.Find(ID);
@@ -274,7 +274,7 @@ namespace PurchaseOrderSys.Controllers
                 }
                 db.SaveChanges();
             }
-            Session["CMSkuNumberList" + SID] = dataList.ToList();
+            Session["CMSkuNumberList" + ID] = dataList.ToList();
             return View(CreditMemo);
         }
         [HttpPost]
@@ -572,7 +572,12 @@ namespace PurchaseOrderSys.Controllers
                     var PurchaseSKUID = db.SerialsLlist.Where(x => x.SerialsNo == QCreditMemoVM.Serial && x.SerialsType == "CM").Select(x => x.PurchaseSKUID).ToList();
                     listCreditMemo = listCreditMemo.Where(x => x.PurchaseSKU.Where(y => y.IsEnable && PurchaseSKUID.Contains(y.ID)).Any());
                 }
-
+                if (!string.IsNullOrWhiteSpace(QCreditMemoVM.POID))
+                {
+                    var PurchaseOrderID = 0;
+                    int.TryParse(QCreditMemoVM.POID, out PurchaseOrderID);
+                    listCreditMemo = listCreditMemo.Where(x => x.PurchaseOrderID == PurchaseOrderID);
+                }
 
 
 
@@ -609,7 +614,7 @@ namespace PurchaseOrderSys.Controllers
                     GrandTotal = x.PurchaseSKU.Where(y => y.IsEnable).Sum(y => (y.QTYOrdered * y.Price)),
                     Balance = x.PurchaseSKU.Where(y => y.IsEnable).Sum(y => (y.QTYOrdered * y.Price)),
                     x.CMStatus,
-
+                    POID = "<a target='_blank' href='" + Url.Action("EditItem", "PurchaseOrderPO", new { id = x.PurchaseOrderID }) + "'>" + x.PurchaseOrderID + "</a>"
                 });
 
                 if (filter.QTY.HasValue)

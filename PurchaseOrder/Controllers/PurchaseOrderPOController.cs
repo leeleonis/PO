@@ -142,7 +142,7 @@ namespace PurchaseOrderSys.Controllers
         }
 
 
-        public ActionResult GetData(PurchaseOrderPOVM filter, string Type, int? DetailID)
+        public ActionResult GetData(PurchaseOrderPOVM filter, string Type, int? DetailID, int page = 1, int rows = 100)
         {
             if (Type == "Master")
             {
@@ -287,7 +287,8 @@ namespace PurchaseOrderSys.Controllers
                     GrandTotal = x.PurchaseSKU.Where(y => y.IsEnable).Sum(y => (y.QTYOrdered * y.Price)),
                     x.PaidAmount,
                     Balance = x.PurchaseSKU.Where(y => y.IsEnable).Sum(y => (y.QTYOrdered * y.Price)),
-                    x.POStatus
+                    x.POStatus,
+                    CMID= GetCMData(x)
                 });
 
                 if (filter.QTY.HasValue)
@@ -307,12 +308,29 @@ namespace PurchaseOrderSys.Controllers
                     dataList = dataList.Where(x => x.Balance == filter.Balance);
                 }
                 total = dataList.Count();
-                return Json(new { total, rows = dataList.OrderByDescending(x => x.ID) }, JsonRequestBehavior.AllowGet);
+
+                int length = rows;
+                int start = (page - 1) * length;
+                return Json(new { total, rows = dataList.OrderByDescending(x => x.ID).Skip(start).Take(length) }, JsonRequestBehavior.AllowGet);
             }
             else
             {
                 var PurchaseSKU = db.PurchaseSKU.Where(x => x.PurchaseOrderID == DetailID);
                 return PartialView("Detail", PurchaseSKU);
+            }
+        }
+
+        private object GetCMData(PurchaseOrder PurchaseOrder)
+        {
+            var CreditMemolist = PurchaseOrder.CreditMemo.Where(x => x.IsEnable);
+            if (CreditMemolist.Any())
+            {
+                var linkList = "<a target='_blank' href='" + Url.Action("index", "PurchaseOrderCM", new { POID = PurchaseOrder.ID }) + "'>Yes</a>";
+                return linkList;
+            }
+            else
+            {
+                return "No";
             }
         }
 

@@ -37,99 +37,99 @@
                                         @Html.DropDownListFor(model => model.VendorID, VendorDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
                                     </div>
                                 </div>
-                                <div class="col-xs-12 no-padding">
-                                    <label class="col-xs-4 col-md-1 control-label">CM #</label>
-                                    <div class="col-xs-8 col-md-4">
-                                        @Html.EditorFor(model => model.ID, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                    <div class="col-xs-12 no-padding">
+                                        <label class="col-xs-4 col-md-1 control-label">CM #</label>
+                                        <div class="col-xs-8 col-md-4">
+                                            @Html.EditorFor(model => model.ID, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                        </div>
+                                        <label class="col-xs-4 col-md-1 control-label">CMDate</label>
+                                        <div class="col-xs-8 col-md-2">
+                                            @Html.EditorFor(model => model.CMDateS)
+                                        </div>
+                                        <div class="col-xs-8 col-md-2">
+                                            @Html.EditorFor(model => model.CMDateE)
+                                        </div>
                                     </div>
-                                    <label class="col-xs-4 col-md-1 control-label">CMDate</label>
-                                    <div class="col-xs-8 col-md-2">
-                                        @Html.EditorFor(model => model.CMDateS)
+                                    <div class="col-xs-12 no-padding">
+                                        <label class="col-xs-4 col-md-1 control-label">CM Status</label>
+                                        <div class="col-xs-8 col-md-4">
+                                            @Html.DropDownListFor(model => model.CMStatus, CMStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                        </div>
+                                        <label class="col-xs-4 col-md-1 control-label">Invoice Date</label>
+                                        <div class="col-xs-8 col-md-2">
+                                            @Html.EditorFor(model => model.InvoiceDateS)
+                                        </div>
+                                        <div class="col-xs-8 col-md-2">
+                                            @Html.EditorFor(model => model.InvoiceDateE)
+                                        </div>
                                     </div>
-                                    <div class="col-xs-8 col-md-2">
-                                        @Html.EditorFor(model => model.CMDateE)
+                                    <div class="col-xs-12 no-padding">
+                                        <label class="col-xs-4 col-md-1 control-label">CM Type</label>
+                                        <div class="col-xs-8 col-md-4">
+                                            @Html.DropDownListFor(model => model.CMType, CMTypeDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                        </div>
+                                        <label class="col-xs-4 col-md-1 control-label">Invoice No</label>
+                                        <div class="col-xs-8 col-md-4">
+                                            @Html.EditorFor(model => model.InvoiceNo, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 no-padding">
+                                        <label class="col-xs-4 col-md-1 control-label">Creater</label>
+                                        <div class="col-xs-8 col-md-4">
+                                            @Html.EditorFor(model => model.Creater, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                        </div>
+                                        <label class="col-xs-4 col-md-1 control-label">Credit Date</label>
+                                        <div class="col-xs-8 col-md-2">
+                                            @Html.EditorFor(model => model.CreditDateS)
+                                        </div>
+                                        <div class="col-xs-8 col-md-2">
+                                            @Html.EditorFor(model => model.CreditDateE)
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 no-padding">
+                                        <label class="col-xs-4 col-md-1 control-label">Credit Status</label>
+                                        <div class="col-xs-8 col-md-4">
+                                            @Html.DropDownListFor(model => model.CreditStatus, CreditStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                        </div>
+                                        <label class="col-xs-4 col-md-1 control-label">Return Date</label>
+                                        <div class="col-xs-8 col-md-2">
+                                            @Html.EditorFor(model => model.ReturnDateS)
+                                        </div>
+                                        <div class="col-xs-8 col-md-2">
+                                            @Html.EditorFor(model => model.ReturnDateE)
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 no-padding">
+                                        <label class="col-xs-4 col-md-1 control-label">Return Status</label>
+                                        <div class="col-xs-8 col-md-4">
+                                            @*@Html.DropDownListFor(model => model.ReturnStatus, ReturnStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })*@
+                                        </div>
+                                        <label class="col-xs-4 col-md-1 control-label">Brand</label>
+                                        <div class="col-xs-8 col-md-4">
+                                            @Html.EditorFor(model => model.Brand, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 no-padding">
+                                        <label class="col-xs-4 col-md-1 control-label">Tracking</label>
+                                        <div class="col-xs-8 col-md-4">
+                                            @Html.EditorFor(model => model.Tracking, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                        </div>
+                                        <label class="col-xs-4 col-md-1 control-label">Category</label>
+                                        <div class="col-xs-8 col-md-4">
+                                            @Html.EditorFor(model => model.Category, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 no-padding">
+                                        <label class="col-xs-4 col-md-1 control-label">SKU / Name</label>
+                                        <div class="col-xs-8 col-md-4">
+                                            @Html.EditorFor(model => model.SKU, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                        </div>
+                                        <label class="col-xs-4 col-md-1 control-label">Serial</label>
+                                        <div class="col-xs-8 col-md-4">
+                                            @Html.EditorFor(model => model.Serial, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-xs-12 no-padding">
-                                    <label class="col-xs-4 col-md-1 control-label">CM Status</label>
-                                    <div class="col-xs-8 col-md-4">
-                                        @Html.DropDownListFor(model => model.CMStatus, CMStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
-                                    </div>
-                                    <label class="col-xs-4 col-md-1 control-label">Invoice Date</label>
-                                    <div class="col-xs-8 col-md-2">
-                                        @Html.EditorFor(model => model.InvoiceDateS)
-                                    </div>
-                                    <div class="col-xs-8 col-md-2">
-                                        @Html.EditorFor(model => model.InvoiceDateE)
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 no-padding">
-                                    <label class="col-xs-4 col-md-1 control-label">CM Type</label>
-                                    <div class="col-xs-8 col-md-4">
-                                        @Html.DropDownListFor(model => model.CMType, CMTypeDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
-                                    </div>
-                                    <label class="col-xs-4 col-md-1 control-label">Invoice No</label>
-                                    <div class="col-xs-8 col-md-4">
-                                        @Html.EditorFor(model => model.InvoiceNo, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 no-padding">
-                                    <label class="col-xs-4 col-md-1 control-label">Creater</label>
-                                    <div class="col-xs-8 col-md-4">
-                                        @Html.EditorFor(model => model.Creater, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
-                                    </div>
-                                    <label class="col-xs-4 col-md-1 control-label">Credit Date</label>
-                                    <div class="col-xs-8 col-md-2">
-                                        @Html.EditorFor(model => model.CreditDateS)
-                                    </div>
-                                    <div class="col-xs-8 col-md-2">
-                                        @Html.EditorFor(model => model.CreditDateE)
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 no-padding">
-                                    <label class="col-xs-4 col-md-1 control-label">Credit Status</label>
-                                    <div class="col-xs-8 col-md-4">
-                                        @Html.DropDownListFor(model => model.CreditStatus, CreditStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
-                                    </div>
-                                    <label class="col-xs-4 col-md-1 control-label">Return Date</label>
-                                    <div class="col-xs-8 col-md-2">
-                                        @Html.EditorFor(model => model.ReturnDateS)
-                                    </div>
-                                    <div class="col-xs-8 col-md-2">
-                                        @Html.EditorFor(model => model.ReturnDateE)
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 no-padding">
-                                    <label class="col-xs-4 col-md-1 control-label">Return Status</label>
-                                    <div class="col-xs-8 col-md-4">
-                                        @*@Html.DropDownListFor(model => model.ReturnStatus, ReturnStatusDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })*@
-                                    </div>
-                                    <label class="col-xs-4 col-md-1 control-label">Brand</label>
-                                    <div class="col-xs-8 col-md-4">
-                                        @Html.EditorFor(model => model.Brand, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 no-padding">
-                                    <label class="col-xs-4 col-md-1 control-label">Tracking</label>
-                                    <div class="col-xs-8 col-md-4">
-                                        @Html.EditorFor(model => model.Tracking, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
-                                    </div>
-                                    <label class="col-xs-4 col-md-1 control-label">Category</label>
-                                    <div class="col-xs-8 col-md-4">
-                                        @Html.EditorFor(model => model.Category, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 no-padding">
-                                    <label class="col-xs-4 col-md-1 control-label">SKU / Name</label>
-                                    <div class="col-xs-8 col-md-4">
-                                        @Html.EditorFor(model => model.SKU, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
-                                    </div>
-                                    <label class="col-xs-4 col-md-1 control-label">Serial</label>
-                                    <div class="col-xs-8 col-md-4">
-                                        @Html.EditorFor(model => model.Serial, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
-                                    </div>
-                                </div>
-                            </div>
                             <div class="table-cell col-xs-1">
                                 <button type="submit" id="btn-search" class="btn btn-info btn-lg">Search</button>
                             </div>
