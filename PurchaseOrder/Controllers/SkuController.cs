@@ -79,14 +79,6 @@ namespace PurchaseOrderSys.Controllers
                     childSku.ParentSku = sku.SkuID;
                     childSku.UpdateAt = sku.CreateAt;
                     childSku.UpdateBy = sku.CreateBy;
-
-                    if (!db.SKU.Any(s => s.SkuID.Equals(childSku.SkuID + "_var") && s.ParentShadow.Equals(childSku.SkuID)))
-                    {
-                        using (StockKeepingUnit SKU = new StockKeepingUnit())
-                        {
-                            SKU.CreateSkuVariation(childSku);
-                        }
-                    }
                 }
 
                 db.SaveChanges();
@@ -166,14 +158,6 @@ namespace PurchaseOrderSys.Controllers
 
             db.SaveChanges();
 
-            if (!string.IsNullOrEmpty(sku.ParentSku) && db.SKU.Find(sku.SkuID + "_var") == null)
-            {
-                using (StockKeepingUnit SKU = new StockKeepingUnit())
-                {
-                    SKU.CreateSkuVariation(sku);
-                }
-            }
-
             if (VariationValue != null && VariationValue.Any())
             {
                 List<Sku_Attribute> attributeList;
@@ -221,7 +205,6 @@ namespace PurchaseOrderSys.Controllers
                                 };
 
                                 newSku = SKU.CreateSku(newSku, newLang);
-                                SKU.CreateSkuVariation(newSku);
                             }
 
                             db.Sku_Attribute.AddRange(sku.Sku_Attribute.Where(a => !a.IsDiverse).Select(a => new Sku_Attribute()

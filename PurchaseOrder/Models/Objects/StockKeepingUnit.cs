@@ -88,6 +88,7 @@ namespace PurchaseOrderSys.Models
                 {
                     SKU sku_suffix = SkuInherit(newSku, newSku.SkuID + condition.Suffix, (byte)EnumData.SkuType.Single);
                     sku_suffix.Condition = condition.ID;
+                    sku_suffix.ParentShadow = newSku.SkuID;
                     sku_suffix.CreateAt = newSku.CreateAt;
                     sku_suffix.CreateBy = newSku.CreateBy;
 
@@ -114,7 +115,7 @@ namespace PurchaseOrderSys.Models
         /// </summary>
         /// <param name="parentSku">父類品號資料</param>
         /// <returns></returns>
-        public SKU CreateSkuVariation(SKU parentSku)
+        private SKU CreateSkuVariation(SKU parentSku)
         {
             SKU shadow = SkuInherit(parentSku, parentSku.SkuID + "_var", (byte)EnumData.SkuType.Shadow);
             shadow.ParentShadow = parentSku.SkuID;
@@ -217,7 +218,6 @@ namespace PurchaseOrderSys.Models
                 SkuID = sku,
                 Company = parentSku.Company,
                 Type = type,
-                ParentShadow = parentSku.SkuID,
                 Category = parentSku.Category,
                 Brand = parentSku.Brand,
                 Condition = parentSku.Condition,
