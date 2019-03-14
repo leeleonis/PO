@@ -97,36 +97,44 @@ namespace PurchaseOrderSys.Controllers
         {
 
             var PurchaseSKU = db.PurchaseSKU.Where(x => x.PurchaseOrderID == ID && x.IsEnable).ToList();
-
-            var odataList = PurchaseSKU.Select(x => new PoSKUVM
+            try
             {
-                ID = x.ID,
-                ck = x.SkuNo,
-                sk = x.SkuNo,
-                SKU = x.SkuNo,
-                Name = x.Name,
-                VendorSKU = x.VendorSKU,
-                UPCEAN = x.UPCEAN,
-                QTYOrdered = x.QTYOrdered,
-                QTYFulfilled = x.QTYFulfilled,
-                QTYReceived = x.QTYReceived,
-                QTYReturned = x.QTYReturned,
-                Serial = x.SKU.SerialTracking ? "Yes" : "No",
-                SerialQTY = x.SerialsLlist.Where(y => y.SerialsType == "PO").Sum(y => y.SerialsQTY),
-                SerialTracking = x.SKU.SerialTracking,
-                Url = x.SKU.Logistic.ImagePath,
-                Size=GetSize(x)
-            }).ToList();
-            int recordsTotal = odataList.Count();
-            var returnObj =
-            new
-            {
-                draw = draw,
-                recordsTotal = recordsTotal,
-                recordsFiltered = recordsTotal,
-                data = odataList//分頁後的資料 
+                var odataList = PurchaseSKU.Select(x => new PoSKUVM
+                {
+                    ID = x.ID,
+                    ck = x.SkuNo,
+                    sk = x.SkuNo,
+                    SKU = x.SkuNo,
+                    Name = x.Name,
+                    VendorSKU = x.VendorSKU,
+                    UPCEAN = x.UPCEAN,
+                    QTYOrdered = x.QTYOrdered,
+                    QTYFulfilled = x.QTYFulfilled,
+                    QTYReceived = x.QTYReceived,
+                    QTYReturned = x.QTYReturned,
+                    Serial = x.SKU.SerialTracking ? "Yes" : "No",
+                    SerialQTY = x.SerialsLlist.Where(y => y.SerialsType == "PO").Sum(y => y.SerialsQTY),
+                    SerialTracking = x.SKU.SerialTracking,
+                    Url = x.SKU.Logistic?.ImagePath,
+                    Size = GetSize(x)
+                }).ToList();
+                int recordsTotal = odataList.Count();
+                var returnObj =
+                new
+                {
+                    draw = draw,
+                    recordsTotal = recordsTotal,
+                    recordsFiltered = recordsTotal,
+                    data = odataList//分頁後的資料 
             };
-            return Json(returnObj, JsonRequestBehavior.AllowGet);
+                return Json(returnObj, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+
+                return Json(ex.ToString(), JsonRequestBehavior.AllowGet);
+            }
+
         }
         /// <summary>
         /// 取得產品規格資訊
@@ -135,24 +143,37 @@ namespace PurchaseOrderSys.Controllers
         /// <returns></returns>
         private string GetSize(PurchaseSKU PurchaseSKU)
         {
+            TagBuilder divHtml = new TagBuilder("div");
+            var Size = "";
+            var inch = 0.0393700787;
+            var lbs = 0.00220462262;
             if (PurchaseSKU.SKU.Logistic == null)
             {
-                return "";
+                divHtml.AddCssClass("nosize");
+                Size += "Length：0(mm) ；0(inch)<br/>";
+                Size += "Width：0(mm) ；0(inch)<br/>";
+                Size += "Height：0(mm) ；0(inch)<br/>";
+                Size += "Weight：0(g） ；0(lbs)";
             }
             else
             {
-                var Size = "";
-                Size += "Length：" + PurchaseSKU.SKU.Logistic.ShippingLength + "<br/>";
-                Size += "Width：" + PurchaseSKU.SKU.Logistic.ShippingWidth + "<br/>";
-                Size += "Height：" + PurchaseSKU.SKU.Logistic.ShippingHeight + "<br/>";
-                Size += "Weight：" + PurchaseSKU.SKU.Logistic.ShippingWeight;
-                return Size;
+                if (PurchaseSKU.SKU.Logistic.ShippingLength == 0 || PurchaseSKU.SKU.Logistic.ShippingWidth == 0 || PurchaseSKU.SKU.Logistic.ShippingHeight == 0 || PurchaseSKU.SKU.Logistic.ShippingWeight == 0)
+                {
+                    divHtml.AddCssClass("nosize");
+                }
+                Size += "Length：" + PurchaseSKU.SKU.Logistic.ShippingLength + "(mm) ；" + (PurchaseSKU.SKU.Logistic.ShippingLength * inch).ToString("f2") + "(inch)<br/>";
+                Size += "Width：" + PurchaseSKU.SKU.Logistic.ShippingWidth + "(mm) ；" + (PurchaseSKU.SKU.Logistic.ShippingWidth * inch).ToString("f2") + "(inch)<br/>";
+                Size += "Height：" + PurchaseSKU.SKU.Logistic.ShippingHeight + "(mm) ；" + (PurchaseSKU.SKU.Logistic.ShippingHeight * inch).ToString("f2") + "(inch)<br/>";
+                Size += "Weight：" + PurchaseSKU.SKU.Logistic.ShippingWeight + "(g） ；" + (PurchaseSKU.SKU.Logistic.ShippingWeight * lbs).ToString("f2") + "(lbs)";
             }
+            divHtml.InnerHtml = Size;
+            return divHtml.ToString();
         }
 
         public ActionResult GetCMSkuNumberList(int? draw, int? start, int? length, int ID)
         {
-            var odataList = db.PurchaseSKU.Where(x => x.CreditMemoID == ID && x.IsEnable).Select(x => new CMSKUVM
+            var PurchaseSKU = db.PurchaseSKU.Where(x => x.CreditMemoID == ID && x.IsEnable).ToList();
+            var odataList = PurchaseSKU.Select(x => new CMSKUVM
             {
                 ID = x.ID,
                 ck = x.SkuNo,
@@ -166,7 +187,9 @@ namespace PurchaseOrderSys.Controllers
                 QTYReturned = x.QTYReturned,
                 Serial = x.SerialsLlist.Any() ? "Yes" : "No",
                 SerialQTY = x.SerialsLlist.Count(),
-                SerialTracking = x.SKU.SerialTracking
+                SerialTracking = x.SKU.SerialTracking,
+                Url = x.SKU.Logistic?.ImagePath,
+                Size = GetSize(x)
             }).ToList();
             int recordsTotal = odataList.Count();
             var returnObj =

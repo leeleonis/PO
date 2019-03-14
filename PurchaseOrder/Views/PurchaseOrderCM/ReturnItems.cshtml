@@ -19,6 +19,31 @@
         }
     }
 }
+<style>
+    .img {
+        max-width: 500px;
+        margin: 5px;
+    }
+
+    .timg {
+        max-width: 100px;
+    }
+
+    .Imgbtn {
+        width: 120px;
+        height: 100px;
+        text-align: center;
+        line-height: 90px;
+    }
+
+    table tbody tr td {
+        vertical-align: middle !important;
+    }
+
+    .nosize {
+        background-color: yellow;
+    }
+</style>
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -89,13 +114,15 @@
                                                         <thead>
                                                             <tr>
                                                                 <th></th>
+                                                                <th width="20px"></th>
                                                                 <th>SKU</th>
                                                                 <th>Name</th>
                                                                 <th>UPC/EAN</th>
                                                                 <th>QTY Ordered</th>
                                                                 <th>QTY Returned</th>
+                                                                <th>Returned Serials</th>
                                                                 <th>Serial</th>
-                                                                <th>Serial QTY</th>
+                                                                <th>Size</th>
                                                                 <th></th>
                                                             </tr>
                                                         </thead>
@@ -118,6 +145,9 @@
         </div>
     </section>
 </div>
+<div id="dialog">
+
+</div>
 @section pagespecific {
     <script type="text/javascript">
         var hash = window.location.hash;
@@ -139,8 +169,25 @@
                         "className": 'details-control',
                         "orderable": false,
                         "data": null,
-                        "defaultContent": '' },
-                    { data: "SKU" },
+                        "defaultContent": ''
+                    },
+                    {
+                        data: "", render: function (data, type, row, meta) {
+                            var input = "";
+                            if (row.Url == "" || row.Url == null) {
+                                input = '<a class="btn btn-default btn-sm Imgbtn" valID="' + row.ID + '">upload</a>';
+                            }
+                            else {
+                                input = '<a class="btn btn-default btn-sm Imgbtn" valID="' + row.ID + '"><img class="timg" src="../../Uploads/' + row.Url + '" /></a>';
+                            }
+                            return input
+                        }
+                    },
+                    {
+                        data: "SKU", render: function (data, type, row, meta) {
+                            return "<a  target='_blank' href='" + "@Url.Action("edit", "Sku")" + "?id=" + row.SKU + "#5'>" + row.SKU + "</a>";
+                        }
+                    },
                     { data: "Name" },
                     { data: "UPCEAN" },
                     { data: "QTYOrdered", render: function (data, type, row) { return data; } },
@@ -159,8 +206,11 @@
                             }  
                         }
                     },
-                    { data: "Serial", render: function (data, type, row) { return data; }  },
                     { data: "SerialQTY", render: function (data, type, row) { return data; } },
+                    { data: "Serial", render: function (data, type, row) { return data; } },
+                    {
+                        data: "Size"
+                    },
                     {
                         data: "ck",
                         orderable: false,
@@ -242,6 +292,27 @@
             $("#Tax").change(function () {
                 DataGridC.draw();
             });
+                        $("#dialog").dialog({
+                autoOpen: false,
+                width: 800
+            });
+            $("body").on("click", ".Imgbtn", function () {
+                var url = '@Url.Action("GetImg", "Ajax")'
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: { id: $(this).attr("valID"), key: "SKU", ImgType: "ImgType" },
+                    success: function (data) {
+                        $("#dialog").dialog({
+                            title: "Img"
+                        });
+                        $("#dialog").html(data);
+                        $("#dialog").dialog("open");
+                        //$("#dialog").load(data).dialog({ modal: true }).dialog('open');
+                    }
+                });
+                return false;
+            });
             $(tableID + ' tbody').on('click', 'td.details-control', function () {
                 var tr = $(this).closest('tr');
                 var row = DataGridC.row(tr);
@@ -277,5 +348,69 @@
             });
             return div;
         }
+        function Success(data) {
+            $("#dialog").dialog("close");
+            if (data.status == false) {
+                alert(data.Msg);
+            }
+            if (data.reload == true) {
+                window.location.reload();
+            }
+        }
+        var Preview = new function () {
+
+            var root = $("body");
+
+            // 連續的圖片編碼
+            var imgcode = '';
+
+            // 選取發生改變
+            this.change_file = function () {
+                root.on("change", ".ImgFile", function () {
+                    show(this);
+                });
+            }
+
+            // 批次圖片，先清空後再插入
+            var show = function (input) {
+                if (input.files && input.files[0]) {
+                    clean(input.ID);
+                    each_img(input.files, input.id);
+                }
+            }
+
+            // 批次讀取，最後再一次寫入
+            var each_img = function (files, ID) {
+
+                $.each(files, function (index, file) {
+                    var src = URL.createObjectURL(file);
+                    create_imgcode(src);
+                });
+
+                // 放置預覽元素後重設
+                root.find("#" + ID + "preview").html(imgcode);
+                reset();
+            }
+
+
+            // 建立圖片
+            var create_imgcode = function (src) {
+                imgcode += '<a class="aimg" href="' + src + '" data-lightbox="roadtrip"><img class="img" src="' + src + '" /></a>';
+            }
+
+
+            // 清空預覽區域
+            var clean = function (ID) {
+                root.find("#" + ID + "preview").empty();
+            }
+
+            // 還原 input[type=file]
+            var reset = function () {
+                imgcode = '';
+                //root.find("#VendorInvoice").val(null);
+            }
+        }
+        // 執行
+        Preview.change_file();
     </script>
 }

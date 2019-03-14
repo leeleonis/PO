@@ -36,6 +36,9 @@
     table tbody tr td {
         vertical-align: middle !important;
     }
+    .nosize {
+       background-color:yellow;
+    }
 </style>
 <div id="content">
     <section id="widget-grid" class="">
@@ -206,7 +209,9 @@
                     },
                     { data: "SerialQTY", render: function (data, type, row) { return data; } },
                     { data: "Serial", render: function (data, type, row) { return data; }  },
-                    { data: "Size" },
+                    {
+                        data: "Size"
+                    },
                     {
                         data: "ck",
                         orderable: false,

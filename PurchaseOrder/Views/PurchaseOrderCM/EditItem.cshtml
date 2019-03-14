@@ -405,7 +405,11 @@
                         "data": null,
                         "defaultContent": ''
                     },
-                    { data: "SKU" },
+                    {
+                         data: "SKU", render: function (data, type, row, meta) {
+                            return "<a  target='_blank' href='" + "@Url.Action("edit", "Sku")" + "?id=" + row.SKU + "#6'>" + row.SKU + "</a>";
+                        }
+                    },
                     { data: "VendorSKU" },
                     { data: "Name" },
                     {

@@ -469,7 +469,7 @@ namespace PurchaseOrderSys.Controllers
             //var partial = Engine.Razor.RunCompile(template, "templateKey", null, new { Name = "World" });
             return Json(new { status = true, partial }, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult GetData(CreditMemoVM filter, string Type, int? DetailID)
+        public ActionResult GetData(CreditMemoVM filter, string Type, int? DetailID, int page = 1, int rows = 100)
         {
             if (Type == "Master")
             {
@@ -630,7 +630,9 @@ namespace PurchaseOrderSys.Controllers
                     dataList = dataList.Where(x => x.Balance == filter.Balance);
                 }
                 total = dataList.Count();
-                return Json(new { total, rows = dataList.OrderByDescending(x => x.ID) }, JsonRequestBehavior.AllowGet);
+                int length = rows;
+                int start = (page - 1) * length;
+                return Json(new { total, rows = dataList.OrderByDescending(x => x.ID).Skip(start).Take(length) }, JsonRequestBehavior.AllowGet);
             }
             else
             {
@@ -691,6 +693,8 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult Addserials(int? ID)
         {
             var PurchaseSKU = db.PurchaseSKU.Find(ID);
+            var companyList = db.Company.AsNoTracking().Where(c => c.IsEnable).ToList();
+            ViewBag.Company = companyList.Where(c => !c.ParentID.HasValue).Select(c => new SelectListItem() { Text = c.Name, Value = c.ID.ToString() }).ToList();
             return View(PurchaseSKU);
         }
         [HttpPost]

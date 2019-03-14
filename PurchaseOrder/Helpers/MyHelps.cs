@@ -200,8 +200,8 @@ namespace PurchaseOrderSys.Helpers
             }
             return nlist;
         }
-        
-        public static MvcHtmlString BooleanSwitch(this HtmlHelper helper, string name, bool isChecked, string id = null)
+
+        public static MvcHtmlString BooleanSwitch(this HtmlHelper helper, string name, bool isChecked, string id = null, bool disabled = false)
         {
             TagBuilder divHtml = new TagBuilder("div");
             divHtml.AddCssClass("onoffswitch");
@@ -212,6 +212,10 @@ namespace PurchaseOrderSys.Helpers
             inputHtml.Attributes.Add("id", id ?? name);
             inputHtml.Attributes.Add("name", name);
             inputHtml.Attributes.Add("value", "true");
+            if (disabled)
+            {
+                inputHtml.Attributes.Add("disabled", "true");
+            }
             if (isChecked) inputHtml.Attributes.Add("checked", "checked");
 
             TagBuilder labelHtml = new TagBuilder("label");

@@ -668,6 +668,14 @@ namespace PurchaseOrderSys.Models
         /// 開啟序號管理
         /// </summary>
         public bool SerialTracking { get; set; }
+        /// <summary>
+        /// SKU圖檔路徑
+        /// </summary>
+        public string Url { get; set; }
+        /// <summary>
+        /// 規格
+        /// </summary>
+        public string Size { get; set; }
     }
     public class PoSKUVM
     {
