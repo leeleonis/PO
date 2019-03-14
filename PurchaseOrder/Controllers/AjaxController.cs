@@ -899,14 +899,18 @@ namespace PurchaseOrderSys.Controllers
             try
             {
                 string LangID = EnumData.DataLangList().First().Key;
-                List<SKU> sku = db.SKU.Where(s => s.IsEnable && IDs.Contains(s.SkuID)).ToList();
+                List<SKU> sku = db.SKU.Include(s => s.SkuLang).Include(s => s.SkuType).Where(s => s.IsEnable && IDs.Contains(s.SkuID)).ToList();
 
                 result.data = sku.Select(s => new
                 {
                     Sku = s.SkuID,
                     s.SkuLang.First(l => l.LangID.Equals(LangID)).Name,
+                    Width = (s.Logistic?.ShippingWidth ?? 0).ToString(),
+                    Height = (s.Logistic?.ShippingHeight ?? 0).ToString(),
+                    Length = (s.Logistic?.ShippingLength ?? 0).ToString(),
                     Weight = (s.Logistic?.ShippingWeight ?? 500).ToString(),
-                    s.SkuType.HSCode
+                    s.SkuType.HSCode,
+                    ImagePath = s.Logistic?.ImagePath ?? ""
                 }).ToList();
             }
             catch (Exception e)
