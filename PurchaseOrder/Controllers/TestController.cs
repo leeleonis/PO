@@ -208,7 +208,7 @@ namespace PurchaseOrderSys.Controllers
                                         IsEnable = true,
                                         NetoID = categoryID,
                                         CreateAt = DateTime.UtcNow,
-                                        CreateBy = Session["AdminName"].ToString()
+                                        CreateBy = "System Scheduling"
                                     };
 
                                     category.SkuTypeLang.Add(new SkuTypeLang()
