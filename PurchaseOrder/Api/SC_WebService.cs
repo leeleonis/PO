@@ -278,6 +278,11 @@ namespace SellerCloud_WebService
         {
             return OS_SellerCloud.Orders_UpdatePackage(OS_AuthHeader, OS_Options, ref Package);
         }
+
+        public bool Update_ProductFullInfo(ProductFullInfo Info)
+        {
+            return OS_SellerCloud.UpdateProductFullInfo(OS_AuthHeader, OS_Options, Info);
+        }
         /***** 更新資料 *****/
 
         /***** 新增資料 *****/
@@ -291,6 +296,11 @@ namespace SellerCloud_WebService
         {
             NewItem.ID = -1;
             return OS_SellerCloud.Orders_UpdateItem(OS_AuthHeader, OS_Options, NewItem);
+        }
+
+        public bool Create_ProductFullInfo(ProductFullInfo Info)
+        {
+            return OS_SellerCloud.CreateProductFullInfo(OS_AuthHeader, OS_Options, Info);
         }
         /***** 新增資料 *****/
 

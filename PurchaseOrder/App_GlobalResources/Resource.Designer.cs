@@ -441,6 +441,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
+        public static string Brand_SCID {
+            get {
+                return ResourceManager.GetString("Brand_SCID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
         public static string Brand_UpdateAt {
             get {
                 return ResourceManager.GetString("Brand_UpdateAt", resourceCulture);

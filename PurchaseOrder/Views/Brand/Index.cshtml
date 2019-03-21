@@ -62,6 +62,11 @@
                         return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
                     }
                 }, {
+                    field: "SCID", title: "@Html.DisplayNameFor(model => model.SCID)", width: 150, align: "center", sortable: false,
+                    formatter: function (value, row, index) {
+                        return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
+                    }
+                }, {
                     field: "Name", title: "@Html.DisplayNameFor(model => model.Name)", width: 200, align: "center", sortable: false,
                     formatter: function (value, row, index) {
                         return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
@@ -100,6 +105,7 @@
             return {
                 ID: $('.filterColumn .s-ID').val(),
                 NetoID: $('.filterColumn .s-netoID').val(),
+                SCID: $('.filterColumn .s-SCID').val(),
                 Name: $('.filterColumn .s-name').val(),
                 IsExport: $('.filterColumn .s-isExport').val()
             };
@@ -110,6 +116,7 @@
                 IsFilter: true,
                 ID: "<input type='text' class='form-control s-ID' value='" + (!website.IsEmpty(filterValue['ID']) ? filterValue['ID'] : '') + "'>",
                 NetoID: "<input type='text' class='form-control s-netoID' value='" + (!website.IsEmpty(filterValue['NetoID']) ? filterValue['NetoID'] : '') + "'>",
+                SCID: "<input type='text' class='form-control s-SCID' value='" + (!website.IsEmpty(filterValue['SCID']) ? filterValue['SCID'] : '') + "'>",
                 Name: "<input type='text' class='form-control s-name' value='" + (!website.IsEmpty(filterValue['Name']) ? filterValue['Name'] : '') + "'>",
                 IsExport: "<select class='form-control s-isExport'><option value=''>全部</option>" + datagrid.setSelectOption(selectOption['ApprevedForExport'], filterValue['IsExport']) + "</select>",
                 Action: "<button type='button' class='btn btn-default btn-sm' onclick='SaveData()'>SAVE ALL</button>"
@@ -162,6 +169,7 @@
             return {
                 ID: row.ID,
                 NetoID: $("input#NetoID:eq(" + index + ")").val(),
+                SCID: $("input#SCID:eq(" + index + ")").val(),
                 Name: $("input#Name:eq(" + index + ")").val(),
                 IsExport: $("input#IsExport:eq(" + index + ")").prop("checked")
             }

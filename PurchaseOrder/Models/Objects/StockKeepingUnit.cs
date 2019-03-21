@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using inventorySKU.NetoDeveloper;
 using NetoDeveloper;
+using PurchaseOrderSys.SCService;
 
 namespace PurchaseOrderSys.Models
 {
@@ -318,6 +319,39 @@ namespace PurchaseOrderSys.Models
             }
         }
 
+        public bool CreateSkuToSC()
+        {
+            string LangID = EnumData.DataLangList().First().Key;
+
+            var skuLang = skuData.SkuLang.First(l => l.LangID.Equals(LangID));
+            ProductFullInfo newSku = new ProductFullInfo()
+            {
+                ID = skuData.SkuID,
+                CompanyID = skuData.Company,
+                ProductName = skuLang.Name,
+                ProductTypeID = skuData.SkuType.SCID.Value,
+                UPC = skuData.UPC,
+                BuyerID = 0,
+                LastCost = 0,
+                ListPrice = 0,
+                LongDescription = "",
+                ManufacturerID = 0,
+                ManufacturerSKU = "",
+                ProductMasterSKU = "",
+                ProductSource = 0,
+                ProductSourceSKU = "",
+                Qty = 0,
+                ShortDescription = "",
+                SiteCost = 0,
+                SitePrice = 0,
+                StorePrice = 0,
+                TaxExempt = false,
+                VendorCost = 0,
+                VendorName = ""
+            };
+
+            return true;
+        }
 
         protected virtual void Dispose(bool disposing)
         {

@@ -2129,4 +2129,7 @@
   <data name="SkuType_SCID" xml:space="preserve">
     <value></value>
   </data>
+  <data name="Brand_SCID" xml:space="preserve">
+    <value></value>
+  </data>
 </root>
