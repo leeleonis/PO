@@ -1992,4 +1992,7 @@
   <data name="RMASerialsLlist_ServiceID" xml:space="preserve">
     <value>維修單號</value>
   </data>
+  <data name="Brand_SCID" xml:space="preserve">
+    <value>SC ID</value>
+  </data>
 </root>

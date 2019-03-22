@@ -46,11 +46,11 @@ namespace PurchaseOrderSys.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,NetoID,Name,IsExport")] Brand brand)
+        public ActionResult Create([Bind(Include = "ID,NetoID,SCID,Name,IsExport")] Brand brand)
         {
             brand.IsEnable = true;
             brand.CreateAt = DateTime.UtcNow;
-            brand.CreateBy = "Test";
+            brand.CreateBy = Session["AdminName"].ToString();
 
             db.Brand.Add(brand);
             db.SaveChanges();
@@ -77,7 +77,7 @@ namespace PurchaseOrderSys.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "IsEnable,ID,NetoID,Name,IsExport,CreateBy,CreateAt,UpdateBy,UpdateAt")] Brand brand)
+        public ActionResult Edit([Bind(Include = "IsEnable,ID,NetoID,SCID,Name,IsExport,CreateBy,CreateAt,UpdateBy,UpdateAt")] Brand brand)
         {
             if (ModelState.IsValid)
             {
@@ -136,6 +136,7 @@ namespace PurchaseOrderSys.Controllers
                 {
                     b.ID,
                     b.NetoID,
+                    b.SCID,
                     b.Name,
                     b.IsExport
                 }).ToList());
@@ -151,11 +152,11 @@ namespace PurchaseOrderSys.Controllers
 
             Brand brand = db.Brand.Find(updateData.ID);
             brand.NetoID = updateData.NetoID;
+            brand.SCID = updateData.SCID;
             brand.Name = updateData.Name;
             brand.IsExport = updateData.IsExport;
             brand.UpdateAt = DateTime.UtcNow;
             brand.UpdateBy = Session["AdminName"].ToString();
-            db.Entry(brand).State = EntityState.Modified;
             db.SaveChanges();
 
             return Json(result, JsonRequestBehavior.AllowGet);

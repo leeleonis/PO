@@ -2219,4 +2219,7 @@
   <data name="RMASerialsLlist_ServiceID" xml:space="preserve">
     <value>ServiceID</value>
   </data>
+  <data name="Brand_SCID" xml:space="preserve">
+    <value></value>
+  </data>
 </root>
