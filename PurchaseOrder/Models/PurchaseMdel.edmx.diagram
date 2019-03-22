@@ -61,9 +61,9 @@
         <AssociationConnector Association="PurchaseOrderModel.FK_Sku_PackageContent_SKU" />
         <AssociationConnector Association="PurchaseOrderModel.FK_SkuPicture_Sku" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Sku_Attribute_SkuAttribute" ManuallyRouted="true" >
-          <ConnectorPoint PointX="10.12499725" PointY="7.2789925130208326" />
-          <ConnectorPoint PointX="10.12499725" PointY="15.479078384602852" />
-          <ConnectorPoint PointX="11.25" PointY="15.479078384602852" />
+          <ConnectorPoint PointX="10.15625" PointY="7.2789925130208326" />
+          <ConnectorPoint PointX="10.15625" PointY="15.462433675130209" />
+          <ConnectorPoint PointX="11.25" PointY="15.462433675130209" />
         </AssociationConnector>
         <AssociationConnector Association="PurchaseOrderModel.FK_SkuAttribute_SkuAttributeType" />
         <AssociationConnector Association="PurchaseOrderModel.FK_SkuAttributeLang_SkuAttribute" />
@@ -115,9 +115,6 @@
         <AssociationConnector Association="PurchaseOrderModel.FK_Logistic_BoxType" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Logistic_SKU" />
         <EntityTypeShape EntityType="PurchaseOrderModel.RMASKU" Width="1.5" PointX="23.625" PointY="1.25" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.RMASerialsLlist" Width="1.5" PointX="25.875" PointY="11.5" />
-        <AssociationConnector Association="PurchaseOrderModel.FK_RMASerialsLlist_RMASKU" />
-        <AssociationConnector Association="PurchaseOrderModel.FK_RMASerialsLlist_Warehouse" />
         <EntityTypeShape EntityType="PurchaseOrderModel.SkuType" Width="1.5" PointX="3.875" PointY="8.375" />
         <AssociationConnector Association="PurchaseOrderModel.FK_PackageContent_SkuType" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Sku_SkuType" />
@@ -125,6 +122,11 @@
         <EntityTypeShape EntityType="PurchaseOrderModel.RMA" Width="1.5" PointX="16" PointY="34.625" />
         <AssociationConnector Association="PurchaseOrderModel.FK_RMA_Warehouse" />
         <AssociationConnector Association="PurchaseOrderModel.FK_RMASKU_RMA" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_RMASKU_Warehouse" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_RMASKU_SKU" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.RMASerialsLlist" Width="1.5" PointX="25.875" PointY="10.5" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_RMASerialsLlist_RMASKU" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_RMASerialsLlist_Warehouse" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

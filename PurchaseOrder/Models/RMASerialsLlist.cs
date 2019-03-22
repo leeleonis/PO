@@ -28,6 +28,7 @@ namespace PurchaseOrderSys.Models
         public Nullable<int> WarehouseID { get; set; }
         public string SerialsType { get; set; }
         public Nullable<int> ServiceID { get; set; }
+        public string Reason { get; set; }
     
         public virtual RMASKU RMASKU { get; set; }
         public virtual Warehouse Warehouse { get; set; }

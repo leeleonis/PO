@@ -1,6 +1,7 @@
 ﻿@model RMA
 @{
     ViewBag.title = "新增RMA";
+    var Warehouselist = EnumData.WarehouseDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
 }
 <div id="content">
     <section id="widget-grid" class="">
@@ -19,6 +20,7 @@
                         <div class="widget-body no-padding">
                             <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
                                 @Html.AntiForgeryToken()
+                                @Html.Hidden("SID")
                                 <div id="content" class="tab-content">
                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                     <div class="tab-pane" id="hb1">
@@ -49,11 +51,12 @@
                                                         <thead>
                                                             <tr>
                                                                 <th><input type="checkbox" /></th>
-                                                                <th></th>
                                                                 <th>Order</th>
                                                                 <th>SKU</th>
                                                                 <th>Product Name</th>
                                                                 <th>訂單數</th>
+                                                                <th>回收數</th>
+                                                                <th>Warehouse</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -88,6 +91,7 @@
         var DataGrid;
         var tableID = "#DataGridC";
         $(document).ready(function () {
+         
              DataGrid = $(tableID).DataTable({
                 fixedHeader: {
                     header: true,
@@ -102,20 +106,46 @@
                         data: "ck",
                         className: 'select-checkbox',
                         orderable: false,
-                        render: function (data, type, obj, meta) {
-                            return '<input type="checkbox" value="' + data + '">';
+                        render: function (data, type, row, meta) {
+                            var html = '<input type="checkbox" name="RMAList[' + meta.row + '].SKU" value="' + row.SKU + '">';
+                            html += '<input type="hidden" name="RMAList[' + meta.row + '].ID" value="' + row.SKU + '">';
+                            return html;
                         }
-                    },
-                    {
-                        "className": 'details-control',
-                        "orderable": false,
-                        "data": null,
-                        "defaultContent": ''
                     },
                     { data: "Order" },
                     { data: "SKU" },
                     { data: "ProductName" },
-                    { data: "QTY"},
+                    { data: "QTY" },
+                    {
+                        data: "RMAQTY",
+                        render: function (data, type, row, meta) {
+                            var html = '<input  name="RMAList[' + meta.row + '].RMAQTY" type="text">';
+                          
+                            return html;
+                        }
+                    },
+                    {
+                        data: "Warehouse",
+                        render: function (data, type, row, meta) {
+                            var Warehouselist = @Html.Raw(Json.Encode(Warehouselist.Select(x => new { x.Text, x.Value }).ToList()));
+                            var $select = $("<select></select>", {
+                                "id": "RMAList[" + meta.row + "].Warehouse",
+                                "name": "RMAList[" + meta.row + "].Warehouse",
+                                "value": data
+                            });
+                            $.each(Warehouselist, function (k, val) {
+                                var $option = $("<option></option>", {
+                                    "text": val.Text,
+                                    "value": val.Value
+                                });
+                                if (data === val) {
+                                    $option.attr("selected", "selected")
+                                }
+                                $select.append($option);
+                            });
+                            return $select.prop("outerHTML");
+                        }
+                    },
                 ],
                 ajax: {
                     traditional: true,
@@ -125,9 +155,11 @@
                         var OrderID = $("#OrderID").val();
                         var SourceID = $("#SourceID").val();
                         var UserID = $("#UserID").val();
+                        var SID = $("#SID").val();
                         d.OrderID = OrderID;
                         d.SourceID = SourceID;
                         d.UserID = UserID;
+                        d.SID = SID;
                     }
                 },
                 serverSide: true,//啟用ServerSide模式
@@ -153,16 +185,16 @@
                 }
                 else {
                     // Open this row
-                    row.child(GetSerialList(row.data())).show();
+                    row.child(GetSKUList(row.data())).show();
                     tr.addClass('shown');
                 }
             });
         });
-        function GetSerialList(d) {
+        function GetSKUList(d) {
             var div = $('<div style="border:2px blue solid;" />').addClass('loading').text('Loading...');
             $.ajax({
                 type: "post",
-                url: "@Url.Action("GetSerialList")",
+                url: "@Url.Action("GetSKUList")",
                 data: {
                     OrderID: d.Order
                 },

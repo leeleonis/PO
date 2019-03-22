@@ -25,6 +25,7 @@ namespace PurchaseOrderSys.Models
             this.PriceGroup = new HashSet<PriceGroup>();
             this.PurchaseSKU = new HashSet<PurchaseSKU>();
             this.TransferSKU = new HashSet<TransferSKU>();
+            this.RMASKU = new HashSet<RMASKU>();
         }
     
         public bool IsEnable { get; set; }
@@ -69,5 +70,7 @@ namespace PurchaseOrderSys.Models
         public virtual ICollection<TransferSKU> TransferSKU { get; set; }
         public virtual Logistic Logistic { get; set; }
         public virtual SkuType SkuType { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RMASKU> RMASKU { get; set; }
     }
 }

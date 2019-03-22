@@ -2124,9 +2124,99 @@
     <value></value>
   </data>
   <data name="RMA_SourceCaseID" xml:space="preserve">
-    <value></value>
+    <value>Source Case ID</value>
   </data>
   <data name="SkuType_SCID" xml:space="preserve">
-    <value></value>
+    <value>SC ID</value>
+  </data>
+  <data name="RMA_SCRMA" xml:space="preserve">
+    <value>SC RMA</value>
+  </data>
+  <data name="RMASKU_IsEnable" xml:space="preserve">
+    <value>IsEnable</value>
+  </data>
+  <data name="RMASKU_ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="RMASKU_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="RMASKU_RMAID" xml:space="preserve">
+    <value>RMAID</value>
+  </data>
+  <data name="RMASKU_SkuNo" xml:space="preserve">
+    <value>SkuNo</value>
+  </data>
+  <data name="RMASKU_QTYOrdered" xml:space="preserve">
+    <value>QTYOrdered</value>
+  </data>
+  <data name="RMASKU_ReturnedQTY" xml:space="preserve">
+    <value>ReturnedQTY</value>
+  </data>
+  <data name="RMASKU_UPCEAN" xml:space="preserve">
+    <value>UPCEAN</value>
+  </data>
+  <data name="RMASKU_CreateBy" xml:space="preserve">
+    <value>CreateBy</value>
+  </data>
+  <data name="RMASKU_CreateAt" xml:space="preserve">
+    <value>CreateAt</value>
+  </data>
+  <data name="RMASKU_UpdateBy" xml:space="preserve">
+    <value>UpdateBy</value>
+  </data>
+  <data name="RMASKU_UpdateAt" xml:space="preserve">
+    <value>UpdateAt</value>
+  </data>
+  <data name="RMASKU_ReceivedBy" xml:space="preserve">
+    <value>ReceivedBy</value>
+  </data>
+  <data name="RMASKU_ReceivedAt" xml:space="preserve">
+    <value>ReceivedAt</value>
+  </data>
+  <data name="RMASKU_WarehouseID" xml:space="preserve">
+    <value>WarehouseID</value>
+  </data>
+  <data name="RMASerialsLlist_ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="RMASerialsLlist_RMASKUID" xml:space="preserve">
+    <value>RMASKUID</value>
+  </data>
+  <data name="RMASerialsLlist_PID" xml:space="preserve">
+    <value>PID</value>
+  </data>
+  <data name="RMASerialsLlist_SerialsNo" xml:space="preserve">
+    <value>SerialsNo</value>
+  </data>
+  <data name="RMASerialsLlist_SerialsQTY" xml:space="preserve">
+    <value>SerialsQTY</value>
+  </data>
+  <data name="RMASerialsLlist_CreateBy" xml:space="preserve">
+    <value>CreateBy</value>
+  </data>
+  <data name="RMASerialsLlist_CreateAt" xml:space="preserve">
+    <value>CreateAt</value>
+  </data>
+  <data name="RMASerialsLlist_UpdateBy" xml:space="preserve">
+    <value>UpdateBy</value>
+  </data>
+  <data name="RMASerialsLlist_UpdateAt" xml:space="preserve">
+    <value>UpdateAt</value>
+  </data>
+  <data name="RMASerialsLlist_ReceivedBy" xml:space="preserve">
+    <value>ReceivedBy</value>
+  </data>
+  <data name="RMASerialsLlist_ReceivedAt" xml:space="preserve">
+    <value>ReceivedAt</value>
+  </data>
+  <data name="RMASerialsLlist_WarehouseID" xml:space="preserve">
+    <value>WarehouseID</value>
+  </data>
+  <data name="RMASerialsLlist_SerialsType" xml:space="preserve">
+    <value>SerialsType</value>
+  </data>
+  <data name="RMASerialsLlist_ServiceID" xml:space="preserve">
+    <value>ServiceID</value>
   </data>
 </root>

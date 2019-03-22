@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 
@@ -73,5 +74,43 @@ namespace PurchaseOrderSys.Models
     {
         public string id { get; set; }
         public string text { get; set; }
+    }
+    public class Country
+    {
+        private RegionInfo info;
+
+        public string ID { get { return info.TwoLetterISORegionName; } }
+        public string Name { get { return info.EnglishName; } }
+        public string ChtName { get { return info.DisplayName; } }
+        public string TwoCode { get { return info.TwoLetterISORegionName; } }
+        public string ThreeCode { get { return info.ThreeLetterISORegionName; } }
+
+        public Country(int LCID)
+        {
+            info = new RegionInfo(LCID);
+        }
+
+        public Country(string Name)
+        {
+            info = new RegionInfo(Name);
+        }
+
+        public string OriginName
+        {
+            get
+            {
+                switch (ID)
+                {
+                    case "CN":
+                        return "China";
+                    case "TW":
+                        return "Taiwan";
+                    case "US":
+                        return "USA";
+                    default:
+                        return Name;
+                }
+            }
+        }
     }
 }

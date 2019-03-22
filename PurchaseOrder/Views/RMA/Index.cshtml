@@ -1,8 +1,11 @@
 ﻿@model RMAVM
     @{
         ViewBag.ptitle = "RMA";
+        var CompanyDDL = EnumData.CompanyDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
         var Warehouselist = EnumData.WarehouseDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
         var RMAStatusDDL = EnumData.RMAStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+        var CountryList = EnumData.CountryList().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+        var ChannelList = EnumData.ChannelList().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
         var DefaultSelect = PurchaseOrderSys.App_GlobalResources.Resource.DefaultSelect;
     }
     <style>
@@ -35,15 +38,15 @@
                                                 <div class="form-group">
                                                     @Html.Label("CompanyID", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.DropDownListFor(model => model.CompanyID, Warehouselist, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.DropDownListFor(model => model.CompanyID, CompanyDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
                                                     </div>
                                                     @Html.Label("Channel", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.DropDownListFor(model => model.Channel, Warehouselist, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.DropDownListFor(model => model.Channel, ChannelList, DefaultSelect, htmlAttributes: new { @class = "form-control" })
                                                     </div>
                                                     @Html.Label("Country", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.DropDownListFor(model => model.Country, Warehouselist, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.DropDownListFor(model => model.Country, CountryList, DefaultSelect, htmlAttributes: new { @class = "form-control" })
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -93,8 +96,8 @@
                                                                 {
                                                                     <tr>
                                                                         <td><input type="checkbox" /></td>
-                                                                        <td class="details-control"></td>
-                                                                        <td><a class='btn btn-default btn-sm' id='Edit' href='@Url.Action("Edit", new { item.ID })'>@item.ID</a></td>
+                                                                        <td class="details-control" RMAID="@item.ID"></td>
+                                                                        <td><a  id='Edit' href='@Url.Action("Edit", new { item.ID })'>@item.ID</a></td>
                                                                         <td>@item.OrderID</td>
                                                                         <td>@item.ReturnTracking</td>
                                                                         <td>@item.Warehouse.Name</td>
@@ -154,7 +157,41 @@
                         }
                     });
                 });
+                $(tableID + ' tbody').on('click', 'td.details-control', function () {
+                    var tr = $(this).closest('tr');
+                    var row = DataGridC.row(tr);
+                    if (row.child.isShown()) {
+                        // This row is already open - close it
+                        row.child.hide();
+                        tr.removeClass('shown');
+                    }
+                    else {
+                        // Open this row
+                        var RMAID = $(this).attr("RMAID");
+                        row.child(GetSerialList(RMAID)).show();
+                        tr.addClass('shown');
+                    }
+                });
             });
+            function GetSerialList(ID) {
+                var div = $('<div style="border:2px blue solid;" />').addClass('loading').text('Loading...');
+                $.ajax({
+                    type: "post",
+                    url: "@Url.Action("GetRMASKUList")",
+                    data: {
+                        ID: ID
+                    },
+                    success: function (data) {
+                        if (data.status) {
+                            div.html(data.partial).removeClass('loading');
+                        }
+                        else {
+                            val = data.Errmsg;
+                        }
+                    }
+                });
+                return div;
+            }
         </script>
     }
 

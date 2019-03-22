@@ -1261,7 +1261,13 @@ namespace PurchaseOrderSys.Models
     public class OrderItemData
     {
         public int OrderID { get; set; }
+        /// <summary>
+        /// 表示是那個平台 channel
+        /// </summary>
         public int OrderSource { get; set; }
+        /// <summary>
+        /// SourceId
+        /// </summary>
         public string OrderSourceOrderId { get; set; }
         public int CompanyID { get; set; }
         public string CountryCode { get; set; }
@@ -1274,6 +1280,22 @@ namespace PurchaseOrderSys.Models
         public int Order { get; set; }
         public string SKU { get; set; }
         public string ProductName { get; set; }
+        public string UPC { get; set; }
         public int? QTY { get; set; }
+        public int? RMAQTY { get; set; }
+        public int? Warehouse { get; set; }
+    }
+    public class RMAModelPost
+    {
+        public string ID { get; set; }
+        public string SKU { get; set; }
+        public int? RMAQTY { get; set; }
+        public int? Warehouse { get; set; }
+    }
+    public class RMASerial
+    {
+        public string Serial { get; set; }
+        public string Warehouse { get; set; }
+        public string Reason { get; set; }
     }
 }

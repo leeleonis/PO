@@ -1,0 +1,215 @@
+﻿@model RMA
+@{
+    ViewBag.title = "修改RMA";
+    var Warehouselist = EnumData.WarehouseDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var RMAStatusList = EnumData.RMAStatusList().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var RMAActionList = EnumData.RMAActionList().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var CompanyDDL = EnumData.CompanyDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var ChannelList = EnumData.ChannelList().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+}
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-xs-12">
+                <div class="jarviswidget" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+
+                        <h2>@ViewBag.title </h2>
+                        <ul class="nav nav-tabs pull-right">
+                            <li><a data-toggle="tab" href="#hb1">@ViewBag.title</a></li>
+                        </ul>
+                    </header>
+                    <div>
+                        <div class="widget-body no-padding">
+                            <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("ID")
+                                @Html.Hidden("SID")
+                                <div id="content" class="tab-content">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="tab-pane" id="hb1">
+                                        <h1><b>RMA# @Model.ID</b></h1>
+                                        <fieldset>
+                                            <legend>@ViewBag.title</legend>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.OrderID, htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("OrderID", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                </div>
+
+                                                @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownList("Status", RMAStatusList, htmlAttributes: new { @class = "form-control" })
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.SourceID, htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("SourceID", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                </div>
+                                                @Html.LabelFor(model => model.Action, htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownList("Action", RMAActionList, htmlAttributes: new { @class = "form-control" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.SourceCaseID, htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("SourceCaseID", new { htmlAttributes = new { @class = "form-control" } })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.CompanyID, htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownList("CompanyID", CompanyDDL, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Channel, htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownList("Channel", ChannelList, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Country, htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("Country", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.SCRMA, htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("SCRMA", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset>
+                                            <div class="row">
+                                                <article class="col-xs-12">
+                                                    <table id="DataGridC" class="table table-striped table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th></th>
+                                                                <th>SKU</th>
+                                                                <th>Product Name</th>
+                                                                <th>UPC / EAN</th>
+                                                                <th>訂單數</th>
+                                                                <th>回收數</th>
+                                                                <th>Return Warehouse</th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach (var item in Model.RMASKU.Where(x => x.IsEnable))
+                                                            {
+                                                                <tr>
+                                                                    <td class="details-control" SKUid="@item.ID"></td>
+                                                                    <td>
+                                                                        @item.SkuNo
+                                                                    </td>
+                                                                    <td>
+                                                                        @item.SKU.SkuLang.Where(x => x.LangID == "en-US").FirstOrDefault().Name
+                                                                    </td>
+                                                                    <td>
+                                                                        @item.SKU.UPC  / @item.SKU.EAN
+                                                                    </td>
+                                                                    <td>
+                                                                        @item.QTYOrdered
+                                                                    </td>
+                                                                    <td>
+                                                                        @item.ReturnedQTY
+                                                                    </td>
+                                                                    <td>@item.Warehouse.Name</td>
+                                                                    <td>
+                                                                        <a href='@Url.Action("Returnedserials",new {item.ID })' class='btn btn-default btn-sm'>Returned serials</a>
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        </tbody>
+                                                        <tfoot>
+                                                        </tfoot>
+                                                    </table>
+                                                </article>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                                <div class="widget-footer">
+                                    <button type="submit" class="btn btn-primary" id="save">儲存</button>
+                                    <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index")'">返回</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section pagespecific {
+    <script type="text/javascript">
+        var hash = window.location.hash;
+        $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
+        $('.tab-pane').eq(hash.substr(1)).addClass('active');
+        var DataGrid;
+        var tableID = "#DataGridC";
+        $(document).ready(function () {
+
+             DataGrid = $(tableID).DataTable({
+                fixedHeader: {
+                    header: true,
+                    footer: true
+                 },
+                 select: {
+                     style: 'os',
+                     selector: 'td:first-child'
+                 },
+                orderMulti: false,
+                "paging": false,
+                "ordering": false,
+                "info": true,
+                "searching": false, "footerCallback": function (row, data, start, end, display) {
+                }
+            });
+            $("#btnsearch").click(function () {
+                DataGrid.draw();
+            });
+            $(tableID + ' tbody').on('click', 'td.details-control', function () {
+                var tr = $(this).closest('tr');
+                var row = DataGrid.row(tr);
+                if (row.child.isShown()) {
+                    // This row is already open - close it
+                    row.child.hide();
+                    tr.removeClass('shown');
+                }
+                else {
+                    // Open this row
+                    var SKUid = $(this).attr("SKUid");
+                    row.child(GetSerialList(SKUid)).show();
+                    tr.addClass('shown');
+                }
+            });
+        });
+        function GetSerialList(ID) {
+            var div = $('<div style="border:2px blue solid;" />').addClass('loading').text('Loading...');
+            $.ajax({
+                type: "post",
+                url: "@Url.Action("GetSerialList")",
+                data: {
+                    ID: ID
+                },
+                success: function (data) {
+                    if (data.status) {
+                        div.html(data.partial).removeClass('loading');
+                    }
+                    else {
+                        val = data.Errmsg;
+                    }
+                }
+            });
+            return div;
+        }
+    </script>
+}

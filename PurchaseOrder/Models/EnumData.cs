@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 
@@ -300,6 +301,43 @@ namespace PurchaseOrderSys.Models
                 { 21, "eBay Title IT" },
                 { 20, "eBay Title US" },
                 { 22, "eBay Title US GBH" }
+            };
+        }
+        public static Dictionary<string, string> CountryList()
+        {
+          
+            var CultureListInf = CultureInfo.GetCultures(CultureTypes.SpecificCultures).Where(x => x.LCID != 4096).Select(x => new Country(x.LCID)).GroupBy(c => c.ID).Select(c => c.First()).OrderBy(x => x.Name);
+            var CultureList = CultureListInf.ToDictionary(x => x.TwoCode, x => x.Name);
+            return CultureList;
+        }
+        public static Dictionary<string, string> ChannelList()
+        {
+            var list = new Dictionary<string, string>();
+            foreach (var item in Enum.GetValues(typeof(SCService.OrderSource1)))
+            {
+                list.Add(Convert.ToInt32(item).ToString(), item.ToString());
+            }
+            return list;
+        }
+        public static Dictionary<string, string> RMAStatusList()
+        {
+            return new Dictionary<string, string>()
+            {
+               { "Open", "Open" },
+               { "Authorized", "Authorized" },
+               { "Received", "Received" },
+               { "Closed", "Closed" },
+               { "Fraud", "Fraud" }
+            };
+        }
+        public static Dictionary<string, string> RMAActionList()
+        {
+            return new Dictionary<string, string>()
+            {
+               { "None", "None" },
+               { "Refund", "Refund" },
+               { "Replacement", "Replacement" },
+               { "Repair", "Repair" },
             };
         }
     }

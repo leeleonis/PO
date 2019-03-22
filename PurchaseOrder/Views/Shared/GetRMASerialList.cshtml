@@ -1,0 +1,35 @@
+﻿@model IEnumerable<RMASerial>
+@{
+    Layout = null;
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Serial
+            </th>
+            <th>
+                Warehouse
+            </th>
+            <th>
+                Reason
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @item.Serial
+            </td>
+            <td>
+                @item.Warehouse
+            </td>
+            <td>
+                @item.Reason
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

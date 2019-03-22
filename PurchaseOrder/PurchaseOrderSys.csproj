@@ -6526,6 +6526,9 @@
     <Content Include="Views\Sku\_BoxData.cshtml" />
     <Content Include="Views\Sku\_PurchaseSerial.cshtml" />
     <Content Include="Views\Shared\GetRMASKUList.cshtml" />
+    <Content Include="Views\RMA\Edit.cshtml" />
+    <Content Include="Views\Shared\GetRMASerialList.cshtml" />
+    <Content Include="Views\RMA\Returnedserials.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -3472,7 +3472,16 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
-        ///   查詢類似  的當地語系化字串。
+        ///   查詢類似 SC RMA 的當地語系化字串。
+        /// </summary>
+        public static string RMA_SCRMA {
+            get {
+                return ResourceManager.GetString("RMA_SCRMA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Source Case ID 的當地語系化字串。
         /// </summary>
         public static string RMA_SourceCaseID {
             get {
@@ -3522,6 +3531,267 @@ namespace PurchaseOrderSys.App_GlobalResources {
         public static string RMA_WarehouseID {
             get {
                 return ResourceManager.GetString("RMA_WarehouseID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CreateAt 的當地語系化字串。
+        /// </summary>
+        public static string RMASerialsLlist_CreateAt {
+            get {
+                return ResourceManager.GetString("RMASerialsLlist_CreateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CreateBy 的當地語系化字串。
+        /// </summary>
+        public static string RMASerialsLlist_CreateBy {
+            get {
+                return ResourceManager.GetString("RMASerialsLlist_CreateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ID 的當地語系化字串。
+        /// </summary>
+        public static string RMASerialsLlist_ID {
+            get {
+                return ResourceManager.GetString("RMASerialsLlist_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 PID 的當地語系化字串。
+        /// </summary>
+        public static string RMASerialsLlist_PID {
+            get {
+                return ResourceManager.GetString("RMASerialsLlist_PID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ReceivedAt 的當地語系化字串。
+        /// </summary>
+        public static string RMASerialsLlist_ReceivedAt {
+            get {
+                return ResourceManager.GetString("RMASerialsLlist_ReceivedAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ReceivedBy 的當地語系化字串。
+        /// </summary>
+        public static string RMASerialsLlist_ReceivedBy {
+            get {
+                return ResourceManager.GetString("RMASerialsLlist_ReceivedBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 RMASKUID 的當地語系化字串。
+        /// </summary>
+        public static string RMASerialsLlist_RMASKUID {
+            get {
+                return ResourceManager.GetString("RMASerialsLlist_RMASKUID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 SerialsNo 的當地語系化字串。
+        /// </summary>
+        public static string RMASerialsLlist_SerialsNo {
+            get {
+                return ResourceManager.GetString("RMASerialsLlist_SerialsNo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 SerialsQTY 的當地語系化字串。
+        /// </summary>
+        public static string RMASerialsLlist_SerialsQTY {
+            get {
+                return ResourceManager.GetString("RMASerialsLlist_SerialsQTY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 SerialsType 的當地語系化字串。
+        /// </summary>
+        public static string RMASerialsLlist_SerialsType {
+            get {
+                return ResourceManager.GetString("RMASerialsLlist_SerialsType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ServiceID 的當地語系化字串。
+        /// </summary>
+        public static string RMASerialsLlist_ServiceID {
+            get {
+                return ResourceManager.GetString("RMASerialsLlist_ServiceID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UpdateAt 的當地語系化字串。
+        /// </summary>
+        public static string RMASerialsLlist_UpdateAt {
+            get {
+                return ResourceManager.GetString("RMASerialsLlist_UpdateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UpdateBy 的當地語系化字串。
+        /// </summary>
+        public static string RMASerialsLlist_UpdateBy {
+            get {
+                return ResourceManager.GetString("RMASerialsLlist_UpdateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 WarehouseID 的當地語系化字串。
+        /// </summary>
+        public static string RMASerialsLlist_WarehouseID {
+            get {
+                return ResourceManager.GetString("RMASerialsLlist_WarehouseID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CreateAt 的當地語系化字串。
+        /// </summary>
+        public static string RMASKU_CreateAt {
+            get {
+                return ResourceManager.GetString("RMASKU_CreateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CreateBy 的當地語系化字串。
+        /// </summary>
+        public static string RMASKU_CreateBy {
+            get {
+                return ResourceManager.GetString("RMASKU_CreateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ID 的當地語系化字串。
+        /// </summary>
+        public static string RMASKU_ID {
+            get {
+                return ResourceManager.GetString("RMASKU_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 IsEnable 的當地語系化字串。
+        /// </summary>
+        public static string RMASKU_IsEnable {
+            get {
+                return ResourceManager.GetString("RMASKU_IsEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Name 的當地語系化字串。
+        /// </summary>
+        public static string RMASKU_Name {
+            get {
+                return ResourceManager.GetString("RMASKU_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 QTYOrdered 的當地語系化字串。
+        /// </summary>
+        public static string RMASKU_QTYOrdered {
+            get {
+                return ResourceManager.GetString("RMASKU_QTYOrdered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ReceivedAt 的當地語系化字串。
+        /// </summary>
+        public static string RMASKU_ReceivedAt {
+            get {
+                return ResourceManager.GetString("RMASKU_ReceivedAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ReceivedBy 的當地語系化字串。
+        /// </summary>
+        public static string RMASKU_ReceivedBy {
+            get {
+                return ResourceManager.GetString("RMASKU_ReceivedBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ReturnedQTY 的當地語系化字串。
+        /// </summary>
+        public static string RMASKU_ReturnedQTY {
+            get {
+                return ResourceManager.GetString("RMASKU_ReturnedQTY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 RMAID 的當地語系化字串。
+        /// </summary>
+        public static string RMASKU_RMAID {
+            get {
+                return ResourceManager.GetString("RMASKU_RMAID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 SkuNo 的當地語系化字串。
+        /// </summary>
+        public static string RMASKU_SkuNo {
+            get {
+                return ResourceManager.GetString("RMASKU_SkuNo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UPCEAN 的當地語系化字串。
+        /// </summary>
+        public static string RMASKU_UPCEAN {
+            get {
+                return ResourceManager.GetString("RMASKU_UPCEAN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UpdateAt 的當地語系化字串。
+        /// </summary>
+        public static string RMASKU_UpdateAt {
+            get {
+                return ResourceManager.GetString("RMASKU_UpdateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UpdateBy 的當地語系化字串。
+        /// </summary>
+        public static string RMASKU_UpdateBy {
+            get {
+                return ResourceManager.GetString("RMASKU_UpdateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 WarehouseID 的當地語系化字串。
+        /// </summary>
+        public static string RMASKU_WarehouseID {
+            get {
+                return ResourceManager.GetString("RMASKU_WarehouseID", resourceCulture);
             }
         }
         
@@ -4480,7 +4750,7 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
-        ///   查詢類似  的當地語系化字串。
+        ///   查詢類似 SC ID 的當地語系化字串。
         /// </summary>
         public static string SkuType_SCID {
             get {
