@@ -660,6 +660,7 @@
           <Property Name="ReceivedBy" Type="nvarchar" MaxLength="50" />
           <Property Name="ReceivedAt" Type="datetime" />
           <Property Name="WarehouseID" Type="int" />
+          <Property Name="Reason" Type="nvarchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="SerialsLlist">
           <Key>
@@ -4149,6 +4150,7 @@
           <NavigationProperty Name="Warehouse" Relationship="PurchaseOrderModel.FK_RMASKU_Warehouse" FromRole="RMASKU" ToRole="Warehouse" />
           <NavigationProperty Name="SKU" Relationship="PurchaseOrderModel.FK_RMASKU_SKU" FromRole="RMASKU" ToRole="SKU" />
           <NavigationProperty Name="RMASerialsLlist" Relationship="PurchaseOrderModel.FK_RMASerialsLlist_RMASKU" FromRole="RMASKU" ToRole="RMASerialsLlist" />
+          <Property Name="Reason" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="SkuType">
           <Key>
@@ -5273,6 +5275,7 @@
           <EntitySetMapping Name="RMASKU">
             <EntityTypeMapping TypeName="PurchaseOrderModel.RMASKU">
               <MappingFragment StoreEntitySet="RMASKU">
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
                 <ScalarProperty Name="WarehouseID" ColumnName="WarehouseID" />
                 <ScalarProperty Name="ReceivedAt" ColumnName="ReceivedAt" />
                 <ScalarProperty Name="ReceivedBy" ColumnName="ReceivedBy" />

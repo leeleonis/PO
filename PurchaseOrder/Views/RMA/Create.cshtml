@@ -2,6 +2,7 @@
 @{
     ViewBag.title = "新增RMA";
     var Warehouselist = EnumData.WarehouseDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var RMAReasonList = EnumData.RMAReasonList().Select(x => new SelectListItem { Text = x.Value, Value = x.Key.ToString() }).ToList();
 }
 <div id="content">
     <section id="widget-grid" class="">
@@ -18,7 +19,7 @@
                     </header>
                     <div>
                         <div class="widget-body no-padding">
-                            <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
+                            <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data" onSubmit="return checkForm(this);">
                                 @Html.AntiForgeryToken()
                                 @Html.Hidden("SID")
                                 <div id="content" class="tab-content">
@@ -55,8 +56,14 @@
                                                                 <th>SKU</th>
                                                                 <th>Product Name</th>
                                                                 <th>訂單數</th>
-                                                                <th>回收數</th>
-                                                                <th>Warehouse</th>
+                                                                <th>
+                                                                    原因
+                                                                    @Html.DropDownList("RMAReasonList", RMAReasonList)
+                                                                </th>
+                                                                <th>
+                                                                    預設資料庫
+                                                                    @Html.DropDownList("Warehouselist", Warehouselist)
+                                                                </th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -117,11 +124,26 @@
                     { data: "ProductName" },
                     { data: "QTY" },
                     {
-                        data: "RMAQTY",
+                        data: "Reason",
                         render: function (data, type, row, meta) {
-                            var html = '<input  name="RMAList[' + meta.row + '].RMAQTY" type="text">';
-                          
-                            return html;
+                            var RMAReasonList = @Html.Raw(Json.Encode(RMAReasonList.Select(x => new { x.Text, x.Value }).ToList()));
+                            var $select = $("<select></select>", {
+                                "id": "RMAList[" + meta.row + "].Reason",
+                                "name": "RMAList[" + meta.row + "].Reason",
+                                "class":"RMAReasonList",
+                                "value": data
+                            });
+                            $.each(RMAReasonList, function (k, val) {
+                                var $option = $("<option></option>", {
+                                    "text": val.Text,
+                                    "value": val.Value
+                                });
+                                if (data === val) {
+                                    $option.attr("selected", "selected")
+                                }
+                                $select.append($option);
+                            });
+                            return $select.prop("outerHTML");
                         }
                     },
                     {
@@ -131,6 +153,7 @@
                             var $select = $("<select></select>", {
                                 "id": "RMAList[" + meta.row + "].Warehouse",
                                 "name": "RMAList[" + meta.row + "].Warehouse",
+                                "class": "Warehouselist",
                                 "value": data
                             });
                             $.each(Warehouselist, function (k, val) {
@@ -208,6 +231,19 @@
                 }
             });
             return div;
+        }
+        function checkForm() {
+            var dataList = [];
+            $(DataGrid.$('input[type="checkbox"]:checked').each(function () {
+                dataList.push("Skulist=" + $(this).val());
+            }));
+            if (dataList.length > 0) {
+                return true;
+            }
+            else {
+                alert("請勾選SKU");
+                return false;
+            }
         }
     </script>
 }

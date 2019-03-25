@@ -118,6 +118,11 @@
                     }
                 }
             });
+            $("body").on("change", "table>thead>tr>th>select", function () {
+                var val = $(this).val();
+                var ID = $(this).attr("ID");
+                $("body").find("." + ID).val(val);
+            });
             @*oTable = $('#dt_basic').dataTable({
                 "columnDefs": [{ "orderable": false, "targets": "nosort" }],
                 "order": [],

@@ -35,6 +35,7 @@ namespace PurchaseOrderSys.Models
         public string ReceivedBy { get; set; }
         public Nullable<System.DateTime> ReceivedAt { get; set; }
         public Nullable<int> WarehouseID { get; set; }
+        public string Reason { get; set; }
     
         public virtual RMA RMA { get; set; }
         public virtual Warehouse Warehouse { get; set; }

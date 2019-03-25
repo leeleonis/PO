@@ -1289,7 +1289,7 @@ namespace PurchaseOrderSys.Models
     {
         public string ID { get; set; }
         public string SKU { get; set; }
-        public int? RMAQTY { get; set; }
+        public string Reason { get; set; }
         public int? Warehouse { get; set; }
     }
     public class RMASerial

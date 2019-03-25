@@ -15,7 +15,7 @@ namespace PurchaseOrderSys.Controllers
         // GET: RMA
         public ActionResult Index(RMAVM RMAVM)
         {
-            RMAVM.RMAList = db.RMA.Where(x => x.IsEnable);
+            RMAVM.RMAList = db.RMA.Where(x => x.IsEnable).OrderByDescending(x=>x.ID);
             return View(RMAVM);
         }
         public ActionResult Create()
@@ -67,7 +67,8 @@ namespace PurchaseOrderSys.Controllers
                                     Name = ProductName,
                                     SkuNo = Skuitem.SKU,
                                     QTYOrdered = Skuitem.QTY,
-                                    ReturnedQTY = RMAListitem.RMAQTY,
+                                    ReturnedQTY = 1,
+                                    Reason= RMAListitem.Reason,
                                     WarehouseID = RMAListitem.Warehouse,
                                     CreateBy = UserBy,
                                     CreateAt = CreateAt
@@ -128,13 +129,13 @@ namespace PurchaseOrderSys.Controllers
                         //{
                         //    RMAModelVMList.Add(new RMAModelVM { ck = item.OrderID, Order = item.OrderID, SKU = "Multi " });
                         //}
-                        foreach (var SKUitem in item.Items.GroupBy(x => x.SKU))
+                        foreach (var SKUitem in item.Items)
                         {
-                            var SKUNo = SKUitem.Key;
+                            var SKUNo = SKUitem.SKU;
                             var sku = db.SkuLang.Where(x => x.LangID == "en-US" && x.Sku == SKUNo).FirstOrDefault();
                             var ProductName = sku?.Name;
                             var UPC = sku?.GetSku.UPC + sku?.GetSku.EAN;
-                            RMAModelVMList.Add(new RMAModelVM { ck = item.OrderID, Order = item.OrderID, QTY = SKUitem.Sum(x => x.QTY), SKU = SKUNo, ProductName = ProductName, UPC = UPC });
+                            RMAModelVMList.Add(new RMAModelVM { ck = item.OrderID, Order = item.OrderID, QTY = 1, SKU = SKUNo, ProductName = ProductName, UPC = UPC });
                         }
                     }
 

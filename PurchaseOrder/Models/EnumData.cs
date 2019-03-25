@@ -340,5 +340,19 @@ namespace PurchaseOrderSys.Models
                { "Repair", "Repair" },
             };
         }
+        public static Dictionary<int, string> RMAReasonList()
+        {
+            return new Dictionary<int, string>()
+            {
+                  { 0, "" },
+                { 1, "defective" },
+                { 22, "no longer needed" },
+                { 70, "website description is inaccurate" },
+                { 4, "exchange" },
+                { 16, "return to shipper" },
+                { 19, "warranty" },
+                { 3, "other" }
+            };
+        }
     }
 }

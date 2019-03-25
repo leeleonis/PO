@@ -6,6 +6,7 @@
     var RMAActionList = EnumData.RMAActionList().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var CompanyDDL = EnumData.CompanyDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var ChannelList = EnumData.ChannelList().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var RMAReasonList = EnumData.RMAReasonList();
 }
 <div id="content">
     <section id="widget-grid" class="">
@@ -96,7 +97,7 @@
                                                                 <th>Product Name</th>
                                                                 <th>UPC / EAN</th>
                                                                 <th>訂單數</th>
-                                                                <th>回收數</th>
+                                                                <th>原因</th>
                                                                 <th>Return Warehouse</th>
                                                                 <th></th>
                                                             </tr>
@@ -119,7 +120,11 @@
                                                                         @item.QTYOrdered
                                                                     </td>
                                                                     <td>
-                                                                        @item.ReturnedQTY
+                                                                        @{ 
+                                                                            var Reason = 0;
+                                                                            int.TryParse(item.Reason, out Reason);
+                                                                        }
+                                                                            @RMAReasonList[Reason]
                                                                     </td>
                                                                     <td>@item.Warehouse.Name</td>
                                                                     <td>
