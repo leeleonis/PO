@@ -4,6 +4,12 @@
     var Warehouselist = EnumData.WarehouseDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var RMAReasonList = EnumData.RMAReasonList().Select(x => new SelectListItem { Text = x.Value, Value = x.Key.ToString() }).ToList();
 }
+<style>
+    table.dataTable tbody tr.selected {
+        color: white !important;
+        background-color: #eeeeee !important;
+    }
+</style>
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -52,7 +58,7 @@
                                                         <thead>
                                                             <tr>
                                                                 <th><input type="checkbox" /></th>
-                                                                <th>Order</th>
+                                                                <th style="width:160px">Order</th>
                                                                 <th>SKU</th>
                                                                 <th>Product Name</th>
                                                                 <th>訂單數</th>
@@ -79,7 +85,7 @@
                                     </div>
                                 </div>
                                 <div class="widget-footer">
-                                    <button type="submit" class="btn btn-primary" id="save">儲存</button>
+                                    <button type="submit" class="btn btn-primary" id="save">新增</button>
                                     <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index")'">返回</button>
                                 </div>
                             </form>
@@ -98,8 +104,7 @@
         var DataGrid;
         var tableID = "#DataGridC";
         $(document).ready(function () {
-         
-             DataGrid = $(tableID).DataTable({
+            DataGrid = $(tableID).DataTable({
                 fixedHeader: {
                     header: true,
                     footer: true
@@ -119,7 +124,13 @@
                             return html;
                         }
                     },
-                    { data: "Order" },
+                    {
+                        data: "Order",
+                        render: function (data, type, row, meta) {
+
+                            return row.Order + "<br/>" + row.SourceID;
+                        }
+                    },
                     { data: "SKU" },
                     { data: "ProductName" },
                     { data: "QTY" },
@@ -130,7 +141,7 @@
                             var $select = $("<select></select>", {
                                 "id": "RMAList[" + meta.row + "].Reason",
                                 "name": "RMAList[" + meta.row + "].Reason",
-                                "class":"RMAReasonList",
+                                "class": "RMAReasonList",
                                 "value": data
                             });
                             $.each(RMAReasonList, function (k, val) {
@@ -183,6 +194,14 @@
                         d.SourceID = SourceID;
                         d.UserID = UserID;
                         d.SID = SID;
+                    },
+                    dataSrc: function (json) {
+                        if (json.success) {
+                            return json.data;
+                        } else {
+                            alert(json.errmsg);
+                            return "";
+                        }
                     }
                 },
                 serverSide: true,//啟用ServerSide模式
@@ -212,6 +231,13 @@
                     tr.addClass('shown');
                 }
             });
+            $("body").on("change", ".RMAReasonList,.Warehouselist", function () {
+                var tr = $(this).closest("tr");
+                var checkboxlist = tr.find("input[type='checkbox']");
+                checkboxlist.each(function () {
+                    $(this).prop("checked", true);
+                });
+            });
         });
         function GetSKUList(d) {
             var div = $('<div style="border:2px blue solid;" />').addClass('loading').text('Loading...');
@@ -233,12 +259,45 @@
             return div;
         }
         function checkForm() {
-            var dataList = [];
+            var checkbox = false;
+            var Reason = false;
+            var Warehouse = false;
             $(DataGrid.$('input[type="checkbox"]:checked').each(function () {
-                dataList.push("Skulist=" + $(this).val());
+                var tr = $(this).closest('tr');
+                tr.find(".RMAReasonList").each(function () {
+                    if ($(this).val() == "" || $(this).val() == "0") {
+
+
+                    }
+                    else {
+                        Reason = true;
+                    }
+                });
+                tr.find(".Warehouselist").each(function () {
+                    if ($(this).val() == "" || $(this).val() == "0") {
+
+
+                    }
+                    else {
+                        Warehouse = true;
+                    }
+                });
+                checkbox = true;
             }));
-            if (dataList.length > 0) {
-                return true;
+            if (checkbox) {
+                if (Reason) {
+
+                    if (Warehouse) {
+                        return true;
+                    } else {
+                        alert("請選擇收貨倉");
+                        return false;
+                    }
+                }
+                else {
+                    alert("請選擇原因");
+                    return false;
+                }
             }
             else {
                 alert("請勾選SKU");

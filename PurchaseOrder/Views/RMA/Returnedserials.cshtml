@@ -1,10 +1,11 @@
 ﻿@model RMASKU
 @{
-    ViewBag.title = "Returned Serials";
+    ViewBag.title = "Receive returns";
     var LangList = EnumData.DataLangList().Select(l => new SelectListItem { Text = l.Value, Value = l.Key });
     var LangID = EnumData.DataLangList().First().Key;
     var SkuStatus = Enum.GetValues(typeof(EnumData.SkuStatus)).Cast<EnumData.SkuStatus>().Select(t => new SelectListItem() { Text = t.ToString(), Value = ((byte)t).ToString() }).ToList();
     var Warehouselist = EnumData.WarehouseDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var RMAReasonList = EnumData.RMAReasonList().Select(x => new SelectListItem { Text = x.Value, Value = x.Key.ToString() }).ToList();
 }
 <div id="content">
     <section id="widget-grid" class="">
@@ -128,13 +129,13 @@
                                                         <div class="col-sm-9 col-lg-2">
                                                             @Html.DropDownListFor(model => model.WarehouseID, Warehouselist, htmlAttributes: new { @class = "form-control" })
                                                         </div>
+                                                        @Html.Label("Reason:", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                        <div class="col-sm-9 col-lg-2">
+                                                            @Html.DropDownListFor(model => model.Reason, RMAReasonList, htmlAttributes: new { @class = "form-control" })
+                                                        </div>
                                                         @Html.Label("Serial:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                         <div class="col-sm-9 col-lg-2">
                                                             @Html.Editor("Serial", new { htmlAttributes = new { @class = "form-control" } })
-                                                        </div>
-                                                        @Html.Label("Reason:", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                        <div class="col-sm-9 col-lg-2">
-                                                            @Html.Editor("Reason", new { htmlAttributes = new { @class = "form-control" } })
                                                         </div>
                                                     </div>
                                                     @{

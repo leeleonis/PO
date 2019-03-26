@@ -122,6 +122,10 @@
                 var val = $(this).val();
                 var ID = $(this).attr("ID");
                 $("body").find("." + ID).val(val);
+                var checkboxlist = $("body").find("table>tbody>tr>td>input[type='checkbox']");
+                checkboxlist.each(function () {
+                    $(this).prop("checked", true);
+                });
             });
             @*oTable = $('#dt_basic').dataTable({
                 "columnDefs": [{ "orderable": false, "targets": "nosort" }],

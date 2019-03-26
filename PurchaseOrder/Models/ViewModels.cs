@@ -1278,6 +1278,7 @@ namespace PurchaseOrderSys.Models
     {
         public int ck { get; set; }
         public int Order { get; set; }
+        public string SourceID { get; set; } 
         public string SKU { get; set; }
         public string ProductName { get; set; }
         public string UPC { get; set; }

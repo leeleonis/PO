@@ -99,9 +99,13 @@
                                                                         <td><input type="checkbox" /></td>
                                                                         <td class="details-control" RMAID="@item.ID"></td>
                                                                         <td><a  id='Edit' href='@Url.Action("Edit", new { item.ID })'>@item.ID</a></td>
-                                                                        <td>@item.OrderID</td>
+                                                                        <td>
+                                                                            <a href='https://dm.cwa.sellercloud.com/Orders/Orders_details.aspx?id=@(item.OrderID)' target="_blank">@item.OrderID</a>
+                                                                            <br />
+                                                                            @item.SourceID
+                                                                        </td>
                                                                         <td>@item.ReturnTracking</td>
-                                                                        <td>@item.Warehouse.Name</td>
+                                                                        <td>@(item.Warehouse?.Name)</td>
                                                                         <td>
                                                                             @{
                                                                                 var Reason = 0;
@@ -153,7 +157,6 @@
                     ],
                     "order": []
                 });
-
                 DataGridC.columns().every(function () {
                     var that = this;
                     $('input', this.footer()).on('keyup change', function () {

@@ -60,11 +60,19 @@
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("SourceCaseID", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
+                                                @Html.Label("Warranty / Repair #", htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("Warranty", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                </div>
                                             </div>
                                             <div class="form-group">
                                                 @Html.LabelFor(model => model.CompanyID, htmlAttributes: new { @class = "control-label col-sm-1" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.DropDownList("CompanyID", CompanyDDL, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                                                </div>
+                                                @Html.Label("Credit Memo #", htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("CreditMemo", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -72,11 +80,19 @@
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.DropDownList("Channel", ChannelList, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
                                                 </div>
+                                                @Html.Label("Create Date", htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    <input class="form-control" type="text" value="@Model.CreateAt.ToLocalTime()" readonly>
+                                                </div>
                                             </div>
                                             <div class="form-group">
                                                 @Html.LabelFor(model => model.Country, htmlAttributes: new { @class = "control-label col-sm-1" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("Country", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                </div>
+                                                @Html.Label("Create By", htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("CreateBy", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -84,14 +100,32 @@
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("SCRMA", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                                                 </div>
+                                                @Html.Label("Received Date", htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("ReceivedDate", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.Label("Received Date", htmlAttributes: new { @class = "control-label col-sm-1  col-sm-offset-3" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("ReceivedDate", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                </div>
                                             </div>
                                         </fieldset>
                                         <fieldset>
+                                            <legend></legend>
+                                            <div class="form-group">
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @*<button type="button" id="Edititems">Edit items</button>
+                                                    <button type="button" id="Removeitems">Remove items</button>*@
+                                                </div>
+                                            </div>
                                             <div class="row">
                                                 <article class="col-xs-12">
                                                     <table id="DataGridC" class="table table-striped table-bordered">
                                                         <thead>
                                                             <tr>
+                                                                <th><input type="checkbox" /></th>
                                                                 <th></th>
                                                                 <th>SKU</th>
                                                                 <th>Product Name</th>
@@ -106,6 +140,9 @@
                                                             @foreach (var item in Model.RMASKU.Where(x => x.IsEnable))
                                                             {
                                                                 <tr>
+                                                                    <td>
+                                                                        <input type="checkbox" value="@item.ID">
+                                                                    </td>
                                                                     <td class="details-control" SKUid="@item.ID"></td>
                                                                     <td>
                                                                         @item.SkuNo
@@ -120,15 +157,15 @@
                                                                         @item.QTYOrdered
                                                                     </td>
                                                                     <td>
-                                                                        @{ 
+                                                                        @{
                                                                             var Reason = 0;
                                                                             int.TryParse(item.Reason, out Reason);
                                                                         }
-                                                                            @RMAReasonList[Reason]
+                                                                        @RMAReasonList[Reason]
                                                                     </td>
                                                                     <td>@item.Warehouse.Name</td>
                                                                     <td>
-                                                                        <a href='@Url.Action("Returnedserials",new {item.ID })' class='btn btn-default btn-sm'>Returned serials</a>
+                                                                        <a href='@Url.Action("Returnedserials",new {item.ID })' class='btn btn-default btn-sm'>Receive returns</a>
                                                                     </td>
                                                                 </tr>
                                                             }
@@ -161,7 +198,6 @@
         var DataGrid;
         var tableID = "#DataGridC";
         $(document).ready(function () {
-
              DataGrid = $(tableID).DataTable({
                 fixedHeader: {
                     header: true,
@@ -195,6 +231,60 @@
                     row.child(GetSerialList(SKUid)).show();
                     tr.addClass('shown');
                 }
+            });
+            $("#Removeitems").on("click", function () {
+                var dataList = [];
+                $(DataGrid.$('input[type="checkbox"]:checked').each(function () {
+                    dataList.push($(this).val());
+                }));
+                //for (var i in rows) {
+                //    dataList.push(i);
+                //}
+                $.ajax({
+                    traditional: true,
+                    type: "post",
+                    url: "@Url.Action("RemoveData")",
+                    data: {
+                        IDList: dataList,
+                        SID:@Html.Display("ID"),
+                    },
+                    success: function (data) {
+                        if (data.status) {
+                            $(tableID + ' thead input[type="checkbox"]').prop("checked", false);
+                            DataGrid.draw();
+                        }
+                        else {
+                            alert(data.Errmsg);
+                        }
+                    }
+                });
+            });
+            $("#Edititems").on("click", function () {
+                var dataList = [];
+                $(DataGrid.$('input[type="checkbox"]:checked').each(function () {
+                    dataList.push($(this).val());
+                }));
+                //for (var i in rows) {
+                //    dataList.push(i);
+                //}
+                $.ajax({
+                    traditional: true,
+                    type: "post",
+                    url: "@Url.Action("EditSKUData")",
+                    data: {
+                        IDList: dataList,
+                        SID:@Html.Display("ID"),
+                    },
+                    success: function (data) {
+                        if (data.status) {
+                            $(tableID + ' thead input[type="checkbox"]').prop("checked", false);
+                            DataGrid.draw();
+                        }
+                        else {
+                            alert(data.Errmsg);
+                        }
+                    }
+                });
             });
         });
         function GetSerialList(ID) {

@@ -111,7 +111,7 @@ namespace PurchaseOrderSys.Models
     		/// Create At
     		/// </summary>        
     	    [Display(Name = "RMA_CreateAt", ResourceType = typeof(App_GlobalResources.Resource))]
-            [UIHint("DateTime")]
+            [UIHint("FDate")]
             [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public System.DateTime  CreateAt { get; set; }
@@ -129,7 +129,7 @@ namespace PurchaseOrderSys.Models
     		/// Update At
     		/// </summary>        
     	    [Display(Name = "RMA_UpdateAt", ResourceType = typeof(App_GlobalResources.Resource))]
-            [UIHint("DateTime")]
+            [UIHint("FDate")]
     		public Nullable<System.DateTime>  UpdateAt { get; set; }
     
     		    

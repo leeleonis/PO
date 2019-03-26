@@ -26,6 +26,7 @@ namespace PurchaseOrderSys.Controllers
         [HttpPost]
         public ActionResult Create(string SID, List<RMAModelPost> RMAList)
         {
+            var RedirectID = 0;
             var OrderItemDataList = (List<OrderItemData>)Session["RSkuNumberList" + SID];
             var CreateAt = DateTime.UtcNow;
             foreach (var OrderItemDataitem in OrderItemDataList)
@@ -78,9 +79,13 @@ namespace PurchaseOrderSys.Controllers
                         }
                     }
                     db.SaveChanges();
+                    if (RedirectID == 0)
+                    {
+                        RedirectID = newRMA.ID;
+                    }
                 }
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Edit", new { id = RedirectID });
         }
         /// <summary>
         /// 已出貨的訂單
@@ -122,29 +127,48 @@ namespace PurchaseOrderSys.Controllers
                 {
                     if (item.Items.Count() > 0)
                     {
-                        //if (item.Items.Count() == 1)
-                        //{
-                        //}
-                        //else
-                        //{
-                        //    RMAModelVMList.Add(new RMAModelVM { ck = item.OrderID, Order = item.OrderID, SKU = "Multi " });
-                        //}
                         foreach (var SKUitem in item.Items)
                         {
                             var SKUNo = SKUitem.SKU;
                             var sku = db.SkuLang.Where(x => x.LangID == "en-US" && x.Sku == SKUNo).FirstOrDefault();
                             var ProductName = sku?.Name;
                             var UPC = sku?.GetSku.UPC + sku?.GetSku.EAN;
-                            RMAModelVMList.Add(new RMAModelVM { ck = item.OrderID, Order = item.OrderID, QTY = 1, SKU = SKUNo, ProductName = ProductName, UPC = UPC });
+                            RMAModelVMList.Add(new RMAModelVM { ck = item.OrderID, Order = item.OrderID, SourceID = item.OrderSourceOrderId, QTY = 1, SKU = SKUNo, ProductName = ProductName, UPC = UPC });
                         }
                     }
-
                 }
+                //過濾已開RMA的SKU
+                if (RMAModelVMList.Any())
+                {
+                    var Orderlist = RMAModelVMList.Select(x => x.Order).Distinct().ToList();
+                    var RMAList = db.RMA.Where(x=>x.IsEnable&& Orderlist.Contains(x.OrderID.Value));
+                    foreach (var RMAitem in RMAList)
+                    {
+                        foreach (var RMASKUitem in RMAitem.RMASKU.Where(x=>x.IsEnable))
+                        {
+                            var chkRMAModelVMList = RMAModelVMList.Where(x => x.Order == RMAitem.OrderID && x.SKU == RMASKUitem.SkuNo).ToList();
+                            if (chkRMAModelVMList.Any())
+                            {
+                                RMAModelVMList.Remove(chkRMAModelVMList.FirstOrDefault());
+                            }
+                        }
+                    }
+                    if (!RMAModelVMList.Any())
+                    {
+                        return Json(new { success = false, errmsg = "無可開RMA的訂單" }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+             
                 Session["RSkuNumberList" + SID] = OrderItemData;
+            }
+            else
+            {
+                return Json(new { success = false, errmsg = "查無訂單資料" }, JsonRequestBehavior.AllowGet);
             }
             int recordsTotal = RMAModelVMList.Count();
             var returnObj = new
             {
+                success = true,
                 draw = draw,
                 recordsTotal = recordsTotal,
                 recordsFiltered = recordsTotal,
@@ -266,6 +290,79 @@ namespace PurchaseOrderSys.Controllers
             else
             {
                 return Json(new { status = false, Errmsg = "序號已經存在" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        public ActionResult RemoveData(string[] IDList, string SID)
+        {
+            var Errmsg = "";
+            if (IDList != null && IDList.Any())
+            {
+                var odataList = (List<PoSKUVM>)Session["RSkuNumberList" + SID];
+                foreach (var item in IDList)
+                {
+                    foreach (var odataListitem in odataList.Where(x => x.ID.ToString() == item || x.SKU == item))
+                    {
+                        if (odataListitem.ID.HasValue)
+                        {
+
+
+                            var PurchaseSKU = db.PurchaseSKU.Find(odataListitem.ID);
+                            if (PurchaseSKU.SerialsLlist.Any())
+                            {
+                                Errmsg += "【" + PurchaseSKU.SkuNo + "】已有序號不能刪除；";
+                            }
+                            else
+                            {
+                                odataListitem.Model = "D";
+                            }
+                        }
+                        else
+                        {
+                            odataListitem.Model = "D";
+                        }
+                    }
+                }
+                Session["RSkuNumberList" + SID] = odataList;
+            }
+            else
+            {
+                Errmsg = "沒有選取SKU";
+            }
+            if (string.IsNullOrWhiteSpace(Errmsg))
+            {
+                return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { status = false, Errmsg }, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+        public ActionResult EditSKUData(string[] IDList, string SID)
+        {
+            var Errmsg = "";
+            if (IDList != null && IDList.Any())
+            {
+                var odataList = (List<PoSKUVM>)Session["RSkuNumberList" + SID];
+                foreach (var item in IDList)
+                {
+                    foreach (var odataListitem in odataList.Where(x => x.ID.ToString() == item || x.SKU == item))
+                    {
+                        odataListitem.Model = "E";
+                    }
+                }
+            }
+            else
+            {
+                Errmsg = "沒有選取SKU";
+            }
+            if (string.IsNullOrWhiteSpace(Errmsg))
+            {
+                return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { status = false, Errmsg }, JsonRequestBehavior.AllowGet);
             }
         }
     }
