@@ -1285,6 +1285,7 @@ namespace PurchaseOrderSys.Models
         public int? QTY { get; set; }
         public int? RMAQTY { get; set; }
         public int? Warehouse { get; set; }
+        public string Reason { get; set; }
     }
     public class RMAModelPost
     {
@@ -1298,5 +1299,18 @@ namespace PurchaseOrderSys.Models
         public string Serial { get; set; }
         public string Warehouse { get; set; }
         public string Reason { get; set; }
+    }
+    public class RMAEdit
+    {
+        public int ID { get; set; }
+        public string SKU { get; set; }
+        public string ProductName { get; set; }
+        public string UPCEAN { get; set; }
+        public int? QTYOrdered { get; set; }
+        public string Reason { get; set; }
+        public int? Warehouse { get; set; }
+        public string SerialsNo { get; set; }
+        public string TrWarehouse { get; set; }
+        public string Model { get; set; }
     }
 }

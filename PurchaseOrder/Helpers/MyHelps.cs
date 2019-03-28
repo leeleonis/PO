@@ -393,5 +393,26 @@ namespace PurchaseOrderSys.Helpers
             //    ActionLog.SaveChanges();
             //}
         }
+        /// <summary>
+        /// 下拉選單改成Label唯讀顯示
+        /// </summary>
+        /// <param name="htmlHelper"></param>
+        /// <param name="name"></param>
+        /// <param name="selectList"></param>
+        /// <param name="htmlAttributes"></param>
+        /// <returns></returns>
+        public static MvcHtmlString DropDownListLabel(this HtmlHelper htmlHelper, string name, IEnumerable<SelectListItem> selectList, object htmlAttributes)
+        {
+            var attrs = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes);
+            var readonlyVal = attrs.Where(x => x.Key == "readonly").FirstOrDefault().Value;
+            if (readonlyVal.ToString()!= "readonly"&& readonlyVal.ToString() != "true")
+            {
+                attrs.Add("readonly", "readonly");
+            }
+            var Value = htmlHelper.Value(name).ToHtmlString();
+            var Text = selectList.Where(x => x.Value == Value).FirstOrDefault()?.Text;
+            var labelHtml = htmlHelper.Label(name, Text, attrs);
+            return MvcHtmlString.Create(labelHtml.ToHtmlString());
+        }
     }
 }

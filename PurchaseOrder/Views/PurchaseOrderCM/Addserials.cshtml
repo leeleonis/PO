@@ -42,12 +42,12 @@
                                                         <a target='_blank' href='@Url.Action("edit", "Sku")?id=@Model.SkuNo#6'>@Model.SkuNo</a>
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
+                                                @*<div class="form-group">
                                                     @Html.LabelFor(model => model.SKU.SkuLang.First().LangID, htmlAttributes: new { @class = "control-label col-sm-2 col-lg-4" })
                                                     <div class="col-sm-8 col-lg-4">
                                                         @Html.DropDownList("LangID", LangList, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
                                                     </div>
-                                                </div>
+                                                </div>*@
                                                 <div class="form-group">
                                                     @Html.LabelFor(model => model.SKU.Company, htmlAttributes: new { @class = "control-label col-sm-2 col-lg-4" })
                                                     <div class="col-sm-8 col-lg-4">
@@ -114,7 +114,17 @@
                                                         @Html.BooleanSwitch("Battery", Model.SKU.Battery, null, true)
                                                     </div>
                                                 </div>
-
+                                                <div class="form-group">
+                                                    <div class="col-sm-8 col-sm-offset-3">
+                                                        @{
+                                                            var ImagePath = Model.SKU.Logistic?.ImagePath;
+                                                            if (!string.IsNullOrWhiteSpace(ImagePath))
+                                                            {
+                                                                <img src="../../Uploads/@(Model.SKU.Logistic?.ImagePath)" style="width:300px" />
+                                                            }
+                                                        }
+                                                    </div>
+                                                </div>
                                             </div>
                                         </fieldset>
                                         <fieldset>

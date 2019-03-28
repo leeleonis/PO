@@ -28,7 +28,6 @@
                                 <li><a data-toggle="tab" href="#hb1">@ViewBag.ptitle</a></li>
                             </ul>
                         </header>
-
                         <div>
                             <div class="widget-body no-padding">
                                 <div id="content" class="tab-content">
@@ -98,22 +97,46 @@
                                                                     <tr>
                                                                         <td><input type="checkbox" /></td>
                                                                         <td class="details-control" RMAID="@item.ID"></td>
-                                                                        <td><a  id='Edit' href='@Url.Action("Edit", new { item.ID })'>@item.ID</a></td>
+                                                                        <td><a id='Edit' href='@Url.Action("Edit", new { item.ID })'>@item.ID</a></td>
                                                                         <td>
                                                                             <a href='https://dm.cwa.sellercloud.com/Orders/Orders_details.aspx?id=@(item.OrderID)' target="_blank">@item.OrderID</a>
                                                                             <br />
                                                                             @item.SourceID
                                                                         </td>
                                                                         <td>@item.ReturnTracking</td>
-                                                                        <td>@(item.Warehouse?.Name)</td>
                                                                         <td>
-                                                                            @{
-                                                                                var Reason = 0;
-                                                                                int.TryParse(item.Reason, out Reason);
+                                                                            @if (item.RMASKU.Where(x => x.IsEnable).Any())
+                                                                            {
+                                                                                if (item.RMASKU.Where(x => x.IsEnable).Count() == 1)
+                                                                                {
+                                                                                    @(item.RMASKU.Where(x => x.IsEnable).FirstOrDefault().Warehouse?.Name)
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    @:multi
+                                                                                }
                                                                             }
-                                                                            @RMAReasonList[Reason]
                                                                         </td>
-                                                                        <td>@item.Status</td>
+                                                                        <td>
+
+                                                                            @if (item.RMASKU.Where(x => x.IsEnable).Any())
+                                                                            {
+                                                                                if (item.RMASKU.Where(x => x.IsEnable).Count() == 1)
+                                                                                {
+                                                                                    var Reasonval = item.RMASKU.Where(x => x.IsEnable).FirstOrDefault()?.Reason;
+                                                                                    var Reason = 0;
+                                                                                    int.TryParse(Reasonval, out Reason);
+                                                                                    @(RMAReasonList[Reason])
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    @:multi
+                                                                                }
+                                                                            }
+                                                                        </td>
+                                                                        <td>
+                                                                        @item.Status
+                                                                        </td>
                                                                         <td>@item.CreateAt.ToLocalTime()</td>
                                                                         <td>@item.CreateBy</td>
                                                                     </tr>

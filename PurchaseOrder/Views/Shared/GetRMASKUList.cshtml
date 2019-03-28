@@ -1,8 +1,10 @@
 ﻿@model IEnumerable<RMAModelVM>
 @{
     Layout = null;
+    var RMAReasonList = EnumData.RMAReasonList();
+    var Warehouselist = EnumData.WarehouseDDL();
 }
-<table class="table">
+<table class="table table-striped table-bordered">
     <thead>
         <tr>
             <th>
@@ -14,6 +16,8 @@
             <th>
                 QTY
             </th>
+            <th>Return Warehouse</th>
+            <th>Reason</th>
         </tr>
     </thead>
     <tbody>
@@ -28,6 +32,16 @@
             </td>
             <td>
                 @item.QTY
+            </td>
+            <td>
+                @Warehouselist[item.Warehouse.ToString()]
+            </td>
+            <td>
+                @{ 
+                    var Reason = 0;
+                    int.TryParse(item.Reason, out Reason);
+                }
+                @RMAReasonList[Reason]
             </td>
         </tr>
         }

@@ -68,7 +68,7 @@
                                             <div class="form-group">
                                                 @Html.LabelFor(model => model.CompanyID, htmlAttributes: new { @class = "control-label col-sm-1" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownList("CompanyID", CompanyDDL, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                                                    @Html.DropDownListLabel("CompanyID", CompanyDDL, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
                                                 </div>
                                                 @Html.Label("Credit Memo #", htmlAttributes: new { @class = "control-label col-sm-1" })
                                                 <div class="col-sm-9 col-lg-2">
@@ -78,7 +78,7 @@
                                             <div class="form-group">
                                                 @Html.LabelFor(model => model.Channel, htmlAttributes: new { @class = "control-label col-sm-1" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownList("Channel", ChannelList, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                                                    @Html.DropDownListLabel("Channel", ChannelList, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
                                                 </div>
                                                 @Html.Label("Create Date", htmlAttributes: new { @class = "control-label col-sm-1" })
                                                 <div class="col-sm-9 col-lg-2">
@@ -102,13 +102,19 @@
                                                 </div>
                                                 @Html.Label("Received Date", htmlAttributes: new { @class = "control-label col-sm-1" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("ReceivedDate", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                    @{
+                                                        var ReceivedDate = Model.RMASKU.Where(x => x.IsEnable).OrderByDescending(x=>x.ReceivedAt).FirstOrDefault()?.ReceivedAt?.ToLocalTime();
+                                                        <input class="form-control" type="text" value="@ReceivedDate" readonly>
+                                                    }
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                @Html.Label("Received Date", htmlAttributes: new { @class = "control-label col-sm-1  col-sm-offset-3" })
+                                                @Html.Label("Received By", htmlAttributes: new { @class = "control-label col-sm-1  col-sm-offset-3" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("ReceivedDate", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                    @{
+                                                        var ReceivedBy = Model.RMASKU.Where(x => x.IsEnable).OrderByDescending(x => x.ReceivedAt).FirstOrDefault()?.ReceivedBy;
+                                                        <input class="form-control" type="text" value="@ReceivedBy" readonly>
+                                                    }
                                                 </div>
                                             </div>
                                         </fieldset>
@@ -116,8 +122,11 @@
                                             <legend></legend>
                                             <div class="form-group">
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @*<button type="button" id="Edititems">Edit items</button>
-                                                    <button type="button" id="Removeitems">Remove items</button>*@
+                                                    @if (Model.Status != "Closed")
+                                                    {
+                                                        <button type="button" id="Edititems">Edit items</button>
+                                                        <button type="button" id="Removeitems">Remove items</button>
+                                                    }
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -126,51 +135,135 @@
                                                         <thead>
                                                             <tr>
                                                                 <th><input type="checkbox" /></th>
-                                                                <th></th>
                                                                 <th>SKU</th>
                                                                 <th>Product Name</th>
                                                                 <th>UPC / EAN</th>
                                                                 <th>訂單數</th>
                                                                 <th>原因</th>
                                                                 <th>Return Warehouse</th>
+                                                                <th>Serial</th>
+                                                                <th>實際收貨倉</th>
                                                                 <th></th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach (var item in Model.RMASKU.Where(x => x.IsEnable))
-                                                            {
-                                                                <tr>
-                                                                    <td>
-                                                                        <input type="checkbox" value="@item.ID">
-                                                                    </td>
-                                                                    <td class="details-control" SKUid="@item.ID"></td>
-                                                                    <td>
-                                                                        @item.SkuNo
-                                                                    </td>
-                                                                    <td>
-                                                                        @item.SKU.SkuLang.Where(x => x.LangID == "en-US").FirstOrDefault().Name
-                                                                    </td>
-                                                                    <td>
-                                                                        @item.SKU.UPC  / @item.SKU.EAN
-                                                                    </td>
-                                                                    <td>
-                                                                        @item.QTYOrdered
-                                                                    </td>
-                                                                    <td>
-                                                                        @{
-                                                                            var Reason = 0;
-                                                                            int.TryParse(item.Reason, out Reason);
-                                                                        }
-                                                                        @RMAReasonList[Reason]
-                                                                    </td>
-                                                                    <td>@item.Warehouse.Name</td>
-                                                                    <td>
-                                                                        <a href='@Url.Action("Returnedserials",new {item.ID })' class='btn btn-default btn-sm'>Receive returns</a>
-                                                                    </td>
-                                                                </tr>
-                                                            }
+                                                            @*@foreach (var item in Model.RMASKU.Where(x => x.IsEnable))
+            {
+            <tr>
+                <td>
+                    <input type="checkbox" value="@item.ID">
+                </td>
+                <td>
+                    @item.SkuNo
+                </td>
+                <td>
+                    @item.SKU.SkuLang.Where(x => x.LangID == "en-US").FirstOrDefault().Name
+                </td>
+                <td>
+                    @item.SKU.UPC  / @item.SKU.EAN
+                </td>
+                <td>
+                    @item.QTYOrdered
+                </td>
+                <td>
+                    @{
+                        var Reason = 0;
+                        int.TryParse(item.Reason, out Reason);
+                    }
+                    @RMAReasonList[Reason]
+                </td>
+                <td>@item.Warehouse.Name</td>
+                <td>
+                    @foreach (var Serialitem in item.RMASerialsLlist)
+                    {
+                        @Serialitem.SerialsNo
+                    }
+                </td>
+                <td>
+                    @foreach (var Serialitem in item.RMASerialsLlist)
+                    {
+                        @Serialitem.Warehouse.Name
+                    }
+                </td>
+                <td>
+                    <a href='@Url.Action("Returnedserials",new {item.ID })' class='btn btn-default btn-sm'>Receive returns</a>
+                </td>
+            </tr>
+            }*@
                                                         </tbody>
                                                         <tfoot>
+                                                            <tr>
+                                                                <td colspan="10"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="8" rowspan="9">
+                                                                    <div class="col-sm-10 col-lg-8">
+                                                                        <textarea rows="20" style="width:100%" id="textnote"></textarea>
+                                                                        <button type="button" id="addnote" style="float:right" class="btn btn-default btn-sm">Add Note</button>
+                                                                        <span style="float:right">　</span>
+                                                                        <button type="button" id="UploadImage" style="float:right" class="btn btn-default btn-sm">Upload Image</button>
+                                                                        <input type="file" id="addimg" style="float:right" />
+                                                                    </div>
+                                                                    <div class="col-sm-2 col-lg-4">
+                                                                        <ul style="list-style-type:none;list-style-position: inside;padding-left: 0px;padding-left: 0px;" id="textnotelog">
+                                                                            @*@foreach (var item in Model.PurchaseNote.OrderByDescending(x => x.ID))
+        {
+            <li>
+                <fieldset>
+                    <legend>
+                        @if (item.NoteType == "Url")
+                        {
+                            <a class="aimg" href="@item.Note" data-lightbox="roadtrip"><img class="img" src="@item.Note" /></a>
+                        }
+                        else
+                        {
+                            @item.Note
+                        }
+
+                        <br />
+                        @( item.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss") + "；" + item.CreateBy)
+                    </legend>
+                </fieldset>
+            </li>
+        }*@
+                                                                        </ul>
+                                                                    </div>
+                                                                </td>
+                                                                <td colspan="2">Refund Statement</td>
+                      
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Item value:</td>
+                                                                <td></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Shipping charge:</td>
+                                                                <td></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Restocking fee:</td>
+                                                                <td></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Return shipping cost:</td>
+                                                                <td></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Other costs:</td>
+                                                                <td></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Total refund:</td>
+                                                                <td></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Order balance:</td>
+                                                                <td></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Apply Refund</td>
+                                                                <td>Save</td>
+                                                            </tr>
                                                         </tfoot>
                                                     </table>
                                                 </article>
@@ -179,8 +272,12 @@
                                     </div>
                                 </div>
                                 <div class="widget-footer">
-                                    <button type="submit" class="btn btn-primary" id="save">儲存</button>
+                                    @if (Model.Status != "Closed")
+                                    {
+                                        <button type="submit" class="btn btn-primary" id="save">儲存</button>
+                                    }
                                     <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index")'">返回</button>
+
                                 </div>
                             </form>
                         </div>
@@ -198,15 +295,125 @@
         var DataGrid;
         var tableID = "#DataGridC";
         $(document).ready(function () {
-             DataGrid = $(tableID).DataTable({
+            DataGrid = $(tableID).DataTable({
                 fixedHeader: {
                     header: true,
                     footer: true
-                 },
-                 select: {
-                     style: 'os',
-                     selector: 'td:first-child'
-                 },
+                },
+                select: {
+                    style: 'os',
+                    selector: 'td:first-child'
+                },
+                columns: [
+                    {
+                        data: "ID",
+                        className: 'select-checkbox',
+                        orderable: false,
+                        render: function (data, type, row, meta) {
+                            var html = '<input type="checkbox" name="RMAList[' + meta.row + '].SKU" value="' + data + '">';
+                            html += '<input type="hidden" name="RMAList[' + meta.row + '].ID" value="' + data + '">';
+                            return html;
+                        }
+                    },
+                    { data: "SKU" },
+                    { data: "ProductName" },
+                    { data: "UPCEAN" },
+                    { data: "QTYOrdered" },
+                    {
+                        data: "Reason",
+                        render: function (data, type, row, meta) {
+                            var RMAReasonList = @Html.Raw(Json.Encode(RMAReasonList.Select(x => new SelectListItem { Text = x.Value, Value = x.Key.ToString() }).ToList().Select(x => new { x.Text, x.Value }).ToList()));
+                            if (row.Model == "E" && "@Model.Status" != "Closed") {
+                                var $select = $("<select></select>", {
+                                    "id": "RMAList[" + meta.row + "].Reason",
+                                    "name": "RMAList[" + meta.row + "].Reason",
+                                    "class": "RMAReasonList",
+                                    "value": data
+                                });
+                                $.each(RMAReasonList, function (k, val) {
+                                    var $option = $("<option></option>", {
+                                        "text": val.Text,
+                                        "value": val.Value
+                                    });
+                                    if (data == val.Value) {
+                                        $option.attr("selected", "selected")
+                                    }
+                                    $select.append($option);
+                                });
+                                return $select.prop("outerHTML");
+                            }
+                            else {
+                                var text = "";
+                                $.each(RMAReasonList, function (k, val) {
+                                    if (data == val.Value) {
+                                        text = val.Text;
+                                    }
+                                });
+                                return text;
+                            }
+                        }
+                    },
+                    {
+                        data: "Warehouse",
+                        render: function (data, type, row, meta) {
+                            var Warehouselist = @Html.Raw(Json.Encode(Warehouselist.Select(x => new { x.Text, x.Value }).ToList()));
+                            if (row.Model == "E" && (row.SerialsNo == null || row.SerialsNo == "")) {
+                                var $select = $("<select></select>", {
+                                    "id": "RMAList[" + meta.row + "].Warehouse",
+                                    "name": "RMAList[" + meta.row + "].Warehouse",
+                                    "class": "Warehouselist",
+                                    "value": data
+                                });
+                                $.each(Warehouselist, function (k, val) {
+                                    var $option = $("<option></option>", {
+                                        "text": val.Text,
+                                        "value": val.Value
+                                    });
+                                    if (data == val.Value) {
+                                        $option.attr("selected", "selected")
+                                    }
+                                    $select.append($option);
+                                });
+                                return $select.prop("outerHTML");
+                            }
+                            else {
+                                var text = "";
+                                $.each(Warehouselist, function (k, val) {
+                                    if (data == val.Value) {
+                                        text = val.Text;
+                                    }
+                                });
+                                return text;
+                            }
+                        }
+                    },
+                    { data: "SerialsNo" },
+                    {data: "TrWarehouse"},
+                    {
+                        data: "ID",
+                        render: function (data, type, row, meta) {
+                            return " <a href='@Url.Action("Returnedserials")?ID=" + data+"' class='btn btn-default btn-sm'>Receive returns</a>";
+                        }
+                    }
+                ],
+                ajax: {
+                    traditional: true,
+                    method: "get",//或post，自由決定，影響到Server端用FormCollection取值或Request.QueryString取得DataTables傳遞的資訊
+                    url: "@Url.Action("GetEditSKUData")",
+                    data: function (d) {
+                        d.ID = @Model.ID;
+                    },
+                    dataSrc: function (json) {
+                        if (json.success) {
+                            return json.data;
+                        } else {
+                            alert(json.errmsg);
+                            return "";
+                        }
+                    }
+                },
+                serverSide: true,//啟用ServerSide模式
+                //deferLoading: 0, //初始化DataTable時，不發出ajax
                 orderMulti: false,
                 "paging": false,
                 "ordering": false,
@@ -237,16 +444,40 @@
                 $(DataGrid.$('input[type="checkbox"]:checked').each(function () {
                     dataList.push($(this).val());
                 }));
-                //for (var i in rows) {
-                //    dataList.push(i);
-                //}
+                if (confirm("是否確定刪除")) {
+                    $.ajax({
+                        traditional: true,
+                        type: "post",
+                        url: "@Url.Action("RemoveData")",
+                        data: {
+                            IDList: dataList,
+                            ID:@Html.Display("ID"),
+                        },
+                        success: function (data) {
+                            if (data.status) {
+                                $(tableID + ' thead input[type="checkbox"]').prop("checked", false);
+                                DataGrid.draw();
+                            }
+                            else {
+                                alert(data.Errmsg);
+                                DataGrid.draw();
+                            }
+                        }
+                    });
+                }
+            });
+            $("#Edititems").on("click", function () {
+                var dataList = [];
+                $(DataGrid.$('input[type="checkbox"]:checked').each(function () {
+                    dataList.push($(this).val());
+                }));
                 $.ajax({
                     traditional: true,
                     type: "post",
-                    url: "@Url.Action("RemoveData")",
+                    url: "@Url.Action("EditSKUData")",
                     data: {
                         IDList: dataList,
-                        SID:@Html.Display("ID"),
+                        ID:@Html.Display("ID"),
                     },
                     success: function (data) {
                         if (data.status) {
@@ -259,32 +490,9 @@
                     }
                 });
             });
-            $("#Edititems").on("click", function () {
-                var dataList = [];
-                $(DataGrid.$('input[type="checkbox"]:checked').each(function () {
-                    dataList.push($(this).val());
-                }));
-                //for (var i in rows) {
-                //    dataList.push(i);
-                //}
-                $.ajax({
-                    traditional: true,
-                    type: "post",
-                    url: "@Url.Action("EditSKUData")",
-                    data: {
-                        IDList: dataList,
-                        SID:@Html.Display("ID"),
-                    },
-                    success: function (data) {
-                        if (data.status) {
-                            $(tableID + ' thead input[type="checkbox"]').prop("checked", false);
-                            DataGrid.draw();
-                        }
-                        else {
-                            alert(data.Errmsg);
-                        }
-                    }
-                });
+            $("body").on("change", ".RMAReasonList,.Warehouselist", function () {
+                var tr = $(this).closest("tr");
+                $(tr).children('td').css({ 'background-color': 'yellow' });
             });
         });
         function GetSerialList(ID) {

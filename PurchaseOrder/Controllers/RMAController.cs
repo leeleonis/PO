@@ -187,7 +187,7 @@ namespace PurchaseOrderSys.Controllers
                 {
                     var SKUNo = SKUitemList.SKU;
                     var ProductName = db.SkuLang.Where(x => x.LangID == "en-US" && x.Sku == SKUNo).FirstOrDefault()?.Name;
-                    RMAModelVMList.Add(new RMAModelVM { ck = item.OrderID, Order = item.OrderID, QTY = item.Items.FirstOrDefault().QTY, SKU = SKUNo, ProductName = ProductName });
+                    RMAModelVMList.Add(new RMAModelVM { ck = item.OrderID, Order = item.OrderID, QTY = item.Items.FirstOrDefault().QTY, SKU = SKUNo, ProductName = ProductName});
                 }
             }
             var partial = ControlToString("~/Views/Shared/GetRMASKUList.cshtml", RMAModelVMList);
@@ -202,7 +202,7 @@ namespace PurchaseOrderSys.Controllers
             {
                 var SKUNo = item.SkuNo;
                 var ProductName = db.SkuLang.Where(x => x.LangID == "en-US" && x.Sku == SKUNo).FirstOrDefault()?.Name;
-                RMAModelVMList.Add(new RMAModelVM { QTY = item.ReturnedQTY, SKU = SKUNo, ProductName = ProductName });
+                RMAModelVMList.Add(new RMAModelVM { QTY = item.ReturnedQTY, SKU = SKUNo, ProductName = ProductName, Warehouse = item.WarehouseID, Reason=item.Reason });
             }
            
             var partial = ControlToString("~/Views/Shared/GetRMASKUList.cshtml", RMAModelVMList);
@@ -211,10 +211,25 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult Edit(int id)
         {
             var RMA = db.RMA.Find(id);
+
+            var RMASKUList = RMA.RMASKU.Where(x => x.IsEnable).Select(x => new RMAEdit
+            {
+                ID = x.ID,
+                Model = "L",
+                SKU = x.SkuNo,
+                QTYOrdered = x.QTYOrdered,
+                ProductName = x.SKU.SkuLang.Where(y => y.LangID == "en-US").FirstOrDefault()?.Name,
+                SerialsNo = x.RMASerialsLlist.FirstOrDefault()?.SerialsNo,
+                UPCEAN = x.SKU.UPC + "/" + x.SKU.EAN,
+                Reason = x.Reason,
+                TrWarehouse = x.RMASerialsLlist.FirstOrDefault()?.Warehouse.Name,
+                Warehouse = x.WarehouseID
+            });
+            Session["RMAEdit" + id] = RMASKUList.ToList();
             return View(RMA);
         }
         [HttpPost]
-        public ActionResult Edit(RMA RMA)
+        public ActionResult Edit(RMA RMA, List<RMAModelPost> RMAList)
         {
             var OldRMA = db.RMA.Find(RMA.ID);
             OldRMA.Status = RMA.Status;
@@ -222,6 +237,27 @@ namespace PurchaseOrderSys.Controllers
             OldRMA.SourceCaseID = RMA.SourceCaseID;
             OldRMA.UpdateBy = UserBy;
             OldRMA.UpdateAt = DateTime.UtcNow;
+            foreach (var RMAListitem in RMAList)
+            {
+                foreach (var RMASKUitem in OldRMA.RMASKU.Where(x => x.IsEnable))
+                {
+                    if (RMAListitem.ID == RMASKUitem.ID.ToString())
+                    {
+                        if (!string.IsNullOrWhiteSpace(RMAListitem.Reason) && RMAListitem.Reason != RMASKUitem.Reason)
+                        {
+                            RMASKUitem.Reason = RMAListitem.Reason;
+                            RMASKUitem.UpdateBy = UserBy;
+                            RMASKUitem.UpdateAt = DateTime.UtcNow;
+                        }
+                        if (RMAListitem.Warehouse.HasValue && RMAListitem.Warehouse != RMASKUitem.WarehouseID)
+                        {
+                            RMASKUitem.WarehouseID = RMAListitem.Warehouse;
+                            RMASKUitem.UpdateBy = UserBy;
+                            RMASKUitem.UpdateAt = DateTime.UtcNow;
+                        }
+                    }
+                }
+            }
             db.SaveChanges();
             return RedirectToAction("Index");
         }
@@ -272,6 +308,8 @@ namespace PurchaseOrderSys.Controllers
                         CreateAt = dt
                     };
                     RMASKU.RMASerialsLlist.Add(nSerialsLlistIn);
+                    RMASKU.ReceivedBy = UserBy;
+                    RMASKU.ReceivedAt = dt;
                     try
                     {
                         db.SaveChanges();
@@ -292,37 +330,46 @@ namespace PurchaseOrderSys.Controllers
                 return Json(new { status = false, Errmsg = "序號已經存在" }, JsonRequestBehavior.AllowGet);
             }
         }
-        public ActionResult RemoveData(string[] IDList, string SID)
+        public ActionResult RemoveData(int[] IDList, int ID)
         {
             var Errmsg = "";
             if (IDList != null && IDList.Any())
             {
-                var odataList = (List<PoSKUVM>)Session["RSkuNumberList" + SID];
                 foreach (var item in IDList)
                 {
-                    foreach (var odataListitem in odataList.Where(x => x.ID.ToString() == item || x.SKU == item))
+
+                    var RMASKU = db.RMASKU.Find(item);
+                    if (RMASKU.RMASerialsLlist.Any())
                     {
-                        if (odataListitem.ID.HasValue)
-                        {
-
-
-                            var PurchaseSKU = db.PurchaseSKU.Find(odataListitem.ID);
-                            if (PurchaseSKU.SerialsLlist.Any())
-                            {
-                                Errmsg += "【" + PurchaseSKU.SkuNo + "】已有序號不能刪除；";
-                            }
-                            else
-                            {
-                                odataListitem.Model = "D";
-                            }
-                        }
-                        else
-                        {
-                            odataListitem.Model = "D";
-                        }
+                        Errmsg += "【" + RMASKU.SkuNo + "】已有序號不能刪除；";
                     }
+                    else
+                    {
+                        var dt = DateTime.UtcNow;
+                        RMASKU.IsEnable = false;
+                        RMASKU.UpdateAt = dt;
+                        RMASKU.UpdateBy = UserBy;
+                        db.SaveChanges();
+                    }
+
+
                 }
-                Session["RSkuNumberList" + SID] = odataList;
+                var RMA = db.RMA.Find(ID);
+
+                var RMASKUList = RMA.RMASKU.Where(x => x.IsEnable).Select(x => new RMAEdit
+                {
+                    ID = x.ID,
+                    Model = "L",
+                    SKU = x.SkuNo,
+                    QTYOrdered = x.QTYOrdered,
+                    ProductName = x.SKU.SkuLang.Where(y => y.LangID == "en-US").FirstOrDefault()?.Name,
+                    SerialsNo = x.RMASerialsLlist.FirstOrDefault()?.SerialsNo,
+                    UPCEAN = x.SKU.UPC + "/" + x.SKU.EAN,
+                    Reason = x.Reason,
+                    TrWarehouse = x.RMASerialsLlist.FirstOrDefault()?.Warehouse.Name,
+                    Warehouse = x.WarehouseID
+                });
+                Session["RMAEdit" + ID] = RMASKUList.ToList();
             }
             else
             {
@@ -338,19 +385,43 @@ namespace PurchaseOrderSys.Controllers
             }
 
         }
-        public ActionResult EditSKUData(string[] IDList, string SID)
+        public ActionResult GetEditSKUData(int ID)
+        {
+            try
+            {
+                var RMAModelVMList = (List<RMAEdit>)Session["RMAEdit" + ID];
+                var recordsTotal = RMAModelVMList.Count();
+                var returnObj = new
+                {
+                    success = true,
+                    recordsTotal = recordsTotal,
+                    recordsFiltered = recordsTotal,
+                    data = RMAModelVMList//分頁後的資料 
+                };
+                return Json(returnObj, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+
+        }
+        public ActionResult EditSKUData(int[] IDList, int ID)
         {
             var Errmsg = "";
             if (IDList != null && IDList.Any())
             {
-                var odataList = (List<PoSKUVM>)Session["RSkuNumberList" + SID];
+                var RMAModelVMList = (List<RMAEdit>)Session["RMAEdit" + ID];
                 foreach (var item in IDList)
                 {
-                    foreach (var odataListitem in odataList.Where(x => x.ID.ToString() == item || x.SKU == item))
+                    foreach (var odataListitem in RMAModelVMList.Where(x => x.ID == item))
                     {
                         odataListitem.Model = "E";
                     }
                 }
+                Session["RMAEdit" + ID] = RMAModelVMList;
             }
             else
             {
