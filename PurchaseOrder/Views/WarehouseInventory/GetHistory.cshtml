@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SerialsLlist>
+﻿@model IEnumerable<SerialsLlistVM>
 @{
     Layout = null;
 }
@@ -16,35 +16,14 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>@item.CreateAt</td>
-            @if (item.SerialsType == "TransferIn")
-            {
-                <td>Transfer(In)</td>
+            <tr>
+                <td>@item.Date</td>
+                <td>@item.ISType</td>
                 <td>@item.ID</td>
-                <td>@item.TransferSKU.Transfer.WarehouseTo.Name</td>
-            }
-            else if (item.SerialsType == "TransferOut")
-            {
-                <td>Transfer(Out)</td>
-                <td>@item.ID</td>
-                <td>@item.PurchaseSKU.PurchaseOrder.WarehousePO.Name</td>
-            }
-            else if (item.SerialsType == "PO")
-            {
-                <td>@item.PurchaseSKU.PurchaseOrder.POType</td>
-                <td>@item.ID</td>
-                <td>@item.PurchaseSKU.PurchaseOrder.WarehousePO.Name</td>
-            }
-            else if (item.SerialsType == "CM")
-            {
-                <td>@item.PurchaseSKU.CreditMemo.CMType</td>
-                <td>@item.ID</td>
-                <td>@item.PurchaseSKU.CreditMemo.PurchaseOrder.WarehousePO.Name</td>
-            }
-            <td>@item.SerialsQTY</td>
-            <td>@item.CreateBy</td>
-        </tr>
+                <td>@item.Warehouse</td>
+                <td>@item.QTY</td>
+                <td>@item.UpdatedBy</td>
+            </tr>
         }
     </tbody>
 

@@ -1,13 +1,6 @@
-﻿@model IEnumerable<PurchaseSKU>
+﻿@model IEnumerable<StatementVM>
 @{
     ViewBag.title = "Inventory Statement";
-    var Awaitinglist = (List<AwaitingDispatchVM>)ViewBag.Awaitinglist;
-    var AwaitingConut = Awaitinglist.Sum(x => x.QTY);
-    var SerialsLlist = new List<SerialsLlist>();
-    foreach (var item in Model)
-    {
-        SerialsLlist.AddRange(item.SerialsLlist.Where(y => !(y.SerialsType == "TransferOut" || y.SerialsType == "TransferIn") || ((y.SerialsType == "TransferOut" || y.SerialsType == "TransferIn") && y.TransferSKU.IsEnable && y.TransferSKU.Transfer.IsEnable)));
-    }
 }
 <style>
     tfoot {
@@ -37,10 +30,10 @@
                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                     <div class="tab-pane" id="hb1">
                                         <fieldset>
-                                            <legend>Company:@(Model.FirstOrDefault()?.PurchaseOrder.Company.Name)</legend>
+                                            <legend>@ViewBag.Company</legend>
                                         </fieldset>
                                         <fieldset>
-                                            <legend>@(Model.FirstOrDefault()?.Name)</legend>
+                                            <legend>@ViewBag.Name</legend>
                                             <div class="row">
                                                 <article class="col-xs-12">
                                                     <table id="DataGridC" class="table table-striped table-bordered">
@@ -63,89 +56,23 @@
                                                         </thead>
                                                         <tfoot></tfoot>
                                                         <tbody>
-                                                            @{
-                                                                var Available = SerialsLlist.Where(x => !(x.SerialsType == "TransferOut" && x.TransferSKU.Transfer.Status == "Requested")).Sum(y => y.SerialsQTY);//實際
-                                                                var Aggregate = SerialsLlist.Sum(y => y.SerialsQTY);//可出貨
-                                                                foreach (var item in SerialsLlist.OrderByDescending(x => x.ID))
-                                                                {
-                                                                    var price = item.PurchaseSKU.Price;
+                                                            @foreach (var item in Model)
+                                                            {
                                                             <tr>
                                                                 <td></td>
-                                                                <td>@item.PurchaseSKU.SkuNo</td>
-                                                                <td>@item.CreateAt.ToLocalTime()</td>
-                                                                @if (item.SerialsType == "PO")
-                                                                {
-                                                                    <td>@item.PurchaseSKU.PurchaseOrder.VendorLIst.Name</td>
-                                                                    <td></td>
-                                                                    <td>PO</td>
-                                                                    <td>@(item.PurchaseSKU.PurchaseOrder.ID)</td>
-                                                                    <td>@(item.PurchaseSKU.PurchaseOrder.WarehousePO.Name)</td>
-                                                                }
-                                                                else if (item.SerialsType == "CM")
-                                                                {
-                                                                    <td>@item.PurchaseSKU.CreditMemo.PurchaseOrder.VendorLIst.Name</td>
-                                                                    <td></td>
-                                                                    <td>
-                                                                        Credit Memo
-                                                                    </td>
-                                                                    <td>@(item.PurchaseSKU.CreditMemo?.ID)</td>
-                                                                    <td>@(item.PurchaseSKU.CreditMemo.PurchaseOrder.WarehousePO.Name)</td>
-                                                                }
-                                                                else if (item.SerialsType == "Order")
-                                                                {
-                                                                    <td>@item.PurchaseSKU.PurchaseOrder.VendorLIst.Name</td>
-                                                                    <td></td>
-                                                                    <td>Order Dispatch</td>
-                                                                    <td>@(item.OrderID)</td>
-                                                                    <td>@(item.PurchaseSKU.PurchaseOrder.WarehousePO.Name)</td>
-                                                                }
-                                                                else if (item.SerialsType == "TransferOut")
-                                                                {
-                                                                    <td>@item.PurchaseSKU.PurchaseOrder.VendorLIst.Name</td>
-                                                                    <td></td>
-                                                                    if (item.TransferSKU.Transfer.Status == "Requested")
-                                                                    {
-                                                                        <td>Transfer (Wait)</td>
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        <td>Transfer (Out)</td>
-                                                                    }
-                                                                    <td>@(item.TransferSKU.TransferID)</td>
-                                                                    <td>@(item.TransferSKU.Transfer.WarehouseFrom.Name)</td>
-                                                                }
-                                                                else if (item.SerialsType == "TransferIn")
-                                                                {
-                                                                    <td>@item.PurchaseSKU.PurchaseOrder.VendorLIst.Name</td>
-                                                                    <td></td>
-                                                                    <td>Transfer (In)</td>
-                                                                    <td>@(item.TransferSKU.TransferID)</td>
-                                                                    <td>@(item.TransferSKU.Transfer.WarehouseTo.Name)</td>
-                                                                }
-                                                                else if (item.SerialsType == "RMA")
-                                                                {
-
-                                                                }
-                                                                else if (item.SerialsType == "Change")
-                                                                {
-
-                                                                }
-                                                                <td>@item.SerialsNo</td>
-                                                                <td>@item.SerialsQTY</td>
-                                                                <td>@(Aggregate - AwaitingConut)</td>
-                                                                <td>@Available</td>
-                                                                <td>$@(Aggregate * price)</td>
+                                                                <td>@item.SKU</td>
+                                                                <td>@item.Date</td>
+                                                                <td>@item.Supplier</td>
+                                                                <td>@item.Channel</td>
+                                                                <td>@item.ISType</td>
+                                                                <td>@item.ID</td>
+                                                                <td>@item.Warehouse</td>
+                                                                <td>@item.Serial</td>
+                                                                <td>@item.QTY</td>
+                                                                <td>@item.BalanceAggregate</td>
+                                                                <td>@item.BalanceAvailable</td>
+                                                                <td>@item.ValueAvailable</td>
                                                             </tr>
-                                                                    if (item.SerialsType == "TransferOut" && item.TransferSKU.Transfer.Status == "Requested")
-                                                                    {
-                                                                        Aggregate -= item.SerialsQTY.Value;
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        Aggregate -= item.SerialsQTY.Value;
-                                                                        Available -= item.SerialsQTY.Value;
-                                                                    }
-                                                                }
                                                             }
                                                         </tbody>
                                                     </table>

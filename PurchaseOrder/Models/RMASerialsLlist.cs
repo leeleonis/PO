@@ -14,6 +14,12 @@ namespace PurchaseOrderSys.Models
     
     public partial class RMASerialsLlist
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public RMASerialsLlist()
+        {
+            this.RMASerialsLlistC = new HashSet<RMASerialsLlist>();
+        }
+    
         public int ID { get; set; }
         public Nullable<int> RMASKUID { get; set; }
         public Nullable<int> PID { get; set; }
@@ -29,8 +35,13 @@ namespace PurchaseOrderSys.Models
         public string SerialsType { get; set; }
         public Nullable<int> ServiceID { get; set; }
         public string Reason { get; set; }
+        public Nullable<int> TransferSKUID { get; set; }
     
         public virtual RMASKU RMASKU { get; set; }
         public virtual Warehouse Warehouse { get; set; }
+        public virtual TransferSKU TransferSKU { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RMASerialsLlist> RMASerialsLlistC { get; set; }
+        public virtual RMASerialsLlist RMASerialsLlistP { get; set; }
     }
 }

@@ -39,6 +39,10 @@ namespace PurchaseOrderSys.Models
         public string SourceCaseID { get; set; }
         public string SCRMA { get; set; }
         public Nullable<int> WarehouseID { get; set; }
+        public Nullable<decimal> FinalShippingFee { get; set; }
+        public Nullable<decimal> RestockingFee { get; set; }
+        public Nullable<decimal> OtherCosts { get; set; }
+        public Nullable<decimal> ReturnShippingCos { get; set; }
     
         public virtual Warehouse Warehouse { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

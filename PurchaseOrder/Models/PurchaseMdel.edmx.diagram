@@ -127,6 +127,8 @@
         <EntityTypeShape EntityType="PurchaseOrderModel.RMASerialsLlist" Width="1.5" PointX="25.875" PointY="10.5" />
         <AssociationConnector Association="PurchaseOrderModel.FK_RMASerialsLlist_RMASKU" />
         <AssociationConnector Association="PurchaseOrderModel.FK_RMASerialsLlist_Warehouse" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_RMASerialsLlist_TransferSKU" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_RMASerialsLlist_RMASerialsLlist" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

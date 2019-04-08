@@ -77,10 +77,16 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult TSkuNumberGet(string Search, int FromWID)
         {
             var SKUList = new List<string>();
-            var PurchaseSKUList = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.IsEnable && x.PurchaseOrder.WarehouseID == FromWID).Select(x => x.SkuNo);
-            var TransferSKUList = db.TransferSKU.Where(x => x.IsEnable && x.Transfer.IsEnable && x.Transfer.ToWID == FromWID).Select(x => x.SkuNo);//只找移入的SKU
+            //一般入庫
+            var PurchaseSKUList = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.IsEnable && x.PurchaseOrder.WarehouseID == FromWID).Select(x => x.SkuNo).ToList();
             SKUList.AddRange(PurchaseSKUList);
+            //移倉入庫
+            var TransferSKUList = db.TransferSKU.Where(x => x.IsEnable && x.Transfer.IsEnable && x.Transfer.ToWID == FromWID).Select(x => x.SkuNo).ToList();//只找移入的SKU
             SKUList.AddRange(TransferSKUList);
+            //RMA入庫
+            var RMAferSKUList = db.RMASerialsLlist.Where(x => x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.WarehouseID == FromWID).Select(x => x.RMASKU.SkuNo).ToList();
+            SKUList.AddRange(RMAferSKUList);
+
             SKUList = SKUList.Distinct().ToList();
             var dataList = db.SkuLang.Where(x => x.LangID == "en-US" && SKUList.Contains(x.Sku) && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
             //var dataList = db.SkuLang.Where(x => x.LangID == "zh-tw" && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
@@ -225,7 +231,7 @@ namespace PurchaseOrderSys.Controllers
                           QTY = 0,
                           Model = "E"
                       }).Distinct().ToList());
-                    //從移倉單選取
+                    //從移倉單選取SKU
                     if (!dataList.Any())
                     {
                         dataList.AddRange(db.TransferSKU.Where(x => x.IsEnable && x.Transfer.IsEnable && x.Transfer.ToWID == FromWID && Skulist.Contains(x.SkuNo)).Select(x =>
@@ -239,15 +245,22 @@ namespace PurchaseOrderSys.Controllers
                             Model = "E"
                         }).Distinct().ToList());
                     }
-                    //foreach (var item in dataList)
-                    //{
-                    //    var QTYOrdered = RandomVal(100, 1000);
-                    //    var QTYFulfilled = RandomVal(100, 1000);
-                    //    var Price = RandomVal(1000, 30000);
-                    //    var Discount = RandomVal(0, 100);
-                    //    var Credit = RandomVal(0, 100);
+                    //從RMA單選取SKU
+                    if (!dataList.Any())
+                    {
+                        dataList.AddRange(db.RMASerialsLlist.Where(x => x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.WarehouseID == FromWID && Skulist.Contains(x.RMASKU.SkuNo)).Select(x =>
+                        new TranSKUVM
+                        {
+                            ck = x.RMASKU.SkuNo,
+                            sk = x.RMASKU.SkuNo,
+                            SKU = x.RMASKU.SkuNo,
+                            ProductName = x.RMASKU.Name,
+                            QTY = 0,
+                            Model = "E"
+                        }).Distinct().ToList());
+                    }
 
-                    //}
+
                     odataList.AddRange(dataList);
                     Session["TSkuNumberList" + SID] = odataList;
                 }

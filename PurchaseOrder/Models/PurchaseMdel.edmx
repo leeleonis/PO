@@ -620,6 +620,10 @@
           <Property Name="SourceCaseID" Type="nvarchar" MaxLength="20" />
           <Property Name="SCRMA" Type="nvarchar" MaxLength="20" />
           <Property Name="WarehouseID" Type="int" />
+          <Property Name="FinalShippingFee" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="RestockingFee" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="OtherCosts" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ReturnShippingCos" Type="decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="RMASerialsLlist">
           <Key>
@@ -640,6 +644,7 @@
           <Property Name="SerialsType" Type="nvarchar" MaxLength="20" />
           <Property Name="ServiceID" Type="int" />
           <Property Name="Reason" Type="nvarchar" MaxLength="20" />
+          <Property Name="TransferSKUID" Type="int" />
         </EntityType>
         <EntityType Name="RMASKU">
           <Key>
@@ -661,6 +666,7 @@
           <Property Name="ReceivedAt" Type="datetime" />
           <Property Name="WarehouseID" Type="int" />
           <Property Name="Reason" Type="nvarchar" MaxLength="20" />
+          <Property Name="UnitPrice" Type="decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="SerialsLlist">
           <Key>
@@ -1408,6 +1414,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_RMASerialsLlist_RMASerialsLlist">
+          <End Role="RMASerialsLlist" Type="Self.RMASerialsLlist" Multiplicity="0..1" />
+          <End Role="RMASerialsLlist1" Type="Self.RMASerialsLlist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RMASerialsLlist">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="RMASerialsLlist1">
+              <PropertyRef Name="PID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_RMASerialsLlist_RMASKU">
           <End Role="RMASKU" Type="Self.RMASKU" Multiplicity="0..1" />
           <End Role="RMASerialsLlist" Type="Self.RMASerialsLlist" Multiplicity="*" />
@@ -1417,6 +1435,18 @@
             </Principal>
             <Dependent Role="RMASerialsLlist">
               <PropertyRef Name="RMASKUID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RMASerialsLlist_TransferSKU">
+          <End Role="TransferSKU" Type="Self.TransferSKU" Multiplicity="0..1" />
+          <End Role="RMASerialsLlist" Type="Self.RMASerialsLlist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TransferSKU">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="RMASerialsLlist">
+              <PropertyRef Name="TransferSKUID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1973,8 +2003,16 @@
             <End Role="Warehouse" EntitySet="Warehouse" />
             <End Role="RMA" EntitySet="RMA" />
           </AssociationSet>
+          <AssociationSet Name="FK_RMASerialsLlist_RMASerialsLlist" Association="Self.FK_RMASerialsLlist_RMASerialsLlist">
+            <End Role="RMASerialsLlist" EntitySet="RMASerialsLlist" />
+            <End Role="RMASerialsLlist1" EntitySet="RMASerialsLlist" />
+          </AssociationSet>
           <AssociationSet Name="FK_RMASerialsLlist_RMASKU" Association="Self.FK_RMASerialsLlist_RMASKU">
             <End Role="RMASKU" EntitySet="RMASKU" />
+            <End Role="RMASerialsLlist" EntitySet="RMASerialsLlist" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RMASerialsLlist_TransferSKU" Association="Self.FK_RMASerialsLlist_TransferSKU">
+            <End Role="TransferSKU" EntitySet="TransferSKU" />
             <End Role="RMASerialsLlist" EntitySet="RMASerialsLlist" />
           </AssociationSet>
           <AssociationSet Name="FK_RMASerialsLlist_Warehouse" Association="Self.FK_RMASerialsLlist_Warehouse">
@@ -2418,6 +2456,14 @@
           <AssociationSet Name="FK_RMASerialsLlist_Warehouse" Association="PurchaseOrderModel.FK_RMASerialsLlist_Warehouse">
             <End Role="Warehouse" EntitySet="Warehouse" />
             <End Role="RMASerialsLlist" EntitySet="RMASerialsLlist" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RMASerialsLlist_TransferSKU" Association="PurchaseOrderModel.FK_RMASerialsLlist_TransferSKU">
+            <End Role="TransferSKU" EntitySet="TransferSKU" />
+            <End Role="RMASerialsLlist" EntitySet="RMASerialsLlist" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RMASerialsLlist_RMASerialsLlist" Association="PurchaseOrderModel.FK_RMASerialsLlist_RMASerialsLlist">
+            <End Role="RMASerialsLlist" EntitySet="RMASerialsLlist" />
+            <End Role="RMASerialsLlist1" EntitySet="RMASerialsLlist" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="AdminGroup">
@@ -3024,6 +3070,7 @@
           <NavigationProperty Name="SerialsLlist" Relationship="PurchaseOrderModel.FK_SerialsLlist_TransferSKU" FromRole="TransferSKU" ToRole="SerialsLlist" />
           <NavigationProperty Name="Transfer" Relationship="PurchaseOrderModel.FK_TransferSKU_Transfer" FromRole="TransferSKU" ToRole="Transfer" />
           <NavigationProperty Name="SKU" Relationship="PurchaseOrderModel.FK_TransferSKU_SKU" FromRole="TransferSKU" ToRole="SKU" />
+          <NavigationProperty Name="RMASerialsLlist" Relationship="PurchaseOrderModel.FK_RMASerialsLlist_TransferSKU" FromRole="TransferSKU" ToRole="RMASerialsLlist" />
         </EntityType>
         <EntityType Name="VendorLIst">
           <Key>
@@ -4151,6 +4198,7 @@
           <NavigationProperty Name="SKU" Relationship="PurchaseOrderModel.FK_RMASKU_SKU" FromRole="RMASKU" ToRole="SKU" />
           <NavigationProperty Name="RMASerialsLlist" Relationship="PurchaseOrderModel.FK_RMASerialsLlist_RMASKU" FromRole="RMASKU" ToRole="RMASerialsLlist" />
           <Property Name="Reason" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UnitPrice" Type="Decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="SkuType">
           <Key>
@@ -4231,6 +4279,10 @@
           <Property Name="WarehouseID" Type="Int32" />
           <NavigationProperty Name="Warehouse" Relationship="PurchaseOrderModel.FK_RMA_Warehouse" FromRole="RMA" ToRole="Warehouse" />
           <NavigationProperty Name="RMASKU" Relationship="PurchaseOrderModel.FK_RMASKU_RMA" FromRole="RMA" ToRole="RMASKU" />
+          <Property Name="FinalShippingFee" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="RestockingFee" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="OtherCosts" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ReturnShippingCos" Type="Decimal" Precision="18" Scale="2" />
         </EntityType>
         <Association Name="FK_RMA_Warehouse">
           <End Type="PurchaseOrderModel.Warehouse" Role="Warehouse" Multiplicity="0..1" />
@@ -4301,6 +4353,10 @@
           <Property Name="Reason" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="RMASKU" Relationship="PurchaseOrderModel.FK_RMASerialsLlist_RMASKU" FromRole="RMASerialsLlist" ToRole="RMASKU" />
           <NavigationProperty Name="Warehouse" Relationship="PurchaseOrderModel.FK_RMASerialsLlist_Warehouse" FromRole="RMASerialsLlist" ToRole="Warehouse" />
+          <Property Name="TransferSKUID" Type="Int32" />
+          <NavigationProperty Name="TransferSKU" Relationship="PurchaseOrderModel.FK_RMASerialsLlist_TransferSKU" FromRole="RMASerialsLlist" ToRole="TransferSKU" />
+          <NavigationProperty Name="RMASerialsLlistC" Relationship="PurchaseOrderModel.FK_RMASerialsLlist_RMASerialsLlist" FromRole="RMASerialsLlist" ToRole="RMASerialsLlist1" />
+          <NavigationProperty Name="RMASerialsLlistP" Relationship="PurchaseOrderModel.FK_RMASerialsLlist_RMASerialsLlist" FromRole="RMASerialsLlist1" ToRole="RMASerialsLlist" />
         </EntityType>
         <Association Name="FK_RMASerialsLlist_RMASKU">
           <End Type="PurchaseOrderModel.RMASKU" Role="RMASKU" Multiplicity="0..1" />
@@ -4323,6 +4379,30 @@
             </Principal>
             <Dependent Role="RMASerialsLlist">
               <PropertyRef Name="WarehouseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RMASerialsLlist_TransferSKU">
+          <End Type="PurchaseOrderModel.TransferSKU" Role="TransferSKU" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.RMASerialsLlist" Role="RMASerialsLlist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TransferSKU">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="RMASerialsLlist">
+              <PropertyRef Name="TransferSKUID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RMASerialsLlist_RMASerialsLlist">
+          <End Type="PurchaseOrderModel.RMASerialsLlist" Role="RMASerialsLlist" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.RMASerialsLlist" Role="RMASerialsLlist1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RMASerialsLlist">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="RMASerialsLlist1">
+              <PropertyRef Name="PID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -5275,6 +5355,7 @@
           <EntitySetMapping Name="RMASKU">
             <EntityTypeMapping TypeName="PurchaseOrderModel.RMASKU">
               <MappingFragment StoreEntitySet="RMASKU">
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
                 <ScalarProperty Name="Reason" ColumnName="Reason" />
                 <ScalarProperty Name="WarehouseID" ColumnName="WarehouseID" />
                 <ScalarProperty Name="ReceivedAt" ColumnName="ReceivedAt" />
@@ -5313,6 +5394,10 @@
           <EntitySetMapping Name="RMA">
             <EntityTypeMapping TypeName="PurchaseOrderModel.RMA">
               <MappingFragment StoreEntitySet="RMA">
+                <ScalarProperty Name="ReturnShippingCos" ColumnName="ReturnShippingCos" />
+                <ScalarProperty Name="OtherCosts" ColumnName="OtherCosts" />
+                <ScalarProperty Name="RestockingFee" ColumnName="RestockingFee" />
+                <ScalarProperty Name="FinalShippingFee" ColumnName="FinalShippingFee" />
                 <ScalarProperty Name="WarehouseID" ColumnName="WarehouseID" />
                 <ScalarProperty Name="SCRMA" ColumnName="SCRMA" />
                 <ScalarProperty Name="SourceCaseID" ColumnName="SourceCaseID" />
@@ -5338,6 +5423,7 @@
           <EntitySetMapping Name="RMASerialsLlist">
             <EntityTypeMapping TypeName="PurchaseOrderModel.RMASerialsLlist">
               <MappingFragment StoreEntitySet="RMASerialsLlist">
+                <ScalarProperty Name="TransferSKUID" ColumnName="TransferSKUID" />
                 <ScalarProperty Name="Reason" ColumnName="Reason" />
                 <ScalarProperty Name="ServiceID" ColumnName="ServiceID" />
                 <ScalarProperty Name="SerialsType" ColumnName="SerialsType" />

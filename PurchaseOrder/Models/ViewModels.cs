@@ -301,7 +301,7 @@ namespace PurchaseOrderSys.Models
         /// 採購單號
         /// </summary>
         [Display(Name = "PurchaseOrder_ID", ResourceType = typeof(App_GlobalResources.Resource))]
-        [DataGrid(Align = "center", Widths = 150 ,ColumnsType = "input")]
+        [DataGrid(Align = "center", Widths = 150, ColumnsType = "input")]
         public string POID { get; set; }
     }
 
@@ -1137,7 +1137,7 @@ namespace PurchaseOrderSys.Models
     }
 
     public class DispatchWarehouseVM
-    {  
+    {
 
         /// <summary>
         /// Is Sellable
@@ -1198,6 +1198,8 @@ namespace PurchaseOrderSys.Models
         public string Name { get; set; }
         public int? QTY { get; set; }
         public List<SerialsLlist> SerialsLlist { get; set; }
+        public List<RMASerialsLlist> RMASerialsLlist { get; set; }
+
     }
     public class PrepTable
     {
@@ -1244,9 +1246,9 @@ namespace PurchaseOrderSys.Models
         public string Title { get; set; }
         public string Carrier { get; set; }
         public string Tracking { get; set; }
-        public IEnumerable <Transfer> Transferlist { get; set; }
+        public IEnumerable<Transfer> Transferlist { get; set; }
     }
-    public class RMAVM:RMA
+    public class RMAVM : RMA
     {
         public IEnumerable<RMA> RMAList { get; set; }
     }
@@ -1254,6 +1256,10 @@ namespace PurchaseOrderSys.Models
     public class SKUIData
     {
         public string SKU { get; set; }
+        /// <summary>
+        /// 單價
+        /// </summary>
+        public decimal? UnitPrice { get; set; }
         public int QTY { get; set; }
         public List<string> Serials { get; set; }
     }
@@ -1273,12 +1279,16 @@ namespace PurchaseOrderSys.Models
         public string CountryCode { get; set; }
         public List<SKUIData> Items { get; set; }
         public int WarehouseID { get; set; }
+        /// <summary>
+        /// 運費
+        /// </summary>
+        public decimal? FinalShippingFee { get; set; }
     }
     public class RMAModelVM
     {
         public int ck { get; set; }
         public int Order { get; set; }
-        public string SourceID { get; set; } 
+        public string SourceID { get; set; }
         public string SKU { get; set; }
         public string ProductName { get; set; }
         public string UPC { get; set; }
@@ -1312,5 +1322,32 @@ namespace PurchaseOrderSys.Models
         public string SerialsNo { get; set; }
         public string TrWarehouse { get; set; }
         public string Model { get; set; }
+        public decimal UnitPrice { get; set; }
+    }
+
+    public class SerialsLlistVM
+    {
+        public DateTime Date { get; set; }
+        public string ISType { get; set; }
+        public int? ID { get; set; }
+        public string Warehouse { get; set; }
+        public int? QTY { get; set; }
+        public string UpdatedBy { get; set; }
+
+    }
+    public class StatementVM
+    {
+        public string SKU { get; set; }
+        public DateTime Date { get; set; }
+        public string Supplier { get; set; }
+        public string Channel { get; set; }
+        public string ISType { get; set; }
+        public int? ID { get; set; }
+        public string Warehouse { get; set; }
+        public string Serial { get; set; }
+        public int? QTY { get; set; }
+        public int? BalanceAggregate { get; set; }
+        public int? BalanceAvailable { get; set; }
+        public decimal? ValueAvailable { get; set; }
     }
 }

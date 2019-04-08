@@ -18,6 +18,7 @@ namespace PurchaseOrderSys.Models
         public TransferSKU()
         {
             this.SerialsLlist = new HashSet<SerialsLlist>();
+            this.RMASerialsLlist = new HashSet<RMASerialsLlist>();
         }
     
         public bool IsEnable { get; set; }
@@ -39,5 +40,7 @@ namespace PurchaseOrderSys.Models
         public virtual ICollection<SerialsLlist> SerialsLlist { get; set; }
         public virtual Transfer Transfer { get; set; }
         public virtual SKU SKU { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RMASerialsLlist> RMASerialsLlist { get; set; }
     }
 }
