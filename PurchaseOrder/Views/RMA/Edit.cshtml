@@ -147,49 +147,6 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @*@foreach (var item in Model.RMASKU.Where(x => x.IsEnable))
-            {
-            <tr>
-                <td>
-                    <input type="checkbox" value="@item.ID">
-                </td>
-                <td>
-                    @item.SkuNo
-                </td>
-                <td>
-                    @item.SKU.SkuLang.Where(x => x.LangID == "en-US").FirstOrDefault().Name
-                </td>
-                <td>
-                    @item.SKU.UPC  / @item.SKU.EAN
-                </td>
-                <td>
-                    @item.QTYOrdered
-                </td>
-                <td>
-                    @{
-                        var Reason = 0;
-                        int.TryParse(item.Reason, out Reason);
-                    }
-                    @RMAReasonList[Reason]
-                </td>
-                <td>@item.Warehouse.Name</td>
-                <td>
-                    @foreach (var Serialitem in item.RMASerialsLlist)
-                    {
-                        @Serialitem.SerialsNo
-                    }
-                </td>
-                <td>
-                    @foreach (var Serialitem in item.RMASerialsLlist)
-                    {
-                        @Serialitem.Warehouse.Name
-                    }
-                </td>
-                <td>
-                    <a href='@Url.Action("Returnedserials",new {item.ID })' class='btn btn-default btn-sm'>Receive returns</a>
-                </td>
-            </tr>
-            }*@
                                                         </tbody>
                                                         <tfoot>
                                                             <tr>
@@ -234,23 +191,33 @@
                                                             </tr>
                                                             <tr>
                                                                 <td>Item value:</td>
-                                                                <td></td>
+                                                                <td>
+                                                                    @*@(Model.RMASKU.Where(x=>x.IsEnable).Sum(x=>x.UnitPrice)?.ToString("###,##0.##"))*@
+                                                                </td>
                                                             </tr>
                                                             <tr>
                                                                 <td>Shipping charge:</td>
-                                                                <td></td>
+                                                                <td>
+                                                                    @((Model.FinalShippingFee?? 0).ToString("###,##0.##"))
+                                                                </td>
                                                             </tr>
                                                             <tr>
                                                                 <td>Restocking fee:</td>
-                                                                <td></td>
+                                                                <td>
+                                                                   @Html.EditorFor(x=>x.RestockingFee, new { htmlAttributes = new { @class = "form-control changed" } })
+                                                                </td>
                                                             </tr>
                                                             <tr>
                                                                 <td>Return shipping cost:</td>
-                                                                <td></td>
+                                                                <td>
+                                                                    @Html.EditorFor(x => x.ReturnShippingCos, new { htmlAttributes = new { @class = "form-control changed" } })
+                                                                </td>
                                                             </tr>
                                                             <tr>
                                                                 <td>Other costs:</td>
-                                                                <td></td>
+                                                                <td>
+                                                                    @Html.EditorFor(x => x.OtherCosts, new { htmlAttributes = new { @class = "form-control changed" } })
+                                                                </td>
                                                             </tr>
                                                             <tr>
                                                                 <td>Total refund:</td>
@@ -418,10 +385,43 @@
                 "paging": false,
                 "ordering": false,
                 "info": true,
-                "searching": false, "footerCallback": function (row, data, start, end, display) {
+                "searching": false,
+                "footerCallback": function (row, data, start, end, display) {
+                    var api = this.api(), data;
+                    // Remove the formatting to get integer data for summation
+                    var intVal = function (i) {
+                        return typeof i === 'string' ?
+                            i.replace(/[\$,]/g, '') * 1 :
+                            typeof i === 'number' ?
+                                i : 0;
+                    };
+
+                    //Item value
+                    var Itemvalue = 0;
+                    data.forEach(function (e) {
+                        Itemvalue += e.UnitPrice;
+                    })
+                    $('tr:eq(2) td:eq(1)', api.table().footer()).html(thousandComma(Itemvalue));
+                    //Shipping charge
+                    var Shippingcharge =@(Model.FinalShippingFee??0);
+                    //Restocking fee:
+                    var Restockingfee = intVal($("#RestockingFee").val());
+                    //Return shipping cost
+                    var Returnshippingcost = intVal($("#ReturnShippingCos").val());
+                    //Other costs
+                    var Othercosts = intVal($("#OtherCosts").val());
+                    //Total refund
+                    var Totalrefund = Itemvalue - Shippingcharge + Restockingfee;
+                    $('tr:eq(7) td:eq(1)', api.table().footer()).html(thousandComma(Totalrefund));
+                    //Order balance
+                    var Orderbalance = Itemvalue + Shippingcharge + Totalrefund - Returnshippingcost - Othercosts;
+                    $('tr:eq(8) td:eq(1)', api.table().footer()).html(thousandComma(Orderbalance));
                 }
             });
             $("#btnsearch").click(function () {
+                DataGrid.draw();
+            });
+            $(".changed").change(function () {
                 DataGrid.draw();
             });
             $(tableID + ' tbody').on('click', 'td.details-control', function () {

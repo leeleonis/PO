@@ -104,7 +104,7 @@ namespace PurchaseOrderSys.Controllers
                     ck = item.SkuNo,
                     sk = item.SkuNo,
                     SKU = item.SkuNo,
-                    ProductName = item.Name,
+                    ProductName = item.SKU.SkuLang.Where(x=>x.LangID == "en-US").FirstOrDefault()?.Name,
                     QTY = item.QTY,
                     TotalReceive = item.SerialsLlist.Where(x => x.SerialsType == "TransferIn").Sum(x => x.SerialsQTY) ,
                     Serial = item.SerialsLlist.Where(x => x.SerialsType == "TransferOut").Any() ? "Multi" : "",
@@ -181,6 +181,8 @@ namespace PurchaseOrderSys.Controllers
         {
             var TransferSKU = db.TransferSKU.Find(ID);
             var SerialsLlist = TransferSKU.SerialsLlist.Where(x => x.SerialsType == "TransferOut").Select(x => new { x.SerialsNo, Status = GetType(x) }).ToDictionary(x => x.SerialsNo, x => x.Status).ToList();
+
+            SerialsLlist.AddRange(TransferSKU.RMASerialsLlist.Where(x => x.SerialsType == "TransferOut").Select(x => new { x.SerialsNo, Status = GetType(x) }).ToDictionary(x => x.SerialsNo, x => x.Status).ToList());
             var partial = ControlToString("~/Views/Transfer/GetSerialList.cshtml", SerialsLlist);
             //var partial = Engine.Razor.RunCompile(template, "templateKey", null, new { Name = "World" });
             return Json(new { status = true, partial }, JsonRequestBehavior.AllowGet);
@@ -203,6 +205,26 @@ namespace PurchaseOrderSys.Controllers
             }
             return returnval;
         }
+        private string GetType(RMASerialsLlist RMASerialsLlist)
+        {
+            var returnval = "";
+            var SerialsNo = RMASerialsLlist.SerialsNo;
+            if (RMASerialsLlist.TransferSKU.SerialsLlist.Where(x => x.SerialsType == "TransferIn" && x.SerialsNo== SerialsNo).Any())
+            {
+                returnval = "已入庫";
+            }
+            else if (RMASerialsLlist.TransferSKU.Transfer.Status == "Requested")
+            {
+                returnval = "待出庫";
+            }
+            else if (RMASerialsLlist.TransferSKU.Transfer.Status == "Shipped")
+            {
+                returnval = "已出庫";
+            }
+            return returnval;
+        }
+
+
 
         public ActionResult Delete(int ID)
         {
@@ -214,7 +236,14 @@ namespace PurchaseOrderSys.Controllers
             var ReceiveVMList = new List<TransferItemVM>();
             foreach (var item in oTransfer.TransferSKU.Where(x=>x.IsEnable))
             {
-                ReceiveVMList.Add(new TransferItemVM { SKU = item.SkuNo, Name = item.Name, QTY = item.QTY, SerialsLlist = item.SerialsLlist.Where(x => x.SerialsType == "TransferIn").ToList() });
+                ReceiveVMList.Add(new TransferItemVM
+                {
+                    SKU = item.SkuNo,
+                    Name = item.Name,
+                    QTY = item.QTY,
+                    SerialsLlist = item.SerialsLlist.Where(x => x.SerialsType == "TransferIn").ToList(),//一般
+                    RMASerialsLlist = item.RMASerialsLlist.Where(x => x.SerialsType == "TransferIn").ToList()//RMA
+                });
             }
             Session["ReceiveVMList" + ID] = ReceiveVMList;
             return View(oTransfer);
@@ -230,6 +259,7 @@ namespace PurchaseOrderSys.Controllers
             {
                 foreach (var ReceiveVM in ReceiveVMList.Where(x => x.SKU == item.SkuNo))
                 {
+                    //一般
                     var nSerialsLlist = ReceiveVM.SerialsLlist.Select(x => new SerialsLlist
                     {
                         TransferSKUID = item.ID,
@@ -247,6 +277,31 @@ namespace PurchaseOrderSys.Controllers
                     }).ToList();
                     //db.SerialsLlist.AddRange(nSerialsLlist);
                     foreach (var Serial in nSerialsLlist)
+                    {
+                        if (!item.SerialsLlist.Where(x => x.SerialsNo == Serial.SerialsNo && x.SerialsType == "TransferIn").Any())
+                        {
+                            item.SerialsLlist.Add(Serial);
+                        }
+                    }
+
+                    //RMA
+                    var nRMASerialsLlist = ReceiveVM.RMASerialsLlist.Select(x => new SerialsLlist
+                    {
+                        TransferSKUID = item.ID,
+                        PID = x.ID,
+                        CreateAt = CreateAt,
+                        CreateBy = CreateBy,
+                        ReceivedAt = CreateAt,
+                        ReceivedBy = CreateBy,
+                        //OrderID = x.OrderID,
+                        //PurchaseSKUID = x.PurchaseSKUID,
+                        //RMAID = x.RMAID,
+                        SerialsNo = x.SerialsNo,
+                        SerialsQTY = 1,
+                        SerialsType = "TransferIn"
+                    }).ToList();
+                    //db.SerialsLlist.AddRange(nSerialsLlist);
+                    foreach (var Serial in nRMASerialsLlist)
                     {
                         if (!item.SerialsLlist.Where(x => x.SerialsNo == Serial.SerialsNo && x.SerialsType == "TransferIn").Any())
                         {
@@ -277,9 +332,17 @@ namespace PurchaseOrderSys.Controllers
         {
             var oTransfer = db.Transfer.Find(ID);
             var PrepVMList = new List<TransferItemVM>();
-            foreach (var item in oTransfer.TransferSKU.Where(x=>x.IsEnable))
+            foreach (var item in oTransfer.TransferSKU.Where(x => x.IsEnable))
             {
-                PrepVMList.Add(new TransferItemVM { SKU = item.SkuNo, Name = item.Name, QTY = item.QTY, SerialsLlist = item.SerialsLlist.Where(x => x.SerialsType == "TransferOut").ToList() });
+
+                PrepVMList.Add(new TransferItemVM
+                {
+                    SKU = item.SkuNo,
+                    Name = item.Name,
+                    QTY = item.QTY,
+                    SerialsLlist = item.SerialsLlist.Where(x => x.SerialsType == "TransferOut").ToList(), //一般序號移倉
+                    RMASerialsLlist = item.RMASerialsLlist.Where(x => x.SerialsType == "TransferOut").ToList() //RMA序號移倉
+                });
             }
             Session["PrepVMList" + ID] = PrepVMList;
             return View(oTransfer);
@@ -294,6 +357,7 @@ namespace PurchaseOrderSys.Controllers
             var oTransfer = db.Transfer.Find(ID);
             foreach (var item in oTransfer.TransferSKU.Where(x=>x.IsEnable))
             {
+                //一般
                 foreach (var PrepVM in PrepVMList.Where(x => x.SKU == item.SkuNo))
                 {
                     var nSerialsLlist = PrepVM.SerialsLlist.Select(x => new SerialsLlist
@@ -317,6 +381,34 @@ namespace PurchaseOrderSys.Controllers
                         if (!item.SerialsLlist.Where(x => x.SerialsNo == Serial.SerialsNo).Any())
                         {
                             item.SerialsLlist.Add(Serial);
+                        }
+                    }
+                }
+
+                //RMA
+                foreach (var PrepVM in PrepVMList.Where(x => x.SKU == item.SkuNo))
+                {
+                    var nRMASerialsLlist = PrepVM.RMASerialsLlist.Select(x => new RMASerialsLlist
+                    {
+                        TransferSKUID = item.ID,
+                        PID = x.ID,
+                        CreateAt = CreateAt,
+                        CreateBy = CreateBy,
+                        UpdateAt = CreateAt,
+                        UpdateBy = CreateBy,
+                        //OrderID = x.OrderID,
+                        RMASKUID = x.RMASKUID,
+                        //RMAID = x.RMAID,
+                        SerialsNo = x.SerialsNo,
+                        SerialsQTY = -1,
+                        SerialsType = "TransferOut"//等待移倉
+                    }).ToList();
+                    //db.SerialsLlist.AddRange(nSerialsLlist);
+                    foreach (var Serial in nRMASerialsLlist)
+                    {
+                        if (!item.RMASerialsLlist.Where(x => x.SerialsNo == Serial.SerialsNo).Any())
+                        {
+                            item.RMASerialsLlist.Add(Serial);
                         }
                     }
                 }
@@ -379,6 +471,7 @@ namespace PurchaseOrderSys.Controllers
             var PrepVMList = (List<TransferItemVM>)Session["PrepVMList" + SID];
 
             var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials && !x.SerialsLlistC.Any() && x.SerialsQTY > 0);//找到序號
+            var RMASerialsLlist = db.RMASerialsLlist.Where(x => x.SerialsNo == serials && !x.RMASerialsLlistC.Any() && x.SerialsQTY > 0);//找到RMA序號
             if (SerialsLlist.Any())
             {
                 if (SerialsLlist.Where(x => x.SerialsQTY > 0 && !x.SerialsLlistC.Any()).Any())
@@ -415,6 +508,50 @@ namespace PurchaseOrderSys.Controllers
                     return Json(new { status = false, Errmsg = "序號不在倉庫，此序號不能移倉" }, JsonRequestBehavior.AllowGet);
                 }
             }
+            else if (RMASerialsLlist.Any())
+            {
+                if (RMASerialsLlist.Where(x => x.SerialsQTY > 0 && !x.RMASerialsLlistC.Any()).Any())
+                {
+                    var RMASerial = RMASerialsLlist.FirstOrDefault();
+                    var RMAPrepVM = PrepVMList.Where(x => x.SKU == RMASerial.RMASKU.SkuNo).FirstOrDefault();
+                    try
+                    {
+                        if (RMAPrepVM != null)
+                        {
+                            if (RMAPrepVM.QTY > RMAPrepVM.RMASerialsLlist.Count())
+                            {
+                                if (!PrepVMList.Where(x => x.SerialsLlist.Where(y => y.SerialsNo == serials).Any()).Any())
+                                {
+                                    RMAPrepVM.RMASerialsLlist.Add(RMASerial);
+                                    Session["PrepVMList" + SID] = PrepVMList;
+                                    return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+                                }
+                                else
+                                {
+                                    return Json(new { status = false, Errmsg = "序號已在清單" }, JsonRequestBehavior.AllowGet);
+                                }
+                            }
+                            else
+                            {
+                                return Json(new { status = false, Errmsg = "移倉數量超過" }, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                        else
+                        {
+                            return Json(new { status = false, Errmsg = "序號無對應的SKU" }, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+
+                        throw;
+                    }
+                }
+                else
+                {
+                    return Json(new { status = false, Errmsg = "序號不在倉庫，此序號不能移倉" }, JsonRequestBehavior.AllowGet);
+                }
+            }
             else
             {
                 return Json(new { status = false, Errmsg = "序號不存在，此序號不能移倉" }, JsonRequestBehavior.AllowGet);
@@ -425,19 +562,21 @@ namespace PurchaseOrderSys.Controllers
             var SID = id;
             var ReceiveVMList = (List<TransferItemVM>)Session["ReceiveVMList" + SID];
             var SerialsLlist = db.SerialsLlist.Where(x => x.TransferSKU.TransferID == id && x.SerialsNo == serials && !x.SerialsLlistC.Any());
+            var RMASerialsLlist = db.RMASerialsLlist.Where(x => x.TransferSKU.TransferID == id && x.SerialsNo == serials && !x.RMASerialsLlistC.Any());
             if (SerialsLlist.Sum(x => x.SerialsQTY) > 0)//檔序號數量>0
             {
-                var SkuNolist = ReceiveVMList.Select(x=>x.SKU).Where(s => !string.IsNullOrWhiteSpace(s)).Distinct().ToList();
-                if (SerialsLlist.Where(x=> SkuNolist.Contains(x.TransferSKU.SkuNo)).Any())//檢查是否存在相同的sku而且序號相同
+                var SkuNolist = ReceiveVMList.Select(x => x.SKU).Where(s => !string.IsNullOrWhiteSpace(s)).Distinct().ToList();
+                if (SerialsLlist.Where(x => SkuNolist.Contains(x.TransferSKU.SkuNo)).Any())//檢查是否存在相同的sku而且序號相同
                 {
                     return Json(new { status = false, Errmsg = "序號已存在，不能重複入庫" }, JsonRequestBehavior.AllowGet);
                 }
             }
 
-            SerialsLlist = SerialsLlist.Where(x => x.SerialsType == "TransferOut");//找到序號
-            if (SerialsLlist.Any())
+            var SerialsLlistGET = SerialsLlist.Where(x => x.SerialsType == "TransferOut");//找到序號
+            var RMASerialsLlistGET = RMASerialsLlist.Where(x => x.SerialsType == "TransferOut");//找到序號
+            if (SerialsLlistGET.Any())
             {
-                var Serial = SerialsLlist.FirstOrDefault();
+                var Serial = SerialsLlistGET.FirstOrDefault();
                 var ReceiveVM = ReceiveVMList.Where(x => x.SKU == Serial.TransferSKU.SkuNo).FirstOrDefault();
                 if (ReceiveVM != null)
                 {
@@ -465,29 +604,66 @@ namespace PurchaseOrderSys.Controllers
                 }
 
             }
+            else if (RMASerialsLlistGET.Any())
+            {
+                var RMASerial = RMASerialsLlistGET.FirstOrDefault();
+                var ReceiveVM = ReceiveVMList.Where(x => x.SKU == RMASerial.TransferSKU.SkuNo).FirstOrDefault();
+                if (ReceiveVM != null)
+                {
+                    if (ReceiveVM.QTY > ReceiveVM.SerialsLlist.Count())
+                    {
+                        if (!ReceiveVMList.Where(x => x.SerialsLlist.Where(y => y.SerialsNo == serials).Any()).Any())
+                        {
+                            ReceiveVM.RMASerialsLlist.Add(RMASerial);
+                            Session["ReceiveVMList" + SID] = ReceiveVMList;
+                            return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            return Json(new { status = false, Errmsg = "序號已在清單" }, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else
+                    {
+                        return Json(new { status = false, Errmsg = "移倉數量超過" }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    return Json(new { status = false, Errmsg = "序號無對應的SKU" }, JsonRequestBehavior.AllowGet);
+                }
+
+            }
             else
             {
                 return Json(new { status = false, Errmsg = "序號不存在，此序號不能移倉" }, JsonRequestBehavior.AllowGet);
             }
         }
-        public ActionResult PrepVMList()
+        public ActionResult PrepVMList(string SID)
         {
-            var PrepVMList = (List<TransferItemVM>)Session["PrepVMList"];
+            var PrepVMList = (List<TransferItemVM>)Session["PrepVMList"+ SID];
             var PrepTableList = new List<PrepTable>();
             if (PrepVMList != null)
             {
                 foreach (var item in PrepVMList)
                 {
-                    if (item.SerialsLlist.Any())
+                    if (item.SerialsLlist.Any()) //一般
                     {
                         foreach (var SerialsLlistitem in item.SerialsLlist)
                         {
                             PrepTableList.Add(new PrepTable { SKU = item.SKU, Name = item.Name, Serial = SerialsLlistitem.SerialsNo, QTY = item.QTY + "/" + item.SerialsLlist.Count(), SerialTracking = GetSerialTracking(item.SKU) });
                         }
                     }
+                    else if (item.RMASerialsLlist.Any()) //RMA
+                    {
+                        foreach (var RMASerialsLlistitem in item.RMASerialsLlist)
+                        {
+                            PrepTableList.Add(new PrepTable { SKU = item.SKU, Name = item.Name, Serial = RMASerialsLlistitem.SerialsNo, QTY = item.QTY + "/" + item.RMASerialsLlist.Count(), SerialTracking = GetSerialTracking(item.SKU) });
+                        }
+                    }
                     else
                     {
-                        PrepTableList.Add(new PrepTable { SKU = item.SKU, Name = item.Name, QTY = item.QTY + "/" + item.SerialsLlist.Count(), SerialTracking = GetSerialTracking(item.SKU) });
+                        PrepTableList.Add(new PrepTable { SKU = item.SKU, Name = item.Name, QTY = item.QTY + "/" + item.RMASerialsLlist.Count(), SerialTracking = GetSerialTracking(item.SKU) });
                     }
                 }
             }
@@ -500,9 +676,9 @@ namespace PurchaseOrderSys.Controllers
            };
             return Json(returnObj, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult ReceiveVMList()
+        public ActionResult ReceiveVMList(string SID)
         {
-            var ReceiveVMList = (List<TransferItemVM>)Session["ReceiveVMList"];
+            var ReceiveVMList = (List<TransferItemVM>)Session["ReceiveVMList"+ SID];
             var PrepTableList = new List<PrepTable>();
             if (ReceiveVMList != null)
             {
@@ -513,6 +689,13 @@ namespace PurchaseOrderSys.Controllers
                         foreach (var SerialsLlistitem in item.SerialsLlist)
                         {
                             PrepTableList.Add(new PrepTable { SKU = item.SKU, Name = item.Name, Serial = SerialsLlistitem.SerialsNo, QTY = item.QTY + "/" + item.SerialsLlist.Count() , SerialTracking= GetSerialTracking( item.SKU)});
+                        }
+                    }
+                    if (item.RMASerialsLlist.Any())
+                    {
+                        foreach (var RMASerialsLlistitem in item.RMASerialsLlist)
+                        {
+                            PrepTableList.Add(new PrepTable { SKU = item.SKU, Name = item.Name, Serial = RMASerialsLlistitem.SerialsNo, QTY = item.QTY + "/" + item.SerialsLlist.Count(), SerialTracking = GetSerialTracking(item.SKU) });
                         }
                     }
                     else

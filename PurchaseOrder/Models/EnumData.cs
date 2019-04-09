@@ -344,7 +344,7 @@ namespace PurchaseOrderSys.Models
         {
             return new Dictionary<int, string>()
             {
-                  { 0, "" },
+                { 0, "" },
                 { 1, "defective" },
                 { 22, "no longer needed" },
                 { 70, "website description is inaccurate" },

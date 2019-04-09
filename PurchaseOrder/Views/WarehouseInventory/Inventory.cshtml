@@ -128,10 +128,9 @@
                 autoOpen: false,
                 width: 800
             });
-            $(".GetHistory").click(function () {
+            $("body").on("click", ".GetHistory",function () {
                 $.ajax({
                     url: $(this).attr("href"),
-
                     success: function (data) {
                         $("#dialog").html(data);
                         $("#dialog").dialog("open");

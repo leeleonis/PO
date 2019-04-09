@@ -103,7 +103,7 @@
                     method: "get",//或post，自由決定，影響到Server端用FormCollection取值或Request.QueryString取得DataTables傳遞的資訊
                     url: "@Url.Action("PrepVMList")",
                     data: function (d) {
-
+                        d.SID=@Model.ID
                     }
                 },
                 serverSide: true,//啟用ServerSide模式
@@ -125,8 +125,7 @@
                         url: "@Url.Action("PrepSaveserials")",
                         data: {
                             serials: serials,
-                            SID:@Html.Display("SID")
-                        },
+                            SID:@Html.Display("ID")},
                         success: function (data) {
                             if (data.status) {
                                 DataGrid.draw();

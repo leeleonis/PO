@@ -15,7 +15,30 @@ namespace PurchaseOrderSys.Controllers
         // GET: RMA
         public ActionResult Index(RMAVM RMAVM)
         {
-            RMAVM.RMAList = db.RMA.Where(x => x.IsEnable).OrderByDescending(x=>x.ID);
+            var RMAList = db.RMA.Where(x => x.IsEnable);
+            if (RMAVM.CompanyID.HasValue)
+            {
+                RMAList = RMAList.Where(x => x.CompanyID == RMAVM.CompanyID);
+            }
+            if (RMAVM.Channel.HasValue)
+            {
+                RMAList = RMAList.Where(x => x.Channel == RMAVM.Channel);
+            }
+            if (!string.IsNullOrWhiteSpace(RMAVM.Country))
+            {
+                RMAList = RMAList.Where(x => x.Country == RMAVM.Country);
+            }
+            if (!string.IsNullOrWhiteSpace(RMAVM.SourceID))
+            {
+                RMAList = RMAList.Where(x => x.SourceID == RMAVM.SourceID);
+            }
+           
+            //if (RMAVM.ID.HasValue)
+            //{
+
+            //}
+
+            RMAVM.RMAList = RMAList.OrderByDescending(x => x.ID);
             return View(RMAVM);
         }
         public ActionResult Create()
@@ -36,6 +59,7 @@ namespace PurchaseOrderSys.Controllers
                 var CompanyID = OrderItemDataitem.CompanyID;
                 var Country = OrderItemDataitem.CountryCode;
                 var Channel = OrderItemDataitem.OrderSource;
+                var FinalShippingFee = OrderItemDataitem.FinalShippingFee;
                 var WarehouseID = db.WarehouseSummary.AsQueryable().Where(x => x.Type == "SCID" && x.Val.Contains(OrderItemDataitem.WarehouseID.ToString())).FirstOrDefault()?.WarehouseID;
                 var newRMA = new RMA
                 {
@@ -46,6 +70,7 @@ namespace PurchaseOrderSys.Controllers
                     Country = Country,
                     Channel = Channel,
                     WarehouseID = WarehouseID,
+                    FinalShippingFee = FinalShippingFee,
                     CreateBy = UserBy,
                     CreateAt = CreateAt
                 };
@@ -55,12 +80,13 @@ namespace PurchaseOrderSys.Controllers
                 {
                     foreach (var RMAListitem in RMAList)
                     {
-                        var skulist = OrderItemDataitem.Items.Where(x => x.SKU == RMAListitem.SKU).Select(x => new { x.SKU, x.QTY }).Distinct();
+                        var skulist = OrderItemDataitem.Items.Where(x => x.SKU == RMAListitem.SKU).Select(x => new { x.SKU, x.QTY }).Distinct();//取單價
                         if (skulist.Any())
                         {
 
                             foreach (var Skuitem in skulist)
                             {
+                                var UnitPrice = OrderItemDataitem.Items.Where(x => x.SKU == Skuitem.SKU).FirstOrDefault()?.UnitPrice;
                                 var ProductName = db.SkuLang.Where(x => x.LangID == "en-US" && x.Sku == Skuitem.SKU).FirstOrDefault()?.Name;
                                 var newRMASKU = new RMASKU
                                 {
@@ -69,8 +95,9 @@ namespace PurchaseOrderSys.Controllers
                                     SkuNo = Skuitem.SKU,
                                     QTYOrdered = Skuitem.QTY,
                                     ReturnedQTY = 1,
-                                    Reason= RMAListitem.Reason,
+                                    Reason = RMAListitem.Reason,
                                     WarehouseID = RMAListitem.Warehouse,
+                                    UnitPrice = UnitPrice,
                                     CreateBy = UserBy,
                                     CreateAt = CreateAt
                                 };
@@ -121,7 +148,7 @@ namespace PurchaseOrderSys.Controllers
         {
             var RMAModelVMList = new List<RMAModelVM>();
             var OrderItemData = GetOrderItemData(OrderID, SourceID, UserID, 3);
-            if (OrderItemData != null)
+            if (OrderItemData != null && OrderItemData.Count() > 0)
             {
                 foreach (var item in OrderItemData)
                 {
@@ -141,10 +168,10 @@ namespace PurchaseOrderSys.Controllers
                 if (RMAModelVMList.Any())
                 {
                     var Orderlist = RMAModelVMList.Select(x => x.Order).Distinct().ToList();
-                    var RMAList = db.RMA.Where(x=>x.IsEnable&& Orderlist.Contains(x.OrderID.Value));
+                    var RMAList = db.RMA.Where(x => x.IsEnable && Orderlist.Contains(x.OrderID.Value));
                     foreach (var RMAitem in RMAList)
                     {
-                        foreach (var RMASKUitem in RMAitem.RMASKU.Where(x=>x.IsEnable))
+                        foreach (var RMASKUitem in RMAitem.RMASKU.Where(x => x.IsEnable))
                         {
                             var chkRMAModelVMList = RMAModelVMList.Where(x => x.Order == RMAitem.OrderID && x.SKU == RMASKUitem.SkuNo).ToList();
                             if (chkRMAModelVMList.Any())
@@ -158,7 +185,7 @@ namespace PurchaseOrderSys.Controllers
                         return Json(new { success = false, errmsg = "無可開RMA的訂單" }, JsonRequestBehavior.AllowGet);
                     }
                 }
-             
+
                 Session["RSkuNumberList" + SID] = OrderItemData;
             }
             else
@@ -223,7 +250,8 @@ namespace PurchaseOrderSys.Controllers
                 UPCEAN = x.SKU.UPC + "/" + x.SKU.EAN,
                 Reason = x.Reason,
                 TrWarehouse = x.RMASerialsLlist.FirstOrDefault()?.Warehouse.Name,
-                Warehouse = x.WarehouseID
+                Warehouse = x.WarehouseID,
+                UnitPrice = (x.UnitPrice * x.RMASerialsLlist.Sum(y=>y.SerialsQTY)) ?? 0
             });
             Session["RMAEdit" + id] = RMASKUList.ToList();
             return View(RMA);
@@ -235,6 +263,9 @@ namespace PurchaseOrderSys.Controllers
             OldRMA.Status = RMA.Status;
             OldRMA.Action = RMA.Action;
             OldRMA.SourceCaseID = RMA.SourceCaseID;
+            OldRMA.RestockingFee = RMA.RestockingFee;
+            OldRMA.ReturnShippingCos = RMA.ReturnShippingCos;
+            OldRMA.OtherCosts = RMA.OtherCosts;
             OldRMA.UpdateBy = UserBy;
             OldRMA.UpdateAt = DateTime.UtcNow;
             foreach (var RMAListitem in RMAList)

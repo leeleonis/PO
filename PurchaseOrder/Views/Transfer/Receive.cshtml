@@ -102,7 +102,7 @@
                     method: "get",//或post，自由決定，影響到Server端用FormCollection取值或Request.QueryString取得DataTables傳遞的資訊
                     url: "@Url.Action("ReceiveVMList")",
                     data: function (d) {
-
+                        d.SID =@Model.ID
                     }
                 },
                 serverSide: true,//啟用ServerSide模式
