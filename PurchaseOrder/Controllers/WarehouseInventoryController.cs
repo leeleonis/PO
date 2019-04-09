@@ -191,9 +191,9 @@ namespace PurchaseOrderSys.Controllers
             foreach (var item in GroupWarehouseVM)
             {
                 item.Unfulfillable = Math.Abs(item.Unfulfillable);
-                item.Fulfillable = item.POQTY + item.TransferInQTY - item.TransferAwaiting;
+                item.Fulfillable = item.POQTY + item.TransferInQTY - item.TransferAwaiting + item.UnfulfillableRMA;
                 item.Awaiting = (Awaitinglist.Where(x => x.SKU == item.SKU && x.SCID == SCID).FirstOrDefault()?.QTY ?? 0) - item.TransferAwaiting;
-                item.Aggregate = item.Fulfillable - item.Awaiting;//Aggregate = Fulfillable - Awaiting dispatch
+                item.Aggregate = item.Fulfillable - item.Awaiting - item.UnfulfillableRMA;//Aggregate = Fulfillable - Awaiting dispatch
                 item.DaysOfSupply = item.Aggregate != 0 && item.Velocity != 0 ? item.Aggregate / item.Velocity / 30 : 0;  //Days of supply 算法: Aggregate / Velocity (30 days) / 30
                                                                                                                           //item.Fulfillable = item.Awaiting + item.Aggregate; //Fulfillable = Awaiting dispatch + Aggregate 2018/12/28 拿掉公式
             }
@@ -748,7 +748,7 @@ namespace PurchaseOrderSys.Controllers
                     QTY = SerialsLlistitem.SerialsQTY;
                     BalanceAggregate = Aggregate;
                     BalanceAvailable = Available;
-                    ValueAvailable = Aggregate * price;
+                    ValueAvailable = QTY * price;
 
                     StatementVM.Add(new StatementVM
                     {
