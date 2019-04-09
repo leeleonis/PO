@@ -68,6 +68,10 @@ namespace PurchaseOrderSys.Controllers
                 sku.CreateBy = Session["AdminName"].ToString();
                 langData.LangID = EnumData.DataLangList().Keys.First();
                 sku = SKU.CreateSku(sku, langData);
+
+                SKU.CreateSkuToNeto();
+                SKU.SC_Api = new SellerCloud_WebService.SC_WebService(Session["ApiUserName"].ToString(), Session["ApiPassword"].ToString()); ;
+                SKU.CreateSkuToSC();
             }
 
             if (sku.Type.Equals((byte)EnumData.SkuType.Variation))
@@ -200,7 +204,7 @@ namespace PurchaseOrderSys.Controllers
                                 SkuLang newLang = new SkuLang()
                                 {
                                     LangID = langData.LangID,
-                                    Name = langData.Name,
+                                    Name = langData.Name + " " + string.Join(" ", variationList.Select(a => a.Value).ToArray()),
                                     Model = langData.Model
                                 };
 
@@ -312,6 +316,7 @@ namespace PurchaseOrderSys.Controllers
                     }
                 }
 
+                // 新增Spec
                 List<Sku_Attribute> newAttributeList = attributeData.Except(attributeList).ToList();
                 foreach (var newAttr in newAttributeList)
                 {
@@ -320,6 +325,7 @@ namespace PurchaseOrderSys.Controllers
                 }
                 db.Sku_Attribute.AddRange(newAttributeList);
 
+                // 更新Spec
                 foreach (var updateAttr in attributeList)
                 {
                     var update = attributeData.First(a => a.Sku.Equals(updateAttr.Sku) && a.AttrID.Equals(updateAttr.AttrID));
@@ -388,6 +394,18 @@ namespace PurchaseOrderSys.Controllers
                 }
                 sku.Logistic.ImagePath = string.Format("Sku/{0}/{1}", sku.SkuID, fileName);
                 db.SaveChanges();
+            }
+
+            using (StockKeepingUnit SKU = new StockKeepingUnit(sku))
+            {
+                SKU.UpdateSkuToNeto();
+                SKU.SC_Api = new SellerCloud_WebService.SC_WebService(Session["ApiUserName"].ToString(), Session["ApiPassword"].ToString()); ;
+                SKU.UpdateSkuToSC();
+
+                if (sku.Type.Equals((byte)EnumData.SkuType.Variation))
+                {
+                    SKU.UpdateVariationToNeto();
+                }
             }
 
             var LangID = EnumData.DataLangList().First().Key;
@@ -825,7 +843,7 @@ namespace PurchaseOrderSys.Controllers
             {
                 if (sku == null) throw new Exception("Not found sku!");
 
-                var skuList =  sku.PurchaseSKU.Where(s => s.IsEnable && ((s.PurchaseOrderID.HasValue && s.PurchaseOrder.IsEnable) || (s.CreditMemoID.HasValue && s.CreditMemo.IsEnable))).ToList();
+                var skuList = sku.PurchaseSKU.Where(s => s.IsEnable && ((s.PurchaseOrderID.HasValue && s.PurchaseOrder.IsEnable) || (s.CreditMemoID.HasValue && s.CreditMemo.IsEnable))).ToList();
                 var SerialList = skuList.SelectMany(s => s.SerialsLlist).Where(s => !(s.TransferSKUID.HasValue && (!s.TransferSKU.IsEnable || !s.TransferSKU.Transfer.IsEnable))).OrderByDescending(s => s.ID).ToList();
 
                 var warehouseList = db.Warehouse.Where(w => w.IsEnable).OrderBy(w => w.Name).ToList();

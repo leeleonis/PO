@@ -218,7 +218,7 @@ namespace SellerCloud_WebService
 
         public ManufacturerResponseLite[] Get_Manufacturers()
         {
-            return OS_SellerCloud.Manufacturer_ListALL(OS_AuthHeader, OS_Options, 0);
+            return OS_SellerCloud.Manufacturer_ListALL(OS_AuthHeader, OS_Options, 163);
         }
 
         /***** 取得資料 *****/

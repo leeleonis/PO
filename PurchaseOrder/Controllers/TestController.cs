@@ -232,7 +232,7 @@ namespace PurchaseOrderSys.Controllers
                                         IsEnable = true,
                                         Name = brandName,
                                         CreateAt = DateTime.UtcNow,
-                                        CreateBy = Session["AdminName"].ToString()
+                                        CreateBy = "System Scheduling"
                                     };
 
                                     db.Brand.Add(brand);
@@ -252,7 +252,7 @@ namespace PurchaseOrderSys.Controllers
                                     eBayTitle = JsonConvert.SerializeObject(eBayTitle),
                                     Status = Convert.ToByte(item.IsActive),
                                     CreateAt = DateTime.UtcNow,
-                                    CreateBy = Session["AdminName"].ToString()
+                                    CreateBy = "System Scheduling"
                                 };
 
                                 if (sku.SkuID.Contains('_')) { sku.ParentShadow = sku.SkuID.Split('_')[0]; }
@@ -353,10 +353,14 @@ namespace PurchaseOrderSys.Controllers
             //var data1 = SC_Api.LoadProducts(ProductIDs).Select(p => new { p.ID, p.RequireSerialNumberScanWhileShipping, p.Replenishable }).ToList();
         }
 
-        public void GetProduct()
+        public void GetProductBrand()
         {
             var SC_Api = new SellerCloud_WebService.SC_WebService("tim@weypro.com", "timfromweypro");
-            var Skus = SC_Api.Get_ProductFullInfos(new string[] { "106005543", "106005543-AU" });
+            var Brand = SC_Api.Get_Manufacturers();
+            foreach(var brand in Brand.OrderBy(b => b.ID))
+            {
+                Response.Write(string.Format("{0} - {1}<br />", brand.ID, brand.ManufacturerName));
+            }
         }
     }
 }
