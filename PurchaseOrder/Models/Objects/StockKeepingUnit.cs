@@ -5,6 +5,7 @@ using System.Web;
 using inventorySKU.NetoDeveloper;
 using NetoDeveloper;
 using PurchaseOrderSys.SCService;
+using SellerCloud_WebService;
 
 namespace PurchaseOrderSys.Models
 {
@@ -14,6 +15,8 @@ namespace PurchaseOrderSys.Models
 
         protected SKU skuData;
         protected NetoApi netoApi;
+
+        public SC_WebService SC_Api;
 
         #region IDisposable Support
         private bool disposedValue = false; // 偵測多餘的呼叫
@@ -27,7 +30,7 @@ namespace PurchaseOrderSys.Models
 
         public StockKeepingUnit(SKU sku)
         {
-            skuData = sku;
+            SetSkuData(sku.SkuID);
         }
 
         public void SetSkuData(string sku)
@@ -108,6 +111,7 @@ namespace PurchaseOrderSys.Models
             }
 
             db.SaveChanges();
+            skuData = newSku;
 
             return newSku;
         }
@@ -239,7 +243,6 @@ namespace PurchaseOrderSys.Models
             var update = new UpdateItemItem()
             {
                 SKU = skuData.SkuID,
-                ParentSKU = skuData.ParentSku,
                 Brand = skuData.GetBrand.Name,
                 Name = skuLang.Name,
                 Active = Convert.ToBoolean(skuData.Status),
@@ -264,7 +267,8 @@ namespace PurchaseOrderSys.Models
                 PriceGroups = skuData.PriceGroup.Where(p => p.GetMarket.NetoGroup.HasValue)
                     .Select(p => new UpdateItemItemPriceGroup() { Group = p.GetMarket.GetNetoGroup.Name, Price = p.Price, PriceSpecified = true, MaximumQuantity = p.Max.ToString(), MinimumQuantity = p.Min.ToString() }).ToArray(),
                 Categories = new UpdateItemItemCategory[] { new UpdateItemItemCategory() { CategoryID = skuData.SkuType.NetoID.Value.ToString() } },
-                ItemSpecifics = skuData.Sku_Attribute.Where(a => a.eBay).GroupBy(a => a.AttrID).Where(g => !g.Any(a => a.LangID.Equals(LangID) && !a.eBay)).Select(g => g.First(a => a.LangID.Equals(LangID)))
+                ItemSpecifics = skuData.Sku_Attribute.Where(a => skuData.Type.Equals((byte)EnumData.SkuType.Variation) ? !a.IsDiverse : true)
+                    .Where(a => a.eBay).GroupBy(a => a.AttrID).Where(g => !g.Any(a => a.LangID.Equals(LangID) && !a.eBay)).Select(g => g.First(a => a.LangID.Equals(LangID)))
                     .Select(g => new UpdateItemItemItemSpecific() { Name = g.SkuAttribute.SkuAttributeLang.First(l => l.LangID.Equals(LangID)).Name, Value = g.Value }).ToArray()
             };
 
@@ -281,6 +285,57 @@ namespace PurchaseOrderSys.Models
             else
             {
                 throw new Exception("Waring:" + string.Join(",", result.Messages.Warning.Select(e => e.Message).ToArray()));
+            }
+        }
+
+        public bool UpdateSkuToSC()
+        {
+            if (SC_Api == null) SC_Api = new SC_WebService("tim@weypro.com", "timfromweypro");
+            string LangID = EnumData.DataLangList().First().Key;
+
+            var skuLang = skuData.SkuLang.First(l => l.LangID.Equals(LangID));
+            ProductFullInfo newSku = new ProductFullInfo()
+            {
+                ID = skuData.SkuID,
+                CompanyID = skuData.Company,
+                ProductName = skuLang.Name,
+                ProductTypeID = skuData.SkuType.SCID.Value,
+                ManufacturerID = skuData.GetBrand.SCID.Value,
+                UPC = skuData.UPC
+            };
+
+            bool result = SC_Api.Update_ProductFullInfo(newSku);
+            if (skuData.Type.Equals((byte)EnumData.SkuType.Single) && result)
+            {
+                foreach (var company in db.Company.Where(c => c.ParentID.Value.Equals(skuData.Company)))
+                {
+                    result = result && SC_Api.Update_ProductFullInfo(new ProductFullInfo()
+                    {
+                        ID = skuData.SkuID + company.ShandowSuffix,
+                        CompanyID = company.ID,
+                        ProductName = skuLang.Name,
+                        ProductTypeID = skuData.SkuType.SCID.Value,
+                        ManufacturerID = skuData.GetBrand.SCID.Value,
+                        UPC = skuData.UPC
+                    });
+                }
+            }
+
+            return result;
+        }
+
+        public void UpdateVariationToNeto()
+        {
+            if (netoApi == null) netoApi = new NetoApi();
+
+            var parentSku = skuData;
+            foreach (var variationSku in db.SKU.Where(s => s.IsEnable && s.ParentSku.Equals(parentSku.SkuID)))
+            {
+                var response = netoApi.GetItemBySku(variationSku.SkuID);
+                if(response.Ack != GetItemResponseAck.Success)
+                {
+
+                }
             }
         }
 
@@ -321,6 +376,7 @@ namespace PurchaseOrderSys.Models
 
         public bool CreateSkuToSC()
         {
+            if (SC_Api == null) SC_Api = new SC_WebService("tim@weypro.com", "timfromweypro");
             string LangID = EnumData.DataLangList().First().Key;
 
             var skuLang = skuData.SkuLang.First(l => l.LangID.Equals(LangID));
@@ -330,27 +386,28 @@ namespace PurchaseOrderSys.Models
                 CompanyID = skuData.Company,
                 ProductName = skuLang.Name,
                 ProductTypeID = skuData.SkuType.SCID.Value,
-                UPC = skuData.UPC,
-                BuyerID = 0,
-                LastCost = 0,
-                ListPrice = 0,
-                LongDescription = "",
-                ManufacturerID = 0,
-                ManufacturerSKU = "",
-                ProductMasterSKU = "",
-                ProductSource = 0,
-                ProductSourceSKU = "",
-                Qty = 0,
-                ShortDescription = "",
-                SiteCost = 0,
-                SitePrice = 0,
-                StorePrice = 0,
-                TaxExempt = false,
-                VendorCost = 0,
-                VendorName = ""
+                ManufacturerID = skuData.GetBrand.SCID.Value,
+                UPC = skuData.UPC
             };
 
-            return true;
+            bool result = SC_Api.Create_ProductFullInfo(newSku);
+            if (skuData.Type.Equals((byte)EnumData.SkuType.Single) && result)
+            {
+                foreach (var company in db.Company.Where(c => c.ParentID.Value.Equals(skuData.Company)))
+                {
+                    result = result && SC_Api.Create_ProductFullInfo(new ProductFullInfo()
+                    {
+                        ID = skuData.SkuID + company.ShandowSuffix,
+                        CompanyID = company.ID,
+                        ProductName = skuLang.Name,
+                        ProductTypeID = skuData.SkuType.SCID.Value,
+                        ManufacturerID = skuData.GetBrand.SCID.Value,
+                        UPC = skuData.UPC
+                    });
+                }
+            }
+
+            return result;
         }
 
         protected virtual void Dispose(bool disposing)
@@ -368,6 +425,7 @@ namespace PurchaseOrderSys.Models
                 db = null;
                 skuData = null;
                 netoApi = null;
+                SC_Api = null;
 
                 disposedValue = true;
             }
