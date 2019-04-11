@@ -69,9 +69,9 @@ namespace PurchaseOrderSys.Controllers
                 langData.LangID = EnumData.DataLangList().Keys.First();
                 sku = SKU.CreateSku(sku, langData);
 
-                SKU.CreateSkuToNeto();
-                SKU.SC_Api = new SellerCloud_WebService.SC_WebService(Session["ApiUserName"].ToString(), Session["ApiPassword"].ToString()); ;
-                SKU.CreateSkuToSC();
+                //SKU.CreateSkuToNeto();
+                //SKU.SC_Api = new SellerCloud_WebService.SC_WebService(Session["ApiUserName"].ToString(), Session["ApiPassword"].ToString()); ;
+                //SKU.CreateSkuToSC();
             }
 
             if (sku.Type.Equals((byte)EnumData.SkuType.Variation))
@@ -396,17 +396,17 @@ namespace PurchaseOrderSys.Controllers
                 db.SaveChanges();
             }
 
-            using (StockKeepingUnit SKU = new StockKeepingUnit(sku))
-            {
-                SKU.UpdateSkuToNeto();
-                SKU.SC_Api = new SellerCloud_WebService.SC_WebService(Session["ApiUserName"].ToString(), Session["ApiPassword"].ToString()); ;
-                SKU.UpdateSkuToSC();
+            //using (StockKeepingUnit SKU = new StockKeepingUnit(sku))
+            //{
+            //    SKU.UpdateSkuToNeto();
+            //    SKU.SC_Api = new SellerCloud_WebService.SC_WebService(Session["ApiUserName"].ToString(), Session["ApiPassword"].ToString()); ;
+            //    SKU.UpdateSkuToSC();
 
-                if (sku.Type.Equals((byte)EnumData.SkuType.Variation))
-                {
-                    SKU.UpdateVariationToNeto();
-                }
-            }
+            //    if (sku.Type.Equals((byte)EnumData.SkuType.Variation))
+            //    {
+            //        SKU.UpdateVariationToNeto();
+            //    }
+            //}
 
             var LangID = EnumData.DataLangList().First().Key;
             ViewBag.LangID = langData.LangID;
