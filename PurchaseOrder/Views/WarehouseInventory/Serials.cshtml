@@ -66,7 +66,8 @@
                                                                         {
                                                                             var SerialsLlist = Skuitem.SerialsLlist.Where(x => x.SerialsNo == SerialsNoitem).ToList();
                                                                             var Order = SerialsLlist.Where(x => x.OrderID.HasValue).FirstOrDefault()?.OrderID;
-                                                                            var RMA = RMASerialsLlist.Where(x => x.SerialsNo == SerialsNoitem).FirstOrDefault()?.RMASKU.RMAID;
+                                                                            var FRMA = RMASerialsLlist.Where(x => x.SerialsNo == SerialsNoitem).FirstOrDefault();
+                                                                            var RMA = FRMA?.RMASKU.RMAID;
                                                                             var PurchaseOrderID = SerialsLlist.Where(x => x.PurchaseSKU.PurchaseOrderID.HasValue).FirstOrDefault()?.PurchaseSKU.PurchaseOrderID;
                                                                             var CreditMemoID = SerialsLlist.Where(x => x.PurchaseSKU.CreditMemoID.HasValue).FirstOrDefault()?.PurchaseSKU.CreditMemoID;
                                                                             var WarehouseName = "";
@@ -80,6 +81,10 @@
                                                                             }
                                                                             var Price = SerialsLlist.Where(x => x.PurchaseSKU.Price.HasValue).FirstOrDefault()?.PurchaseSKU.Price;
                                                                             var CreateAt = SerialsLlist.OrderByDescending(x => x.CreateAt).FirstOrDefault()?.CreateAt;
+                                                                            if (FRMA?.CreateAt > CreateAt)
+                                                                            {
+                                                                                CreateAt = FRMA?.CreateAt;
+                                                                            }
                                                                             <tr>
                                                                                 <td>@SerialsNoitem</td>
                                                                                 <td>@Order</td>

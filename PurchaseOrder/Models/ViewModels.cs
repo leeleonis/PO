@@ -1349,5 +1349,7 @@ namespace PurchaseOrderSys.Models
         public int? BalanceAggregate { get; set; }
         public int? BalanceAvailable { get; set; }
         public decimal? ValueAvailable { get; set; }
+        public decimal? price { get; set; }
+        public int? OrderID { get; set; }
     }
 }

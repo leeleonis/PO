@@ -81,6 +81,7 @@ namespace PurchaseOrderSys.Controllers
                     PurchaseSKU = PurchaseSKU.Where(x => x.SkuNo == Product).ToList();
                     TransferToSKU = TransferToSKU.Where(x => x.SkuNo == Product).ToList();
                     TransferFromSKU = TransferFromSKU.Where(x => x.SkuNo == Product).ToList();
+                    RMASKU = RMASKU.Where(x => x.SkuNo == Product).ToList();
                 }
                 WarehouseVM.AddRange(PurchaseSKU.Select(x => new WarehouseVM
                 {
@@ -621,7 +622,7 @@ namespace PurchaseOrderSys.Controllers
                 foreach (var SerialsLlistitem in SerialsLlist.OrderByDescending(x => x.ID))
                 {
 
-                    var itemSKU = SerialsLlistitem.SerialsNo;
+                    var itemSKU = SerialsLlistitem.PurchaseSKU.SkuNo;
                     var Date = SerialsLlistitem.CreateAt.ToLocalTime();
                     var Supplier = "";
                     var Channel = "";
@@ -633,6 +634,11 @@ namespace PurchaseOrderSys.Controllers
                     int? BalanceAggregate;
                     int? BalanceAvailable;
                     decimal? ValueAvailable;
+                    var OrderID = SerialsLlistitem.OrderID;
+                    if (!OrderID.HasValue)
+                    {
+                        OrderID = SerialsLlistitem.SerialsLlistC.Where(x => x.OrderID.HasValue).FirstOrDefault().OrderID;
+                    }
                     var price = SerialsLlistitem.PurchaseSKU.Price;
                     if (SerialsLlistitem.SerialsType == "PO")
                     {
@@ -688,7 +694,7 @@ namespace PurchaseOrderSys.Controllers
                     QTY = SerialsLlistitem.SerialsQTY;
                     BalanceAggregate = Aggregate - AwaitingConut;
                     BalanceAvailable = Available;
-                    ValueAvailable = Aggregate * price;
+                    ValueAvailable = Available * price;
                     if (SerialsLlistitem.SerialsType == "TransferOut" && SerialsLlistitem.TransferSKU.Transfer.Status == "Requested")
                     {
                         Aggregate -= SerialsLlistitem.SerialsQTY.Value;
@@ -701,6 +707,7 @@ namespace PurchaseOrderSys.Controllers
                     StatementVM.Add(new StatementVM
                     {
                         SKU = itemSKU,
+                        OrderID = OrderID,
                         Date = Date,
                         Supplier = Supplier,
                         ID = ID,
@@ -709,6 +716,7 @@ namespace PurchaseOrderSys.Controllers
                         Warehouse = Warehouse,
                         Serial = Serial,
                         QTY = QTY,
+                        price = price,
                         BalanceAggregate = BalanceAggregate,
                         BalanceAvailable = BalanceAvailable,
                         ValueAvailable = ValueAvailable
@@ -717,6 +725,7 @@ namespace PurchaseOrderSys.Controllers
 
 
             }
+            var ChannelList = EnumData.ChannelList();
             foreach (var item in RmaSKU)
             {
                 var RMASerialsLlist = item.RMASerialsLlist.Where(y => !(y.SerialsType == "TransferOut" || y.SerialsType == "TransferIn") || ((y.SerialsType == "TransferOut" || y.SerialsType == "TransferIn") && y.TransferSKU.IsEnable && y.TransferSKU.Transfer.IsEnable)).ToList();
@@ -724,10 +733,10 @@ namespace PurchaseOrderSys.Controllers
                 var Aggregate = 0;//可出貨
                 foreach (var SerialsLlistitem in RMASerialsLlist.OrderByDescending(x => x.ID))
                 {
-                    var itemSKU = SerialsLlistitem.SerialsNo;
+                    var itemSKU = SerialsLlistitem.RMASKU.SkuNo;
                     var Date = SerialsLlistitem.CreateAt.ToLocalTime();
                     var Supplier = "";
-                    var Channel = "";
+                    var Channel = ChannelList[SerialsLlistitem.RMASKU.RMA.Channel.ToString()];
                     var ISType = "";
                     int? ID = null;
                     var Warehouse = "";
@@ -736,6 +745,7 @@ namespace PurchaseOrderSys.Controllers
                     int? BalanceAggregate;
                     int? BalanceAvailable;
                     decimal? ValueAvailable;
+                    var OrderID = SerialsLlistitem.RMASKU.RMA.OrderID;
                     var price = SerialsLlistitem.RMASKU.UnitPrice;
                     if (SerialsLlistitem.SerialsType == "RMAIn")
                     {
@@ -748,11 +758,12 @@ namespace PurchaseOrderSys.Controllers
                     QTY = SerialsLlistitem.SerialsQTY;
                     BalanceAggregate = Aggregate;
                     BalanceAvailable = Available;
-                    ValueAvailable = QTY * price;
+                    ValueAvailable = Available * price;
 
                     StatementVM.Add(new StatementVM
                     {
                         SKU = itemSKU,
+                        OrderID = OrderID,
                         Date = Date,
                         Supplier = Supplier,
                         ID = ID,
@@ -761,10 +772,23 @@ namespace PurchaseOrderSys.Controllers
                         Warehouse = Warehouse,
                         Serial = Serial,
                         QTY = QTY,
+                        price = price,
                         BalanceAggregate = BalanceAggregate,
                         BalanceAvailable = BalanceAvailable,
                         ValueAvailable = ValueAvailable
                     });
+                }
+            }
+            var StatementVMPO = StatementVM.Where(x => x.ISType == "PO").ToList();//2019/4/9 SKYPE 金額直接使用 PO進價
+            foreach (var POitem in StatementVMPO)
+            {
+                var price = POitem.price;
+                var Supplier = POitem.Supplier;
+                foreach (var VMitem in StatementVM.Where(x => x.SKU == POitem.SKU&&x.OrderID== POitem.OrderID))
+                {
+                    VMitem.price = price;//2019/4/9 SKYPE 加入單價 PO進價
+                    VMitem.ValueAvailable = VMitem.BalanceAvailable * price;
+                    VMitem.Supplier = Supplier;
                 }
             }
             return View(StatementVM.OrderByDescending(x => x.Date));
