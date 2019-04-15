@@ -670,7 +670,7 @@
                                     </div>
 
                                     @{
-                                        var SCList = WarehouseList.Select(w => w.WarehouseSummary.First(s => s.Type.Equals("SCID"))).ToDictionary(s => s.Val, s => s.WarehouseID);
+                                        var SCList = WarehouseList.SelectMany(w => w.WarehouseSummary.Where(ws => ws.IsEnable && ws.Type.Equals("SCID"))).ToDictionary(s => s.Val, s => s.WarehouseID);
                                         var TypeList = new Dictionary<string, string>() { { "PO", "PO" }, { "CM", "Credit Memo" }, { "Order", "Order Dispatch" }, { "TransferOut", "Transfer (Out)" }, { "TransferIn", "Transfer (In)" }, { "RMA", "" }, { "Change", "" } };
                                         var SerialList = PurchaseSku.SelectMany(sku => sku.SerialsLlist).Where(s => !(s.TransferSKUID.HasValue && (!s.TransferSKU.IsEnable || !s.TransferSKU.Transfer.IsEnable))).OrderByDescending(s => s.ID).Select(s => new
                                         {
