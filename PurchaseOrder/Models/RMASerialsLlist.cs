@@ -36,6 +36,9 @@ namespace PurchaseOrderSys.Models
         public Nullable<int> ServiceID { get; set; }
         public string Reason { get; set; }
         public Nullable<int> TransferSKUID { get; set; }
+        public string NewSkuNo { get; set; }
+        public string NewSKUCreateBy { get; set; }
+        public Nullable<System.DateTime> NewSKUCreateAt { get; set; }
     
         public virtual RMASKU RMASKU { get; set; }
         public virtual Warehouse Warehouse { get; set; }
@@ -43,5 +46,6 @@ namespace PurchaseOrderSys.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RMASerialsLlist> RMASerialsLlistC { get; set; }
         public virtual RMASerialsLlist RMASerialsLlistP { get; set; }
+        public virtual SKU SKU { get; set; }
     }
 }

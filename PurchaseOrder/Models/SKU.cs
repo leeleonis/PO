@@ -26,6 +26,7 @@ namespace PurchaseOrderSys.Models
             this.PurchaseSKU = new HashSet<PurchaseSKU>();
             this.TransferSKU = new HashSet<TransferSKU>();
             this.RMASKU = new HashSet<RMASKU>();
+            this.RMASerialsLlist = new HashSet<RMASerialsLlist>();
         }
     
         public bool IsEnable { get; set; }
@@ -72,5 +73,7 @@ namespace PurchaseOrderSys.Models
         public virtual SkuType SkuType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RMASKU> RMASKU { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RMASerialsLlist> RMASerialsLlist { get; set; }
     }
 }

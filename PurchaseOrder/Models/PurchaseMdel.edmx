@@ -529,6 +529,7 @@
           <Property Name="NoteType" Type="nvarchar" MaxLength="20" />
           <Property Name="CreditMemoID" Type="int" />
           <Property Name="TransferID" Type="int" />
+          <Property Name="RMAID" Type="int" />
         </EntityType>
         <EntityType Name="PurchaseOrder">
           <Key>
@@ -645,6 +646,9 @@
           <Property Name="ServiceID" Type="int" />
           <Property Name="Reason" Type="nvarchar" MaxLength="20" />
           <Property Name="TransferSKUID" Type="int" />
+          <Property Name="NewSkuNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="NewSKUCreateBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="NewSKUCreateAt" Type="datetime" />
         </EntityType>
         <EntityType Name="RMASKU">
           <Key>
@@ -1318,6 +1322,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PurchaseNote_RMA">
+          <End Role="RMA" Type="Self.RMA" Multiplicity="0..1" />
+          <End Role="PurchaseNote" Type="Self.PurchaseNote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RMA">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PurchaseNote">
+              <PropertyRef Name="RMAID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_PurchaseNote_Transfer">
           <End Role="Transfer" Type="Self.Transfer" Multiplicity="0..1" />
           <End Role="PurchaseNote" Type="Self.PurchaseNote" Multiplicity="*" />
@@ -1435,6 +1451,18 @@
             </Principal>
             <Dependent Role="RMASerialsLlist">
               <PropertyRef Name="RMASKUID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RMASerialsLlist_SKU">
+          <End Role="SKU" Type="Self.SKU" Multiplicity="0..1" />
+          <End Role="RMASerialsLlist" Type="Self.RMASerialsLlist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SKU">
+              <PropertyRef Name="SkuID" />
+            </Principal>
+            <Dependent Role="RMASerialsLlist">
+              <PropertyRef Name="NewSkuNo" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1971,6 +1999,10 @@
             <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
             <End Role="PurchaseNote" EntitySet="PurchaseNote" />
           </AssociationSet>
+          <AssociationSet Name="FK_PurchaseNote_RMA" Association="Self.FK_PurchaseNote_RMA">
+            <End Role="RMA" EntitySet="RMA" />
+            <End Role="PurchaseNote" EntitySet="PurchaseNote" />
+          </AssociationSet>
           <AssociationSet Name="FK_PurchaseNote_Transfer" Association="Self.FK_PurchaseNote_Transfer">
             <End Role="Transfer" EntitySet="Transfer" />
             <End Role="PurchaseNote" EntitySet="PurchaseNote" />
@@ -2009,6 +2041,10 @@
           </AssociationSet>
           <AssociationSet Name="FK_RMASerialsLlist_RMASKU" Association="Self.FK_RMASerialsLlist_RMASKU">
             <End Role="RMASKU" EntitySet="RMASKU" />
+            <End Role="RMASerialsLlist" EntitySet="RMASerialsLlist" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RMASerialsLlist_SKU" Association="Self.FK_RMASerialsLlist_SKU">
+            <End Role="SKU" EntitySet="SKU" />
             <End Role="RMASerialsLlist" EntitySet="RMASerialsLlist" />
           </AssociationSet>
           <AssociationSet Name="FK_RMASerialsLlist_TransferSKU" Association="Self.FK_RMASerialsLlist_TransferSKU">
@@ -2465,6 +2501,14 @@
             <End Role="RMASerialsLlist" EntitySet="RMASerialsLlist" />
             <End Role="RMASerialsLlist1" EntitySet="RMASerialsLlist" />
           </AssociationSet>
+          <AssociationSet Name="FK_RMASerialsLlist_SKU" Association="PurchaseOrderModel.FK_RMASerialsLlist_SKU">
+            <End Role="SKU" EntitySet="SKU" />
+            <End Role="RMASerialsLlist" EntitySet="RMASerialsLlist" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PurchaseNote_RMA" Association="PurchaseOrderModel.FK_PurchaseNote_RMA">
+            <End Role="RMA" EntitySet="RMA" />
+            <End Role="PurchaseNote" EntitySet="PurchaseNote" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="AdminGroup">
           <Key>
@@ -2786,6 +2830,8 @@
           <Property Name="TransferID" Type="Int32" />
           <NavigationProperty Name="CreditMemo" Relationship="PurchaseOrderModel.FK_PurchaseNote_CreditMemo" FromRole="PurchaseNote" ToRole="CreditMemo" />
           <NavigationProperty Name="Transfer" Relationship="PurchaseOrderModel.FK_PurchaseNote_Transfer" FromRole="PurchaseNote" ToRole="Transfer" />
+          <Property Name="RMAID" Type="Int32" />
+          <NavigationProperty Name="RMA" Relationship="PurchaseOrderModel.FK_PurchaseNote_RMA" FromRole="PurchaseNote" ToRole="RMA" />
         </EntityType>
         <EntityType Name="PurchaseOrder">
           <Key>
@@ -2936,6 +2982,7 @@
           <NavigationProperty Name="Logistic" Relationship="PurchaseOrderModel.FK_Logistic_SKU" FromRole="SKU" ToRole="Logistic" />
           <NavigationProperty Name="SkuType" Relationship="PurchaseOrderModel.FK_Sku_SkuType" FromRole="SKU" ToRole="SkuType" />
           <NavigationProperty Name="RMASKU" Relationship="PurchaseOrderModel.FK_RMASKU_SKU" FromRole="SKU" ToRole="RMASKU" />
+          <NavigationProperty Name="RMASerialsLlist" Relationship="PurchaseOrderModel.FK_RMASerialsLlist_SKU" FromRole="SKU" ToRole="RMASerialsLlist" />
         </EntityType>
         <EntityType Name="Sku_Attribute">
           <Key>
@@ -4283,6 +4330,7 @@
           <Property Name="RestockingFee" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="OtherCosts" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="ReturnShippingCos" Type="Decimal" Precision="18" Scale="2" />
+          <NavigationProperty Name="PurchaseNote" Relationship="PurchaseOrderModel.FK_PurchaseNote_RMA" FromRole="RMA" ToRole="PurchaseNote" />
         </EntityType>
         <Association Name="FK_RMA_Warehouse">
           <End Type="PurchaseOrderModel.Warehouse" Role="Warehouse" Multiplicity="0..1" />
@@ -4357,6 +4405,10 @@
           <NavigationProperty Name="TransferSKU" Relationship="PurchaseOrderModel.FK_RMASerialsLlist_TransferSKU" FromRole="RMASerialsLlist" ToRole="TransferSKU" />
           <NavigationProperty Name="RMASerialsLlistC" Relationship="PurchaseOrderModel.FK_RMASerialsLlist_RMASerialsLlist" FromRole="RMASerialsLlist" ToRole="RMASerialsLlist1" />
           <NavigationProperty Name="RMASerialsLlistP" Relationship="PurchaseOrderModel.FK_RMASerialsLlist_RMASerialsLlist" FromRole="RMASerialsLlist1" ToRole="RMASerialsLlist" />
+          <Property Name="NewSkuNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NewSKUCreateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NewSKUCreateAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="SKU" Relationship="PurchaseOrderModel.FK_RMASerialsLlist_SKU" FromRole="RMASerialsLlist" ToRole="SKU" />
         </EntityType>
         <Association Name="FK_RMASerialsLlist_RMASKU">
           <End Type="PurchaseOrderModel.RMASKU" Role="RMASKU" Multiplicity="0..1" />
@@ -4403,6 +4455,30 @@
             </Principal>
             <Dependent Role="RMASerialsLlist1">
               <PropertyRef Name="PID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RMASerialsLlist_SKU">
+          <End Type="PurchaseOrderModel.SKU" Role="SKU" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.RMASerialsLlist" Role="RMASerialsLlist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SKU">
+              <PropertyRef Name="SkuID" />
+            </Principal>
+            <Dependent Role="RMASerialsLlist">
+              <PropertyRef Name="NewSkuNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PurchaseNote_RMA">
+          <End Type="PurchaseOrderModel.RMA" Role="RMA" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.PurchaseNote" Role="PurchaseNote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RMA">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PurchaseNote">
+              <PropertyRef Name="RMAID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4706,6 +4782,7 @@
           <EntitySetMapping Name="PurchaseNote">
             <EntityTypeMapping TypeName="PurchaseOrderModel.PurchaseNote">
               <MappingFragment StoreEntitySet="PurchaseNote">
+                <ScalarProperty Name="RMAID" ColumnName="RMAID" />
                 <ScalarProperty Name="TransferID" ColumnName="TransferID" />
                 <ScalarProperty Name="CreditMemoID" ColumnName="CreditMemoID" />
                 <ScalarProperty Name="NoteType" ColumnName="NoteType" />
@@ -5423,6 +5500,9 @@
           <EntitySetMapping Name="RMASerialsLlist">
             <EntityTypeMapping TypeName="PurchaseOrderModel.RMASerialsLlist">
               <MappingFragment StoreEntitySet="RMASerialsLlist">
+                <ScalarProperty Name="NewSKUCreateAt" ColumnName="NewSKUCreateAt" />
+                <ScalarProperty Name="NewSKUCreateBy" ColumnName="NewSKUCreateBy" />
+                <ScalarProperty Name="NewSkuNo" ColumnName="NewSkuNo" />
                 <ScalarProperty Name="TransferSKUID" ColumnName="TransferSKUID" />
                 <ScalarProperty Name="Reason" ColumnName="Reason" />
                 <ScalarProperty Name="ServiceID" ColumnName="ServiceID" />

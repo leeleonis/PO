@@ -2,6 +2,7 @@
 using PurchaseOrderSys.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -148,6 +149,7 @@ namespace PurchaseOrderSys.Controllers
         {
             var RMAModelVMList = new List<RMAModelVM>();
             var OrderItemData = GetOrderItemData(OrderID, SourceID, UserID, 3);
+            var NoSKU = new List<string>();
             if (OrderItemData != null && OrderItemData.Count() > 0)
             {
                 foreach (var item in OrderItemData)
@@ -157,12 +159,24 @@ namespace PurchaseOrderSys.Controllers
                         foreach (var SKUitem in item.Items)
                         {
                             var SKUNo = SKUitem.SKU;
-                            var sku = db.SkuLang.Where(x => x.LangID == "en-US" && x.Sku == SKUNo).FirstOrDefault();
-                            var ProductName = sku?.Name;
-                            var UPC = sku?.GetSku.UPC + sku?.GetSku.EAN;
-                            RMAModelVMList.Add(new RMAModelVM { ck = item.OrderID, Order = item.OrderID, SourceID = item.OrderSourceOrderId, QTY = 1, SKU = SKUNo, ProductName = ProductName, UPC = UPC });
+                            var SKU = db.SKU.Find(SKUNo);
+                            if (SKU == null)
+                            {
+                                NoSKU.Add(SKUNo);
+                            }
+                            else
+                            {
+                                var sku = SKU.SkuLang.Where(x => x.LangID == "en-US" && x.Sku == SKUNo).FirstOrDefault();
+                                var ProductName = sku?.Name;
+                                var UPC = sku?.GetSku.UPC + sku?.GetSku.EAN;
+                                RMAModelVMList.Add(new RMAModelVM { ck = item.OrderID, Order = item.OrderID, SourceID = item.OrderSourceOrderId, QTY = 1, SKU = SKUNo, ProductName = ProductName, UPC = UPC });
+                            }
                         }
                     }
+                }
+                if (NoSKU.Any())
+                {
+                    return Json(new { success = false, errmsg = string.Join(";", NoSKU) + "無SKU資料請先增SKU" }, JsonRequestBehavior.AllowGet);
                 }
                 //過濾已開RMA的SKU
                 if (RMAModelVMList.Any())
@@ -291,6 +305,79 @@ namespace PurchaseOrderSys.Controllers
             }
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+        [HttpPost]
+        public ActionResult CreatNote(int? ID, string SID, string Note)
+        {
+            try
+            {
+                var PurchaseNoteList = new List<PurchaseNote>();
+                if (ID.HasValue && ID != 0)
+                {
+                    var RMA = db.RMA.Find(ID);
+                    RMA.PurchaseNote.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = "txt", CreateAt = DateTime.UtcNow, CreateBy = UserBy });
+                    db.SaveChanges();
+                    PurchaseNoteList = RMA.PurchaseNote.ToList();
+                }
+                else
+                {
+                    PurchaseNoteList = (List<PurchaseNote>)Session["RMAPurchaseNote" + SID];
+                    if (PurchaseNoteList == null)
+                    {
+                        PurchaseNoteList = new List<PurchaseNote>();
+                    }
+
+                    PurchaseNoteList.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = "txt", CreateAt = DateTime.UtcNow, CreateBy = UserBy });
+                    Session["RMAPurchaseNote" + SID] = PurchaseNoteList;
+                }
+                return Json(new { status = true, datalist = PurchaseNoteList.OrderByDescending(x => x.CreateAt).Select(x => new { CreateAt = x.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss"), x.CreateBy, x.Note, x.NoteType }).ToList() }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { status = false, Errmsg = ex.ToString() }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        public ActionResult CreatNoteImg(int? ID, string SID, HttpPostedFileBase Img)
+        {
+            try
+            {
+                if (Img == null)
+                {
+                    return Json(new { status = false, Errmsg = "沒有圖檔" }, JsonRequestBehavior.AllowGet);
+                }
+                var NoteType = Img.ContentType;
+                var PurchaseNoteList = new List<PurchaseNote>();
+                if (ID.HasValue && ID != 0)
+                {
+                    var Note = SaveImg(Img);
+                    var RMA = db.RMA.Find(ID);
+                    RMA.PurchaseNote.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = "Url", CreateAt = DateTime.UtcNow, CreateBy = UserBy });
+                    db.SaveChanges();
+                    PurchaseNoteList = RMA.PurchaseNote.ToList();
+                }
+                else
+                {
+                    MemoryStream target = new MemoryStream();
+
+                    Img.InputStream.CopyTo(target);
+                    byte[] data = target.ToArray();
+                    string Note = Convert.ToBase64String(data, 0, data.Length);
+                    PurchaseNoteList = (List<PurchaseNote>)Session["RMAPurchaseNote" + SID];
+                    if (PurchaseNoteList == null)
+                    {
+                        PurchaseNoteList = new List<PurchaseNote>();
+                    }
+
+                    PurchaseNoteList.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = NoteType, CreateAt = DateTime.UtcNow, CreateBy = UserBy });
+                    Session["RMAPurchaseNote" + SID] = PurchaseNoteList;
+                }
+                return Json(new { status = true, datalist = PurchaseNoteList.OrderByDescending(x => x.CreateAt).Select(x => new { CreateAt = x.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss"), x.CreateBy, x.Note, x.NoteType }).ToList() }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { status = false, Errmsg = ex.ToString() }, JsonRequestBehavior.AllowGet);
+            }
         }
         [HttpPost]
         public ActionResult GetSerialList(int ID)

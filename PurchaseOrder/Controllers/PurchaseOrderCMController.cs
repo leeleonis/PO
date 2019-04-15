@@ -128,7 +128,7 @@ namespace PurchaseOrderSys.Controllers
 
                 }
             }
-            var CMPurchaseNote = (List<PurchaseNote>)Session["CMPurchaseNote"];
+            var CMPurchaseNote = (List<PurchaseNote>)Session["CMPurchaseNote" + SID];
             if (CMPurchaseNote != null)
             {
                 foreach (var item in CMPurchaseNote)

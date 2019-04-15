@@ -8,6 +8,13 @@
     var ChannelList = EnumData.ChannelList().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var RMAReasonList = EnumData.RMAReasonList();
 }
+<style>
+    .img {
+        max-width: 20px;
+        max-height: 20px;
+        margin: 5px;
+    }
+</style>
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -103,7 +110,7 @@
                                                 @Html.Label("Received Date", htmlAttributes: new { @class = "control-label col-sm-1" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @{
-                                                        var ReceivedDate = Model.RMASKU.Where(x => x.IsEnable).OrderByDescending(x=>x.ReceivedAt).FirstOrDefault()?.ReceivedAt?.ToLocalTime();
+                                                        var ReceivedDate = Model.RMASKU.Where(x => x.IsEnable).OrderByDescending(x => x.ReceivedAt).FirstOrDefault()?.ReceivedAt?.ToLocalTime();
                                                         <input class="form-control" type="text" value="@ReceivedDate" readonly>
                                                     }
                                                 </div>
@@ -146,8 +153,7 @@
                                                                 <th></th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody>
-                                                        </tbody>
+                                                        <tbody></tbody>
                                                         <tfoot>
                                                             <tr>
                                                                 <td colspan="10"></td>
@@ -163,31 +169,31 @@
                                                                     </div>
                                                                     <div class="col-sm-2 col-lg-4">
                                                                         <ul style="list-style-type:none;list-style-position: inside;padding-left: 0px;padding-left: 0px;" id="textnotelog">
-                                                                            @*@foreach (var item in Model.PurchaseNote.OrderByDescending(x => x.ID))
-        {
-            <li>
-                <fieldset>
-                    <legend>
-                        @if (item.NoteType == "Url")
-                        {
-                            <a class="aimg" href="@item.Note" data-lightbox="roadtrip"><img class="img" src="@item.Note" /></a>
-                        }
-                        else
-                        {
-                            @item.Note
-                        }
+                                                                            @foreach (var item in Model.PurchaseNote.OrderByDescending(x => x.ID))
+                                                                            {
+                                                                                <li>
+                                                                                    <fieldset>
+                                                                                        <legend>
+                                                                                            @if (item.NoteType == "Url")
+                                                                                            {
+                                                                                                <a class="aimg" href="@item.Note" data-lightbox="roadtrip"><img class="img" src="@item.Note" /></a>
+                                                                                            }
+                                                                                            else
+                                                                                            {
+                                                                                                @item.Note
+                                                                                            }
 
-                        <br />
-                        @( item.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss") + "；" + item.CreateBy)
-                    </legend>
-                </fieldset>
-            </li>
-        }*@
+                                                                                            <br />
+                                                                                            @( item.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss") + "；" + item.CreateBy)
+                                                                                        </legend>
+                                                                                    </fieldset>
+                                                                                </li>
+                                                                            }
                                                                         </ul>
                                                                     </div>
                                                                 </td>
                                                                 <td colspan="2">Refund Statement</td>
-                      
+
                                                             </tr>
                                                             <tr>
                                                                 <td>Item value:</td>
@@ -198,13 +204,13 @@
                                                             <tr>
                                                                 <td>Shipping charge:</td>
                                                                 <td>
-                                                                    @((Model.FinalShippingFee?? 0).ToString("###,##0.##"))
+                                                                    @((Model.FinalShippingFee ?? 0).ToString("###,##0.##"))
                                                                 </td>
                                                             </tr>
                                                             <tr>
                                                                 <td>Restocking fee:</td>
                                                                 <td>
-                                                                   @Html.EditorFor(x=>x.RestockingFee, new { htmlAttributes = new { @class = "form-control changed" } })
+                                                                    @Html.EditorFor(x => x.RestockingFee, new { htmlAttributes = new { @class = "form-control changed" } })
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -228,8 +234,8 @@
                                                                 <td></td>
                                                             </tr>
                                                             <tr>
-                                                                <td>Apply Refund</td>
-                                                                <td>Save</td>
+                                                                <td></td>
+                                                                <td></td>
                                                             </tr>
                                                         </tfoot>
                                                     </table>
@@ -254,7 +260,15 @@
         </div>
     </section>
 </div>
+<div id="dialog">
+    <select id="gebruikerId" name="gebruikerId" class="form-control" style="width:50%"></select>
+    <input type="hidden" id="ChangeSKUID" />
+    <button type="button" id="addsku">Change SKU</button>
+
+</div>
 @section pagespecific {
+    <link href="~/Content/css/lightbox.css" rel="stylesheet" />
+    <script src="~/Scripts/lightbox.js"></script>
     <script type="text/javascript">
         var hash = window.location.hash;
         $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
@@ -359,7 +373,9 @@
                     {
                         data: "ID",
                         render: function (data, type, row, meta) {
-                            return " <a href='@Url.Action("Returnedserials")?ID=" + data+"' class='btn btn-default btn-sm'>Receive returns</a>";
+                            var html = " <a href='@Url.Action("Returnedserials")?ID=" + data + "' class='btn btn-default btn-sm'>Receive returns</a>";
+                            html += " <a val='" + data + "' class='btn btn-default btn-sm ChangeSKU'>Change SKU</a>";
+                            return html;
                         }
                     }
                 ],
@@ -494,6 +510,103 @@
                 var tr = $(this).closest("tr");
                 $(tr).children('td').css({ 'background-color': 'yellow' });
             });
+            $("#dialog").dialog({
+                autoOpen: false,
+                width: 800
+            });
+            $("body").on("click", ".ChangeSKU", function () {
+                var val = $(this).attr("val");
+                $("#ChangeSKUID").val(val);
+                $("#dialog").dialog({
+                    title: "Change SKU"
+                });
+                $("#dialog").dialog("open");
+                @*var url = '@Url.Action("GetImg", "Ajax")'
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: { id: $(this).attr("valID"), key: "SKU", ImgType: "ImgType" },
+                    success: function (data) {
+                        $("#dialog").dialog({
+                            title: "Img"
+                        });
+                        $("#dialog").html(data);
+                        $("#dialog").dialog("open");
+                        //$("#dialog").load(data).dialog({ modal: true }).dialog('open');
+                    }
+                });*@
+                return false;
+            });
+             $("#gebruikerId").select2({
+                minimumInputLength: 1,
+                placeholder: "Search",
+                allowClear: true,
+                multiple: true,
+                ajax: {
+                    url: "@Url.Action("SkuNumberGet", "Ajax")",
+                    dataType: 'json',
+                    delay: 0,
+                    data: function (term) {
+                        return {
+                            Search: term.term
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data.items
+                        };
+                    }
+                }
+            });
+            $("#UploadImage").click(function () {
+                var data = new FormData();
+                data.append("ID", "@Html.DisplayFor(x=>x.ID)");
+                var files = $("#addimg").get(0).files;
+                if (files.length > 0) {
+                    data.append("Img", files[0]);
+                }
+                $.ajax({
+                    traditional: true,
+                    type: "post",
+                    contentType: false,
+                    processData: false,
+                    dataType: "json",
+                    url: "@Url.Action("CreatNoteImg")",
+                    data: data,
+                    success: function (data) {
+                        if (data.status) {
+                            $("#addimg").val("");
+                            $("#textnotelog li").remove();
+                            datalistSet(data);
+
+                        }
+                        else {
+                            alert(data.Errmsg);
+                        }
+                    }
+                });
+            });
+            $("#addnote").click(function () {
+                $.ajax({
+                    traditional: true,
+                    type: "post",
+                    url: "@Url.Action("CreatNote")",
+                    data: {
+                        ID: "@Html.DisplayFor(x=>x.ID)",
+                        Note: $("#textnote").val()
+                    },
+                    success: function (data) {
+                        if (data.status) {
+                            $("#textnote").val("");
+                            $("#textnotelog li").remove();
+                            datalistSet(data);
+                        }
+                        else {
+                            alert(data.Errmsg);
+                        }
+                    }
+                });
+            });
         });
         function GetSerialList(ID) {
             var div = $('<div style="border:2px blue solid;" />').addClass('loading').text('Loading...');
@@ -514,5 +627,85 @@
             });
             return div;
         }
+        function Success(data) {
+            $("#dialog").dialog("close");
+            if (data.status == false) {
+                alert(data.Msg);
+            }
+            if (data.reload == true) {
+                window.location.reload();
+            }
+        }
+        function datalistSet(data) {
+            data.datalist.forEach(function (value) {
+                var href = "";
+                if (value.NoteType == "Url") {
+                    href = value.Note;
+                    $("#textnotelog").append("<li><fieldset><legend><a class='aimg' href='" + href + "' data-lightbox='roadtrip'><img class='img' src='" + href + "' /></a><br />" + value.CreateAt + "；" + value.CreateBy + "</legend></fieldset></li>");
+                }
+                else if (value.NoteType == "" || value.NoteType == "txt") {
+                    $("#textnotelog").append("<li><fieldset><legend>" + value.Note + "<br />" + value.CreateAt + "；" + value.CreateBy + "</legend></fieldset></li>");
+                }
+                else {
+                    href = "data:" + value.NoteType + ";base64," + value.Note;
+                    $("#textnotelog").append("<li><fieldset><legend><a class='aimg' href='" + href + "' data-lightbox='roadtrip'><img class='img' src='" + href + "' /></a><br />" + value.CreateAt + "；" + value.CreateBy + "</legend></fieldset></li>");
+                }
+            });
+        }
+        var Preview = new function () {
+
+            var root = $("#data-form");
+
+            // 連續的圖片編碼
+            var imgcode = '';
+
+            // 選取發生改變
+            this.change_file = function () {
+                root.on("change", ".ImgFile", function () {
+                    show(this);
+                });
+            }
+
+            // 批次圖片，先清空後再插入
+            var show = function (input) {
+                if (input.files && input.files[0]) {
+                    clean(input.ID);
+                    each_img(input.files, input.id);
+                }
+            }
+
+            // 批次讀取，最後再一次寫入
+            var each_img = function (files, ID) {
+
+                $.each(files, function (index, file) {
+                    var src = URL.createObjectURL(file);
+                    create_imgcode(src);
+                });
+
+                // 放置預覽元素後重設
+                root.find("#" + ID + "preview").html(imgcode);
+                reset();
+            }
+
+
+            // 建立圖片
+            var create_imgcode = function (src) {
+                imgcode += '<a class="aimg" href="' + src + '" data-lightbox="roadtrip"><img class="img" src="' + src + '" /></a>';
+            }
+
+
+            // 清空預覽區域
+            var clean = function (ID) {
+                root.find("#" + ID + "preview").empty();
+            }
+
+            // 還原 input[type=file]
+            var reset = function () {
+                imgcode = '';
+                //root.find("#VendorInvoice").val(null);
+            }
+        }
+        // 執行
+        Preview.change_file();
     </script>
 }

@@ -24,7 +24,7 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult Create(string POTypeVal = "PurchaseOrder")
         {
             Session["SkuNumberList"] = null;
-            Session["PurchaseNote"] = null;
+            Session["POPurchaseNote"] = null;
             ViewBag.SID = DateTime.Now.ToString("HHmmss");
             var PurchaseOrder = new PurchaseOrder();
             PurchaseOrder.POType = POTypeVal;
@@ -75,7 +75,7 @@ namespace PurchaseOrderSys.Controllers
                     filter.PurchaseSKU.Add(item);
                 }
             }
-            var PurchaseNoteLlist = (List<PurchaseNote>)Session["PurchaseNote" + SID];
+            var PurchaseNoteLlist = (List<PurchaseNote>)Session["POPurchaseNote" + SID];
             if (PurchaseNoteLlist != null)
             {
                 foreach (var item in PurchaseNoteLlist)
@@ -886,14 +886,14 @@ namespace PurchaseOrderSys.Controllers
                 }
                 else
                 {
-                    PurchaseNoteList = (List<PurchaseNote>)Session["PurchaseNote" + SID];
+                    PurchaseNoteList = (List<PurchaseNote>)Session["POPurchaseNote" + SID];
                     if (PurchaseNoteList == null)
                     {
                         PurchaseNoteList = new List<PurchaseNote>();
                     }
 
                     PurchaseNoteList.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = "txt", CreateAt = DateTime.UtcNow, CreateBy = UserBy });
-                    Session["PurchaseNote" + SID] = PurchaseNoteList;
+                    Session["POPurchaseNote" + SID] = PurchaseNoteList;
                 }
                 return Json(new { status = true, datalist = PurchaseNoteList.OrderByDescending(x => x.CreateAt).Select(x => new { CreateAt = x.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss"), x.CreateBy, x.Note, x.NoteType }).ToList() }, JsonRequestBehavior.AllowGet);
             }
@@ -928,14 +928,14 @@ namespace PurchaseOrderSys.Controllers
                     Img.InputStream.CopyTo(target);
                     byte[] data = target.ToArray();
                     string Note = Convert.ToBase64String(data, 0, data.Length);
-                    PurchaseNoteList = (List<PurchaseNote>)Session["PurchaseNote"+ SID];
+                    PurchaseNoteList = (List<PurchaseNote>)Session["POPurchaseNote"+ SID];
                     if (PurchaseNoteList == null)
                     {
                         PurchaseNoteList = new List<PurchaseNote>();
                     }
 
                     PurchaseNoteList.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = NoteType, CreateAt = DateTime.UtcNow, CreateBy = UserBy });
-                    Session["PurchaseNote"+ SID] = PurchaseNoteList;
+                    Session["POPurchaseNote"+ SID] = PurchaseNoteList;
                 }
                 return Json(new { status = true, datalist = PurchaseNoteList.OrderByDescending(x => x.CreateAt).Select(x => new { CreateAt = x.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss"), x.CreateBy, x.Note, x.NoteType }).ToList() }, JsonRequestBehavior.AllowGet);
             }

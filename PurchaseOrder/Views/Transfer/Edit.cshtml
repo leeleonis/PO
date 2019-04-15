@@ -33,7 +33,7 @@
                             <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
                                 @Html.AntiForgeryToken()
                                 @Html.HiddenFor(x => x.ID)
-                                @Html.Hidden("SID")
+                                @Html.Hidden("SID",Model.ID)
                                 <input type="hidden" name="IsEnable" value="True">
                                 <div id="content" class="tab-content">
                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })

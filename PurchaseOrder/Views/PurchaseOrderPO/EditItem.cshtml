@@ -192,7 +192,7 @@
                                                         @Html.ValidationMessageFor(model => model.Tracking, "", new { @class = "text-danger" })
                                                     </div>
                                                 </div>
-</fieldset>
+                                        </fieldset>
                                         <fieldset>
                                             <legend>Items Ordered</legend>
                                             <div class="form-group">
@@ -662,7 +662,7 @@
 @section pagespecific {
 <link href="~/Content/css/lightbox.css" rel="stylesheet" />
 <script src="~/Scripts/lightbox.js"></script>
-    <script type="text/javascript">
+<script type="text/javascript">
         var hash = window.location.hash;
         $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
         $('.tab-pane').eq(hash.substr(1)).addClass('active');
@@ -1207,5 +1207,5 @@
     }
     // 執行
     Preview.change_file();
-    </script>
+</script>
 }
