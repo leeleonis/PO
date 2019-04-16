@@ -1,9 +1,11 @@
 ﻿using PurchaseOrderSys.SCService;
+using PurchaseOrderSys.OrderCreationService;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Web;
+using PurchaseOrderSys.PurchaseOrderService;
 
 /**
 * 整理 SellerCloud API
@@ -15,17 +17,17 @@ namespace SellerCloud_WebService
     {
         // OrderService
         private SCServiceSoapClient OS_SellerCloud;
-        private AuthHeader OS_AuthHeader;
-        private ServiceOptions OS_Options;
+        private PurchaseOrderSys.SCService.AuthHeader OS_AuthHeader;
+        private PurchaseOrderSys.SCService.ServiceOptions OS_Options;
 
-        //// OrderCreationService
-        //private OrderCreationServiceSoapClient OCS_SellerCloud;
-        //private QDLogistics.OrderCreationService.AuthHeader OCS_AuthHeader;
+        // OrderCreationService
+        private OrderCreationServiceSoapClient OCS_SellerCloud;
+        private PurchaseOrderSys.OrderCreationService.AuthHeader OCS_AuthHeader;
 
-        //// PurchaseOrderService
-        //private POServicesSoapClient PO_SellerCloud;
-        //private QDLogistics.PurchaseOrderService.AuthHeader PO_AuthHeader;
-        //private QDLogistics.PurchaseOrderService.ServiceOptions PO_Options;
+        // PurchaseOrderService
+        private POServicesSoapClient PO_SellerCloud;
+        private PurchaseOrderSys.PurchaseOrderService.AuthHeader PO_AuthHeader;
+        private PurchaseOrderSys.PurchaseOrderService.ServiceOptions PO_Options;
 
         public int UserID;
         public DateTime SyncOn;
@@ -51,19 +53,19 @@ namespace SellerCloud_WebService
             // OrderService
             OS_SellerCloud = new SCServiceSoapClient();
             OS_SellerCloud.InnerChannel.OperationTimeout = new TimeSpan(0, 10, 0);
-            OS_AuthHeader = new AuthHeader();
-            OS_Options = new ServiceOptions();
+            OS_AuthHeader = new PurchaseOrderSys.SCService.AuthHeader();
+            OS_Options = new PurchaseOrderSys.SCService.ServiceOptions();
 
-            //// OrderCreationService
-            //OCS_SellerCloud = new OrderCreationServiceSoapClient();
-            //OCS_SellerCloud.InnerChannel.OperationTimeout = new TimeSpan(0, 10, 0);
-            //OCS_AuthHeader = new QDLogistics.OrderCreationService.AuthHeader();
+            // OrderCreationService
+            OCS_SellerCloud = new OrderCreationServiceSoapClient();
+            OCS_SellerCloud.InnerChannel.OperationTimeout = new TimeSpan(0, 10, 0);
+            OCS_AuthHeader = new PurchaseOrderSys.OrderCreationService.AuthHeader();
 
-            //// PurchaseOrderService
-            //PO_SellerCloud = new POServicesSoapClient();
-            //PO_SellerCloud.InnerChannel.OperationTimeout = new TimeSpan(0, 10, 0);
-            //PO_AuthHeader = new QDLogistics.PurchaseOrderService.AuthHeader();
-            //PO_Options = new QDLogistics.PurchaseOrderService.ServiceOptions();
+            // PurchaseOrderService
+            PO_SellerCloud = new POServicesSoapClient();
+            PO_SellerCloud.InnerChannel.OperationTimeout = new TimeSpan(0, 10, 0);
+            PO_AuthHeader = new PurchaseOrderSys.PurchaseOrderService.AuthHeader();
+            PO_Options = new PurchaseOrderSys.PurchaseOrderService.ServiceOptions();
 
             OS_AuthHeader.UserName = UserName; //"tim@weypro.com"
             OS_AuthHeader.Password = Password; //"timfromweypro"
@@ -201,7 +203,7 @@ namespace SellerCloud_WebService
             return OS_SellerCloud.Vendors_GetVendor(OS_AuthHeader, OS_Options, VendorID);
         }
 
-        public Warehouse[] Get_Warehouses()
+        public PurchaseOrderSys.SCService.Warehouse[] Get_Warehouses()
         {
             return OS_SellerCloud.GetWarehouses(OS_AuthHeader, OS_Options);
         }
@@ -224,17 +226,17 @@ namespace SellerCloud_WebService
         /***** 取得資料 *****/
 
         /***** 更新資料 *****/
-        public bool Update_Order(Order order)
+        public bool Update_Order(PurchaseOrderSys.SCService.Order order)
         {
             return OS_SellerCloud.Orders_SaveOrder(OS_AuthHeader, OS_Options, order);
         }
 
         public bool Update_OrderStatus(int OrderID, int StatusCode)
         {
-            return OS_SellerCloud.Orders_UpdateStatus(OS_AuthHeader, OS_Options, OrderID, (OrderStatusCode)StatusCode);
+            return OS_SellerCloud.Orders_UpdateStatus(OS_AuthHeader, OS_Options, OrderID, (PurchaseOrderSys.SCService.OrderStatusCode)StatusCode);
         }
 
-        public bool Update_OrderShippingStatus(Order order, string Carrier = "", string Service = "")
+        public bool Update_OrderShippingStatus(PurchaseOrderSys.SCService.Order order, string Carrier = "", string Service = "")
         {
             return OS_SellerCloud.Orders_UpdateShippingStatusOrder(OS_AuthHeader, OS_Options, order.ID, Carrier, Service, order.StationID, order.ShippingLocationID, false);
         }
@@ -244,17 +246,17 @@ namespace SellerCloud_WebService
             return OS_SellerCloud.Orders_Unship(OS_AuthHeader, OS_Options, OrderID);
         }
 
-        public int Update_PackageShippingStatus(Package package, string TrackingNumber, string Carrier = "", string Service = "")
+        public int Update_PackageShippingStatus(PurchaseOrderSys.SCService.Package package, string TrackingNumber, string Carrier = "", string Service = "")
         {
             return OS_SellerCloud.Orders_UpdateShippingStatusPackage(OS_AuthHeader, OS_Options, package.OrderID, package, TrackingNumber, Carrier, Service, package.Weight.ToString(), package.FinalShippingFee.ToString(), package.StationID, 0);
         }
 
-        public OrderItem Update_OrderItem(OrderItem item)
+        public PurchaseOrderSys.SCService.OrderItem Update_OrderItem(PurchaseOrderSys.SCService.OrderItem item)
         {
             return OS_SellerCloud.Orders_UpdateItem(OS_AuthHeader, OS_Options, item);
         }
 
-        public bool Update_OrderItem(OrderItem[] itemList)
+        public bool Update_OrderItem(PurchaseOrderSys.SCService.OrderItem[] itemList)
         {
             return OS_SellerCloud.Orders_UpdateOrderItems(OS_AuthHeader, OS_Options, itemList);
         }
@@ -274,7 +276,7 @@ namespace SellerCloud_WebService
             OS_SellerCloud.OrderPackages_AddOrUpdateMultiple(OS_AuthHeader, OS_Options, OrderPackages);
         }
 
-        public bool Update_PackageData(Package Package)
+        public bool Update_PackageData(PurchaseOrderSys.SCService.Package Package)
         {
             return OS_SellerCloud.Orders_UpdatePackage(OS_AuthHeader, OS_Options, ref Package);
         }
@@ -286,13 +288,13 @@ namespace SellerCloud_WebService
         /***** 更新資料 *****/
 
         /***** 新增資料 *****/
-        public Package Add_OrderNewPackage(Package NewPckage)
+        public PurchaseOrderSys.SCService.Package Add_OrderNewPackage(PurchaseOrderSys.SCService.Package NewPckage)
         {
             NewPckage.ID = -1;
-            return OS_SellerCloud.Orders_AddPackagesToOrder(OS_AuthHeader, OS_Options, NewPckage.OrderID, new Package[] { NewPckage }).First();
+            return OS_SellerCloud.Orders_AddPackagesToOrder(OS_AuthHeader, OS_Options, NewPckage.OrderID, new PurchaseOrderSys.SCService.Package[] { NewPckage }).First();
         }
 
-        public OrderItem Add_OrderNewItem(OrderItem NewItem)
+        public PurchaseOrderSys.SCService.OrderItem Add_OrderNewItem(PurchaseOrderSys.SCService.OrderItem NewItem)
         {
             NewItem.ID = -1;
             return OS_SellerCloud.Orders_UpdateItem(OS_AuthHeader, OS_Options, NewItem);
@@ -310,15 +312,15 @@ namespace SellerCloud_WebService
             return OS_SellerCloud.Orders_DeletePackage(OS_AuthHeader, OS_Options, PackageID);
         }
 
-        //public bool Delete_Item(int OrderID, int ItemID)
-        //{
-        //    return OCS_SellerCloud.OrderItem_Delete(OCS_AuthHeader, OrderID, ItemID);
-        //}
+        public bool Delete_Item(int OrderID, int ItemID)
+        {
+            return OCS_SellerCloud.OrderItem_Delete(OCS_AuthHeader, OrderID, ItemID);
+        }
 
-        //public bool Delete_ItemSerials(int OrderID, int ItemID)
-        //{
-        //    return OCS_SellerCloud.OrderItem_DeleteAllSerialsByOrderItemID(OCS_AuthHeader, OrderID, ItemID);
-        //}
+        public bool Delete_ItemSerials(int OrderID, int ItemID)
+        {
+            return OCS_SellerCloud.OrderItem_DeleteAllSerialsByOrderItemID(OCS_AuthHeader, OrderID, ItemID);
+        }
         /***** 刪除資料 *****/
 
         /***** 商品退貨 *****/
@@ -347,15 +349,15 @@ namespace SellerCloud_WebService
         //    return OCS_SellerCloud.RMA_GetRMAItems(OCS_AuthHeader, OrderID);
         //}
 
-        //public int Create_RMA(int OrderID)
-        //{
-        //    return OCS_SellerCloud.RMA_CreateNew(OCS_AuthHeader, OrderID);
-        //}
+        public int Create_RMA(int OrderID)
+        {
+            return OCS_SellerCloud.RMA_CreateNew(OCS_AuthHeader, OrderID);
+        }
 
-        //public int Create_RMA_Item(int OrderID, int OrderItemID, int RMAID, int QtyToReturn, int RMAReason, string RMADescription, string KitProductID = "")
-        //{
-        //    return OCS_SellerCloud.RMAItem_CreateNew(OCS_AuthHeader, OrderID, OrderItemID, RMAID, KitProductID, QtyToReturn, RMAReason, RMADescription);
-        //}
+        public int Create_RMA_Item(int OrderID, int OrderItemID, int RMAID, int QtyToReturn, int RMAReason, string RMADescription, string KitProductID = "")
+        {
+            return OCS_SellerCloud.RMAItem_CreateNew(OCS_AuthHeader, OrderID, OrderItemID, RMAID, KitProductID, QtyToReturn, RMAReason, RMADescription);
+        }
 
         //public bool Update_RMA(RMAData RMAData, bool IsUpdateItems = false)
         //{
@@ -367,15 +369,15 @@ namespace SellerCloud_WebService
         //    return PO_SellerCloud.RMA_UpdateRMAItem(PO_AuthHeader, item);
         //}
 
-        //public bool Receive_RMA_Item(int RMAItemID, string ProductID, int QtyToReceive, int WarehouseID, string DestinationBinName = "")
-        //{
-        //    return PO_SellerCloud.RMA_ReceiveItem_New(PO_AuthHeader, RMAItemID, ProductID, QtyToReceive, DestinationBinName, WarehouseID);
-        //}
+        public bool Receive_RMA_Item(int RMAItemID, string ProductID, int QtyToReceive, int WarehouseID, string DestinationBinName = "")
+        {
+            return PO_SellerCloud.RMA_ReceiveItem_New(PO_AuthHeader, RMAItemID, ProductID, QtyToReceive, DestinationBinName, WarehouseID);
+        }
 
-        //public bool Receive_RMA_Item(int RMAID, int RMAItemID, string ProductID, int QtyToReceive, int WarehouseID, string SerialsList, string DestinationBinName = "", int QtyReturnedDoNotCount = 0)
-        //{
-        //    return PO_SellerCloud.RMA_ReceiveItem_New2(PO_AuthHeader, RMAID, RMAItemID, ProductID, QtyToReceive, DestinationBinName, WarehouseID, SerialsList, QtyReturnedDoNotCount);
-        //}
+        public bool Receive_RMA_Item(int RMAID, int RMAItemID, string ProductID, int QtyToReceive, int WarehouseID, string SerialsList, string DestinationBinName = "", int QtyReturnedDoNotCount = 0)
+        {
+            return PO_SellerCloud.RMA_ReceiveItem_New2(PO_AuthHeader, RMAID, RMAItemID, ProductID, QtyToReceive, DestinationBinName, WarehouseID, SerialsList, QtyReturnedDoNotCount, DateTime.Now, "");
+        }
 
         /***** 採購單 *****/
         //public Purchase Get_PurchaseOrder(int POId)

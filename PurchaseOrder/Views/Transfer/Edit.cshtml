@@ -104,12 +104,11 @@
                                                     else if (Model.Status == "Shipped")
                                                     {
                                                         <a type="button" href="@Url.Action("Receive", new { Model.ID })" class='btn btn-default btn-sm' id='Receive'>Receive</a>
-
                                                     }
                                                     else if (Model.Status == "Received")
                                                     {
-
-
+                                                        <a type="button" href="@Url.Action("Receive", new { Model.ID })" class='btn btn-default btn-sm' id='Receive'>Receive</a>
+                                                        <a type="button" href="@Url.Action("Completed", new { Model.ID })" class='btn btn-default btn-sm' id='Completed'>Completed</a>
                                                     }
                                                     else if (Model.Status == "Completed")
                                                     {

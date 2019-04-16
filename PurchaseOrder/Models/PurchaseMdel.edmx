@@ -671,6 +671,7 @@
           <Property Name="WarehouseID" Type="int" />
           <Property Name="Reason" Type="nvarchar" MaxLength="20" />
           <Property Name="UnitPrice" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="RMAItemID" Type="int" />
         </EntityType>
         <EntityType Name="SerialsLlist">
           <Key>
@@ -4246,6 +4247,7 @@
           <NavigationProperty Name="RMASerialsLlist" Relationship="PurchaseOrderModel.FK_RMASerialsLlist_RMASKU" FromRole="RMASKU" ToRole="RMASerialsLlist" />
           <Property Name="Reason" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="UnitPrice" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="RMAItemID" Type="Int32" />
         </EntityType>
         <EntityType Name="SkuType">
           <Key>
@@ -5432,6 +5434,7 @@
           <EntitySetMapping Name="RMASKU">
             <EntityTypeMapping TypeName="PurchaseOrderModel.RMASKU">
               <MappingFragment StoreEntitySet="RMASKU">
+                <ScalarProperty Name="RMAItemID" ColumnName="RMAItemID" />
                 <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
                 <ScalarProperty Name="Reason" ColumnName="Reason" />
                 <ScalarProperty Name="WarehouseID" ColumnName="WarehouseID" />

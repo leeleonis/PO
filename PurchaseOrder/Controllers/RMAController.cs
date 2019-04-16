@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using PurchaseOrderSys.Models;
+using SellerCloud_WebService;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -62,88 +63,78 @@ namespace PurchaseOrderSys.Controllers
                 var Channel = OrderItemDataitem.OrderSource;
                 var FinalShippingFee = OrderItemDataitem.FinalShippingFee;
                 var WarehouseID = db.WarehouseSummary.AsQueryable().Where(x => x.Type == "SCID" && x.Val.Contains(OrderItemDataitem.WarehouseID.ToString())).FirstOrDefault()?.WarehouseID;
-                var newRMA = new RMA
+                //開SC的RMA
+                SC_WebService SCWS = new SC_WebService("tim@weypro.com", "timfromweypro");
+                SCService.Order order = SCWS.Get_OrderData(OrderID).Order;//去SC抓訂單資料
+                order.OrderCreationSourceApplication = SCService.OrderCreationSourceApplicationType.PointOfSale;
+                if (SCWS.Update_Order(order))
                 {
-                    IsEnable = true,
-                    OrderID = OrderID,
-                    SourceID = SourceID,
-                    CompanyID = CompanyID,
-                    Country = Country,
-                    Channel = Channel,
-                    WarehouseID = WarehouseID,
-                    FinalShippingFee = FinalShippingFee,
-                    CreateBy = UserBy,
-                    CreateAt = CreateAt
-                };
-                db.RMA.Add(newRMA);
-                var RMAListselect = RMAList.Where(x => !string.IsNullOrWhiteSpace(x.SKU));
-                if (RMAListselect.Any())
-                {
-                    foreach (var RMAListitem in RMAList)
+                    int RMAId = SCWS.Create_RMA(order.ID);//建立RMAID
+                    var newRMA = new RMA
                     {
-                        var skulist = OrderItemDataitem.Items.Where(x => x.SKU == RMAListitem.SKU).Select(x => new { x.SKU, x.QTY }).Distinct();//取單價
-                        if (skulist.Any())
-                        {
+                        IsEnable = true,
+                        OrderID = OrderID,
+                        SourceID = SourceID,
+                        CompanyID = CompanyID,
+                        Country = Country,
+                        Channel = Channel,
+                        WarehouseID = WarehouseID,
+                        FinalShippingFee = FinalShippingFee,
+                        SCRMA = RMAId.ToString(),
+                        CreateBy = UserBy,
+                        CreateAt = CreateAt
+                    };
+                    db.RMA.Add(newRMA);
 
-                            foreach (var Skuitem in skulist)
+
+
+                    var RMAListselect = RMAList.Where(x => !string.IsNullOrWhiteSpace(x.SKU));
+                    if (RMAListselect.Any())
+                    {
+                        foreach (var RMAListitem in RMAList)
+                        {
+                            //int RMAItemID = SCWS.Create_RMA_Item(OrderID, item.ID, RMAId, item.Qty, Reason, "");//建立每個SKU要退貨的數量
+                            var skulist = OrderItemDataitem.Items.Where(x => x.SKU == RMAListitem.SKU).Select(x => new { x.SKU, x.QTY }).Distinct();//取單價
+                            if (skulist.Any())
                             {
-                                var UnitPrice = OrderItemDataitem.Items.Where(x => x.SKU == Skuitem.SKU).FirstOrDefault()?.UnitPrice;
-                                var ProductName = db.SkuLang.Where(x => x.LangID == "en-US" && x.Sku == Skuitem.SKU).FirstOrDefault()?.Name;
-                                var newRMASKU = new RMASKU
+
+                                foreach (var Skuitem in skulist)
                                 {
-                                    IsEnable = true,
-                                    Name = ProductName,
-                                    SkuNo = Skuitem.SKU,
-                                    QTYOrdered = Skuitem.QTY,
-                                    ReturnedQTY = 1,
-                                    Reason = RMAListitem.Reason,
-                                    WarehouseID = RMAListitem.Warehouse,
-                                    UnitPrice = UnitPrice,
-                                    CreateBy = UserBy,
-                                    CreateAt = CreateAt
-                                };
-                                newRMA.RMASKU.Add(newRMASKU);
+                                    var UnitPrice = OrderItemDataitem.Items.Where(x => x.SKU == Skuitem.SKU).FirstOrDefault()?.UnitPrice;
+                                    var ProductName = db.SkuLang.Where(x => x.LangID == "en-US" && x.Sku == Skuitem.SKU).FirstOrDefault()?.Name;
+                                    var newRMASKU = new RMASKU
+                                    {
+                                        IsEnable = true,
+                                        Name = ProductName,
+                                        SkuNo = Skuitem.SKU,
+                                        QTYOrdered = Skuitem.QTY,
+                                        ReturnedQTY = 1,
+                                        Reason = RMAListitem.Reason,
+                                        WarehouseID = RMAListitem.Warehouse,
+                                        UnitPrice = UnitPrice,
+                                        RMAItemID = RMAItemID,
+                                        CreateBy = UserBy,
+                                        CreateAt = CreateAt
+                                    };
+                                    newRMA.RMASKU.Add(newRMASKU);
+                                }
                             }
                         }
+
+                        db.SaveChanges();
+                        if (RedirectID == 0)
+                        {
+                            RedirectID = newRMA.ID;
+                        }
                     }
-                    db.SaveChanges();
-                    if (RedirectID == 0)
-                    {
-                        RedirectID = newRMA.ID;
-                    }
+                }
+
+                else
+                {
+
                 }
             }
             return RedirectToAction("Edit", new { id = RedirectID });
-        }
-        /// <summary>
-        /// 已出貨的訂單
-        /// </summary>
-        /// <param name="OrderID">訂單號</param>
-        /// <param name="SourceID">源頭訂單的ID</param>
-        /// <param name="UserID">使用者</param>
-        /// <param name="Status">訂單狀態 0：未出貨 1：待出貨 3：已出貨</param>
-        /// <returns></returns>
-        public List<OrderItemData> GetOrderItemData(int? OrderID, string SourceID, string UserID,int? Status)
-        {
-            var OrderItemDataList = new List<OrderItemData>();
-            using (WebClient wc = new WebClient())
-            {
-
-                try
-                {
-                    wc.Encoding = Encoding.UTF8;
-                    var nDictionary = new { OrderID, SourceID, UserID, Status };
-                    var dataString = JsonConvert.SerializeObject(nDictionary);
-                    wc.Headers.Add(HttpRequestHeader.ContentType, "application/json");
-                    string resultXML = wc.UploadString(ApiUrl + "Api/GetOrderItemData", "Post", dataString);
-                    OrderItemDataList = JsonConvert.DeserializeObject<List<OrderItemData>>(resultXML);
-                }
-                catch (WebException ex)
-                {
-
-                }
-            }
-            return OrderItemDataList;
         }
         public ActionResult RSkuNumberList(int? draw, int? start, int? length, int? OrderID, string SourceID, string UserID, string SID)
         {
@@ -305,6 +296,11 @@ namespace PurchaseOrderSys.Controllers
             }
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+        [HttpPost]
+        public ActionResult ChangeSKU(int OldSKU, string[] NewSKU)
+        {
+            return Json(new { status = true }, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
         public ActionResult CreatNote(int? ID, string SID, string Note)

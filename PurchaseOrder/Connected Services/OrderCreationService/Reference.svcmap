@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="d1929b27-1168-42fb-9adc-c758512e97fa" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://dm.ws.sellercloud.com/OrderCreationService.asmx" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="OrderCreationService.wsdl" MetadataType="Wsdl" ID="2c65c38d-cc46-45f1-a0f5-8e0091fcb383" SourceId="1" SourceUrl="http://dm.ws.sellercloud.com/OrderCreationService.asmx?wsdl" />
+    <MetadataFile FileName="OrderCreationService.disco" MetadataType="Disco" ID="a69bb260-ee70-46b4-95a9-a8a11104ff4a" SourceId="1" SourceUrl="http://dm.ws.sellercloud.com/OrderCreationService.asmx?disco" />
+    <MetadataFile FileName="OrderItemExtraInformation.xsd" MetadataType="Schema" ID="3d85a604-515d-4dd4-a522-2d1f402ab55e" SourceId="1" SourceUrl="http://dm.ws.sellercloud.com/OrderCreationService.asmx?schema=OrderItemExtraInformation" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

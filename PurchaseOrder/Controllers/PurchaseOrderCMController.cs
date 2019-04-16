@@ -142,7 +142,7 @@ namespace PurchaseOrderSys.Controllers
                 }
             }
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("EditItem", new { CreditMemo.ID });
         }
         [HttpPost]
         public ActionResult DeleteData(int[] IDList)

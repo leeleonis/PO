@@ -190,6 +190,16 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Connected Services\OrderCreationService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Connected Services\PurchaseOrderService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Connected Services\SCInventoryService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -599,6 +609,974 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Connected Services\OrderCreationService\OrderCreationService.disco" />
+    <None Include="Connected Services\OrderCreationService\configuration91.svcinfo" />
+    <None Include="Connected Services\OrderCreationService\configuration.svcinfo" />
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.AmazonMerchant.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.AuthenticateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.ClientUser.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Companies_GetByIDResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Companies_GetDefaultCompanyResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Companies_ListAllResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.CreateNewOrderResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.CreateOrderNoteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Customer_AddNewResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Customer_GetByIDResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Customer_GetListResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Customer_GetResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Customer_Search2Response.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Customer_SearchResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Customer_UpdateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Discount.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Discounts_AddDiscountResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Discounts_GetDiscountAmountForCouponResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Discounts_GetDiscountDetailsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.ExistingOrderInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.GetClientSettingValueResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.GetOrderFromOrderSourceOrderIDResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.GetOrderFullResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.GetOrderResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.GetProductSKUFromUPCResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.GetTaxRateFromZipCodeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.HowHeard_ListResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.ListOrdersForTrackingExportResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.ListOrdersResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Order.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.OrderItemExtraInformation.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.OrderItem_AddSerial2Response.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.OrderItem_AddSerialResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.OrderItem_AddToOrderResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.OrderItem_DeleteAllSerialsByOrderItemIDResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.OrderItem_DeleteAllSerialsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.OrderItem_DeleteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.OrderItem_ReturnQtyResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.OrderItem_UpdateItemResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.OrderSearchResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.OrderShippedDetail.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.OrderStatusCode.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Orders_AddItemsToRMAResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Orders_AddPaymentToOrderResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Orders_AddPaymentToOrderUsingPaymentDetailObjectResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Orders_AddPaymentToOrderUsingPaymentObjectResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Orders_AddTransactionFileRecordResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Orders_CreditCard_AuthorizeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Orders_CreditCard_ChargeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Orders_CreditCard_PostAuthorizeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Orders_GetStatusResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Orders_MarkPaidResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Orders_MarkReadyForPickupResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Orders_MarkShippedResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Orders_UpdateStatusResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.PaymentRefundSummaryResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.PaymentSummaryResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.PaymentSummaryWithoutItemsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.POSStoreCoupon.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.POSStoreCouponUsage.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Product.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.ProductRebate.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.ProductRebate_GetApplicableRebateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Products_GetProductResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Products_ListAllSKUs_NonShadowResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Products_ListForAutoCompleteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Products_ListSKUResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Products_SearchProductsByKeywordIncludingShadowsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Products_SearchProductsByKeywordResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Products_SearchProductsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.RefundOrderPaymentResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.ReturnReason.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.RMA.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.RMAGetResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.RMAItem.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.RMAItem_CreateNewResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.RMAItem_UpdateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.RMA_CreateNewResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.RMA_GetResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.RMA_GetRMAByIDResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.RMA_GetRMAByOrderIDResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.RMA_GetRMAItemsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.RMA_ListReasonsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.SearchOrders2Response.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.SearchOrders3Response.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.SearchOrders4Response.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.SearchOrdersResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.ShippingServiceInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.ShippingServices_ListAllResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.StoreCoupon_AddNewResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.StoreCoupon_GetAmountLeftResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.StoreCoupon_GetByCodeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.StoreCoupon_GetResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.StoreCoupon_ListUsageResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.StoreCoupon_UpdateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Tax.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.UserAccount.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Users_GetCurrentUserDetailsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Warehouse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Warehouse_ListAllResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.ZipCodeSearchResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.ZipCodeSearchResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Connected Services\OrderCreationService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Connected Services\PurchaseOrderService\POServices.disco" />
+    <None Include="Connected Services\PurchaseOrderService\configuration91.svcinfo" />
+    <None Include="Connected Services\PurchaseOrderService\configuration.svcinfo" />
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.AmazonMerchant.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.AuthenticateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.Company_GetResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.Company_UpdateProductIDCounterResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.CreateNewPurchaseOrderResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.CreditMemoItem_PickProductResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.DeletePurchaseOrderResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.EnableMultiWareHousesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.FindPurchaseOrdersLiteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.FindPurchaseOrdersLiteResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.FindPurchaseOrdersResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.GenerateRandomSerialsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.GetBuyersAllResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.GetBuyersResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.GetCompanyBuyerVendorBasicListsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.GetCompanyBuyerVendorBasicListsResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.GetCreditMemoInfoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.GetCurrentCompanyIDResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.GetDefaultWarehouseResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.GetNewProductIDResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.GetPOContainerItemsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.GetProductResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.GetProductsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.GetPurchaseOrderIDsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.GetPurchaseOrderInfo2Response.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.GetPurchaseOrderInfoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.GetPurchaseOrderInfosFullResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.GetPurchaseOrderInfosResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.GetPurchaseOrderInfosSummaryResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.GetPurchaseOrderInfosSummary_ByVendorInvoiceNumberResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.GetPurchaseOrderInfosSummary_NewResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.GetPurchaseOrderInfo_WithPaginationResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.GetPurchaseOrderReceivingDetailsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.GetPurchaseOrderReceiving_GetPurchaseItemReceivesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.GetPurchaseOrderReceiving_GetPurchaseItemsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.GetPurchaseOrderResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.GetPurchaseOrdersResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.GetReceivingContainerInfoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.GetRelatedOrderResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.GetUserEmailByIDResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.GetUserNameByIDResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.GetVendorSKUResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.HandleInventoryOnlyViaWareHouseResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.ListAllCurrentOpenPurchaseOrderIDsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.ListAllCurrentOpenPurchaseOrdersResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.ListAllCurrentPurchaseOrdersResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.ListAllOpenPurchaseOrderIDsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.ListAllOpenPurchaseOrdersResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.ListAllPurchaseOrdersResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.ListWarehousesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.LookedUpSerialNumber.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.MergeSimilarSKUResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.NoteTag.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.NoteTagSubType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.Order.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.OrderItemExtraInformation.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.OrderReturn.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.Orders_GetProductShipWeightResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.POContainerItem.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.POContainer_GetAllForPOIDResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.POContainer_GetAllResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.POContainer_GetAll_ByContainerNameResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.POContainer_GetAll_Response.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.POProductInformation.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.Product.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.Products_GetPOInformationResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.Products_GetPOInformation_NewResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.Product_AddManualSerialResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.Product_AddManualSerial_NewResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.Purchase.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItem.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItemData.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItemKit.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItemKitReceive.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItemKitReceive_AddNewResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItemKitReceive_DeleteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItemKitReceive_GetResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItemKitReceive_ListAllByPurchaseItemIDResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItemKitReceive_UpdateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItemReceive.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItemReceiveData.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItemReceiveSerial.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItemReceiveSerial_GetInfoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItemReceiveSerial_GetInfo_Response.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItemReceiveSession.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItemReceiveSingleResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItemReceive_AddNew2Response.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItemReceive_AddNew3Response.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItemReceive_AddNew4Response.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItemReceive_AddNewResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItemReceive_AddNew_BulkResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItemReceive_AddNew_SingleResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItemReceive_DeleteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItemReceive_GetLastSessionResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItemReceive_GetResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItemReceive_ListAllByPurchaseIDResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItemReceive_ListAllByPurchaseItemIDResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItemReceive_ListAllBySessionIDResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItemReceive_QueueJobForAverageCostCalculationResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItemReceive_UpdateLocationBinResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItemReceive_UpdateLocationBin_ByNameResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItemReceive_UpdateLocationBin_ByName_NewResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItemReceive_UpdateLocationBin_NewResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItemReceive_UpdateLocationBin_Result.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItemReceive_UpdateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItem_AddForManualSerialAddResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItem_AttachSerialsManuallyResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItem_DeleteSerialsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItem_SaveSerialsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItem_SerialNumbersNew_DeleteAllInPurchaseReceiveResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItem_SerialNumbersNew_DeleteMultipleResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItem_SerialNumbersNew_DeleteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItem_SerialNumbersNew_GetResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItem_SerialNumbersNew_LookUpResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItem_SerialNumbersNew_SaveMultipleResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItem_SerialNumbersNew_SaveMultiple_2Response.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItem_SerialNumbersNew_SaveResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItem_SerialNumbersNew_UpdateMultipleResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseItem_UpdateReceiveCounterResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseNote.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseNote_AddResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseNote_Add_NewResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseNote_Delete_ByIdResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseNote_GetAllResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseOrderInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseOrderInfoSummaryResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseOrderItemKit_AddNewResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseOrderItemKit_DeleteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseOrderItemKit_GetResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseOrderItemKit_ListAllResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseOrderItemKit_UpdateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseOrderItems_CreateNewResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseOrderItems_DeleteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseOrderItems_GetTotalQtyForProductResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseOrderItems_ListAllResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseOrderItems_SelectByIDResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseOrderItems_SelectByOrderAndSKUResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseOrderItems_UpdateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.PurchaseOrderReceivingDetails.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.Purchase_GenerateRandomSerialsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.Purchase_Notes_UpdateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.QueueJobForInventoryCalcuationResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.QueueJobForInventoryCalcuationWhenReceivingPOinRBResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.QueueJobForInventoryCalculationSKUsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.QueueJobForInventoryCalculationWithInfoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RBQueuedJobDetails.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.ReCalculatePOLastCostResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.ReceiveBridge_SerialScan_SettingUpgradeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.ReceiveLock_AcquireResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.ReceiveLock_GetResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.ReceiveLock_ReleaseResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.ReceiveSession_AddNewResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.ReceiveSession_DeleteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.ReceiveSession_GetAllSessionResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.ReceiveSession_GetLastSessionResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.ReceiveSession_GetSessionResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.ReceiveSession_UpdateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.ReceivingContainerInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.ReceivingContainer_ReceiveProductResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.ReceivingContainer_ReceiveProduct_Response.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RecieveLockStatus.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMAData.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMAGetDetailsByOrderIDResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMAGetDetailsByTrackingResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMAGetDetailsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMAGetNotes_Response.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMAItemSummaryListResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMAItemSummaryResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMAItem_GetSerialsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMAItem_GetUntestedResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMANote.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMANotes_GetTagsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMANoteTagSubType_CreateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMANoteTagSubType_DeleteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMANoteTagSubType_GetAllResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMA_AddNoteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMA_AddNote_NewResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMA_AddNote_ReturnResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMA_ArchiveNoteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMA_GetIDsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMA_GetNotesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMA_GetNotes_NewResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMA_GetOrderIDsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMA_GetRMAResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMA_GetRMAsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMA_ListResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMA_List_NewResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMA_Notes_CreateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMA_Notes_DeleteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMA_Notes_Delete_ByIdResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMA_Notes_UpdateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMA_Notes_Update_ByIdResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMA_Notes_Update_NewResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMA_OrderReturnReleaseReservedResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMA_ReceiveItemResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMA_ReceiveItem_New2Response.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMA_ReceiveItem_NewResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMA_UnArchiveNoteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMA_UpdateRMAExResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMA_UpdateRMAItemResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.RMA_UpdateRMAResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.SendPOReceivedEmailByReceivedItemsForContainerResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.SendPOReceivedEmailByReceivedItemsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.SendPOReceivedEmailResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.Test5Response.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.UpdatePurchaseOrderResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.Warehouse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.WarehouseBin.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.WarehouseBinProduct_AddByNameSKUResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.WarehouseBinProduct_AddBySKUResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.WarehouseBin_GetByNameResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.WarehouseLot.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.WarehouseLot_CreateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.WarehouseLot_Create_WithRequestObjectResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.WarehouseLot_DeleteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\PurchaseOrderService\PurchaseOrderSys.PurchaseOrderService.WarehouseLot_GetAllForPOResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Connected Services\PurchaseOrderService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="Connected Services\SCInventoryService\PurchaseOrderSys.SCInventoryService.AuthenticateResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
@@ -632,6 +1610,10 @@
     <Content Include="Connected Services\SCInventoryService\PurchaseOrderSys.SCInventoryService.GetInventoryMultipleResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
+    <None Include="Connected Services\OrderCreationService\OrderCreationService.wsdl" />
+    <None Include="Connected Services\OrderCreationService\OrderItemExtraInformation.xsd" />
+    <None Include="Connected Services\PurchaseOrderService\OrderItemExtraInformation.xsd" />
+    <None Include="Connected Services\PurchaseOrderService\POServices.wsdl" />
     <None Include="Connected Services\SCInventoryService\SCInventoryService.disco" />
     <None Include="Connected Services\SCInventoryService\configuration91.svcinfo" />
     <None Include="Connected Services\SCInventoryService\configuration.svcinfo" />
@@ -6590,6 +7572,8 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\OrderCreationService\" />
+    <WCFMetadataStorage Include="Connected Services\PurchaseOrderService\" />
     <WCFMetadataStorage Include="Connected Services\SCInventoryService\" />
     <WCFMetadataStorage Include="Connected Services\SCService\" />
   </ItemGroup>

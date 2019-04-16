@@ -29,7 +29,7 @@ namespace PurchaseOrderSys.Controllers
 
         private IEnumerable<WarehouseVM> GetWarehouseVMList(Warehouse Warehouse, string Product, int? FulfillableMin, int? FulfillableMax)
         {
-            var SCID = Warehouse.WarehouseSummary.Where(x => x.Type == "SCID").FirstOrDefault().Val;
+            var SCID = Warehouse.WarehouseSummary.Where(x => x.Type == "SCID").FirstOrDefault()?.Val;
             var Awaitinglist = GetAwaitingCount("", SCID);
             var AllSKUList = db.SKU.Where(x => x.IsEnable && x.Status == 1).Select(x => new { x.SkuID, x.SkuLang.FirstOrDefault().Name }).ToList();
             var WarehouseVM = new List<WarehouseVM>();
@@ -635,9 +635,13 @@ namespace PurchaseOrderSys.Controllers
                     int? BalanceAvailable;
                     decimal? ValueAvailable;
                     var OrderID = SerialsLlistitem.OrderID;
-                    if (!OrderID.HasValue)
+                    if (OrderID.HasValue)
                     {
-                        OrderID = SerialsLlistitem.SerialsLlistC.Where(x => x.OrderID.HasValue).FirstOrDefault().OrderID;
+                      
+                    }
+                    else
+                    {
+                        OrderID = SerialsLlistitem.SerialsLlistC.Where(x => x.OrderID.HasValue).FirstOrDefault()?.OrderID;
                     }
                     var price = SerialsLlistitem.PurchaseSKU.Price;
                     if (SerialsLlistitem.SerialsType == "PO")

@@ -138,7 +138,7 @@ namespace PurchaseOrderSys.Controllers
                 var e = ex;
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("EditItem", new { filter.ID });
         }
 
 
@@ -964,7 +964,7 @@ namespace PurchaseOrderSys.Controllers
             };
             db.PurchaseOrder.Add(PurchaseOrder);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Edit", new { PurchaseOrder.ID });
         }
         [HttpPost]
         public ActionResult CopyData(int[] IDList)

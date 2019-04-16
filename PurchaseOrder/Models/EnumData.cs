@@ -345,13 +345,13 @@ namespace PurchaseOrderSys.Models
             return new Dictionary<int, string>()
             {
                 { 0, "" },
-                { 1, "defective" },
-                { 22, "no longer needed" },
-                { 70, "website description is inaccurate" },
-                { 4, "exchange" },
-                { 16, "return to shipper" },
-                { 19, "warranty" },
-                { 3, "other" }
+                { 1, "Defective" },
+                { 22, "No longer needed" },
+                { 70, "Website description is inaccurate" },
+                { 4, "Package never" },//2019/04/15 SKYPE exchange 改成Package never
+                { 16, "Return to shipper" },
+                { 19, "Warranty" },
+                { 3, "Other" }
             };
         }
     }

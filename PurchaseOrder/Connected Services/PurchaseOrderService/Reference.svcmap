@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="74daaef7-7f7f-4738-980b-5a6d924b8aed" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://dm.ws.sellercloud.com/POServices.asmx" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="POServices.wsdl" MetadataType="Wsdl" ID="8e8de202-371e-4b50-a1c4-5ccf64053326" SourceId="1" SourceUrl="http://dm.ws.sellercloud.com/POServices.asmx?wsdl" />
+    <MetadataFile FileName="OrderItemExtraInformation.xsd" MetadataType="Schema" ID="94dc5d2b-6f40-44ff-bce6-6dcdcc47b379" SourceId="1" SourceUrl="http://dm.ws.sellercloud.com/POServices.asmx?schema=OrderItemExtraInformation" />
+    <MetadataFile FileName="POServices.disco" MetadataType="Disco" ID="28459ee2-254d-4d61-930c-d3c125d1e3dc" SourceId="1" SourceUrl="http://dm.ws.sellercloud.com/POServices.asmx?disco" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

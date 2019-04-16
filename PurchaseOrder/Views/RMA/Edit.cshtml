@@ -263,7 +263,7 @@
 <div id="dialog">
     <select id="gebruikerId" name="gebruikerId" class="form-control" style="width:50%"></select>
     <input type="hidden" id="ChangeSKUID" />
-    <button type="button" id="addsku">Change SKU</button>
+    <button type="button" id="ChangeSKU">Change SKU</button>
 
 </div>
 @section pagespecific {
@@ -521,27 +521,38 @@
                     title: "Change SKU"
                 });
                 $("#dialog").dialog("open");
-                @*var url = '@Url.Action("GetImg", "Ajax")'
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: { id: $(this).attr("valID"), key: "SKU", ImgType: "ImgType" },
-                    success: function (data) {
-                        $("#dialog").dialog({
-                            title: "Img"
-                        });
-                        $("#dialog").html(data);
-                        $("#dialog").dialog("open");
-                        //$("#dialog").load(data).dialog({ modal: true }).dialog('open');
-                    }
-                });*@
                 return false;
             });
-             $("#gebruikerId").select2({
+            $("#ChangeSKU").click(function () {
+                var OldSKU = $("#ChangeSKUID").val();
+                var NewSKU = $("#gebruikerId").val();
+                alert(NewSKU);
+                $.ajax({
+                    traditional: true,
+                    type: "post",
+                    url: "@Url.Action("ChangeSKU")",
+                    data: {
+                        OldSKU: OldSKU,
+                        NewSKU: NewSKU
+                    },
+                    success: function (data) {
+                        if (data.status) {
+                            //$("#addimg").val("");
+                            //$("#textnotelog li").remove();
+                            datalistSet(data);
+
+                        }
+                        else {
+                            alert(data.Errmsg);
+                        }
+                    }
+                });
+            });
+            $("#gebruikerId").select2({
                 minimumInputLength: 1,
                 placeholder: "Search",
                 allowClear: true,
-                multiple: true,
+                multiple: false,
                 ajax: {
                     url: "@Url.Action("SkuNumberGet", "Ajax")",
                     dataType: 'json',

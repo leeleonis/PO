@@ -22,9 +22,9 @@
     <MetadataSource Address="http://dm.ws.sellercloud.com/scservice.asmx" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="bvc_Order.xsd" MetadataType="Schema" ID="4378444a-43dc-4bd8-ac87-37083dcd3569" SourceId="1" SourceUrl="http://dm.ws.sellercloud.com/scservice.asmx?schema=bvc_Order" />
     <MetadataFile FileName="OrderItemExtraInformation.xsd" MetadataType="Schema" ID="e57daf31-1fcf-4a85-83d8-6ed8b6f3e460" SourceId="1" SourceUrl="http://dm.ws.sellercloud.com/scservice.asmx?schema=OrderItemExtraInformation" />
     <MetadataFile FileName="scservice.wsdl" MetadataType="Wsdl" ID="eec0d37d-8e7a-403b-bf9f-b4700010fd55" SourceId="1" SourceUrl="http://dm.ws.sellercloud.com/scservice.asmx?wsdl" />
+    <MetadataFile FileName="bvc_Order.xsd" MetadataType="Schema" ID="4378444a-43dc-4bd8-ac87-37083dcd3569" SourceId="1" SourceUrl="http://dm.ws.sellercloud.com/scservice.asmx?schema=bvc_Order" />
     <MetadataFile FileName="scservice.disco" MetadataType="Disco" ID="9cb5ee69-fdc8-446c-8f7a-dcf9b2108668" SourceId="1" SourceUrl="http://dm.ws.sellercloud.com/scservice.asmx?disco" />
   </Metadata>
   <Extensions>

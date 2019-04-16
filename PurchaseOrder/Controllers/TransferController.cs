@@ -14,8 +14,6 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult Index(TransferSearchVM TransferSearchVM)
         {
             var Transferlist = db.Transfer.Where(x => x.IsEnable);
-
-
             if (!string.IsNullOrWhiteSpace(TransferSearchVM.Status))
             {
                 Transferlist = Transferlist.Where(x => x.Status == TransferSearchVM.Status);
@@ -89,7 +87,7 @@ namespace PurchaseOrderSys.Controllers
             db.Transfer.Add(Transfer);
             db.SaveChanges();
             Session["TSkuNumberList" + SID] = null;
-            return RedirectToAction("Index");
+            return RedirectToAction("Edit", new { Transfer.ID });
         }
         public ActionResult Edit(int ID)
         {
@@ -104,10 +102,12 @@ namespace PurchaseOrderSys.Controllers
                     ck = item.SkuNo,
                     sk = item.SkuNo,
                     SKU = item.SkuNo,
-                    ProductName = item.SKU.SkuLang.Where(x=>x.LangID == "en-US").FirstOrDefault()?.Name,
+                    ProductName = item.SKU.SkuLang.Where(x => x.LangID == "en-US").FirstOrDefault()?.Name,
                     QTY = item.QTY,
-                    TotalReceive = item.SerialsLlist.Where(x => x.SerialsType == "TransferIn").Sum(x => x.SerialsQTY) ,
-                    Serial = item.SerialsLlist.Where(x => x.SerialsType == "TransferOut").Any() ? "Multi" : "",
+                    TotalReceive = item.SerialsLlist.Where(x => x.SerialsType == "TransferIn").Sum(x => x.SerialsQTY),
+                    Serial = GetSerialMulti(item),
+                    TWN= item.Transfer.WarehouseFrom.Name,
+                    Winit = item.Transfer.WarehouseTo.Name,
                     Model = "L"
                 });
             }
@@ -115,6 +115,28 @@ namespace PurchaseOrderSys.Controllers
             Session["TSkuNumberList" + SID] = TranSKUVMList;
             return View(Transfer);
         }
+
+        private string GetSerialMulti(TransferSKU item)
+        {
+            var SerialsLlist = item.SerialsLlist.Where(x => x.SerialsType == "TransferOut");
+            if (SerialsLlist.Any())
+            {
+                if (SerialsLlist.Count() > 1)
+                {
+                    return "Multi";
+                }
+                else
+                {
+                    return SerialsLlist.FirstOrDefault().SerialsNo;
+                }
+ 
+            }
+            else
+            {
+                return "";
+            }
+        }
+
         [HttpPost]
         public ActionResult Edit(Transfer Transfer, string SID, bool? saveexit)
         {          
@@ -269,7 +291,7 @@ namespace PurchaseOrderSys.Controllers
                         ReceivedAt = CreateAt,
                         ReceivedBy = CreateBy,
                         //OrderID = x.OrderID,
-                        //PurchaseSKUID = x.PurchaseSKUID,
+                        PurchaseSKUID = x.PurchaseSKUID,
                         //RMAID = x.RMAID,
                         SerialsNo = x.SerialsNo,
                         SerialsQTY = 1,
@@ -745,6 +767,17 @@ namespace PurchaseOrderSys.Controllers
         {
             var Transfer= db.Transfer.Find(ID);
             Transfer.Status = "Shipped";
+            Transfer.UpdateBy = UserBy;
+            Transfer.UpdateAt = DateTime.UtcNow;
+            db.SaveChanges();
+
+            return RedirectToAction("Edit", new { ID });
+            //return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult Completed(int ID)
+        {
+            var Transfer = db.Transfer.Find(ID);
+            Transfer.Status = "Completed";
             Transfer.UpdateBy = UserBy;
             Transfer.UpdateAt = DateTime.UtcNow;
             db.SaveChanges();

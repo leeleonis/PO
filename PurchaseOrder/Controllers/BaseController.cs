@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -527,8 +528,50 @@ namespace PurchaseOrderSys.Controllers
             }
             catch (Exception ex)
             {
-                return ex.ToString(); 
+                return ex.ToString();
             }
+        }
+        /// <summary>
+        /// 已出貨的訂單
+        /// </summary>
+        /// <param name="OrderID">訂單號</param>
+        /// <param name="SourceID">源頭訂單的ID</param>
+        /// <param name="UserID">使用者</param>
+        /// <param name="Status">訂單狀態 0：未出貨 1：待出貨 3：已出貨</param>
+        /// <returns></returns>
+        public List<OrderItemData> GetOrderItemData(int? OrderID, string SourceID, string UserID, int? Status)
+        {
+            var OrderItemDataList = new List<OrderItemData>();
+            using (WebClient wc = new WebClient())
+            {
+
+                try
+                {
+                    wc.Encoding = Encoding.UTF8;
+                    var nDictionary = new { OrderID, SourceID, UserID, Status };
+                    var dataString = JsonConvert.SerializeObject(nDictionary);
+                    wc.Headers.Add(HttpRequestHeader.ContentType, "application/json");
+                    string resultXML = wc.UploadString(ApiUrl + "Api/GetOrderItemData", "Post", dataString);
+                    OrderItemDataList = JsonConvert.DeserializeObject<List<OrderItemData>>(resultXML);
+                }
+                catch (WebException ex)
+                {
+
+                }
+            }
+            return OrderItemDataList;
+        }
+        public string GetCountryCode(string countryCode)
+        {
+            if (countryCode.Length > 2)
+            {
+                var countryList = CultureInfo.GetCultures(CultureTypes.SpecificCultures).Where(x => x.LCID != 4096).Select(x => new Country(x.LCID)).GroupBy(c => c.ID).Select(c => c.First()).OrderBy(x => x.Name);
+                if (countryList.Any(c => c.Name == countryCode))
+                {
+                    return countryList.First(c => c.Name == countryCode).TwoCode;
+                }
+            }
+            return countryCode;
         }
     }
 }
