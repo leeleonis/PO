@@ -684,7 +684,7 @@
                                             QTY = s.SerialsQTY.Value,
                                             Price = s.PurchaseSKU.Price ?? 0,
                                             Awaiting = s.SerialsType.Equals("TransferOut") && s.TransferSKU.Transfer.Status.Equals("Requested"),
-                                            Shipped = s.SerialsType.Equals("TransferOut") && s.TransferSKU.Transfer.Status.Equals("Shipped")
+                                            Shipped = s.SerialsType.Equals("TransferOut") && s.TransferSKU.Transfer.Status.Equals("Shipped") && !s.SerialsLlistC.Any(sl => sl.SerialsType.Equals("TransferIn"))
                                         }).ToList();
                                         var AwaitingConut = AwaitingList.Select(a => new { WID = SCList[a.SCID], QTY = a.QTY }).Concat(SerialList.Where(s => s.Awaiting).Select(s => new { WID = s.WID.Value, QTY = Math.Abs(s.QTY) })).GroupBy(a => a.WID, a => a.QTY).ToDictionary(g => g.Key, g => g.Sum());
                                         var AggregateCount = SerialList.Where(s => !s.Awaiting).GroupBy(s => s.WID.Value, s => s.QTY).ToDictionary(g => g.Key, g => g.Sum() - (AwaitingConut.ContainsKey(g.Key) ? AwaitingConut[g.Key] : 0));

@@ -161,6 +161,36 @@ namespace PurchaseOrderSys.Controllers
             }
 
             db.SaveChanges();
+            
+            if (sku.Type.Equals((byte)EnumData.SkuType.Single) && sku.Condition.Equals(1))
+            {
+                using (StockKeepingUnit SKU = new StockKeepingUnit())
+                {
+                    foreach (var condition in db.Condition.Where(c => c.IsEnable && !c.ID.Equals(sku.Condition)).ToList())
+                    {
+                        if (!db.SKU.Any(s => s.SkuID.Equals(sku.SkuID + condition.Suffix)))
+                        {
+                            SKU sku_suffix = SKU.SkuInherit(sku, sku.SkuID + condition.Suffix, (byte)EnumData.SkuType.Single);
+                            sku_suffix.Condition = condition.ID;
+                            sku_suffix.ParentShadow = sku.SkuID;
+                            sku_suffix.CreateAt = sku.UpdateAt.Value;
+                            sku_suffix.CreateBy = sku.UpdateBy;
+
+                            sku_suffix.SkuLang.Add(new SkuLang()
+                            {
+                                Sku = sku_suffix.SkuID,
+                                LangID = langData.LangID,
+                                Name = langData.Name,
+                                Model = langData.Model,
+                                CreateAt = sku.UpdateAt.Value,
+                                CreateBy = sku.UpdateBy
+                            });
+
+                            db.SKU.Add(sku_suffix);
+                        }
+                    }
+                }
+            }
 
             if (VariationValue != null && VariationValue.Any())
             {
