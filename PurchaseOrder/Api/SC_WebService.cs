@@ -67,8 +67,8 @@ namespace SellerCloud_WebService
             PO_AuthHeader = new PurchaseOrderSys.PurchaseOrderService.AuthHeader();
             PO_Options = new PurchaseOrderSys.PurchaseOrderService.ServiceOptions();
 
-            OS_AuthHeader.UserName = UserName; //"tim@weypro.com"
-            OS_AuthHeader.Password = Password; //"timfromweypro"
+            OS_AuthHeader.UserName = OCS_AuthHeader.UserName = PO_AuthHeader.UserName = UserName; //"tim@weypro.com"
+            OS_AuthHeader.Password = OCS_AuthHeader.Password = PO_AuthHeader.Password = Password; //"timfromweypro"
 
             SyncOn = DateTime.UtcNow;
         }
@@ -319,6 +319,7 @@ namespace SellerCloud_WebService
 
         public bool Delete_ItemSerials(int OrderID, int ItemID)
         {
+            
             return OCS_SellerCloud.OrderItem_DeleteAllSerialsByOrderItemID(OCS_AuthHeader, OrderID, ItemID);
         }
         /***** 刪除資料 *****/
@@ -339,15 +340,15 @@ namespace SellerCloud_WebService
         //    return PO_SellerCloud.RMA_GetRMA(PO_AuthHeader, PO_Options, RMAID);
         //}
 
-        //public QDLogistics.OrderCreationService.RMA Get_RMA_by_OrderID(int OrderID)
-        //{
-        //    return OCS_SellerCloud.RMA_GetRMAByOrderID(OCS_AuthHeader, OrderID);
-        //}
+        public PurchaseOrderSys.OrderCreationService.RMA Get_RMA_by_OrderID(int OrderID)
+        {
+            return OCS_SellerCloud.RMA_GetRMAByOrderID(OCS_AuthHeader, OrderID);
+        }
 
-        //public QDLogistics.OrderCreationService.RMAItem[] Get_RMA_Item(int OrderID)
-        //{
-        //    return OCS_SellerCloud.RMA_GetRMAItems(OCS_AuthHeader, OrderID);
-        //}
+        public PurchaseOrderSys.OrderCreationService.RMAItem[] Get_RMA_Item(int OrderID)
+        {
+            return OCS_SellerCloud.RMA_GetRMAItems(OCS_AuthHeader, OrderID);
+        }
 
         public int Create_RMA(int OrderID)
         {
@@ -453,12 +454,12 @@ namespace SellerCloud_WebService
             OS_AuthHeader = null;
             OS_Options = null;
 
-            //OCS_SellerCloud = null;
-            //OCS_AuthHeader = null;
+            OCS_SellerCloud = null;
+            OCS_AuthHeader = null;
 
-            //PO_SellerCloud = null;
-            //PO_AuthHeader = null;
-            //PO_Options = null;
+            PO_SellerCloud = null;
+            PO_AuthHeader = null;
+            PO_Options = null;
 
             disposed = true;
         }

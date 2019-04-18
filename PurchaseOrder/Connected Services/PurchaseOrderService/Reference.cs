@@ -68733,8 +68733,8 @@ namespace PurchaseOrderSys.PurchaseOrderService {
             inValue.WarehouseID = WarehouseID;
             inValue.SerialsList = SerialsList;
             inValue.QtyReturnedDoNotCount = QtyReturnedDoNotCount;
-            inValue.ExpiryDate = ExpiryDate;
-            inValue.LotNumber = LotNumber;
+            //inValue.ExpiryDate = ExpiryDate;
+            //inValue.LotNumber = LotNumber;
             PurchaseOrderSys.PurchaseOrderService.RMA_ReceiveItem_New2Response retVal = ((PurchaseOrderSys.PurchaseOrderService.POServicesSoap)(this)).RMA_ReceiveItem_New2(inValue);
             return retVal.RMA_ReceiveItem_New2Result;
         }

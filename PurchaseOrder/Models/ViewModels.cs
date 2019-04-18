@@ -1299,7 +1299,8 @@ namespace PurchaseOrderSys.Models
     }
     public class RMAModelPost
     {
-        public string ID { get; set; }
+        public int ID { get; set; }
+        public int OrderID { get; set; }
         public string SKU { get; set; }
         public string Reason { get; set; }
         public int? Warehouse { get; set; }

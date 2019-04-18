@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using inventorySKU;
+using Newtonsoft.Json;
 using PurchaseOrderSys.Models;
 using SellerCloud_WebService;
 using System;
@@ -12,6 +13,7 @@ using System.Web.Mvc;
 
 namespace PurchaseOrderSys.Controllers
 {
+    [CheckSession]
     public class RMAController : BaseController
     {
         // GET: RMA
@@ -43,8 +45,9 @@ namespace PurchaseOrderSys.Controllers
             RMAVM.RMAList = RMAList.OrderByDescending(x => x.ID);
             return View(RMAVM);
         }
-        public ActionResult Create()
+        public ActionResult Create(int? OrderID)
         {
+            ViewBag.OrderID = OrderID;
             ViewBag.SID = DateTime.Now.ToString("HHmmss");
             return View();
         }
@@ -65,11 +68,23 @@ namespace PurchaseOrderSys.Controllers
                 var WarehouseID = db.WarehouseSummary.AsQueryable().Where(x => x.Type == "SCID" && x.Val.Contains(OrderItemDataitem.WarehouseID.ToString())).FirstOrDefault()?.WarehouseID;
                 //開SC的RMA
                 SC_WebService SCWS = new SC_WebService("tim@weypro.com", "timfromweypro");
-                SCService.Order order = SCWS.Get_OrderData(OrderID).Order;//去SC抓訂單資料
+                var order = SCWS.Get_OrderData(OrderID).Order;//去SC抓訂單資料
+                var SCRMA = SCWS.Get_RMA_by_OrderID(OrderID);//檢查SC上是否有開過RMA
+               
+                //var order = OrderData.Order;
+                //var Serials = OrderData.Serials;
                 order.OrderCreationSourceApplication = SCService.OrderCreationSourceApplicationType.PointOfSale;
                 if (SCWS.Update_Order(order))
                 {
-                    int RMAId = SCWS.Create_RMA(order.ID);//建立RMAID
+                    int RMAId;
+                    if (SCRMA == null)
+                    {
+                        RMAId= SCWS.Create_RMA(order.ID);//建立RMAID
+                    }
+                    else
+                    {
+                        RMAId= SCRMA.ID;
+                    }
                     var newRMA = new RMA
                     {
                         IsEnable = true,
@@ -85,117 +100,136 @@ namespace PurchaseOrderSys.Controllers
                         CreateAt = CreateAt
                     };
                     db.RMA.Add(newRMA);
-
-
-
-                    var RMAListselect = RMAList.Where(x => !string.IsNullOrWhiteSpace(x.SKU));
-                    if (RMAListselect.Any())
+                    foreach (var Skuitem in OrderItemDataitem.Items)
                     {
-                        foreach (var RMAListitem in RMAList)
+                        var SKURMAList = RMAList.Where(x => x.OrderID == OrderItemDataitem.OrderID && x.SKU == Skuitem.SKU);
+                        var OrderItemID = order.Items.Where(x => x.ProductID == Skuitem.SKU).FirstOrDefault().ID;
+                        if (SKURMAList.Any())
                         {
-                            //int RMAItemID = SCWS.Create_RMA_Item(OrderID, item.ID, RMAId, item.Qty, Reason, "");//建立每個SKU要退貨的數量
-                            var skulist = OrderItemDataitem.Items.Where(x => x.SKU == RMAListitem.SKU).Select(x => new { x.SKU, x.QTY }).Distinct();//取單價
-                            if (skulist.Any())
+                            var ReasonID = 1;
+                            var Reason = SKURMAList.FirstOrDefault().Reason;
+                            int.TryParse(Reason, out ReasonID);
+                            int RMAItemID;
+                            var SCRMA_Item = SCWS.Get_RMA_Item(OrderID)?.Where(x => x.OriginalOrderItemID == OrderItemID).FirstOrDefault();
+                            if (SCRMA_Item == null)//沒資料就新增
                             {
-
-                                foreach (var Skuitem in skulist)
-                                {
-                                    var UnitPrice = OrderItemDataitem.Items.Where(x => x.SKU == Skuitem.SKU).FirstOrDefault()?.UnitPrice;
-                                    var ProductName = db.SkuLang.Where(x => x.LangID == "en-US" && x.Sku == Skuitem.SKU).FirstOrDefault()?.Name;
-                                    var newRMASKU = new RMASKU
-                                    {
-                                        IsEnable = true,
-                                        Name = ProductName,
-                                        SkuNo = Skuitem.SKU,
-                                        QTYOrdered = Skuitem.QTY,
-                                        ReturnedQTY = 1,
-                                        Reason = RMAListitem.Reason,
-                                        WarehouseID = RMAListitem.Warehouse,
-                                        UnitPrice = UnitPrice,
-                                        RMAItemID = RMAItemID,
-                                        CreateBy = UserBy,
-                                        CreateAt = CreateAt
-                                    };
-                                    newRMA.RMASKU.Add(newRMASKU);
-                                }
-                            }
-                        }
-
-                        db.SaveChanges();
-                        if (RedirectID == 0)
-                        {
-                            RedirectID = newRMA.ID;
-                        }
-                    }
-                }
-
-                else
-                {
-
-                }
-            }
-            return RedirectToAction("Edit", new { id = RedirectID });
-        }
-        public ActionResult RSkuNumberList(int? draw, int? start, int? length, int? OrderID, string SourceID, string UserID, string SID)
-        {
-            var RMAModelVMList = new List<RMAModelVM>();
-            var OrderItemData = GetOrderItemData(OrderID, SourceID, UserID, 3);
-            var NoSKU = new List<string>();
-            if (OrderItemData != null && OrderItemData.Count() > 0)
-            {
-                foreach (var item in OrderItemData)
-                {
-                    if (item.Items.Count() > 0)
-                    {
-                        foreach (var SKUitem in item.Items)
-                        {
-                            var SKUNo = SKUitem.SKU;
-                            var SKU = db.SKU.Find(SKUNo);
-                            if (SKU == null)
-                            {
-                                NoSKU.Add(SKUNo);
+                                RMAItemID = SCWS.Create_RMA_Item(OrderID, OrderItemID, RMAId, Skuitem.QTY, ReasonID, "");//建立每個SKU要退貨的數量
                             }
                             else
                             {
-                                var sku = SKU.SkuLang.Where(x => x.LangID == "en-US" && x.Sku == SKUNo).FirstOrDefault();
-                                var ProductName = sku?.Name;
-                                var UPC = sku?.GetSku.UPC + sku?.GetSku.EAN;
-                                RMAModelVMList.Add(new RMAModelVM { ck = item.OrderID, Order = item.OrderID, SourceID = item.OrderSourceOrderId, QTY = 1, SKU = SKUNo, ProductName = ProductName, UPC = UPC });
+                                //有資料直接取值
+                                RMAItemID= SCRMA_Item.ID;
                             }
-                        }
-                    }
-                }
-                if (NoSKU.Any())
-                {
-                    return Json(new { success = false, errmsg = string.Join(";", NoSKU) + "無SKU資料請先增SKU" }, JsonRequestBehavior.AllowGet);
-                }
-                //過濾已開RMA的SKU
-                if (RMAModelVMList.Any())
-                {
-                    var Orderlist = RMAModelVMList.Select(x => x.Order).Distinct().ToList();
-                    var RMAList = db.RMA.Where(x => x.IsEnable && Orderlist.Contains(x.OrderID.Value));
-                    foreach (var RMAitem in RMAList)
-                    {
-                        foreach (var RMASKUitem in RMAitem.RMASKU.Where(x => x.IsEnable))
-                        {
-                            var chkRMAModelVMList = RMAModelVMList.Where(x => x.Order == RMAitem.OrderID && x.SKU == RMASKUitem.SkuNo).ToList();
-                            if (chkRMAModelVMList.Any())
+                            var UnitPrice = OrderItemDataitem.Items.Where(x => x.SKU == Skuitem.SKU).FirstOrDefault()?.UnitPrice;
+                            var ProductName = db.SkuLang.Where(x => x.LangID == "en-US" && x.Sku == Skuitem.SKU).FirstOrDefault()?.Name;
+                            foreach (var RMAListitem in RMAList.Where(x => x.SKU == Skuitem.SKU))
                             {
-                                RMAModelVMList.Remove(chkRMAModelVMList.FirstOrDefault());
+                                var newRMASKU = new RMASKU
+                                {
+                                    IsEnable = true,
+                                    Name = ProductName,
+                                    SkuNo = Skuitem.SKU,
+                                    QTYOrdered = 1,
+                                    ReturnedQTY = 1,
+                                    Reason = RMAListitem.Reason,
+                                    WarehouseID = RMAListitem.Warehouse,
+                                    UnitPrice = UnitPrice,
+                                    RMAItemID = RMAItemID,
+                                    CreateBy = UserBy,
+                                    CreateAt = CreateAt
+                                };
+                                newRMA.RMASKU.Add(newRMASKU);
                             }
                         }
                     }
-                    if (!RMAModelVMList.Any())
+                    order.OrderCreationSourceApplication = SCService.OrderCreationSourceApplicationType.Default;
+                    SCWS.Update_Order(order);
+                    db.SaveChanges();
+                    if (RedirectID == 0)
                     {
-                        return Json(new { success = false, errmsg = "無可開RMA的訂單" }, JsonRequestBehavior.AllowGet);
+                        RedirectID = newRMA.ID;
                     }
                 }
-
-                Session["RSkuNumberList" + SID] = OrderItemData;
+            }
+            if (RedirectID == 0)
+            {
+                return RedirectToAction("Create");
             }
             else
             {
-                return Json(new { success = false, errmsg = "查無訂單資料" }, JsonRequestBehavior.AllowGet);
+                return RedirectToAction("Edit", new { id = RedirectID });
+            }
+        }
+
+        public ActionResult RSkuNumberList(int? draw, int? start, int? length, int? OrderID, string SourceID, string UserID, string SID)
+        {
+            var RMAModelVMList = new List<RMAModelVM>();
+            if (OrderID.HasValue)
+            {
+                var OrderItemData = GetOrderItemData(OrderID, SourceID, UserID, 3);
+                var NoSKU = new List<string>();
+                int index = 0;
+                if (OrderItemData != null && OrderItemData.Count() > 0)
+                {
+                    foreach (var item in OrderItemData)
+                    {
+                        if (item.Items.Count() > 0)
+                        {
+                            foreach (var SKUitem in item.Items)
+                            {
+                                var SKUNo = SKUitem.SKU;
+                                var SKU = db.SKU.Find(SKUNo);
+                                if (SKU == null)
+                                {
+                                    NoSKU.Add(SKUNo);
+                                }
+                                else
+                                {
+                                    var sku = SKU.SkuLang.Where(x => x.LangID == "en-US" && x.Sku == SKUNo).FirstOrDefault();
+                                    var ProductName = sku?.Name;
+                                    var UPC = sku?.GetSku.UPC + sku?.GetSku.EAN;
+                                    for (int i = 0; i < SKUitem.QTY; i++)
+                                    {
+                                        RMAModelVMList.Add(new RMAModelVM { ck = index, Order = item.OrderID, SourceID = item.OrderSourceOrderId, QTY = 1, SKU = SKUNo, ProductName = ProductName, UPC = UPC });
+                                        index++;
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+                    if (NoSKU.Any())
+                    {
+                        return Json(new { success = false, errmsg = string.Join(";", NoSKU) + "無SKU資料請先增SKU" }, JsonRequestBehavior.AllowGet);
+                    }
+                    //過濾已開RMA的SKU
+                    if (RMAModelVMList.Any())
+                    {
+                        var Orderlist = RMAModelVMList.Select(x => x.Order).Distinct().ToList();
+                        var RMAList = db.RMA.Where(x => x.IsEnable && Orderlist.Contains(x.OrderID.Value));
+                        foreach (var RMAitem in RMAList)
+                        {
+                            foreach (var RMASKUitem in RMAitem.RMASKU.Where(x => x.IsEnable))
+                            {
+                                var chkRMAModelVMList = RMAModelVMList.Where(x => x.Order == RMAitem.OrderID && x.SKU == RMASKUitem.SkuNo).ToList();
+                                if (chkRMAModelVMList.Any())
+                                {
+                                    RMAModelVMList.Remove(chkRMAModelVMList.FirstOrDefault());
+                                }
+                            }
+                        }
+                        if (!RMAModelVMList.Any())
+                        {
+                            return Json(new { success = false, errmsg = "無可開RMA的訂單" }, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+
+                    Session["RSkuNumberList" + SID] = OrderItemData;
+                }
+                else
+                {
+                    return Json(new { success = false, errmsg = "查無訂單資料" }, JsonRequestBehavior.AllowGet);
+                }
             }
             int recordsTotal = RMAModelVMList.Count();
             var returnObj = new
@@ -277,7 +311,7 @@ namespace PurchaseOrderSys.Controllers
             {
                 foreach (var RMASKUitem in OldRMA.RMASKU.Where(x => x.IsEnable))
                 {
-                    if (RMAListitem.ID == RMASKUitem.ID.ToString())
+                    if (RMAListitem.ID == RMASKUitem.ID)
                     {
                         if (!string.IsNullOrWhiteSpace(RMAListitem.Reason) && RMAListitem.Reason != RMASKUitem.Reason)
                         {
@@ -392,8 +426,9 @@ namespace PurchaseOrderSys.Controllers
             var RMASKU = db.RMASKU.Find(ID);
             return View(RMASKU);
         }
-        public ActionResult Saveserials(string serials,string Reason, int RMASKUID, int WarehouseID)
+        public ActionResult Saveserials(string serials, string Reason, int RMASKUID, int WarehouseID)
         {
+            var ReturnWarehouseID = db.WarehouseSummary.Where(x => x.Type == "SCID" && x.Val == WarehouseID.ToString()).FirstOrDefault()?.ID;
             var RMASKU = db.RMASKU.Find(RMASKUID);
             var SerialsLlistCount = RMASKU.RMASerialsLlist.Where(x => x.SerialsType == "RMAIn").Sum(x => x.SerialsQTY);//計算RMAIn的序號數
             if (SerialsLlistCount >= RMASKU.QTYOrdered)
@@ -403,29 +438,52 @@ namespace PurchaseOrderSys.Controllers
             var RMASerialsLlist = db.RMASerialsLlist.Where(x => x.SerialsNo == serials && x.RMASKU.SkuNo == RMASKU.SkuNo);//檢查序號是否重複，同SKU序號不能新增,2019/02/05 加入有已出貨或是CM的紀錄, 就能重新在入庫
             if (!RMASerialsLlist.Any())
             {
-
                 var OrderData = db.SerialsLlist.Where(x => x.SerialsType == "Order" && x.SerialsNo == serials && x.PurchaseSKU.SkuNo == RMASKU.SkuNo && x.OrderID == RMASKU.RMA.OrderID);
 
                 if (OrderData.Any())
                 {
-                    var dt = DateTime.UtcNow;
-                    var nSerialsLlistIn = new RMASerialsLlist
-                    {
-                        WarehouseID = WarehouseID,
-                        Reason = Reason,
-                        SerialsType = "RMAIn",
-                        SerialsNo = serials,
-                        SerialsQTY = 1,
-                        ReceivedBy = UserBy,
-                        ReceivedAt = dt,
-                        CreateBy = UserBy,
-                        CreateAt = dt
-                    };
-                    RMASKU.RMASerialsLlist.Add(nSerialsLlistIn);
-                    RMASKU.ReceivedBy = UserBy;
-                    RMASKU.ReceivedAt = dt;
                     try
                     {
+                        //SC加入RMA序號
+                        SC_WebService SCWS = new SC_WebService("tim@weypro.com", "timfromweypro");
+                        var SCOrderID = 0;
+                        int.TryParse(RMASKU.RMA.SCRMA, out SCOrderID);
+                        var order = SCWS.Get_OrderData(SCOrderID).Order;//去SC抓訂單資料
+                        order.OrderCreationSourceApplication = SCService.OrderCreationSourceApplicationType.PointOfSale;
+                        if (SCWS.Update_Order(order))
+                        {
+                            foreach (var item in order.Items.Where(x => x.ProductID == RMASKU.SkuNo))
+                            {
+                                var OrderItemID = order.Items.Where(x => x.ProductID == item.ProductID).FirstOrDefault().ID;
+                                var SCRMA_Item = SCWS.Get_RMA_Item(SCOrderID)?.Where(x => x.OriginalOrderItemID == OrderItemID).FirstOrDefault();
+                                if (SCRMA_Item != null)//沒資料就新增
+                                {
+                                    if (SCRMA_Item.QtyReturned > SCRMA_Item.QtyReceived)//比對數量
+                                    {
+                                        SCWS.Receive_RMA_Item(SCOrderID, RMASKU.RMAItemID.Value, item.ProductID, item.Qty, ReturnWarehouseID.Value, serials);//RMA入庫
+                                    }
+                                }
+                                SCWS.Delete_ItemSerials(SCOrderID, item.ID);//SC上的序號移除
+                            }
+                            order.OrderCreationSourceApplication = SCService.OrderCreationSourceApplicationType.Default;
+                            SCWS.Update_Order(order);
+                        }
+                        var dt = DateTime.UtcNow;
+                        var nSerialsLlistIn = new RMASerialsLlist
+                        {
+                            WarehouseID = WarehouseID,
+                            Reason = Reason,
+                            SerialsType = "RMAIn",
+                            SerialsNo = serials,
+                            SerialsQTY = 1,
+                            ReceivedBy = UserBy,
+                            ReceivedAt = dt,
+                            CreateBy = UserBy,
+                            CreateAt = dt
+                        };
+                        RMASKU.RMASerialsLlist.Add(nSerialsLlistIn);
+                        RMASKU.ReceivedBy = UserBy;
+                        RMASKU.ReceivedAt = dt;
                         db.SaveChanges();
                         return Json(new { status = true }, JsonRequestBehavior.AllowGet);
                     }
