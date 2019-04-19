@@ -325,10 +325,10 @@ namespace SellerCloud_WebService
         /***** 刪除資料 *****/
 
         /***** 商品退貨 *****/
-        //public QDLogistics.OrderCreationService.ReturnReason[] Get_RMA_Reason_List()
-        //{
-        //    return OCS_SellerCloud.RMA_ListReasons(OCS_AuthHeader);
-        //}
+        public PurchaseOrderSys.OrderCreationService.ReturnReason[] Get_RMA_Reason_List()
+        {
+            return OCS_SellerCloud.RMA_ListReasons(OCS_AuthHeader);
+        }
 
         //public QDLogistics.OrderCreationService.RMA Get_RMA_by_ID(int RMAID)
         //{

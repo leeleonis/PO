@@ -1,0 +1,26 @@
+﻿@model IEnumerable<int>
+@{
+    Layout = null;
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                OrderID
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a class="selectOrderID" val="@item">
+                        @item
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

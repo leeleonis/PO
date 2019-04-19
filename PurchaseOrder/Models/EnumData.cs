@@ -133,7 +133,7 @@ namespace PurchaseOrderSys.Models
             var list = new Dictionary<string, string>();
             using (var db = new PurchaseOrderEntities())
             {
-                list = db.Warehouse.Where(x=>x.Type!= "Interim").ToDictionary(y => y.ID.ToString(), y => y.Name);
+                list = db.Warehouse.Where(x => x.Type != "Interim").ToDictionary(y => y.ID.ToString(), y => y.Name);
                 //list = db.VendorLIst.ToDictionary(y => y.ID.ToString(), y => y.VendorNo + "_" + y.Name);
             }
             return list;
@@ -305,7 +305,7 @@ namespace PurchaseOrderSys.Models
         }
         public static Dictionary<string, string> CountryList()
         {
-          
+
             var CultureListInf = CultureInfo.GetCultures(CultureTypes.SpecificCultures).Where(x => x.LCID != 4096).Select(x => new Country(x.LCID)).GroupBy(c => c.ID).Select(c => c.First()).OrderBy(x => x.Name);
             var CultureList = CultureListInf.ToDictionary(x => x.TwoCode, x => x.Name);
             return CultureList;
@@ -344,12 +344,14 @@ namespace PurchaseOrderSys.Models
         {
             return new Dictionary<int, string>()
             {
-                { 0, "" },
-                { 1, "Defective" },
-                { 22, "No longer needed" },
-                { 70, "Website description is inaccurate" },
-                { 4, "Package never" },//2019/04/15 SKYPE exchange 改成Package never
+                { 0, "Damaged" },
+                { 13, "Fraud" },
+                { 22, "No Longer Needed" },
+                { 29,  "Package Never Arrive" },
                 { 16, "Return to shipper" },
+                { 1, "Defective" },
+                { 70, "Website description is inaccurate" },
+                //{ 4,  "Exchange" },//2019/04/15 SKYPE exchange 改成Package never
                 { 19, "Warranty" },
                 { 3, "Other" }
             };

@@ -23,7 +23,7 @@ namespace PurchaseOrderSys.Controllers
         protected string FileUploads = "~/FileUploads";
         public static string UserBy = "test";
         protected PurchaseOrderEntities db = new PurchaseOrderEntities();
-
+        public static SellerCloud_WebService.SC_WebService SCWS;
         protected string RenderPartialViewToString()
         {
             return RenderPartialViewToString(null, null);

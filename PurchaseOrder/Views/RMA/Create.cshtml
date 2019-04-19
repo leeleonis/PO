@@ -63,7 +63,7 @@
                                                                 <th>訂單數</th>
                                                                 <th>
                                                                     原因
-                                                                    @Html.DropDownList("RMAReasonList", RMAReasonList)
+                                                                    @Html.DropDownList("RMAReasonList", RMAReasonList,"")
                                                                 </th>
                                                                 <th>
                                                                     預設資料庫
@@ -94,6 +94,9 @@
             </article>
         </div>
     </section>
+</div>
+<div id="dialog" title="Order">
+
 </div>
 @section pagespecific {
     <script type="text/javascript">
@@ -136,6 +139,11 @@
                                 "class": "RMAReasonList",
                                 "value": data
                             });
+                            var def = $("<option></option>", {
+                                "text": "",
+                                "value": ""
+                            });
+                            $select.append(def)
                             $.each(RMAReasonList, function (k, val) {
                                 var $option = $("<option></option>", {
                                     "text": val.Text,
@@ -206,7 +214,39 @@
                 }
             });
             $("#btnsearch").click(function () {
-                DataGrid.draw();
+                var OrderID = $("#OrderID").val();
+                if (OrderID == "") {
+                    var SourceID = $("#SourceID").val();
+                    var UserID = $("#UserID").val();
+                    var SID = $("#SID").val();
+                    $.ajax({
+                        type: "post",
+                        url: "@Url.Action("ChkRSkuNumberList")",
+                        data: {
+                            OrderID: OrderID,
+                            SourceID: SourceID,
+                            UserID: UserID,
+                            SID: SID
+                        },
+                        success: function (data) {
+                            if (data.status) {
+                                if (data.length > 0 && data.length == 1) {
+                                    DataGrid.draw();
+                                }
+                                else {
+                                    $("#dialog").html(data.html);
+                                    $("#dialog").dialog("open");
+                                }
+                            }
+                            else {
+                                alert(data.Errmsg);
+                            }
+                        }
+                    });
+                }
+                else {
+                    DataGrid.draw();
+                }
             });
             $(tableID + ' tbody').on('click', 'td.details-control', function () {
                 var tr = $(this).closest('tr');
@@ -229,6 +269,18 @@
                 checkboxlist.each(function () {
                     $(this).prop("checked", true);
                 });
+            });
+            $("#dialog").dialog({
+                autoOpen: false,
+                width: 800,
+                height:800
+            });
+            $("body").on("click", ".selectOrderID", function () {
+                var val = $(this).attr("val");
+                $("#OrderID").val(val);
+                $("#dialog").dialog("close");
+                DataGrid.draw();
+                $("#OrderID").val("");
             });
         });
         function GetSKUList(d) {

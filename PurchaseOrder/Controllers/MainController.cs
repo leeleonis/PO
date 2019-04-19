@@ -15,30 +15,30 @@ namespace PurchaseOrderSys.Controllers
         // GET: Main
         public ActionResult Index()
         {
-            var s0 = db.SerialsLlist.Where(x => x.PurchaseSKU.SkuNo == "106005422" &&(!x.TransferSKUID.HasValue||(x.TransferSKU.IsEnable&&x.TransferSKU.Transfer.IsEnable) && (!x.PurchaseSKU.CreditMemoID.HasValue|| x.PurchaseSKU.CreditMemo.IsEnable))).Sum(x => x.SerialsQTY);
-            var s1 = db.SerialsLlist.Where(x => x.PurchaseSKU.SkuNo == "106005422" && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable).Sum(x => x.SerialsQTY);
-            var s11 = db.SerialsLlist.Where(x => (x.PurchaseSKU.SkuNo == "106005422" && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable) || (x.TransferSKUID.HasValue && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable)).Sum(x => x.SerialsQTY);
+           // var s0 = db.SerialsLlist.Where(x => x.PurchaseSKU.SkuNo == "106005422" &&(!x.TransferSKUID.HasValue||(x.TransferSKU.IsEnable&&x.TransferSKU.Transfer.IsEnable) && (!x.PurchaseSKU.CreditMemoID.HasValue|| x.PurchaseSKU.CreditMemo.IsEnable))).Sum(x => x.SerialsQTY);
+           // var s1 = db.SerialsLlist.Where(x => x.PurchaseSKU.SkuNo == "106005422" && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable).Sum(x => x.SerialsQTY);
+           // var s11 = db.SerialsLlist.Where(x => (x.PurchaseSKU.SkuNo == "106005422" && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable) || (x.TransferSKUID.HasValue && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable)).Sum(x => x.SerialsQTY);
 
 
-            var s12 = db.SerialsLlist.Where(x => (x.PurchaseSKU.IsEnable &&x.PurchaseSKU.SkuNo == "106005422" &&  x.PurchaseSKU.PurchaseOrder.IsEnable) ||
-                                                 (x.PurchaseSKU.IsEnable &&x.PurchaseSKU.SkuNo == "106005422" &&  x.PurchaseSKU.CreditMemo.IsEnable) ||
-                                                 (x.TransferSKUID.HasValue &&x.TransferSKU.SkuNo == "106005422" &&  x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable)
+           // var s12 = db.SerialsLlist.Where(x => (x.PurchaseSKU.IsEnable &&x.PurchaseSKU.SkuNo == "106005422" &&  x.PurchaseSKU.PurchaseOrder.IsEnable) ||
+           //                                      (x.PurchaseSKU.IsEnable &&x.PurchaseSKU.SkuNo == "106005422" &&  x.PurchaseSKU.CreditMemo.IsEnable) ||
+           //                                      (x.TransferSKUID.HasValue &&x.TransferSKU.SkuNo == "106005422" &&  x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable)
 
-           ).Sum(x => x.SerialsQTY);
-
-
+           //).Sum(x => x.SerialsQTY);
 
 
 
-            var s2 = db.SerialsLlist.Where(x => x.PurchaseSKU.SkuNo == "106005422"&&!x.SerialsLlistC.Any()).Sum(x => x.SerialsQTY);
 
 
-            var s13 = db.SerialsLlist.Where(x => x.PurchaseSKU.SkuNo == "106005422" && 
-            (
-            (x.PurchaseSKU.IsEnable && x.PurchaseSKU.CreditMemo.IsEnable) ||
-            (x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable)||
-            (x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable)
-            )).Sum(x => x.SerialsQTY);
+           // var s2 = db.SerialsLlist.Where(x => x.PurchaseSKU.SkuNo == "106005422"&&!x.SerialsLlistC.Any()).Sum(x => x.SerialsQTY);
+
+
+           // var s13 = db.SerialsLlist.Where(x => x.PurchaseSKU.SkuNo == "106005422" && 
+           // (
+           // (x.PurchaseSKU.IsEnable && x.PurchaseSKU.CreditMemo.IsEnable) ||
+           // (x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable)||
+           // (x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable)
+           // )).Sum(x => x.SerialsQTY);
 
 
 
@@ -67,10 +67,19 @@ namespace PurchaseOrderSys.Controllers
         {
             if (ValidateUser(username, password))
             {
+                System.Threading.Tasks.Task.Factory.StartNew(() =>
+                {
+                    SCLogin("tim@weypro.com", "timfromweypro");
+                    var Is_login = SCWS.Is_login;
+                    var ss = SCWS.Get_RMA_Reason_List().Select(x => new { x.ID, x.Reason }).OrderBy(x => x.ID).ToList();
+                });
                 return RedirectToAction("Index");
             }
-
             return RedirectToAction("Login");
+        }
+        private  void SCLogin(string username, string password)
+        {
+            SCWS = new SellerCloud_WebService.SC_WebService( username,  password);
         }
         // 驗證帳號密碼
         private bool ValidateUser(string Account, string Password)
