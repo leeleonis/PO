@@ -1353,4 +1353,19 @@ namespace PurchaseOrderSys.Models
         public decimal? price { get; set; }
         public int? OrderID { get; set; }
     }
+
+    public class ExcelQTY
+    {
+        public int? WarehouseID { get; set; }
+        public string WarehouseName { get; set; }
+        public string SKU { get; set; }
+        public int? QTY { get; set; }
+    }
+    public class ExcelSerial
+    {
+        public int? WarehouseID { get; set; }
+        public string WarehouseName { get; set; }
+        public string SKU { get; set; }
+        public string Serial { get; set; }
+    }
 }

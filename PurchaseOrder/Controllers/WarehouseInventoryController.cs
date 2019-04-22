@@ -145,6 +145,7 @@ namespace PurchaseOrderSys.Controllers
                     ID = x.FirstOrDefault().ID,
                     Name = x.FirstOrDefault().Name,
                     SKU = x.Key.SKU,
+                    BackOrdered = x.Sum(p => p.BackOrdered),
                     POQTY = x.Sum(p => p.POQTY),
                     CMQTY = x.Sum(p => p.CMQTY),
                     OrderQTY = x.Sum(p => p.OrderQTY),
@@ -1010,7 +1011,7 @@ namespace PurchaseOrderSys.Controllers
             //SkuPurchasingVM.Fulfillable = SkuPurchasingVM.POQTY + SkuPurchasingVM.CMQTY + SkuPurchasingVM.OrderQTY + SkuPurchasingVM.TransferInQTY + SkuPurchasingVM.TransferOutQTY;
             SkuPurchasingVM.Aggregate = SkuPurchasingVM.Fulfillable - SkuPurchasingVM.Awaiting;//Aggregate = Fulfillable - Awaiting dispatch
             SkuPurchasingVM.UnfulfillableTransit = SkuPurchasingVM.TransferInQTY + SkuPurchasingVM.TransferOutQTY;
-            SkuPurchasingVM.TotalInventory = SkuPurchasingVM.POQTY + SkuPurchasingVM.CMQTY + SkuPurchasingVM.OrderQTY + SkuPurchasingVM.TransferInQTY + SkuPurchasingVM.TransferOutQTY;
+            SkuPurchasingVM.TotalInventory = SkuPurchasingVM.POQTY + SkuPurchasingVM.CMQTY + SkuPurchasingVM.UnfulfillableRMA + SkuPurchasingVM.TransferInQTY + SkuPurchasingVM.TransferOutQTY;
             SkuPurchasingVM.QTYperbox = 1;
             SkuPurchasingVM.QTYpercase = 1;
             return View(SkuPurchasingVM);

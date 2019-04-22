@@ -84,6 +84,7 @@
                                                                 <th>Return Warehouse</th>
                                                                 <th>Reason</th>
                                                                 <th>Status</th>
+                                                                <th>Action</th>
                                                                 <th>Created Date</th>
                                                                 <th>Created By</th>
                                                             </tr>
@@ -94,52 +95,55 @@
                                                             {
                                                                 foreach (var item in Model.RMAList)
                                                                 {
-                                                                    <tr>
-                                                                        <td><input type="checkbox" /></td>
-                                                                        <td class="details-control" RMAID="@item.ID"></td>
-                                                                        <td><a id='Edit' href='@Url.Action("Edit", new { item.ID })'>@item.ID</a></td>
-                                                                        <td>
-                                                                            <a href='https://dm.cwa.sellercloud.com/Orders/Orders_details.aspx?id=@(item.OrderID)' target="_blank">@item.OrderID</a>
-                                                                            <br />
-                                                                            @item.SourceID
-                                                                        </td>
-                                                                        <td>@item.ReturnTracking</td>
-                                                                        <td>
-                                                                            @if (item.RMASKU.Where(x => x.IsEnable).Any())
-                                                                            {
-                                                                                if (item.RMASKU.Where(x => x.IsEnable).Count() == 1)
-                                                                                {
-                                                                                    @(item.RMASKU.Where(x => x.IsEnable).FirstOrDefault().Warehouse?.Name)
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                    @:multi
-                                                                                }
-                                                                            }
-                                                                        </td>
-                                                                        <td>
+                                                            <tr>
+                                                                <td><input type="checkbox" /></td>
+                                                                <td class="details-control" RMAID="@item.ID"></td>
+                                                                <td><a id='Edit' href='@Url.Action("Edit", new { item.ID })'>@item.ID</a></td>
+                                                                <td>
+                                                                    <a href='https://dm.cwa.sellercloud.com/Orders/Orders_details.aspx?id=@(item.OrderID)' target="_blank">@item.OrderID</a>
+                                                                    <br />
+                                                                    @item.SourceID
+                                                                </td>
+                                                                <td>@item.ReturnTracking</td>
+                                                                <td>
+                                                                    @if (item.RMASKU.Where(x => x.IsEnable).Any())
+                                                                    {
+                                                                        if (item.RMASKU.Where(x => x.IsEnable).Count() == 1)
+                                                                        {
+                                                                            @(item.RMASKU.Where(x => x.IsEnable).FirstOrDefault().Warehouse?.Name)
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            @:multi
+                                                                        }
+                                                                    }
+                                                                </td>
+                                                                <td>
 
-                                                                            @if (item.RMASKU.Where(x => x.IsEnable).Any())
-                                                                            {
-                                                                                if (item.RMASKU.Where(x => x.IsEnable).Count() == 1)
-                                                                                {
-                                                                                    var Reasonval = item.RMASKU.Where(x => x.IsEnable).FirstOrDefault()?.Reason;
-                                                                                    var Reason = 0;
-                                                                                    int.TryParse(Reasonval, out Reason);
-                                                                                    @(RMAReasonList[Reason])
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                    @:multi
-                                                                                }
-                                                                            }
-                                                                        </td>
-                                                                        <td>
-                                                                        @item.Status
-                                                                        </td>
-                                                                        <td>@item.CreateAt.ToLocalTime()</td>
-                                                                        <td>@item.CreateBy</td>
-                                                                    </tr>
+                                                                    @if (item.RMASKU.Where(x => x.IsEnable).Any())
+                                                                    {
+                                                                        if (item.RMASKU.Where(x => x.IsEnable).Count() == 1)
+                                                                        {
+                                                                            var Reasonval = item.RMASKU.Where(x => x.IsEnable).FirstOrDefault()?.Reason;
+                                                                            var Reason = 0;
+                                                                            int.TryParse(Reasonval, out Reason);
+                                                                            @(RMAReasonList[Reason])
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            @:multi
+                                                                        }
+                                                                    }
+                                                                </td>
+                                                                <td>
+                                                                    @item.Status
+                                                                </td>
+                                                                <td>
+                                                                    @item.Action
+                                                                </td>
+                                                                <td>@item.CreateAt.ToLocalTime()</td>
+                                                                <td>@item.CreateBy</td>
+                                                            </tr>
                                                                 }
                                                             }
                                                         </tbody>

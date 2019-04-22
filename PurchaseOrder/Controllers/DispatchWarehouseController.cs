@@ -8,6 +8,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using inventorySKU;
+using OfficeOpenXml;
 
 namespace PurchaseOrderSys.Controllers
 {
@@ -390,6 +391,109 @@ namespace PurchaseOrderSys.Controllers
                     break;
             }
             return val;
+        }
+        public ActionResult ExcelQTY()
+        {
+            var ExcelQTYList = new List<ExcelQTY>();
+            var filename = "庫存數" + DateTime.Today.ToString("yyyyMMdd");
+            ExcelPackage ep = new ExcelPackage();
+            var WorksheetName = "庫存數";
+            ep.Workbook.Worksheets.Add(WorksheetName);
+            ExcelWorksheet sheet1 = ep.Workbook.Worksheets[WorksheetName];//取得Sheet1             
+            sheet1.Cells[1, 1].Value = " Warehouse ID";
+            sheet1.Cells[1, 2].Value = "Warehouse Name";
+            sheet1.Cells[1, 3].Value = "SKU";
+            sheet1.Cells[1, 4].Value = "QTY";
+            //sheet1.Cells[1, 5].Value = "最後狀態";
+            int index = 2;
+            //var SerialsLlist = db.SerialsLlist.Where(x => !x.SerialsLlistC.Any());
+            var SerialsLlist = db.SerialsLlist.Where(x => x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable);
+            SerialsLlist = SerialsLlist.Where(x => (x.TransferSKUID.HasValue && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable) || (!x.TransferSKUID.HasValue));
+            var SerialsLlistGroup = SerialsLlist.GroupBy(x => x.PurchaseSKU).Select(x => x);
+            foreach (var item in SerialsLlistGroup)
+            {
+                var SerialsQTY = item.Sum(x => x.SerialsQTY);
+                if (SerialsQTY != 0)
+                {
+                    var Serial = item.OrderByDescending(x => x.CreateAt).FirstOrDefault();
+                    ExcelQTYList.Add(new ExcelQTY
+                    {
+                        WarehouseID = Serial.PurchaseSKU.PurchaseOrder.WarehouseID,
+                        WarehouseName = Serial.PurchaseSKU.PurchaseOrder.WarehousePO.Name,
+                        SKU = Serial.PurchaseSKU.SkuNo,
+                        QTY = SerialsQTY
+                    });
+
+                    //sheet1.Cells[index, 5].Value = Serial.SerialsType;
+                }
+            }
+            foreach (var item in ExcelQTYList.OrderBy(x => x.WarehouseID))
+            {
+                sheet1.Cells[index, 1].Value = item.WarehouseID;
+                sheet1.Cells[index, 2].Value = item.WarehouseName;
+                sheet1.Cells[index, 3].Value = item.SKU;
+                sheet1.Cells[index, 4].Value = item.QTY;
+                index++;
+            }
+            sheet1.Column(1).AutoFit(); //自動欄寬
+            sheet1.Column(2).AutoFit(); //自動欄寬
+            sheet1.Column(3).AutoFit(); //自動欄寬
+            sheet1.Column(4).AutoFit(); //自動欄寬
+            //sheet1.Column(5).AutoFit(); //自動欄寬
+            Byte[] bin = ep.GetAsByteArray();
+            return File(bin, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename + ".xlsx");
+        }
+        public ActionResult ExcelSerial()
+        {
+            var ExcelSerialList = new List<ExcelSerial>();
+            var filename = "庫存所有序號" + DateTime.Today.ToString("yyyyMMdd");
+            ExcelPackage ep = new ExcelPackage();
+            var WorksheetName = "庫存所有序號";
+            ep.Workbook.Worksheets.Add(WorksheetName);
+            ExcelWorksheet sheet1 = ep.Workbook.Worksheets[WorksheetName];//取得Sheet1             
+            sheet1.Cells[1, 1].Value = " Warehouse ID";
+            sheet1.Cells[1, 2].Value = "Warehouse Name";
+            sheet1.Cells[1, 3].Value = "SKU";
+            sheet1.Cells[1, 4].Value = "Serial";
+            int index = 2;
+            var SerialsLlist = db.SerialsLlist.Where(x => x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable);
+            SerialsLlist = SerialsLlist.Where(x => (x.TransferSKUID.HasValue && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable) || (!x.TransferSKUID.HasValue));
+            var SerialsLlistGroup = SerialsLlist.GroupBy(x => x.SerialsNo).Select(x => x);
+            foreach (var Serialitem in SerialsLlistGroup)
+            {
+                var SerialsQTY = Serialitem.Sum(x => x.SerialsQTY);
+                if (SerialsQTY != 0)
+                {
+                    var Serial = Serialitem.OrderByDescending(x => x.CreateAt).FirstOrDefault();
+                    foreach (var item in Serialitem.Where(x => !x.SerialsLlistC.Any()))
+                    {
+                        ExcelSerialList.Add(new ExcelSerial
+                        {
+                            WarehouseID = Serial.PurchaseSKU.PurchaseOrder.WarehouseID,
+                            WarehouseName = Serial.PurchaseSKU.PurchaseOrder.WarehousePO.Name,
+                            SKU = Serial.PurchaseSKU.SkuNo,
+                            Serial = item.SerialsNo
+                        });
+                    }
+                   
+
+                    //sheet1.Cells[index, 5].Value = Serial.SerialsType;
+                }
+            }
+            foreach (var item in ExcelSerialList.OrderBy(x => x.WarehouseID))
+            {
+                sheet1.Cells[index, 1].Value = item.WarehouseID;
+                sheet1.Cells[index, 2].Value = item.WarehouseName;
+                sheet1.Cells[index, 3].Value = item.SKU;
+                sheet1.Cells[index, 4].Value = item.Serial;
+                index++;
+            }
+            sheet1.Column(1).AutoFit(); //自動欄寬
+            sheet1.Column(2).AutoFit(); //自動欄寬
+            sheet1.Column(3).AutoFit(); //自動欄寬
+            sheet1.Column(4).AutoFit(); //自動欄寬
+            Byte[] bin = ep.GetAsByteArray();
+            return File(bin, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename + ".xlsx");
         }
     }
 }
