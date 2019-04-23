@@ -36,7 +36,7 @@
                                             <legend>Company ： @(Model.FirstOrDefault()?.PurchaseOrder.Company.Name)</legend>
                                         </fieldset>
                                         <fieldset>
-                                            <legend>@(Model.FirstOrDefault()?.SkuNo) ： @(Model.FirstOrDefault()?.Name)</legend>
+                                            <legend>   <a href=' @Url.Action("edit", "Sku", new { id = Model.FirstOrDefault()?.SkuNo })' target="_blank">@(Model.FirstOrDefault()?.SkuNo)</a>： @(Model.FirstOrDefault()?.Name)</legend>
                                             <div class="row">
                                                 <article class="col-xs-12">
                                                     <table id="DataGridC" class="table table-striped table-bordered">
@@ -71,6 +71,7 @@
                                                                             var PurchaseOrderID = SerialsLlist.Where(x => x.PurchaseSKU.PurchaseOrderID.HasValue).FirstOrDefault()?.PurchaseSKU.PurchaseOrderID;
                                                                             var CreditMemoID = SerialsLlist.Where(x => x.PurchaseSKU.CreditMemoID.HasValue).FirstOrDefault()?.PurchaseSKU.CreditMemoID;
                                                                             var WarehouseName = "";
+                                                                            var Location = "";
                                                                             if (Skuitem.PurchaseOrder != null)
                                                                             {
                                                                                 WarehouseName = Skuitem.PurchaseOrder.WarehousePO.Name;
@@ -85,14 +86,42 @@
                                                                             {
                                                                                 CreateAt = FRMA?.CreateAt;
                                                                             }
+                                                                            if (Order.HasValue)
+                                                                            {
+                                                                                Location = Skuitem.PurchaseOrder.WarehousePO.Name;
+                                                                            }
                                                                             <tr>
                                                                                 <td>@SerialsNoitem</td>
-                                                                                <td>@Order</td>
-                                                                                <td>@RMA</td>
-                                                                                <td>@PurchaseOrderID</td>
-                                                                                <td>@CreditMemoID</td>
+                                                                                <td>
+                                                                                    @if (Order.HasValue)
+                                                                                    {
+                                                                                        <a href='https://dm.cwa.sellercloud.com/Orders/Orders_details.aspx?id=@(Order)' target="_blank">@Order</a>
+                                                                                    }
+                                                                                </td>
+                                                                                <td>
+                                                                                    @if (RMA.HasValue)
+                                                                                    {
+                                                                                        <a href=' @Url.Action("Edit", "RMA", new { id = RMA })' target="_blank">@RMA</a>
+                                                                                       
+                                                                                    }
+                                                                                </td>
+                                                                                <td>
+                                                                                    @if (PurchaseOrderID.HasValue)
+                                                                                    {
+                                                                                        <a href=' @Url.Action("EditItem", "PurchaseOrderPO", new { id = PurchaseOrderID })' target="_blank">@PurchaseOrderID</a>
+
+                                                                                    }
+                                                                                </td>
+                                                                                <td>
+                                                                                    @if (CreditMemoID.HasValue)
+                                                                                    {
+                                                                                        <a href=' @Url.Action("EditItem", "PurchaseOrderCM", new { id = CreditMemoID })' target="_blank">@CreditMemoID</a>
+
+                                                                                    }
+                                                                                    @CreditMemoID
+                                                                                </td>
                                                                                 <td>@WarehouseName</td>
-                                                                                <td></td>
+                                                                                <td>@Location</td>
                                                                                 <td>@Price</td>
                                                                                 <td>@(CreateAt.Value.ToLocalTime())</td>
                                                                                 <td>

@@ -392,7 +392,7 @@ namespace PurchaseOrderSys.Controllers
             }
             return val;
         }
-        public ActionResult ExcelQTY()
+        public ActionResult ExcelQTY(int? WarehouseID)
         {
             var ExcelQTYList = new List<ExcelQTY>();
             var filename = "庫存數" + DateTime.Today.ToString("yyyyMMdd");
@@ -405,7 +405,6 @@ namespace PurchaseOrderSys.Controllers
             sheet1.Cells[1, 3].Value = "SKU";
             sheet1.Cells[1, 4].Value = "QTY";
             //sheet1.Cells[1, 5].Value = "最後狀態";
-            int index = 2;
             //var SerialsLlist = db.SerialsLlist.Where(x => !x.SerialsLlistC.Any());
             var SerialsLlist = db.SerialsLlist.Where(x => x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable);
             SerialsLlist = SerialsLlist.Where(x => (x.TransferSKUID.HasValue && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable) || (!x.TransferSKUID.HasValue));
@@ -421,29 +420,57 @@ namespace PurchaseOrderSys.Controllers
                         WarehouseID = Serial.PurchaseSKU.PurchaseOrder.WarehouseID,
                         WarehouseName = Serial.PurchaseSKU.PurchaseOrder.WarehousePO.Name,
                         SKU = Serial.PurchaseSKU.SkuNo,
+                        SKUName = Serial.PurchaseSKU.SKU.SkuLang.Where(x => x.LangID == "en-US").FirstOrDefault().Name,
                         QTY = SerialsQTY
                     });
 
                     //sheet1.Cells[index, 5].Value = Serial.SerialsType;
                 }
             }
+
+            var RMASerialsLlist = db.RMASerialsLlist.Where(x => x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable);
+            var RMASerialsLlistGroup = RMASerialsLlist.GroupBy(x => x.RMASKU).Select(x => x);
+            foreach (var item in RMASerialsLlistGroup)
+            {
+                var SerialsQTY = item.Sum(x => x.SerialsQTY);
+                if (SerialsQTY != 0)
+                {
+                    var Serial = item.OrderByDescending(x => x.CreateAt).FirstOrDefault();
+                    ExcelQTYList.Add(new ExcelQTY
+                    {
+                        WarehouseID = Serial.WarehouseID,
+                        WarehouseName = Serial.Warehouse.Name,
+                        SKU = Serial.RMASKU.SkuNo,
+                        SKUName = Serial.RMASKU.SKU.SkuLang.Where(x => x.LangID == "en-US").FirstOrDefault().Name,
+                        QTY = SerialsQTY
+                    });
+                    //sheet1.Cells[index, 5].Value = Serial.SerialsType;
+                }
+            }
+
+            int index = 2;
+            if (WarehouseID.HasValue)
+            {
+                ExcelQTYList = ExcelQTYList.Where(x => x.WarehouseID == WarehouseID).ToList();
+            }
             foreach (var item in ExcelQTYList.OrderBy(x => x.WarehouseID))
             {
                 sheet1.Cells[index, 1].Value = item.WarehouseID;
                 sheet1.Cells[index, 2].Value = item.WarehouseName;
                 sheet1.Cells[index, 3].Value = item.SKU;
-                sheet1.Cells[index, 4].Value = item.QTY;
+                sheet1.Cells[index, 4].Value = item.SKUName;
+                sheet1.Cells[index, 5].Value = item.QTY;
                 index++;
             }
             sheet1.Column(1).AutoFit(); //自動欄寬
             sheet1.Column(2).AutoFit(); //自動欄寬
             sheet1.Column(3).AutoFit(); //自動欄寬
             sheet1.Column(4).AutoFit(); //自動欄寬
-            //sheet1.Column(5).AutoFit(); //自動欄寬
+            sheet1.Column(5).AutoFit(); //自動欄寬
             Byte[] bin = ep.GetAsByteArray();
             return File(bin, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename + ".xlsx");
         }
-        public ActionResult ExcelSerial()
+        public ActionResult ExcelSerial(int? WarehouseID)
         {
             var ExcelSerialList = new List<ExcelSerial>();
             var filename = "庫存所有序號" + DateTime.Today.ToString("yyyyMMdd");
@@ -454,8 +481,8 @@ namespace PurchaseOrderSys.Controllers
             sheet1.Cells[1, 1].Value = " Warehouse ID";
             sheet1.Cells[1, 2].Value = "Warehouse Name";
             sheet1.Cells[1, 3].Value = "SKU";
-            sheet1.Cells[1, 4].Value = "Serial";
-            int index = 2;
+            sheet1.Cells[1, 4].Value = "SKU Name";
+            sheet1.Cells[1, 5].Value = "Serial";
             var SerialsLlist = db.SerialsLlist.Where(x => x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable);
             SerialsLlist = SerialsLlist.Where(x => (x.TransferSKUID.HasValue && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable) || (!x.TransferSKUID.HasValue));
             var SerialsLlistGroup = SerialsLlist.GroupBy(x => x.SerialsNo).Select(x => x);
@@ -472,6 +499,7 @@ namespace PurchaseOrderSys.Controllers
                             WarehouseID = Serial.PurchaseSKU.PurchaseOrder.WarehouseID,
                             WarehouseName = Serial.PurchaseSKU.PurchaseOrder.WarehousePO.Name,
                             SKU = Serial.PurchaseSKU.SkuNo,
+                            SKUName = Serial.PurchaseSKU.SKU.SkuLang.Where(x => x.LangID == "en-US").FirstOrDefault().Name,
                             Serial = item.SerialsNo
                         });
                     }
@@ -480,18 +508,46 @@ namespace PurchaseOrderSys.Controllers
                     //sheet1.Cells[index, 5].Value = Serial.SerialsType;
                 }
             }
+            var RMASerialsLlist = db.RMASerialsLlist.Where(x => x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable);
+            var RMASerialsLlistGroup = RMASerialsLlist.GroupBy(x => x.SerialsNo).Select(x => x);
+            foreach (var Serialitem in RMASerialsLlistGroup)
+            {
+                var SerialsQTY = Serialitem.Sum(x => x.SerialsQTY);
+                if (SerialsQTY != 0)
+                {
+                    var Serial = Serialitem.OrderByDescending(x => x.CreateAt).FirstOrDefault();
+                    foreach (var item in Serialitem.Where(x => !x.RMASerialsLlistC.Any()))
+                    {
+                        ExcelSerialList.Add(new ExcelSerial
+                        {
+                            WarehouseID = Serial.WarehouseID,
+                            WarehouseName = Serial.Warehouse.Name,
+                            SKU = Serial.RMASKU.SkuNo,
+                            SKUName = Serial.RMASKU.SKU.SkuLang.Where(x => x.LangID == "en-US").FirstOrDefault().Name,
+                            Serial = item.SerialsNo
+                        });
+                    }
+                }
+            }
+            int index = 2;
+            if (WarehouseID.HasValue)
+            {
+                ExcelSerialList = ExcelSerialList.Where(x => x.WarehouseID == WarehouseID).ToList();
+            }
             foreach (var item in ExcelSerialList.OrderBy(x => x.WarehouseID))
             {
                 sheet1.Cells[index, 1].Value = item.WarehouseID;
                 sheet1.Cells[index, 2].Value = item.WarehouseName;
                 sheet1.Cells[index, 3].Value = item.SKU;
-                sheet1.Cells[index, 4].Value = item.Serial;
+                sheet1.Cells[index, 4].Value = item.SKUName;
+                sheet1.Cells[index, 5].Value = item.Serial;
                 index++;
             }
             sheet1.Column(1).AutoFit(); //自動欄寬
             sheet1.Column(2).AutoFit(); //自動欄寬
             sheet1.Column(3).AutoFit(); //自動欄寬
             sheet1.Column(4).AutoFit(); //自動欄寬
+            sheet1.Column(5).AutoFit(); //自動欄寬
             Byte[] bin = ep.GetAsByteArray();
             return File(bin, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename + ".xlsx");
         }

@@ -1359,6 +1359,7 @@ namespace PurchaseOrderSys.Models
         public int? WarehouseID { get; set; }
         public string WarehouseName { get; set; }
         public string SKU { get; set; }
+        public string SKUName { get; set; }
         public int? QTY { get; set; }
     }
     public class ExcelSerial
@@ -1366,6 +1367,7 @@ namespace PurchaseOrderSys.Models
         public int? WarehouseID { get; set; }
         public string WarehouseName { get; set; }
         public string SKU { get; set; }
+        public string SKUName { get; set; }
         public string Serial { get; set; }
     }
 }

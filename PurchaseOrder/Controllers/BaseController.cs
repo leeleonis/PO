@@ -22,6 +22,7 @@ namespace PurchaseOrderSys.Controllers
         //protected string ApiUrl = "http://localhost:49920/";
         protected string FileUploads = "~/FileUploads";
         public static string UserBy = "test";
+        public static string LangID = "en-US";
         protected PurchaseOrderEntities db = new PurchaseOrderEntities();
         public static SellerCloud_WebService.SC_WebService SCWS;
         protected string RenderPartialViewToString()

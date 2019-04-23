@@ -43,7 +43,8 @@
                                             <div class="form-group">
                                                 @Html.LabelFor(model => model.OrderID, htmlAttributes: new { @class = "control-label col-sm-1" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("OrderID", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                    @*@Html.Editor("OrderID", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })*@
+                                                    <a href='https://dm.cwa.sellercloud.com/Orders/Orders_details.aspx?id=@(Model.OrderID)' target="_blank" class="control-label col-sm-1">@Model.OrderID</a>
                                                 </div>
 
                                                 @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-sm-1" })
@@ -105,7 +106,8 @@
                                             <div class="form-group">
                                                 @Html.LabelFor(model => model.SCRMA, htmlAttributes: new { @class = "control-label col-sm-1" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("SCRMA", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                    @*@Html.Editor("SCRMA", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })*@
+                                                    <a href='https://dm.cwa.sellercloud.com/Orders/Orders_Return.aspx?id=@(Model.OrderID)' target="_blank" class="control-label col-sm-1">@Model.SCRMA</a>
                                                 </div>
                                                 @Html.Label("Received Date", htmlAttributes: new { @class = "control-label col-sm-1" })
                                                 <div class="col-sm-9 col-lg-2">

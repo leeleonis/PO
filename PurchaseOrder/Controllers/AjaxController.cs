@@ -959,14 +959,14 @@ namespace PurchaseOrderSys.Controllers
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-        [HttpPost]
+        //[HttpPost]
         public ActionResult CreateALLRMA(int OrderID, int ReturnWarehouseID)
         {
             AjaxResult result = new AjaxResult();
             var Reason = 16;
             var dt = DateTime.UtcNow;
             var SerialsLlist = db.SerialsLlist.Where(x => x.OrderID == OrderID && x.SerialsType == "Order");
-            var WarehouseID = db.WarehouseSummary.Where(x => x.Type == "SCID" && x.Val == ReturnWarehouseID.ToString()).FirstOrDefault()?.ID;
+            var WarehouseID = db.WarehouseSummary.Where(x => x.Type == "SCID" && x.Val == ReturnWarehouseID.ToString()).FirstOrDefault()?.WarehouseID;
             if (WarehouseID.HasValue)
             {
                 try
