@@ -77,6 +77,15 @@
                         return website.IsEmpty(row.IsFilter) ? datagrid.setCheckBox(row.ID, this.field, value) : value;
                     }
                 }, {
+                    field: "Delete", title: "Delete", width: 80, align: "center", sortable: false,
+                    formatter: function (value, row, index) {
+                        if (website.IsEmpty(row.IsFilter)) {
+                            return "<button type='button' class='btn btn-default btn-sm' id='btn-delete' onclick='Delete(" + row.ID + ")'>Delete</button>";
+                        } else {
+                            return "";
+                        }
+                    }
+                }, {
                     field: "Action", title: "Action", width: 80, align: "center", sortable: false,
                     formatter: function (value, row, index) {
                         if (website.IsEmpty(row.IsFilter)) {
@@ -128,6 +137,20 @@
 
             $table.datagrid('checkRow', index + 1);
             $("button#btn-save:eq(" + index + ")").removeAttr("disabled");
+        }
+
+        function Delete(ID) {
+            var index = $table.datagrid("getRowIndex", ID) - 1;
+            row = $table.datagrid("getRows")[index + 1];
+            website.AjaxUrl("@Url.Action("Delete", "Brand")", 'post', { id: row.ID }).done(function (response) {
+                if (response.status) {
+                    alert("Success!");
+
+                    $table.datagrid('reload');
+                } else {
+                    alert(response.message);
+                }
+            });
         }
 
         function SaveData(ID) {

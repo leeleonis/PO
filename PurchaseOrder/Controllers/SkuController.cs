@@ -48,7 +48,7 @@ namespace PurchaseOrderSys.Controllers
             ViewBag.TypeList = Enum.GetValues(typeof(EnumData.SkuType)).Cast<EnumData.SkuType>().Select(t => new SelectListItem() { Text = t.ToString(), Value = ((int)t).ToString() }).ToList();
             ViewBag.Condition = db.Condition.AsNoTracking().Where(c => c.IsEnable).SelectMany(c => c.ConditionLang.Where(l => l.LangID.Equals(LangID))).Select(l => new SelectListItem() { Text = l.Name, Value = l.ConditionID.ToString() });
             ViewBag.Category = db.SkuType.Where(s => s.IsEnable).SelectMany(s => s.SkuTypeLang.Where(l => l.LangID.Equals(LangID))).Select(l => new SelectListItem() { Text = l.Name, Value = l.TypeID.ToString() });
-            ViewBag.Brand = new SelectList(db.Brand.Where(b => b.IsEnable), "ID", "Name");
+            ViewBag.Brand = new SelectList(db.Brand.Where(b => b.IsEnable).OrderBy(b => b.Name), "ID", "Name");
             return View();
         }
 
@@ -59,7 +59,6 @@ namespace PurchaseOrderSys.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(SKU sku, SkuLang langData)
         {
-
             if (db.SKU.AsNoTracking().Any(s => s.SkuID.Equals(sku.SkuID))) return RedirectToAction("Create");
 
             using (StockKeepingUnit SKU = new StockKeepingUnit())
@@ -108,7 +107,7 @@ namespace PurchaseOrderSys.Controllers
             ViewBag.TypeList = Enum.GetValues(typeof(EnumData.SkuType)).Cast<EnumData.SkuType>().Select(t => new SelectListItem() { Text = t.ToString(), Value = ((int)t).ToString() }).ToList();
             ViewBag.Condition = db.Condition.Where(c => c.IsEnable).SelectMany(c => c.ConditionLang.Where(l => l.LangID.Equals(LangID))).Select(l => new SelectListItem() { Text = l.Name, Value = l.ConditionID.ToString() }).ToList();
             ViewBag.Category = db.SkuType.Where(s => s.IsEnable).SelectMany(s => s.SkuTypeLang.Where(l => l.LangID.Equals(LangID))).Select(l => new SelectListItem() { Text = l.Name, Value = l.TypeID.ToString() }).ToList();
-            ViewBag.Brand = new SelectList(db.Brand.Where(b => b.IsEnable), "ID", "Name");
+            ViewBag.Brand = new SelectList(db.Brand.Where(b => b.IsEnable).OrderBy(b => b.Name), "ID", "Name");
             ViewBag.CompanyList = companyList;
             ViewBag.MarketList = db.Marketplace.Where(m => m.IsEnable).ToList();
             ViewBag.BoxTypeList = db.BoxType.Select(b => new SelectListItem() { Text = b.Name, Value = b.ID.ToString() }).ToList();
@@ -445,7 +444,7 @@ namespace PurchaseOrderSys.Controllers
             ViewBag.TypeList = Enum.GetValues(typeof(EnumData.SkuType)).Cast<EnumData.SkuType>().Select(t => new SelectListItem() { Text = t.ToString(), Value = ((int)t).ToString() }).ToList();
             ViewBag.Condition = db.Condition.Where(c => c.IsEnable).SelectMany(c => c.ConditionLang.Where(l => l.LangID.Equals(LangID))).Select(l => new SelectListItem() { Text = l.Name, Value = l.ConditionID.ToString() });
             ViewBag.Category = db.SkuType.Where(s => s.IsEnable).SelectMany(s => s.SkuTypeLang.Where(l => l.LangID.Equals(LangID))).Select(l => new SelectListItem() { Text = l.Name, Value = l.TypeID.ToString() });
-            ViewBag.Brand = new SelectList(db.Brand.Where(b => b.IsEnable), "ID", "Name");
+            ViewBag.Brand = new SelectList(db.Brand.Where(b => b.IsEnable).OrderBy(b => b.Name), "ID", "Name");
             ViewBag.AttributeTypeList = db.SkuAttributeType.Where(t => t.IsEnable).OrderBy(t => t.Order).ToList();
             ViewBag.CompanyList = db.Company.AsNoTracking().Where(c => c.IsEnable).ToList();
             ViewBag.MarketList = db.Marketplace.Where(m => m.IsEnable).ToList();

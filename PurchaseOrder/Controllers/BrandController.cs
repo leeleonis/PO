@@ -105,13 +105,34 @@ namespace PurchaseOrderSys.Controllers
 
         // POST: Brand/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Brand brand = db.Brand.Find(id);
-            db.Brand.Remove(brand);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            AjaxResult result = new AjaxResult();
+
+            try
+            {
+                Brand brand = db.Brand.Find(id);
+
+                if (brand == null) throw new Exception("Not find brand!");
+
+                brand.IsEnable = false;
+                brand.UpdateAt = DateTime.UtcNow;
+                brand.UpdateBy = Session["AdminName"].ToString();
+                foreach (var sku in brand.SKU)
+                {
+                    sku.Brand = 100;
+                    sku.UpdateAt = brand.UpdateAt.Value;
+                    sku.UpdateBy = brand.UpdateBy;
+                }
+
+                db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                result.SetError(e.InnerException?.Message ?? e.Message);
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetData(BrandFilter filter, int page = 1, int rows = 100)
@@ -130,7 +151,7 @@ namespace PurchaseOrderSys.Controllers
                 int length = rows;
                 int start = (page - 1) * length;
                 total = BrandFilter.Count();
-                var results = BrandFilter.OrderByDescending(b => b.CreateAt).Skip(start).Take(length).ToList();
+                var results = BrandFilter.OrderBy(b => b.Name).Skip(start).Take(length).ToList();
 
                 dataList.AddRange(results.Select(b => new
                 {

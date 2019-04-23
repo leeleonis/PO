@@ -177,12 +177,12 @@ namespace PurchaseOrderSys.Controllers
             SkuType category;
             Dictionary<string, string> VariationList = new Dictionary<string, string>();
             int page = 0, limit = 100, categoryID;
-            var skuList = neto.GetItemBySkus(page++, limit);
+            var skuList = neto.GetItemBySkus(page, limit);
             try
             {
                 do
                 {
-                    Debug.Print(string.Format("Sync Sku from {0} to {1}...", page * limit + 1, (page + 1) * limit));
+                    Response.Write(string.Format("Sync Sku from {0} to {1}... <br />", page++ * limit + 1, page * limit));
                     foreach (var item in skuList.Item.Where(i => i.Categories[0] != null))
                     {
                         var eBayTitle = new Dictionary<int, string>()
@@ -194,83 +194,95 @@ namespace PurchaseOrderSys.Controllers
                         {
                             if (!item.SKU.Contains("_var"))
                             {
-                                categoryID = int.Parse(item.Categories.First().Category[0].CategoryID);
-                                if (!db.SkuType.Any(t => t.NetoID.Value.Equals(categoryID)))
+                                try
                                 {
-                                    categoryID = int.Parse(categoryList.First(c => c.CategoryID.Equals(categoryID.ToString())).ParentCategoryID);
-                                }
 
-                                category = db.SkuType.FirstOrDefault(t => t.NetoID.Value.Equals(categoryID));
-                                if(category == null)
-                                {
-                                    category = new SkuType()
+                                    categoryID = int.Parse(item.Categories.First().Category[0].CategoryID);
+                                    if (!db.SkuType.Any(t => t.NetoID.Value.Equals(categoryID)))
+                                    {
+                                        var parentCategoryID = int.Parse(categoryList.First(c => c.CategoryID.Equals(categoryID.ToString())).ParentCategoryID);
+                                        if (!parentCategoryID.Equals(0))
+                                        {
+                                            categoryID = parentCategoryID;
+                                        }
+                                    }
+
+                                    category = db.SkuType.FirstOrDefault(t => t.NetoID.Value.Equals(categoryID));
+                                    if (category == null)
+                                    {
+                                        category = new SkuType()
+                                        {
+                                            IsEnable = true,
+                                            NetoID = categoryID,
+                                            CreateAt = DateTime.UtcNow,
+                                            CreateBy = "System Scheduling"
+                                        };
+
+                                        category.SkuTypeLang.Add(new SkuTypeLang()
+                                        {
+                                            Name = categoryList.First(c => c.CategoryID.Equals(categoryID.ToString())).CategoryName,
+                                            LangID = LangID,
+                                            CreateAt = category.CreateAt,
+                                            CreateBy = category.CreateBy
+                                        });
+
+                                        db.SkuType.Add(category);
+                                        db.SaveChanges();
+                                    }
+
+                                    string brandName = string.IsNullOrEmpty(item.Brand) ? "Other" : item.Brand.Trim(' ');
+                                    brand = db.Brand.FirstOrDefault(b => b.Name.ToLower().Equals(brandName.ToLower()));
+                                    if (brand == null)
+                                    {
+                                        brand = new Brand()
+                                        {
+                                            IsEnable = true,
+                                            Name = brandName,
+                                            CreateAt = DateTime.UtcNow,
+                                            CreateBy = "System Scheduling"
+                                        };
+
+                                        db.Brand.Add(brand);
+                                        db.SaveChanges();
+                                    }
+
+                                    sku = new SKU()
                                     {
                                         IsEnable = true,
-                                        NetoID = categoryID,
+                                        SkuID = item.SKU,
+                                        Company = 163,
+                                        Category = category.ID,
+                                        Brand = brand.ID,
+                                        Condition = CheckCondition(conditionList, item.SKU),
+                                        UPC = item.UPC,
+                                        Type = (byte)EnumData.SkuType.Single,
+                                        eBayTitle = JsonConvert.SerializeObject(eBayTitle),
+                                        Status = Convert.ToByte(item.IsActive),
                                         CreateAt = DateTime.UtcNow,
                                         CreateBy = "System Scheduling"
                                     };
 
-                                    category.SkuTypeLang.Add(new SkuTypeLang()
+                                    if (sku.SkuID.Contains('_')) { sku.ParentShadow = sku.SkuID.Split('_')[0]; }
+
+                                    sku.SkuLang.Add(new SkuLang()
                                     {
-                                        Name = categoryList.First(c => c.CategoryID.Equals(categoryID.ToString())).CategoryName,
+                                        Sku = sku.SkuID,
                                         LangID = LangID,
-                                        CreateAt = category.CreateAt,
-                                        CreateBy = category.CreateBy
+                                        Name = item.Name,
+                                        Model = item.ModelNumber,
+                                        Description = item.Description,
+                                        PackageContent = item.Misc01,
+                                        SpecContent = item.Specifications,
+                                        CreateAt = sku.CreateAt,
+                                        CreateBy = sku.CreateBy
                                     });
 
-                                    db.SkuType.Add(category);
-                                    db.SaveChanges();
+                                    db.SKU.Add(sku);
                                 }
-
-                                string brandName = string.IsNullOrEmpty(item.Brand) ? "Other" : item.Brand.Trim(' ');
-                                brand = db.Brand.FirstOrDefault(b => b.Name.ToLower().Equals(brandName.ToLower()));
-                                if (brand == null)
+                                catch(Exception e)
                                 {
-                                    brand = new Brand()
-                                    {
-                                        IsEnable = true,
-                                        Name = brandName,
-                                        CreateAt = DateTime.UtcNow,
-                                        CreateBy = "System Scheduling"
-                                    };
-
-                                    db.Brand.Add(brand);
-                                    db.SaveChanges();
+                                    Response.Write(string.Format("Error:【{0}】{1} <br />", item.SKU, e.InnerException?.Message ?? e.Message));
                                 }
-
-                                sku = new SKU()
-                                {
-                                    IsEnable = true,
-                                    SkuID = item.SKU,
-                                    Company = 163,
-                                    Category = category.ID,
-                                    Brand = brand.ID,
-                                    Condition = CheckCondition(conditionList, item.SKU),
-                                    UPC = item.UPC,
-                                    Type = (byte)EnumData.SkuType.Single,
-                                    eBayTitle = JsonConvert.SerializeObject(eBayTitle),
-                                    Status = Convert.ToByte(item.IsActive),
-                                    CreateAt = DateTime.UtcNow,
-                                    CreateBy = "System Scheduling"
-                                };
-
-                                if (sku.SkuID.Contains('_')) { sku.ParentShadow = sku.SkuID.Split('_')[0]; }
-
-                                sku.SkuLang.Add(new SkuLang()
-                                {
-                                    Sku = sku.SkuID,
-                                    LangID = LangID,
-                                    Name = item.Name,
-                                    Model = item.ModelNumber,
-                                    Description = item.Description,
-                                    PackageContent = item.Misc01,
-                                    SpecContent = item.Specifications,
-                                    CreateAt = sku.CreateAt,
-                                    CreateBy = sku.CreateBy
-                                });
-
-                                db.SKU.Add(sku);
                             }
                             else
                             {
@@ -280,7 +292,7 @@ namespace PurchaseOrderSys.Controllers
                     }
                     db.SaveChanges();
 
-                    skuList = page <= 5 ? neto.GetItemBySkus(page++, limit) : new NetoDeveloper.GetItemResponse() { Ack = NetoDeveloper.GetItemResponseAck.Error };
+                    skuList = page < 5 ? neto.GetItemBySkus(page, limit) : new NetoDeveloper.GetItemResponse() { Ack = NetoDeveloper.GetItemResponseAck.Error };
                 } while (skuList.Ack == NetoDeveloper.GetItemResponseAck.Success && skuList.Item.Any());
 
                 if (VariationList.Any())
@@ -302,6 +314,7 @@ namespace PurchaseOrderSys.Controllers
             catch (Exception e)
             {
                 string msg = e.Message;
+                Response.Write(msg);
             }
         }
 

@@ -385,8 +385,8 @@ namespace PurchaseOrderSys.Models
                 ID = skuData.SkuID,
                 CompanyID = skuData.Company,
                 ProductName = skuLang.Name,
-                ProductTypeID = skuData.SkuType.SCID.Value,
-                ManufacturerID = skuData.GetBrand.SCID.Value,
+                ProductTypeID = skuData.SkuType.SCID ?? 0,
+                ManufacturerID = skuData.GetBrand.SCID ?? 0,
                 UPC = skuData.UPC
             };
 
@@ -397,11 +397,11 @@ namespace PurchaseOrderSys.Models
                 {
                     result = result && SC_Api.Create_ProductFullInfo(new ProductFullInfo()
                     {
-                        ID = skuData.SkuID + company.ShandowSuffix,
+                        ID = newSku.ID + company.ShandowSuffix,
                         CompanyID = company.ID,
                         ProductName = skuLang.Name,
-                        ProductTypeID = skuData.SkuType.SCID.Value,
-                        ManufacturerID = skuData.GetBrand.SCID.Value,
+                        ProductTypeID = newSku.ProductTypeID,
+                        ManufacturerID = newSku.ManufacturerID,
                         UPC = skuData.UPC
                     });
                 }
