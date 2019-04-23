@@ -19,7 +19,36 @@
             <tr>
                 <td>@item.Date</td>
                 <td>@item.ISType</td>
-                <td>@item.ID</td>
+                <td>
+                    @if (item.ISType == "TransferIn")
+                    {
+                        <a href=' @Url.Action("Edit", "Transfer", new { id = item.ID })' target="_blank">@item.ID</a>
+                    }
+                    else if (item.ISType == "TransferOut")
+                    {
+                        <a href=' @Url.Action("Edit", "Transfer", new { id = item.ID })' target="_blank">@item.ID</a>
+                    }
+                    else if (item.ISType == "PO")
+                    {
+                        <a href=' @Url.Action("EditItem", "PurchaseOrderPO", new { id = item.ID })' target="_blank">@item.ID</a>
+                    }
+                    else if (item.ISType == "CM")
+                    {
+                        <a href=' @Url.Action("EditItem", "PurchaseOrderCM", new { id = item.ID })' target="_blank">@item.ID</a>
+                    }
+                    else if (item.ISType == "Order")
+                    {
+                        <a href='https://dm.cwa.sellercloud.com/Orders/Orders_details.aspx?id=@(item.ID)' target="_blank">@item.ID</a>
+                    }
+                    else if (item.ISType == "RMAIn")
+                    {
+                        <a href=' @Url.Action("Edit", "RMA", new { id = item.ID })' target="_blank">@item.ID</a>
+                    }
+                    else
+                    {
+                        @item.ID
+                    }
+                </td>
                 <td>@item.Warehouse</td>
                 <td>@item.QTY</td>
                 <td>@item.UpdatedBy</td>

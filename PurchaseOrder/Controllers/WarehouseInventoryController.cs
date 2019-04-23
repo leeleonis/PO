@@ -1160,7 +1160,7 @@ namespace PurchaseOrderSys.Controllers
                 }
                 else if (item.SerialsType == "Order")
                 {
-                    ISType = " Order";
+                    ISType = "Order";
                     SID = item.ID;
                     Warehouse = item.PurchaseSKU.PurchaseOrder.WarehousePO.Name;
                 }

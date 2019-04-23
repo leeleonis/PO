@@ -116,21 +116,12 @@
                                         </fieldset>
                                         <fieldset>
                                             <legend></legend>
-                                            @*<div class="form-group" >
-                                                    <div class="col-sm-9  col-lg-offset-11">
-                                                        <a type="button" href="@Url.Action("Transit")" class='btn btn-danger btn-sm' id='btn-Add'>Request a Transit</a>
-                                                    </div>
+                                            <div class="form-group">
+                                                <div class="col-sm-9  col-lg-offset-10">
+                                                    <a type="button" href="@Url.Action("ExcelQTY","DispatchWarehouse",new {ViewBag.WarehouseID})" class='btn btn-primary btn-sm' id='btn-Add' target="_blank">Download SKU QTY</a>
+                                                    <a type="button" href="@Url.Action("ExcelSerial","DispatchWarehouse",new {ViewBag.WarehouseID})" class='btn btn-primary btn-sm' id='btn-Add' target="_blank">Download SKU Serials</a>
                                                 </div>
-                                                <div class="form-group">
-                                                    <div class="col-sm-9  col-lg-offset-11">
-                                                        <a type="button" href="@Url.Action("CreatePO")" class='btn btn-danger btn-sm' id='btn-Add'>Create PO</a>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-sm-9  col-lg-offset-11">
-                                                        <a type="button" href="@Url.Action("CreateCM")" class='btn btn-danger btn-sm' id='btn-Add'>Create CM</a>
-                                                    </div>
-                                                </div>*@
+                                            </div>
                                             <div class="row">
                                                 <article class="col-xs-12">
                                                     <table id="DataGridC" class="table table-striped table-bordered">
@@ -156,7 +147,9 @@
                                                                 {
                                                                     <tr>
                                                                         <td><input type="checkbox" value="@item.SKU"></td>
-                                                                        <td>@item.SKU</td>
+                                                                        <td>
+                                                                            <a href=' @Url.Action("edit", "Sku", new { id = item.SKU })' target="_blank">@(item.SKU)</a>
+                                                                        </td>
                                                                         <td>@item.Name</td>
                                                                         <td>@item.Velocity</td>
                                                                         <td>@item.DaysOfSupply</td>
