@@ -77,5 +77,6 @@ namespace PurchaseOrderSys.Models
         public virtual DbSet<SkuType> SkuType { get; set; }
         public virtual DbSet<RMA> RMA { get; set; }
         public virtual DbSet<RMASerialsLlist> RMASerialsLlist { get; set; }
+        public virtual DbSet<RMAOrderSerialsLlist> RMAOrderSerialsLlist { get; set; }
     }
 }

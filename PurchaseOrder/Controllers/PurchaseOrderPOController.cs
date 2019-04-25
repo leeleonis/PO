@@ -706,6 +706,7 @@ namespace PurchaseOrderSys.Controllers
                     var dt = DateTime.UtcNow;
                     PurchaseSKU.SerialsLlist.Add(new SerialsLlist
                     {
+                        IsEnable = true,
                         SerialsNo = "POA" +  PurchaseSKU.ID + dt.ToString("MMddHHmmssfff") + i,
                         SerialsType = "PO",
                         SerialsQTY = 1,
@@ -799,6 +800,7 @@ namespace PurchaseOrderSys.Controllers
                     var dt = DateTime.UtcNow;
                     var nSerialsLlistIn = new SerialsLlist
                     {
+                        IsEnable = true,
                         PurchaseSKUID = PurchaseSKUID,
                         SerialsType = "DropshpOrderIn",
                         SerialsNo = serials,
@@ -811,6 +813,7 @@ namespace PurchaseOrderSys.Controllers
                     db.SerialsLlist.Add(nSerialsLlistIn);
                     var nSerialsLlistOut = new SerialsLlist
                     {
+                        IsEnable = true,
                         PurchaseSKUID = PurchaseSKUID,
                         SerialsType = "DropshpOrderOut",
                         SerialsNo = serials,
@@ -844,6 +847,7 @@ namespace PurchaseOrderSys.Controllers
                     var dt = DateTime.UtcNow;
                     var nSerialsLlist = new SerialsLlist
                     {
+                        IsEnable = true,
                         PurchaseSKUID = PurchaseSKUID,
                         SerialsType = "PO",
                         SerialsNo = serials,

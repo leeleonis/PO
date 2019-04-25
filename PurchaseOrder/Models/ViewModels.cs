@@ -1294,6 +1294,7 @@ namespace PurchaseOrderSys.Models
         public string UPC { get; set; }
         public int? QTY { get; set; }
         public int? RMAQTY { get; set; }
+        public string Serial { get; set; }
         public int? Warehouse { get; set; }
         public string Reason { get; set; }
     }
@@ -1302,6 +1303,7 @@ namespace PurchaseOrderSys.Models
         public int ID { get; set; }
         public int OrderID { get; set; }
         public string SKU { get; set; }
+        public string Serial { get; set; }
         public string Reason { get; set; }
         public int? Warehouse { get; set; }
     }
@@ -1320,7 +1322,8 @@ namespace PurchaseOrderSys.Models
         public int? QTYOrdered { get; set; }
         public string Reason { get; set; }
         public int? Warehouse { get; set; }
-        public string SerialsNo { get; set; }
+        public string OrderSerialsNo { get; set; }
+        public string ReturnedSerialsNo { get; set; }
         public string TrWarehouse { get; set; }
         public string Model { get; set; }
         public decimal UnitPrice { get; set; }

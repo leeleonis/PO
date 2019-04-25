@@ -20,15 +20,15 @@
                 <td>@item.Date</td>
                 <td>@item.ISType</td>
                 <td>
-                    @if (item.ISType == "TransferIn")
+                    @if (item.ISType == "Transfer(In)")
                     {
                         <a href=' @Url.Action("Edit", "Transfer", new { id = item.ID })' target="_blank">@item.ID</a>
                     }
-                    else if (item.ISType == "TransferOut")
+                    else if (item.ISType == "Transfer(Out)")
                     {
                         <a href=' @Url.Action("Edit", "Transfer", new { id = item.ID })' target="_blank">@item.ID</a>
                     }
-                    else if (item.ISType == "PO")
+                    else if (item.ISType == "PurchaseOrder")
                     {
                         <a href=' @Url.Action("EditItem", "PurchaseOrderPO", new { id = item.ID })' target="_blank">@item.ID</a>
                     }
@@ -40,7 +40,7 @@
                     {
                         <a href='https://dm.cwa.sellercloud.com/Orders/Orders_details.aspx?id=@(item.ID)' target="_blank">@item.ID</a>
                     }
-                    else if (item.ISType == "RMAIn")
+                    else if (item.ISType == "RMA")
                     {
                         <a href=' @Url.Action("Edit", "RMA", new { id = item.ID })' target="_blank">@item.ID</a>
                     }

@@ -138,7 +138,7 @@
                                                             <tr>
                                                                 <td colspan="10">
                                                                     <select id="gebruikerId" name="gebruikerId" class=" form-control" style="width:50%"></select>
-                                                                    <button type="button" id="addsku">Add SKU</button>
+                                                                    <button type="button" id="addsku">Add SKU</button>Note: Only items available in From warehouse can be found and added!
                                                                 </td>
                                                             </tr>
                                                         </tfoot>
@@ -209,7 +209,7 @@
                         var FromWID = $("#FromWID").val();
                         d.Skulist = Skulist;
                         d.FromWID = FromWID;
-                        d.SID =@Html.Display("SID");
+                        d.SID ="@Html.Display("SID")";
                         $("#gebruikerId").val(null).trigger('change');
                     }
                 },
@@ -278,7 +278,7 @@
                     url: "@Url.Action("RemoveData")",
                     data: {
                         IDList: dataList,
-                        SID:@Html.Display("SID")
+                        SID:"@Html.Display("SID")"
                     },
                     success: function (data) {
                         if (data.status) {
@@ -308,7 +308,7 @@
                 type: "post",
                 url: "@Url.Action("TSkuNumberListQTY", "Ajax")",
                 data: {
-                    SID:@Html.Display("SID"),
+                    SID:"@Html.Display("SID")",
                     SKU: SKU,
                     val: $(x).val(),
                 },

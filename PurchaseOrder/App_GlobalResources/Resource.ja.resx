@@ -522,4 +522,28 @@
   <data name="RMASerialsLlist_ServiceID" xml:space="preserve">
     <value>ServiceID</value>
   </data>
+  <data name="Brand_SCID" xml:space="preserve">
+    <value>SC ID</value>
+  </data>
+  <data name="RMAOrderSerialsLlist_IsEnable" xml:space="preserve">
+    <value>IsEnable</value>
+  </data>
+  <data name="RMAOrderSerialsLlist_ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="RMAOrderSerialsLlist_RMASKUID" xml:space="preserve">
+    <value>RMASKUID</value>
+  </data>
+  <data name="RMAOrderSerialsLlist_SerialsNo" xml:space="preserve">
+    <value>SerialsNo</value>
+  </data>
+  <data name="RMAOrderSerialsLlist_SerialsQTY" xml:space="preserve">
+    <value>SerialsQTY</value>
+  </data>
+  <data name="RMAOrderSerialsLlist_CreateBy" xml:space="preserve">
+    <value>CreateBy</value>
+  </data>
+  <data name="RMAOrderSerialsLlist_CreateAt" xml:space="preserve">
+    <value>CreateAt</value>
+  </data>
 </root>
