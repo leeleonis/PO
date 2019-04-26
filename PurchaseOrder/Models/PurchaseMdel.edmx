@@ -255,6 +255,7 @@
           <Property Name="UpdateAt" Type="datetime" />
           <Property Name="ReceivedBy" Type="nvarchar" MaxLength="50" />
           <Property Name="ReceivedAt" Type="datetime" />
+          <Property Name="RMAID" Type="int" />
         </EntityType>
         <EntityType Name="Currency">
           <Key>
@@ -685,6 +686,7 @@
           <Property Name="Reason" Type="nvarchar" MaxLength="20" />
           <Property Name="UnitPrice" Type="decimal" Precision="18" Scale="2" />
           <Property Name="RMAItemID" Type="int" />
+          <Property Name="CreditMemoID" Type="int" />
         </EntityType>
         <EntityType Name="SerialsLlist">
           <Key>
@@ -703,7 +705,7 @@
           <Property Name="ReceivedAt" Type="datetime" />
           <Property Name="TransferSKUID" Type="int" />
           <Property Name="OrderID" Type="int" />
-          <Property Name="RMAID" Type="int" />
+          <Property Name="RMASKUID" Type="int" />
           <Property Name="SerialsType" Type="nvarchar" MaxLength="20" />
           <Property Name="Memo" Type="ntext" />
           <Property Name="IsEnable" Type="bit" Nullable="false" />
@@ -1094,6 +1096,18 @@
             </Principal>
             <Dependent Role="CreditMemo">
               <PropertyRef Name="PurchaseOrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CreditMemo_RMA">
+          <End Role="RMA" Type="Self.RMA" Multiplicity="0..1" />
+          <End Role="CreditMemo" Type="Self.CreditMemo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RMA">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CreditMemo">
+              <PropertyRef Name="RMAID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1947,6 +1961,10 @@
             <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
             <End Role="CreditMemo" EntitySet="CreditMemo" />
           </AssociationSet>
+          <AssociationSet Name="FK_CreditMemo_RMA" Association="Self.FK_CreditMemo_RMA">
+            <End Role="RMA" EntitySet="RMA" />
+            <End Role="CreditMemo" EntitySet="CreditMemo" />
+          </AssociationSet>
           <AssociationSet Name="FK_ImgFile_CreditMemo" Association="Self.FK_ImgFile_CreditMemo">
             <End Role="CreditMemo" EntitySet="CreditMemo" />
             <End Role="ImgFile" EntitySet="ImgFile" />
@@ -2546,6 +2564,10 @@
             <End Role="RMASKU" EntitySet="RMASKU" />
             <End Role="RMAOrderSerialsLlist" EntitySet="RMAOrderSerialsLlist" />
           </AssociationSet>
+          <AssociationSet Name="FK_CreditMemo_RMA" Association="PurchaseOrderModel.FK_CreditMemo_RMA">
+            <End Role="RMA" EntitySet="RMA" />
+            <End Role="CreditMemo" EntitySet="CreditMemo" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="AdminGroup">
           <Key>
@@ -2750,6 +2772,8 @@
           <NavigationProperty Name="PurchaseSKU" Relationship="PurchaseOrderModel.FK_PurchaseSKU_CreditMemo" FromRole="CreditMemo" ToRole="PurchaseSKU" />
           <NavigationProperty Name="ImgFile" Relationship="PurchaseOrderModel.FK_ImgFile_CreditMemo" FromRole="CreditMemo" ToRole="ImgFile" />
           <NavigationProperty Name="PurchaseNote" Relationship="PurchaseOrderModel.FK_PurchaseNote_CreditMemo" FromRole="CreditMemo" ToRole="PurchaseNote" />
+          <Property Name="RMAID" Type="Int32" />
+          <NavigationProperty Name="RMA" Relationship="PurchaseOrderModel.FK_CreditMemo_RMA" FromRole="CreditMemo" ToRole="RMA" />
         </EntityType>
         <EntityType Name="DirectLine">
           <Key>
@@ -3979,7 +4003,6 @@
           <Property Name="ReceivedAt" Type="DateTime" Precision="3" />
           <Property Name="TransferSKUID" Type="Int32" />
           <Property Name="OrderID" Type="Int32" />
-          <Property Name="RMAID" Type="Int32" />
           <Property Name="SerialsType" Type="String" MaxLength="20" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="Orders" Relationship="PurchaseOrderModel.FK_SerialsLlist_Orders" FromRole="SerialsLlist" ToRole="Orders" />
           <NavigationProperty Name="PurchaseSKU" Relationship="PurchaseOrderModel.FK_SerialsLlist_PurchaseSKU" FromRole="SerialsLlist" ToRole="PurchaseSKU" />
@@ -3988,6 +4011,7 @@
           <NavigationProperty Name="TransferSKU" Relationship="PurchaseOrderModel.FK_SerialsLlist_TransferSKU" FromRole="SerialsLlist" ToRole="TransferSKU" />
           <Property Name="Memo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="IsEnable" Type="Boolean" Nullable="false" />
+          <Property Name="RMASKUID" Type="Int32" />
         </EntityType>
         <Association Name="FK_SerialsLlist_Orders">
           <End Type="PurchaseOrderModel.Orders" Role="Orders" Multiplicity="0..1" />
@@ -4286,6 +4310,7 @@
           <Property Name="UnitPrice" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="RMAItemID" Type="Int32" />
           <NavigationProperty Name="RMAOrderSerialsLlist" Relationship="PurchaseOrderModel.FK_RMAOrderSerialsLlist_RMASKU1" FromRole="RMASKU" ToRole="RMAOrderSerialsLlist" />
+          <Property Name="CreditMemoID" Type="Int32" />
         </EntityType>
         <EntityType Name="SkuType">
           <Key>
@@ -4371,6 +4396,7 @@
           <Property Name="OtherCosts" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="ReturnShippingCos" Type="Decimal" Precision="18" Scale="2" />
           <NavigationProperty Name="PurchaseNote" Relationship="PurchaseOrderModel.FK_PurchaseNote_RMA" FromRole="RMA" ToRole="PurchaseNote" />
+          <NavigationProperty Name="CreditMemo" Relationship="PurchaseOrderModel.FK_CreditMemo_RMA" FromRole="RMA" ToRole="CreditMemo" />
         </EntityType>
         <Association Name="FK_RMA_Warehouse">
           <End Type="PurchaseOrderModel.Warehouse" Role="Warehouse" Multiplicity="0..1" />
@@ -4545,6 +4571,18 @@
             </Principal>
             <Dependent Role="RMAOrderSerialsLlist">
               <PropertyRef Name="RMASKUID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CreditMemo_RMA">
+          <End Type="PurchaseOrderModel.RMA" Role="RMA" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.CreditMemo" Role="CreditMemo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RMA">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CreditMemo">
+              <PropertyRef Name="RMAID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4728,6 +4766,7 @@
           <EntitySetMapping Name="CreditMemo">
             <EntityTypeMapping TypeName="PurchaseOrderModel.CreditMemo">
               <MappingFragment StoreEntitySet="CreditMemo">
+                <ScalarProperty Name="RMAID" ColumnName="RMAID" />
                 <ScalarProperty Name="ReceivedAt" ColumnName="ReceivedAt" />
                 <ScalarProperty Name="ReceivedBy" ColumnName="ReceivedBy" />
                 <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
@@ -5403,10 +5442,10 @@
           <EntitySetMapping Name="SerialsLlist">
             <EntityTypeMapping TypeName="PurchaseOrderModel.SerialsLlist">
               <MappingFragment StoreEntitySet="SerialsLlist">
+                <ScalarProperty Name="RMASKUID" ColumnName="RMASKUID" />
                 <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
                 <ScalarProperty Name="Memo" ColumnName="Memo" />
                 <ScalarProperty Name="SerialsType" ColumnName="SerialsType" />
-                <ScalarProperty Name="RMAID" ColumnName="RMAID" />
                 <ScalarProperty Name="OrderID" ColumnName="OrderID" />
                 <ScalarProperty Name="TransferSKUID" ColumnName="TransferSKUID" />
                 <ScalarProperty Name="ReceivedAt" ColumnName="ReceivedAt" />
@@ -5499,6 +5538,7 @@
           <EntitySetMapping Name="RMASKU">
             <EntityTypeMapping TypeName="PurchaseOrderModel.RMASKU">
               <MappingFragment StoreEntitySet="RMASKU">
+                <ScalarProperty Name="CreditMemoID" ColumnName="CreditMemoID" />
                 <ScalarProperty Name="RMAItemID" ColumnName="RMAItemID" />
                 <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
                 <ScalarProperty Name="Reason" ColumnName="Reason" />

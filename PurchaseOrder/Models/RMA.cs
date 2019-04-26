@@ -19,6 +19,7 @@ namespace PurchaseOrderSys.Models
         {
             this.RMASKU = new HashSet<RMASKU>();
             this.PurchaseNote = new HashSet<PurchaseNote>();
+            this.CreditMemo = new HashSet<CreditMemo>();
         }
     
         public bool IsEnable { get; set; }
@@ -50,5 +51,7 @@ namespace PurchaseOrderSys.Models
         public virtual ICollection<RMASKU> RMASKU { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseNote> PurchaseNote { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CreditMemo> CreditMemo { get; set; }
     }
 }

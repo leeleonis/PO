@@ -45,6 +45,7 @@ namespace PurchaseOrderSys.Models
         public Nullable<System.DateTime> UpdateAt { get; set; }
         public string ReceivedBy { get; set; }
         public Nullable<System.DateTime> ReceivedAt { get; set; }
+        public Nullable<int> RMAID { get; set; }
     
         public virtual PurchaseOrder PurchaseOrder { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -53,5 +54,6 @@ namespace PurchaseOrderSys.Models
         public virtual ICollection<ImgFile> ImgFile { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseNote> PurchaseNote { get; set; }
+        public virtual RMA RMA { get; set; }
     }
 }
