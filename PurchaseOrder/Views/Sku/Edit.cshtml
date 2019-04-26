@@ -17,8 +17,20 @@
     var AwaitingList = (List<AwaitingDispatchVM>)ViewBag.AwaitingList;
     var SkuStatus = Enum.GetValues(typeof(EnumData.SkuStatus)).Cast<EnumData.SkuStatus>().Select(t => new SelectListItem() { Text = t.ToString(), Value = ((byte)t).ToString() }).ToList();
 }
-
 <div id="content">
+    @if (TempData["ErrorMsg"] != null)
+    {
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="alert alert-danger fade in">
+                    <button class="close" data-dismiss="alert">×</button>
+                    <i class="fa-fw fa fa-times"></i>
+                    @TempData["ErrorMsg"].ToString()
+                </div>
+            </div>
+        </div>
+    }
+
     <section id="widget-grid" class="">
         <div class="row">
             <article class="col-xs-12">
@@ -357,6 +369,17 @@
                                         <fieldset>
                                             <legend>Description</legend>
 
+                                            @if (!string.IsNullOrEmpty(Model.ParentSku))
+                                            {
+                                                <div class="alert alert-warning fade in">
+                                                    <button class="close" data-dismiss="alert">
+                                                        ×
+                                                    </button>
+                                                    <i class="fa-fw fa fa-warning"></i>
+                                                    <strong>Warning</strong> This is a Variation Child! Only the Description in the Variation Parent will be used instead
+                                                </div>
+                                            }
+
                                             @Html.TextArea("Description")
                                         </fieldset>
 
@@ -364,6 +387,17 @@
 
                                         <fieldset>
                                             <legend>Package Content</legend>
+
+                                            @if (!string.IsNullOrEmpty(Model.ParentSku))
+                                            {
+                                                <div class="alert alert-warning fade in">
+                                                    <button class="close" data-dismiss="alert">
+                                                        ×
+                                                    </button>
+                                                    <i class="fa-fw fa fa-warning"></i>
+                                                    <strong>Warning</strong> This is a Variation Child! Only the Package Content in the Variation Parent will be used instead
+                                                </div>
+                                            }
 
                                             <div class="form-group">
                                                 <div class="col-lg-12">

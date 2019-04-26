@@ -237,6 +237,9 @@ namespace PurchaseOrderSys.Models
             if (netoApi == null) netoApi = new NetoApi();
             string LangID = EnumData.DataLangList().First().Key;
 
+            if (!netoApi.GetItemBySku(skuData.SkuID).Item.Any())
+                CreateSkuToNeto();
+
             var skuLang = skuData.SkuLang.First(l => l.LangID.Equals(LangID));
             var eBayTitle = !string.IsNullOrEmpty(skuData.eBayTitle) ? Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<int, string>>(skuData.eBayTitle) : new Dictionary<int, string> { };
 
@@ -288,40 +291,48 @@ namespace PurchaseOrderSys.Models
             }
         }
 
-        public bool UpdateSkuToSC()
+        public void UpdateSkuToSC()
         {
             if (SC_Api == null) SC_Api = new SC_WebService("tim@weypro.com", "timfromweypro");
             string LangID = EnumData.DataLangList().First().Key;
 
-            var skuLang = skuData.SkuLang.First(l => l.LangID.Equals(LangID));
-            ProductFullInfo newSku = new ProductFullInfo()
+            try
             {
-                ID = skuData.SkuID,
-                CompanyID = skuData.Company,
-                ProductName = skuLang.Name,
-                ProductTypeID = skuData.SkuType.SCID.Value,
-                ManufacturerID = skuData.GetBrand.SCID.Value,
-                UPC = skuData.UPC
-            };
+                if (SC_Api.Get_ProductFullInfo(skuData.SkuID) == null)
+                    CreateSkuToSC();
 
-            bool result = SC_Api.Update_ProductFullInfo(newSku);
-            if (skuData.Type.Equals((byte)EnumData.SkuType.Single) && result)
-            {
-                foreach (var company in db.Company.Where(c => c.ParentID.Value.Equals(skuData.Company)))
+                var skuLang = skuData.SkuLang.First(l => l.LangID.Equals(LangID));
+                ProductFullInfo newSku = new ProductFullInfo()
                 {
-                    result = result && SC_Api.Update_ProductFullInfo(new ProductFullInfo()
+                    ID = skuData.SkuID,
+                    CompanyID = skuData.Company,
+                    ProductName = skuLang.Name,
+                    ProductTypeID = skuData.SkuType.SCID.Value,
+                    ManufacturerID = skuData.GetBrand.SCID.Value,
+                    UPC = skuData.UPC
+                };
+
+                bool result = SC_Api.Update_ProductFullInfo(newSku);
+                if (skuData.Type.Equals((byte)EnumData.SkuType.Single) && result)
+                {
+                    foreach (var company in db.Company.Where(c => c.ParentID.Value.Equals(skuData.Company)))
                     {
-                        ID = skuData.SkuID + company.ShandowSuffix,
-                        CompanyID = company.ID,
-                        ProductName = skuLang.Name,
-                        ProductTypeID = skuData.SkuType.SCID.Value,
-                        ManufacturerID = skuData.GetBrand.SCID.Value,
-                        UPC = skuData.UPC
-                    });
+                        result = result && SC_Api.Update_ProductFullInfo(new ProductFullInfo()
+                        {
+                            ID = skuData.SkuID + company.ShandowSuffix,
+                            CompanyID = company.ID,
+                            ProductName = skuLang.Name,
+                            ProductTypeID = skuData.SkuType.SCID.Value,
+                            ManufacturerID = skuData.GetBrand.SCID.Value,
+                            UPC = skuData.UPC
+                        });
+                    }
                 }
             }
-
-            return result;
+            catch (Exception e)
+            {
+                throw new Exception("SC Error:" + e.InnerException?.Message ?? e.Message);
+            }
         }
 
         public void UpdateVariationToNeto()
@@ -332,17 +343,23 @@ namespace PurchaseOrderSys.Models
             foreach (var variationSku in db.SKU.Where(s => s.IsEnable && s.ParentSku.Equals(parentSku.SkuID)))
             {
                 var response = netoApi.GetItemBySku(variationSku.SkuID);
-                if(response.Ack != GetItemResponseAck.Success)
-                {
-
-                }
+                skuData = variationSku;
+                //if (!response.Item.Any())
+                //{
+                //    CreateSkuToNeto();
+                //}
+                //UpdateSkuToNeto();
             }
+            skuData = parentSku;
         }
 
         public AddItemResponseItem CreateSkuToNeto()
         {
             if (netoApi == null) netoApi = new NetoApi();
             string LangID = EnumData.DataLangList().First().Key;
+
+            if (!skuData.SkuType.NetoID.HasValue)
+                throw new Exception("Neto Error: SKU的Category尚未設定NetoID!");
 
             var skuLang = skuData.SkuLang.First(l => l.LangID.Equals(LangID));
 
@@ -366,48 +383,59 @@ namespace PurchaseOrderSys.Models
 
             if (result.Messages.Error.Any())
             {
-                throw new Exception("Error:" + string.Join(",", result.Messages.Error.Select(e => e.Message + "-" + e.Description).ToArray()));
+                throw new Exception("Neto Error:" + string.Join(",", result.Messages.Error.Select(e => e.Message + "-" + e.Description).ToArray()));
             }
             else
             {
-                throw new Exception("Waring:" + string.Join(",", result.Messages.Warning.Select(e => e.Message).ToArray()));
+                throw new Exception("Neto Waring:" + string.Join(",", result.Messages.Warning.Select(e => e.Message).ToArray()));
             }
         }
 
-        public bool CreateSkuToSC()
+        public void CreateSkuToSC()
         {
             if (SC_Api == null) SC_Api = new SC_WebService("tim@weypro.com", "timfromweypro");
             string LangID = EnumData.DataLangList().First().Key;
 
-            var skuLang = skuData.SkuLang.First(l => l.LangID.Equals(LangID));
-            ProductFullInfo newSku = new ProductFullInfo()
+            try
             {
-                ID = skuData.SkuID,
-                CompanyID = skuData.Company,
-                ProductName = skuLang.Name,
-                ProductTypeID = skuData.SkuType.SCID ?? 0,
-                ManufacturerID = skuData.GetBrand.SCID ?? 0,
-                UPC = skuData.UPC
-            };
+                if (!skuData.SkuType.SCID.HasValue)
+                    throw new Exception("SKU的Category尚未設定SCID!");
 
-            bool result = SC_Api.Create_ProductFullInfo(newSku);
-            if (skuData.Type.Equals((byte)EnumData.SkuType.Single) && result)
-            {
-                foreach (var company in db.Company.Where(c => c.ParentID.Value.Equals(skuData.Company)))
+                if (!skuData.GetBrand.SCID.HasValue)
+                    throw new Exception("SKU的Brand尚未設定SCID!");
+
+                var skuLang = skuData.SkuLang.First(l => l.LangID.Equals(LangID));
+                ProductFullInfo newSku = new ProductFullInfo()
                 {
-                    result = result && SC_Api.Create_ProductFullInfo(new ProductFullInfo()
+                    ID = skuData.SkuID,
+                    CompanyID = skuData.Company,
+                    ProductName = skuLang.Name,
+                    ProductTypeID = skuData.SkuType.SCID.Value,
+                    ManufacturerID = skuData.GetBrand.SCID.Value,
+                    UPC = skuData.UPC
+                };
+
+                bool result = SC_Api.Create_ProductFullInfo(newSku);
+                if (skuData.Type.Equals((byte)EnumData.SkuType.Single) && result)
+                {
+                    foreach (var company in db.Company.Where(c => c.ParentID.Value.Equals(skuData.Company)))
                     {
-                        ID = newSku.ID + company.ShandowSuffix,
-                        CompanyID = company.ID,
-                        ProductName = skuLang.Name,
-                        ProductTypeID = newSku.ProductTypeID,
-                        ManufacturerID = newSku.ManufacturerID,
-                        UPC = skuData.UPC
-                    });
+                        result = result && SC_Api.Create_ProductFullInfo(new ProductFullInfo()
+                        {
+                            ID = newSku.ID + company.ShandowSuffix,
+                            CompanyID = company.ID,
+                            ProductName = skuLang.Name,
+                            ProductTypeID = newSku.ProductTypeID,
+                            ManufacturerID = newSku.ManufacturerID,
+                            UPC = skuData.UPC
+                        });
+                    }
                 }
             }
-
-            return result;
+            catch (Exception e)
+            {
+                throw new Exception("SC Error:" + e.InnerException?.Message ?? e.Message);
+            }
         }
 
         protected virtual void Dispose(bool disposing)

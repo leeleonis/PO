@@ -338,32 +338,11 @@ namespace PurchaseOrderSys.Controllers
 
         public void GetProductsData()
         {
-            Api.SC_API SC_Api = new Api.SC_API();
+            var SC_Api = new SellerCloud_WebService.SC_WebService("tim@weypro.com", "timfromweypro");
+            var sku = SC_Api.Get_ProductFullInfo("123");
 
-            int page = 0, num = 500;
-            try
-            {
-                var ProductIDs = db.SKU.AsNoTracking().OrderBy(s => s.SkuID).Select(s => s.SkuID).ToArray();
-                SCService.Product[] productList = SC_Api.GetProductsRaw(ProductIDs.Skip(num * page++).Take(num).ToArray());
-                do
-                {
-                    var IDs = productList.Select(p => p.ID).ToArray();
-                    foreach (var Sku in db.SKU.Where(s => IDs.Contains(s.SkuID)))
-                    {
-                        var update = productList.First(p => p.ID.Equals(Sku.SkuID));
-                        Sku.Replenishable = update.Replenishable;
-                        Sku.SerialTracking = update.RequireSerialNumberScanWhileShipping;
-                    }
-
-                    db.SaveChanges();
-                    productList = SC_Api.GetProductsRaw(ProductIDs.Skip(num * page++).Take(num).ToArray());
-                } while (productList.Any());
-            }
-            catch (Exception e)
-            {
-
-            }
-            //var data1 = SC_Api.LoadProducts(ProductIDs).Select(p => new { p.ID, p.RequireSerialNumberScanWhileShipping, p.Replenishable }).ToList();
+           var netoApi = new NetoApi();
+            var sku2 = netoApi.GetItemBySku("123");
         }
 
         public void GetProductBrand()
