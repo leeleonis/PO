@@ -1995,4 +1995,25 @@
   <data name="Brand_SCID" xml:space="preserve">
     <value>SC ID</value>
   </data>
+  <data name="RMAOrderSerialsLlist_IsEnable" xml:space="preserve">
+    <value>啟用</value>
+  </data>
+  <data name="RMAOrderSerialsLlist_ID" xml:space="preserve">
+    <value>流水號</value>
+  </data>
+  <data name="RMAOrderSerialsLlist_RMASKUID" xml:space="preserve">
+    <value>SKUID</value>
+  </data>
+  <data name="RMAOrderSerialsLlist_SerialsNo" xml:space="preserve">
+    <value>Serials號碼</value>
+  </data>
+  <data name="RMAOrderSerialsLlist_SerialsQTY" xml:space="preserve">
+    <value>數量 </value>
+  </data>
+  <data name="RMAOrderSerialsLlist_CreateBy" xml:space="preserve">
+    <value>建立者</value>
+  </data>
+  <data name="RMAOrderSerialsLlist_CreateAt" xml:space="preserve">
+    <value>建立時間</value>
+  </data>
 </root>

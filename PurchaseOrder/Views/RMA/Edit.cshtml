@@ -41,75 +41,106 @@
                                         <fieldset>
                                             <legend>@ViewBag.title</legend>
                                             <div class="form-group">
-                                                @Html.LabelFor(model => model.OrderID, htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                @Html.LabelFor(model => model.OrderID, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @*@Html.Editor("OrderID", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })*@
                                                     <a href='https://dm.cwa.sellercloud.com/Orders/Orders_details.aspx?id=@(Model.OrderID)' target="_blank" class="control-label col-sm-1">@Model.OrderID</a>
                                                 </div>
 
-                                                @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                <label class="control-label col-sm-2">Generate Prepaid Return Label</label>
+                                                <div class="col-sm-9 col-lg-2">
+                                                  
+                                                </div>
+
+                                                @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.DropDownList("Status", RMAStatusList, htmlAttributes: new { @class = "form-control" })
                                                 </div>
 
                                             </div>
                                             <div class="form-group">
-                                                @Html.LabelFor(model => model.SourceID, htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                @Html.LabelFor(model => model.SourceID, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("SourceID", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                                                 </div>
-                                                @Html.LabelFor(model => model.Action, htmlAttributes: new { @class = "control-label col-sm-1" })
+
+                                                @Html.LabelFor(model => model.ReturnTracking, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("ReturnTracking", new { htmlAttributes = new { @class = "form-control"} })
+                                                </div>
+
+                                                @Html.LabelFor(model => model.Action, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.DropDownList("Action", RMAActionList, htmlAttributes: new { @class = "form-control" })
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                @Html.LabelFor(model => model.SourceCaseID, htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                @Html.LabelFor(model => model.SourceCaseID, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("SourceCaseID", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
-                                                @Html.Label("Warranty / Repair #", htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                @Html.LabelFor(model => model.Carrier, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("Carrier", new { htmlAttributes = new { @class = "form-control" } })
+                                                </div>
+                                                @Html.Label("Warranty / Repair #", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("Warranty", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                @Html.LabelFor(model => model.CompanyID, htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                @Html.LabelFor(model => model.CompanyID, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.DropDownListLabel("CompanyID", CompanyDDL, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
                                                 </div>
-                                                @Html.Label("Credit Memo #", htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                <label class="control-label col-sm-2">Tracking Status (Date)</label>
+                                                <div class="col-sm-9 col-lg-2">
+                                                    Tracking Status (Event)
+                                                </div>
+                                                @Html.Label("Credit Memo #", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("CreditMemo", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                @Html.LabelFor(model => model.Channel, htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                @Html.LabelFor(model => model.Channel, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.DropDownListLabel("Channel", ChannelList, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
                                                 </div>
-                                                @Html.Label("Create Date", htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                <label class="control-label col-sm-2"></label>
+                                                <div class="col-sm-9 col-lg-2">
+
+                                                </div>
+                                                @Html.Label("Create Date", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     <input class="form-control" type="text" value="@Model.CreateAt.ToLocalTime()" readonly>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                @Html.LabelFor(model => model.Country, htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                @Html.LabelFor(model => model.Country, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("Country", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                                                 </div>
-                                                @Html.Label("Create By", htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                <label class="control-label col-sm-2"></label>
+                                                <div class="col-sm-9 col-lg-2">
+
+                                                </div>
+                                                @Html.Label("Create By", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("CreateBy", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                @Html.LabelFor(model => model.SCRMA, htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                @Html.LabelFor(model => model.SCRMA, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @*@Html.Editor("SCRMA", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })*@
-                                                    <a href='https://dm.cwa.sellercloud.com/Orders/Orders_Return.aspx?id=@(Model.OrderID)' target="_blank" class="control-label col-sm-1">@Model.SCRMA</a>
+                                                    <a href='https://dm.cwa.sellercloud.com/Orders/Orders_Return.aspx?id=@(Model.OrderID)' target="_blank" class="control-label col-sm-2">@Model.SCRMA</a>
                                                 </div>
-                                                @Html.Label("Received Date", htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                <label class="control-label col-sm-2"></label>
+                                                <div class="col-sm-9 col-lg-2">
+
+                                                </div>
+                                                @Html.Label("Received Date", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @{
                                                         var ReceivedDate = Model.RMASKU.Where(x => x.IsEnable).OrderByDescending(x => x.ReceivedAt).FirstOrDefault()?.ReceivedAt?.ToLocalTime();
@@ -118,7 +149,15 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                @Html.Label("Received By", htmlAttributes: new { @class = "control-label col-sm-1  col-sm-offset-3" })
+                                                <label class="control-label col-sm-2"></label>
+                                                <div class="col-sm-9 col-lg-2">
+
+                                                </div>
+                                                <label class="control-label col-sm-2"></label>
+                                                <div class="col-sm-9 col-lg-2">
+
+                                                </div>
+                                                @Html.Label("Received By", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @{
                                                         var ReceivedBy = Model.RMASKU.Where(x => x.IsEnable).OrderByDescending(x => x.ReceivedAt).FirstOrDefault()?.ReceivedBy;
@@ -150,7 +189,8 @@
                                                                 <th>訂單數</th>
                                                                 <th>原因</th>
                                                                 <th>Return Warehouse</th>
-                                                                <th>Serial</th>
+                                                                <th>Order Serial</th>
+                                                                <th>Returned  Serial</th>
                                                                 <th>實際收貨倉</th>
                                                                 <th></th>
                                                             </tr>
@@ -158,10 +198,10 @@
                                                         <tbody></tbody>
                                                         <tfoot>
                                                             <tr>
-                                                                <td colspan="10"></td>
+                                                                <td colspan="11"></td>
                                                             </tr>
                                                             <tr>
-                                                                <td colspan="8" rowspan="9">
+                                                                <td colspan="9" rowspan="8">
                                                                     <div class="col-sm-10 col-lg-8">
                                                                         <textarea rows="20" style="width:100%" id="textnote"></textarea>
                                                                         <button type="button" id="addnote" style="float:right" class="btn btn-default btn-sm">Add Note</button>
@@ -198,13 +238,7 @@
 
                                                             </tr>
                                                             <tr>
-                                                                <td>Item value:</td>
-                                                                <td>
-                                                                    @*@(Model.RMASKU.Where(x=>x.IsEnable).Sum(x=>x.UnitPrice)?.ToString("###,##0.##"))*@
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Shipping charge:</td>
+                                                                <td>Item value & Shipping charge:</td>
                                                                 <td>
                                                                     @((Model.FinalShippingFee ?? 0).ToString("###,##0.##"))
                                                                 </td>
@@ -298,7 +332,11 @@
                             return html;
                         }
                     },
-                    { data: "SKU" },
+                    {
+                        data: "SKU", render: function (data, type, row, meta) {
+                            return "<a  target='_blank' href='" + "@Url.Action("edit", "Sku")" + "?id=" + row.SKU + "#6'>" + row.SKU + "</a>";
+                        }
+                    },
                     { data: "ProductName" },
                     { data: "UPCEAN" },
                     { data: "QTYOrdered" },
@@ -370,7 +408,8 @@
                             }
                         }
                     },
-                    { data: "SerialsNo" },
+                    { data: "OrderSerialsNo" },
+                    { data: "ReturnedSerialsNo" },
                     {data: "TrWarehouse"},
                     {
                         data: "ID",
@@ -430,10 +469,10 @@
                     var Othercosts = intVal($("#OtherCosts").val());
                     //Total refund
                     var Totalrefund = Itemvalue - Shippingcharge + Restockingfee;
-                    $('tr:eq(7) td:eq(1)', api.table().footer()).html(thousandComma(Totalrefund));
+                    $('tr:eq(6) td:eq(1)', api.table().footer()).html(thousandComma(Totalrefund));
                     //Order balance
                     var Orderbalance = Itemvalue + Shippingcharge + Totalrefund - Returnshippingcost - Othercosts;
-                    $('tr:eq(8) td:eq(1)', api.table().footer()).html(thousandComma(Orderbalance));
+                    $('tr:eq(7) td:eq(1)', api.table().footer()).html(thousandComma(Orderbalance));
                 }
             });
             $("#btnsearch").click(function () {

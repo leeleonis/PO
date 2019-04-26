@@ -60,6 +60,7 @@
                                                                 <th style="width:250px">Order</th>
                                                                 <th>SKU</th>
                                                                 <th>Product Name</th>
+                                                                <th>Serial</th>
                                                                 <th>訂單數</th>
                                                                 <th>
                                                                     原因
@@ -123,11 +124,13 @@
                             html += '<input type="hidden" name="RMAList[' + meta.row + '].ID" value="' + row.ck + '">';
                             html += '<input type="hidden" name="RMAList[' + meta.row + '].SKU" value="' + row.SKU + '">';
                             html += '<input type="hidden" name="RMAList[' + meta.row + '].OrderID" value="' + row.Order + '">';
+                            html += '<input type="hidden" name="RMAList[' + meta.row + '].Serial" value="' + row.Serial + '">';
                             return html;
                         }
                     },
                     { data: "SKU" },
                     { data: "ProductName" },
+                    { data: "Serial" },
                     { data: "QTY" },
                     {
                         data: "Reason",
@@ -187,7 +190,7 @@
                     url: "@Url.Action("RSkuNumberList")",
                     data: function (d) {
                         var OrderID = $("#OrderID").val();
-                        var SourceID = $("#SourceID").val();
+                        var SourceID = $("#SourceCaseID").val();
                         var UserID = $("#UserID").val();
                         var SID = $("#SID").val();
                         d.OrderID = OrderID;
@@ -216,7 +219,7 @@
             $("#btnsearch").click(function () {
                 var OrderID = $("#OrderID").val();
                 if (OrderID == "") {
-                    var SourceID = $("#SourceID").val();
+                    var SourceID = $("#SourceCaseID").val();
                     var UserID = $("#UserID").val();
                     var SID = $("#SID").val();
                     $.ajax({
@@ -309,7 +312,7 @@
             $(DataGrid.$('tr').each(function () {
                 var tr = $(this);
                 tr.find(".RMAReasonList").each(function () {
-                    if ($(this).val() == "" || $(this).val() == "0") {
+                    if ($(this).val() == "") {
 
 
                     }

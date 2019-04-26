@@ -195,7 +195,7 @@
                         data: "QTYReceived", render: function (data, type, row, meta) {
 
                             if (row.SerialTracking) {
-                                return "";
+                                return '<input type="hidden"  vmin="0" vmax="' + row.QTYOrdered + '" id="QTYReceived[' + meta.row + ']" name="QTYReceived[' + meta.row + '].val" > <input type="hidden" name="QTYReceived[' + meta.row + '].ID" value = ' + row.ID + ' />';
                             }
                             else {
                                 if (data == 0 || data == null) {

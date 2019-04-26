@@ -3,31 +3,27 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
-    /// AdminGroup class
+    /// RMAOrderSerialsLlist class
     /// </summary>
-    [MetadataType(typeof(AdminGroupMetadata))]
-    public  partial class AdminGroup
+    [MetadataType(typeof(RMAOrderSerialsLlistMetadata))]
+    public  partial class RMAOrderSerialsLlist
     {
     
     	/// <summary>
-    	/// AdminGroup Metadata class
+    	/// RMAOrderSerialsLlist Metadata class
     	/// </summary>
-    	public   class AdminGroupMetadata
+    	public   class RMAOrderSerialsLlistMetadata
     	{
     		    
     		/// <summary>
     		/// Is Enable
     		/// </summary>        
-    	    [Display(Name = "AdminGroup_IsEnable", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "RMAOrderSerialsLlist_IsEnable", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public bool  IsEnable { get; set; }
     
@@ -35,31 +31,37 @@ namespace PurchaseOrderSys.Models
     		/// <summary>
     		/// ID
     		/// </summary>        
-    	    [Display(Name = "AdminGroup_ID", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "RMAOrderSerialsLlist_ID", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public int  ID { get; set; }
     
     		    
     		/// <summary>
-    		/// Name
+    		/// RMASKUID
     		/// </summary>        
-    	    [Display(Name = "AdminGroup_Name", ResourceType = typeof(App_GlobalResources.Resource))]
-            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public string  Name { get; set; }
+    	    [Display(Name = "RMAOrderSerialsLlist_RMASKUID", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  RMASKUID { get; set; }
     
     		    
     		/// <summary>
-    		/// Auth
+    		/// Serials No
     		/// </summary>        
-    	    [Display(Name = "AdminGroup_Auth", ResourceType = typeof(App_GlobalResources.Resource))]
-    		public string  Auth { get; set; }
+    	    [Display(Name = "RMAOrderSerialsLlist_SerialsNo", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  SerialsNo { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Serials QTY
+    		/// </summary>        
+    	    [Display(Name = "RMAOrderSerialsLlist_SerialsQTY", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  SerialsQTY { get; set; }
     
     		    
     		/// <summary>
     		/// Create By
     		/// </summary>        
-    	    [Display(Name = "AdminGroup_CreateBy", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "RMAOrderSerialsLlist_CreateBy", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  CreateBy { get; set; }
@@ -68,27 +70,11 @@ namespace PurchaseOrderSys.Models
     		/// <summary>
     		/// Create At
     		/// </summary>        
-    	    [Display(Name = "AdminGroup_CreateAt", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "RMAOrderSerialsLlist_CreateAt", ResourceType = typeof(App_GlobalResources.Resource))]
             [UIHint("DateTime")]
             [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public System.DateTime  CreateAt { get; set; }
-    
-    		    
-    		/// <summary>
-    		/// Update By
-    		/// </summary>        
-    	    [Display(Name = "AdminGroup_UpdateBy", ResourceType = typeof(App_GlobalResources.Resource))]
-            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public string  UpdateBy { get; set; }
-    
-    		    
-    		/// <summary>
-    		/// Update At
-    		/// </summary>        
-    	    [Display(Name = "AdminGroup_UpdateAt", ResourceType = typeof(App_GlobalResources.Resource))]
-            [UIHint("DateTime")]
-    		public Nullable<System.DateTime>  UpdateAt { get; set; }
     
     		    
     	}

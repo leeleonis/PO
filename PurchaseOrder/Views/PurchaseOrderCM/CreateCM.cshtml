@@ -430,7 +430,7 @@
                     url: "@Url.Action("CMSkuNumberList", "Ajax")",
                     data: function (d) {
                         var Skulist = $("#gebruikerId").val();
-                        d.SID = @Html.Display("SID");
+                        d.SID = "@Html.Display("SID")";
                         d.Skulist = Skulist;
                         d.PurchaseOrderID=@Html.DisplayFor(x => x.PurchaseOrderID);
                         $("#gebruikerId").val(null).trigger('change');

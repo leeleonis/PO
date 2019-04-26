@@ -480,6 +480,12 @@
     <Compile Include="Models\RMAMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\RMAOrderSerialsLlist.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\RMAOrderSerialsLlistMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\RMASerialsLlist.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
     </Compile>

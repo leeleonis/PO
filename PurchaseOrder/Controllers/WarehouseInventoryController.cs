@@ -1132,36 +1132,36 @@ namespace PurchaseOrderSys.Controllers
                 var QTY = item.SerialsQTY;
                 var UpdatedBy = item.CreateBy;
                 string ISType = "";
-                int SID = 0;
+                int? SID = 0;
                 string Warehouse = "";
                 if (item.SerialsType == "TransferIn")
                 {
                     ISType = "Transfer(In)";
-                    SID = item.ID;
+                    SID = item.TransferSKU.TransferID;
                     Warehouse = item.TransferSKU.Transfer.WarehouseTo.Name;
                 }
                 else if (item.SerialsType == "TransferOut")
                 {
                     ISType = "Transfer(Out)";
-                    SID = item.ID;
+                    SID = item.TransferSKU.TransferID;
                     Warehouse = item.PurchaseSKU.PurchaseOrder.WarehousePO.Name;
                 }
                 else if (item.SerialsType == "PO")
                 {
                     ISType = item.PurchaseSKU.PurchaseOrder.POType;
-                    SID = item.ID;
+                    SID = item.PurchaseSKU.PurchaseOrderID;
                     Warehouse = item.PurchaseSKU.PurchaseOrder.WarehousePO.Name;
                 }
                 else if (item.SerialsType == "CM")
                 {
                     ISType = item.PurchaseSKU.CreditMemo.CMType;
-                    SID = item.ID;
+                    SID = item.PurchaseSKU.CreditMemoID;
                     Warehouse = item.PurchaseSKU.CreditMemo.PurchaseOrder.WarehousePO.Name;
                 }
                 else if (item.SerialsType == "Order")
                 {
                     ISType = "Order";
-                    SID = item.ID;
+                    SID = item.OrderID;
                     Warehouse = item.PurchaseSKU.PurchaseOrder.WarehousePO.Name;
                 }
                 SerialsLlistVMList.Add(new SerialsLlistVM { Date = CreateAt, ID = SID, ISType = ISType, QTY = QTY, UpdatedBy = UpdatedBy, Warehouse = Warehouse });
@@ -1177,7 +1177,7 @@ namespace PurchaseOrderSys.Controllers
                 string Warehouse = "";
                 if (item.SerialsType == "RMAIn")
                 {
-                    ISType = "RMAIn";
+                    ISType = "RMA";
                     SID = item.RMASKU.RMAID;
                     Warehouse = item.Warehouse.Name;
                 }

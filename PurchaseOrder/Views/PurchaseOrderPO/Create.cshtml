@@ -666,7 +666,7 @@
                     data: function (d) {
                         var Skulist = $("#gebruikerId").val();
                         d.Skulist = Skulist;
-                        d.SID=@Html.Display("SID"),
+                        d.SID="@Html.Display("SID")",
                         $("#gebruikerId").val(null).trigger('change');
                     }
                 },
@@ -808,7 +808,7 @@
                     type: "post",
                     url: "@Url.Action("CreatNote")",
                     data: {
-                        SID:@Html.Display("SID"),
+                        SID:"@Html.Display("SID")",
                         ID: "@Html.DisplayFor(x=>x.ID)",
                         Note: $("#textnote").val()
                     },
@@ -859,7 +859,7 @@
                     url: "@Url.Action("RemoveData")",
                     data: {
                         IDList: dataList,
-                        SID:@Html.Display("SID"),
+                        SID:"@Html.Display("SID")",
                     },
                     success: function (data) {
                         if (data.status) {
@@ -886,7 +886,7 @@
                     url: "@Url.Action("EditSKUData")",
                     data: {
                         IDList: dataList,
-                        SID:@Html.Display("SID")
+                        SID:"@Html.Display("SID")"
                     },
                     success: function (data) {
                         if (data.status) {
@@ -921,7 +921,7 @@
                 type: "post",
                 url: "@Url.Action("SkuNumberListEdit", "Ajax")",
                 data: {
-                    SID:@Html.Display("SID"),
+                    SID:"@Html.Display("SID")",
                     SKU: SKU,
                     type: type,
                     oval: oval,

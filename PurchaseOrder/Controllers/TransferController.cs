@@ -284,6 +284,7 @@ namespace PurchaseOrderSys.Controllers
                     //一般
                     var nSerialsLlist = ReceiveVM.SerialsLlist.Select(x => new SerialsLlist
                     {
+                        IsEnable = true,
                         TransferSKUID = item.ID,
                         PID = x.ID,
                         CreateAt = CreateAt,
@@ -309,6 +310,7 @@ namespace PurchaseOrderSys.Controllers
                     //RMA
                     var nRMASerialsLlist = ReceiveVM.RMASerialsLlist.Select(x => new SerialsLlist
                     {
+                        IsEnable = true,
                         TransferSKUID = item.ID,
                         PID = x.ID,
                         CreateAt = CreateAt,
@@ -384,6 +386,7 @@ namespace PurchaseOrderSys.Controllers
                 {
                     var nSerialsLlist = PrepVM.SerialsLlist.Select(x => new SerialsLlist
                     {
+                        IsEnable = true,
                         TransferSKUID = item.ID,
                         PID = x.ID,
                         CreateAt = CreateAt,

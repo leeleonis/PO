@@ -447,6 +447,7 @@ namespace PurchaseOrderSys.Controllers
                 {
                     var nSerialsLlist = new SerialsLlist
                     {
+                        IsEnable = true,
                         PurchaseSKUID = item.PurchaseSKUID,
                         PID = item.ID,
                         SerialsType = "CM",
@@ -768,6 +769,7 @@ namespace PurchaseOrderSys.Controllers
                             var dt = DateTime.UtcNow;
                             var nSerialsLlist = new SerialsLlist
                             {
+                                IsEnable = true,
                                 PurchaseSKUID = PurchaseSKUID,
                                 PID = PID,
                                 SerialsType = "CM",

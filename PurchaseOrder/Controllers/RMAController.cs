@@ -76,10 +76,10 @@ namespace PurchaseOrderSys.Controllers
                 order.OrderCreationSourceApplication = SCService.OrderCreationSourceApplicationType.PointOfSale;
                 if (SCWS.Update_Order(order))
                 {
-                    int RMAId;
+                    int RMAId = 0;
                     if (SCRMA == null)
                     {
-                        RMAId= SCWS.Create_RMA(order.ID);//建立RMAID
+                        RMAId = SCWS.Create_RMA(order.ID);//建立RMAID
                     }
                     else
                     {
@@ -109,7 +109,7 @@ namespace PurchaseOrderSys.Controllers
                             var ReasonID = 1;
                             var Reason = SKURMAList.FirstOrDefault().Reason;
                             int.TryParse(Reason, out ReasonID);
-                            int RMAItemID;
+                            int RMAItemID = 0;
                             if (SCRMA == null)
                             {
                                 RMAItemID = SCWS.Create_RMA_Item(OrderID, OrderItemID, RMAId, Skuitem.QTY, ReasonID, "");//建立每個SKU要退貨的數量原因，並取回ID
@@ -145,6 +145,15 @@ namespace PurchaseOrderSys.Controllers
                                     CreateBy = UserBy,
                                     CreateAt = CreateAt
                                 };
+                                newRMASKU.RMAOrderSerialsLlist.Add(
+                                    new RMAOrderSerialsLlist
+                                    {
+                                        IsEnable = true,
+                                        SerialsNo = RMAListitem.Serial,
+                                        SerialsQTY = 1,
+                                        CreateBy = UserBy,
+                                        CreateAt = CreateAt
+                                    });
                                 newRMA.RMASKU.Add(newRMASKU);
                             }
                         }
@@ -206,9 +215,22 @@ namespace PurchaseOrderSys.Controllers
                                     var sku = SKU.SkuLang.Where(x => x.LangID == "en-US" && x.Sku == SKUNo).FirstOrDefault();
                                     var ProductName = sku?.Name;
                                     var UPC = sku?.GetSku.UPC + sku?.GetSku.EAN;
+                                    var Serial = "";
+
+
+
                                     for (int i = 0; i < SKUitem.QTY; i++)
                                     {
-                                        RMAModelVMList.Add(new RMAModelVM { ck = index, Order = item.OrderID, SourceID = item.OrderSourceOrderId, QTY = 1, SKU = SKUNo, ProductName = ProductName, UPC = UPC });
+                                        try
+                                        {
+                                            Serial = SKUitem.Serials[i];
+                                        }
+                                        catch 
+                                        {
+
+
+                                        }
+                                        RMAModelVMList.Add(new RMAModelVM { ck = index, Order = item.OrderID, SourceID = item.OrderSourceOrderId, QTY = 1, SKU = SKUNo, ProductName = ProductName, UPC = UPC, Serial= Serial });
                                         index++;
                                     }
 
@@ -303,12 +325,13 @@ namespace PurchaseOrderSys.Controllers
                 SKU = x.SkuNo,
                 QTYOrdered = x.QTYOrdered,
                 ProductName = x.SKU.SkuLang.Where(y => y.LangID == "en-US").FirstOrDefault()?.Name,
-                SerialsNo = x.RMASerialsLlist.FirstOrDefault()?.SerialsNo,
+                ReturnedSerialsNo = x.RMASerialsLlist.FirstOrDefault()?.SerialsNo,
+                OrderSerialsNo = x.RMAOrderSerialsLlist.FirstOrDefault()?.SerialsNo,
                 UPCEAN = x.SKU.UPC + "/" + x.SKU.EAN,
                 Reason = x.Reason,
                 TrWarehouse = x.RMASerialsLlist.FirstOrDefault()?.Warehouse.Name,
                 Warehouse = x.WarehouseID,
-                UnitPrice = (x.UnitPrice * x.RMASerialsLlist.Sum(y=>y.SerialsQTY)) ?? 0
+                UnitPrice = (x.UnitPrice * x.RMASerialsLlist.Sum(y => y.SerialsQTY)) ?? 0
             });
             Session["RMAEdit" + id] = RMASKUList.ToList();
             return View(RMA);
@@ -323,6 +346,8 @@ namespace PurchaseOrderSys.Controllers
             OldRMA.RestockingFee = RMA.RestockingFee;
             OldRMA.ReturnShippingCos = RMA.ReturnShippingCos;
             OldRMA.OtherCosts = RMA.OtherCosts;
+            OldRMA.ReturnTracking = RMA.ReturnTracking;
+            OldRMA.Carrier = RMA.Carrier;
             OldRMA.UpdateBy = UserBy;
             OldRMA.UpdateAt = DateTime.UtcNow;
             foreach (var RMAListitem in RMAList)
@@ -490,6 +515,7 @@ namespace PurchaseOrderSys.Controllers
                             var dt = DateTime.UtcNow;
                             var nSerialsLlistIn = new RMASerialsLlist
                             {
+                                IsEnable = true,
                                 WarehouseID = WarehouseID,
                                 Reason = Reason,
                                 SerialsType = "RMAIn",
@@ -547,8 +573,6 @@ namespace PurchaseOrderSys.Controllers
                         RMASKU.UpdateBy = UserBy;
                         db.SaveChanges();
                     }
-
-
                 }
                 var RMA = db.RMA.Find(ID);
 
@@ -559,7 +583,8 @@ namespace PurchaseOrderSys.Controllers
                     SKU = x.SkuNo,
                     QTYOrdered = x.QTYOrdered,
                     ProductName = x.SKU.SkuLang.Where(y => y.LangID == "en-US").FirstOrDefault()?.Name,
-                    SerialsNo = x.RMASerialsLlist.FirstOrDefault()?.SerialsNo,
+                    ReturnedSerialsNo = x.RMASerialsLlist.FirstOrDefault()?.SerialsNo,
+                    OrderSerialsNo = x.RMAOrderSerialsLlist.FirstOrDefault()?.SerialsNo,
                     UPCEAN = x.SKU.UPC + "/" + x.SKU.EAN,
                     Reason = x.Reason,
                     TrWarehouse = x.RMASerialsLlist.FirstOrDefault()?.Warehouse.Name,

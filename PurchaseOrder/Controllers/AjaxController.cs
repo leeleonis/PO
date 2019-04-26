@@ -577,7 +577,8 @@ namespace PurchaseOrderSys.Controllers
                     QTY = Serialsitem.QTY;
                 }
                 var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == Serialsitem.SerialsNo);//檢查是否有序號
-                var PurchaseSKU = db.PurchaseSKU.Where(x => x.SkuNo == Serialsitem.SkuNo && x.IsEnable);
+                var PurchaseSKUs = db.PurchaseSKU.Where(x => x.SkuNo == Serialsitem.SkuNo && x.PurchaseOrder.IsEnable && x.IsEnable);
+                PurchaseSKUs = PurchaseSKUs.Where(x => x.SerialsLlist.Where(y => y.SerialsQTY > 0 && (y.SerialsType == "PO" || y.SerialsType == "TransferIn") && !y.SerialsLlistC.Any()).Any());
                 if (SerialsLlist.Any())
                 {
                     SerialsLlist = SerialsLlist.Where(x => x.SerialsQTY > 0 && (x.SerialsType == "PO" || x.SerialsType == "TransferIn") && !x.SerialsLlistC.Any());//PO和TransferIn才能出貨
@@ -585,6 +586,7 @@ namespace PurchaseOrderSys.Controllers
                     {
                         var nSerials = new SerialsLlist
                         {
+                            IsEnable = true,
                             OrderID = Serialsitem.OrderID,
                             PurchaseSKUID = SerialsLlist.FirstOrDefault().PurchaseSKUID,
                             PID = SerialsLlist.FirstOrDefault().ID,
@@ -602,24 +604,31 @@ namespace PurchaseOrderSys.Controllers
                         result.SetError(Serialsitem.SerialsNo + "：此序號已經出貨");
                     }
                 }
-                else if (PurchaseSKU.Any())
+                else if (PurchaseSKUs.Any())
                 {
-                    //if (!PurchaseSKU.Where(x=>x.SerialsLlist.Where(y=>y.SerialsNo== Serialsitem.SerialsNo).Any()).Any())
-                    //{
-
-                    //}
-                    var nSerials = new SerialsLlist
+                    var PurchaseSKU = PurchaseSKUs.FirstOrDefault();
+                    var PSerialsLlist = PurchaseSKU.SerialsLlist.Where(x => x.SerialsQTY > 0 && (x.SerialsType == "PO" || x.SerialsType == "TransferIn") && !x.SerialsLlistC.Any()).FirstOrDefault();//PO和TransferIn才能出貨
+                    if (PSerialsLlist != null)
                     {
-                        OrderID = Serialsitem.OrderID,
-                        PurchaseSKUID = PurchaseSKU.FirstOrDefault().ID,
-                        SerialsNo = Serialsitem.SerialsNo,
-                        SerialsType = "Order",
-                        SerialsQTY = QTY,
-                        CreateAt = DateTime.UtcNow,
-                        CreateBy = "APIUser",
-                    };
-                    db.SerialsLlist.Add(nSerials);
-                    db.SaveChanges();
+                        var nSerials = new SerialsLlist
+                        {
+                            IsEnable = true,
+                            OrderID = Serialsitem.OrderID,
+                            PurchaseSKUID = PurchaseSKUs.FirstOrDefault().ID,
+                            PID = PSerialsLlist.ID,
+                            SerialsNo = PSerialsLlist.SerialsNo,
+                            SerialsType = "Order",
+                            SerialsQTY = QTY,
+                            CreateAt = DateTime.UtcNow,
+                            CreateBy = "APIUser",
+                        };
+                        db.SerialsLlist.Add(nSerials);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        NoDataList.Add(Serialsitem.OrderID + "：(SKU：" + Serialsitem.SkuNo + ";Serial：無序號產品)");
+                    }
                 }
                 else
                 {
@@ -959,7 +968,7 @@ namespace PurchaseOrderSys.Controllers
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-        //[HttpPost]
+       // [HttpPost]
         public ActionResult CreateALLRMA(int OrderID, int ReturnWarehouseID)
         {
             AjaxResult result = new AjaxResult();
@@ -972,7 +981,7 @@ namespace PurchaseOrderSys.Controllers
                 try
                 {
                     //建立SC上的RMA資料
-                    //SC_WebService SCWS = new SC_WebService("tim@weypro.com", "timfromweypro");
+                    SC_WebService SCWS = new SC_WebService("tim@weypro.com", "timfromweypro");
                     var order = SCWS.Get_OrderData(OrderID).Order;//去SC抓訂單資料
                     var SCRMA = SCWS.Get_RMA_by_OrderID(OrderID);//檢查SC上是否有開過RMA
                     order.OrderCreationSourceApplication = SCService.OrderCreationSourceApplicationType.PointOfSale;
@@ -1066,6 +1075,7 @@ namespace PurchaseOrderSys.Controllers
                                 };
                                 newRMASKU.RMASerialsLlist.Add(new RMASerialsLlist
                                 {
+                                    IsEnable = true,
                                     SerialsNo = Serialitem,
                                     SerialsQTY = 1,
                                     Reason = Reason.ToString(),
@@ -1075,6 +1085,14 @@ namespace PurchaseOrderSys.Controllers
                                     CreateAt = dt,
                                     UpdateBy = "RMAAPI",
                                     UpdateAt = dt,
+                                });
+                                newRMASKU.RMAOrderSerialsLlist.Add(new RMAOrderSerialsLlist
+                                {
+                                    IsEnable = true,
+                                    SerialsNo = Serialitem,
+                                    SerialsQTY = 1,
+                                    CreateBy = "RMAAPI",
+                                    CreateAt = dt,
                                 });
                                 newRMA.RMASKU.Add(newRMASKU);
                             }

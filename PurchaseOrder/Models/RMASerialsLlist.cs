@@ -39,6 +39,7 @@ namespace PurchaseOrderSys.Models
         public string NewSkuNo { get; set; }
         public string NewSKUCreateBy { get; set; }
         public Nullable<System.DateTime> NewSKUCreateAt { get; set; }
+        public bool IsEnable { get; set; }
     
         public virtual RMASKU RMASKU { get; set; }
         public virtual Warehouse Warehouse { get; set; }
