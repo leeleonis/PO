@@ -246,38 +246,41 @@ namespace PurchaseOrderSys.Controllers
                                         db.SaveChanges();
                                     }
 
-                                    sku = new SKU()
+                                    using (StockKeepingUnit SKU = new StockKeepingUnit())
                                     {
-                                        IsEnable = true,
-                                        SkuID = item.SKU,
-                                        Company = 163,
-                                        Category = category.ID,
-                                        Brand = brand.ID,
-                                        Condition = CheckCondition(conditionList, item.SKU),
-                                        UPC = item.UPC,
-                                        Type = (byte)EnumData.SkuType.Single,
-                                        eBayTitle = JsonConvert.SerializeObject(eBayTitle),
-                                        Status = Convert.ToByte(item.IsActive),
-                                        CreateAt = DateTime.UtcNow,
-                                        CreateBy = "System Scheduling"
-                                    };
+                                        sku = new SKU()
+                                        {
+                                            IsEnable = true,
+                                            SkuID = item.SKU,
+                                            Company = 163,
+                                            Category = category.ID,
+                                            Brand = brand.ID,
+                                            Condition = CheckCondition(conditionList, item.SKU),
+                                            UPC = item.UPC,
+                                            Type = (byte)EnumData.SkuType.Single,
+                                            eBayTitle = JsonConvert.SerializeObject(eBayTitle),
+                                            Status = Convert.ToByte(item.IsActive),
+                                            CreateAt = DateTime.UtcNow,
+                                            CreateBy = "System Scheduling"
+                                        };
+                                        
+                                        if (sku.SkuID.Contains('_')) { sku.ParentShadow = sku.SkuID.Split('_')[0]; }
 
-                                    if (sku.SkuID.Contains('_')) { sku.ParentShadow = sku.SkuID.Split('_')[0]; }
+                                        var langData = new SkuLang()
+                                        {
+                                            Sku = sku.SkuID,
+                                            LangID = LangID,
+                                            Name = item.Name,
+                                            Model = item.ModelNumber,
+                                            Description = item.Description,
+                                            PackageContent = item.Misc01,
+                                            SpecContent = item.Specifications,
+                                            CreateAt = sku.CreateAt,
+                                            CreateBy = sku.CreateBy
+                                        };
 
-                                    sku.SkuLang.Add(new SkuLang()
-                                    {
-                                        Sku = sku.SkuID,
-                                        LangID = LangID,
-                                        Name = item.Name,
-                                        Model = item.ModelNumber,
-                                        Description = item.Description,
-                                        PackageContent = item.Misc01,
-                                        SpecContent = item.Specifications,
-                                        CreateAt = sku.CreateAt,
-                                        CreateBy = sku.CreateBy
-                                    });
-
-                                    db.SKU.Add(sku);
+                                        sku = SKU.CreateSku(sku, langData);
+                                    }
                                 }
                                 catch(Exception e)
                                 {

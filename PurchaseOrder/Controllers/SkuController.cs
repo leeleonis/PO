@@ -71,6 +71,14 @@ namespace PurchaseOrderSys.Controllers
                 try
                 {
                     SKU.CreateSkuToNeto();
+                    if (sku.Type.Equals((byte)EnumData.SkuType.Single) && sku.Condition.Equals(1))
+                    {
+                        foreach (var condition in db.Condition.Where(c => c.IsEnable && !c.ID.Equals(sku.Condition)).ToList())
+                        {
+                            SKU.SetSkuData(sku.SkuID + condition.Suffix);
+                            SKU.CreateSkuToNeto();
+                        }
+                    }
                     SKU.SC_Api = new SellerCloud_WebService.SC_WebService("tim@weypro.com", "timfromweypro");
                     SKU.CreateSkuToSC();
                 }
