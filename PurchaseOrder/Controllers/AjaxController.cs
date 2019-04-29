@@ -181,35 +181,48 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult GetCMSkuNumberList(int? draw, int? start, int? length, int ID)
         {
             var PurchaseSKU = db.PurchaseSKU.Where(x => x.CreditMemoID == ID && x.IsEnable).ToList();
-            var odataList = PurchaseSKU.Select(x => new CMSKUVM
+            foreach (var item in PurchaseSKU)
             {
-                ID = x.ID,
-                ck = x.SkuNo,
-                sk = x.SkuNo,
-                SKU = x.SkuNo,
-                Name = x.Name,
-                VendorSKU = x.VendorSKU,
-                UPCEAN = "",
-                QTYOrdered = x.QTYOrdered,
-                QTYReceived = x.QTYReceived,
-                QTYReturned = x.QTYReturned,
-                Serial = x.SerialsLlist.Any() ? "Yes" : "No",
-                SerialQTY = x.SerialsLlist.Count(),
-                SerialTracking = x.SKU.SerialTracking,
-                Url = x.SKU.Logistic?.ImagePath,
-                Size = GetSize(x)
-            }).ToList();
-            int recordsTotal = odataList.Count();
-            var returnObj =
-            new
+                var ss = item.SKU;
+            }
+            try
             {
-                draw = draw,
-                recordsTotal = recordsTotal,
-                recordsFiltered = recordsTotal,
-                data = odataList//分頁後的資料 
-            };
-            return Json(returnObj, JsonRequestBehavior.AllowGet);
+                var odataList = PurchaseSKU.Select(x => new CMSKUVM
+                {
+                    ID = x.ID,
+                    ck = x.SkuNo,
+                    sk = x.SkuNo,
+                    SKU = x.SkuNo,
+                    Name = x.Name,
+                    VendorSKU = x.VendorSKU,
+                    UPCEAN = "",
+                    QTYOrdered = x.QTYOrdered,
+                    QTYReceived = x.QTYReceived,
+                    QTYReturned = x.QTYReturned,
+                    Serial = x.SerialsLlist.Any() ? "Yes" : "No",
+                    SerialQTY = x.SerialsLlist.Count(),
+                    SerialTracking = x.SKU.SerialTracking,
+                    Url = x.SKU.Logistic?.ImagePath,
+                    Size = GetSize(x)
+                }).ToList();
+                int recordsTotal = odataList.Count();
+                var returnObj =
+                new
+                {
+                    draw = draw,
+                    recordsTotal = recordsTotal,
+                    recordsFiltered = recordsTotal,
+                    data = odataList//分頁後的資料 
+                };
+                return Json(returnObj, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+
+                return Json(null, JsonRequestBehavior.AllowGet);
+            }
         }
+    
         public ActionResult TSkuNumberList(int? draw, int? start, int? length, string[] Skulist, int? FromWID, string SID)
         {
             var odataList = (List<TranSKUVM>)Session["TSkuNumberList" + SID];

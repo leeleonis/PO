@@ -319,6 +319,15 @@ namespace PurchaseOrderSys.Models
             }
             return list;
         }
+        public static Dictionary<string, string> Renewitem()
+        {
+            var list = new Dictionary<string, string>();
+            using (var db = new PurchaseOrderEntities())
+            {
+                list = db.Condition.ToDictionary(y => y.Suffix ?? "", y => y.ConditionLang.Where(x => x.LangID == "en-US").First()?.Name);
+            }
+            return list;
+        }
         public static Dictionary<string, string> RMAStatusList()
         {
             return new Dictionary<string, string>()

@@ -626,6 +626,7 @@
           <Property Name="RestockingFee" Type="decimal" Precision="18" Scale="2" />
           <Property Name="OtherCosts" Type="decimal" Precision="18" Scale="2" />
           <Property Name="ReturnShippingCos" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="SCUserID" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="RMAOrderSerialsLlist">
           <Key>
@@ -4397,6 +4398,7 @@
           <Property Name="ReturnShippingCos" Type="Decimal" Precision="18" Scale="2" />
           <NavigationProperty Name="PurchaseNote" Relationship="PurchaseOrderModel.FK_PurchaseNote_RMA" FromRole="RMA" ToRole="PurchaseNote" />
           <NavigationProperty Name="CreditMemo" Relationship="PurchaseOrderModel.FK_CreditMemo_RMA" FromRole="RMA" ToRole="CreditMemo" />
+          <Property Name="SCUserID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_RMA_Warehouse">
           <End Type="PurchaseOrderModel.Warehouse" Role="Warehouse" Multiplicity="0..1" />
@@ -5579,6 +5581,7 @@
           <EntitySetMapping Name="RMA">
             <EntityTypeMapping TypeName="PurchaseOrderModel.RMA">
               <MappingFragment StoreEntitySet="RMA">
+                <ScalarProperty Name="SCUserID" ColumnName="SCUserID" />
                 <ScalarProperty Name="ReturnShippingCos" ColumnName="ReturnShippingCos" />
                 <ScalarProperty Name="OtherCosts" ColumnName="OtherCosts" />
                 <ScalarProperty Name="RestockingFee" ColumnName="RestockingFee" />

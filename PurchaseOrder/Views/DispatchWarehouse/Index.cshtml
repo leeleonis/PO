@@ -7,6 +7,7 @@
     var ShippingList = new PurchaseOrderSys.Api.Shipping_API().ShippingList();
     var SummaryList = new List<string> { "Shippingmethods", "3PWarehouse", "Marketplace", "SCID" };
 }
+
 <style>
     .ediv {
         overflow: hidden;
@@ -108,8 +109,12 @@
                                                                                                 {
 
                                                                                                     var Valarr = WarehouseSummaryitem.Val.Split(',');
-                                                                                                    var ShippingListName = ShippingList.data.shippingMethod.Where(x => Valarr.Contains(x.value.ToString())).Select(x => x.text);
-                                                                                                    textVal = string.Join(",", ShippingListName);
+                                                                                                    if (ShippingList.status)
+                                                                                                    {
+                                                                                                        var ShippingListName = ShippingList.data.shippingMethod.Where(x => Valarr.Contains(x.value.ToString())).Select(x => x.text);
+                                                                                                        textVal = string.Join(",", ShippingListName);
+                                                                                                    }
+
                                                                                                 }
                                                                                             }
                                                                                             <tr>
@@ -221,6 +226,15 @@
             $('#DataGrid').DataTable();
         });
     </script>
+@if (!ShippingList.status)
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            alert("@Html.Raw(ShippingList.message)");
+        });
+      
+    </script>
+}
 }
 
 

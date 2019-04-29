@@ -1250,6 +1250,7 @@ namespace PurchaseOrderSys.Models
     }
     public class RMAVM : RMA
     {
+        public int? QID { get; set; }
         public IEnumerable<RMA> RMAList { get; set; }
     }
 
@@ -1283,6 +1284,7 @@ namespace PurchaseOrderSys.Models
         /// 運費
         /// </summary>
         public decimal? FinalShippingFee { get; set; }
+        public string eBayUserID { get; set; }
     }
     public class RMAModelVM
     {

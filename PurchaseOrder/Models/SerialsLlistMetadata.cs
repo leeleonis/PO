@@ -123,15 +123,7 @@ namespace PurchaseOrderSys.Models
     		/// Order ID
     		/// </summary>        
     	    [Display(Name = "SerialsLlist_OrderID", ResourceType = typeof(App_GlobalResources.Resource))]
-    		public Nullable<int>  OrderID { get; set; }
-    
-    		    
-    		/// <summary>
-    		/// RMAID
-    		/// </summary>        
-    	    [Display(Name = "SerialsLlist_RMAID", ResourceType = typeof(App_GlobalResources.Resource))]
-    		public Nullable<int>  RMAID { get; set; }
-    
+    		public Nullable<int>  OrderID { get; set; }  
     		    
     		/// <summary>
     		/// Serials Type

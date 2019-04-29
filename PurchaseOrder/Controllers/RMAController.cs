@@ -36,12 +36,22 @@ namespace PurchaseOrderSys.Controllers
             {
                 RMAList = RMAList.Where(x => x.SourceID == RMAVM.SourceID);
             }
-           
-            //if (RMAVM.ID.HasValue)
-            //{
-
-            //}
-
+            if (!string.IsNullOrWhiteSpace(RMAVM.SourceCaseID))
+            {
+                RMAList = RMAList.Where(x => x.SourceCaseID == RMAVM.SourceCaseID);
+            }
+            if (RMAVM.QID.HasValue)
+            {
+                RMAList = RMAList.Where(x => x.ID == RMAVM.QID);
+            }
+            if (!string.IsNullOrWhiteSpace(RMAVM.SCUserID))
+            {
+                RMAList = RMAList.Where(x => x.SCUserID == RMAVM.SCUserID);
+            }
+            if (!string.IsNullOrWhiteSpace(RMAVM.SCRMA))
+            {
+                RMAList = RMAList.Where(x => x.SCRMA == RMAVM.SCRMA);
+            }
             RMAVM.RMAList = RMAList.OrderByDescending(x => x.ID);
             return View(RMAVM);
         }
@@ -96,6 +106,7 @@ namespace PurchaseOrderSys.Controllers
                         WarehouseID = WarehouseID,
                         FinalShippingFee = FinalShippingFee,
                         SCRMA = RMAId.ToString(),
+                        SCUserID = OrderItemDataitem.eBayUserID,
                         CreateBy = UserBy,
                         CreateAt = CreateAt
                     };
@@ -318,21 +329,35 @@ namespace PurchaseOrderSys.Controllers
         {
             var RMA = db.RMA.Find(id);
 
-            var RMASKUList = RMA.RMASKU.Where(x => x.IsEnable).Select(x => new RMAEdit
+            var RMASKUList = new List<RMAEdit>();
+            foreach (var item in RMA.RMASKU.Where(x => x.IsEnable))
             {
-                ID = x.ID,
-                Model = "L",
-                SKU = x.SkuNo,
-                QTYOrdered = x.QTYOrdered,
-                ProductName = x.SKU.SkuLang.Where(y => y.LangID == "en-US").FirstOrDefault()?.Name,
-                ReturnedSerialsNo = x.RMASerialsLlist.FirstOrDefault()?.SerialsNo,
-                OrderSerialsNo = x.RMAOrderSerialsLlist.FirstOrDefault()?.SerialsNo,
-                UPCEAN = x.SKU.UPC + "/" + x.SKU.EAN,
-                Reason = x.Reason,
-                TrWarehouse = x.RMASerialsLlist.FirstOrDefault()?.Warehouse.Name,
-                Warehouse = x.WarehouseID,
-                UnitPrice = (x.UnitPrice * x.RMASerialsLlist.Sum(y => y.SerialsQTY)) ?? 0
-            });
+                var nRMAEdit = new RMAEdit();
+
+                var RMASerial = item.RMASerialsLlist.FirstOrDefault();
+
+                nRMAEdit.ID = item.ID;
+                nRMAEdit.Model = "L";
+                if (RMASerial != null && !string.IsNullOrWhiteSpace( RMASerial.NewSkuNo))
+                {
+                    nRMAEdit.SKU = RMASerial.NewSkuNo;
+                }
+                else
+                {
+                    nRMAEdit.SKU = item.SkuNo;
+                }
+             
+                nRMAEdit.QTYOrdered = item.QTYOrdered;
+                nRMAEdit.ProductName = item.SKU.SkuLang.Where(y => y.LangID == "en-US").FirstOrDefault()?.Name;
+                nRMAEdit.ReturnedSerialsNo = RMASerial?.SerialsNo;
+                nRMAEdit.OrderSerialsNo = RMASerial?.SerialsNo;
+                nRMAEdit.UPCEAN = item.SKU.UPC + "/" + item.SKU.EAN;
+                nRMAEdit.Reason = item.Reason;
+                nRMAEdit.TrWarehouse = RMASerial?.Warehouse.Name;
+                nRMAEdit.Warehouse = item.WarehouseID;
+                nRMAEdit.UnitPrice = (item.UnitPrice * item.RMASerialsLlist.Sum(y => y.SerialsQTY)) ?? 0;
+                RMASKUList.Add(nRMAEdit);
+            }
             Session["RMAEdit" + id] = RMASKUList.ToList();
             return View(RMA);
         }
@@ -386,10 +411,11 @@ namespace PurchaseOrderSys.Controllers
             {
                 foreach (var item in RMASerialsLlist)
                 {
-                    item.NewSkuNo = NewSKU;
+                    item.NewSkuNo = RMASKU.SkuNo + NewSKU;
                     item.NewSKUCreateAt = dt;
                     item.NewSKUCreateBy = UserBy;
                 }
+                db.SaveChanges();
                 return Json(new { status = true }, JsonRequestBehavior.AllowGet);
             }
 

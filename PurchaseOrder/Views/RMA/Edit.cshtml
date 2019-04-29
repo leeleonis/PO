@@ -7,6 +7,7 @@
     var CompanyDDL = EnumData.CompanyDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var ChannelList = EnumData.ChannelList().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var RMAReasonList = EnumData.RMAReasonList();
+    var Renewitem = EnumData.Renewitem().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
 }
 <style>
     .img {
@@ -297,9 +298,12 @@
     </section>
 </div>
 <div id="dialog">
-    <select id="gebruikerId" name="gebruikerId" class="form-control" style="width:50%"></select>
+    <div class="col-sm-9 col-lg-6">
+        @Html.DropDownList("Renewitem", Renewitem, htmlAttributes: new { @class = "form-control" })
+    </div>
     <input type="hidden" id="ChangeSKUID" />
-    <button type="button" id="ChangeSKU">Change SKU</button>
+    <input type="hidden" id="oSKU" />
+    <button type="button" id="ChangeSKU">Renew item</button>
 
 </div>
 @section pagespecific {
@@ -415,7 +419,7 @@
                         data: "ID",
                         render: function (data, type, row, meta) {
                             var html = " <a href='@Url.Action("Returnedserials")?ID=" + data + "' class='btn btn-default btn-sm'>Receive returns</a>";
-                            html += " <a val='" + data + "' class='btn btn-default btn-sm ChangeSKU'>Change SKU</a>";
+                            html += " <a val='" + data + "'  oSKU='" + row.SKU + "' class='btn btn-default btn-sm ChangeSKU'>Renew item</a>";
                             return html;
                         }
                     }
@@ -557,7 +561,9 @@
             });
             $("body").on("click", ".ChangeSKU", function () {
                 var val = $(this).attr("val");
+                var oSKU = $(this).attr("oSKU");
                 $("#ChangeSKUID").val(val);
+                $("#oSKU").val(oSKU);
                 $("#dialog").dialog({
                     title: "Change SKU"
                 });
@@ -566,8 +572,9 @@
             });
             $("#ChangeSKU").click(function () {
                 var OldSKU = $("#ChangeSKUID").val();
-                var NewSKU = $("#gebruikerId").val();
-                alert(NewSKU);
+                var NewSKU = $("#Renewitem").val();
+                var oSKU = $("#oSKU").val();
+                alert("新的SKU：" + oSKU + NewSKU);
                 $.ajax({
                     traditional: true,
                     type: "post",
@@ -578,37 +585,13 @@
                     },
                     success: function (data) {
                         if (data.status) {
-                            //$("#addimg").val("");
-                            //$("#textnotelog li").remove();
-                            datalistSet(data);
-
+                            window.location.reload();
                         }
                         else {
                             alert(data.Errmsg);
                         }
                     }
                 });
-            });
-            $("#gebruikerId").select2({
-                minimumInputLength: 1,
-                placeholder: "Search",
-                allowClear: true,
-                multiple: false,
-                ajax: {
-                    url: "@Url.Action("SkuNumberGet", "Ajax")",
-                    dataType: 'json',
-                    delay: 0,
-                    data: function (term) {
-                        return {
-                            Search: term.term
-                        };
-                    },
-                    processResults: function (data) {
-                        return {
-                            results: data.items
-                        };
-                    }
-                }
             });
             $("#UploadImage").click(function () {
                 var data = new FormData();
