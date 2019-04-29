@@ -140,7 +140,7 @@ namespace PurchaseOrderSys.Controllers
             int total = 0;
             List<object> dataList = new List<object>();
 
-            var BrandFilter = db.Brand.AsQueryable();
+            var BrandFilter = db.Brand.Where(b => b.IsEnable).AsQueryable();
             if (filter.ID.HasValue) BrandFilter = BrandFilter.Where(b => b.ID.Equals(filter.ID.Value));
             if (filter.NetoID.HasValue) BrandFilter = BrandFilter.Where(b => b.NetoID.Equals(filter.NetoID.Value));
             if (!string.IsNullOrEmpty(filter.Name)) BrandFilter = BrandFilter.Where(b => b.Name.Equals(filter.Name));
