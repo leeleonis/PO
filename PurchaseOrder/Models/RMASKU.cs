@@ -39,6 +39,7 @@ namespace PurchaseOrderSys.Models
         public string Reason { get; set; }
         public Nullable<decimal> UnitPrice { get; set; }
         public Nullable<int> RMAItemID { get; set; }
+        public Nullable<int> CreditMemoID { get; set; }
     
         public virtual RMA RMA { get; set; }
         public virtual Warehouse Warehouse { get; set; }

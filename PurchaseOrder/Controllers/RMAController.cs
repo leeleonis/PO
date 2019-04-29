@@ -339,6 +339,8 @@ namespace PurchaseOrderSys.Controllers
         [HttpPost]
         public ActionResult Edit(RMA RMA, List<RMAModelPost> RMAList)
         {
+            var dt = DateTime.UtcNow;
+
             var OldRMA = db.RMA.Find(RMA.ID);
             OldRMA.Status = RMA.Status;
             OldRMA.Action = RMA.Action;
@@ -349,7 +351,7 @@ namespace PurchaseOrderSys.Controllers
             OldRMA.ReturnTracking = RMA.ReturnTracking;
             OldRMA.Carrier = RMA.Carrier;
             OldRMA.UpdateBy = UserBy;
-            OldRMA.UpdateAt = DateTime.UtcNow;
+            OldRMA.UpdateAt = dt;
             foreach (var RMAListitem in RMAList)
             {
                 foreach (var RMASKUitem in OldRMA.RMASKU.Where(x => x.IsEnable))
@@ -360,13 +362,13 @@ namespace PurchaseOrderSys.Controllers
                         {
                             RMASKUitem.Reason = RMAListitem.Reason;
                             RMASKUitem.UpdateBy = UserBy;
-                            RMASKUitem.UpdateAt = DateTime.UtcNow;
+                            RMASKUitem.UpdateAt = dt;
                         }
                         if (RMAListitem.Warehouse.HasValue && RMAListitem.Warehouse != RMASKUitem.WarehouseID)
                         {
                             RMASKUitem.WarehouseID = RMAListitem.Warehouse;
                             RMASKUitem.UpdateBy = UserBy;
-                            RMASKUitem.UpdateAt = DateTime.UtcNow;
+                            RMASKUitem.UpdateAt = dt;
                         }
                     }
                 }
@@ -375,9 +377,26 @@ namespace PurchaseOrderSys.Controllers
             return RedirectToAction("Index");
         }
         [HttpPost]
-        public ActionResult ChangeSKU(int OldSKU, string[] NewSKU)
+        public ActionResult ChangeSKU(int OldSKU, string NewSKU)
         {
-            return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+            var RMASKU = db.RMASKU.Find(OldSKU);
+            var dt = DateTime.UtcNow;
+            var RMASerialsLlist = RMASKU.RMASerialsLlist;
+            if (RMASerialsLlist.Any())
+            {
+                foreach (var item in RMASerialsLlist)
+                {
+                    item.NewSkuNo = NewSKU;
+                    item.NewSKUCreateAt = dt;
+                    item.NewSKUCreateBy = UserBy;
+                }
+                return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+            }
+
+            else
+            {
+                return Json(new { status = false , Errmsg ="沒有可轉換的序號"}, JsonRequestBehavior.AllowGet);
+            }
         }
         [HttpPost]
         public ActionResult CreatNote(int? ID, string SID, string Note)
