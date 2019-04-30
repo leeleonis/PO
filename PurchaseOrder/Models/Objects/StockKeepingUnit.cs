@@ -79,6 +79,7 @@ namespace PurchaseOrderSys.Models
         {
             if (string.IsNullOrEmpty(newSku.SkuID)) newSku.SkuID = GetNewSku(newSku.Category, newSku.Brand);
 
+            newSku.SkuID = newSku.SkuID.Trim();
             newLang.Sku = newSku.SkuID;
             newLang.CreateAt = newSku.CreateAt;
             newLang.CreateBy = newSku.CreateBy;
@@ -378,6 +379,14 @@ namespace PurchaseOrderSys.Models
             var result = netoApi.AddItem(newItem);
             if (result.Ack.Equals(AddItemResponseAck.Success))
             {
+                if (skuData.Type.Equals((byte)EnumData.SkuType.Single) && skuData.Condition.Equals(1))
+                {
+                    foreach (var condition in db.Condition.Where(c => c.IsEnable && !c.ID.Equals(skuData.Condition)).ToList())
+                    {
+                        SetSkuData(skuData.SkuID + condition.Suffix);
+                        CreateSkuToNeto();
+                    }
+                }
                 return result.Item[0];
             }
 

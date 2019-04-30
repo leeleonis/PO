@@ -339,13 +339,13 @@ namespace PurchaseOrderSys.Controllers
             var skuData = netoApi.GetItemBySku(Sku);
         }
 
-        public void GetProductsData()
+        public void GetProductData(string skuID)
         {
             var SC_Api = new SellerCloud_WebService.SC_WebService("tim@weypro.com", "timfromweypro");
-            var sku = SC_Api.Get_ProductFullInfo("123");
+            var sku1 = SC_Api.Get_ProductFullInfo(skuID);
 
            var netoApi = new NetoApi();
-            var sku2 = netoApi.GetItemBySku("123");
+            var sku2 = netoApi.GetItemBySku(skuID);
         }
 
         public void GetProductBrand()
