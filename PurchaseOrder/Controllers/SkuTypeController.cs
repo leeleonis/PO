@@ -182,13 +182,34 @@ namespace PurchaseOrderSys.Controllers
 
         // POST: SkuTypes/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            SkuType skuType = db.SkuType.Find(id);
-            db.SkuType.Remove(skuType);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            AjaxResult result = new AjaxResult();
+
+            try
+            {
+                SkuType type = db.SkuType.Find(id);
+
+                if (type == null) throw new Exception("Not find sku type!");
+
+                type.IsEnable = false;
+                type.UpdateAt = DateTime.UtcNow;
+                type.UpdateBy = Session["AdminName"].ToString();
+                foreach (var sku in type.SKU)
+                {
+                    sku.Type = 119;
+                    sku.UpdateAt = type.UpdateAt.Value;
+                    sku.UpdateBy = type.UpdateBy;
+                }
+
+                db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                result.SetError(e.InnerException?.Message ?? e.Message);
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetData(SkuTypeFilter filter, int page = 1, int rows = 100)
@@ -197,7 +218,7 @@ namespace PurchaseOrderSys.Controllers
             List<object> dataList = new List<object>();
 
             var LangID = !string.IsNullOrEmpty(filter.LangID) ? filter.LangID : EnumData.DataLangList().First().Key;
-            var TypeFilter = db.SkuType.Include(t => t.SkuTypeLang).AsQueryable();
+            var TypeFilter = db.SkuType.Include(t => t.SkuTypeLang).Where(t => t.IsEnable);
             if (filter.ID.HasValue) TypeFilter = TypeFilter.Where(t => t.ID.Equals(filter.ID.Value));
             if (!string.IsNullOrEmpty(filter.Name)) TypeFilter = TypeFilter.Where(t => t.SkuTypeLang.Any(l => l.LangID.Equals(LangID) && l.Name.ToLower().Contains(filter.Name.ToLower())));
             if (filter.NetoID.HasValue) TypeFilter = TypeFilter.Where(t => t.NetoID.Value.Equals(filter.NetoID.Value));

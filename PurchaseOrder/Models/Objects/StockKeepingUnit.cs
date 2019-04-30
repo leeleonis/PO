@@ -79,6 +79,7 @@ namespace PurchaseOrderSys.Models
         {
             if (string.IsNullOrEmpty(newSku.SkuID)) newSku.SkuID = GetNewSku(newSku.Category, newSku.Brand);
 
+            newSku.SkuID = newSku.SkuID.Trim();
             newLang.Sku = newSku.SkuID;
             newLang.CreateAt = newSku.CreateAt;
             newLang.CreateBy = newSku.CreateBy;
