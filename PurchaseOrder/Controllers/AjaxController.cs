@@ -77,7 +77,7 @@ namespace PurchaseOrderSys.Controllers
             return Json(new { items = dataList }, JsonRequestBehavior.AllowGet);
         }
         public ActionResult TSkuNumberGet(string Search, int FromWID)
-        {
+        { 
             var SKUList = new List<string>();
             //一般入庫
             var PurchaseSKUList = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.IsEnable && x.PurchaseOrder.WarehouseID == FromWID).Select(x => x.SkuNo).ToList();
@@ -86,13 +86,16 @@ namespace PurchaseOrderSys.Controllers
             var TransferSKUList = db.TransferSKU.Where(x => x.IsEnable && x.Transfer.IsEnable && x.Transfer.ToWID == FromWID).Select(x => x.SkuNo).ToList();//只找移入的SKU
             SKUList.AddRange(TransferSKUList);
             //RMA入庫
-            var RMAferSKUList = db.RMASerialsLlist.Where(x => x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.WarehouseID == FromWID).Select(x => x.RMASKU.SkuNo).ToList();
-            SKUList.AddRange(RMAferSKUList);
+            var NoNewRMAferSKUList = db.RMASerialsLlist.AsEnumerable().Where(x => x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.WarehouseID == FromWID && string.IsNullOrWhiteSpace(x.NewSkuNo)).Select(x => x.RMASKU.SkuNo).ToList();//沒有新的SKU
+            SKUList.AddRange(NoNewRMAferSKUList);
+            var NewRMAferSKUList = db.RMASerialsLlist.AsEnumerable().Where(x => x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.WarehouseID == FromWID && !string.IsNullOrWhiteSpace(x.NewSkuNo)).Select(x => x.NewSkuNo).ToList();//沒有新的SKU
+            SKUList.AddRange(NewRMAferSKUList);
 
             SKUList = SKUList.Distinct().ToList();
             var dataList = db.SkuLang.Where(x => x.LangID == "en-US" && SKUList.Contains(x.Sku) && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
             //var dataList = db.SkuLang.Where(x => x.LangID == "zh-tw" && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
             return Json(new { items = dataList }, JsonRequestBehavior.AllowGet);
+
         }
         public ActionResult CMSkuNumberGet(string Search, int PurchaseOrderID)
         {

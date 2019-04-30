@@ -1375,4 +1375,9 @@ namespace PurchaseOrderSys.Models
         public string SKUName { get; set; }
         public string Serial { get; set; }
     }
+    public class InventorySerials
+    {
+        public string SKU { get; set; }
+        public string SKUName { get; set; }
+    }
 }

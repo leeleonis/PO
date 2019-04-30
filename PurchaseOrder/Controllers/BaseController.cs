@@ -18,8 +18,8 @@ namespace PurchaseOrderSys.Controllers
 {
     public class BaseController : Controller
     {
-        //protected string ApiUrl = "http://internal.qd.com.tw/";
-        protected string ApiUrl = "http://localhost:49920/";
+        protected string ApiUrl = "http://internal.qd.com.tw/";
+        //protected string ApiUrl = "http://localhost:49920/";
         protected string FileUploads = "~/FileUploads";
         public static string UserBy = "test";
         public static string LangID = "en-US";
@@ -548,7 +548,6 @@ namespace PurchaseOrderSys.Controllers
             var OrderItemDataList = new List<OrderItemData>();
             using (WebClient wc = new WebClient())
             {
-
                 try
                 {
                     wc.Encoding = Encoding.UTF8;

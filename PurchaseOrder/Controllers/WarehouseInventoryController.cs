@@ -73,7 +73,7 @@ namespace PurchaseOrderSys.Controllers
                 var PurchaseSKU = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.IsEnable && x.PurchaseOrder.WarehousePO.ID == Warehouse.ID).Include(x => x.SerialsLlist).ToList();//PO單
                 var TransferToSKU = db.TransferSKU.Where(x => x.IsEnable && x.Transfer.IsEnable && x.Transfer.ToWID == Warehouse.ID).Include(x => x.SerialsLlist).ToList();//移倉單入庫
                 var TransferFromSKU = db.TransferSKU.Where(x => x.IsEnable && x.Transfer.IsEnable && x.Transfer.FromWID == Warehouse.ID).Include(x => x.SerialsLlist).ToList();//移倉單出庫
-                var RMASKU = db.RMASerialsLlist.Where(x => x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.WarehouseID == Warehouse.ID).Select(x => x.RMASKU).Include(x => x.RMASerialsLlist).ToList();//RMA單
+                var RMASerialsLlist = db.RMASerialsLlist.Where(x => x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.WarehouseID == Warehouse.ID).ToList();//RMA單
 
 
                 if (!string.IsNullOrWhiteSpace(Product))
@@ -81,7 +81,7 @@ namespace PurchaseOrderSys.Controllers
                     PurchaseSKU = PurchaseSKU.Where(x => x.SkuNo == Product).ToList();
                     TransferToSKU = TransferToSKU.Where(x => x.SkuNo == Product).ToList();
                     TransferFromSKU = TransferFromSKU.Where(x => x.SkuNo == Product).ToList();
-                    RMASKU = RMASKU.Where(x => x.SkuNo == Product).ToList();
+                    RMASerialsLlist = RMASerialsLlist.Where(x => (!string.IsNullOrWhiteSpace(x.NewSkuNo) && x.NewSkuNo == Product) || (string.IsNullOrWhiteSpace(x.NewSkuNo) && x.RMASKU.SkuNo == Product)).ToList();
                 }
                 WarehouseVM.AddRange(PurchaseSKU.Select(x => new WarehouseVM
                 {
@@ -126,19 +126,30 @@ namespace PurchaseOrderSys.Controllers
                     TransferOutCloseQTY = GetTransferOutCloseQTY(x, Warehouse, ref NoList),
                     TransferAwaiting = GetTransferAwaiting(x, Warehouse, ref NoList),//等待移倉的數量
                 }).ToList());
-
-                WarehouseVM.AddRange(RMASKU.Select(x => new WarehouseVM
+                var NoNewRMASKU = RMASerialsLlist.Where(x => string.IsNullOrWhiteSpace(x.NewSkuNo)).Select(x => x.RMASKU).ToList();//沒有新SKU
+                WarehouseVM.AddRange(NoNewRMASKU.Select(x => new WarehouseVM
                 {
                     ID = x.ID,
                     Name = x.Name,
                     SKU = x.SkuNo,
-                    UnfulfillableRMA= GetPOQty(x, null, Warehouse.ID),//RMA借用數量
+                    UnfulfillableRMA = GetRMAInQty(x, x.SkuNo, false, null, Warehouse.ID),
                     TransferInQTY = GetTransferInQTY(x, Warehouse, "", ref NoList),//接入庫當PO
                     TransferOutQTY = GetTransferOutQTY(x, Warehouse, "", ref NoList) * -1,
                     TransferOutCloseQTY = GetTransferOutCloseQTY(x, Warehouse, ref NoList),//移倉已入庫
                     TransferAwaiting = GetTransferAwaiting(x, Warehouse, ref NoList),//等待移倉的數量
                 }).ToList());
-
+                var NewRMASKU = RMASerialsLlist.Where(x => !string.IsNullOrWhiteSpace(x.NewSkuNo)).Select(x => x.RMASKU).ToList();//有新SKU
+                WarehouseVM.AddRange(NewRMASKU.Select(x => new WarehouseVM
+                {
+                    ID = x.ID,
+                    Name = x.Name,
+                    SKU = x.RMASerialsLlist.FirstOrDefault().NewSkuNo,
+                    UnfulfillableRMA = GetRMAInQty(x, x.RMASerialsLlist.FirstOrDefault().NewSkuNo, true, null, Warehouse.ID),
+                    TransferInQTY = GetTransferInQTY(x, Warehouse, "", ref NoList),//接入庫當PO
+                    TransferOutQTY = GetTransferOutQTY(x, Warehouse, "", ref NoList) * -1,
+                    TransferOutCloseQTY = GetTransferOutCloseQTY(x, Warehouse, ref NoList),//移倉已入庫
+                    TransferAwaiting = GetTransferAwaiting(x, Warehouse, ref NoList),//等待移倉的數量
+                }).ToList());
 
                 GroupWarehouseVM = WarehouseVM.GroupBy(x => new { x.SKU }).Select(x => new WarehouseVM //SKU數量總計
                 {
@@ -210,7 +221,7 @@ namespace PurchaseOrderSys.Controllers
             return GroupWarehouseVM.OrderByDescending(x => x.Fulfillable).ThenByDescending(x => x.Awaiting).ToList();
         }
 
-
+       
 
         public ActionResult IndexN(int ID, string Product, int? FulfillableMin, int? FulfillableMax)
         {
@@ -550,12 +561,37 @@ namespace PurchaseOrderSys.Controllers
                 //else
                 //{
                 //}
+            }   
+            return count;
+        }
+        /// <summary>
+        /// 計算RMAIN的庫存
+        /// </summary>
+        /// <param name="SKU"></param>
+        /// <param name="SKUNO"></param>
+        /// <param name="NoList"></param>
+        /// <param name="WarehouseID"></param>
+        /// <returns></returns>
+        private int GetRMAInQty(dynamic SKU, string SKUNO, bool IsNew, List<int> NoList = null, int? WarehouseID = null)
+        {
+            if (NoList == null)
+            {
+                NoList = new List<int>();
             }
-            else if (SKU.GetType().BaseType.Name == typeof(RMASKU).Name)
+            var count = 0;
+            if (SKU.GetType().BaseType.Name == typeof(RMASKU).Name)
             {
                 var RMASKU = (RMASKU)SKU;
                 var SerialsLlist = RMASKU.RMASerialsLlist.Where(y => y.WarehouseID == WarehouseID && !NoList.Contains(y.ID) && y.SerialsType == "RMAIn" && !y.RMASerialsLlistC.Any());//有輸入直接讀輸入，沒輸入計算序號數
-                count = SerialsLlist.Sum(y => y.SerialsQTY) ?? 0;
+                if (IsNew)
+                {
+                    count = SerialsLlist.Where(x => x.NewSkuNo== SKUNO).Sum(y => y.SerialsQTY) ?? 0;
+                }
+                else
+                {
+                    count = SerialsLlist.Where(x => string.IsNullOrWhiteSpace(x.NewSkuNo)).Sum(y => y.SerialsQTY) ?? 0;
+                }
+               
                 //WNoList.AddRange(SerialsLlist.Select(x => x.ID));
                 //if (TransferSKU.QTYFulfilled.HasValue && TransferSKU.QTYFulfilled > 0)
                 //{
@@ -567,6 +603,7 @@ namespace PurchaseOrderSys.Controllers
             }
             return count;
         }
+
         /// <summary>
         /// 取CM序號數量
         /// </summary>
@@ -607,7 +644,8 @@ namespace PurchaseOrderSys.Controllers
         {
             ViewBag.WarehouseID = WarehouseID;
             var PurchaseSKU = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.IsEnable && x.SkuNo == SKU);
-            var RmaSKU = db.RMASKU.Where(x => x.IsEnable && x.RMA.IsEnable && x.SkuNo == SKU);
+            var NoNewRmaSKU = db.RMASKU.AsEnumerable().Where(x => x.IsEnable && x.RMA.IsEnable && x.SkuNo == SKU && x.RMASerialsLlist.Where(y => string.IsNullOrWhiteSpace(y.NewSkuNo)).Any());
+            var NewRmaSKU = db.RMASKU.AsEnumerable().Where(x => x.IsEnable && x.RMA.IsEnable && x.RMASerialsLlist.Where(y => !string.IsNullOrWhiteSpace(y.NewSkuNo) && y.NewSkuNo == SKU).Any());
             var Awaitinglist = GetAwaitingCount(SKU, "");
             var AwaitingConut = Awaitinglist.Sum(x => x.QTY);
             var StatementVM = new List<StatementVM>();
@@ -731,7 +769,7 @@ namespace PurchaseOrderSys.Controllers
 
             }
             var ChannelList = EnumData.ChannelList();
-            foreach (var item in RmaSKU)
+            foreach (var item in NoNewRmaSKU)
             {
                 var RMASerialsLlist = item.RMASerialsLlist.Where(y => !(y.SerialsType == "TransferOut" || y.SerialsType == "TransferIn") || ((y.SerialsType == "TransferOut" || y.SerialsType == "TransferIn") && y.TransferSKU.IsEnable && y.TransferSKU.Transfer.IsEnable)).ToList();
                 var Available = RMASerialsLlist.Where(x => !(x.SerialsType == "TransferOut" && x.TransferSKU.Transfer.Status == "Requested")).Sum(y => y.SerialsQTY);//實際
@@ -739,6 +777,59 @@ namespace PurchaseOrderSys.Controllers
                 foreach (var SerialsLlistitem in RMASerialsLlist.OrderByDescending(x => x.ID))
                 {
                     var itemSKU = SerialsLlistitem.RMASKU.SkuNo;
+                    var Date = SerialsLlistitem.CreateAt.ToLocalTime();
+                    var Supplier = "";
+                    var Channel = ChannelList[SerialsLlistitem.RMASKU.RMA.Channel.ToString()];
+                    var ISType = "";
+                    int? ID = null;
+                    var Warehouse = "";
+                    var Serial = "";
+                    int? QTY;
+                    int? BalanceAggregate;
+                    int? BalanceAvailable;
+                    decimal? ValueAvailable;
+                    var OrderID = SerialsLlistitem.RMASKU.RMA.OrderID;
+                    var price = SerialsLlistitem.RMASKU.UnitPrice;
+                    if (SerialsLlistitem.SerialsType == "RMAIn")
+                    {
+                        // Supplier = SerialsLlistitem.RMASKU.RMA.VendorLIst.Name;
+                        ISType = "RMAIn";
+                        ID = SerialsLlistitem.RMASKU.RMAID;
+                        Warehouse = SerialsLlistitem.Warehouse.Name;
+                    }
+                    Serial = SerialsLlistitem.SerialsNo;
+                    QTY = SerialsLlistitem.SerialsQTY;
+                    BalanceAggregate = Aggregate;
+                    BalanceAvailable = Available;
+                    ValueAvailable = Available * price;
+
+                    StatementVM.Add(new StatementVM
+                    {
+                        SKU = itemSKU,
+                        OrderID = OrderID,
+                        Date = Date,
+                        Supplier = Supplier,
+                        ID = ID,
+                        Channel = Channel,
+                        ISType = ISType,
+                        Warehouse = Warehouse,
+                        Serial = Serial,
+                        QTY = QTY,
+                        price = price,
+                        BalanceAggregate = BalanceAggregate,
+                        BalanceAvailable = BalanceAvailable,
+                        ValueAvailable = ValueAvailable
+                    });
+                }
+            }
+            foreach (var item in NewRmaSKU)
+            {
+                var RMASerialsLlist = item.RMASerialsLlist.Where(y => y.NewSkuNo == SKU && !(y.SerialsType == "TransferOut" || y.SerialsType == "TransferIn") || ((y.SerialsType == "TransferOut" || y.SerialsType == "TransferIn") && y.TransferSKU.IsEnable && y.TransferSKU.Transfer.IsEnable)).ToList();
+                var Available = RMASerialsLlist.Where(x => !(x.SerialsType == "TransferOut" && x.TransferSKU.Transfer.Status == "Requested")).Sum(y => y.SerialsQTY);//實際
+                var Aggregate = 0;//可出貨
+                foreach (var SerialsLlistitem in RMASerialsLlist.OrderByDescending(x => x.ID))
+                {
+                    var itemSKU = SerialsLlistitem.NewSkuNo;
                     var Date = SerialsLlistitem.CreateAt.ToLocalTime();
                     var Supplier = "";
                     var Channel = ChannelList[SerialsLlistitem.RMASKU.RMA.Channel.ToString()];
@@ -806,7 +897,7 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult Serials(string SKU, int WarehouseID)
         {
             ViewBag.WarehouseID = WarehouseID;
-            var RMASerialsLlist = db.RMASerialsLlist.Where(x => x.WarehouseID == WarehouseID && x.RMASKU.IsEnable && x.RMASKU.SkuNo == SKU && x.RMASKU.RMA.IsEnable).ToList();
+            var RMASerialsLlist = db.RMASerialsLlist.Where(x => x.WarehouseID == WarehouseID && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && (x.RMASKU.SkuNo == SKU || x.NewSkuNo == SKU)).ToList();
             var PurchaseSKU = db.PurchaseSKU.Where(x => x.IsEnable && x.SkuNo == SKU);
             ViewBag.RMASerialsLlist = RMASerialsLlist;
             return View(PurchaseSKU);

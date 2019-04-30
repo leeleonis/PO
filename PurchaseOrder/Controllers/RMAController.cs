@@ -4,6 +4,7 @@ using PurchaseOrderSys.Models;
 using SellerCloud_WebService;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -64,6 +65,12 @@ namespace PurchaseOrderSys.Controllers
         [HttpPost]
         public ActionResult Create(string SID, List<RMAModelPost> RMAList)
         {
+            var TestMod = ConfigurationManager.AppSettings["TestMod"];
+            var UpdateSC = true;
+            if (TestMod == "true")
+            {
+                UpdateSC = false;
+            }
             var RedirectID = 0;
             var OrderItemDataList = (List<OrderItemData>)Session["RSkuNumberList" + SID];
             var CreateAt = DateTime.UtcNow;
@@ -84,16 +91,19 @@ namespace PurchaseOrderSys.Controllers
                 //var order = OrderData.Order;
                 //var Serials = OrderData.Serials;
                 order.OrderCreationSourceApplication = SCService.OrderCreationSourceApplicationType.PointOfSale;
-                if (SCWS.Update_Order(order))
+                if (!UpdateSC || SCWS.Update_Order(order))
                 {
                     int RMAId = 0;
                     if (SCRMA == null)
                     {
-                        RMAId = SCWS.Create_RMA(order.ID);//建立RMAID
+                        if (UpdateSC)
+                        {
+                            RMAId = SCWS.Create_RMA(order.ID);//建立RMAID
+                        }
                     }
                     else
                     {
-                        RMAId= SCRMA.ID;
+                        RMAId = SCRMA.ID;
                     }
                     var newRMA = new RMA
                     {
@@ -123,14 +133,21 @@ namespace PurchaseOrderSys.Controllers
                             int RMAItemID = 0;
                             if (SCRMA == null)
                             {
-                                RMAItemID = SCWS.Create_RMA_Item(OrderID, OrderItemID, RMAId, Skuitem.QTY, ReasonID, "");//建立每個SKU要退貨的數量原因，並取回ID
+                                if (UpdateSC)
+                                {
+                                    RMAItemID = SCWS.Create_RMA_Item(OrderID, OrderItemID, RMAId, Skuitem.QTY, ReasonID, "");//建立每個SKU要退貨的數量原因，並取回ID
+                                }
                             }
                             else
                             {
                                 var SCRMA_Item = SCWS.Get_RMA_Item(OrderID)?.Where(x => x.OriginalOrderItemID == OrderItemID).FirstOrDefault();
                                 if (SCRMA_Item == null)//沒資料就新增
                                 {
-                                    RMAItemID = SCWS.Create_RMA_Item(OrderID, OrderItemID, RMAId, Skuitem.QTY, ReasonID, "");//建立每個SKU要退貨的數量原因，並取回ID
+                                    if (UpdateSC)
+                                    {
+                                        RMAItemID = SCWS.Create_RMA_Item(OrderID, OrderItemID, RMAId, Skuitem.QTY, ReasonID, "");//建立每個SKU要退貨的數量原因，並取回ID
+                                    }
+
                                 }
                                 else
                                 {
@@ -169,8 +186,11 @@ namespace PurchaseOrderSys.Controllers
                             }
                         }
                     }
-                    order.OrderCreationSourceApplication = SCService.OrderCreationSourceApplicationType.Default;
-                    SCWS.Update_Order(order);
+                    if (UpdateSC)
+                    {
+                        order.OrderCreationSourceApplication = SCService.OrderCreationSourceApplicationType.Default;
+                        SCWS.Update_Order(order);
+                    }             
                     db.SaveChanges();
                     if (RedirectID == 0)
                     {
@@ -350,7 +370,7 @@ namespace PurchaseOrderSys.Controllers
                 nRMAEdit.QTYOrdered = item.QTYOrdered;
                 nRMAEdit.ProductName = item.SKU.SkuLang.Where(y => y.LangID == "en-US").FirstOrDefault()?.Name;
                 nRMAEdit.ReturnedSerialsNo = RMASerial?.SerialsNo;
-                nRMAEdit.OrderSerialsNo = RMASerial?.SerialsNo;
+                nRMAEdit.OrderSerialsNo = item.RMAOrderSerialsLlist.FirstOrDefault()?.SerialsNo;
                 nRMAEdit.UPCEAN = item.SKU.UPC + "/" + item.SKU.EAN;
                 nRMAEdit.Reason = item.Reason;
                 nRMAEdit.TrWarehouse = RMASerial?.Warehouse.Name;
