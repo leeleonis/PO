@@ -1020,7 +1020,7 @@ namespace PurchaseOrderSys.Controllers
                             SourceID = order.OrderSourceOrderId,
                             CompanyID = order.CompanyId,
                             Country = GetCountryCode(order.ShippingAddress.CountryCode),
-                            Status = "Closed",
+                            Status = "Received",
                             Action = "None",
                             Channel = (int)order.OrderSource,
                             WarehouseID = WarehouseID,

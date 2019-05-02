@@ -1377,7 +1377,22 @@ namespace PurchaseOrderSys.Models
     }
     public class InventorySerials
     {
+        public string CompanyName { get; set; }
         public string SKU { get; set; }
         public string SKUName { get; set; }
+        public List<InventorySerialsItem> InventorySerialsItem { get; set; }
     }
+    public class InventorySerialsItem
+    {
+        public string Serial { get; set; }
+        public int? Order { get; set; }
+        public int? RMA { get; set; }
+        public int? PO { get; set; }
+        public int? CM { get; set; }
+        public string Warehouse { get; set; }
+        public string DispatchLocation { get; set; }
+        public decimal? Value { get; set; }
+        public DateTime? Date { get; set; }
+    }
+
 }

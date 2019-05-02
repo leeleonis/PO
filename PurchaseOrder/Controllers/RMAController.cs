@@ -53,7 +53,7 @@ namespace PurchaseOrderSys.Controllers
             {
                 RMAList = RMAList.Where(x => x.SCRMA == RMAVM.SCRMA);
             }
-            RMAVM.RMAList = RMAList.OrderByDescending(x => x.ID);
+            RMAVM.RMAList = RMAList.OrderByDescending(x => x.ID).Take(1000);
             return View(RMAVM);
         }
         public ActionResult Create(int? OrderID)

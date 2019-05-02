@@ -897,10 +897,95 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult Serials(string SKU, int WarehouseID)
         {
             ViewBag.WarehouseID = WarehouseID;
+            var SKUName = db.SkuLang.Where(x => x.Sku == SKU && x.LangID == LangID).FirstOrDefault().Name;
             var RMASerialsLlist = db.RMASerialsLlist.Where(x => x.WarehouseID == WarehouseID && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && (x.RMASKU.SkuNo == SKU || x.NewSkuNo == SKU)).ToList();
             var PurchaseSKU = db.PurchaseSKU.Where(x => x.IsEnable && x.SkuNo == SKU);
-            ViewBag.RMASerialsLlist = RMASerialsLlist;
-            return View(PurchaseSKU);
+            var CompanyName = PurchaseSKU.FirstOrDefault()?.PurchaseOrder.Company.Name;
+            var InventorySerialsItem = new List<InventorySerialsItem>();
+            foreach (var Skuitem in PurchaseSKU)
+            {
+                if (Skuitem.SerialsLlist != null && Skuitem.SerialsLlist.Any(x => x.SerialsType == "PO"))
+                {
+                    foreach (var SerialsNoitem in Skuitem.SerialsLlist.Where(x => x.SerialsType == "PO").Select(x => x.SerialsNo).Distinct())
+                    {
+                        var SerialsLlist = Skuitem.SerialsLlist.Where(x => x.SerialsNo == SerialsNoitem).ToList();
+                        var Order = SerialsLlist.Where(x => x.OrderID.HasValue).FirstOrDefault()?.OrderID;
+                        //var FRMA = RMASerialsLlist.Where(x => x.SerialsNo == SerialsNoitem).FirstOrDefault();
+                        //var RMA = FRMA?.RMASKU.RMAID;
+                        var PO = SerialsLlist.Where(x => x.PurchaseSKU.PurchaseOrderID.HasValue).FirstOrDefault()?.PurchaseSKU.PurchaseOrderID;
+                        var CM = SerialsLlist.Where(x => x.PurchaseSKU.CreditMemoID.HasValue).FirstOrDefault()?.PurchaseSKU.CreditMemoID;
+                        var WarehouseName = "";
+                        var Location = "";
+                        if (Skuitem.PurchaseOrder != null)
+                        {
+                            WarehouseName = Skuitem.PurchaseOrder.WarehousePO.Name;
+                        }
+                        else if (Skuitem.CreditMemo != null)
+                        {
+                            WarehouseName = Skuitem.CreditMemo.PurchaseOrder.WarehousePO.Name;
+                        }
+                        var Price = SerialsLlist.Where(x => x.PurchaseSKU.Price.HasValue).FirstOrDefault()?.PurchaseSKU.Price;
+                        var CreateAt = SerialsLlist.OrderByDescending(x => x.CreateAt).FirstOrDefault()?.CreateAt;
+                        //if (FRMA?.CreateAt > CreateAt)
+                        //{
+                        //    CreateAt = FRMA?.CreateAt;
+                        //}
+                        if (Order.HasValue)
+                        {
+                            Location = Skuitem.PurchaseOrder.WarehousePO.Name;
+                        }
+                        InventorySerialsItem.Add(new InventorySerialsItem
+                        {
+                            CM = CM,
+                            PO = PO,
+                            DispatchLocation = Location,
+                            Order = Order,
+                            //RMA = RMA,
+                            Serial = SerialsNoitem,
+                            Value = Price,
+                            Warehouse = WarehouseName,
+                            Date = CreateAt.Value.ToLocalTime(),
+                        });
+                    }
+                }
+            }
+            foreach (var item in RMASerialsLlist)
+            {
+             var QInventorySerials=  InventorySerialsItem.Where(x => x.Serial == item.SerialsNo);
+                if (QInventorySerials.Any())
+                {
+                    foreach (var Serialitem in QInventorySerials)
+                    {
+                        Serialitem.RMA = item.RMASKU.RMAID;
+                        if (item.CreateAt.ToLocalTime() > Serialitem.Date)
+                        {
+                            Serialitem.Date = item.CreateAt.ToLocalTime();
+                        }
+                    }
+                }
+                else
+                {
+                    InventorySerialsItem.Add(new InventorySerialsItem
+                    {
+                      
+                        DispatchLocation = item.Warehouse.Name,
+                        Order = item.RMASKU.RMA.OrderID,
+                        RMA = item.RMASKU.RMAID,
+                        Serial = item.SerialsNo,
+                        Value = item.RMASKU.UnitPrice,
+                        Warehouse = item.Warehouse.Name,
+                        Date = item.CreateAt.ToLocalTime(),
+                    });
+                }
+            }
+            var InventorySerials = new InventorySerials
+            {
+                InventorySerialsItem = InventorySerialsItem,
+                SKU = SKU,
+                SKUName = SKUName,
+                CompanyName= CompanyName
+            };
+            return View(InventorySerials);
         }
         public ActionResult Inventory(string SKU, int WarehouseID)
         {

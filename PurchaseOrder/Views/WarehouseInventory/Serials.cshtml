@@ -1,7 +1,6 @@
-﻿@model IEnumerable<PurchaseSKU>
+﻿@model InventorySerials
 @{
     ViewBag.title = "Serials";
-    var RMASerialsLlist = (List<RMASerialsLlist>)ViewBag.RMASerialsLlist;
 }
 <style>
     tfoot {
@@ -33,10 +32,10 @@
                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                     <div class="tab-pane" id="hb1">
                                         <fieldset>
-                                            <legend>Company ： @(Model.FirstOrDefault()?.PurchaseOrder.Company.Name)</legend>
+                                            <legend>Company ：@Model.CompanyName</legend>
                                         </fieldset>
                                         <fieldset>
-                                            <legend>   <a href=' @Url.Action("edit", "Sku", new { id = Model.FirstOrDefault()?.SkuNo })' target="_blank">@(Model.FirstOrDefault()?.SkuNo)</a>： @(Model.FirstOrDefault()?.Name)</legend>
+                                            <legend>   <a href=' @Url.Action("edit", "Sku", new { id = Model.SKU })' target="_blank">@(Model.SKU)</a>： @(Model.SKUName)</legend>
                                             <div class="row">
                                                 <article class="col-xs-12">
                                                     <table id="DataGridC" class="table table-striped table-bordered">
@@ -56,80 +55,50 @@
                                                         </thead>
                                                         <tfoot></tfoot>
                                                         <tbody>
-                                                            @if (Model != null && Model.Any())
+                                                            @if (Model != null)
                                                             {
-                                                                foreach (var Skuitem in Model)
+                                                                foreach (var Skuitem in Model.InventorySerialsItem)
                                                                 {
-                                                                    if (Skuitem.SerialsLlist != null && Skuitem.SerialsLlist.Any(x => x.SerialsType == "PO"))
-                                                                    {
-                                                                        foreach (var SerialsNoitem in Skuitem.SerialsLlist.Where(x => x.SerialsType == "PO").Select(x => x.SerialsNo).Distinct())
-                                                                        {
-                                                                            var SerialsLlist = Skuitem.SerialsLlist.Where(x => x.SerialsNo == SerialsNoitem).ToList();
-                                                                            var Order = SerialsLlist.Where(x => x.OrderID.HasValue).FirstOrDefault()?.OrderID;
-                                                                            var FRMA = RMASerialsLlist.Where(x => x.SerialsNo == SerialsNoitem).FirstOrDefault();
-                                                                            var RMA = FRMA?.RMASKU.RMAID;
-                                                                            var PurchaseOrderID = SerialsLlist.Where(x => x.PurchaseSKU.PurchaseOrderID.HasValue).FirstOrDefault()?.PurchaseSKU.PurchaseOrderID;
-                                                                            var CreditMemoID = SerialsLlist.Where(x => x.PurchaseSKU.CreditMemoID.HasValue).FirstOrDefault()?.PurchaseSKU.CreditMemoID;
-                                                                            var WarehouseName = "";
-                                                                            var Location = "";
-                                                                            if (Skuitem.PurchaseOrder != null)
-                                                                            {
-                                                                                WarehouseName = Skuitem.PurchaseOrder.WarehousePO.Name;
-                                                                            }
-                                                                            else if (Skuitem.CreditMemo != null)
-                                                                            {
-                                                                                WarehouseName = Skuitem.CreditMemo.PurchaseOrder.WarehousePO.Name;
-                                                                            }
-                                                                            var Price = SerialsLlist.Where(x => x.PurchaseSKU.Price.HasValue).FirstOrDefault()?.PurchaseSKU.Price;
-                                                                            var CreateAt = SerialsLlist.OrderByDescending(x => x.CreateAt).FirstOrDefault()?.CreateAt;
-                                                                            if (FRMA?.CreateAt > CreateAt)
-                                                                            {
-                                                                                CreateAt = FRMA?.CreateAt;
-                                                                            }
-                                                                            if (Order.HasValue)
-                                                                            {
-                                                                                Location = Skuitem.PurchaseOrder.WarehousePO.Name;
-                                                                            }
+
                                                                             <tr>
-                                                                                <td>@SerialsNoitem</td>
+                                                                                <td>@Skuitem.Serial</td>Skuitem
                                                                                 <td>
-                                                                                    @if (Order.HasValue)
+                                                                                    @if (Skuitem.Order.HasValue)
                                                                                     {
-                                                                                        <a href='https://dm.cwa.sellercloud.com/Orders/Orders_details.aspx?id=@(Order)' target="_blank">@Order</a>
+                                                                                        <a href='https://dm.cwa.sellercloud.com/Orders/Orders_details.aspx?id=@(Skuitem.Order)' target="_blank">@Skuitem.Order</a>
                                                                                     }
                                                                                 </td>
                                                                                 <td>
-                                                                                    @if (RMA.HasValue)
+                                                                                    @if (Skuitem.RMA.HasValue)
                                                                                     {
-                                                                                        <a href=' @Url.Action("Edit", "RMA", new { id = RMA })' target="_blank">@RMA</a>
-                                                                                       
-                                                                                    }
-                                                                                </td>
-                                                                                <td>
-                                                                                    @if (PurchaseOrderID.HasValue)
-                                                                                    {
-                                                                                        <a href=' @Url.Action("EditItem", "PurchaseOrderPO", new { id = PurchaseOrderID })' target="_blank">@PurchaseOrderID</a>
+                                                                                        <a href=' @Url.Action("Edit", "RMA", new { id = Skuitem.RMA })' target="_blank">@Skuitem.RMA</a>
 
                                                                                     }
                                                                                 </td>
                                                                                 <td>
-                                                                                    @if (CreditMemoID.HasValue)
+                                                                                    @if (Skuitem.PO.HasValue)
                                                                                     {
-                                                                                        <a href=' @Url.Action("EditItem", "PurchaseOrderCM", new { id = CreditMemoID })' target="_blank">@CreditMemoID</a>
+                                                                                        <a href=' @Url.Action("EditItem", "PurchaseOrderPO", new { id = Skuitem.PO })' target="_blank">@Skuitem.PO</a>
 
                                                                                     }
-                                                                                    @CreditMemoID
                                                                                 </td>
-                                                                                <td>@WarehouseName</td>
-                                                                                <td>@Location</td>
-                                                                                <td>@Price</td>
-                                                                                <td>@(CreateAt.Value.ToLocalTime())</td>
                                                                                 <td>
-                                                                                    <a class='btn btn-default btn-sm GetHistory' href='@Url.Action("GetHistory", new { ID = SerialsNoitem })'>History</a>
+                                                                                    @if (Skuitem.CM.HasValue)
+                                                                                    {
+                                                                                        <a href=' @Url.Action("EditItem", "PurchaseOrderCM", new { id = Skuitem.CM })' target="_blank">@Skuitem.CM</a>
+
+                                                                                    }
+                                                                                </td>
+                                                                                <td>@Skuitem.Warehouse</td>
+                                                                                <td>@Skuitem.DispatchLocation</td>
+                                                                                <td>@Skuitem.Value</td>
+                                                                                <td>@Skuitem.Date</td>
+                                                                                <td>
+                                                                                    <a class='btn btn-default btn-sm GetHistory' href='@Url.Action("GetHistory", new { ID = Skuitem.Serial })'>History</a>
                                                                                 </td>
                                                                             </tr>
-                                                                        }
-                                                                    }
+
+
                                                                 }
                                                             }
                                                         </tbody>
