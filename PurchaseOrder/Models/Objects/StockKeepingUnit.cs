@@ -425,7 +425,9 @@ namespace PurchaseOrderSys.Models
                 };
 
                 bool result = SC_Api.Create_ProductFullInfo(newSku);
-                if (skuData.Type.Equals((byte)EnumData.SkuType.Single) && result)
+                if (!result) throw new Exception("建立SKU-失敗");
+
+                if (skuData.Type.Equals((byte)EnumData.SkuType.Single))
                 {
                     foreach (var company in db.Company.Where(c => c.ParentID.Value.Equals(skuData.Company)))
                     {

@@ -132,7 +132,7 @@ namespace PurchaseOrderSys.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(SKU updateData, SkuLang langData, List<Dictionary<string, string>> eBayTitle, int[] DiverseAttribute, Sku_Attribute[] VariationValue, KitSku[] KitSku, Sku_PackageContent[] SkuContent, Sku_Attribute[] AttributeValue, HttpPostedFileBase picture, PriceGroup[] PriceGroup, Logistic Logistic, HttpPostedFileBase LogisticImg)
+        public ActionResult Edit(SKU updateData, SkuLang langData, List<Dictionary<string, string>> eBayTitle, int[] DiverseAttribute, Sku_Attribute[] VariationValue, KitSku[] KitSku, Sku_PackageContent[] SkuContent, Sku_Attribute[] AttributeValue, HttpPostedFileBase picture, PriceGroup[] PriceGroup, Logistic Logistic, HttpPostedFileBase LogisticImg, bool Sync = false)
         {
             SKU sku = db.SKU.Find(updateData.SkuID);
             if (sku == null) return HttpNotFound();
@@ -201,16 +201,19 @@ namespace PurchaseOrderSys.Controllers
             if (VariationValue != null && VariationValue.Any())
             {
                 List<Sku_Attribute> attributeList;
+                ViewDataDictionary viewData = new ViewDataDictionary() { { "LangID", langData.LangID } };
+                viewData.Add("AttributeTypeList", db.SkuAttributeType.Where(t => t.IsEnable).OrderBy(t => t.Order).ToList());
 
                 foreach (var variationList in VariationValue.GroupBy(a => a.Sku))
                 {
                     if (VariationValue.Where(a => !a.Sku.Equals(variationList.Key)).GroupBy(a => a.Sku).All(a => !CompareValue(variationList.ToList(), a.ToList())))
                     {
+                        SkuLang variationSkuLang;
                         if (!variationList.Key.Contains("newSku"))
                         {
-                            var variationSkuLang = db.SKU.Find(variationList.Key).SkuLang.First(l => l.LangID.Equals(langData.LangID));
+                            variationSkuLang = db.SKU.Find(variationList.Key).SkuLang.First(l => l.LangID.Equals(langData.LangID));
                             variationSkuLang.Description = langData.Description;
-                            variationSkuLang.PackageContent = langData.PackageContent;
+                            variationSkuLang.PackageContent = langData.PackageContent;                            
                             
                             attributeList = db.Sku_Attribute.Where(a => a.Sku.Equals(variationList.Key) && a.LangID.Equals(langData.LangID)).ToList();
 
@@ -262,6 +265,8 @@ namespace PurchaseOrderSys.Controllers
                                 {
                                     TempData["ErrorMsg"] = e.InnerException?.Message ?? e.Message;
                                 }
+
+                                variationSkuLang = newLang;
                             }
 
                             db.Sku_Attribute.AddRange(sku.Sku_Attribute.Where(a => !a.IsDiverse).Select(a => new Sku_Attribute()
@@ -285,6 +290,10 @@ namespace PurchaseOrderSys.Controllers
                                 CreateBy = sku.UpdateBy
                             }));
                         }
+
+                        db.SaveChanges();
+
+                        variationSkuLang.SpecContent = RenderViewToString(ControllerContext, "_SpecContent", variationSkuLang.GetSku, viewData);
                     }
                     else
                     {
@@ -449,22 +458,25 @@ namespace PurchaseOrderSys.Controllers
                 db.SaveChanges();
             }
 
-            using (StockKeepingUnit SKU = new StockKeepingUnit(sku))
+            if (Sync)
             {
-                try
+                using (StockKeepingUnit SKU = new StockKeepingUnit(sku))
                 {
-                    SKU.UpdateSkuToNeto();
-                    SKU.SC_Api = new SellerCloud_WebService.SC_WebService("tim@weypro.com", "timfromweypro");
-                    SKU.UpdateSkuToSC();
-
-                    if (sku.Type.Equals((byte)EnumData.SkuType.Variation))
+                    try
                     {
-                        SKU.UpdateVariationToNeto();
+                        SKU.UpdateSkuToNeto();
+                        SKU.SC_Api = new SellerCloud_WebService.SC_WebService("tim@weypro.com", "timfromweypro");
+                        SKU.UpdateSkuToSC();
+
+                        if (sku.Type.Equals((byte)EnumData.SkuType.Variation))
+                        {
+                            SKU.UpdateVariationToNeto();
+                        }
                     }
-                }
-                catch (Exception e)
-                {
-                    TempData["ErrorMsg"] = e.InnerException?.Message ?? e.Message;
+                    catch (Exception e)
+                    {
+                        TempData["ErrorMsg"] = e.InnerException?.Message ?? e.Message;
+                    }
                 }
             }
 
