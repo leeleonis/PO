@@ -232,6 +232,7 @@
           <s:element minOccurs="1" maxOccurs="1" name="IncludeWalmartOrderSpecificData" type="s:boolean" />
           <s:element minOccurs="1" maxOccurs="1" name="SkipProductMetadata" type="s:boolean" />
           <s:element minOccurs="1" maxOccurs="1" name="IncludePODetails" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="IncludeShippingSuggestions" type="s:boolean" />
           <s:element minOccurs="1" maxOccurs="1" name="CreateNewProducts" type="s:boolean" />
           <s:element minOccurs="1" maxOccurs="1" name="SplitItems" type="s:boolean" />
           <s:element minOccurs="1" maxOccurs="1" name="PaymentNotNeeded" type="s:boolean" />

@@ -521,6 +521,8 @@ namespace PurchaseOrderSys.SCInventoryService {
         
         private bool includePODetailsField;
         
+        private bool includeShippingSuggestionsField;
+        
         private bool createNewProductsField;
         
         private bool splitItemsField;
@@ -737,6 +739,18 @@ namespace PurchaseOrderSys.SCInventoryService {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=16)]
+        public bool IncludeShippingSuggestions {
+            get {
+                return this.includeShippingSuggestionsField;
+            }
+            set {
+                this.includeShippingSuggestionsField = value;
+                this.RaisePropertyChanged("IncludeShippingSuggestions");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=17)]
         public bool CreateNewProducts {
             get {
                 return this.createNewProductsField;
@@ -748,7 +762,7 @@ namespace PurchaseOrderSys.SCInventoryService {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=17)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=18)]
         public bool SplitItems {
             get {
                 return this.splitItemsField;
@@ -760,7 +774,7 @@ namespace PurchaseOrderSys.SCInventoryService {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=18)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=19)]
         public bool PaymentNotNeeded {
             get {
                 return this.paymentNotNeededField;
@@ -772,7 +786,7 @@ namespace PurchaseOrderSys.SCInventoryService {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=19)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=20)]
         public string DebugInfo {
             get {
                 return this.debugInfoField;
@@ -784,7 +798,7 @@ namespace PurchaseOrderSys.SCInventoryService {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=20)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=21)]
         public bool DoNotDownloadImageData {
             get {
                 return this.doNotDownloadImageDataField;
@@ -796,7 +810,7 @@ namespace PurchaseOrderSys.SCInventoryService {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=21)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=22)]
         public bool BulkWipeRelationships {
             get {
                 return this.bulkWipeRelationshipsField;
@@ -808,7 +822,7 @@ namespace PurchaseOrderSys.SCInventoryService {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=22)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=23)]
         public bool BulkDeleteShadows {
             get {
                 return this.bulkDeleteShadowsField;
@@ -820,7 +834,7 @@ namespace PurchaseOrderSys.SCInventoryService {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=23)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=24)]
         public bool BulkResetOffsetQty {
             get {
                 return this.bulkResetOffsetQtyField;
@@ -832,7 +846,7 @@ namespace PurchaseOrderSys.SCInventoryService {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=24)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=25)]
         public bool UseCache {
             get {
                 return this.useCacheField;
@@ -844,7 +858,7 @@ namespace PurchaseOrderSys.SCInventoryService {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=25)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=26)]
         public bool DontNeedCompanyProfile {
             get {
                 return this.dontNeedCompanyProfileField;

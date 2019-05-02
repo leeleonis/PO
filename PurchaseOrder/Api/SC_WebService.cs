@@ -377,7 +377,8 @@ namespace SellerCloud_WebService
 
         public bool Receive_RMA_Item(int RMAID, int RMAItemID, string ProductID, int QtyToReceive, int WarehouseID, string SerialsList, string DestinationBinName = "", int QtyReturnedDoNotCount = 0)
         {
-            return PO_SellerCloud.RMA_ReceiveItem_New2(PO_AuthHeader, RMAID, RMAItemID, ProductID, QtyToReceive, DestinationBinName, WarehouseID, SerialsList, QtyReturnedDoNotCount, DateTime.Now, "");
+            //return PO_SellerCloud.RMA_ReceiveItem_New2(PO_AuthHeader, RMAID, RMAItemID, ProductID, QtyToReceive, DestinationBinName, WarehouseID, SerialsList, QtyReturnedDoNotCount, DateTime.Now, "");
+            return PO_SellerCloud.RMA_ReceiveItem_New2(PO_AuthHeader, RMAID, RMAItemID, ProductID, QtyToReceive, DestinationBinName, WarehouseID, SerialsList, QtyReturnedDoNotCount);//API有問題所以拿掉後面的2個變數
         }
 
         /***** 採購單 *****/

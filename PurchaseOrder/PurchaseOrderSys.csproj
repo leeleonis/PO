@@ -924,6 +924,9 @@
     <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.ZipCodeSearchResponseType.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
+    <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.Products_ListAllSKUs_NonShadow_AllCompaniesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
     <None Include="Connected Services\OrderCreationService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
@@ -2441,9 +2444,6 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.GetWarehousesResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.GetWebAppSettingResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.GetWebImageRootResponse.datasource">
@@ -6204,6 +6204,66 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.WarehouseTransfer_From_NonBinEnabled_To_BinEnabled_WithLotExpiryResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.FBA_InboundShipment_GetBoxContentWithBoxNumAndAmazonShipmentIDResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.GetCompatibleQuickBridgeVersionResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.GetProductAttributesBatchedResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.Orders_AddMerchantNote_MultiResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.Orders_ExportByProfileResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.PopularHash.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.PredictiveServices_OrderHash_CalculateByOrderIdResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.PredictiveServices_OrderHash_GetPersistedByOrderIdResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.PredictiveServices_OrderHash_MostPopularResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.PredictiveServices_ShippingAndPackageSuggestions_ByHashResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.PredictiveServices_ShippingAndPackageSuggestions_ByOrderIdResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.PredictiveServices_ShippingAndPackageSuggestions_ByOrderIdsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.Products_ExportByProfileResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.ProfileExportedFile.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.QB_GetChannelInvoiceDetailsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.QB_GetChannelInvoicesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.ShippingAndPackageSuggestionResponseModel.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.ShippingAndPackageSuggestionsForOrderResponseModel.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.SI_UpdateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\SCService\PurchaseOrderSys.SCService.UpdateChannelInvoiceAsExportedResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <None Include="Connected Services\SCService\scservice.disco" />
