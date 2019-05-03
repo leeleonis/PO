@@ -81,7 +81,7 @@ namespace PurchaseOrderSys.Controllers
             {
                 foreach (var item in odataList.Where(x => x.Model == "E"))
                 {
-                    Transfer.TransferSKU.Add(new TransferSKU { IsEnable = true, SkuNo = item.SKU, QTY = item.QTY, CreateBy = CreateBy, CreateAt = CreateAt });
+                    Transfer.TransferSKU.Add(new TransferSKU { IsEnable = true, SkuNo = item.SKU, Name = item.ProductName, QTY = item.QTY, CreateBy = CreateBy, CreateAt = CreateAt });
                 }
             }
             db.Transfer.Add(Transfer);
@@ -106,8 +106,8 @@ namespace PurchaseOrderSys.Controllers
                     QTY = item.QTY,
                     TotalReceive = item.SerialsLlist.Where(x => x.SerialsType == "TransferIn").Sum(x => x.SerialsQTY),
                     Serial = GetSerialMulti(item),
-                    TWN= item.Transfer.WarehouseFrom.Name,
-                    Winit = item.Transfer.WarehouseTo.Name,
+                    TWN= item.Transfer.WarehouseFrom?.Name,
+                    Winit = item.Transfer.WarehouseTo?.Name,
                     Model = "L"
                 });
             }
@@ -129,11 +129,26 @@ namespace PurchaseOrderSys.Controllers
                 {
                     return SerialsLlist.FirstOrDefault().SerialsNo;
                 }
- 
+
             }
             else
             {
-                return "";
+                var RMASerialsLlist = item.RMASerialsLlist.Where(x => x.SerialsType == "TransferOut");
+                if (RMASerialsLlist.Any())
+                {
+                    if (RMASerialsLlist.Count() > 1)
+                    {
+                        return "Multi";
+                    }
+                    else
+                    {
+                        return RMASerialsLlist.FirstOrDefault().SerialsNo;
+                    }
+                }
+                else
+                {
+                    return "";
+                }
             }
         }
 
@@ -415,8 +430,10 @@ namespace PurchaseOrderSys.Controllers
                 {
                     var nRMASerialsLlist = PrepVM.RMASerialsLlist.Select(x => new RMASerialsLlist
                     {
+                        IsEnable = true,
                         TransferSKUID = item.ID,
                         PID = x.ID,
+                        WarehouseID = x.WarehouseID,
                         CreateAt = CreateAt,
                         CreateBy = CreateBy,
                         UpdateAt = CreateAt,
@@ -424,6 +441,7 @@ namespace PurchaseOrderSys.Controllers
                         //OrderID = x.OrderID,
                         RMASKUID = x.RMASKUID,
                         //RMAID = x.RMAID,
+                        NewSkuNo = x.NewSkuNo,
                         SerialsNo = x.SerialsNo,
                         SerialsQTY = -1,
                         SerialsType = "TransferOut"//等待移倉
@@ -538,7 +556,7 @@ namespace PurchaseOrderSys.Controllers
                 if (RMASerialsLlist.Where(x => x.SerialsQTY > 0 && !x.RMASerialsLlistC.Any()).Any())
                 {
                     var RMASerial = RMASerialsLlist.FirstOrDefault();
-                    var RMAPrepVM = PrepVMList.Where(x => x.SKU == RMASerial.RMASKU.SkuNo).FirstOrDefault();
+                    var RMAPrepVM = PrepVMList.Where(x => x.SKU == RMASerial.RMASKU.SkuNo || x.SKU == RMASerial.NewSkuNo).FirstOrDefault();
                     try
                     {
                         if (RMAPrepVM != null)
@@ -720,7 +738,7 @@ namespace PurchaseOrderSys.Controllers
                     {
                         foreach (var RMASerialsLlistitem in item.RMASerialsLlist)
                         {
-                            PrepTableList.Add(new PrepTable { SKU = item.SKU, Name = item.Name, Serial = RMASerialsLlistitem.SerialsNo, QTY = item.QTY + "/" + item.SerialsLlist.Count(), SerialTracking = GetSerialTracking(item.SKU) });
+                            PrepTableList.Add(new PrepTable { SKU = item.SKU, Name = item.Name, Serial = RMASerialsLlistitem.SerialsNo, QTY = item.QTY + "/" + item.RMASerialsLlist.Count(), SerialTracking = GetSerialTracking(item.SKU) });
                         }
                     }
                     else
@@ -774,6 +792,16 @@ namespace PurchaseOrderSys.Controllers
             Transfer.UpdateAt = DateTime.UtcNow;
             db.SaveChanges();
 
+            return RedirectToAction("Edit", new { ID });
+            //return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult Received(int ID)
+        {
+            var Transfer = db.Transfer.Find(ID);
+            Transfer.Status = "Received";
+            Transfer.UpdateBy = UserBy;
+            Transfer.UpdateAt = DateTime.UtcNow;
+            db.SaveChanges();
             return RedirectToAction("Edit", new { ID });
             //return Json(new { status = true }, JsonRequestBehavior.AllowGet);
         }

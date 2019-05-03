@@ -266,18 +266,30 @@ namespace PurchaseOrderSys.Controllers
                     //從RMA單選取SKU
                     if (!dataList.Any())
                     {
-                        dataList.AddRange(db.RMASerialsLlist.Where(x => x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.WarehouseID == FromWID && Skulist.Contains(x.RMASKU.SkuNo)).Select(x =>
-                        new TranSKUVM
-                        {
-                            ck = x.RMASKU.SkuNo,
-                            sk = x.RMASKU.SkuNo,
-                            SKU = x.RMASKU.SkuNo,
-                            ProductName = x.RMASKU.Name,
-                            QTY = 0,
-                            Model = "E"
-                        }).Distinct().ToList());
+                        dataList.AddRange(db.RMASerialsLlist.Where(x => x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.WarehouseID == FromWID && Skulist.Contains(x.RMASKU.SkuNo) ).Select(x =>
+                         new TranSKUVM
+                         {
+                             ck = x.RMASKU.SkuNo,
+                             sk = x.RMASKU.SkuNo,
+                             SKU = x.RMASKU.SkuNo,
+                             ProductName = x.RMASKU.Name,
+                             QTY = 0,
+                             Model = "E"
+                         }).Distinct().ToList());
                     }
-
+                    if (!dataList.Any())
+                    {
+                        dataList.AddRange(db.RMASerialsLlist.Where(x => x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.WarehouseID == FromWID && Skulist.Contains(x.NewSkuNo)).Select(x =>
+                         new TranSKUVM
+                         {
+                             ck = x.NewSkuNo,
+                             sk = x.NewSkuNo,
+                             SKU = x.NewSkuNo,
+                             ProductName = x.RMASKU.Name,
+                             QTY = 0,
+                             Model = "E"
+                         }).Distinct().ToList());
+                    }
 
                     odataList.AddRange(dataList);
                     Session["TSkuNumberList" + SID] = odataList;
