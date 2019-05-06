@@ -272,7 +272,64 @@ namespace PurchaseOrderSys.Models
                     .Select(p => new UpdateItemItemPriceGroup() { Group = p.GetMarket.GetNetoGroup.Name, Price = p.Price, PriceSpecified = true, MaximumQuantity = p.Max.ToString(), MinimumQuantity = p.Min.ToString() }).ToArray(),
                 Categories = new UpdateItemItemCategory[] { new UpdateItemItemCategory() { CategoryID = skuData.SkuType.NetoID.Value.ToString() } },
                 ItemSpecifics = skuData.Sku_Attribute.Where(a => skuData.Type.Equals((byte)EnumData.SkuType.Variation) ? !a.IsDiverse : true)
-                    .Where(a => a.eBay).GroupBy(a => a.AttrID).Where(g => !g.Any(a => a.LangID.Equals(LangID) && !a.eBay)).Select(g => g.First(a => a.LangID.Equals(LangID)))
+                    .Where(a => a.eBay).GroupBy(a => a.AttrID).Where(g => !g.Any(a => a.LangID.Equals(LangID))).Select(g => g.First(a => a.LangID.Equals(LangID)))
+                    .Select(g => new UpdateItemItemItemSpecific() { Name = g.SkuAttribute.SkuAttributeLang.First(l => l.LangID.Equals(LangID)).Name, Value = g.Value }).ToArray()
+            };
+
+            var result = netoApi.UpdateItem(update);
+            if (result.Ack.Equals(UpdateItemResponseAck.Success))
+            {
+                return result.Item[0];
+            }
+
+            if (result.Messages.Error.Any())
+            {
+                throw new Exception("Error:" + string.Join(",", result.Messages.Error.Select(e => e.Message + "-" + e.Description).ToArray()));
+            }
+            else
+            {
+                throw new Exception("Waring:" + string.Join(",", result.Messages.Warning.Select(e => e.Message).ToArray()));
+            }
+        }
+
+        public UpdateItemResponseItem UpdateVarToNeto()
+        {
+            if (netoApi == null) netoApi = new NetoApi();
+            string LangID = EnumData.DataLangList().First().Key;
+
+            if (!netoApi.GetItemBySku(skuData.SkuID + "_var").Item.Any())
+                CreateSkuToNeto("_var");
+
+            var skuLang = skuData.SkuLang.First(l => l.LangID.Equals(LangID));
+            var eBayTitle = !string.IsNullOrEmpty(skuData.eBayTitle) ? Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<int, string>>(skuData.eBayTitle) : new Dictionary<int, string> { };
+
+            var update = new UpdateItemItem()
+            {
+                SKU = skuData.SkuID + "_var",
+                Brand = skuData.GetBrand.Name,
+                Name = skuLang.Name,
+                Active = Convert.ToBoolean(skuData.Status),
+                ActiveSpecified = true,
+                Description = skuLang.Description,
+                Specifications = skuLang.SpecContent,
+                ModelNumber = skuLang.Model,
+                UPC = skuData.UPC,
+                Type = skuData.SkuType.SkuTypeLang.FirstOrDefault(l => l.LangID.Equals(LangID))?.Name ?? "",
+                Misc01 = skuLang.PackageContent,
+
+                Misc02 = eBayTitle.ContainsKey(2) ? eBayTitle[2] : "",
+                Misc19 = eBayTitle.ContainsKey(19) ? eBayTitle[19] : "",
+                Misc50 = eBayTitle.ContainsKey(50) ? eBayTitle[50] : "",
+                Misc24 = eBayTitle.ContainsKey(24) ? eBayTitle[24] : "",
+                Misc25 = eBayTitle.ContainsKey(25) ? eBayTitle[25] : "",
+                Misc23 = eBayTitle.ContainsKey(23) ? eBayTitle[23] : "",
+                Misc21 = eBayTitle.ContainsKey(21) ? eBayTitle[21] : "",
+                Misc20 = eBayTitle.ContainsKey(20) ? eBayTitle[20] : "",
+                Misc22 = eBayTitle.ContainsKey(22) ? eBayTitle[22] : "",
+
+                Categories = new UpdateItemItemCategory[] { new UpdateItemItemCategory() { CategoryID = skuData.SkuType.NetoID.Value.ToString() } },
+                ItemSpecifics = skuData.Sku_Attribute.Where(a => a.IsDiverse && a.eBay).GroupBy(a => a.AttrID)
+                    .Where(g => !g.Any(a => a.LangID.Equals(LangID))).Select(g => g.First(a => a.LangID.Equals(LangID)))
                     .Select(g => new UpdateItemItemItemSpecific() { Name = g.SkuAttribute.SkuAttributeLang.First(l => l.LangID.Equals(LangID)).Name, Value = g.Value }).ToArray()
             };
 
@@ -343,18 +400,14 @@ namespace PurchaseOrderSys.Models
             var parentSku = skuData;
             foreach (var variationSku in db.SKU.Where(s => s.IsEnable && s.ParentSku.Equals(parentSku.SkuID)))
             {
-                var response = netoApi.GetItemBySku(variationSku.SkuID);
                 skuData = variationSku;
-                //if (!response.Item.Any())
-                //{
-                //    CreateSkuToNeto();
-                //}
-                //UpdateSkuToNeto();
+                UpdateSkuToNeto();
+                UpdateVarToNeto();
             }
             skuData = parentSku;
         }
 
-        public AddItemResponseItem CreateSkuToNeto()
+        public AddItemResponseItem CreateSkuToNeto(string Suffix = null)
         {
             if (netoApi == null) netoApi = new NetoApi();
             string LangID = EnumData.DataLangList().First().Key;
@@ -367,7 +420,7 @@ namespace PurchaseOrderSys.Models
             AddItemItem newItem = new AddItemItem()
             {
                 SKU = skuData.SkuID,
-                Name = skuLang.Name,
+                Name = skuLang.Name + Suffix,
                 Brand = skuData.GetBrand.Name,
                 ModelNumber = skuLang.Model,
                 UPC = skuData.UPC,
@@ -377,16 +430,16 @@ namespace PurchaseOrderSys.Models
             };
 
             var result = netoApi.AddItem(newItem);
-            if (result.Ack.Equals(AddItemResponseAck.Success))
+            if (result.Ack.Equals(AddItemResponseAck.Success) && string.IsNullOrEmpty(Suffix))
             {
                 if (skuData.Type.Equals((byte)EnumData.SkuType.Single) && skuData.Condition.Equals(1))
                 {
                     foreach (var condition in db.Condition.Where(c => c.IsEnable && !c.ID.Equals(skuData.Condition)).ToList())
                     {
-                        SetSkuData(skuData.SkuID + condition.Suffix);
-                        CreateSkuToNeto();
+                        CreateSkuToNeto(condition.Suffix);
                     }
                 }
+
                 return result.Item[0];
             }
 
