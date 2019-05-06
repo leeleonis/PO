@@ -296,6 +296,12 @@ namespace PurchaseOrderSys.Controllers
             {
                 foreach (var ReceiveVM in ReceiveVMList.Where(x => x.SKU == item.SkuNo))
                 {
+                    if (oTransfer.Status != "Received")
+                    {
+                        oTransfer.Status = "Received";
+                        oTransfer.UpdateAt = CreateAt;
+                        oTransfer.UpdateBy = CreateBy;
+                    }
                     //一般
                     var nSerialsLlist = ReceiveVM.SerialsLlist.Select(x => new SerialsLlist
                     {
@@ -731,19 +737,19 @@ namespace PurchaseOrderSys.Controllers
                     {
                         foreach (var SerialsLlistitem in item.SerialsLlist)
                         {
-                            PrepTableList.Add(new PrepTable { SKU = item.SKU, Name = item.Name, Serial = SerialsLlistitem.SerialsNo, QTY = item.QTY + "/" + item.SerialsLlist.Count() , SerialTracking= GetSerialTracking( item.SKU)});
+                            PrepTableList.Add(new PrepTable { SKU = item.SKU, Name = item.Name, Serial = SerialsLlistitem.SerialsNo, QTY = item.QTY + "/" + item.SerialsLlist.Count(), SerialTracking = GetSerialTracking(item.SKU), count = (item.QTY - item.SerialsLlist.Count()) });
                         }
                     }
                     if (item.RMASerialsLlist.Any())
                     {
                         foreach (var RMASerialsLlistitem in item.RMASerialsLlist)
                         {
-                            PrepTableList.Add(new PrepTable { SKU = item.SKU, Name = item.Name, Serial = RMASerialsLlistitem.SerialsNo, QTY = item.QTY + "/" + item.RMASerialsLlist.Count(), SerialTracking = GetSerialTracking(item.SKU) });
+                            PrepTableList.Add(new PrepTable { SKU = item.SKU, Name = item.Name, Serial = RMASerialsLlistitem.SerialsNo, QTY = item.QTY + "/" + item.RMASerialsLlist.Count(), SerialTracking = GetSerialTracking(item.SKU), count = (item.QTY - item.SerialsLlist.Count()) });
                         }
                     }
                     else
                     {
-                        PrepTableList.Add(new PrepTable { SKU = item.SKU, Name = item.Name, QTY = item.QTY + "/" + item.SerialsLlist.Count(), SerialTracking = GetSerialTracking(item.SKU) });
+                        PrepTableList.Add(new PrepTable { SKU = item.SKU, Name = item.Name, QTY = item.QTY + "/" + item.SerialsLlist.Count(), SerialTracking = GetSerialTracking(item.SKU), count = (item.QTY - item.SerialsLlist.Count()) });
                     }
                 }
             }

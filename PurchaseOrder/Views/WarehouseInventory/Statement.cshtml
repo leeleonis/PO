@@ -61,14 +61,47 @@
                                                             {
                                                             <tr>
                                                                 <td></td>
-                                                                <td>@item.SKU</td>
+                                                                <td>
+                                                                    <a href=' @Url.Action("edit", "Sku", new { id =item.SKU})' target="_blank">@(item.SKU)</a>
+                                                                </td>
                                                                 <td>@item.Date</td>
                                                                 <td>@item.Supplier</td>
                                                                 <td>@item.Channel</td>
                                                                 <td>@item.ISType</td>
-                                                                <td>@item.ID</td>
+                                                                <td>
+                                                                    @if (item.ISType == "Transfer(In)")
+                                                                    {
+                                                                        <a href=' @Url.Action("Edit", "Transfer", new { id = item.ID })' target="_blank">@item.ID</a>
+                                                                    }
+                                                                    else if (item.ISType == "Transfer(Out)")
+                                                                    {
+                                                                        <a href=' @Url.Action("Edit", "Transfer", new { id = item.ID })' target="_blank">@item.ID</a>
+                                                                    }
+                                                                    else if (item.ISType == "PO")
+                                                                    {
+                                                                        <a href=' @Url.Action("EditItem", "PurchaseOrderPO", new { id = item.ID })' target="_blank">@item.ID</a>
+                                                                    }
+                                                                    else if (item.ISType == "Credit Memo")
+                                                                    {
+                                                                        <a href=' @Url.Action("EditItem", "PurchaseOrderCM", new { id = item.ID })' target="_blank">@item.ID</a>
+                                                                    }
+                                                                    else if (item.ISType == "Order Dispatch")
+                                                                    {
+                                                                        <a href='https://dm.cwa.sellercloud.com/Orders/Orders_details.aspx?id=@(item.ID)' target="_blank">@item.ID</a>
+                                                                    }
+                                                                    else if (item.ISType == "RMA")
+                                                                    {
+                                                                        <a href=' @Url.Action("Edit", "RMA", new { id = item.ID })' target="_blank">@item.ID</a>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @item.ID
+                                                                    }
+                                                                </td>
                                                                 <td>@item.Warehouse</td>
-                                                                <td>@item.Serial</td>
+                                                                <td>
+                                                                    <a href=' @Url.Action("Serials", new { SKU = item.SKU,WarehouseID=ViewBag.WarehouseID })' target="_blank">@item.Serial</a>
+                                                                </td>
                                                                 <td>@item.QTY</td>
                                                                 <td>@item.price</td>
                                                                 <td>@item.BalanceAggregate</td>

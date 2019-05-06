@@ -734,7 +734,7 @@ namespace PurchaseOrderSys.Controllers
                     else if (SerialsLlistitem.SerialsType == "Order")
                     {
                         Supplier = SerialsLlistitem.PurchaseSKU.PurchaseOrder.VendorLIst.Name;
-                        ISType = " Order Dispatch";
+                        ISType = "Order Dispatch";
                         ID = SerialsLlistitem.OrderID;
                         Warehouse = SerialsLlistitem.PurchaseSKU.PurchaseOrder.WarehousePO.Name;
                     }

@@ -53,6 +53,25 @@ namespace PurchaseOrderSys.Controllers
             {
                 RMAList = RMAList.Where(x => x.SCRMA == RMAVM.SCRMA);
             }
+            if (RMAVM.OrderID.HasValue)
+            {
+                RMAList = RMAList.Where(x => x.OrderID == RMAVM.OrderID);
+            }
+            if (!string.IsNullOrWhiteSpace(RMAVM.Serial))
+            {
+                var SerialsLlist = new List<int>();
+                var RMAOrderSerialsLlist = db.RMAOrderSerialsLlist.Where(x => x.SerialsNo == RMAVM.Serial);
+                var RMASerialsLlist = db.RMASerialsLlist.Where(x => x.SerialsNo == RMAVM.Serial);
+                foreach (var item in RMAOrderSerialsLlist)
+                {
+                    SerialsLlist.Add(item.RMASKU.RMA.ID);
+                }
+                foreach (var item in RMASerialsLlist)
+                {
+                    SerialsLlist.Add(item.RMASKU.RMA.ID);
+                }
+                RMAList = RMAList.Where(x => SerialsLlist.Contains(x.ID));
+            }
             RMAVM.RMAList = RMAList.OrderByDescending(x => x.ID).Take(1000);
             return View(RMAVM);
         }
@@ -721,6 +740,20 @@ namespace PurchaseOrderSys.Controllers
             {
                 return Json(new { status = false, Errmsg }, JsonRequestBehavior.AllowGet);
             }
+        }
+        public ActionResult SCID(string id)
+        {
+            var RMA = db.RMA.Where(x => x.SCRMA == id).FirstOrDefault();
+
+            if (RMA == null)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return RedirectToAction("Edit", new { id = RMA.ID });
+            }
+
         }
     }
 }
