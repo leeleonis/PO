@@ -301,31 +301,17 @@ namespace PurchaseOrderSys.Models
                 CreateSkuToNeto("_var");
 
             var skuLang = skuData.SkuLang.First(l => l.LangID.Equals(LangID));
-            var eBayTitle = !string.IsNullOrEmpty(skuData.eBayTitle) ? Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<int, string>>(skuData.eBayTitle) : new Dictionary<int, string> { };
-
             var update = new UpdateItemItem()
             {
                 SKU = skuData.SkuID + "_var",
+                ParentSKU = skuData.ParentSku,
                 Brand = skuData.GetBrand.Name,
                 Name = skuLang.Name,
                 Active = Convert.ToBoolean(skuData.Status),
                 ActiveSpecified = true,
-                Description = skuLang.Description,
-                Specifications = skuLang.SpecContent,
                 ModelNumber = skuLang.Model,
                 UPC = skuData.UPC,
                 Type = skuData.SkuType.SkuTypeLang.FirstOrDefault(l => l.LangID.Equals(LangID))?.Name ?? "",
-                Misc01 = skuLang.PackageContent,
-
-                Misc02 = eBayTitle.ContainsKey(2) ? eBayTitle[2] : "",
-                Misc19 = eBayTitle.ContainsKey(19) ? eBayTitle[19] : "",
-                Misc50 = eBayTitle.ContainsKey(50) ? eBayTitle[50] : "",
-                Misc24 = eBayTitle.ContainsKey(24) ? eBayTitle[24] : "",
-                Misc25 = eBayTitle.ContainsKey(25) ? eBayTitle[25] : "",
-                Misc23 = eBayTitle.ContainsKey(23) ? eBayTitle[23] : "",
-                Misc21 = eBayTitle.ContainsKey(21) ? eBayTitle[21] : "",
-                Misc20 = eBayTitle.ContainsKey(20) ? eBayTitle[20] : "",
-                Misc22 = eBayTitle.ContainsKey(22) ? eBayTitle[22] : "",
 
                 Categories = new UpdateItemItemCategory[] { new UpdateItemItemCategory() { CategoryID = skuData.SkuType.NetoID.Value.ToString() } },
                 ItemSpecifics = skuData.Sku_Attribute.Where(a => a.IsDiverse && a.eBay).GroupBy(a => a.AttrID)
