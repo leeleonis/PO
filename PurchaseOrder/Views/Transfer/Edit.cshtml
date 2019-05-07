@@ -104,12 +104,12 @@
                                                     else if (Model.Status == "Shipped")
                                                     {
                                                         <a type="button" href="@Url.Action("Receive", new { Model.ID })" class='btn btn-default btn-sm' id='Receive'>Receive</a>
-                                                        <a type="button" href="@Url.Action("Received", new { Model.ID })" class='btn btn-default btn-sm' id='Received'>Received</a>
+                                                        @*<a type="button" href="@Url.Action("Received", new { Model.ID })" class='btn btn-default btn-sm' id='Received'>Received</a>*@
                                                     }
                                                     else if (Model.Status == "Received")
                                                     {
                                                         <a type="button" href="@Url.Action("Receive", new { Model.ID })" class='btn btn-default btn-sm' id='Receive'>Receive</a>
-                                                        <a type="button" href="@Url.Action("Completed", new { Model.ID })" class='btn btn-default btn-sm' id='Completed'>Completed</a>
+                                                        @*<a type="button" href="@Url.Action("Completed", new { Model.ID })" class='btn btn-default btn-sm' id='Completed'>Completed</a>*@
                                                     }
                                                     else if (Model.Status == "Completed")
                                                     {

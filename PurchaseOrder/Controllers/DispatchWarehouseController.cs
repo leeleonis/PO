@@ -22,12 +22,62 @@ namespace PurchaseOrderSys.Controllers
     public class DispatchWarehouseController : BaseController
     {
         // GET: DispatchWarehouse
-        public ActionResult Index()
+        public ActionResult Index(string Name,string Type,string Serial)
         {      
             ViewBag.Warehouse3PList = new Api.Winit_API().Warehouse3P();
-            var SCList = new Api.SC_API().SCList();
-            ViewBag.SCList = SCList;
+            //var SCList = new Api.SC_API().SCList();
+            //ViewBag.SCList = SCList;
             var Warehouse = db.Warehouse.Where(x => x.IsEnable);
+            if (!string.IsNullOrWhiteSpace(Name))
+            {
+                Warehouse = Warehouse.Where(x => x.Name == Name);
+            }
+            if (!string.IsNullOrWhiteSpace(Type))
+            {
+                Warehouse = Warehouse.Where(x => x.Type == Type);
+            }
+            if (!string.IsNullOrWhiteSpace(Serial))
+            {
+                var WarehouseList = new List<int>();
+                var QSerial = db.SerialsLlist.Where(x => x.SerialsNo == Serial).OrderByDescending(x => x.CreateAt).FirstOrDefault();
+                var QRMASerial = db.RMASerialsLlist.Where(x => x.SerialsNo == Serial).OrderByDescending(x => x.CreateAt).FirstOrDefault();
+                var QRMAOrderSerial = db.RMAOrderSerialsLlist.Where(x => x.SerialsNo == Serial).OrderByDescending(x => x.CreateAt).FirstOrDefault();
+                if (QSerial != null)
+                {
+                    if (QSerial.SerialsType == "Order")
+                    {
+                        //WarehouseList.Add(QSerial.PurchaseSKU.PurchaseOrder.WarehouseID.Value);
+                    }
+                    else if (QSerial.SerialsType == "CM")
+                    {
+                       // WarehouseList.Add(QSerial.PurchaseSKU.PurchaseOrder.WarehouseID.Value);
+                    }
+                    else if (QSerial.SerialsType == "TransferOut")
+                    {
+                        WarehouseList.Add(QSerial.TransferSKU.Transfer.FromWID.Value);
+                    }
+                    else if (QSerial.SerialsType == "PO")
+                    {
+                        WarehouseList.Add(QSerial.PurchaseSKU.PurchaseOrder.WarehouseID.Value);
+                    }
+                    else if (QSerial.SerialsType == "TransferIn")
+                    {
+                        WarehouseList.Add(QSerial.TransferSKU.Transfer.ToWID.Value);
+                    }
+                }
+                if (QRMASerial != null)
+                {
+                    if (QRMASerial.SerialsType == "RMAIn")
+                    {
+                        WarehouseList.Add(QRMASerial.WarehouseID.Value);
+                    }
+                }
+                if (QRMAOrderSerial != null)
+                {           
+                        WarehouseList.Add(QRMAOrderSerial.RMASKU.WarehouseID.Value);
+                }
+                Warehouse = Warehouse.Where(x => WarehouseList.Contains(x.ID));
+            }
             return View(Warehouse);
         }
         public ActionResult Create()

@@ -19,7 +19,7 @@
                     </header>
                     <div>
                         <div class="widget-body no-padding">
-                            <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
+                            <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data" onSubmit="return isValid()">
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="IsEnable" value="True">
                                 <div id="content" class="tab-content">
@@ -92,7 +92,15 @@
                             }
                         }
                     },
-                    { data: "Serial" },
+                    {
+                        data: "Serial",
+                        render: function (data, type, row, meta) {
+                            if (data == null) {
+                                data = "";
+                            }
+                            return data + '<input class="form-control SerialCount" type = "hidden"  val=' + row.count+' >';
+                        }
+                    },
                     { data: "Label" },
                     { data: "Download" }
                 ],
@@ -141,7 +149,17 @@
             });
         });
 
-
-
+        function isValid() {
+            var SerialCount = 0;
+            $(".SerialCount").each(function () {
+                SerialCount += parseInt($(this).attr("val"));
+            })
+            if (SerialCount != 0) {
+                return  confirm("序號不齊全,是否確定入庫");
+            }
+            else {
+                return true;
+            }
+        }
     </script>
 }

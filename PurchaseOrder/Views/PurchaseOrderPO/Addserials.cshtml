@@ -43,11 +43,11 @@
                                                     </div>
                                                 </div>
                                                 @*<div class="form-group">
-                                                    @Html.LabelFor(model => model.SKU.SkuLang.First().LangID, htmlAttributes: new { @class = "control-label col-sm-2 col-lg-4" })
-                                                    <div class="col-sm-8 col-lg-4">
-                                                        @Html.DropDownList("LangID", LangList, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
-                                                    </div>
-                                                </div>*@
+            @Html.LabelFor(model => model.SKU.SkuLang.First().LangID, htmlAttributes: new { @class = "control-label col-sm-2 col-lg-4" })
+            <div class="col-sm-8 col-lg-4">
+                @Html.DropDownList("LangID", LangList, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+            </div>
+        </div>*@
                                                 <div class="form-group">
                                                     @Html.LabelFor(model => model.SKU.Company, htmlAttributes: new { @class = "control-label col-sm-2 col-lg-4" })
                                                     <div class="col-sm-8 col-lg-4">
@@ -84,6 +84,11 @@
                                                     <div class="col-sm-8 col-lg-4">
                                                         @Html.EditorFor(x => Model.QTYReceived, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                                                     </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2 col-lg-4">
+                                                        Warehouse:@Model.PurchaseOrder.WarehousePO.Name
+                                                    </label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-12 col-lg-6 no-padding">

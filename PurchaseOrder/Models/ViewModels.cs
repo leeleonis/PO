@@ -1213,6 +1213,7 @@ namespace PurchaseOrderSys.Models
         /// 開啟序號管理
         /// </summary>
         public bool SerialTracking { get; set; }
+        public int? count { get; set; }
     }
     public class GetImgVM
     {
@@ -1251,6 +1252,7 @@ namespace PurchaseOrderSys.Models
     public class RMAVM : RMA
     {
         public int? QID { get; set; }
+        public string Serial { get; set; }
         public IEnumerable<RMA> RMAList { get; set; }
     }
 

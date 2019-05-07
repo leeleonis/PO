@@ -3,7 +3,7 @@
     ViewBag.ptitle = "Dispatch Warehouse";
     var SCIDList = (PurchaseOrderSys.SCService.Warehouse[])ViewBag.SCList;
     var Warehouse3PList = (List<SelectListItem>)ViewBag.Warehouse3PList;
-    var SCList = SCIDList.Select(x => new SelectListItem { Text = x.Name, Value = x.ID.ToString() }).ToList();
+    //var SCList = SCIDList.Select(x => new SelectListItem { Text = x.Name, Value = x.ID.ToString() }).ToList();
     var ShippingList = new PurchaseOrderSys.Api.Shipping_API().ShippingList();
     var SummaryList = new List<string> { "Shippingmethods", "3PWarehouse", "Marketplace", "SCID" };
 }
@@ -41,17 +41,21 @@
                                         <legend>Search</legend>
                                         <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
                                             <div class="form-group">
-                                                @Html.Label("Name", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @Html.Label("Name", htmlAttributes: new { @class = "control-label col-sm-1" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("Name", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
-                                                @Html.Label("Type", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @Html.Label("Type", htmlAttributes: new { @class = "control-label col-sm-1" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("Type", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
+                                                @Html.Label("Serial Search", htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("Serial", new { htmlAttributes = new { @class = "form-control" } })
+                                                </div>
                                             </div>
                                             <div class="col-lg-offset-10">
-                                                <button type="button" id="btn-search" class="btn btn-info btn-lg">Search</button>
+                                                <button type="submit" id="btn-search" class="btn btn-info btn-lg">Search</button>
                                             </div>
                                         </form>
                                     </fieldset>
