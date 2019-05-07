@@ -151,7 +151,7 @@
                                                     @{
                                                         var SerialsLlist = Model.RMASerialsLlist.Where(x => x.SerialsType == "RMAIn");
                                                     }
-                                                    <label>Serial # ( <label id="Serialcount">@SerialsLlist.Count()</label> /1</label>
+                                                    <label>Serial # ( <label id="Serialcount">@SerialsLlist.Count()</label> /1</label>)
                                                     <ul style="list-style-type:none;list-style-position: inside;padding-left: 0px;padding-left: 0px;" id="SerialList">
                                                         @foreach (var item in SerialsLlist)
                                                         {
