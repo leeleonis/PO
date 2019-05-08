@@ -46,6 +46,7 @@
                                                                 <th>RMA</th>
                                                                 <th>PO</th>
                                                                 <th>CM</th>
+                                                                <th>Transfer</th>
                                                                 <th>Warehouse</th>
                                                                 <th>Dispatch Location</th>
                                                                 <th>Value</th>
@@ -60,43 +61,50 @@
                                                                 foreach (var Skuitem in Model.InventorySerialsItem)
                                                                 {
 
-                                                                            <tr>
-                                                                                <td>@Skuitem.Serial</td>
-                                                                                <td>
-                                                                                    @if (Skuitem.Order.HasValue)
-                                                                                    {
-                                                                                        <a href='https://dm.cwa.sellercloud.com/Orders/Orders_details.aspx?id=@(Skuitem.Order)' target="_blank">@Skuitem.Order</a>
-                                                                                    }
-                                                                                </td>
-                                                                                <td>
-                                                                                    @if (Skuitem.RMA.HasValue)
-                                                                                    {
-                                                                                        <a href=' @Url.Action("Edit", "RMA", new { id = Skuitem.RMA })' target="_blank">@Skuitem.RMA</a>
+                                                            <tr>
+                                                                <td>@Skuitem.Serial</td>
+                                                                <td>
+                                                                    @if (Skuitem.Order.HasValue)
+                                                                    {
+                                                                        <a href='https://dm.cwa.sellercloud.com/Orders/Orders_details.aspx?id=@(Skuitem.Order)' target="_blank">@Skuitem.Order</a>
+                                                                    }
+                                                                </td>
+                                                                <td>
+                                                                    @if (Skuitem.RMA.HasValue)
+                                                                    {
+                                                                        <a href=' @Url.Action("Edit", "RMA", new { id = Skuitem.RMA })' target="_blank">@Skuitem.RMA</a>
 
-                                                                                    }
-                                                                                </td>
-                                                                                <td>
-                                                                                    @if (Skuitem.PO.HasValue)
-                                                                                    {
-                                                                                        <a href=' @Url.Action("EditItem", "PurchaseOrderPO", new { id = Skuitem.PO })' target="_blank">@Skuitem.PO</a>
+                                                                    }
+                                                                </td>
+                                                                <td>
+                                                                    @if (Skuitem.PO.HasValue)
+                                                                    {
+                                                                        <a href=' @Url.Action("EditItem", "PurchaseOrderPO", new { id = Skuitem.PO })' target="_blank">@Skuitem.PO</a>
 
-                                                                                    }
-                                                                                </td>
-                                                                                <td>
-                                                                                    @if (Skuitem.CM.HasValue)
-                                                                                    {
-                                                                                        <a href=' @Url.Action("EditItem", "PurchaseOrderCM", new { id = Skuitem.CM })' target="_blank">@Skuitem.CM</a>
+                                                                    }
+                                                                </td>
+                                                                <td>
+                                                                    @if (Skuitem.CM.HasValue)
+                                                                    {
+                                                                        <a href=' @Url.Action("EditItem", "PurchaseOrderCM", new { id = Skuitem.CM })' target="_blank">@Skuitem.CM</a>
 
-                                                                                    }
-                                                                                </td>
-                                                                                <td>@Skuitem.Warehouse</td>
-                                                                                <td>@Skuitem.DispatchLocation</td>
-                                                                                <td>@Skuitem.Value</td>
-                                                                                <td>@Skuitem.Date</td>
-                                                                                <td>
-                                                                                    <a class='btn btn-default btn-sm GetHistory' href='@Url.Action("GetHistory", new { ID = Skuitem.Serial })'>History</a>
-                                                                                </td>
-                                                                            </tr>
+                                                                    }
+                                                                </td>
+                                                                <td>
+                                                                    @if (Skuitem.Transfer.HasValue)
+                                                                    {
+                                                                        <a href=' @Url.Action("Edit", "Transfer", new { id = Skuitem.Transfer })' target="_blank">@Skuitem.Transfer</a>
+
+                                                                    }
+                                                                </td>
+                                                                <td>@Skuitem.Warehouse</td>
+                                                                <td>@Skuitem.DispatchLocation</td>
+                                                                <td>@Skuitem.Value</td>
+                                                                <td>@Skuitem.Date</td>
+                                                                <td>
+                                                                    <a class='btn btn-default btn-sm GetHistory' href='@Url.Action("GetHistory", new { ID = Skuitem.Serial })'>History</a>
+                                                                </td>
+                                                            </tr>
 
 
                                                                 }

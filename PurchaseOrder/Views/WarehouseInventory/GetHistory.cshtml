@@ -17,7 +17,7 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>@item.Date</td>
+                <td>@item.Date.ToLocalTime()</td>
                 <td>@item.ISType</td>
                 <td>
                     @if (item.ISType == "Transfer(In)")

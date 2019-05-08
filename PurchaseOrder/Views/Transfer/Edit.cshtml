@@ -86,9 +86,12 @@
                                         <fieldset>
                                             <legend></legend>
                                             <div class="form-group">
-                                                <div class="col-sm-9  col-lg-8">
+                                                <div class="col-sm-9  col-lg-12">
                                                     @if (Model.Status == "Pending")
                                                     {
+                                                        <div class="col-lg-offset-11">
+                                                            <a class='btn btn-danger btn-sm Excel' valID=" @Model.ID">Create by Excel</a>
+                                                        </div>
                                                         <a type="button" href="@Url.Action("Requested", new { Model.ID })" class='btn btn-default btn-sm' id='Request'>Request</a>
                                                     }
                                                     else if (Model.Status == "Requested")
@@ -192,6 +195,9 @@
             </article>
         </div>
     </section>
+</div>
+<div id="dialog">
+
 </div>
 @section pagespecific {
     <script type="text/javascript">
@@ -379,6 +385,26 @@
                     }
                 });
             });
+            $("#dialog").dialog({
+                autoOpen: false,
+                width: 800
+            });
+            $("body").on("click", ".Excel", function () {
+                var url = '@Url.Action("SerialsExcel", "Ajax")'
+                $.ajax({
+                    url: url,
+                    data: { id: $(this).attr("valID"), key: "TransferExcel"},
+                    success: function (data) {
+                        $("#dialog").dialog({
+                            title: "Excel"
+                        });
+                        $("#dialog").html(data);
+                        $("#dialog").dialog("open");
+                        //$("#dialog").load(data).dialog({ modal: true }).dialog('open');
+                    }
+                });
+                return false;
+            });
         });
         function ajaxpost(e) {
             $.ajax({
@@ -431,7 +457,15 @@
                     }
                 }
             });
-
+        }
+        function Success(data) {
+            $("#dialog").dialog("close");
+            if (data.status == false) {
+                alert(data.Msg);
+            }
+            if (data.reload == true) {
+                window.location.reload();
+            }
         }
     </script>
 }

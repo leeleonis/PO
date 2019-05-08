@@ -1391,6 +1391,7 @@ namespace PurchaseOrderSys.Models
         public int? RMA { get; set; }
         public int? PO { get; set; }
         public int? CM { get; set; }
+        public int? Transfer { get; set; }
         public string Warehouse { get; set; }
         public string DispatchLocation { get; set; }
         public decimal? Value { get; set; }

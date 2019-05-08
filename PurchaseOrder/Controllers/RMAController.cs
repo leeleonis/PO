@@ -245,8 +245,13 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult RSkuNumberList(int? draw, int? start, int? length, int? OrderID, string SourceID, string UserID, string SID)
         {
             var RMAModelVMList = new List<RMAModelVM>();
-            if (OrderID.HasValue || !string.IsNullOrWhiteSpace(SourceID)|| !string.IsNullOrWhiteSpace(UserID))
+            if (OrderID.HasValue || !string.IsNullOrWhiteSpace(SourceID) || !string.IsNullOrWhiteSpace(UserID))
             {
+                var HaveSerialsLlist = db.SerialsLlist.Where(x => x.OrderID == OrderID && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable).Any();
+                if (!HaveSerialsLlist)
+                {
+                    return Json(new { success = false, errmsg = "系統內無出貨資料" }, JsonRequestBehavior.AllowGet);
+                }
                 var OrderItemData = GetOrderItemData(OrderID, SourceID, UserID, 3);
                 var NoSKU = new List<string>();
                 int index = 0;
@@ -279,12 +284,12 @@ namespace PurchaseOrderSys.Controllers
                                         {
                                             Serial = SKUitem.Serials[i];
                                         }
-                                        catch 
+                                        catch
                                         {
 
 
                                         }
-                                        RMAModelVMList.Add(new RMAModelVM { ck = index, Order = item.OrderID, SourceID = item.OrderSourceOrderId, QTY = 1, SKU = SKUNo, ProductName = ProductName, UPC = UPC, Serial= Serial });
+                                        RMAModelVMList.Add(new RMAModelVM { ck = index, Order = item.OrderID, SourceID = item.OrderSourceOrderId, QTY = 1, SKU = SKUNo, ProductName = ProductName, UPC = UPC, Serial = Serial });
                                         index++;
                                     }
 
@@ -317,7 +322,6 @@ namespace PurchaseOrderSys.Controllers
                             return Json(new { success = false, errmsg = "無可開RMA的訂單" }, JsonRequestBehavior.AllowGet);
                         }
                     }
-
                     Session["RSkuNumberList" + SID] = OrderItemData;
                 }
                 else
@@ -575,32 +579,32 @@ namespace PurchaseOrderSys.Controllers
                 {
                     var HaveOrderData = db.SerialsLlist.Where(x => x.SerialsType == "Order" && x.SerialsNo == serials && x.PurchaseSKU.SkuNo == RMASKU.SkuNo && x.OrderID == RMASKU.RMA.OrderID).Any();
 
-                    if (!HaveOrderData)
-                    {
-                        HaveOrderData = RMASKU.RMAOrderSerialsLlist.Where(x => x.SerialsNo == serials).Any();
-                        if (!HaveOrderData)
-                        {
-                            var OrderItemData = GetOrderItemData(RMASKU.RMA.OrderID, null, null, 3);
-                            foreach (var Orderitem in OrderItemData)
-                            {
-                                foreach (var item in Orderitem.Items.Where(x => x.SKU == RMASKU.SkuNo))
-                                {
-                                    HaveOrderData = item.Serials.Where(x => x == serials).Any();
-                                    if (HaveOrderData)
-                                    {
-                                        RMASKU.RMAOrderSerialsLlist.Add(new RMAOrderSerialsLlist
-                                        {
-                                            IsEnable = true,
-                                            SerialsNo = serials,
-                                            SerialsQTY = 1,
-                                            CreateBy = UserBy,
-                                            CreateAt = dt
-                                        });
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    //if (!HaveOrderData)
+                    //{
+                    //    HaveOrderData = RMASKU.RMAOrderSerialsLlist.Where(x => x.SerialsNo == serials).Any();
+                    //    if (!HaveOrderData)
+                    //    {
+                    //        var OrderItemData = GetOrderItemData(RMASKU.RMA.OrderID, null, null, 3);
+                    //        foreach (var Orderitem in OrderItemData)
+                    //        {
+                    //            foreach (var item in Orderitem.Items.Where(x => x.SKU == RMASKU.SkuNo))
+                    //            {
+                    //                HaveOrderData = item.Serials.Where(x => x == serials).Any();
+                    //                if (HaveOrderData)
+                    //                {
+                    //                    RMASKU.RMAOrderSerialsLlist.Add(new RMAOrderSerialsLlist
+                    //                    {
+                    //                        IsEnable = true,
+                    //                        SerialsNo = serials,
+                    //                        SerialsQTY = 1,
+                    //                        CreateBy = UserBy,
+                    //                        CreateAt = dt
+                    //                    });
+                    //                }
+                    //            }
+                    //        }
+                    //    }
+                    //}
                     if (HaveOrderData)
                     {
                         try

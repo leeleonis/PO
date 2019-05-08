@@ -526,7 +526,17 @@ namespace PurchaseOrderSys.Controllers
                 if (SerialsLlist.Where(x => x.SerialsQTY > 0 && !x.SerialsLlistC.Any()).Any())
                 {
                     var Serial = SerialsLlist.FirstOrDefault();
-                    var PrepVM = PrepVMList.Where(x => x.SKU == Serial.PurchaseSKU.SkuNo).FirstOrDefault();
+                    var SkuNo = "";
+                    if (Serial.PurchaseSKUID.HasValue)
+                    {
+                        SkuNo = Serial.PurchaseSKU.SkuNo;
+                    }
+                    else if (Serial.TransferSKUID.HasValue)
+                    {
+                        SkuNo = Serial.TransferSKU.SkuNo;
+                    }
+
+                    var PrepVM = PrepVMList.Where(x => x.SKU == SkuNo).FirstOrDefault();
                     if (PrepVM != null)
                     {
                         if (PrepVM.QTY > PrepVM.SerialsLlist.Count())
@@ -744,7 +754,7 @@ namespace PurchaseOrderSys.Controllers
                     {
                         foreach (var RMASerialsLlistitem in item.RMASerialsLlist)
                         {
-                            PrepTableList.Add(new PrepTable { SKU = item.SKU, Name = item.Name, Serial = RMASerialsLlistitem.SerialsNo, QTY = item.QTY + "/" + item.RMASerialsLlist.Count(), SerialTracking = GetSerialTracking(item.SKU), count = (item.QTY - item.SerialsLlist.Count()) });
+                            PrepTableList.Add(new PrepTable { SKU = item.SKU, Name = item.Name, Serial = RMASerialsLlistitem.SerialsNo, QTY = item.QTY + "/" + item.RMASerialsLlist.Count(), SerialTracking = GetSerialTracking(item.SKU), count = (item.QTY - item.RMASerialsLlist.Count()) });
                         }
                     }
                     else

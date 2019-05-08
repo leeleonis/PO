@@ -948,18 +948,15 @@ namespace PurchaseOrderSys.Controllers
                         //var RMA = FRMA?.RMASKU.RMAID;
                         var PO = SerialsLlist.Where(x => x.PurchaseSKU.PurchaseOrderID.HasValue).FirstOrDefault()?.PurchaseSKU.PurchaseOrderID;
                         var CM = SerialsLlist.Where(x => x.PurchaseSKU.CreditMemoID.HasValue).FirstOrDefault()?.PurchaseSKU.CreditMemoID;
+                        var Transfer =SerialsLlist.Where(x => x.TransferSKUID.HasValue).FirstOrDefault()?.TransferSKU.TransferID;
                         var WarehouseName = "";
                         var Location = "";
-                        if (Skuitem.PurchaseOrder != null)
-                        {
-                            WarehouseName = Skuitem.PurchaseOrder.WarehousePO.Name;
-                        }
-                        else if (Skuitem.CreditMemo != null)
-                        {
-                            WarehouseName = Skuitem.CreditMemo.PurchaseOrder.WarehousePO.Name;
-                        }
+                        var lastSerial = SerialsLlist.OrderByDescending(x => x.CreateAt).FirstOrDefault();//最後一筆資料
+                        WarehouseName = lastWarehouse(lastSerial);
+                        
+                        
                         var Price = SerialsLlist.Where(x => x.PurchaseSKU.Price.HasValue).FirstOrDefault()?.PurchaseSKU.Price;
-                        var CreateAt = SerialsLlist.OrderByDescending(x => x.CreateAt).FirstOrDefault()?.CreateAt;
+                        var CreateAt = lastSerial?.CreateAt;
                         //if (FRMA?.CreateAt > CreateAt)
                         //{
                         //    CreateAt = FRMA?.CreateAt;
@@ -974,6 +971,7 @@ namespace PurchaseOrderSys.Controllers
                             PO = PO,
                             DispatchLocation = Location,
                             Order = Order,
+                            Transfer= Transfer,
                             //RMA = RMA,
                             Serial = SerialsNoitem,
                             Value = Price,
@@ -1014,13 +1012,36 @@ namespace PurchaseOrderSys.Controllers
             }
             var InventorySerials = new InventorySerials
             {
-                InventorySerialsItem = InventorySerialsItem,
+                InventorySerialsItem = InventorySerialsItem.OrderByDescending(x=>x.Date).ToList(),
                 SKU = SKU,
                 SKUName = SKUName,
                 CompanyName= CompanyName
             };
             return View(InventorySerials);
         }
+
+        private string lastWarehouse(SerialsLlist lastSerial)
+        {
+            var WarehouseName = "";
+            if (lastSerial.SerialsType == "PO")
+            {
+                WarehouseName = lastSerial.PurchaseSKU.PurchaseOrder.WarehousePO.Name;
+            }
+            else if (lastSerial.SerialsType == "TransferIn")
+            {
+                WarehouseName = lastSerial.TransferSKU.Transfer.WarehouseTo.Name;
+            }
+            else if (lastSerial.SerialsType == "TransferOut")
+            {
+                WarehouseName = lastSerial.TransferSKU.Transfer.WarehouseFrom.Name;
+            }
+            else if (lastSerial.SerialsType == "CM" || lastSerial.SerialsType == "Order")
+            {
+                WarehouseName = lastWarehouse(lastSerial.SerialsLlistP);
+            }
+            return WarehouseName;
+        }
+
         public ActionResult Inventory(string SKU, int WarehouseID)
         {
             var NoList = new List<int>();
@@ -1354,7 +1375,7 @@ namespace PurchaseOrderSys.Controllers
                 {
                     ISType = "Transfer(Out)";
                     SID = item.TransferSKU.TransferID;
-                    Warehouse = item.PurchaseSKU.PurchaseOrder.WarehousePO.Name;
+                    Warehouse = item.TransferSKU.Transfer.WarehouseFrom.Name;
                 }
                 else if (item.SerialsType == "PO")
                 {
@@ -1390,6 +1411,12 @@ namespace PurchaseOrderSys.Controllers
                     ISType = "RMA";
                     SID = item.RMASKU.RMAID;
                     Warehouse = item.Warehouse.Name;
+                }
+                else if (item.SerialsType == "TransferOut")
+                {
+                    ISType = "Transfer(Out)";
+                    SID = item.TransferSKU.TransferID;
+                    Warehouse = item.TransferSKU.Transfer.WarehouseFrom.Name;
                 }
                 SerialsLlistVMList.Add(new SerialsLlistVM { Date = CreateAt, ID = SID, ISType = ISType, QTY = QTY, UpdatedBy = UpdatedBy, Warehouse = Warehouse });
             }

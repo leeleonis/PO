@@ -15,6 +15,15 @@ namespace PurchaseOrderSys.Controllers
 {
     public class AjaxController : BaseController
     {
+        protected static bool UpdateSC = true;
+        public AjaxController()
+        {
+            var TestMod = System.Configuration.ConfigurationManager.AppSettings["TestMod"];
+            if (TestMod == "true")
+            {
+                UpdateSC = false;
+            }
+        }
         [HttpPost]
         public ActionResult Language(string Lang)
         {
@@ -946,6 +955,10 @@ namespace PurchaseOrderSys.Controllers
                     }
                 }
             }
+            else if (key == "TransferExcel")//SKU及序號上傳
+            {
+                return Json(new { status = true, reload = true }, JsonRequestBehavior.AllowGet);
+            }
             else
             {
                 return Json(new { status = false, Msg = "參數錯誤" }, JsonRequestBehavior.AllowGet);
@@ -1012,13 +1025,20 @@ namespace PurchaseOrderSys.Controllers
                     SC_WebService SCWS = new SC_WebService("tim@weypro.com", "timfromweypro");
                     var order = SCWS.Get_OrderData(OrderID).Order;//去SC抓訂單資料
                     var SCRMA = SCWS.Get_RMA_by_OrderID(OrderID);//檢查SC上是否有開過RMA
-                    order.OrderCreationSourceApplication = SCService.OrderCreationSourceApplicationType.PointOfSale;
-                    if (SCWS.Update_Order(order))
+                    if (UpdateSC)
                     {
-                        int RMAId;
+                        order.OrderCreationSourceApplication = SCService.OrderCreationSourceApplicationType.PointOfSale;
+                    }
+                 
+                    if (!UpdateSC || SCWS.Update_Order(order))
+                    {
+                        int RMAId = 0;
                         if (SCRMA == null)
                         {
-                            RMAId = SCWS.Create_RMA(order.ID);//建立RMAID
+                            if (UpdateSC)
+                            {
+                                RMAId = SCWS.Create_RMA(order.ID);//建立RMAID
+                            }
                         }
                         else
                         {
@@ -1027,7 +1047,7 @@ namespace PurchaseOrderSys.Controllers
                         //建立RMA資料
                         var newRMA = new RMA
                         {
-                            IsEnable=true,
+                            IsEnable = true,
                             OrderID = OrderID,
                             SourceID = order.OrderSourceOrderId,
                             CompanyID = order.CompanyId,
@@ -1055,33 +1075,35 @@ namespace PurchaseOrderSys.Controllers
                             var SKUSerialsLlist = SerialsLlist.Where(x => x.PurchaseSKU.SkuNo == item.ProductID).Select(x => x.SerialsNo);
                             string serialsList = string.Join(",", SKUSerialsLlist);
 
-                            int RMAItemID;
+                            int RMAItemID = 0;
                             var OrderItemID = order.Items.Where(x => x.ProductID == item.ProductID).FirstOrDefault().ID;
-
-                            if (SCRMA == null)
+                            if (UpdateSC)
                             {
-                                RMAItemID = SCWS.Create_RMA_Item(item.OrderID, item.ID, RMAId, item.Qty, Reason, "");//建立每個SKU要退貨的數量原因，並取回ID
-                                SCWS.Receive_RMA_Item(RMAId, RMAItemID, item.ProductID, item.Qty, ReturnWarehouseID, serialsList);//RMA入庫
-                            }
-                            else
-                            {
-                                var SCRMA_Item = SCWS.Get_RMA_Item(OrderID)?.Where(x => x.OriginalOrderItemID == OrderItemID).FirstOrDefault();
-                                if (SCRMA_Item == null)//沒資料就新增
+                                if (SCRMA == null)
                                 {
                                     RMAItemID = SCWS.Create_RMA_Item(item.OrderID, item.ID, RMAId, item.Qty, Reason, "");//建立每個SKU要退貨的數量原因，並取回ID
                                     SCWS.Receive_RMA_Item(RMAId, RMAItemID, item.ProductID, item.Qty, ReturnWarehouseID, serialsList);//RMA入庫
                                 }
                                 else
                                 {
-                                    //有資料直接取值
-                                    RMAItemID = SCRMA_Item.ID;
-                                    if (SCRMA_Item.QtyReturned > SCRMA_Item.QtyReceived)//比對數量
+                                    var SCRMA_Item = SCWS.Get_RMA_Item(OrderID)?.Where(x => x.OriginalOrderItemID == OrderItemID).FirstOrDefault();
+                                    if (SCRMA_Item == null)//沒資料就新增
                                     {
+                                        RMAItemID = SCWS.Create_RMA_Item(item.OrderID, item.ID, RMAId, item.Qty, Reason, "");//建立每個SKU要退貨的數量原因，並取回ID
                                         SCWS.Receive_RMA_Item(RMAId, RMAItemID, item.ProductID, item.Qty, ReturnWarehouseID, serialsList);//RMA入庫
                                     }
+                                    else
+                                    {
+                                        //有資料直接取值
+                                        RMAItemID = SCRMA_Item.ID;
+                                        if (SCRMA_Item.QtyReturned > SCRMA_Item.QtyReceived)//比對數量
+                                        {
+                                            SCWS.Receive_RMA_Item(RMAId, RMAItemID, item.ProductID, item.Qty, ReturnWarehouseID, serialsList);//RMA入庫
+                                        }
+                                    }
                                 }
+                                SCWS.Delete_ItemSerials(item.OrderID, item.ID);//SC上的序號移除
                             }
-                            SCWS.Delete_ItemSerials(item.OrderID, item.ID);//SC上的序號移除
                             //建立RMASKU資料
                             var UnitPrice = 0m;
                             decimal.TryParse(item.UnitPrice, out UnitPrice);
@@ -1097,7 +1119,7 @@ namespace PurchaseOrderSys.Controllers
                                     WarehouseID = WarehouseID,
                                     Reason = Reason.ToString(),
                                     UnitPrice = UnitPrice,
-                                    RMAItemID= RMAItemID,
+                                    RMAItemID = RMAItemID,
                                     CreateBy = "RMAAPI",
                                     CreateAt = dt,
                                 };
@@ -1125,18 +1147,76 @@ namespace PurchaseOrderSys.Controllers
                                 newRMA.RMASKU.Add(newRMASKU);
                             }
                         }
-                        order.OrderCreationSourceApplication = OrderCreationSourceApplicationType.Default;
-                        SCWS.Update_Order(order);
+                        if (UpdateSC)
+                        {
+                            order.OrderCreationSourceApplication = OrderCreationSourceApplicationType.Default;
+                            SCWS.Update_Order(order);
+                        }
                         result.data = RMAId;
                         db.RMA.Add(newRMA);
                         db.SaveChanges();
-                        //
+                        //開移倉單
+                        var nTransfer = new Transfer
+                        {
+                            IsEnable = true,
+                            Title = OrderID + "_Cancel ",
+                            FromWID = WarehouseID,
+                            ToWID = WarehouseID,
+                            Status = "Completed",
+                            Interim = 2,
+                            CreateBy = "RMAAPI",
+                            CreateAt = dt
+                        };
+                        foreach (var RMASKUitem in newRMA.RMASKU)
+                        {
+                            var nTransferSKU = new TransferSKU
+                            {
+                                IsEnable = true,
+                                QTY = 1,
+                                SkuNo = RMASKUitem.SkuNo,
+                                Name = RMASKUitem.Name,
+                                CreateBy = "RMAAPI",
+                                CreateAt = dt
+                            };
+
+                            foreach (var Serialitem in RMASKUitem.RMASerialsLlist)
+                            {
+                                var nSerialsLlist = new SerialsLlist
+                                {
+                                    IsEnable = true,
+                                    SerialsNo= Serialitem.SerialsNo,
+                                    SerialsQTY=1,
+                                    SerialsType= "TransferIn",
+                                    CreateBy = "RMAAPI",
+                                    CreateAt = dt,
+                                    ReceivedBy = "RMAAPI",
+                                    ReceivedAt = dt,
+                                };
+                                nTransferSKU.SerialsLlist.Add(nSerialsLlist);
+                                var nRMASerialsLlist = new RMASerialsLlist
+                                {
+                                    IsEnable = true,
+                                    RMASKUID= RMASKUitem.ID,
+                                    PID= Serialitem.ID,
+                                    SerialsNo = Serialitem.SerialsNo,
+                                    SerialsQTY = 1,
+                                    SerialsType = "TransferOut",
+                                    CreateBy = "RMAAPI",
+                                    CreateAt = dt,
+                                    ReceivedBy = "RMAAPI",
+                                    ReceivedAt = dt,
+                                };
+                                nTransferSKU.RMASerialsLlist.Add(nRMASerialsLlist);
+                            }
+                            nTransfer.TransferSKU.Add(nTransferSKU);
+                        }
+                        db.Transfer.Add(nTransfer);
+                        db.SaveChanges();
                     }
                     else
                     {
                         result.SetError("無訂單資料");
                     }
-
                 }
                 catch (Exception ex)
                 {

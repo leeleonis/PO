@@ -418,7 +418,11 @@
                     {
                         data: "ID",
                         render: function (data, type, row, meta) {
-                            var html = " <a href='@Url.Action("Returnedserials")?ID=" + data + "' class='btn btn-default btn-sm'>Receive returns</a>";
+                            var html = "";
+                             @if (Model.Status != "Closed")
+                             {
+                                 @:html += " <a href='@Url.Action("Returnedserials")?ID=" + data + "' class='btn btn-default btn-sm'>Receive returns</a>";
+                             }
                             html += " <a val='" + data + "'  oSKU='" + row.SKU + "' class='btn btn-default btn-sm ChangeSKU'>Renew item</a>";
                             return html;
                         }
