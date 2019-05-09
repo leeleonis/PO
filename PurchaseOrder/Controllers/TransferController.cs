@@ -119,7 +119,13 @@ namespace PurchaseOrderSys.Controllers
         private string GetSerialMulti(TransferSKU item)
         {
             var SerialsLlist = item.SerialsLlist.Where(x => x.SerialsType == "TransferOut");
-            if (SerialsLlist.Any())
+            var RMASerialsLlist = item.RMASerialsLlist.Where(x => x.SerialsType == "TransferOut");
+
+            if (SerialsLlist.Any() && RMASerialsLlist.Any())
+            {
+                return "Multi";
+            }
+            else if (SerialsLlist.Any() && RMASerialsLlist.Any())
             {
                 if (SerialsLlist.Count() > 1)
                 {
@@ -133,7 +139,6 @@ namespace PurchaseOrderSys.Controllers
             }
             else
             {
-                var RMASerialsLlist = item.RMASerialsLlist.Where(x => x.SerialsType == "TransferOut");
                 if (RMASerialsLlist.Any())
                 {
                     if (RMASerialsLlist.Count() > 1)
@@ -379,9 +384,9 @@ namespace PurchaseOrderSys.Controllers
             var PrepVMList = new List<TransferItemVM>();
             foreach (var item in oTransfer.TransferSKU.Where(x => x.IsEnable))
             {
-
                 PrepVMList.Add(new TransferItemVM
                 {
+                    WarehouseID = oTransfer.FromWID,
                     SKU = item.SkuNo,
                     Name = item.Name,
                     QTY = item.QTY,
@@ -518,9 +523,10 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult PrepSaveserials(string serials, string SID)
         {
             var PrepVMList = (List<TransferItemVM>)Session["PrepVMList" + SID];
-
+            var WarehouseID = PrepVMList.FirstOrDefault().WarehouseID;
             var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials && !x.SerialsLlistC.Any() && x.SerialsQTY > 0);//找到序號
-            var RMASerialsLlist = db.RMASerialsLlist.Where(x => x.SerialsNo == serials && !x.RMASerialsLlistC.Any() && x.SerialsQTY > 0);//找到RMA序號
+            SerialsLlist = SerialsLlist.Where(x => (x.TransferSKUID.HasValue && x.TransferSKU.Transfer.ToWID == WarehouseID) || (x.PurchaseSKUID.HasValue && x.PurchaseSKU.PurchaseOrder.WarehouseID == WarehouseID));
+            var RMASerialsLlist = db.RMASerialsLlist.Where(x => x.SerialsNo == serials && !x.RMASerialsLlistC.Any() && x.SerialsQTY > 0&&x.WarehouseID== WarehouseID);//找到RMA序號
             if (SerialsLlist.Any())
             {
                 if (SerialsLlist.Where(x => x.SerialsQTY > 0 && !x.SerialsLlistC.Any()).Any())
@@ -539,9 +545,9 @@ namespace PurchaseOrderSys.Controllers
                     var PrepVM = PrepVMList.Where(x => x.SKU == SkuNo).FirstOrDefault();
                     if (PrepVM != null)
                     {
-                        if (PrepVM.QTY > PrepVM.SerialsLlist.Count())
+                        if (PrepVM.QTY > PrepVM.SerialsLlist.Count() + PrepVM.RMASerialsLlist.Count())
                         {
-                            if (!PrepVMList.Where(x => x.SerialsLlist.Where(y => y.SerialsNo == serials).Any()).Any())
+                            if (!PrepVMList.Where(x => x.SerialsLlist.Where(y => y.SerialsNo == serials).Any()).Any()&& !PrepVMList.Where(x => x.RMASerialsLlist.Where(y => y.SerialsNo == serials).Any()).Any())
                             {
                                 PrepVM.SerialsLlist.Add(Serial);
                                 Session["PrepVMList" + SID] = PrepVMList;
@@ -577,9 +583,9 @@ namespace PurchaseOrderSys.Controllers
                     {
                         if (RMAPrepVM != null)
                         {
-                            if (RMAPrepVM.QTY > RMAPrepVM.RMASerialsLlist.Count())
+                            if (RMAPrepVM.QTY > RMAPrepVM.SerialsLlist.Count() + RMAPrepVM.RMASerialsLlist.Count())
                             {
-                                if (!PrepVMList.Where(x => x.SerialsLlist.Where(y => y.SerialsNo == serials).Any()).Any())
+                                if (!PrepVMList.Where(x => x.SerialsLlist.Where(y => y.SerialsNo == serials).Any()).Any() && !PrepVMList.Where(x => x.RMASerialsLlist.Where(y => y.SerialsNo == serials).Any()).Any())
                                 {
                                     RMAPrepVM.RMASerialsLlist.Add(RMASerial);
                                     Session["PrepVMList" + SID] = PrepVMList;
@@ -613,7 +619,7 @@ namespace PurchaseOrderSys.Controllers
             }
             else
             {
-                return Json(new { status = false, Errmsg = "序號不存在，此序號不能移倉" }, JsonRequestBehavior.AllowGet);
+                return Json(new { status = false, Errmsg = "序號不存在或是已在清單" }, JsonRequestBehavior.AllowGet);
             }
         }
         public ActionResult ReceiveSaveserials(int id, string serials)
@@ -706,23 +712,21 @@ namespace PurchaseOrderSys.Controllers
             {
                 foreach (var item in PrepVMList)
                 {
-                    if (item.SerialsLlist.Any()) //一般
+                    if (item.SerialsLlist.Any()|| item.RMASerialsLlist.Any()) 
                     {
-                        foreach (var SerialsLlistitem in item.SerialsLlist)
+                        foreach (var SerialsLlistitem in item.SerialsLlist)//一般
                         {
-                            PrepTableList.Add(new PrepTable { SKU = item.SKU, Name = item.Name, Serial = SerialsLlistitem.SerialsNo, QTY = item.QTY + "/" + item.SerialsLlist.Count(), SerialTracking = GetSerialTracking(item.SKU) });
+                            PrepTableList.Add(new PrepTable { SKU = item.SKU, Name = item.Name, Serial = SerialsLlistitem.SerialsNo, QTY = item.QTY + "/" + (item.SerialsLlist.Count() + item.RMASerialsLlist.Count()), SerialTracking = GetSerialTracking(item.SKU) });
                         }
-                    }
-                    else if (item.RMASerialsLlist.Any()) //RMA
-                    {
-                        foreach (var RMASerialsLlistitem in item.RMASerialsLlist)
+                   
+                        foreach (var RMASerialsLlistitem in item.RMASerialsLlist)//RMA
                         {
-                            PrepTableList.Add(new PrepTable { SKU = item.SKU, Name = item.Name, Serial = RMASerialsLlistitem.SerialsNo, QTY = item.QTY + "/" + item.RMASerialsLlist.Count(), SerialTracking = GetSerialTracking(item.SKU) });
+                            PrepTableList.Add(new PrepTable { SKU = item.SKU, Name = item.Name, Serial = RMASerialsLlistitem.SerialsNo, QTY = item.QTY + "/" + (item.SerialsLlist.Count() + item.RMASerialsLlist.Count()), SerialTracking = GetSerialTracking(item.SKU) });
                         }
                     }
                     else
                     {
-                        PrepTableList.Add(new PrepTable { SKU = item.SKU, Name = item.Name, QTY = item.QTY + "/" + item.RMASerialsLlist.Count(), SerialTracking = GetSerialTracking(item.SKU) });
+                        PrepTableList.Add(new PrepTable { SKU = item.SKU, Name = item.Name, QTY = item.QTY + "/" + (item.SerialsLlist.Count() + item.RMASerialsLlist.Count()), SerialTracking = GetSerialTracking(item.SKU) });
                     }
                 }
             }

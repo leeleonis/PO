@@ -934,6 +934,7 @@ namespace PurchaseOrderSys.Controllers
             var SKUName = db.SkuLang.Where(x => x.Sku == SKU && x.LangID == LangID).FirstOrDefault().Name;
             var RMASerialsLlist = db.RMASerialsLlist.Where(x => x.WarehouseID == WarehouseID && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && (x.RMASKU.SkuNo == SKU || x.NewSkuNo == SKU)).ToList();
             var PurchaseSKU = db.PurchaseSKU.Where(x => x.IsEnable && x.SkuNo == SKU);
+            var TransferSKU = db.TransferSKU.Where(x => x.IsEnable && x.SkuNo == SKU);
             var CompanyName = PurchaseSKU.FirstOrDefault()?.PurchaseOrder.Company.Name;
             var InventorySerialsItem = new List<InventorySerialsItem>();
             foreach (var Skuitem in PurchaseSKU)
@@ -981,6 +982,41 @@ namespace PurchaseOrderSys.Controllers
                     }
                 }
             }
+            foreach (var TransferSKUitem in TransferSKU)
+            {
+                foreach (var item in TransferSKUitem.SerialsLlist)
+                {
+                    var QInventorySerials = InventorySerialsItem.Where(x => x.Serial == item.SerialsNo);
+                    if (QInventorySerials.Any())
+                    {
+                        foreach (var Serialitem in QInventorySerials)
+                        {
+                            Serialitem.Transfer = TransferSKUitem.TransferID;
+                            if (item.CreateAt.ToLocalTime() > Serialitem.Date)
+                            {
+                                Serialitem.Date = item.CreateAt.ToLocalTime();
+                                Serialitem.DispatchLocation = TransferSKUitem.Transfer.WarehouseTo.Name;
+                                Serialitem.Warehouse = TransferSKUitem.Transfer.WarehouseFrom.Name;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        InventorySerialsItem.Add(new InventorySerialsItem
+                        {
+
+                            DispatchLocation = TransferSKUitem.Transfer.WarehouseTo.Name,
+                            Order = item.OrderID,
+                            //RMA = item.RMASKU.RMAID,
+                            Serial = item.SerialsNo,
+                            //Value = item.RMASKU.UnitPrice,
+                            Warehouse = TransferSKUitem.Transfer.WarehouseFrom.Name,
+                            Date = item.CreateAt.ToLocalTime(),
+                        });
+                    }
+                }
+            }
+               
             foreach (var item in RMASerialsLlist)
             {
              var QInventorySerials=  InventorySerialsItem.Where(x => x.Serial == item.SerialsNo);

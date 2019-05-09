@@ -1194,6 +1194,7 @@ namespace PurchaseOrderSys.Models
     }
     public class TransferItemVM
     {
+        public int? WarehouseID { get; set; }
         public string SKU { get; set; }
         public string Name { get; set; }
         public int? QTY { get; set; }

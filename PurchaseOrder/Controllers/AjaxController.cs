@@ -88,24 +88,14 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult TSkuNumberGet(string Search, int FromWID)
         { 
             var SKUList = new List<string>();
-            //一般入庫
-            var PurchaseSKUList = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.IsEnable && x.PurchaseOrder.WarehouseID == FromWID).Select(x => x.SkuNo).ToList();
-            SKUList.AddRange(PurchaseSKUList);
-            //移倉入庫
-            var TransferSKUList = db.TransferSKU.Where(x => x.IsEnable && x.Transfer.IsEnable && x.Transfer.ToWID == FromWID).Select(x => x.SkuNo).ToList();//只找移入的SKU
-            SKUList.AddRange(TransferSKUList);
-            //RMA入庫
-            var NoNewRMAferSKUList = db.RMASerialsLlist.AsEnumerable().Where(x => x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.WarehouseID == FromWID && string.IsNullOrWhiteSpace(x.NewSkuNo)).Select(x => x.RMASKU.SkuNo).ToList();//沒有新的SKU
-            SKUList.AddRange(NoNewRMAferSKUList);
-            var NewRMAferSKUList = db.RMASerialsLlist.AsEnumerable().Where(x => x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.WarehouseID == FromWID && !string.IsNullOrWhiteSpace(x.NewSkuNo)).Select(x => x.NewSkuNo).ToList();//沒有新的SKU
-            SKUList.AddRange(NewRMAferSKUList);
-
-            SKUList = SKUList.Distinct().ToList();
+            SKUList = SearchSkuByWarehouse(Search, FromWID);
             var dataList = db.SkuLang.Where(x => x.LangID == "en-US" && SKUList.Contains(x.Sku) && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
             //var dataList = db.SkuLang.Where(x => x.LangID == "zh-tw" && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
             return Json(new { items = dataList }, JsonRequestBehavior.AllowGet);
-
         }
+
+ 
+
         public ActionResult CMSkuNumberGet(string Search, int PurchaseOrderID)
         {
             var PurchaseSKUList = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.IsEnable && x.PurchaseOrderID == PurchaseOrderID && x.SerialsLlist.Sum(y => y.SerialsQTY) > 0).Select(x => x.SkuNo);
@@ -918,7 +908,6 @@ namespace PurchaseOrderSys.Controllers
                                     QTYOrdered = item.QTYOrdered,
                                     CreateBy = UserBy,
                                     CreateAt = dt
-
                                 };
                                 //比對資料，並寫回資料庫
                                 Err = SerialsAddCheck(nPurchaseSKU, item.Groupitem, PurchaseOrder.POType);
@@ -957,6 +946,157 @@ namespace PurchaseOrderSys.Controllers
             }
             else if (key == "TransferExcel")//SKU及序號上傳
             {
+                var dt = DateTime.UtcNow;
+                var AddSKUserialsVMList = new List<AddSKUserialsVM>();
+                using (var package = new ExcelPackage(ExcelFile.InputStream))
+                {
+
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
+                    int col = 1;
+
+                    for (int row = 2; worksheet.Cells[row, col].Value != null; row++)
+                    {
+                        var SKU = worksheet.Cells[row, 1].Value?.ToString();
+                        var serials = worksheet.Cells[row, 2].Value?.ToString();
+
+                        AddSKUserialsVMList.Add(new AddSKUserialsVM
+                        {
+                            serials = serials,
+                            SKU = SKU
+                        });
+                    }
+                }
+                var groupserials = AddSKUserialsVMList.GroupBy(x => x.SKU).Select(x => new { x.Key, item = x });
+                if (groupserials.Any())
+                {
+                    var Transfer = db.Transfer.Find(id);
+                    var FromWID = Transfer.FromWID;
+                    if (FromWID.HasValue)
+                    {
+                        var ErrSKU = new List<string>();
+                        var Errserial = new List<string>();
+                        var Repserial = new List<string>();
+                        foreach (var Gserialitem in groupserials)
+                        {
+                            var SKUList = new List<string>();
+                            SKUList = SearchSkuByWarehouse(Gserialitem.Key, FromWID.Value);
+                            if (SKUList.Any())
+                            {
+                                var SKU = db.SKU.Find(Gserialitem.Key)?.SkuLang.Where(x => x.LangID == "en-US").FirstOrDefault();
+                                var nTransferSKU = Transfer.TransferSKU.Where(x=>x.SkuNo== Gserialitem.Key).FirstOrDefault();
+                                if (nTransferSKU == null)//沒有資料就新增
+                                {
+                                    nTransferSKU = new TransferSKU
+                                    {
+                                        IsEnable = true,
+                                        QTY = Gserialitem.item.Count(),
+                                        SkuNo = Gserialitem.Key,
+                                        Name = SKU.Name,
+                                        CreateBy = UserBy,
+                                        CreateAt = dt
+                                    };
+                                    Transfer.TransferSKU.Add(nTransferSKU);
+                                }
+                                else
+                                {
+                                    nTransferSKU.QTY = Gserialitem.item.Count();
+                                    nTransferSKU.UpdateBy = UserBy;
+                                    nTransferSKU.UpdateAt = dt;
+                                }
+                                foreach (var item in Gserialitem.item)
+                                {
+                                    var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == item.serials && !x.SerialsLlistC.Any() && x.SerialsQTY > 0);//找到序號
+                                    SerialsLlist = SerialsLlist.Where(x => (x.TransferSKUID.HasValue && x.TransferSKU.Transfer.ToWID == FromWID) || (x.PurchaseSKUID.HasValue && x.PurchaseSKU.PurchaseOrder.WarehouseID == FromWID));
+                                    var RMASerialsLlist = db.RMASerialsLlist.Where(x => x.SerialsNo == item.serials && !x.RMASerialsLlistC.Any() && x.SerialsQTY > 0 && x.WarehouseID == FromWID);//找到RMA序號
+                                    if (SerialsLlist.Any() || RMASerialsLlist.Any())
+                                    {
+                                        foreach (var Serial in SerialsLlist)
+                                        {
+                                            if (nTransferSKU.SerialsLlist != null && nTransferSKU.SerialsLlist.Where(x => x.SerialsNo == Serial.SerialsNo).Any())
+                                            {
+                                                Repserial.Add(Serial.SerialsNo);
+                                            }
+                                            else
+                                            {
+                                                var nSerialsLlist = new SerialsLlist
+                                                {
+                                                    IsEnable = true,
+                                                    PurchaseSKUID = Serial.PurchaseSKUID,
+                                                    PID = Serial.ID,
+                                                    SerialsNo = Serial.SerialsNo,
+                                                    SerialsQTY = 1,
+                                                    SerialsType = "TransferOut",
+                                                    CreateBy = UserBy,
+                                                    CreateAt = dt,
+                                                    ReceivedBy = UserBy,
+                                                    ReceivedAt = dt,
+                                                };
+                                                nTransferSKU.SerialsLlist.Add(nSerialsLlist);
+                                            }
+
+                                        }
+                                        foreach (var Serial in RMASerialsLlist)
+                                        {
+                                            if (nTransferSKU.SerialsLlist != null && nTransferSKU.SerialsLlist.Where(x => x.SerialsNo == Serial.SerialsNo).Any())
+                                            {
+                                                Repserial.Add(Serial.SerialsNo);
+                                            }
+                                            else
+                                            {
+                                                var nSerialsLlist = new SerialsLlist
+                                                {
+                                                    IsEnable = true,
+                                                    SerialsNo = Serial.SerialsNo,
+                                                    SerialsQTY = 1,
+                                                    SerialsType = "TransferOut",
+                                                    CreateBy = UserBy,
+                                                    CreateAt = dt,
+                                                    ReceivedBy = UserBy,
+                                                    ReceivedAt = dt,
+                                                };
+                                                nTransferSKU.SerialsLlist.Add(nSerialsLlist);
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Errserial.Add(item.serials);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                ErrSKU.Add(Gserialitem.Key);
+                            }
+                        }
+                        if (Repserial.Any())
+                        {
+                            return Json(new { status = false, Msg = string.Join(Environment.NewLine, Repserial) + Environment.NewLine + "序號重複" }, JsonRequestBehavior.AllowGet);
+                        }
+                        if (ErrSKU.Any())
+                        {
+                            return Json(new { status = false, Msg = string.Join(Environment.NewLine, ErrSKU) + Environment.NewLine + "出貨倉無此SKU" }, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            if (Errserial.Any())
+                            {
+                                return Json(new { status = false, Msg = string.Join(Environment.NewLine, Errserial)+ Environment.NewLine + "出貨倉無此序號" }, JsonRequestBehavior.AllowGet);
+                            }
+                            else
+                            {
+                                Transfer.UpdateBy = UserBy;
+                                Transfer.UpdateAt = dt;
+                                Transfer.Status = "Requested";
+                                db.SaveChanges();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return Json(new { status = false, Msg = "移倉單未設定出貨倉" }, JsonRequestBehavior.AllowGet);
+                    }
+                }
                 return Json(new { status = true, reload = true }, JsonRequestBehavior.AllowGet);
             }
             else

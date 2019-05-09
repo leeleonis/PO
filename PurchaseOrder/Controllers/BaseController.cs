@@ -576,5 +576,28 @@ namespace PurchaseOrderSys.Controllers
             }
             return countryCode;
         }
+        /// <summary>
+        /// 檢查倉庫是否有SKU
+        /// </summary>
+        /// <param name="search"></param>
+        /// <param name="FromWID"></param>
+        /// <returns></returns>
+        public List<string> SearchSkuByWarehouse(string search, int FromWID)
+        {
+            var SKUList = new List<string>();
+            //一般入庫
+            var PurchaseSKUList = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.IsEnable && x.PurchaseOrder.WarehouseID == FromWID).Select(x => x.SkuNo).ToList();
+            SKUList.AddRange(PurchaseSKUList);
+            //移倉入庫
+            var TransferSKUList = db.TransferSKU.Where(x => x.IsEnable && x.Transfer.IsEnable && x.Transfer.ToWID == FromWID).Select(x => x.SkuNo).ToList();//只找移入的SKU
+            SKUList.AddRange(TransferSKUList);
+            //RMA入庫
+            var NoNewRMAferSKUList = db.RMASerialsLlist.AsEnumerable().Where(x => x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.WarehouseID == FromWID && string.IsNullOrWhiteSpace(x.NewSkuNo)).Select(x => x.RMASKU.SkuNo).ToList();//沒有新的SKU
+            SKUList.AddRange(NoNewRMAferSKUList);
+            var NewRMAferSKUList = db.RMASerialsLlist.AsEnumerable().Where(x => x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.WarehouseID == FromWID && !string.IsNullOrWhiteSpace(x.NewSkuNo)).Select(x => x.NewSkuNo).ToList();//沒有新的SKU
+            SKUList.AddRange(NewRMAferSKUList);
+            SKUList = SKUList.Distinct().ToList();
+            return SKUList;
+        }
     }
 }
