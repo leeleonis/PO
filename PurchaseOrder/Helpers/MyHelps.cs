@@ -232,6 +232,38 @@ namespace PurchaseOrderSys.Helpers
 
             return MvcHtmlString.Create(divHtml.ToString());
         }
+
+        public static MvcHtmlString SetExtraLink(this HtmlHelper helper, string type = null, object data = null)
+        {
+            TagBuilder aHtml = new TagBuilder("a");
+            aHtml.Attributes.Add("target", "_blank");
+            aHtml.InnerHtml = data.ToString();
+
+            switch (type)
+            {
+                case "PO Page":
+                    aHtml.Attributes.Add("href", "http://internal.qd.com.tw:8080/PurchaseOrderPO/EditItem?ID=" + data.ToString());
+                    break;
+                case "CM Page":
+                    aHtml.Attributes.Add("href", "http://internal.qd.com.tw:8080/PurchaseOrderCM/EditItem?ID=" + data.ToString());
+                    break;
+                case "Order Page":
+                    aHtml.Attributes.Add("href", "https://dm.cwa.sellercloud.com/Orders/Orders_details.aspx?id=" + data.ToString());
+                    break;
+                case "RMAIn Page":
+                    aHtml.Attributes.Add("href", "http://internal.qd.com.tw:8080/RMA/Edit/" + data.ToString());
+                    break;
+                case "SKU Page":
+                    aHtml.Attributes.Add("href", "http://internal.qd.com.tw:8080/Sku/edit/" + data.ToString());
+                    break;
+                default:
+                    aHtml.Attributes.Add("href", "javascript:;");
+                    break;
+            }
+
+            return MvcHtmlString.Create(aHtml.ToString());
+        }
+
         public static MvcHtmlString BCheckBox(this HtmlHelper htmlHelper, string name, object htmlAttributes)
         {
             return BCheckBox(htmlHelper,name, false, htmlAttributes);
