@@ -410,10 +410,16 @@
     <Compile Include="Models\Objects\Neto\Schema\GetWarehouseResponse.cs" />
     <Compile Include="Models\Objects\Neto\Schema\UpdateItem.cs" />
     <Compile Include="Models\Objects\Neto\Schema\UpdateItemResponse.cs" />
+    <Compile Include="Models\Order.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\OrderLog.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\OrderLogMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OrderMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Orders.cs">

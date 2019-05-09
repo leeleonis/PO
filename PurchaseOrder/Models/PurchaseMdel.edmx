@@ -404,6 +404,29 @@
           <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
           <Property Name="UpdateAt" Type="datetime" />
         </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="bit" Nullable="false" />
+          <Property Name="IsRush" Type="bit" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderParent" Type="int" />
+          <Property Name="OrderSourceID" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="SCID" Type="int" Nullable="false" />
+          <Property Name="Company" Type="int" Nullable="false" />
+          <Property Name="OrderType" Type="tinyint" Nullable="false" />
+          <Property Name="OrderStatus" Type="tinyint" Nullable="false" />
+          <Property Name="OrderDate" Type="datetime" Nullable="false" />
+          <Property Name="PaymentStatus" Type="tinyint" Nullable="false" />
+          <Property Name="PaymentDate" Type="datetime" />
+          <Property Name="FulfillmentStatus" Type="tinyint" Nullable="false" />
+          <Property Name="FulfilledDate" Type="datetime" />
+          <Property Name="Update_by" Type="nvarchar" MaxLength="50" />
+          <Property Name="Update_at" Type="datetime" />
+          <Property Name="Create_by" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Create_at" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="OrderLog">
           <Key>
             <PropertyRef Name="ID" />
@@ -1904,6 +1927,7 @@
           <EntitySet Name="Menu" EntityType="Self.Menu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MenuLang" EntityType="Self.MenuLang" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NetoGroup" EntityType="Self.NetoGroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrderLog" EntityType="Self.OrderLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PackageContent" EntityType="Self.PackageContent" Schema="dbo" store:Type="Tables" />
@@ -2569,6 +2593,7 @@
             <End Role="RMA" EntitySet="RMA" />
             <End Role="CreditMemo" EntitySet="CreditMemo" />
           </AssociationSet>
+          <EntitySet Name="Order" EntityType="PurchaseOrderModel.Order" />
           </EntityContainer>
         <EntityType Name="AdminGroup">
           <Key>
@@ -4588,6 +4613,29 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="Boolean" Nullable="false" DefaultValue="true" />
+          <Property Name="IsRush" Type="Boolean" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderParent" Type="Int32" />
+          <Property Name="OrderSourceID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SCID" Type="Int32" Nullable="false" />
+          <Property Name="Company" Type="Int32" Nullable="false" />
+          <Property Name="OrderType" Type="Byte" Nullable="false" />
+          <Property Name="OrderStatus" Type="Byte" Nullable="false" />
+          <Property Name="OrderDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="PaymentStatus" Type="Byte" Nullable="false" />
+          <Property Name="PaymentDate" Type="DateTime" Precision="3" />
+          <Property Name="FulfillmentStatus" Type="Byte" Nullable="false" />
+          <Property Name="FulfilledDate" Type="DateTime" Precision="3" />
+          <Property Name="Update_by" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Update_at" Type="DateTime" Precision="3" />
+          <Property Name="Create_by" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Create_at" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -5643,6 +5691,30 @@
                 <ScalarProperty Name="SerialsNo" ColumnName="SerialsNo" />
                 <ScalarProperty Name="RMASKUID" ColumnName="RMASKUID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Order">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.Order">
+              <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="FulfilledDate" ColumnName="FulfilledDate" />
+                <ScalarProperty Name="FulfillmentStatus" ColumnName="FulfillmentStatus" />
+                <ScalarProperty Name="OrderType" ColumnName="OrderType" />
+                <ScalarProperty Name="OrderSourceID" ColumnName="OrderSourceID" />
+                <ScalarProperty Name="OrderParent" ColumnName="OrderParent" />
+                <ScalarProperty Name="Create_at" ColumnName="Create_at" />
+                <ScalarProperty Name="Create_by" ColumnName="Create_by" />
+                <ScalarProperty Name="Update_at" ColumnName="Update_at" />
+                <ScalarProperty Name="Update_by" ColumnName="Update_by" />
+                <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+                <ScalarProperty Name="PaymentStatus" ColumnName="PaymentStatus" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="OrderStatus" ColumnName="OrderStatus" />
+                <ScalarProperty Name="Company" ColumnName="Company" />
+                <ScalarProperty Name="SCID" ColumnName="SCID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IsRush" ColumnName="IsRush" />
                 <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
               </MappingFragment>
             </EntityTypeMapping>
