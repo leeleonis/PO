@@ -6,6 +6,13 @@
     var SkuStatus = Enum.GetValues(typeof(EnumData.SkuStatus)).Cast<EnumData.SkuStatus>().Select(t => new SelectListItem() { Text = t.ToString(), Value = ((byte)t).ToString() }).ToList();
     var Warehouselist = EnumData.WarehouseDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var RMAReasonList = EnumData.RMAReasonList().Select(x => new SelectListItem { Text = x.Value, Value = x.Key.ToString() }).ToList();
+    var sRMASKU = (RMASKU)Session["RMASKU" + Model.ID];
+    var sRMASKUCount = 0;
+    if (sRMASKU !=null )
+    {
+        sRMASKUCount = sRMASKU.RMASerialsLlist.Count();
+    }
+
 }
 <div id="content">
     <section id="widget-grid" class="">
@@ -137,11 +144,11 @@
                                                     <div class="form-group">
                                                         @Html.Label("Warehouse:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                         <div class="col-sm-9 col-lg-2">
-                                                            @Html.DropDownListFor(model => model.WarehouseID, Warehouselist, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.DropDownListFor(model => model.WarehouseID, Warehouselist, htmlAttributes: new { @class = "form-control readonly" })
                                                         </div>
                                                         @Html.Label("Reason:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                         <div class="col-sm-9 col-lg-2">
-                                                            @Html.DropDownListFor(model => model.Reason, RMAReasonList, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.DropDownListFor(model => model.Reason, RMAReasonList, htmlAttributes: new { @class = "form-control readonly" })
                                                         </div>
                                                         @Html.Label("Serial:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                         <div class="col-sm-9 col-lg-2">
@@ -151,11 +158,18 @@
                                                     @{
                                                         var SerialsLlist = Model.RMASerialsLlist.Where(x => x.SerialsType == "RMAIn");
                                                     }
-                                                    <label>Serial # ( <label id="Serialcount">@SerialsLlist.Count()</label> /1</label>)
+                                                    <label>Serial # ( <label id="Serialcount">@(SerialsLlist.Count()+ (sRMASKUCount))</label> /1</label>)
                                                     <ul style="list-style-type:none;list-style-position: inside;padding-left: 0px;padding-left: 0px;" id="SerialList">
                                                         @foreach (var item in SerialsLlist)
                                                         {
-                                                            <li><button type="button" class="glyphicon glyphicon-remove btn-danger delserials" val="@item.SerialsNo"></button>@item.SerialsNo　　@item.CreateAt.ToLocalTime()</li>
+                                                            <li>@item.SerialsNo　　@item.CreateAt.ToLocalTime()</li>
+                                                        }
+                                                        @if (sRMASKU != null && sRMASKU.RMASerialsLlist != null)
+                                                        {
+                                                            foreach (var item in sRMASKU.RMASerialsLlist)
+                                                            {
+                                                            <li><button type='button' class='glyphicon glyphicon-remove btn-danger delserials' val="@item.SerialsNo"></button>@item.SerialsNo　　@item.CreateAt.ToLocalTime()</li>
+                                                            }
                                                         }
                                                     </ul>
                                                 </article>
@@ -200,10 +214,10 @@
                         },
                         success: function (data) {
                             if (data.status) {
-                                $("#SerialList").prepend("<li><button type='button' class='glyphicon glyphicon-remove btn-danger'></button>" + serials + "</li>");
+                                $("#SerialList").prepend("<li><button type='button' class='glyphicon glyphicon-remove btn-danger delserials' val=" + serials +"></button>" + serials + "</li>");
                                 $("#Serialcount").text($("#SerialList li").length);
                                 $("#Serial").val("");
-                                $("#Reason").val("");
+                                $(".readonly").attr('readonly', true);
                             }
                             else {
                                 alert(data.Errmsg);
@@ -234,6 +248,10 @@
                 }
                 return false;
             });
+            @if (Model.RMASerialsLlist.Any() || (sRMASKU!=null&& sRMASKU.RMASerialsLlist.Any()))
+            {
+               @:$(".readonly").attr('readonly', true);
+            }
         });
     </script>
 }
