@@ -37,14 +37,6 @@ namespace PurchaseOrderSys.Models
     
     		    
     		/// <summary>
-    		/// Is Confirm
-    		/// </summary>        
-    	    [Display(Name = "Order_IsConfirm", ResourceType = typeof(App_GlobalResources.Resource))]
-            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public bool  IsConfirm { get; set; }
-    
-    		    
-    		/// <summary>
     		/// ID
     		/// </summary>        
     	    [Display(Name = "Order_ID", ResourceType = typeof(App_GlobalResources.Resource))]
@@ -53,10 +45,19 @@ namespace PurchaseOrderSys.Models
     
     		    
     		/// <summary>
-    		/// Parent Order
+    		/// Order Parent
     		/// </summary>        
-    	    [Display(Name = "Order_ParentOrder", ResourceType = typeof(App_GlobalResources.Resource))]
-    		public Nullable<int>  ParentOrder { get; set; }
+    	    [Display(Name = "Order_OrderParent", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  OrderParent { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Order Source ID
+    		/// </summary>        
+    	    [Display(Name = "Order_OrderSourceID", ResourceType = typeof(App_GlobalResources.Resource))]
+            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  OrderSourceID { get; set; }
     
     		    
     		/// <summary>
@@ -73,6 +74,14 @@ namespace PurchaseOrderSys.Models
     	    [Display(Name = "Order_Company", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public int  Company { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Order Type
+    		/// </summary>        
+    	    [Display(Name = "Order_OrderType", ResourceType = typeof(App_GlobalResources.Resource))]
+            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public byte  OrderType { get; set; }
     
     		    
     		/// <summary>
@@ -109,35 +118,19 @@ namespace PurchaseOrderSys.Models
     
     		    
     		/// <summary>
-    		/// Shipping Status
+    		/// Fulfillment Status
     		/// </summary>        
-    	    [Display(Name = "Order_ShippingStatus", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "Order_FulfillmentStatus", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public byte  ShippingStatus { get; set; }
+    		public byte  FulfillmentStatus { get; set; }
     
     		    
     		/// <summary>
-    		/// Ship Date
+    		/// Fulfilled Date
     		/// </summary>        
-    	    [Display(Name = "Order_ShipDate", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "Order_FulfilledDate", ResourceType = typeof(App_GlobalResources.Resource))]
             [UIHint("DateTime")]
-    		public Nullable<System.DateTime>  ShipDate { get; set; }
-    
-    		    
-    		/// <summary>
-    		/// Confirm_by
-    		/// </summary>        
-    	    [Display(Name = "Order_Confirm_by", ResourceType = typeof(App_GlobalResources.Resource))]
-            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public string  Confirm_by { get; set; }
-    
-    		    
-    		/// <summary>
-    		/// Confirm_at
-    		/// </summary>        
-    	    [Display(Name = "Order_Confirm_at", ResourceType = typeof(App_GlobalResources.Resource))]
-            [UIHint("DateTime")]
-    		public Nullable<System.DateTime>  Confirm_at { get; set; }
+    		public Nullable<System.DateTime>  FulfilledDate { get; set; }
     
     		    
     		/// <summary>

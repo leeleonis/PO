@@ -226,6 +226,7 @@
     <Compile Include="Controllers\MarketplaceController.cs" />
     <Compile Include="Controllers\MenusController.cs" />
     <Compile Include="Controllers\NetoGroupController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\PurchaseOrderCMController.cs" />
     <Compile Include="Controllers\PurchaseOrderPOController.cs" />
     <Compile Include="Controllers\PurchaseSKUController.cs" />
@@ -7589,6 +7590,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Base\" />
+    <Folder Include="Views\Order\" />
     <Folder Include="Views\SkuSerials\" />
   </ItemGroup>
   <ItemGroup>
