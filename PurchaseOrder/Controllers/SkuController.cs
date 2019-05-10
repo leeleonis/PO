@@ -497,6 +497,7 @@ namespace PurchaseOrderSys.Controllers
             var warehouseList = db.Warehouse.Where(w => w.IsEnable).ToList();
             ViewBag.WarehouseList = warehouseList;
             ViewBag.PurchaseSku = db.PurchaseSKU.Where(s => s.IsEnable && s.SkuNo.Equals(sku.SkuID)).ToList();
+            ViewBag.RMASku = db.RMASKU.Where(s => s.IsEnable && s.SkuNo.Equals(sku.SkuID)).ToList();
             ViewBag.AwaitingList = GetAwaitingCount(new string[] { sku.SkuID }, warehouseList.SelectMany(w => w.WarehouseSummary.Where(ws => ws.IsEnable && ws.Type.Equals("SCID"))).Select(w => w.Val).ToArray());
 
             return View(sku);
