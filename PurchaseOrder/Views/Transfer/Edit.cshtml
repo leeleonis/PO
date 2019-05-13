@@ -8,6 +8,7 @@
     var ShippingList = new PurchaseOrderSys.Api.Shipping_API().ShippingList().data.shippingMethod.Select(x => new SelectListItem { Text = x.text, Value = x.value.ToString() }).ToList();
     var disabled = "disabled";
     var TStatus = Model.Status;
+    var NoPrepSerials = (List<string>)ViewBag.NoPrepSerials;
 }
 <style>
     .error {
@@ -101,7 +102,16 @@
                                                         <a type="button" href="@Url.Action("PrintAWB", new { Model.ID })" class='btn btn-default btn-sm' id='PrintAWB'>Print AWB</a>
                                                         if (Model.TransferSKU.Where(x => x.IsEnable).Where(x => x.SerialsLlist.Where(y => y.SerialsType == "TransferOut").Any() || x.RMASerialsLlist.Where(y => y.SerialsType == "TransferOut").Any()).Any())
                                                         {
-                                                            <a type="button" href="@Url.Action("Ship", new { Model.ID })" class='btn btn-default btn-sm' id='Ship'>Ship</a>
+                                                            if (NoPrepSerials.Any())
+                                                            {
+                                                                var Msg = "以下物品尚未安排, 請問是否繼續發送?\\n\\r";
+                                                                Msg += string.Join("\\n\\r", NoPrepSerials);
+                                                                <a type="button" href="@Url.Action("Ship", new { Model.ID })" class='btn btn-default btn-sm' id='Ship' onclick="return confirm('@(Msg)')">Ship</a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a type="button" href="@Url.Action("Ship", new { Model.ID })" class='btn btn-default btn-sm' id='Ship'>Ship</a>
+                                                            }
                                                         }
                                                     }
                                                     else if (Model.Status == "Shipped")
@@ -137,9 +147,9 @@
                                                                 <th>QTY</th>
                                                                 <th>Serial</th>
                                                                 <th>Label</th>
-                                                                <th>Total Receive</th>
-                                                                <th>TWN (Available)</th>
-                                                                <th>Winit US WC (Available)</th>
+                                                                <th>Total Received</th>
+                                                                @*<th>TWN (Available)</th>*@
+                                                                @*<th>Winit US WC (Available)</th>*@
                                                                 @*<th>Download</th>*@
                                                                 @*<th>Action</th>*@
                                                             </tr>
@@ -170,7 +180,7 @@
                                                         {
                                                             <tfoot>
                                                                 <tr>
-                                                                    <td colspan="10">
+                                                                    <td colspan="8">
                                                                         <select id="gebruikerId" name="gebruikerId" class=" form-control" style="width:50%"></select>
                                                                         <button type="button" id="addsku">Add SKU</button>
                                                                     </td>
@@ -249,8 +259,8 @@
                     { data: "Serial", render: function (data, type, row) { return data; } },
                     { data: "Label", render: function (data, type, row) { return thousandComma(data); }  },
                     { data: "TotalReceive", render: function (data, type, row) { return data; } },
-                    { data: "TWN", render: function (data, type, row) { return thousandComma(data); }  },
-                    { data: "Winit", render: function (data, type, row) { return thousandComma(data); } }
+                    //{ data: "TWN", render: function (data, type, row) { return thousandComma(data); }  },
+                    //{ data: "Winit", render: function (data, type, row) { return thousandComma(data); } }
                 ],
                 ajax: {
                     traditional: true,
@@ -273,7 +283,12 @@
                 "info": true,
                  "searching": false,
                  "footerCallback": function (row, data, start, end, display) {
-                }
+                 },
+                 "rowCallback": function (row, data, index) {
+                     if (data.Prep != 0) {
+                         $('td', row).css('background-color', 'yellow');
+                     }
+                 }
             });
             $(tableID + ' tbody').on('click', 'td.details-control', function () {
                 var tr = $(this).closest('tr');

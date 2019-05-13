@@ -621,6 +621,7 @@ namespace PurchaseOrderSys.Models
         public string TWN { get; set; }
         public string Winit { get; set; }
         public string Model { get; set; }
+        public int? Prep { get; set; }
     }
     public class CMSKUVM
     {

@@ -102,7 +102,7 @@
                                                                 <td>@Skuitem.Value</td>
                                                                 <td>@Skuitem.Date</td>
                                                                 <td>
-                                                                    <a class='btn btn-default btn-sm GetHistory' href='@Url.Action("GetHistory", new { ID = Skuitem.Serial })'>History</a>
+                                                                    <a class='btn btn-default btn-sm GetHistory' href='@Url.Action("GetHistory", new { ID = Skuitem.Serial.Trim() })'>History</a>
                                                                 </td>
                                                             </tr>
 
