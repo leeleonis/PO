@@ -105,9 +105,9 @@
                                                                 <th>QTY</th>
                                                                 <th>Serial</th>
                                                                 <th>Label</th>
-                                                                <th>Total Receive</th>
-                                                                <th>TWN (Available)</th>
-                                                                <th>Winit US WC (Available)</th>
+                                                                <th>Total Received</th>
+                                                                @*<th>TWN (Available)</th>
+                                                                <th>Winit US WC (Available)</th>*@
                                                                 @*<th>Download</th>*@
                                                                 @*<th>Action</th>*@
                                                             </tr>
@@ -136,7 +136,7 @@
                                                         </tbody>
                                                         <tfoot>
                                                             <tr>
-                                                                <td colspan="10">
+                                                                <td colspan="8">
                                                                     <select id="gebruikerId" name="gebruikerId" class=" form-control" style="width:50%"></select>
                                                                     <button type="button" id="addsku">Add SKU</button>Note: Only items available in From warehouse can be found and added!
                                                                 </td>
@@ -197,8 +197,8 @@
                     { data: "Serial", render: function (data, type, row) { return thousandComma(data); } },
                     { data: "Label", render: function (data, type, row) { return thousandComma(data); }  },
                     { data: "TotalReceive", render: function (data, type, row) { return thousandComma(data); } },
-                    { data: "TWN", render: function (data, type, row) { return thousandComma(data); }  },
-                    { data: "Winit", render: function (data, type, row) { return thousandComma(data); } }
+                    //{ data: "TWN", render: function (data, type, row) { return thousandComma(data); }  },
+                    //{ data: "Winit", render: function (data, type, row) { return thousandComma(data); } }
                 ],
                 ajax: {
                     traditional: true,
