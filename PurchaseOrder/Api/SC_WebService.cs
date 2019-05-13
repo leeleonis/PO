@@ -143,6 +143,11 @@ namespace SellerCloud_WebService
             return OS_SellerCloud.Orders_GetOrderItemsNeedingSerialScan(OS_AuthHeader, OS_Options, OrderID);
         }
 
+        public PurchaseOrderSys.SCService.Product Get_Product(string SKU)
+        {
+            return OS_SellerCloud.GetProduct(OS_AuthHeader, OS_Options, SKU);
+        }
+
         public ProductFullInfo Get_ProductFullInfo(string SKU)
         {
             return OS_SellerCloud.GetProductFullInfo(OS_AuthHeader, OS_Options, SKU);
@@ -284,6 +289,11 @@ namespace SellerCloud_WebService
         public bool Update_ProductFullInfo(ProductFullInfo Info)
         {
             return OS_SellerCloud.UpdateProductFullInfo(OS_AuthHeader, OS_Options, Info);
+        }
+
+        public bool Update_Product(PurchaseOrderSys.SCService.Product Product, string errorMessage = null)
+        {
+            return OS_SellerCloud.SaveProduct(OS_AuthHeader, OS_Options, Product, ref errorMessage);
         }
         /***** 更新資料 *****/
 

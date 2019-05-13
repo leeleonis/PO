@@ -298,7 +298,8 @@ namespace PurchaseOrderSys.Models
                 { 24, "eBay Title DE" },
                 { 25, "eBay Title ES" },
                 { 23, "eBay Title FR" },
-                { 21, "eBay Title IT" },
+                { 26, "eBay Title IT" },
+                { 21, "eBay Title UK" },
                 { 20, "eBay Title US" },
                 { 22, "eBay Title US GBH" }
             };

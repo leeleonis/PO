@@ -264,6 +264,7 @@ namespace PurchaseOrderSys.Models
                 Misc24 = eBayTitle.ContainsKey(24) ? eBayTitle[24] : "",
                 Misc25 = eBayTitle.ContainsKey(25) ? eBayTitle[25] : "",
                 Misc23 = eBayTitle.ContainsKey(23) ? eBayTitle[23] : "",
+                Misc26 = eBayTitle.ContainsKey(26) ? eBayTitle[26] : "",
                 Misc21 = eBayTitle.ContainsKey(21) ? eBayTitle[21] : "",
                 Misc20 = eBayTitle.ContainsKey(20) ? eBayTitle[20] : "",
                 Misc22 = eBayTitle.ContainsKey(22) ? eBayTitle[22] : "",
@@ -272,7 +273,7 @@ namespace PurchaseOrderSys.Models
                     .Select(p => new UpdateItemItemPriceGroup() { Group = p.GetMarket.GetNetoGroup.Name, Price = p.Price, PriceSpecified = true, MaximumQuantity = p.Max.ToString(), MinimumQuantity = p.Min.ToString() }).ToArray(),
                 Categories = new UpdateItemItemCategory[] { new UpdateItemItemCategory() { CategoryID = skuData.SkuType.NetoID.Value.ToString() } },
                 ItemSpecifics = skuData.Sku_Attribute.Where(a => skuData.Type.Equals((byte)EnumData.SkuType.Variation) ? !a.IsDiverse : true)
-                    .Where(a => a.eBay).GroupBy(a => a.AttrID).Where(g => !g.Any(a => a.LangID.Equals(LangID))).Select(g => g.First(a => a.LangID.Equals(LangID)))
+                    .Where(a => a.eBay).GroupBy(a => a.AttrID).Where(g => g.Any(a => a.LangID.Equals(LangID))).Select(g => g.First(a => a.LangID.Equals(LangID)))
                     .Select(g => new UpdateItemItemItemSpecific() { Name = g.SkuAttribute.SkuAttributeLang.First(l => l.LangID.Equals(LangID)).Name, Value = g.Value }).ToArray()
             };
 
@@ -315,7 +316,7 @@ namespace PurchaseOrderSys.Models
 
                 Categories = new UpdateItemItemCategory[] { new UpdateItemItemCategory() { CategoryID = skuData.SkuType.NetoID.Value.ToString() } },
                 ItemSpecifics = skuData.Sku_Attribute.Where(a => a.IsDiverse && a.eBay).GroupBy(a => a.AttrID)
-                    .Where(g => !g.Any(a => a.LangID.Equals(LangID))).Select(g => g.First(a => a.LangID.Equals(LangID)))
+                    .Where(g => g.Any(a => a.LangID.Equals(LangID))).Select(g => g.First(a => a.LangID.Equals(LangID)))
                     .Select(g => new UpdateItemItemItemSpecific() { Name = g.SkuAttribute.SkuAttributeLang.First(l => l.LangID.Equals(LangID)).Name, Value = g.Value }).ToArray()
             };
 
@@ -346,30 +347,23 @@ namespace PurchaseOrderSys.Models
                     CreateSkuToSC();
 
                 var skuLang = skuData.SkuLang.First(l => l.LangID.Equals(LangID));
-                ProductFullInfo newSku = new ProductFullInfo()
-                {
-                    ID = skuData.SkuID,
-                    CompanyID = skuData.Company,
-                    ProductName = skuLang.Name,
-                    ProductTypeID = skuData.SkuType.SCID.Value,
-                    ManufacturerID = skuData.GetBrand.SCID.Value,
-                    UPC = skuData.UPC
-                };
+                var updateSku = SC_Api.Get_Product(skuData.SkuID);
+                updateSku.CompanyID = skuData.Company;
+                updateSku.ProductName = skuLang.Name;
+                updateSku.ProductTypeID = skuData.SkuType.SCID.Value;
+                updateSku.ManufacturerID = skuData.GetBrand.SCID.Value;
+                updateSku.UPC = skuData.UPC;
+                updateSku.Replenishable = skuData.Replenishable;
+                updateSku.RequireSerialNumberScanWhileShipping = skuData.SerialTracking;
+                updateSku.Status = Convert.ToBoolean(skuData.Status) ? ProductStatus.Active : ProductStatus.Disabled;
 
-                bool result = SC_Api.Update_ProductFullInfo(newSku);
+                bool result = SC_Api.Update_Product(updateSku);
                 if (skuData.Type.Equals((byte)EnumData.SkuType.Single) && result)
                 {
                     foreach (var company in db.Company.Where(c => c.ParentID.Value.Equals(skuData.Company)))
                     {
-                        result = result && SC_Api.Update_ProductFullInfo(new ProductFullInfo()
-                        {
-                            ID = skuData.SkuID + company.ShandowSuffix,
-                            CompanyID = company.ID,
-                            ProductName = skuLang.Name,
-                            ProductTypeID = skuData.SkuType.SCID.Value,
-                            ManufacturerID = skuData.GetBrand.SCID.Value,
-                            UPC = skuData.UPC
-                        });
+                        updateSku.ID = skuData.SkuID + company.ShandowSuffix;
+                        SC_Api.Update_Product(updateSku);
                     }
                 }
             }

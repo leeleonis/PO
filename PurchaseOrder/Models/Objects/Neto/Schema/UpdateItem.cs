@@ -3920,7 +3920,7 @@ namespace NetoDeveloper
 
         private string valueField;
 
-        private string sortOrderField;
+        private int sortOrderField;
 
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
@@ -3952,7 +3952,7 @@ namespace NetoDeveloper
 
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified, DataType = "integer")]
-        public string SortOrder
+        public int SortOrder
         {
             get
             {

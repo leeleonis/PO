@@ -839,7 +839,7 @@ namespace PurchaseOrderSys.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetPackageContent(string ID, string LangID)
+        public ActionResult GetPackageContent(string ID, string LangID, Sku_PackageContent[] SkuContent)
         {
             AjaxResult result = new AjaxResult();
 

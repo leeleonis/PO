@@ -1270,7 +1270,9 @@
         }
 
         function ResetPackageContent() {
-            website.AjaxUrl('@Url.Action("GetPackageContent", "Sku", new { ID = Model.SkuID })', 'get', { LangID: $('#LangID').val() }).done(function (response) {
+            var data = $contentList.find('input').serializeArray();
+            data.push({ 'name': 'LangID', 'value': $('#LangID').val() });
+            website.AjaxUrl('@Url.Action("GetPackageContent", "Sku", new { ID = Model.SkuID })', 'post', data).done(function (response) {
                 if (response.status) {
                     CKEDITOR.instances['PackageContent'].setData(response.data);
                 }
