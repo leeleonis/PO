@@ -127,7 +127,7 @@ namespace PurchaseOrderSys.Controllers
             var tQTY = item.QTY;
             var SerialsLlist = item.SerialsLlist.Where(x => x.SerialsType == "TransferOut").Sum(x=>x.SerialsQTY);
             var RMASerialsLlist = item.RMASerialsLlist.Where(x => x.SerialsType == "TransferOut").Sum(x => x.SerialsQTY);
-            return SerialsLlist + RMASerialsLlist - tQTY;
+            return SerialsLlist + RMASerialsLlist + tQTY;
 
 
         }

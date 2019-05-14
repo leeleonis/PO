@@ -222,6 +222,7 @@
     <Compile Include="Controllers\CurrencyController.cs" />
     <Compile Include="Controllers\DispatchWarehouseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InventoryController.cs" />
     <Compile Include="Controllers\MainController.cs" />
     <Compile Include="Controllers\MarketplaceController.cs" />
     <Compile Include="Controllers\MenusController.cs" />
@@ -7579,6 +7580,7 @@
     <Content Include="Views\Shared\GetRMASerialList.cshtml" />
     <Content Include="Views\RMA\Returnedserials.cshtml" />
     <Content Include="Views\RMA\GetOrderList.cshtml" />
+    <Content Include="Views\Inventory\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
