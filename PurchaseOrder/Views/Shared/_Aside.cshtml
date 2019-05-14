@@ -2,11 +2,12 @@
     var menuList =(List<Menu>)Session["Menu"];
     var AuthList = ((Dictionary<string, List<string>>)Session["Auth"]).Where(x => x.Value.Any()).Select(x => int.Parse(x.Key));
     var IsManager= (bool)Session["IsManager"];
+    //var WarehouseList = (List<Warehouse>)Session["Warehouse"];
 }
 <aside id="left-panel">
     <nav>
         <ul>
-            @foreach (var menuItem in menuList.Where(x=> x.PrevID == null).OrderBy(x => x.Order))
+            @foreach (var menuItem in menuList.Where(x => x.PrevID == null).OrderBy(x => x.Order))
             {
                 <li class="">
                     <a href="#">
@@ -31,7 +32,25 @@
                         }
                     </ul>
                 </li>
-            }
+            }        
+                @*<li class="">
+                    <a href="@Url.Action("index","DispatchWarehouse")">
+                        <span class="">Warehouses</span><br />
+                    </a>
+                    <ul>
+                        @foreach (var WarehouseItem in WarehouseList)
+                        {
+
+                        <li>
+                            <a href="@Url.Action("index","WarehouseInventory",new {WarehouseItem.ID })">
+                                <span class="">@WarehouseItem.Name</span><br />
+                            </a>
+                        </li>
+
+                        }
+                    </ul>
+                </li>*@
+            
         </ul>
     </nav>
     <span class="minifyme" data-action="minifyMenu" style=""> <i class="fa fa-arrow-circle-left hit"></i> </span>

@@ -692,7 +692,7 @@ namespace PurchaseOrderSys.Controllers
                 }
             }
             db.SaveChanges();
-            return View(PurchaseOrder);
+            return View(oPurchaseOrder);
         }
 
         private void GetFreeSerials(PurchaseSKU PurchaseSKU, DateTime UpdateAt)

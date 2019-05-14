@@ -148,8 +148,6 @@ namespace PurchaseOrderSys.Controllers
 
                 AuthItem = TAuthlist.Where(x => x.Value.Any()).Select(x => int.Parse(x.Key)).ToList();
                 Menu = Menu.Where(x => x.MenuChild.Where(y => AuthItem.Contains(y.MenuID)).Any());
-
-
             }
             Session.Add("IsLogin", true);
             Session.Add("IsManager", IsManger);
@@ -163,6 +161,10 @@ namespace PurchaseOrderSys.Controllers
             Session.Add("TimeZone", TimeZone);
             Session.Add("Menu", Menu.ToList());
             UserBy = AdminName;
+
+            //Session.Add("Warehouse", db.Warehouse.Where(x => x.IsEnable).ToList());
+           
+
             return true;
         }
 
