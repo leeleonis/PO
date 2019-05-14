@@ -7579,6 +7579,7 @@
     <Content Include="Views\Shared\GetRMASerialList.cshtml" />
     <Content Include="Views\RMA\Returnedserials.cshtml" />
     <Content Include="Views\RMA\GetOrderList.cshtml" />
+    <Content Include="Views\Sku\_KeyFeature.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

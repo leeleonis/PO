@@ -850,6 +850,8 @@
           <Property Name="Description" Type="text" />
           <Property Name="PackageContent" Type="text" />
           <Property Name="SpecContent" Type="text" />
+          <Property Name="KeyFeature" Type="text" />
+          <Property Name="FeatureContent" Type="text" />
           <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="CreateAt" Type="datetime" Nullable="false" />
           <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
@@ -3663,6 +3665,8 @@
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="PackageContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="SpecContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="KeyFeature" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="FeatureContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -5265,6 +5269,8 @@
           <EntitySetMapping Name="SkuLang">
             <EntityTypeMapping TypeName="PurchaseOrderModel.SkuLang">
               <MappingFragment StoreEntitySet="SkuLang">
+                <ScalarProperty Name="FeatureContent" ColumnName="FeatureContent" />
+                <ScalarProperty Name="KeyFeature" ColumnName="KeyFeature" />
                 <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
                 <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
                 <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />

@@ -1,0 +1,11 @@
+﻿@model SKU
+@{
+    string LangID = ViewData["LangID"].ToString();
+    string DefaultLangID = EnumData.DataLangList().First().Key;
+
+    var featureList = JsonConvert.DeserializeObject<string[]>(Model.SkuLang.FirstOrDefault(l => l.LangID.Equals(Model.SkuLang.Any(ll => ll.LangID.Equals(LangID)) ? LangID : DefaultLangID))?.KeyFeature ?? "[]");
+    for (int featureIndex = 0; featureIndex < 5; featureIndex++)
+    {
+        <tr><td>@Html.TextBox("KeyFeature[" + featureIndex + "]", featureList.Skip(featureIndex).FirstOrDefault() ?? "", new { @class = "form-control" })</td></tr>
+    }
+}

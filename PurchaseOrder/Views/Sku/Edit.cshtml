@@ -311,21 +311,35 @@
                                         }
 
                                         <fieldset class="">
-                                            <legend>Package Content</legend>
+                                            <div class="form-group col-sm-6">
+                                                <legend>Package Content</legend>
 
-                                            <div class="col-sm-12 col-lg-6">
-                                                <div class="table-responsive col-sm-12">
-                                                    <table class="table table-bordered table-striped text-center">
-                                                        <thead>
-                                                            <tr>
-                                                                <th width="45%" class="text-center">Content</th>
-                                                                <th width="45%" class="text-center">Model</th>
-                                                                <th width="10%" class="text-center">Html</th>
-                                                            </tr>
-                                                        </thead>
+                                                <div class="col-sm-12 col-lg-10">
+                                                    <div class="table-responsive col-sm-12">
+                                                        <table class="table table-bordered table-striped text-center">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th width="45%" class="text-center">Content</th>
+                                                                    <th width="45%" class="text-center">Model</th>
+                                                                    <th width="10%" class="text-center">Html</th>
+                                                                </tr>
+                                                            </thead>
 
-                                                        <tbody id="list-content"></tbody>
-                                                    </table>
+                                                            <tbody id="list-content"></tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group col-sm-6">
+                                                <legend>Key Features</legend>
+
+                                                <div class="col-sm-12 col-lg-10">
+                                                    <div class="table-responsive col-sm-12">
+                                                        <table class="table table-bordered table-striped text-center">
+                                                            <tbody id="list-feature"></tbody>
+                                                        </table>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </fieldset>
@@ -408,6 +422,20 @@
                                             </div>
 
                                             @Html.TextArea("PackageContent")
+                                        </fieldset>
+
+                                        <hr />
+
+                                        <fieldset>
+                                            <legend>Feature</legend>
+
+                                            <div class="form-group">
+                                                <div class="col-lg-12">
+                                                    <button type="button" class="btn btn-default" onclick="ResetFeatureContent()">屬性重置</button>
+                                                </div>
+                                            </div>
+
+                                            @Html.TextArea("FeatureContent")
                                         </fieldset>
 
                                         <hr />
@@ -950,11 +978,12 @@
         $('.tab-pane').eq(hash.substr(1)).addClass('active');
 
         var $parentBtn = $('#btn-parent'), $parentDialog = $('#dialog-parent'), $filterSearch = $('#search-filter'), $skuTable = $('#table-sku');
-        var $variationList = $('#list-variation'), $kitList = $('#list-kit'), $contentList = $('#list-content'), $attributeList = $("#list-attribute"), $attributeTypeList = $('#list-attributeType');
+        var $variationList = $('#list-variation'), $kitList = $('#list-kit'), $contentList = $('#list-content'), $featureList = $('#list-feature'), $attributeList = $("#list-attribute"), $attributeTypeList = $('#list-attributeType');
 
         $(document).ready(function () {
             CKEDITOR.replace('Description', { height: '500px' });
             CKEDITOR.replace('PackageContent', { height: '500px' });
+            CKEDITOR.replace('FeatureContent', { height: '500px' });
             CKEDITOR.replace('SpecContent', { height: '1000px' });
 
             $('#LangID').change(function () {
@@ -964,6 +993,7 @@
                         $('#Models').val(response.data.Models);
                         CKEDITOR.instances['Description'].setData(website.IsEmpty(response.data.Description) ? '' : response.data.Description);
                         CKEDITOR.instances['PackageContent'].setData(website.IsEmpty(response.data.PackageContent) ? '' : response.data.PackageContent);
+                        CKEDITOR.instances['FeatureContent'].setData(website.IsEmpty(response.data.FeatureContent) ? '' : response.data.FeatureContent);
                         CKEDITOR.instances['SpecContent'].setData(website.IsEmpty(response.data.SpecContent) ? '' : response.data.SpecContent);
 
                         if (!website.IsEmpty(response.data.VariationList)) {
@@ -975,6 +1005,7 @@
                         }
 
                         $contentList.html(response.data.ContentList);
+                        $featureList.html(response.data.FeatureList);
                         $attributeList.html(response.data.AttributeList);
                     } else {
                         alert(response.message);
@@ -1279,8 +1310,20 @@
             });
         }
 
+        function ResetFeatureContent() {
+            var data = $featureList.find('input').serializeArray();
+            data.push({ 'name': 'LangID', 'value': $('#LangID').val() });
+            website.AjaxUrl('@Url.Action("GetFeatureContent", "Sku", new { ID = Model.SkuID })', 'post', data).done(function (response) {
+                if (response.status) {
+                    CKEDITOR.instances['FeatureContent'].setData(response.data);
+                }
+            });
+        }
+
         function ResetSpecContent() {
-            website.AjaxUrl('@Url.Action("GetSpecContent", "Sku", new { ID = Model.SkuID })', 'get', { LangID: $('#LangID').val() }).done(function (response) {
+            var data = $attributeList.find('input').serializeArray();
+            data.push({ 'name': 'LangID', 'value': $('#LangID').val() });
+            website.AjaxUrl('@Url.Action("GetSpecContent", "Sku", new { ID = Model.SkuID })', 'post', data).done(function (response) {
                 if (response.status) {
                     CKEDITOR.instances['SpecContent'].setData(response.data);
                 }

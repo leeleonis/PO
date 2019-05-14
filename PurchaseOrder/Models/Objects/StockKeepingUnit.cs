@@ -257,6 +257,7 @@ namespace PurchaseOrderSys.Models
                 UPC = skuData.UPC,
                 Type = skuData.SkuType.SkuTypeLang.FirstOrDefault(l => l.LangID.Equals(LangID))?.Name ?? "",
                 Misc01 = skuLang.PackageContent,
+                Features = skuLang.FeatureContent,
 
                 Misc02 = eBayTitle.ContainsKey(2) ? eBayTitle[2] : "",
                 Misc19 = eBayTitle.ContainsKey(19) ? eBayTitle[19] : "",

@@ -133,7 +133,7 @@ namespace PurchaseOrderSys.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(SKU updateData, SkuLang langData, List<Dictionary<string, string>> eBayTitle, int[] DiverseAttribute, Sku_Attribute[] VariationValue, KitSku[] KitSku, Sku_PackageContent[] SkuContent, Sku_Attribute[] AttributeValue, HttpPostedFileBase picture, PriceGroup[] PriceGroup, Logistic Logistic, HttpPostedFileBase LogisticImg, bool Sync = false)
+        public ActionResult Edit(SKU updateData, SkuLang langData, List<Dictionary<string, string>> eBayTitle, int[] DiverseAttribute, Sku_Attribute[] VariationValue, KitSku[] KitSku, Sku_PackageContent[] SkuContent, string[] KeyFeature, Sku_Attribute[] AttributeValue, HttpPostedFileBase picture, PriceGroup[] PriceGroup, Logistic Logistic, HttpPostedFileBase LogisticImg, bool Sync = false)
         {
             SKU sku = db.SKU.Find(updateData.SkuID);
             if (sku == null) return HttpNotFound();
@@ -145,10 +145,12 @@ namespace PurchaseOrderSys.Controllers
             {
                 SkuLang skuLang = sku.SkuLang.First(l => l.LangID.Equals(langData.LangID));
                 SetUpdateData(skuLang, langData, new string[] { "Name", "Model", "Description", "PackageContent", "SpecContent" });
+                skuLang.KeyFeature = JsonConvert.SerializeObject(KeyFeature);
             }
             else
             {
                 langData.Sku = sku.SkuID;
+                langData.KeyFeature = JsonConvert.SerializeObject(KeyFeature);
                 langData.CreateAt = sku.UpdateAt.Value;
                 langData.CreateBy = sku.UpdateBy;
                 db.SkuLang.Add(langData);
@@ -214,8 +216,8 @@ namespace PurchaseOrderSys.Controllers
                         {
                             variationSkuLang = db.SKU.Find(variationList.Key).SkuLang.First(l => l.LangID.Equals(langData.LangID));
                             variationSkuLang.Description = langData.Description;
-                            variationSkuLang.PackageContent = langData.PackageContent;                            
-                            
+                            variationSkuLang.PackageContent = langData.PackageContent;
+
                             attributeList = db.Sku_Attribute.Where(a => a.Sku.Equals(variationList.Key) && a.LangID.Equals(langData.LangID)).ToList();
 
                             foreach (var skuAttr in variationList)
@@ -779,10 +781,12 @@ namespace PurchaseOrderSys.Controllers
                 langData?.Model,
                 langData?.Description,
                 langData?.PackageContent,
+                langData?.FeatureContent,
                 langData?.SpecContent,
                 VariationList = sku.Type.Equals((byte)EnumData.SkuType.Variation) ? RenderViewToString(ControllerContext, "_VariationAttribute", sku, viewData) : "",
                 KitList = sku.Type.Equals((byte)EnumData.SkuType.Kit) ? RenderViewToString(ControllerContext, "_SkuKit", sku, viewData) : "",
                 ContentList = RenderViewToString(ControllerContext, "_Content", sku, viewData),
+                FeatureList = RenderViewToString(ControllerContext, "_KeyFeature", sku, viewData),
                 AttributeList = RenderViewToString(ControllerContext, "_SingleAttribute", sku, viewData)
             };
 
@@ -849,6 +853,28 @@ namespace PurchaseOrderSys.Controllers
             {
                 if (sku == null) throw new Exception("Not found sku!");
 
+                if (SkuContent != null && SkuContent.Any())
+                {
+                    foreach (var content in SkuContent)
+                    {
+                        var contentModel = sku.Sku_PackageContent.FirstOrDefault(c => c.ItemID.Equals(content.ItemID) && c.LangID.Equals(content.LangID));
+                        if (contentModel != null)
+                        {
+                            contentModel.Model = content.Model;
+                            contentModel.Html = content.Html;
+                            content.UpdateAt = sku.UpdateAt;
+                            content.UpdateBy = sku.UpdateBy;
+                        }
+                        else
+                        {
+                            content.CreateAt = sku.UpdateAt.Value;
+                            content.CreateBy = sku.UpdateBy;
+                            sku.Sku_PackageContent.Add(content);
+                        }
+                    }
+                    db.SaveChanges();
+                }
+
                 ViewDataDictionary viewData = new ViewDataDictionary() { { "LangID", LangID } };
 
                 result.data = RenderViewToString(ControllerContext, "_PackageContent", sku, viewData);
@@ -862,7 +888,7 @@ namespace PurchaseOrderSys.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetSpecContent(string ID, string LangID)
+        public ActionResult GetFeatureContent(string ID, string LangID, string[] KeyFeature)
         {
             AjaxResult result = new AjaxResult();
 
@@ -871,6 +897,80 @@ namespace PurchaseOrderSys.Controllers
             try
             {
                 if (sku == null) throw new Exception("Not found sku!");
+
+                if (KeyFeature != null && KeyFeature.Any())
+                {
+                    sku.SkuLang.First(l => l.LangID.Equals(LangID)).KeyFeature = JsonConvert.SerializeObject(KeyFeature);
+                    db.SaveChanges();
+                }
+
+                result.data = "<p>Key Features</p><ul>" + (KeyFeature.Any() ? string.Join("", KeyFeature.Select(f => string.Format("<li><p>{0}</p></li>", f)).ToArray()) : "") + "</ul>";
+            }
+            catch (Exception e)
+            {
+                result.status = false;
+                result.message = e.InnerException != null ? e.InnerException.Message ?? e.Message : e.Message;
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetSpecContent(string ID, string LangID, Sku_Attribute[] AttributeValue)
+        {
+            AjaxResult result = new AjaxResult();
+
+            SKU sku = db.SKU.Find(ID);
+
+            try
+            {
+                if (sku == null) throw new Exception("Not found sku!");
+
+                if (AttributeValue != null && AttributeValue.Any())
+                {
+                    List<Sku_Attribute> attributeData = AttributeValue.ToList();
+                    List<Sku_Attribute> attributeList = sku.Sku_Attribute.Where(a => a.LangID.Equals(LangID)).ToList();
+                    if (sku.Type.Equals((byte)EnumData.SkuType.Variation))
+                    {
+                        foreach (SKU childSku in db.SKU.Where(s => s.IsEnable && s.ParentSku.Equals(sku.SkuID)).ToList())
+                        {
+                            attributeData.AddRange(AttributeValue.Where(a => !a.IsDiverse).Select(a => new Sku_Attribute()
+                            {
+                                Sku = childSku.SkuID,
+                                LangID = a.LangID,
+                                AttrID = a.AttrID,
+                                Value = a.Value,
+                                Html = a.Html,
+                                eBay = a.eBay
+                            }));
+
+                            attributeList.AddRange(childSku.Sku_Attribute.Where(a => a.LangID.Equals(LangID) && !a.IsDiverse).ToList());
+                        }
+                    }
+
+                    // 新增Spec
+                    List<Sku_Attribute> newAttributeList = attributeData.Except(attributeList).ToList();
+                    foreach (var newAttr in newAttributeList)
+                    {
+                        newAttr.CreateAt = sku.UpdateAt.Value;
+                        newAttr.CreateBy = sku.UpdateBy;
+                    }
+                    db.Sku_Attribute.AddRange(newAttributeList);
+
+                    // 更新Spec
+                    foreach (var updateAttr in attributeList)
+                    {
+                        var update = attributeData.First(a => a.Sku.Equals(updateAttr.Sku) && a.AttrID.Equals(updateAttr.AttrID));
+                        updateAttr.IsDiverse = update.IsDiverse;
+                        updateAttr.Value = update.Value;
+                        updateAttr.Html = update.Html;
+                        updateAttr.eBay = update.eBay;
+                        updateAttr.UpdateAt = sku.UpdateAt.Value;
+                        updateAttr.UpdateBy = sku.UpdateBy;
+                        db.Entry(updateAttr).State = EntityState.Modified;
+                    }
+
+                    db.SaveChanges();
+                }
 
                 ViewDataDictionary viewData = new ViewDataDictionary() { { "LangID", LangID } };
                 viewData.Add("AttributeTypeList", db.SkuAttributeType.Where(t => t.IsEnable).OrderBy(t => t.Order).ToList());
