@@ -27,7 +27,7 @@
                     </tr>
                     foreach (var attribute in type.SkuAttribute.Where(a => a.IsEnable && attributeGroup[type.ID].Contains(a.ID)))
                     {
-                        Sku_Attribute value = Model.Sku_Attribute.FirstOrDefault(s => s.AttrID.Equals(attribute.ID) && s.LangID.Equals(LangID));
+                        Sku_Attribute value = Model.Sku_Attribute.FirstOrDefault(s => s.AttrID.Equals(attribute.ID) && s.LangID.Equals(LangID) && s.Html);
                         if (value != null && !string.IsNullOrEmpty(value.Value))
                         {
                             <tr>

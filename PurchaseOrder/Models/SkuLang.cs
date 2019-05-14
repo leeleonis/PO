@@ -21,6 +21,8 @@ namespace PurchaseOrderSys.Models
         public string Description { get; set; }
         public string PackageContent { get; set; }
         public string SpecContent { get; set; }
+        public string KeyFeature { get; set; }
+        public string FeatureContent { get; set; }
         public string CreateBy { get; set; }
         public System.DateTime CreateAt { get; set; }
         public string UpdateBy { get; set; }
