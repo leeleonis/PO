@@ -139,13 +139,13 @@
     <value>Please Enter  {0}</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>QD - SKU System</value>
+    <value>QD - Inventory System</value>
   </data>
   <data name="Username" xml:space="preserve">
     <value>User Name</value>
   </data>
   <data name="PurchaseOrder_IsEnable" xml:space="preserve">
-    <value>Is Enable</value>
+    <value>Enable</value>
   </data>
   <data name="PurchaseOrder_ID" xml:space="preserve">
     <value>ID</value>
@@ -157,7 +157,7 @@
     <value>Company ID</value>
   </data>
   <data name="PurchaseOrder_VendorID" xml:space="preserve">
-    <value>Vendor ID</value>
+    <value>Vendor</value>
   </data>
   <data name="PurchaseOrder_POStatus" xml:space="preserve">
     <value>PO Status</value>
@@ -193,22 +193,22 @@
     <value>Paid Amount</value>
   </data>
   <data name="PurchaseOrder_CreateBy" xml:space="preserve">
-    <value>Create By</value>
+    <value>Created by</value>
   </data>
   <data name="PurchaseOrder_CreateAt" xml:space="preserve">
-    <value>Create At</value>
+    <value>Created at</value>
   </data>
   <data name="PurchaseOrder_UpdateBy" xml:space="preserve">
-    <value>Update By</value>
+    <value>Updated by</value>
   </data>
   <data name="PurchaseOrder_UpdateAt" xml:space="preserve">
-    <value>Update At</value>
+    <value>Updated at</value>
   </data>
   <data name="PurchaseOrder_ReceivedBy" xml:space="preserve">
-    <value>Received By</value>
+    <value>Received by</value>
   </data>
   <data name="PurchaseOrder_ReceivedAt" xml:space="preserve">
-    <value>Received At</value>
+    <value>Received at</value>
   </data>
   <data name="QTY" xml:space="preserve">
     <value>QTY</value>
@@ -217,7 +217,7 @@
     <value>Grand Total</value>
   </data>
   <data name="PaidAmount" xml:space="preserve">
-    <value>PaidAmount</value>
+    <value>Paid Amount</value>
   </data>
   <data name="Balance" xml:space="preserve">
     <value>Balance</value>
@@ -244,7 +244,7 @@
     <value>Completed</value>
   </data>
   <data name="PurchaseSKU_IsEnable" xml:space="preserve">
-    <value>Is Enable</value>
+    <value>Enable</value>
   </data>
   <data name="PurchaseSKU_ID" xml:space="preserve">
     <value>ID</value>
@@ -253,10 +253,10 @@
     <value>Name</value>
   </data>
   <data name="PurchaseSKU_PurchaseOrderID" xml:space="preserve">
-    <value>Purchase Order ID</value>
+    <value>PO #</value>
   </data>
   <data name="PurchaseSKU_SkuNo" xml:space="preserve">
-    <value>Sku No</value>
+    <value>SKU</value>
   </data>
   <data name="PurchaseSKU_QTYOrdered" xml:space="preserve">
     <value>QTY Ordered</value>
@@ -283,22 +283,22 @@
     <value>Total Refunded</value>
   </data>
   <data name="PurchaseSKU_CreateBy" xml:space="preserve">
-    <value>Create By</value>
+    <value>Created by</value>
   </data>
   <data name="PurchaseSKU_CreateAt" xml:space="preserve">
-    <value>Create At</value>
+    <value>Created at</value>
   </data>
   <data name="PurchaseSKU_UpdateBy" xml:space="preserve">
-    <value>Update By</value>
+    <value>Updated by</value>
   </data>
   <data name="PurchaseSKU_UpdateAt" xml:space="preserve">
-    <value>Update At</value>
+    <value>Updated at</value>
   </data>
   <data name="PurchaseSKU_ReceivedBy" xml:space="preserve">
-    <value>Received By</value>
+    <value>Received by</value>
   </data>
   <data name="PurchaseSKU_ReceivedAt" xml:space="preserve">
-    <value>Received At</value>
+    <value>Received at</value>
   </data>
   <data name="PurchaseSKU_VendorSKU" xml:space="preserve">
     <value>Vendor SKU</value>
@@ -316,22 +316,22 @@
     <value>SerialsType</value>
   </data>
   <data name="SerialsLlist_CreateBy" xml:space="preserve">
-    <value>CreateBy</value>
+    <value>Created by</value>
   </data>
   <data name="SerialsLlist_CreateAt" xml:space="preserve">
-    <value>CreateAt</value>
+    <value>Created at</value>
   </data>
   <data name="SerialsLlist_UpdateBy" xml:space="preserve">
-    <value>UpdateBy</value>
+    <value>Updated by</value>
   </data>
   <data name="SerialsLlist_UpdateAt" xml:space="preserve">
-    <value>UpdateAt</value>
+    <value>Updated at</value>
   </data>
   <data name="SerialsLlist_ReceivedBy" xml:space="preserve">
-    <value>ReceivedBy</value>
+    <value>Received by</value>
   </data>
   <data name="SerialsLlist_ReceivedAt" xml:space="preserve">
-    <value>ReceivedAt</value>
+    <value>Received at</value>
   </data>
   <data name="PurchaseOrder_InvoiceDate" xml:space="preserve">
     <value>Invoice Date</value>
@@ -385,43 +385,43 @@
     <value>QTY Received</value>
   </data>
   <data name="CMCreditNote_IsEnable" xml:space="preserve">
-    <value>Is Enable</value>
+    <value>Enable</value>
   </data>
   <data name="CMCreditNote_ID" xml:space="preserve">
     <value>ID</value>
   </data>
   <data name="CMCreditNote_PurchaseOrderID" xml:space="preserve">
-    <value>PurchaseOrder ID</value>
+    <value>PO #</value>
   </data>
   <data name="CMCreditNote_SkuNo" xml:space="preserve">
-    <value>SkuNo</value>
+    <value>SKU</value>
   </data>
   <data name="CMCreditNote_VendorSKU" xml:space="preserve">
-    <value>VendorSKU</value>
+    <value>Vendor SKU</value>
   </data>
   <data name="CMCreditNote_Name" xml:space="preserve">
     <value>Name</value>
   </data>
   <data name="CMCreditNote_QTYOrdered" xml:space="preserve">
-    <value>QTYOrdered</value>
+    <value>QTY Ordered</value>
   </data>
   <data name="CMCreditNote_CreditQTY" xml:space="preserve">
-    <value>CreditQTY</value>
+    <value>Credit QTY</value>
   </data>
   <data name="CMCreditNote_Credit" xml:space="preserve">
     <value>Credit</value>
   </data>
   <data name="CMReplacement_IsEnable" xml:space="preserve">
-    <value>Is Enable</value>
+    <value>Enable</value>
   </data>
   <data name="CMReplacement_ID" xml:space="preserve">
     <value>ID</value>
   </data>
   <data name="CMReplacement_PurchaseOrderID" xml:space="preserve">
-    <value>PurchaseOrder D</value>
+    <value>PO #</value>
   </data>
   <data name="CMReplacement_SkuNo" xml:space="preserve">
-    <value>Sku No</value>
+    <value>SKU</value>
   </data>
   <data name="CMReplacement_Name" xml:space="preserve">
     <value>Name</value>
@@ -442,34 +442,34 @@
     <value>Serial QTY</value>
   </data>
   <data name="PurchaseNote_IsEnable" xml:space="preserve">
-    <value>IsEnable</value>
+    <value>Enable</value>
   </data>
   <data name="PurchaseNote_ID" xml:space="preserve">
     <value>ID</value>
   </data>
   <data name="PurchaseNote_PurchaseOrderID" xml:space="preserve">
-    <value>PurchaseOrderID</value>
+    <value>PO #</value>
   </data>
   <data name="PurchaseNote_Note" xml:space="preserve">
     <value>Note</value>
   </data>
   <data name="PurchaseNote_CreateBy" xml:space="preserve">
-    <value>CreateBy</value>
+    <value>Created by</value>
   </data>
   <data name="PurchaseNote_CreateAt" xml:space="preserve">
-    <value>CreateAt</value>
+    <value>Created at</value>
   </data>
   <data name="PurchaseNote_UpdateBy" xml:space="preserve">
-    <value>UpdateBy</value>
+    <value>Updated by</value>
   </data>
   <data name="PurchaseNote_UpdateAt" xml:space="preserve">
-    <value>UpdateAt</value>
+    <value>Updated at</value>
   </data>
   <data name="CMCreditNote_CompanyID" xml:space="preserve">
     <value>Company ID</value>
   </data>
   <data name="CMCreditNote_VendorID" xml:space="preserve">
-    <value>Vendor ID</value>
+    <value>Vendor</value>
   </data>
   <data name="CMCreditNote_InvoiceDate" xml:space="preserve">
     <value>Invoice Date</value>
@@ -508,28 +508,28 @@
     <value>Credit Amount</value>
   </data>
   <data name="CMCreditNote_CreateBy" xml:space="preserve">
-    <value>Create By</value>
+    <value>Created by</value>
   </data>
   <data name="CMCreditNote_CreateAt" xml:space="preserve">
-    <value>Create At</value>
+    <value>Created at</value>
   </data>
   <data name="CMCreditNote_UpdateBy" xml:space="preserve">
-    <value>Update By</value>
+    <value>Updated by</value>
   </data>
   <data name="CMCreditNote_UpdateAt" xml:space="preserve">
-    <value>Update At</value>
+    <value>Updated at</value>
   </data>
   <data name="CMCreditNote_ReceivedBy" xml:space="preserve">
-    <value>Received By</value>
+    <value>Received by</value>
   </data>
   <data name="CMCreditNote_ReceivedAt" xml:space="preserve">
-    <value>Received At</value>
+    <value>Received at</value>
   </data>
   <data name="CMReplacement_CompanyID" xml:space="preserve">
     <value>Company ID</value>
   </data>
   <data name="CMReplacement_VendorID" xml:space="preserve">
-    <value>Vendor ID</value>
+    <value>Vendor</value>
   </data>
   <data name="CMReplacement_InvoiceDate" xml:space="preserve">
     <value>Invoice Date</value>
@@ -571,31 +571,31 @@
     <value>Credit Amount</value>
   </data>
   <data name="CMReplacement_CreateBy" xml:space="preserve">
-    <value>Create By</value>
+    <value>Created by</value>
   </data>
   <data name="CMReplacement_CreateAt" xml:space="preserve">
-    <value>Create At</value>
+    <value>Created at</value>
   </data>
   <data name="CMReplacement_UpdateBy" xml:space="preserve">
-    <value>Update By</value>
+    <value>Updated by</value>
   </data>
   <data name="CMReplacement_UpdateAt" xml:space="preserve">
-    <value>Update At</value>
+    <value>Updated at</value>
   </data>
   <data name="CMReplacement_ReceivedBy" xml:space="preserve">
-    <value>Received By</value>
+    <value>Received by</value>
   </data>
   <data name="CMReplacement_ReceivedAt" xml:space="preserve">
-    <value>Received At</value>
+    <value>Received at</value>
   </data>
   <data name="VendorLIst_IsEnable" xml:space="preserve">
-    <value>IsEnable</value>
+    <value>Enable</value>
   </data>
   <data name="VendorLIst_ID" xml:space="preserve">
     <value>ID</value>
   </data>
   <data name="VendorLIst_VendorNo" xml:space="preserve">
-    <value>VendorNo</value>
+    <value>Vendor No</value>
   </data>
   <data name="VendorLIst_Name" xml:space="preserve">
     <value>Name</value>
@@ -607,10 +607,10 @@
     <value>Address</value>
   </data>
   <data name="VendorLIst_TEL" xml:space="preserve">
-    <value>TEL</value>
+    <value>Telephone</value>
   </data>
   <data name="VendorLIst_Phone" xml:space="preserve">
-    <value>Phone</value>
+    <value>Mobile Phone</value>
   </data>
   <data name="VendorLIst_Fax" xml:space="preserve">
     <value>Fax</value>
@@ -622,22 +622,22 @@
     <value>Tax</value>
   </data>
   <data name="VendorLIst_CreateBy" xml:space="preserve">
-    <value>CreateBy</value>
+    <value>Created by</value>
   </data>
   <data name="VendorLIst_CreateAt" xml:space="preserve">
-    <value>CreateAt</value>
+    <value>Created at</value>
   </data>
   <data name="VendorLIst_UpdateBy" xml:space="preserve">
-    <value>UpdateBy</value>
+    <value>Updated by</value>
   </data>
   <data name="VendorLIst_UpdateAt" xml:space="preserve">
-    <value>UpdateAt</value>
+    <value>Updated at</value>
   </data>
   <data name="VendorLIst_DelBy" xml:space="preserve">
-    <value>DelBy</value>
+    <value>Deleted by</value>
   </data>
   <data name="VendorLIst_DelAt" xml:space="preserve">
-    <value>DelAt</value>
+    <value>Deleted at</value>
   </data>
   <data name="CurrencyTWD" xml:space="preserve">
     <value>TWD</value>
@@ -649,13 +649,13 @@
     <value>USD</value>
   </data>
   <data name="Warehouse_IsEnable" xml:space="preserve">
-    <value>IsEnable</value>
+    <value>Enable</value>
   </data>
   <data name="Warehouse_IsDefault" xml:space="preserve">
-    <value>IsDefault</value>
+    <value>Default</value>
   </data>
   <data name="Warehouse_IsSellable" xml:space="preserve">
-    <value>IsSellable</value>
+    <value>Sellable</value>
   </data>
   <data name="Warehouse_ID" xml:space="preserve">
     <value>ID</value>
@@ -667,19 +667,19 @@
     <value>Type</value>
   </data>
   <data name="Warehouse_WinitWarehouse" xml:space="preserve">
-    <value>WinitWarehouse</value>
+    <value>Winit Warehouse</value>
   </data>
   <data name="Warehouse_CreateBy" xml:space="preserve">
-    <value>CreateBy</value>
+    <value>Created by</value>
   </data>
   <data name="Warehouse_CreateAt" xml:space="preserve">
-    <value>CreateAt</value>
+    <value>Created at</value>
   </data>
   <data name="Warehouse_UpdateBy" xml:space="preserve">
-    <value>UpdateBy</value>
+    <value>Updated by</value>
   </data>
   <data name="Warehouse_UpdateAt" xml:space="preserve">
-    <value>UpdateAt</value>
+    <value>Updated at</value>
   </data>
   <data name="Warehouse_Fulfillable" xml:space="preserve">
     <value>Fulfillable</value>
@@ -697,7 +697,7 @@
     <value>Company Name</value>
   </data>
   <data name="WarehouseUser_IsEnable" xml:space="preserve">
-    <value>IsEnable</value>
+    <value>Enable</value>
   </data>
   <data name="WarehouseUser_ID" xml:space="preserve">
     <value>ID</value>
@@ -706,25 +706,25 @@
     <value>Purview</value>
   </data>
   <data name="WarehouseUser_WarehouseID" xml:space="preserve">
-    <value>WarehouseID</value>
+    <value>Warehouse ID</value>
   </data>
   <data name="WarehouseUser_AdminUserID" xml:space="preserve">
-    <value>AdminUserID</value>
+    <value>User ID</value>
   </data>
   <data name="WarehouseUser_CreateBy" xml:space="preserve">
-    <value>CreateBy</value>
+    <value>Created by</value>
   </data>
   <data name="WarehouseUser_CreateAt" xml:space="preserve">
-    <value>CreateAt</value>
+    <value>Created at</value>
   </data>
   <data name="WarehouseUser_UpdateBy" xml:space="preserve">
-    <value>UpdateBy</value>
+    <value>Updated by</value>
   </data>
   <data name="WarehouseUser_UpdateAt" xml:space="preserve">
-    <value>UpdateAt</value>
+    <value>Updated at</value>
   </data>
   <data name="AdminUser_IsEnable" xml:space="preserve">
-    <value>IsEnable</value>
+    <value>Enable</value>
   </data>
   <data name="AdminUser_ID" xml:space="preserve">
     <value>ID</value>
@@ -748,28 +748,28 @@
     <value>ApiPassword</value>
   </data>
   <data name="AdminUser_TimeZone" xml:space="preserve">
-    <value>TimeZone</value>
+    <value>Time Zone</value>
   </data>
   <data name="AdminUser_AllowWarehouse" xml:space="preserve">
-    <value>AllowWarehouse</value>
+    <value>Allowed Warehouse</value>
   </data>
   <data name="AdminUser_Auth" xml:space="preserve">
-    <value>Auth</value>
+    <value>Authority</value>
   </data>
   <data name="AdminUser_CreateBy" xml:space="preserve">
-    <value>CreateBy</value>
+    <value>Created by</value>
   </data>
   <data name="AdminUser_CreateAt" xml:space="preserve">
-    <value>CreateAt</value>
+    <value>Created at</value>
   </data>
   <data name="AdminUser_UpdateBy" xml:space="preserve">
-    <value>UpdateBy</value>
+    <value>Updated by</value>
   </data>
   <data name="AdminUser_UpdateAt" xml:space="preserve">
-    <value>UpdateAt</value>
+    <value>Updated at</value>
   </data>
   <data name="Transfer_IsEnable" xml:space="preserve">
-    <value>IsEnable</value>
+    <value>Enable</value>
   </data>
   <data name="Transfer_ID" xml:space="preserve">
     <value>ID</value>
@@ -793,16 +793,16 @@
     <value>Status</value>
   </data>
   <data name="Transfer_CreateBy" xml:space="preserve">
-    <value>CreateBy</value>
+    <value>Created by</value>
   </data>
   <data name="Transfer_CreateAt" xml:space="preserve">
-    <value>CreateAt</value>
+    <value>Created at</value>
   </data>
   <data name="Transfer_UpdateBy" xml:space="preserve">
-    <value>UpdateBy</value>
+    <value>Updated by</value>
   </data>
   <data name="Transfer_UpdateAt" xml:space="preserve">
-    <value>UpdateAt</value>
+    <value>Updated at</value>
   </data>
   <data name="Transfer_Interim" xml:space="preserve">
     <value>Interim</value>
@@ -814,7 +814,7 @@
     <value>Tracking</value>
   </data>
   <data name="TransferSKU_IsEnable" xml:space="preserve">
-    <value>IsEnable</value>
+    <value>Enable</value>
   </data>
   <data name="TransferSKU_ID" xml:space="preserve">
     <value>ID</value>
@@ -823,22 +823,22 @@
     <value>TransferID</value>
   </data>
   <data name="TransferSKU_CreateBy" xml:space="preserve">
-    <value>CreateBy</value>
+    <value>Created by</value>
   </data>
   <data name="TransferSKU_CreateAt" xml:space="preserve">
-    <value>CreateAt</value>
+    <value>Created at</value>
   </data>
   <data name="TransferSKU_UpdateBy" xml:space="preserve">
-    <value>UpdateBy</value>
+    <value>Updated by</value>
   </data>
   <data name="TransferSKU_UpdateAt" xml:space="preserve">
-    <value>UpdateAt</value>
+    <value>Updated at</value>
   </data>
   <data name="TransferSKU_QTY" xml:space="preserve">
     <value>QTY</value>
   </data>
   <data name="TransferSKU_TotalReceive" xml:space="preserve">
-    <value>Total Receive</value>
+    <value>Total Received</value>
   </data>
   <data name="TransferSKU_TWN" xml:space="preserve">
     <value>TWN</value>
@@ -850,7 +850,7 @@
     <value>Action</value>
   </data>
   <data name="TransferSKU_SkuNo" xml:space="preserve">
-    <value>SkuNo</value>
+    <value>SKU</value>
   </data>
   <data name="AttributeErr" xml:space="preserve">
     <value>buteErr</value>
@@ -877,7 +877,7 @@
     <value>CompanyID</value>
   </data>
   <data name="CreditMemo_VendorID" xml:space="preserve">
-    <value>VendorID</value>
+    <value>Vendor</value>
   </data>
   <data name="CreditMemo_InvoiceDate" xml:space="preserve">
     <value>InvoiceDate</value>
@@ -1250,5 +1250,119 @@
   </data>
   <data name="RMAOrderSerialsLlist_CreateAt" xml:space="preserve">
     <value>CreateAt</value>
+  </data>
+  <data name="Brand_IsEnable" xml:space="preserve">
+    <value>Enable</value>
+  </data>
+  <data name="Brand_ID" xml:space="preserve">
+    <value>Brand ID</value>
+  </data>
+  <data name="Brand_NetoID" xml:space="preserve">
+    <value>Neto ID</value>
+  </data>
+  <data name="Brand_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Brand_IsExport" xml:space="preserve">
+    <value>Approval for Export</value>
+  </data>
+  <data name="Brand_CreateBy" xml:space="preserve">
+    <value>Created by</value>
+  </data>
+  <data name="Brand_CreateAt" xml:space="preserve">
+    <value>Created at</value>
+  </data>
+  <data name="Brand_UpdateBy" xml:space="preserve">
+    <value>Updated by</value>
+  </data>
+  <data name="Brand_UpdateAt" xml:space="preserve">
+    <value>Updated at</value>
+  </data>
+  <data name="Company_IsEnable" xml:space="preserve">
+    <value>Enable</value>
+  </data>
+  <data name="Company_ID" xml:space="preserve">
+    <value>Company ID</value>
+  </data>
+  <data name="Company_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Company_ShandowSuffix" xml:space="preserve">
+    <value>Suffix</value>
+  </data>
+  <data name="Company_ParentID" xml:space="preserve">
+    <value>Parent Company</value>
+  </data>
+  <data name="Company_RelateID" xml:space="preserve">
+    <value>Related Company</value>
+  </data>
+  <data name="Company_eBayAccountID" xml:space="preserve">
+    <value>eBay Account</value>
+  </data>
+  <data name="Company_AmazonAccountID" xml:space="preserve">
+    <value>Amazon Account</value>
+  </data>
+  <data name="Company_CreateBy" xml:space="preserve">
+    <value>Created by</value>
+  </data>
+  <data name="Company_CreateAt" xml:space="preserve">
+    <value>Created at</value>
+  </data>
+  <data name="Company_UpdateBy" xml:space="preserve">
+    <value>Updated by</value>
+  </data>
+  <data name="Company_UpdateAt" xml:space="preserve">
+    <value>Updated at</value>
+  </data>
+  <data name="SkuAttribute_IsEnable" xml:space="preserve">
+    <value>Enable</value>
+  </data>
+  <data name="SkuAttribute_ID" xml:space="preserve">
+    <value>Spec ID</value>
+  </data>
+  <data name="SkuAttribute_Type" xml:space="preserve">
+    <value>Spec Type</value>
+  </data>
+  <data name="SkuAttribute_CreateBy" xml:space="preserve">
+    <value>Created by</value>
+  </data>
+  <data name="SkuAttribute_CreateAt" xml:space="preserve">
+    <value>Created at</value>
+  </data>
+  <data name="SkuAttribute_UpdateBy" xml:space="preserve">
+    <value>Updated by</value>
+  </data>
+  <data name="SkuAttribute_UpdateAt" xml:space="preserve">
+    <value>Updated at</value>
+  </data>
+  <data name="SkuAttributeType_IsEnable" xml:space="preserve">
+    <value>Enable</value>
+  </data>
+  <data name="SkuAttributeType_ID" xml:space="preserve">
+    <value>Type ID</value>
+  </data>
+  <data name="SkuAttributeType_Name" xml:space="preserve">
+    <value>Type Name</value>
+  </data>
+  <data name="SkuAttributeType_CreateBy" xml:space="preserve">
+    <value>Created by</value>
+  </data>
+  <data name="SkuAttributeType_CreateAt" xml:space="preserve">
+    <value>Created at</value>
+  </data>
+  <data name="SkuAttributeType_UpdateBy" xml:space="preserve">
+    <value>Updated by</value>
+  </data>
+  <data name="SkuAttributeType_UpdateAt" xml:space="preserve">
+    <value>Updated at</value>
+  </data>
+  <data name="SkuType_IsEnable" xml:space="preserve">
+    <value>Enable</value>
+  </data>
+  <data name="SkuLang_KeyFeature" xml:space="preserve">
+    <value>Key Feature</value>
+  </data>
+  <data name="SkuLang_FeatureContent" xml:space="preserve">
+    <value>Feature Content</value>
   </data>
 </root>

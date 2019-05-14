@@ -2016,4 +2016,10 @@
   <data name="RMAOrderSerialsLlist_CreateAt" xml:space="preserve">
     <value>建立時間</value>
   </data>
+  <data name="SkuLang_KeyFeature" xml:space="preserve">
+    <value>Key Feature</value>
+  </data>
+  <data name="SkuLang_FeatureContent" xml:space="preserve">
+    <value>特色內容</value>
+  </data>
 </root>

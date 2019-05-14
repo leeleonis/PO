@@ -4606,6 +4606,24 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查詢類似 Feature Content 的當地語系化字串。
+        /// </summary>
+        public static string SkuLang_FeatureContent {
+            get {
+                return ResourceManager.GetString("SkuLang_FeatureContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Key Feature 的當地語系化字串。
+        /// </summary>
+        public static string SkuLang_KeyFeature {
+            get {
+                return ResourceManager.GetString("SkuLang_KeyFeature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
         public static string SkuLang_LangID {
