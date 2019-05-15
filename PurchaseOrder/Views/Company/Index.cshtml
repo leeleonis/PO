@@ -34,7 +34,7 @@
         var $table = $("#DataGrid"), datagrid;
 
         $(function () {
-            var data = { optionType: ['CompanyOption'] };
+            var data = { optionType: ['CompanyOption', 'Currency'] };
 
             website.AjaxUrl("@Url.Action("GetSelectOption", "Ajax")", 'post', data).done(function (response) {
                 if (response.status) {
@@ -78,6 +78,11 @@
                         return website.IsEmpty(row.IsFilter) ? datagrid.setDropdown(row.ID, this.field, selectOption['CompanyOption'], value) : value;
                     }
                 }, {
+                    field: "CurrencyID", title: "@Html.DisplayNameFor(model => model.CurrencyID)", width: 180, align: "center", sortable: false,
+                    formatter: function (value, row, index) {
+                        return website.IsEmpty(row.IsFilter) ? datagrid.setDropdown(row.ID, this.field, selectOption['Currency'], value.toString()) : value;
+                    }
+                }, {
                     field: "eBayAccountID", title: "@Html.DisplayNameFor(model => model.eBayAccountID)", width: 250, align: "center", sortable: false,
                     formatter: function (value, row, index) {
                         return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
@@ -119,6 +124,7 @@
                 ShandowSuffix: $('.filterColumn .s-shandowSuffix').val(),
                 ParentID: $('.filterColumn .s-parentID').val(),
                 RelateID: $('.filterColumn .s-relateID').val(),
+                CurrencyID: $('.filterColumn .s-currencyID').val(),
                 eBayAccountID: $('.filterColumn .s-eBayAccountID').val(),
                 AmazonAccountID: $('.filterColumn .s-amazonAccountID').val()
             };
@@ -134,6 +140,7 @@
                 ShandowSuffix: "<input type='text' class='form-control s-shandowSuffix' value='" + (!website.IsEmpty(filterValue['ShandowSuffix']) ? filterValue['ShandowSuffix'] : '') + "'>",
                 ParentID: "<select class='form-control s-parentID'><option value=''>全部</option>" + datagrid.setSelectOption(CompanyOption, filterValue['ParentID']) + "</select>",
                 RelateID: "<select class='form-control s-relateID'><option value=''>全部</option>" + datagrid.setSelectOption(CompanyOption, filterValue['RelateID']) + "</select>",
+                CurrencyID: "<select class='form-control s-currencyID'><option value=''>全部</option>" + datagrid.setSelectOption(selectOption['Currency'], filterValue['CurrencyID']) + "</select>",
                 eBayAccountID: "<input type='text' class='form-control s-eBayAccountID' value='" + (!website.IsEmpty(filterValue['eBayAccountID']) ? filterValue['eBayAccountID'] : '') + "'>",
                 AmazonAccountID: "<input type='text' class='form-control s-amazonAccountID' value='" + (!website.IsEmpty(filterValue['AmazonAccountID']) ? filterValue['AmazonAccountID'] : '') + "'>",
                 Action: "<button type='button' class='btn btn-default btn-sm' onclick='SaveData()'>SAVE ALL</button>"
@@ -192,6 +199,7 @@
                 ShandowSuffix: $("input#ShandowSuffix:eq(" + index + ")").val(),
                 ParentID: $("select#ParentID:eq(" + index + ")").val(),
                 RelateID: $("select#RelateID:eq(" + index + ")").val(),
+                CurrencyID: $("select#CurrencyID:eq(" + index + ")").val(),
                 eBayAccountID: $("input#eBayAccountID:eq(" + index + ")").val(),
                 AmazonAccountID: $("input#AmazonAccountID:eq(" + index + ")").val()
             }

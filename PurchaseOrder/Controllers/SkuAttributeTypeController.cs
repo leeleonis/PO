@@ -46,16 +46,14 @@ namespace PurchaseOrderSys.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IsEnable,ID,Name,CreateBy,CreateAt,UpdateBy,UpdateAt")] SkuAttributeType skuAttributeType)
+        public ActionResult Create([Bind(Include = "Name,Order")] SkuAttributeType skuAttributeType)
         {
-            if (ModelState.IsValid)
-            {
-                db.SkuAttributeType.Add(skuAttributeType);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
+            skuAttributeType.CreateAt = DateTime.UtcNow;
+            skuAttributeType.CreateBy = Session["AdminName"].ToString();
 
-            return View(skuAttributeType);
+            db.SkuAttributeType.Add(skuAttributeType);
+            db.SaveChanges();
+            return RedirectToAction("Index");
         }
 
         // GET: SkuAttributeType/Edit/5

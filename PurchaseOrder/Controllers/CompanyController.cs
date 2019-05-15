@@ -42,6 +42,7 @@ namespace PurchaseOrderSys.Controllers
             CompanyList.AddRange(db.Company.AsNoTracking().Where(c => c.IsEnable).Select(c => new SelectListItem() { Text = c.Name, Value = c.ID.ToString() }).ToList());
 
             ViewBag.CompanyList = CompanyList;
+            ViewBag.CurrencyList = db.Currency.AsNoTracking().Select(c => new SelectListItem() { Text = c.Code + " - " + c.Name, Value = c.ID.ToString() }).ToList();
             return View();
         }
 
@@ -50,11 +51,10 @@ namespace PurchaseOrderSys.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Name,ShandowSuffix,ParentID,RelateID,eBayAccountID,AmazonAccountID")] Company company)
+        public ActionResult Create([Bind(Include = "Name,ShandowSuffix,ParentID,RelateID,eBayAccountID,AmazonAccountID,CurrencyID")] Company company)
         {
-            company.IsEnable = true;
             company.CreateAt = DateTime.UtcNow;
-            company.CreateBy = "Test";
+            company.CreateBy = Session["AdminName"].ToString();
 
             db.Company.Add(company);
             db.SaveChanges();
@@ -130,6 +130,7 @@ namespace PurchaseOrderSys.Controllers
             if (!string.IsNullOrEmpty(filter.ShandowSuffix)) CompanyFilter = CompanyFilter.Where(c => c.ShandowSuffix.ToLower().Contains(filter.ShandowSuffix.ToLower()));
             if (filter.ParentID.HasValue) CompanyFilter = CompanyFilter.Where(c => c.ParentID.Value.Equals(filter.ParentID.Value));
             if (filter.RelateID.HasValue) CompanyFilter = CompanyFilter.Where(c => c.RelateID.Value.Equals(filter.RelateID.Value));
+            if (filter.CurrencyID.HasValue) CompanyFilter = CompanyFilter.Where(c => c.CurrencyID.Equals(filter.CurrencyID.Value));
             if (!string.IsNullOrEmpty(filter.eBayAccountID)) CompanyFilter = CompanyFilter.Where(c => c.eBayAccountID.ToLower().Contains(filter.eBayAccountID.ToLower()));
             if (!string.IsNullOrEmpty(filter.AmazonAccountID)) CompanyFilter = CompanyFilter.Where(c => c.AmazonAccountID.ToLower().Contains(filter.AmazonAccountID.ToLower()));
             var CompanyList = CompanyFilter.Select(x => new  {
@@ -141,6 +142,7 @@ namespace PurchaseOrderSys.Controllers
                 ShandowSuffix = x.ShandowSuffix,
                 ParentID = x.ParentID.ToString(),
                 RelateID = x.RelateID.ToString(),
+                x.CurrencyID,
                 x.CreateAt
             }).ToList();
             if (CompanyList.Any())
@@ -156,19 +158,12 @@ namespace PurchaseOrderSys.Controllers
         }
 
         //[HttpPost]
-        public ActionResult Update(CompanyVM updateData)
+        public ActionResult Update(Company updateData)
         {
             AjaxResult result = new AjaxResult();
 
-            Company Company = db.Company.Find(updateData.ID);
-            Company.Name = updateData.Name;
-            Company.ShandowSuffix = updateData.ShandowSuffix;
-            Company.ParentID = updateData.ParentID;
-            Company.RelateID = updateData.RelateID;
-            Company.eBayAccountID = updateData.eBayAccountID;
-            Company.AmazonAccountID = updateData.AmazonAccountID;
-            Company.UpdateAt = DateTime.UtcNow;
-            Company.UpdateBy = Session["AdminName"].ToString();
+            Company company = db.Company.Find(updateData.ID);
+            SetUpdateData(company, updateData, new string[] { "Name", "ShandowSuffix", "ParentID", "RelateID", "CurrencyID", "eBayAccountID", "AmazonAccountID" });
             db.SaveChanges();
 
             return Json(result, JsonRequestBehavior.AllowGet);

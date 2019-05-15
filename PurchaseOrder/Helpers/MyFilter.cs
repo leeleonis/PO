@@ -29,6 +29,7 @@ namespace PurchaseOrderSys
         public Nullable<int> RelateID { get; set; }
         public string eBayAccountID { get { return this.eBayAccountIDField; } set { eBayAccountIDField = !string.IsNullOrEmpty(value) ? value.Trim() : value; } }
         public string AmazonAccountID { get { return this.amazonAccountIDField; } set { amazonAccountIDField = !string.IsNullOrEmpty(value) ? value.Trim() : value; } }
+        public Nullable<int> CurrencyID { get; set; }
     }
 
     public class SkuAttributeTypeFilter
