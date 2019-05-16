@@ -224,8 +224,8 @@ namespace PurchaseOrderSys.Controllers
                 return Json(null, JsonRequestBehavior.AllowGet);
             }
         }
-    
-        public ActionResult TSkuNumberList(int? draw, int? start, int? length, string[] Skulist, int? FromWID, string SID)
+
+        public ActionResult TSkuNumberList(int? draw, int? start, int? length, List<string> Skulist, int? FromWID, string SID)
         {
             var odataList = (List<TranSKUVM>)Session["TSkuNumberList" + SID];
             if (odataList == null)
@@ -234,18 +234,29 @@ namespace PurchaseOrderSys.Controllers
             }
             if (FromWID.HasValue)
             {
+                if (Skulist != null)
+                {
+                    foreach (var item in odataList.Where(x => Skulist.Contains(x.SKU)))
+                    {
+                        item.QTY++;
+                        item.Model = "E";
+                        Skulist.Remove(item.SKU);
+                    }
+                }
+                var index = odataList.Count();
                 if (Skulist != null && Skulist.Where(x => !string.IsNullOrWhiteSpace(x)).Any())
                 {
+
                     //從PO單取SKU
                     var dataList = new List<TranSKUVM>();
                     dataList.AddRange(db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.IsEnable && x.PurchaseOrder.WarehouseID == FromWID && Skulist.Contains(x.SkuNo)).Select(x =>
                       new TranSKUVM
                       {
-                          ck = x.SkuNo,
+                          ck = index + 1,
                           sk = x.SkuNo,
                           SKU = x.SkuNo,
                           ProductName = x.Name,
-                          QTY = 0,
+                          QTY = 1,
                           Model = "E"
                       }).Distinct().ToList());
                     //從移倉單選取SKU
@@ -254,45 +265,45 @@ namespace PurchaseOrderSys.Controllers
                         dataList.AddRange(db.TransferSKU.Where(x => x.IsEnable && x.Transfer.IsEnable && x.Transfer.ToWID == FromWID && Skulist.Contains(x.SkuNo)).Select(x =>
                         new TranSKUVM
                         {
-                            ck = x.SkuNo,
+                            ck = index + 1,
                             sk = x.SkuNo,
                             SKU = x.SkuNo,
                             ProductName = x.Name,
-                            QTY = 0,
+                            QTY = 1,
                             Model = "E"
                         }).Distinct().ToList());
                     }
                     //從RMA單選取SKU
                     if (!dataList.Any())
                     {
-                        dataList.AddRange(db.RMASerialsLlist.Where(x => x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.WarehouseID == FromWID && Skulist.Contains(x.RMASKU.SkuNo) ).Select(x =>
-                         new TranSKUVM
-                         {
-                             ck = x.RMASKU.SkuNo,
-                             sk = x.RMASKU.SkuNo,
-                             SKU = x.RMASKU.SkuNo,
-                             ProductName = x.RMASKU.Name,
-                             QTY = 0,
-                             Model = "E"
-                         }).Distinct().ToList());
+                        dataList.AddRange(db.RMASerialsLlist.Where(x => x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.WarehouseID == FromWID && Skulist.Contains(x.RMASKU.SkuNo)).Select(x =>
+                        new TranSKUVM
+                        {
+                            ck = index + 1,
+                            sk = x.RMASKU.SkuNo,
+                            SKU = x.RMASKU.SkuNo,
+                            ProductName = x.RMASKU.Name,
+                            QTY = 1,
+                            Model = "E"
+                        }).Distinct().ToList());
                     }
                     if (!dataList.Any())
                     {
                         dataList.AddRange(db.RMASerialsLlist.Where(x => x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.WarehouseID == FromWID && Skulist.Contains(x.NewSkuNo)).Select(x =>
                          new TranSKUVM
                          {
-                             ck = x.NewSkuNo,
+                             ck = index + 1,
                              sk = x.NewSkuNo,
                              SKU = x.NewSkuNo,
                              ProductName = x.RMASKU.Name,
-                             QTY = 0,
+                             QTY = 1,
                              Model = "E"
                          }).Distinct().ToList());
                     }
 
                     odataList.AddRange(dataList);
-                    Session["TSkuNumberList" + SID] = odataList;
                 }
+                Session["TSkuNumberList" + SID] = odataList;
                 odataList = odataList.Where(x => x.Model != "D").ToList();
             }
             int recordsTotal = odataList.Count();
@@ -466,10 +477,10 @@ namespace PurchaseOrderSys.Controllers
             return Json(new { status = true }, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public ActionResult TSkuNumberListQTY(string SKU, int val, string SID)
+        public ActionResult TSkuNumberListQTY(int id, int val, string SID)
         {
             var odataList = (List<TranSKUVM>)Session["TSkuNumberList" + SID];
-            foreach (var item in odataList.Where(x => x.SKU == SKU))
+            foreach (var item in odataList.Where(x => x.ID == id))
             {
                 item.QTY = val;
                 item.Model = "E";

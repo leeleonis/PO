@@ -624,7 +624,7 @@ namespace PurchaseOrderSys.Controllers
             }
             catch (Exception ex)
             {
-
+                ViewBag.errormsg = ex.Message;
             }
 
             return View(oRMASKU);

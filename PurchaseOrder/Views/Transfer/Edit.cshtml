@@ -90,14 +90,15 @@
                                                 <div class="col-sm-9  col-lg-12">
                                                     @if (Model.Status == "Pending")
                                                     {
-                                                        <div class="col-lg-offset-11">
+                                                        <div class="col-lg-offset-10">
+                                                            <a class='btn btn-info btn-sm' href="~/File/TransferExample.xlsx">Transfer Example</a>
                                                             <a class='btn btn-danger btn-sm Excel' valID=" @Model.ID">Create by Excel</a>
                                                         </div>
                                                         <a type="button" href="@Url.Action("Requested", new { Model.ID })" class='btn btn-default btn-sm' id='Request'>Request</a>
                                                     }
                                                     else if (Model.Status == "Requested")
                                                     {
-                                                        <a type="button" href="@Url.Action("Prep", new { Model.ID })" class='btn btn-default btn-sm' id='Prep'>Prep</a>
+                                                        <a type = "button" href = "@Url.Action("Prep", new { Model.ID })" class='btn btn-default btn-sm' id='Prep'>Prep</a>
                                                         <a type="button" href="@Url.Action("Requested", new { Model.ID })" class='btn btn-default btn-sm' id='Request'>UnRequest</a>
                                                         <a type="button" href="@Url.Action("PrintAWB", new { Model.ID })" class='btn btn-default btn-sm' id='PrintAWB'>Print AWB</a>
                                                         if (Model.TransferSKU.Where(x => x.IsEnable).Where(x => x.SerialsLlist.Where(y => y.SerialsType == "TransferOut").Any() || x.RMASerialsLlist.Where(y => y.SerialsType == "TransferOut").Any()).Any())
@@ -250,7 +251,7 @@
                     { data: "ProductName" },
                     @if (Model.Status== "Pending")
                     {
-                        @:{ data: "QTY", render: function (data, type, row) { return '<input class="form-control" type="text" onchange="TSkuNumberListQTY(this,\'' + row.SKU + '\',' + data + ')"  value = ' + data + ' > '; } },
+                        @:{ data: "QTY", render: function (data, type, row) { return '<input class="form-control" type="text" onchange="TSkuNumberListQTY(this,' + row.ck + ',' + data + ')"  value = ' + data + ' > '; } },
                     }
                     else
                     {
@@ -454,13 +455,13 @@
             });
             return div;
         }
-        function TSkuNumberListQTY(x,SKU) {
+        function TSkuNumberListQTY(x,id) {
             $.ajax({
                 type: "post",
                 url: "@Url.Action("TSkuNumberListQTY", "Ajax")",
                 data: {
                     SID:@Html.Display("ID"),
-                    SKU: SKU,
+                    ID: id,
                     val: $(x).val(),
                 },
                 success: function (data) {

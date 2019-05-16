@@ -601,7 +601,7 @@ namespace PurchaseOrderSys.Models
     public class TranSKUVM
     {
         public int? ID { get; set; }
-        public string ck { get; set; }
+        public int ck { get; set; }
         public string sk { get; set; }
         /// <summary>
         /// 品號

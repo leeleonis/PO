@@ -193,7 +193,7 @@
                         "defaultContent": '' },
                     { data: "SKU" },
                     { data: "ProductName" },
-                    { data: "QTY", render: function (data, type, row) { return '<input class="form-control" type="text" onchange="TSkuNumberListQTY(this,\'' + row.SKU + '\',' + data + ')"  value = ' +data + ' > '; } },
+                    { data: "QTY", render: function (data, type, row) { return '<input class="form-control" type="text" onchange="TSkuNumberListQTY(this,' + row.ck + ',' + data + ')"  value = ' +data + ' > '; } },
                     { data: "Serial", render: function (data, type, row) { return thousandComma(data); } },
                     { data: "Label", render: function (data, type, row) { return thousandComma(data); }  },
                     { data: "TotalReceive", render: function (data, type, row) { return thousandComma(data); } },
@@ -303,13 +303,13 @@
                 }
             });
         });
-        function TSkuNumberListQTY(x,SKU) {
+        function TSkuNumberListQTY(x,id) {
             $.ajax({
                 type: "post",
                 url: "@Url.Action("TSkuNumberListQTY", "Ajax")",
                 data: {
                     SID:"@Html.Display("SID")",
-                    SKU: SKU,
+                    ID: id,
                     val: $(x).val(),
                 },
                 success: function (data) {

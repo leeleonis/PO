@@ -1,6 +1,8 @@
 ﻿@model  IEnumerable<WarehouseVM>
 @{
     ViewBag.title = "倉庫庫存";
+    var Warehouselist = EnumData.WarehouseDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var DefaultSelect = PurchaseOrderSys.App_GlobalResources.Resource.DefaultSelect;
 }
 <style>
     tfoot {
@@ -30,18 +32,26 @@
                                         <fieldset>
                                             <legend>Search</legend>
                                             <div class="form-group">
-                                                @Html.Label("Product", htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                @Html.Label("SKU", htmlAttributes: new { @class = "control-label col-sm-1" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Product", new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.Editor("SKU", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
-                                                @Html.Label("Product", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @Html.Label("Warehouse", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Product", new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.DropDownList("WarehouseID", Warehouselist, DefaultSelect, htmlAttributes: new { @class = "form-control" })
                                                 </div>
-                                                @Html.Label("Product", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @Html.Label("有無庫存", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Product", new { htmlAttributes = new { @class = "form-control" } })
+                                                    <label class="radio radio-inline">
+                                                        @Html.RadioButton("IsInventory", true,  new { @class = "radiobox"})
+                                                        <span>是</span>
+                                                    </label>
+                                                    <label class="radio radio-inline">
+                                                        @Html.RadioButton("IsInventory", false, new { @class = "radiobox"})
+                                                        <span>否</span>
+                                                    </label>
                                                 </div>
+                                                <button type="submit" class="btn btn-primary" id="Query">查詢</button>
                                             </div>
                                         </fieldset>
                                         <fieldset>
@@ -52,6 +62,8 @@
                                                             <tr>
                                                                 <th>SKU</th>
                                                                 <th width="30%">Name</th>
+                                                                <th>Fulfillable</th>
+                                                                <th>Aggregate</th>
                                                             </tr>
                                                         </thead>
                                                         <tfoot></tfoot>
@@ -65,6 +77,8 @@
                                                                             <a href=' @Url.Action("edit", "Sku", new { id = item.SKU })' target="_blank">@(item.SKU)</a>
                                                                         </td>
                                                                         <td>@item.Name</td>
+                                                                        <td>@item.Fulfillable</td>
+                                                                        <td>@item.Aggregate</td>
                                                                     </tr>
                                                                 }
                                                             }
@@ -75,10 +89,7 @@
                                         </fieldset>
                                     </div>
                                 </div>
-                                @*<div class="widget-footer">
-                                       <button type="submit" class="btn btn-primary" id="save">儲存</button>
-                                        <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index")'">返回</button>
-                                    </div>*@
+                         
                             </form>
                         </div>
                     </div>

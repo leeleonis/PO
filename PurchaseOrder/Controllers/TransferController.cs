@@ -100,7 +100,7 @@ namespace PurchaseOrderSys.Controllers
                 TranSKUVMList.Add(new TranSKUVM
                 {
                     ID = item.ID,
-                    ck = item.SkuNo,
+                    ck = item.ID,
                     sk = item.SkuNo,
                     SKU = item.SkuNo,
                     ProductName = item.SKU.SkuLang.Where(x => x.LangID == "en-US").FirstOrDefault()?.Name,
@@ -188,7 +188,7 @@ namespace PurchaseOrderSys.Controllers
 
             foreach (var item in odataList.Where(x => x.Model == "E"))
             {
-                var TransferSKUList = oTransfer.TransferSKU.Where(x => x.IsEnable && x.SkuNo == item.SKU);
+                var TransferSKUList = oTransfer.TransferSKU.Where(x => x.IsEnable && x.ID == item.ID);
                 if (TransferSKUList.Any())
                 {
                     foreach (var SKUitem in TransferSKUList)
@@ -553,7 +553,7 @@ namespace PurchaseOrderSys.Controllers
                         SkuNo = Serial.TransferSKU.SkuNo;
                     }
 
-                    var PrepVM = PrepVMList.Where(x => x.SKU == SkuNo).FirstOrDefault();
+                    var PrepVM = PrepVMList.Where(x => x.SKU == SkuNo && x.QTY > x.SerialsLlist.Count()).FirstOrDefault();
                     if (PrepVM != null)
                     {
                         if (PrepVM.QTY > PrepVM.SerialsLlist.Count() + PrepVM.RMASerialsLlist.Count())

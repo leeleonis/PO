@@ -6932,6 +6932,7 @@
     <Content Include="Properties\DataSources\System.Data.DataSet.datasource" />
     <Content Include="Properties\DataSources\System.Data.DataTable.datasource" />
     <Content Include="Content\css\imgbox.scss" />
+    <Content Include="File\TransferExample.xlsx" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

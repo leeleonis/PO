@@ -10,9 +10,29 @@ namespace PurchaseOrderSys.Controllers
     public class InventoryController : BaseController
     {
         // GET: Inventory
-        public ActionResult Index(Warehouse Warehouse, string Product, int? FulfillableMin, int? FulfillableMax)
+        public ActionResult Index()
         {
-            var WarehouseVMList = GetWarehouseVMList(Warehouse, Product, FulfillableMin, FulfillableMax);
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Index(int? WarehouseID, string SKU, bool IsInventory)
+        {
+            var Warehouse = db.Warehouse.Find(WarehouseID);
+            int? FulfillableMin = null;
+            int? FulfillableMax = null;
+            if (Warehouse==null)
+            {
+                Warehouse = new Warehouse();
+            }
+            if (IsInventory)
+            {
+                FulfillableMin = 1;
+            }
+            else
+            {
+                FulfillableMax = 0;
+            }
+            var WarehouseVMList = GetWarehouseVMList(Warehouse, SKU, FulfillableMin, FulfillableMax);
             return View(WarehouseVMList);
         }
     }

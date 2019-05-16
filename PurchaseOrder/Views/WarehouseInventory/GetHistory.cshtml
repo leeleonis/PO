@@ -32,7 +32,7 @@
                     {
                         <a href=' @Url.Action("EditItem", "PurchaseOrderPO", new { id = item.ID })' target="_blank">@item.ID</a>
                     }
-                    else if (item.ISType == "CM")
+                    else if (item.ISType == "CreditNote")
                     {
                         <a href=' @Url.Action("EditItem", "PurchaseOrderCM", new { id = item.ID })' target="_blank">@item.ID</a>
                     }
