@@ -62,7 +62,7 @@
                         return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
                     }
                 }, {
-                    field: "ShandowSuffix", title: "@Html.DisplayNameFor(model => model.ShandowSuffix)", width: 100, align: "center", sortable: false,
+                    field: "ShadowSuffix", title: "@Html.DisplayNameFor(model => model.ShadowSuffix)", width: 100, align: "center", sortable: false,
                     formatter: function (value, row, index) {
                         return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
                     }
@@ -121,7 +121,7 @@
             return {
                 ID: $('.filterColumn .s-ID').val(),
                 Name: $('.filterColumn .s-name').val(),
-                ShandowSuffix: $('.filterColumn .s-shandowSuffix').val(),
+                ShadowSuffix: $('.filterColumn .s-ShadowSuffix').val(),
                 ParentID: $('.filterColumn .s-parentID').val(),
                 RelateID: $('.filterColumn .s-relateID').val(),
                 CurrencyID: $('.filterColumn .s-currencyID').val(),
@@ -137,7 +137,7 @@
                 IsFilter: true,
                 ID: "<input type='text' class='form-control s-ID' value='" + (!website.IsEmpty(filterValue['ID']) ? filterValue['ID'] : '') + "'>",
                 Name: "<input type='text' class='form-control s-name' value='" + (!website.IsEmpty(filterValue['Name']) ? filterValue['Name'] : '') + "'>",
-                ShandowSuffix: "<input type='text' class='form-control s-shandowSuffix' value='" + (!website.IsEmpty(filterValue['ShandowSuffix']) ? filterValue['ShandowSuffix'] : '') + "'>",
+                ShadowSuffix: "<input type='text' class='form-control s-ShadowSuffix' value='" + (!website.IsEmpty(filterValue['ShadowSuffix']) ? filterValue['ShadowSuffix'] : '') + "'>",
                 ParentID: "<select class='form-control s-parentID'><option value=''>全部</option>" + datagrid.setSelectOption(CompanyOption, filterValue['ParentID']) + "</select>",
                 RelateID: "<select class='form-control s-relateID'><option value=''>全部</option>" + datagrid.setSelectOption(CompanyOption, filterValue['RelateID']) + "</select>",
                 CurrencyID: "<select class='form-control s-currencyID'><option value=''>全部</option>" + datagrid.setSelectOption(selectOption['Currency'], filterValue['CurrencyID']) + "</select>",
@@ -196,7 +196,7 @@
             return {
                 ID: row.ID,
                 Name: $("input#Name:eq(" + index + ")").val(),
-                ShandowSuffix: $("input#ShandowSuffix:eq(" + index + ")").val(),
+                ShadowSuffix: $("input#ShadowSuffix:eq(" + index + ")").val(),
                 ParentID: $("select#ParentID:eq(" + index + ")").val(),
                 RelateID: $("select#RelateID:eq(" + index + ")").val(),
                 CurrencyID: $("select#CurrencyID:eq(" + index + ")").val(),

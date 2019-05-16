@@ -185,7 +185,7 @@
           <Property Name="IsEnable" Type="bit" Nullable="false" />
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="ShandowSuffix" Type="nvarchar" MaxLength="10" />
+          <Property Name="ShadowSuffix" Type="nvarchar" MaxLength="10" />
           <Property Name="ParentID" Type="int" />
           <Property Name="RelateID" Type="int" />
           <Property Name="eBayAccountID" Type="nvarchar" MaxLength="50" />
@@ -5383,7 +5383,7 @@
                 <ScalarProperty Name="eBayAccountID" ColumnName="eBayAccountID" />
                 <ScalarProperty Name="RelateID" ColumnName="RelateID" />
                 <ScalarProperty Name="ParentID" ColumnName="ParentID" />
-                <ScalarProperty Name="ShadowSuffix" ColumnName="ShandowSuffix" />
+                <ScalarProperty Name="ShadowSuffix" ColumnName="ShadowSuffix" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />

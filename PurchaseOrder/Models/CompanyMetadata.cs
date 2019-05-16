@@ -52,7 +52,7 @@ namespace PurchaseOrderSys.Models
     		/// <summary>
     		/// Shandow Suffix
     		/// </summary>        
-    	    [Display(Name = "Company_ShandowSuffix", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "Company_ShadowSuffix", ResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(10, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  ShadowSuffix { get; set; }
     

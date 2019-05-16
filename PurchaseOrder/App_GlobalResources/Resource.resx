@@ -1186,7 +1186,7 @@
   <data name="Company_Name" xml:space="preserve">
     <value></value>
   </data>
-  <data name="Company_ShandowSuffix" xml:space="preserve">
+  <data name="Company_ShadowSuffix" xml:space="preserve">
     <value></value>
   </data>
   <data name="Company_ParentID" xml:space="preserve">

@@ -18,13 +18,13 @@ namespace PurchaseOrderSys
     public class CompanyFilter
     {
         private string nameField;
-        private string shandowSuffixField;
+        private string ShadowSuffixField;
         private string eBayAccountIDField;
         private string amazonAccountIDField;
 
         public Nullable<int> ID { get; set; }
         public string Name { get { return this.nameField; } set { nameField = !string.IsNullOrEmpty(value) ? value.Trim() : value; } }
-        public string ShandowSuffix { get { return this.shandowSuffixField; } set { shandowSuffixField = !string.IsNullOrEmpty(value) ? value.Trim() : value; } }
+        public string ShadowSuffix { get { return this.ShadowSuffixField; } set { ShadowSuffixField = !string.IsNullOrEmpty(value) ? value.Trim() : value; } }
         public Nullable<int> ParentID { get; set; }
         public Nullable<int> RelateID { get; set; }
         public string eBayAccountID { get { return this.eBayAccountIDField; } set { eBayAccountIDField = !string.IsNullOrEmpty(value) ? value.Trim() : value; } }

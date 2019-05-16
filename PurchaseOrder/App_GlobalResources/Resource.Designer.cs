@@ -1107,9 +1107,9 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string Company_ShandowSuffix {
+        public static string Company_ShadowSuffix {
             get {
-                return ResourceManager.GetString("Company_ShandowSuffix", resourceCulture);
+                return ResourceManager.GetString("Company_ShadowSuffix", resourceCulture);
             }
         }
         
