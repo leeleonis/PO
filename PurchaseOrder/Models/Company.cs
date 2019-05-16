@@ -25,7 +25,7 @@ namespace PurchaseOrderSys.Models
         public bool IsEnable { get; set; }
         public int ID { get; set; }
         public string Name { get; set; }
-        public string ShandowSuffix { get; set; }
+        public string ShadowSuffix { get; set; }
         public Nullable<int> ParentID { get; set; }
         public Nullable<int> RelateID { get; set; }
         public string eBayAccountID { get; set; }

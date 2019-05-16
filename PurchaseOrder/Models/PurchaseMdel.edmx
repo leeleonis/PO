@@ -3846,7 +3846,7 @@
           <Property Name="IsEnable" Type="Boolean" Nullable="false" />
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ShandowSuffix" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="ShadowSuffix" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="ParentID" Type="Int32" />
           <Property Name="RelateID" Type="Int32" />
           <Property Name="eBayAccountID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -5383,7 +5383,7 @@
                 <ScalarProperty Name="eBayAccountID" ColumnName="eBayAccountID" />
                 <ScalarProperty Name="RelateID" ColumnName="RelateID" />
                 <ScalarProperty Name="ParentID" ColumnName="ParentID" />
-                <ScalarProperty Name="ShandowSuffix" ColumnName="ShandowSuffix" />
+                <ScalarProperty Name="ShadowSuffix" ColumnName="ShandowSuffix" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
