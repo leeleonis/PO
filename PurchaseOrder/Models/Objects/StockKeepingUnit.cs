@@ -364,6 +364,7 @@ namespace PurchaseOrderSys.Models
                     foreach (var company in db.Company.Where(c => c.ParentID.Value.Equals(skuData.Company)))
                     {
                         updateSku.ID = skuData.SkuID + company.ShadowSuffix;
+                        updateSku.CompanyID = company.ID;
                         SC_Api.Update_Product(updateSku);
                     }
                 }
