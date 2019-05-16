@@ -342,7 +342,7 @@ namespace PurchaseOrderSys.Controllers
         public void GetProductData(string skuID)
         {
             var SC_Api = new SellerCloud_WebService.SC_WebService("tim@weypro.com", "timfromweypro");
-            var sku1 = SC_Api.Get_ProductFullInfo(skuID);
+            var sku1 = SC_Api.Get_Product(skuID);
 
            var netoApi = new NetoApi();
             var sku2 = netoApi.GetItemBySku(skuID);

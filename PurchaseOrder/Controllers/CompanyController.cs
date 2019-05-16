@@ -127,7 +127,7 @@ namespace PurchaseOrderSys.Controllers
             var CompanyFilter = db.Company.AsNoTracking().AsQueryable();
             if (filter.ID.HasValue) CompanyFilter = CompanyFilter.Where(c => c.ID.Equals(filter.ID.Value));
             if (!string.IsNullOrEmpty(filter.Name)) CompanyFilter = CompanyFilter.Where(c => c.Name.ToLower().Contains(filter.Name.ToLower()));
-            if (!string.IsNullOrEmpty(filter.ShandowSuffix)) CompanyFilter = CompanyFilter.Where(c => c.ShandowSuffix.ToLower().Contains(filter.ShandowSuffix.ToLower()));
+            if (!string.IsNullOrEmpty(filter.ShandowSuffix)) CompanyFilter = CompanyFilter.Where(c => c.ShadowSuffix.ToLower().Contains(filter.ShandowSuffix.ToLower()));
             if (filter.ParentID.HasValue) CompanyFilter = CompanyFilter.Where(c => c.ParentID.Value.Equals(filter.ParentID.Value));
             if (filter.RelateID.HasValue) CompanyFilter = CompanyFilter.Where(c => c.RelateID.Value.Equals(filter.RelateID.Value));
             if (filter.CurrencyID.HasValue) CompanyFilter = CompanyFilter.Where(c => c.CurrencyID.Equals(filter.CurrencyID.Value));
@@ -139,7 +139,7 @@ namespace PurchaseOrderSys.Controllers
                 eBayAccountID = x.eBayAccountID,
                 ID = x.ID,
                 Name = x.Name,
-                ShandowSuffix = x.ShandowSuffix,
+                ShandowSuffix = x.ShadowSuffix,
                 ParentID = x.ParentID.ToString(),
                 RelateID = x.RelateID.ToString(),
                 x.CurrencyID,

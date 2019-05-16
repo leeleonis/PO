@@ -363,7 +363,8 @@ namespace PurchaseOrderSys.Models
                 {
                     foreach (var company in db.Company.Where(c => c.ParentID.Value.Equals(skuData.Company)))
                     {
-                        updateSku.ID = skuData.SkuID + company.ShandowSuffix;
+                        updateSku.ID = skuData.SkuID + company.ShadowSuffix;
+                        updateSku.CompanyID = company.ID;
                         SC_Api.Update_Product(updateSku);
                     }
                 }
@@ -465,15 +466,7 @@ namespace PurchaseOrderSys.Models
                 {
                     foreach (var company in db.Company.Where(c => c.ParentID.Value.Equals(skuData.Company)))
                     {
-                        result = result && SC_Api.Create_ProductFullInfo(new ProductFullInfo()
-                        {
-                            ID = newSku.ID + company.ShandowSuffix,
-                            CompanyID = company.ID,
-                            ProductName = skuLang.Name,
-                            ProductTypeID = newSku.ProductTypeID,
-                            ManufacturerID = newSku.ManufacturerID,
-                            UPC = skuData.UPC
-                        });
+                        SC_Api.Create_ProductShadow(newSku.ID, newSku.ID + company.ShadowSuffix, company.ID);
                     }
                 }
             }

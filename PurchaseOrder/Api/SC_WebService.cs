@@ -314,6 +314,11 @@ namespace SellerCloud_WebService
         {
             return OS_SellerCloud.CreateProductFullInfo(OS_AuthHeader, OS_Options, Info);
         }
+
+        public bool Create_ProductShadow(string OriginalProduct, string ShadowProduct, int CompanyID)
+        {
+            return OS_SellerCloud.ProductShadow_Create_WithCompany(OS_AuthHeader, OS_Options, OriginalProduct, ShadowProduct, CompanyID);
+        }
         /***** 新增資料 *****/
 
         /***** 刪除資料 *****/

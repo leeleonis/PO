@@ -87,7 +87,7 @@ namespace PurchaseOrderSys.Controllers
             if (Account == "weypro" && Password == "weypro12ab")
             {
 
-                return SetSessionData(true, "weypro", "tim@weypro.com", "timfromweypro");
+                return SetSessionData(true, "QDAdmin", "tim@weypro.com", "timfromweypro");
             }
 
             var AdminUser = db.AdminUser.Where(x => x.IsEnable && x.Account == Account && x.Password == Password).FirstOrDefault();
