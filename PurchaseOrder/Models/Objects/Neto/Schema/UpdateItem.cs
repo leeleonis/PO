@@ -430,11 +430,17 @@ namespace NetoDeveloper
 
         private UpdateItemItemKitComponent[] kitComponentsField;
 
-        private UpdateItemItemPriceGroup[] priceGroupsField;
+        private UpdateItemItemPriceGroups priceGroupsField;
 
-        private UpdateItemItemCategory[] categoriesField;
+        private UpdateItemItemPriceGroup[] priceGroupField;
 
-        private UpdateItemItemItemSpecific[] itemSpecificsField;
+        private UpdateItemItemCategoryGroup categoriesField;
+
+        private UpdateItemItemCategory[] categoryField;
+
+        private UpdateItemItemItemSpecificGroup itemSpecificsField;
+
+        private UpdateItemItemItemSpecific[] itemSpecificField;
 
         private UpdateItemItemWarehouseQuantity[] warehouseQuantityField;
 
@@ -3112,7 +3118,7 @@ namespace NetoDeveloper
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         [System.Xml.Serialization.XmlArrayItemAttribute("PriceGroup", Form = System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable = false)]
-        public UpdateItemItemPriceGroup[] PriceGroups
+        public UpdateItemItemPriceGroups PriceGroups
         {
             get
             {
@@ -3124,10 +3130,25 @@ namespace NetoDeveloper
             }
         }
 
+        [System.Xml.Serialization.XmlArrayAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("PriceGroup", Form = System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable = false)]
+        public UpdateItemItemPriceGroup[] PriceGroup
+        {
+            get
+            {
+                return this.priceGroupField;
+            }
+            set
+            {
+                this.priceGroupField = value;
+            }
+        }
+
+
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         [System.Xml.Serialization.XmlArrayItemAttribute("Category", Form = System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable = false)]
-        public UpdateItemItemCategory[] Categories
+        public UpdateItemItemCategoryGroup Categories
         {
             get
             {
@@ -3141,8 +3162,23 @@ namespace NetoDeveloper
 
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("Category", Form = System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable = false)]
+        public UpdateItemItemCategory[] Category
+        {
+            get
+            {
+                return this.categoryField;
+            }
+            set
+            {
+                this.categoryField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlArrayAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
         [System.Xml.Serialization.XmlArrayItemAttribute("ItemSpecific", Form = System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable = false)]
-        public UpdateItemItemItemSpecific[] ItemSpecifics
+        public UpdateItemItemItemSpecificGroup ItemSpecifics
         {
             get
             {
@@ -3151,6 +3187,21 @@ namespace NetoDeveloper
             set
             {
                 this.itemSpecificsField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlArrayAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("ItemSpecific", Form = System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable = false)]
+        public UpdateItemItemItemSpecific[] ItemSpecific
+        {
+            get
+            {
+                return this.itemSpecificField;
+            }
+            set
+            {
+                this.itemSpecificField = value;
             }
         }
 
@@ -3653,6 +3704,32 @@ namespace NetoDeveloper
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "NetoAPI")]
+    public partial class UpdateItemItemPriceGroups
+    {
+
+        private UpdateItemItemPriceGroup[] groupsField;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public UpdateItemItemPriceGroup[] PriceGroup
+        {
+            get
+            {
+                return this.groupsField;
+            }
+            set
+            {
+                this.groupsField = value;
+            }
+        }
+    }
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "NetoAPI")]
     public partial class UpdateItemItemPriceGroup
     {
 
@@ -3833,6 +3910,30 @@ namespace NetoDeveloper
         }
     }
 
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "NetoAPI")]
+    public partial class UpdateItemItemCategoryGroup
+    {
+
+        private UpdateItemItemCategory[] categoryField;
+
+        /// <remarks/>
+        public UpdateItemItemCategory[] Category
+        {
+            get
+            {
+                return this.categoryField;
+            }
+            set
+            {
+                this.categoryField = value;
+            }
+        }
+    }
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
     [System.SerializableAttribute()]
@@ -3903,6 +4004,32 @@ namespace NetoDeveloper
             set
             {
                 this.deleteFieldSpecified = value;
+            }
+        }
+    }
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "NetoAPI")]
+    public partial class UpdateItemItemItemSpecificGroup
+    {
+
+        private UpdateItemItemItemSpecific[] itemSpecificField;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public UpdateItemItemItemSpecific[] ItemSpecific
+        {
+            get
+            {
+                return this.itemSpecificField;
+            }
+            set
+            {
+                this.itemSpecificField = value;
             }
         }
     }

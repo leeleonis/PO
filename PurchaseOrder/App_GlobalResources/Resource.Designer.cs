@@ -2646,6 +2646,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
+        public static string PriceGroup_CurrentPrice {
+            get {
+                return ResourceManager.GetString("PriceGroup_CurrentPrice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
         public static string PriceGroup_ID {
             get {
                 return ResourceManager.GetString("PriceGroup_ID", resourceCulture);

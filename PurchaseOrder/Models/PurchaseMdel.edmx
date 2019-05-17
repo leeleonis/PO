@@ -507,6 +507,7 @@
           <Property Name="Sku" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="ItemID" Type="nvarchar" MaxLength="50" />
           <Property Name="Marketplace" Type="int" />
+          <Property Name="CurrentPrice" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="Price" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="Max" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="Min" Type="decimal" Precision="18" Scale="2" Nullable="false" />
@@ -3771,6 +3772,7 @@
           <Property Name="Sku" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ItemID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Marketplace" Type="Int32" />
+          <Property Name="CurrentPrice" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="Price" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="Max" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="Min" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
@@ -5336,6 +5338,7 @@
           <EntitySetMapping Name="PriceGroup">
             <EntityTypeMapping TypeName="PurchaseOrderModel.PriceGroup">
               <MappingFragment StoreEntitySet="PriceGroup">
+                <ScalarProperty Name="CurrentPrice" ColumnName="CurrentPrice" />
                 <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
                 <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
                 <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
