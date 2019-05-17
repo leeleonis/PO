@@ -19,6 +19,7 @@ namespace PurchaseOrderSys.Models
         public string Sku { get; set; }
         public string ItemID { get; set; }
         public Nullable<int> Marketplace { get; set; }
+        public decimal CurrentPrice { get; set; }
         public decimal Price { get; set; }
         public decimal Max { get; set; }
         public decimal Min { get; set; }

@@ -2022,4 +2022,7 @@
   <data name="SkuLang_FeatureContent" xml:space="preserve">
     <value>特色內容</value>
   </data>
+  <data name="PriceGroup_CurrentPrice" xml:space="preserve">
+    <value>目前價錢</value>
+  </data>
 </root>

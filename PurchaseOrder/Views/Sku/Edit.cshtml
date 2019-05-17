@@ -538,8 +538,8 @@
                                                                         <td>@(market.Company?.Name ?? "")</td>
                                                                         <td>@(market.Company != null ? (!string.IsNullOrEmpty(market.Company.eBayAccountID) ? market.Company.eBayAccountID : market.Company.AmazonAccountID) : "")</td>
                                                                         <td>@(market.Currency?.Code ?? "")</td>
-                                                                        <td></td>
-                                                                        <td class="no-padding">@Html.TextBox(name + "[Price]", "", new { @class = "form-control" })</td>
+                                                                        <td>@(price?.CurrentPrice ?? 0)</td>
+                                                                        <td class="no-padding">@Html.TextBox(name + "[Price]", price?.Price ?? 0, new { @class = "form-control" })</td>
                                                                         <td class="no-padding">@Html.TextBox(name + "[Max]", price?.Max ?? 0, new { @class = "form-control" })</td>
                                                                         <td class="no-padding">@Html.TextBox(name + "[Min]", price?.Min ?? 0, new { @class = "form-control" })</td>
                                                                     </tr>

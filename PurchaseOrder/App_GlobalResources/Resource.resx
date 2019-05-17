@@ -2249,4 +2249,7 @@
   <data name="SkuLang_FeatureContent" xml:space="preserve">
     <value>Feature Content</value>
   </data>
+  <data name="PriceGroup_CurrentPrice" xml:space="preserve">
+    <value></value>
+  </data>
 </root>

@@ -243,6 +243,9 @@ namespace PurchaseOrderSys.Models
             if (!netoApi.GetItemBySku(skuData.SkuID).Item.Any())
                 CreateSkuToNeto();
 
+            if (!skuData.SkuType.NetoID.HasValue)
+                throw new Exception("Neto Error: SKU的Category尚未設定NetoID!");
+
             var skuLang = skuData.SkuLang.First(l => l.LangID.Equals(LangID));
             var eBayTitle = !string.IsNullOrEmpty(skuData.eBayTitle) ? Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<int, string>>(skuData.eBayTitle) : new Dictionary<int, string> { };
 
@@ -272,12 +275,18 @@ namespace PurchaseOrderSys.Models
                 Misc20 = eBayTitle.ContainsKey(20) ? eBayTitle[20] : "",
                 Misc22 = eBayTitle.ContainsKey(22) ? eBayTitle[22] : "",
 
-                PriceGroups = skuData.PriceGroup.Where(p => p.GetMarket.NetoGroup.HasValue)
-                    .Select(p => new UpdateItemItemPriceGroup() { Group = p.GetMarket.GetNetoGroup.Name, Price = p.Price, PriceSpecified = true, MaximumQuantity = p.Max.ToString(), MinimumQuantity = p.Min.ToString() }).ToArray(),
-                Categories = new UpdateItemItemCategory[] { new UpdateItemItemCategory() { CategoryID = skuData.SkuType.NetoID.Value.ToString() } },
-                ItemSpecifics = skuData.Sku_Attribute.Where(a => skuData.Type.Equals((byte)EnumData.SkuType.Variation) ? !a.IsDiverse : true)
+                PriceGroups = new UpdateItemItemPriceGroups()
+                {
+                    PriceGroup = skuData.PriceGroup.Where(p => p.GetMarket.NetoGroup.HasValue)
+                    .Select(p => new UpdateItemItemPriceGroup() { Group = p.GetMarket.GetNetoGroup.Name, Price = !p.CurrentPrice.Equals(0) ? p.CurrentPrice : p.Price, PriceSpecified = true, MaximumQuantity = p.Max.ToString(), MinimumQuantity = p.Min.ToString() }).ToArray()
+                },
+                Categories = new UpdateItemItemCategoryGroup() { Category = new UpdateItemItemCategory[] { new UpdateItemItemCategory() { CategoryID = skuData.SkuType.NetoID.Value.ToString() } } },
+                ItemSpecifics = new UpdateItemItemItemSpecificGroup()
+                {
+                    ItemSpecific = skuData.Sku_Attribute.Where(a => skuData.Type.Equals((byte)EnumData.SkuType.Variation) ? !a.IsDiverse : true)
                     .Where(a => a.eBay).GroupBy(a => a.AttrID).Where(g => g.Any(a => a.LangID.Equals(LangID))).Select(g => g.First(a => a.LangID.Equals(LangID)))
                     .Select(g => new UpdateItemItemItemSpecific() { Name = g.SkuAttribute.SkuAttributeLang.First(l => l.LangID.Equals(LangID)).Name, Value = g.Value }).ToArray()
+                }
             };
 
             var result = netoApi.UpdateItem(update);
@@ -288,11 +297,11 @@ namespace PurchaseOrderSys.Models
 
             if (result.Messages.Error.Any())
             {
-                throw new Exception("Error:" + string.Join(",", result.Messages.Error.Select(e => e.Message + "-" + e.Description).ToArray()));
+                throw new Exception("Neto Error: " + string.Join(",", result.Messages.Error.Select(e => e.Message + "-" + e.Description).ToArray()));
             }
             else
             {
-                throw new Exception("Waring:" + string.Join(",", result.Messages.Warning.Select(e => e.Message).ToArray()));
+                throw new Exception("Neto Waring: " + string.Join(",", result.Messages.Warning.Select(e => e.Message).ToArray()));
             }
         }
 
@@ -303,8 +312,9 @@ namespace PurchaseOrderSys.Models
 
             if (!netoApi.GetItemBySku(skuData.SkuID + "_var").Item.Any())
                 CreateSkuToNeto("_var");
-
+            
             var skuLang = skuData.SkuLang.First(l => l.LangID.Equals(LangID));
+
             var update = new UpdateItemItem()
             {
                 SKU = skuData.SkuID + "_var",
@@ -317,10 +327,13 @@ namespace PurchaseOrderSys.Models
                 UPC = skuData.UPC,
                 Type = skuData.SkuType.SkuTypeLang.FirstOrDefault(l => l.LangID.Equals(LangID))?.Name ?? "",
 
-                Categories = new UpdateItemItemCategory[] { new UpdateItemItemCategory() { CategoryID = skuData.SkuType.NetoID.Value.ToString() } },
-                ItemSpecifics = skuData.Sku_Attribute.Where(a => a.IsDiverse && a.eBay).GroupBy(a => a.AttrID)
+                Categories = new UpdateItemItemCategoryGroup() { Category = new UpdateItemItemCategory[] { new UpdateItemItemCategory() { CategoryID = skuData.SkuType.NetoID.Value.ToString() } } },
+                ItemSpecifics = new UpdateItemItemItemSpecificGroup()
+                {
+                    ItemSpecific = skuData.Sku_Attribute.Where(a => a.IsDiverse && a.eBay).GroupBy(a => a.AttrID)
                     .Where(g => g.Any(a => a.LangID.Equals(LangID))).Select(g => g.First(a => a.LangID.Equals(LangID)))
                     .Select(g => new UpdateItemItemItemSpecific() { Name = g.SkuAttribute.SkuAttributeLang.First(l => l.LangID.Equals(LangID)).Name, Value = g.Value }).ToArray()
+                }
             };
 
             var result = netoApi.UpdateItem(update);
@@ -331,11 +344,11 @@ namespace PurchaseOrderSys.Models
 
             if (result.Messages.Error.Any())
             {
-                throw new Exception("Error:" + string.Join(",", result.Messages.Error.Select(e => e.Message + "-" + e.Description).ToArray()));
+                throw new Exception("Neto Error: " + string.Join(",", result.Messages.Error.Select(e => e.Message + "-" + e.Description).ToArray()));
             }
             else
             {
-                throw new Exception("Waring:" + string.Join(",", result.Messages.Warning.Select(e => e.Message).ToArray()));
+                throw new Exception("Neto Waring: " + string.Join(",", result.Messages.Warning.Select(e => e.Message).ToArray()));
             }
         }
 
@@ -348,6 +361,12 @@ namespace PurchaseOrderSys.Models
             {
                 if (SC_Api.Get_ProductFullInfo(skuData.SkuID) == null)
                     CreateSkuToSC();
+
+                if (!skuData.SkuType.SCID.HasValue)
+                    throw new Exception("SKU的Category尚未設定SCID!");
+
+                if (!skuData.GetBrand.SCID.HasValue)
+                    throw new Exception("SKU的Brand尚未設定SCID!");
 
                 var skuLang = skuData.SkuLang.First(l => l.LangID.Equals(LangID));
                 var updateSku = SC_Api.Get_Product(skuData.SkuID);
@@ -373,7 +392,7 @@ namespace PurchaseOrderSys.Models
             }
             catch (Exception e)
             {
-                throw new Exception("SC Error:" + e.InnerException?.Message ?? e.Message);
+                throw new Exception("SC Error: " + (e.InnerException?.Message ?? e.Message));
             }
         }
 
@@ -429,11 +448,11 @@ namespace PurchaseOrderSys.Models
 
             if (result.Messages.Error.Any())
             {
-                throw new Exception("Neto Error:" + string.Join(",", result.Messages.Error.Select(e => e.Message + "-" + e.Description).ToArray()));
+                throw new Exception("Neto Error: " + string.Join(",", result.Messages.Error.Select(e => e.Message + "-" + e.Description).ToArray()));
             }
             else
             {
-                throw new Exception("Neto Waring:" + string.Join(",", result.Messages.Warning.Select(e => e.Message).ToArray()));
+                throw new Exception("Neto Waring: " + string.Join(",", result.Messages.Warning.Select(e => e.Message).ToArray()));
             }
         }
 
@@ -474,7 +493,7 @@ namespace PurchaseOrderSys.Models
             }
             catch (Exception e)
             {
-                throw new Exception("SC Error:" + e.InnerException?.Message ?? e.Message);
+                throw new Exception("SC Error: " + (e.InnerException?.Message ?? e.Message));
             }
         }
 
