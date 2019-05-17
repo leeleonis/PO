@@ -12,7 +12,7 @@
     {
         sRMASKUCount = sRMASKU.RMASerialsLlist.Count();
     }
-
+    var errormsg = (string)ViewBag.errormsg;
 }
 <div id="content">
     <section id="widget-grid" class="">
@@ -171,10 +171,6 @@
                                                                 <li><button type='button' class='glyphicon glyphicon-remove btn-danger delserials' val="@item.SerialsNo"></button>@item.SerialsNo　　@item.CreateAt.ToLocalTime()</li>
                                                             }
                                                         }
-                                                        @if (ViewBag.errormsg != null)
-                                                        {
-                                                            @ViewBag.errormsg
-                                                        }
                                                     </ul>
                                                 </article>
                                             </div>
@@ -183,7 +179,7 @@
                                 </div>
                                 <div class="widget-footer">
                                     <button type="submit" class="btn btn-primary" id="save">儲存</button>
-                                    <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Edit",new { id=Model.RMAID})'">返回</button>
+                                    <button type="button" class="btn btn-default" id="chkClosed" onclick="location.href = '@Url.Action("Edit",new { id=Model.RMAID})'">返回</button>
                                 </div>
                             </form>
                         </div>
@@ -194,7 +190,7 @@
     </section>
 </div>
 @section pagespecific {
-    <script type="text/javascript">
+<script type="text/javascript">
         var hash = window.location.hash;
         $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
         $('.tab-pane').eq(hash.substr(1)).addClass('active');
@@ -222,6 +218,7 @@
                                 $("#Serialcount").text($("#SerialList li").length);
                                 $("#Serial").val("");
                                 $(".readonly").attr('readonly', true);
+                                $("#chkClosed").attr('onclick', "return chkClose()");
                             }
                             else {
                                 alert(data.Errmsg);
@@ -256,6 +253,18 @@
             {
                @:$(".readonly").attr('readonly', true);
             }
-        });
-    </script>
+            @if (!string.IsNullOrWhiteSpace(errormsg))
+            {
+                @:alert("@errormsg ;請手動更新SC");
+            }
+    });
+    function chkClose() {
+        if (confirm('尚未儲存，是否要放棄儲存？')) {
+            location.href = '@Url.Action("Edit",new { id=Model.RMAID})'
+        }
+        else {
+            return false;
+        }
+    }
+</script>
 }

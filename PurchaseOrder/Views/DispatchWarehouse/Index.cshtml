@@ -82,7 +82,7 @@
                                                             <th>@Html.DisplayName("Summary")</th>
                                                             <th>Edit</th>
                                                             <th>Delete</th>
-                                                            <th>SKU ITEM</th>
+                                                            @*<th>SKU ITEM</th>*@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -197,9 +197,9 @@
                                                                     <td>
                                                                         <a class='btn btn-default btn-sm' id='Delete' href='@Url.Action("Delete", new { item.ID })' onclick="return confirm('是否確定刪除')">Delete</a>
                                                                     </td>
-                                                                    <td>
+                                                                    @*<td>
                                                                         <a class='btn btn-default btn-sm' id='index' href='@Url.Action("index","WarehouseInventory", new { item.ID })'>SKU</a>
-                                                                    </td>
+                                                                    </td>*@
                                                                 </tr>
                                                             }
                                                         }

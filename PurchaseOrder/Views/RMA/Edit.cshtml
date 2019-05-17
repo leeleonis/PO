@@ -423,7 +423,12 @@
                              {
                                  @:html += " <a href='@Url.Action("Returnedserials")?ID=" + data + "' class='btn btn-default btn-sm'>Receive returns</a>";
                              }
-                            html += " <a val='" + data + "'  oSKU='" + row.SKU + "' class='btn btn-default btn-sm ChangeSKU'>Renew item</a>";
+                            if (row.ReturnedSerialsNo == "" || row.ReturnedSerialsNo == null) {
+                                html += " <a val='" + data + "'  oSKU='" + row.SKU + "' class='btn btn-default btn-sm ChangeSKU'>Renew item</a>";
+                            }
+                            else {
+                                html = " <a val='" + data + "'  oSKU='" + row.SKU + "' class='btn btn-default btn-sm ChangeSKU'>Renew item</a>";
+                            }
                             return html;
                         }
                     }

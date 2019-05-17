@@ -24,6 +24,8 @@ namespace PurchaseOrderSys.Controllers
         protected string FileUploads = "~/FileUploads";
         public static string UserBy = "test";
         public static string LangID = "en-US";
+        public static string ApiUserName = "test@qd.com.tw";
+        public static string ApiPassword = "prU$U9R7CHl3O#uXU6AcH6ch";
         protected PurchaseOrderEntities db = new PurchaseOrderEntities();
         public static SellerCloud_WebService.SC_WebService SCWS;
         protected string RenderPartialViewToString()

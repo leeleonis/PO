@@ -1035,7 +1035,7 @@ namespace PurchaseOrderSys.Controllers
                                                     PurchaseSKUID = Serial.PurchaseSKUID,
                                                     PID = Serial.ID,
                                                     SerialsNo = Serial.SerialsNo,
-                                                    SerialsQTY = 1,
+                                                    SerialsQTY = -1,
                                                     SerialsType = "TransferOut",
                                                     CreateBy = UserBy,
                                                     CreateAt = dt,
@@ -1173,7 +1173,7 @@ namespace PurchaseOrderSys.Controllers
                 try
                 {
                     //建立SC上的RMA資料
-                    SC_WebService SCWS = new SC_WebService("tim@weypro.com", "timfromweypro");
+                    SC_WebService SCWS = new SC_WebService(ApiUserName, ApiPassword);
                     var order = SCWS.Get_OrderData(OrderID).Order;//去SC抓訂單資料
                     var SCRMA = SCWS.Get_RMA_by_OrderID(OrderID);//檢查SC上是否有開過RMA
                     if (UpdateSC)

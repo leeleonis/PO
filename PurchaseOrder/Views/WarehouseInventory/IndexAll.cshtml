@@ -1,0 +1,103 @@
+﻿@model IEnumerable<WarehouseAllVM>
+@{
+    ViewBag.ptitle = "Warehouse";
+}
+
+<style>
+    .ediv {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 700px;
+    }
+</style>
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-xs-12">
+                <div class="jarviswidget" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+
+                        <h2>@ViewBag.ptitle</h2>
+                        <ul class="nav nav-tabs pull-right">
+                            <li>
+                                <a data-toggle="tab" href="#hb1">@ViewBag.ptitle</a>
+                            </li>
+                        </ul>
+                    </header>
+
+                    <div>
+                        <div class="widget-body no-padding">
+                            <div id="content" class="tab-content">
+                                <div class="tab-pane" id="hb1">
+                                    <fieldset>
+                                        <legend></legend>
+                                        <div class="row">
+                                            <article class="col-xs-12">
+                                                <table id="DataGrid" class="table table-striped table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>@Html.DisplayName("ID")</th>
+                                                            <th>@Html.DisplayName("Name")</th>
+                                                            <th>@Html.DisplayName("Type")</th>
+                                                            <th>@Html.DisplayName("Fulfillable")</th>
+                                                            <th>@Html.DisplayName("Awaiting Dispatch")</th>
+                                                            <th>@Html.DisplayName("Aggregate")</th>
+                                                            <th>@Html.DisplayName("Unfulfillable - Transit")</th>
+                                                            <th>SKU ITEM</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (Model != null)
+                                                        {
+                                                            foreach (var item in Model)
+                                                            {
+                                                                <tr>
+                                                                    <td>@item.ID</td>
+                                                                    <td>@item.Name</td>
+                                                                    <td>@item.Type</td>
+                                                                    <td>@item.Fulfillable</td>
+                                                                    <td>@item.Awaiting</td>
+                                                                    <td>@item.Aggregate</td>
+                                                                    <td>@item.TransferOutQTY</td>
+                                                                    <td>
+                                                                        <a class='btn btn-default btn-sm' id='index' href='@Url.Action("index", "WarehouseInventory", new { item.ID })'>SKU</a>
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </article>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section pagespecific {
+    <script type="text/javascript">
+        var hash = window.location.hash;
+        $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
+        $('.tab-pane').eq(hash.substr(1)).addClass('active');
+
+        //$('.datepicker').datepicker({
+        //    dateFormat: 'yy-mm-dd'
+        //});
+        $(document).ready(function () {
+            $('#DataGrid').DataTable();
+        });
+    </script>
+}
+
+
+
+
+

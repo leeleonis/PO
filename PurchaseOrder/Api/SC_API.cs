@@ -16,8 +16,8 @@ namespace PurchaseOrderSys.Api
 {
     public class SC_API
     {
-        private string UserName = "tim@weypro.com";
-        private string Password = "timfromweypro";
+        private string UserName = "test@qd.com.tw";
+        private string Password = "prU$U9R7CHl3O#uXU6AcH6ch";
 
         public Warehouse[] SCList()
         {

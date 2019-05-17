@@ -71,7 +71,7 @@ namespace PurchaseOrderSys.Controllers
                 try
                 {
                     SKU.CreateSkuToNeto();
-                    SKU.SC_Api = new SellerCloud_WebService.SC_WebService("tim@weypro.com", "timfromweypro");
+                    SKU.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
                     SKU.CreateSkuToSC();
                 }
                 catch (Exception e)
@@ -261,7 +261,7 @@ namespace PurchaseOrderSys.Controllers
                                 try
                                 {
                                     SKU.CreateSkuToNeto();
-                                    SKU.SC_Api = new SellerCloud_WebService.SC_WebService("tim@weypro.com", "timfromweypro");
+                                    SKU.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
                                     SKU.CreateSkuToSC();
                                 }
                                 catch (Exception e)
@@ -468,7 +468,7 @@ namespace PurchaseOrderSys.Controllers
                     try
                     {
                         SKU.UpdateSkuToNeto();
-                        SKU.SC_Api = new SellerCloud_WebService.SC_WebService("tim@weypro.com", "timfromweypro");
+                        SKU.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
                         SKU.UpdateSkuToSC();
 
                         if (sku.Type.Equals((byte)EnumData.SkuType.Variation))

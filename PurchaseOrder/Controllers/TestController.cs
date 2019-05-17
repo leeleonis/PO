@@ -23,7 +23,7 @@ namespace PurchaseOrderSys.Controllers
         public int MyMoney { get; set; }
 
     }
-    public class TestController : Controller
+    public class TestController : BaseController
     {
         protected PurchaseOrderEntities db = new PurchaseOrderEntities();
 
@@ -341,7 +341,7 @@ namespace PurchaseOrderSys.Controllers
 
         public void GetProductData(string skuID)
         {
-            var SC_Api = new SellerCloud_WebService.SC_WebService("tim@weypro.com", "timfromweypro");
+            var SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
             var sku1 = SC_Api.Get_Product(skuID);
 
            var netoApi = new NetoApi();
@@ -350,7 +350,7 @@ namespace PurchaseOrderSys.Controllers
 
         public void GetProductBrand()
         {
-            var SC_Api = new SellerCloud_WebService.SC_WebService("tim@weypro.com", "timfromweypro");
+            var SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
             var Brand = SC_Api.Get_Manufacturers();
             foreach(var brand in Brand.OrderBy(b => b.ID))
             {

@@ -69,7 +69,7 @@ namespace PurchaseOrderSys.Controllers
             {
                 System.Threading.Tasks.Task.Factory.StartNew(() =>
                 {
-                    SCLogin("tim@weypro.com", "timfromweypro");
+                    SCLogin(ApiUserName, ApiPassword);
                     var Is_login = SCWS.Is_login;
                     var ss = SCWS.Get_RMA_Reason_List().Select(x => new { x.ID, x.Reason }).OrderBy(x => x.ID).ToList();
                 });
@@ -87,7 +87,7 @@ namespace PurchaseOrderSys.Controllers
             if (Account == "weypro" && Password == "weypro12ab")
             {
 
-                return SetSessionData(true, "QDAdmin", "tim@weypro.com", "timfromweypro");
+                return SetSessionData(true, "QDAdmin", ApiUserName, ApiPassword);
             }
 
             var AdminUser = db.AdminUser.Where(x => x.IsEnable && x.Account == Account && x.Password == Password).FirstOrDefault();

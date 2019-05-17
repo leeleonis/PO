@@ -11,6 +11,8 @@ namespace PurchaseOrderSys.Models
 {
     public class StockKeepingUnit : IDisposable
     {
+        public static string ApiUserName = "test@qd.com.tw";
+        public static string ApiPassword = "prU$U9R7CHl3O#uXU6AcH6ch";
         protected PurchaseOrderEntities db = new PurchaseOrderEntities();
 
         protected SKU skuData;
@@ -339,7 +341,7 @@ namespace PurchaseOrderSys.Models
 
         public void UpdateSkuToSC()
         {
-            if (SC_Api == null) SC_Api = new SC_WebService("tim@weypro.com", "timfromweypro");
+            if (SC_Api == null) SC_Api = new SC_WebService(ApiUserName, ApiPassword);
             string LangID = EnumData.DataLangList().First().Key;
 
             try
@@ -437,7 +439,7 @@ namespace PurchaseOrderSys.Models
 
         public void CreateSkuToSC()
         {
-            if (SC_Api == null) SC_Api = new SC_WebService("tim@weypro.com", "timfromweypro");
+            if (SC_Api == null) SC_Api = new SC_WebService(ApiUserName, ApiPassword);
             string LangID = EnumData.DataLangList().First().Key;
 
             try

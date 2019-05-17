@@ -26,10 +26,32 @@ namespace PurchaseOrderSys.Controllers
             WarehouseInventoryVM.WarehouseVM = GetWarehouseVMList(Warehouse, Product, FulfillableMin, FulfillableMax);
             return View(WarehouseInventoryVM);
         }
+        public ActionResult IndexAll()
+        {
+            var WarehouseAllVMList = new List<WarehouseAllVM>();
+            var WarehouseList = db.Warehouse.Where(x=>x.IsEnable);
+            foreach (var Warehouse in WarehouseList)
+            {
+                var WarehouseVM = GetWarehouseVMList(Warehouse, null, null, null);
+                WarehouseAllVMList.Add(new WarehouseAllVM
+                {
+                    ID = Warehouse.ID,
+                    Name = Warehouse.Name,
+                    Type = Warehouse.Type,
+                    Aggregate = WarehouseVM.Sum(x => x.Aggregate),
+                    Awaiting = WarehouseVM.Sum(x => x.Awaiting),
+                    Fulfillable = WarehouseVM.Sum(x => x.Fulfillable),
+                    TransferOutQTY = WarehouseVM.Sum(x => x.TransferOutQTY)
 
-       
+                });
 
-       
+            }
+          
+            return View(WarehouseAllVMList);
+        }
+
+
+
 
         public ActionResult IndexN(int ID, string Product, int? FulfillableMin, int? FulfillableMax)
         {

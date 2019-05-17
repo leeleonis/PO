@@ -107,7 +107,7 @@ namespace PurchaseOrderSys.Controllers
                 var FinalShippingFee = OrderItemDataitem.FinalShippingFee;
                 var WarehouseID = db.WarehouseSummary.AsQueryable().Where(x => x.Type == "SCID" && x.Val.Contains(OrderItemDataitem.WarehouseID.ToString())).FirstOrDefault()?.WarehouseID;
                 //開SC的RMA
-                //SC_WebService SCWS = new SC_WebService("tim@weypro.com", "timfromweypro");
+                //SC_WebService SCWS = new SC_WebService("tim@weypro.com", ApiPassword);
                 var order = SCWS.Get_OrderData(OrderID).Order;//去SC抓訂單資料
                 var SCRMA = SCWS.Get_RMA_by_OrderID(OrderID);//檢查SC上是否有開過RMA
 
@@ -560,28 +560,28 @@ namespace PurchaseOrderSys.Controllers
             var companyList = db.Company.AsNoTracking().Where(c => c.IsEnable).ToList();
             ViewBag.Company = companyList.Where(c => !c.ParentID.HasValue).Select(c => new SelectListItem() { Text = c.Name, Value = c.ID.ToString() }).ToList();
             var RMASKU = db.RMASKU.Find(ID);
+            Session.Remove("RMASKU" + ID);
             return View(RMASKU);
         }
         [HttpPost]
         public ActionResult Returnedserials(RMASKU RMASKU)
         {
+            var errormsg = new List<string>();
             var companyList = db.Company.AsNoTracking().Where(c => c.IsEnable).ToList();
             ViewBag.Company = companyList.Where(c => !c.ParentID.HasValue).Select(c => new SelectListItem() { Text = c.Name, Value = c.ID.ToString() }).ToList();
             var oRMASKU = db.RMASKU.Find(RMASKU.ID);
             var sRMASKU = (RMASKU)Session["RMASKU" + RMASKU.ID];
             oRMASKU.ReceivedBy = sRMASKU.ReceivedBy;
             oRMASKU.ReceivedAt = sRMASKU.ReceivedAt;
-            try
-            {
+          
                 foreach (var RMASerialitem in sRMASKU.RMASerialsLlist)
                 {
                     oRMASKU.RMASerialsLlist.Add(RMASerialitem);
                     var ReturnWarehouseID = 0;
                     if (int.TryParse(db.WarehouseSummary.Where(x => x.Type == "SCID" && x.WarehouseID == RMASerialitem.WarehouseID).FirstOrDefault()?.Val, out ReturnWarehouseID))
                     {
-
                         //SC加入RMA序號
-                        //SC_WebService SCWS = new SC_WebService("tim@weypro.com", "timfromweypro");
+                        //SC_WebService SCWS = new SC_WebService("tim@weypro.com", ApiPassword);
                         var SCOrderID = oRMASKU.RMA.OrderID.Value;
                         var order = SCWS.Get_OrderData(SCOrderID).Order;//去SC抓訂單資料
                         if (UpdateSC)
@@ -590,25 +590,39 @@ namespace PurchaseOrderSys.Controllers
                         }
                         if (!UpdateSC || SCWS.Update_Order(order))
                         {
-                            foreach (var item in order.Items.Where(x => x.ProductID == oRMASKU.SkuNo))
+                        foreach (var item in order.Items.Where(x => x.ProductID == oRMASKU.SkuNo))
+                        {
+                            var OrderItemID = order.Items.Where(x => x.ProductID == item.ProductID).FirstOrDefault().ID;
+                            var SCRMA_Item = SCWS.Get_RMA_Item(SCOrderID)?.Where(x => x.OriginalOrderItemID == OrderItemID).FirstOrDefault();
+                            if (SCRMA_Item != null)//沒資料就新增
                             {
-                                var OrderItemID = order.Items.Where(x => x.ProductID == item.ProductID).FirstOrDefault().ID;
-                                var SCRMA_Item = SCWS.Get_RMA_Item(SCOrderID)?.Where(x => x.OriginalOrderItemID == OrderItemID).FirstOrDefault();
-                                if (SCRMA_Item != null)//沒資料就新增
+                                if (SCRMA_Item.QtyReturned > SCRMA_Item.QtyReceived)//比對數量
                                 {
-                                    if (SCRMA_Item.QtyReturned > SCRMA_Item.QtyReceived)//比對數量
+                                    if (UpdateSC)
                                     {
-                                        if (UpdateSC)
+                                        try
                                         {
                                             SCWS.Receive_RMA_Item(SCOrderID, oRMASKU.RMAItemID.Value, item.ProductID, item.Qty, ReturnWarehouseID, RMASerialitem.SerialsNo);//RMA入庫
                                         }
+                                        catch (Exception ex)
+                                        {
+                                            errormsg.Add("Receive_RMA_Item錯誤");
+                                        }
                                     }
                                 }
-                                if (UpdateSC)
+                            }
+                            if (UpdateSC)
+                            {
+                                try
                                 {
                                     SCWS.Delete_ItemSerials(SCOrderID, item.ID);//SC上的序號移除
                                 }
+                                catch (Exception)
+                                {
+                                    errormsg.Add("Delete_ItemSerials錯誤");
+                                }
                             }
+                        }
                             if (UpdateSC)
                             {
                                 order.OrderCreationSourceApplication = SCService.OrderCreationSourceApplicationType.Default;
@@ -621,12 +635,8 @@ namespace PurchaseOrderSys.Controllers
                 }
                 db.SaveChanges();
                 Session["RMASKU" + RMASKU.ID] = null;
-            }
-            catch (Exception ex)
-            {
-                ViewBag.errormsg = ex.Message;
-            }
 
+            ViewBag.errormsg = string.Join("\\n\\r", errormsg);
             return View(oRMASKU);
         }
         public ActionResult Saveserials(string serials, string Reason, int RMASKUID, int WarehouseID)
