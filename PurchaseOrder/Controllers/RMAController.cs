@@ -322,6 +322,17 @@ namespace PurchaseOrderSys.Controllers
                             return Json(new { success = false, errmsg = "無可開RMA的訂單" }, JsonRequestBehavior.AllowGet);
                         }
                     }
+                    //排除已入PO
+                    if (RMAModelVMList.Any())
+                    {
+                        foreach (var item in RMAModelVMList.ToList())
+                        {
+                            if (db.SerialsLlist.Where(x => x.SerialsNo == item.Serial && x.SerialsQTY > 0 && !x.SerialsLlistC.Any()).Any())
+                            {
+                                RMAModelVMList.Remove(item);
+                            }
+                        }
+                    }
                     Session["RSkuNumberList" + SID] = OrderItemData;
                 }
                 else
@@ -611,7 +622,7 @@ namespace PurchaseOrderSys.Controllers
                                     }
                                 }
                             }
-                            if (UpdateSC)
+                            if (UpdateSC && !errormsg.Any())//沒有錯誤才移除
                             {
                                 try
                                 {

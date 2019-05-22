@@ -29,24 +29,38 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult IndexAll()
         {
             var WarehouseAllVMList = new List<WarehouseAllVM>();
-            var WarehouseList = db.Warehouse.Where(x=>x.IsEnable);
+            var WarehouseList = db.Warehouse.Where(x => x.IsEnable);
+            var POSerialsLlist = db.SerialsLlist.Where(x => x.IsEnable && !x.SerialsLlistC.Any() && x.SerialsType == "PO" && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable);
+            var InSerialsLlist = db.SerialsLlist.Where(x => x.IsEnable && !x.SerialsLlistC.Any() && x.SerialsType == "TransferIn" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable);
+            var OutSerialsLlist = db.SerialsLlist.Where(x => x.IsEnable && !x.SerialsLlistC.Any() && x.SerialsType == "TransferOut" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable);
+            var RMAINSerialsLlist = db.RMASerialsLlist.Where(x => x.IsEnable && !x.RMASerialsLlistC.Any() && x.SerialsType == "RMAIn" && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable);
+            var RMAOUTSerialsLlist = db.RMASerialsLlist.Where(x => x.IsEnable && !x.RMASerialsLlistC.Any() && x.SerialsType == "TransferOut" && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable);
             foreach (var Warehouse in WarehouseList)
             {
-                var WarehouseVM = GetWarehouseVMList(Warehouse, null, null, null);
+                var SCID = Warehouse.WarehouseSummary.Where(x => x.Type == "SCID").FirstOrDefault()?.Val;
+                var Awaitinglist = GetAwaitingCount("", SCID);
+                var POQTY = POSerialsLlist.Where(x => x.PurchaseSKU.PurchaseOrder.WarehouseID == Warehouse.ID).Sum(x => x.SerialsQTY) ?? 0;
+                var TinQTY = InSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouse.ID).Sum(x => x.SerialsQTY) ?? 0;
+                var TOutQTY = OutSerialsLlist.Where(x => x.TransferSKU.Transfer.FromWID == Warehouse.ID).Sum(x => x.SerialsQTY) ?? 0;
+                var Awaiting = Awaitinglist.Sum(x => x.QTY);
+                var RMAINQTY= RMAINSerialsLlist.Where(x => x.WarehouseID == Warehouse.ID).Sum(x => x.SerialsQTY) ?? 0;
+                var RMAOUTQTY= RMAOUTSerialsLlist.Where(x => x.TransferSKU.Transfer.FromWID == Warehouse.ID).Sum(x => x.SerialsQTY) ?? 0;
+                //var WarehouseVM = GetWarehouseVMList(Warehouse, null, null, null);
                 WarehouseAllVMList.Add(new WarehouseAllVM
                 {
                     ID = Warehouse.ID,
                     Name = Warehouse.Name,
                     Type = Warehouse.Type,
-                    Aggregate = WarehouseVM.Sum(x => x.Aggregate),
-                    Awaiting = WarehouseVM.Sum(x => x.Awaiting),
-                    Fulfillable = WarehouseVM.Sum(x => x.Fulfillable),
-                    TransferOutQTY = WarehouseVM.Sum(x => x.TransferOutQTY)
-
+                    Aggregate = POQTY + TinQTY + RMAINQTY,
+                    Awaiting = Awaiting,
+                    Fulfillable = POQTY + TinQTY - Awaiting,
+                    TransferOutQTY = TOutQTY + RMAOUTQTY
+                    //Aggregate = WarehouseVM.Sum(x => x.Aggregate),
+                    //Awaiting = WarehouseVM.Sum(x => x.Awaiting),
+                    //Fulfillable = WarehouseVM.Sum(x => x.Fulfillable),
+                    //TransferOutQTY = WarehouseVM.Sum(x => x.TransferOutQTY)
                 });
-
             }
-          
             return View(WarehouseAllVMList);
         }
 

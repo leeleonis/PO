@@ -969,19 +969,19 @@ namespace PurchaseOrderSys.Models
         /// <summary>
         /// 可出貨的庫存
         /// </summary>
-        public int Fulfillable { get; set; }
+        public int? Fulfillable { get; set; }
         /// <summary>
         /// 等待出貨的庫總量
         /// </summary>
-        public int Awaiting { get; set; }
+        public int? Awaiting { get; set; }
         /// <summary>
         /// 可上架的庫存總數
         /// </summary>
-        public int Aggregate { get; set; }
+        public int? Aggregate { get; set; }
         /// <summary>
         /// 移庫出庫數
         /// </summary>
-        public int TransferOutQTY { get; set; }
+        public int? TransferOutQTY { get; set; }
     }
 
     public class WarehouseVM
