@@ -14,6 +14,7 @@
             <div class="table-parent tool-content col-xs-12">
                 <div class="action-button col-xs-2 col-xs-offset-10">
                     <a class="btn btn-default" href="@Url.Action("Create")">新增</a>
+                    <a class="btn btn-default" onclick="SaveSync();">儲存＆更新</a>
                 </div>
             </div>
         </div>
@@ -172,7 +173,6 @@
 
             if (website.IsEmpty(ID)) {
                 var rows = $table.datagrid('getChecked');
-                console.log(rows);
                 for (var i in rows) {
                     index = $table.datagrid('getRowIndex', rows[i].SkuID) - 1;
                     if (!$("button#btn-save:eq(" + index + ")").is("[disabled]")) {
@@ -201,6 +201,26 @@
             };
 
             $table.datagrid('uncheckAll');
+        }
+
+        function SaveSync() {
+            var rows = $table.datagrid('getChecked');
+
+            if (rows.length == 0)  return alert('請先選擇訂單!');
+
+            for (var i in rows) {
+                index = $table.datagrid('getRowIndex', rows[i].SkuID) - 1;
+                $.ajax({
+                    url: "@Url.Action("SaveSync")",
+                    type: "post",
+                    data: setData(rows[i], index),
+                    dataType: "json"
+                }).done(function () {
+                    $("button#btn-save:eq(" + index + ")").attr("disabled", "disabled");
+                });
+            }
+
+            return alert('工作已執行!');
         }
 
         function setData(row, index) {
