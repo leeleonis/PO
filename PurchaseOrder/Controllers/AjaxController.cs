@@ -1392,6 +1392,7 @@ namespace PurchaseOrderSys.Controllers
         public string SerialsNo { get; set; }
         public int QTY { get; set; }
     }
+
     public class AjaxResult
     {
         public bool status { get; set; }

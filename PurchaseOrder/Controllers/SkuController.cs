@@ -764,6 +764,44 @@ namespace PurchaseOrderSys.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        public ActionResult SaveSync(SKU updateData, SkuLang langData)
+        {
+            AjaxResult result = new AjaxResult();
+
+            SKU sku = db.SKU.Find(updateData.SkuID);
+            SetUpdateData(sku, updateData, EditList);
+            db.Entry(sku).State = EntityState.Modified;
+
+            langData.LangID = EnumData.DataLangList().First().Key;
+            SkuLang skuLang = sku.SkuLang.First(l => l.LangID.Equals(langData.LangID));
+            SetUpdateData(skuLang, langData, new string[] { "Name" });
+            db.Entry(skuLang).State = EntityState.Modified;
+
+            db.SaveChanges();
+
+            using (StockKeepingUnit SKU = new StockKeepingUnit(sku))
+            {
+                try
+                {
+                    SKU.UpdateSkuToNeto();
+                    SKU.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
+                    SKU.UpdateSkuToSC();
+
+                    if (sku.Type.Equals((byte)EnumData.SkuType.Variation))
+                    {
+                        SKU.UpdateVariationToNeto();
+                    }
+                }
+                catch (Exception e)
+                {
+                    result.SetError(e.InnerException?.Message ?? e.Message);
+                }
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult GetLangData(string ID, string LangID)
         {
             AjaxResult result = new AjaxResult();
