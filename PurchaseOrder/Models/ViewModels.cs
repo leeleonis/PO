@@ -1243,6 +1243,7 @@ namespace PurchaseOrderSys.Models
         public int id { get; set; }
         public string key { get; set; }
         public string ImgType { get; set; }
+        public int MaxCount { get; set; }
         public List<string> imglist { get; set; }
     }
     public class AwaitingDispatchVM

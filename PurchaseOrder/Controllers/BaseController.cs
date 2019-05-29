@@ -402,6 +402,24 @@ namespace PurchaseOrderSys.Controllers
             }
         }
         /// <summary>
+        /// 刪除圖檔
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public bool DeleteImg(string fileName)
+        {
+            try
+            {
+                var Dirpath = Server.MapPath(fileName);
+                System.IO.File.Delete(Dirpath);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        /// <summary>
         /// 倉庫等待出貨的庫總量
         /// </summary>
         /// <param name="SKU">SKU</param>

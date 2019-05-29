@@ -15,7 +15,7 @@
 </style>
 
 
-@if (Model.imglist.Any())
+@if (Model.imglist.Any() && Model.MaxCount != 0)
 {
     using (Ajax.BeginForm("ImgUpload", "Ajax", new AjaxOptions { HttpMethod = "Post", InsertionMode = InsertionMode.Replace, UpdateTargetId = "dialog", OnSuccess = "Success", Confirm = "是否確定更新舊有的圖檔？" }, new { enctype = "multipart/form-data" }))
     {
@@ -31,7 +31,7 @@
         <div class="preview" id="ImgFilepreview">
         </div>
         <div class="col-sm-9 col-lg-12">
-            <input type='file' class="ImgFile" name="ImgFile" id="ImgFile" multiple>
+            <input type='file' class="ImgFile" name="ImgFile" id="ImgFile" accept="image/*" multiple>
         </div>
         <div class="col-sm-9 col-lg-12">
             <label id="errmsg"></label>
@@ -43,7 +43,7 @@
 }
 else
 {
-    using (Ajax.BeginForm("ImgUpload", "Ajax", new AjaxOptions { HttpMethod = "Post", InsertionMode = InsertionMode.Replace, UpdateTargetId = "dialog", OnSuccess = "Success"}, new { enctype = "multipart/form-data" }))
+    using (Ajax.BeginForm("ImgUpload", "Ajax", new AjaxOptions { HttpMethod = "Post", InsertionMode = InsertionMode.Replace, UpdateTargetId = "dialog", OnSuccess = "Success" }, new { enctype = "multipart/form-data" }))
     {
         @Html.HiddenFor(x => x.id)
         @Html.HiddenFor(x => x.ImgType)
@@ -57,7 +57,7 @@ else
         <div class="preview" id="ImgFilepreview">
         </div>
         <div class="col-sm-9 col-lg-12">
-            <input type='file' class="ImgFile" name="ImgFile" id="ImgFile" multiple>
+            <input type='file' class="ImgFile" name="ImgFile" id="ImgFile"  accept="image/*" multiple>
         </div>
         <div class="col-sm-9 col-lg-12">
             <label id="errmsg"></label>

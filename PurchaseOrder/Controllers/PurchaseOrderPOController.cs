@@ -732,6 +732,11 @@ namespace PurchaseOrderSys.Controllers
                     db.SaveChanges();
                 }
             }
+            if (PurchaseSKU.ReceivedDate != PurchaseSKU.SerialsLlist.OrderByDescending(x => x.ReceivedAt).FirstOrDefault()?.ReceivedAt)
+            {
+                PurchaseSKU.ReceivedDate = PurchaseSKU.SerialsLlist.OrderByDescending(x => x.ReceivedAt).FirstOrDefault()?.ReceivedAt;
+                db.SaveChanges();
+            }
             var companyList = db.Company.AsNoTracking().Where(c => c.IsEnable).ToList();
             ViewBag.Company = companyList.Where(c => !c.ParentID.HasValue).Select(c => new SelectListItem() { Text = c.Name, Value = c.ID.ToString() }).ToList();
             return View(PurchaseSKU);

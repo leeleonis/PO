@@ -61,9 +61,10 @@
                                 <div id="content" class="tab-content">
                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                     <div class="tab-pane" id="hb1">
+                                        <h1><b>PO# @Model.ID</b></h1>
                                         <fieldset>
                                             <legend>@ViewBag.title</legend>
-                                          
+
                                             <div class="form-group">
                                                 @Html.Label("PO #:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
@@ -76,6 +77,19 @@
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.DropDownListFor(model => model.POType, POTypeDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
                                                     @Html.ValidationMessageFor(model => model.POType, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.Label("Company", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.EditorFor(model => model.Company.Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                    @Html.ValidationMessageFor(model => model.ID, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.Label("Warehouse:", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.EditorFor(model => model.WarehousePO.Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -108,10 +122,10 @@
                                             <legend></legend>
                                             <div class="row">
                                                 <article class="col-xs-12">
-                                                    <div class="col-sm-9 col-lg-offset-10">
-                                                        Warehouse:@Model.WarehousePO.Name
-                                                    </div>
-                                                       
+                                                    @*<div class="col-sm-9 col-lg-offset-10">
+                        Warehouse:@Model.WarehousePO.Name
+                    </div>*@
+
                                                     <table id="DataGridC" class="table table-bordered table-striped text-center dataTable no-footer">
                                                         <thead>
                                                             <tr>

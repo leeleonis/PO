@@ -21,7 +21,7 @@
                         <div class="widget-body no-padding">
                             <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
                                 @Html.AntiForgeryToken()
-                                @Html.HiddenFor(x=>x.ID)
+                                @Html.HiddenFor(x => x.ID)
                                 <input type="hidden" name="IsEnable" value="True">
                                 <div id="content" class="tab-content">
                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -81,11 +81,33 @@
                                                 </div>
                                             </div>
                                         </fieldset>
+                                        <fieldset>
+                                            <legend></legend>
+                                            <div class="row">
+                                                <article class="col-xs-12">
+                                                    <table id="DataGrid" class="table table-striped table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>品牌ID</th>
+                                                                <th>Neto ID</th>
+                                                                <th>SCID</th>
+                                                                <th>名稱</th>
+                                                                <th>Appreved For Export</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                        </tbody>
+                                                        <tfoot></tfoot>
+                                                    </table>
+                                                </article>
+                                            </div>
+                                        </fieldset>
                                     </div>
                                 </div>
 
                                 <div class="widget-footer">
-                                   <button type="submit" class="btn btn-primary" id="save">儲存</button>
+                                    <button type="submit" class="btn btn-primary" id="save">儲存</button>
                                     <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index")'">返回</button>
                                 </div>
                             </form>
@@ -93,6 +115,7 @@
                     </div>
                 </div>
             </article>
+
         </div>
     </section>
 </div>

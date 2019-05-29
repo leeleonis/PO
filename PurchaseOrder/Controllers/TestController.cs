@@ -41,22 +41,23 @@ namespace PurchaseOrderSys.Controllers
         // GET: Test
         public ActionResult Index()
         {
-            var SerialsLlist = new List<SerialsLlist>();
-            var POSerialsLlist = new List<SerialsLlist>();
-            var DSerialsLlist = new List<SerialsLlist>();
-            foreach (var PurchaseOrderitem in db.PurchaseOrder.Where(x => x.IsEnable))
-            {
-                foreach (var PurchaseSKUitem in PurchaseOrderitem.PurchaseSKU.Where(x => x.IsEnable && x.SkuNo == "106005422"))
-                {
-                    SerialsLlist.AddRange(PurchaseSKUitem.SerialsLlist);
-                    POSerialsLlist.AddRange(PurchaseSKUitem.SerialsLlist.Where(x => x.SerialsType == "PO"));
-                }
-            }
-            DSerialsLlist.AddRange(SerialsLlist.Except(POSerialsLlist));
-            DSerialsLlist.AddRange(POSerialsLlist.Except(SerialsLlist));
-            if (DSerialsLlist.Any())
-            {
-            }
+          var  Warehouse3PList = new NewApi.Winit_API().Warehouse3P();
+            //var SerialsLlist = new List<SerialsLlist>();
+            //var POSerialsLlist = new List<SerialsLlist>();
+            //var DSerialsLlist = new List<SerialsLlist>();
+            //foreach (var PurchaseOrderitem in db.PurchaseOrder.Where(x => x.IsEnable))
+            //{
+            //    foreach (var PurchaseSKUitem in PurchaseOrderitem.PurchaseSKU.Where(x => x.IsEnable && x.SkuNo == "106005422"))
+            //    {
+            //        SerialsLlist.AddRange(PurchaseSKUitem.SerialsLlist);
+            //        POSerialsLlist.AddRange(PurchaseSKUitem.SerialsLlist.Where(x => x.SerialsType == "PO"));
+            //    }
+            //}
+            //DSerialsLlist.AddRange(SerialsLlist.Except(POSerialsLlist));
+            //DSerialsLlist.AddRange(POSerialsLlist.Except(SerialsLlist));
+            //if (DSerialsLlist.Any())
+            //{
+            //}
 
             return View();
         }

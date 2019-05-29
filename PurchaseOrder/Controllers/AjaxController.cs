@@ -125,7 +125,7 @@ namespace PurchaseOrderSys.Controllers
                     Serial = x.SKU.SerialTracking ? "Yes" : "No",
                     SerialQTY = x.SerialsLlist.Where(y => y.SerialsType == "PO").Sum(y => y.SerialsQTY),
                     SerialTracking = x.SKU.SerialTracking,
-                    Url = x.SKU.Logistic?.ImagePath,
+                    Url = x.SKU.SkuPicture.FirstOrDefault()?.FileName,
                     Size = GetSize(x)
                 }).ToList();
                 int recordsTotal = odataList.Count();
@@ -691,11 +691,12 @@ namespace PurchaseOrderSys.Controllers
             };
             if (key == "SKU")
             {
+                GetImgVM.MaxCount = 3;
                 var PurchaseSKU = db.PurchaseSKU.Find(id);
                 //俢改2019/03/11 SKYPE，改成品號內的圖檔
-                if (PurchaseSKU.SKU.Logistic != null)
+                foreach (var item in PurchaseSKU.SKU.SkuPicture)
                 {
-                    GetImgVM.imglist.Add("../../Uploads/" + PurchaseSKU.SKU.Logistic.ImagePath);
+                    GetImgVM.imglist.Add("../../Uploads/" + item.FileName);
                 }
                 //if (PurchaseSKU.ImgFile.Any())
                 //{
@@ -709,6 +710,7 @@ namespace PurchaseOrderSys.Controllers
         {
             if (key == "SKU")
             {
+                var MaxCount = 3;
                 var PurchaseSKU = db.PurchaseSKU.Find(id);
                 if (ImgFile != null && ImgFile.Any())
                 {
@@ -716,33 +718,48 @@ namespace PurchaseOrderSys.Controllers
                     {
                         if (file != null)
                         {
-                            //俢改2019/03/11 SKYPE，改成品號內的圖檔
+                            //2019/05/29  SKYPE，修改成3張圖
                             var Url = SaveImg(file, "~/Uploads/Sku/" + PurchaseSKU.SkuNo);
                             Url = Url.Replace("/Uploads/", "");
-                            if (PurchaseSKU.SKU.Logistic == null)
+                            PurchaseSKU.SKU.SkuPicture.Add(new SkuPicture
                             {
-                                PurchaseSKU.SKU.Logistic = new Logistic
-                                {
-                                    ImagePath = Url,
-                                    BoxID = 1,
-                                    CaseHeight = 0,
-                                    CaseLength = 0,
-                                    CaseWeight = 0,
-                                    CaseWidth = 0,
-                                    ShippingHeight = 0,
-                                    ShippingLength = 0,
-                                    ShippingWeight = 0,
-                                    ShippingWidth = 0,
-                                    CreateBy = UserBy,
-                                    CreateAt = DateTime.UtcNow
-                                };
-                            }
-                            else
-                            {
-                                PurchaseSKU.SKU.Logistic.ImagePath = Url;
-                                PurchaseSKU.SKU.Logistic.UpdateAt = DateTime.UtcNow;
-                                PurchaseSKU.SKU.Logistic.UpdateBy = UserBy;
-                            }
+                                IsMain = false,
+                                PictureType = "Logistic",
+                                FileSize = file.ContentLength,
+                                FileName = Url,
+                                CreateBy = UserBy,
+                                CreateAt = DateTime.UtcNow,
+                                UpdateAt = DateTime.UtcNow,
+                                UpdateBy = UserBy
+                            });
+
+                            #region 停用
+                            ////俢改2019/03/11 SKYPE，改成品號內的圖檔
+                            //var Url = SaveImg(file, "~/Uploads/Sku/" + PurchaseSKU.SkuNo);
+                            //Url = Url.Replace("/Uploads/", "");
+                            //if (PurchaseSKU.SKU.SkuPicture == null || MaxCount > PurchaseSKU.SKU.SkuPicture.Count())
+                            //{
+                            //    //PurchaseSKU.SKU.SkuPicture
+                            //    PurchaseSKU.SKU.SkuPicture.Add(new SkuPicture
+                            //    {
+                            //        IsMain = false,
+                            //        PictureType = "Logistic",
+                            //         FileSize= file.ContentLength,
+                            //        FileName = Url,
+                            //        CreateBy = UserBy,
+                            //        CreateAt = DateTime.UtcNow,
+                            //        UpdateAt = DateTime.UtcNow,
+                            //        UpdateBy = UserBy
+                            //    });
+                            //}
+                            //else
+                            //{
+                            //    var SkuPicture = PurchaseSKU.SKU.SkuPicture.OrderBy(x => x.UpdateAt).FirstOrDefault();
+                            //    SkuPicture.FileName = Url;
+                            //    SkuPicture.FileSize = file.ContentLength;
+                            //    SkuPicture.UpdateAt = DateTime.UtcNow;
+                            //    SkuPicture.UpdateBy = UserBy;
+                            //}
                             //var Url = SaveImg(file);
                             //PurchaseSKU.ImgFile.Add(new ImgFile
                             //{
@@ -752,9 +769,29 @@ namespace PurchaseOrderSys.Controllers
                             //    CreateBy = UserBy,
                             //    CreateAt = DateTime.UtcNow
                             //});
+                            #endregion
                         }
                     }
                     db.SaveChanges();
+                    //只留3張，剩下的刪除
+                    var saveID = PurchaseSKU.SKU.SkuPicture.OrderByDescending(x => x.CreateAt).Take(3).Select(x => x.ID);
+                    foreach (var item in PurchaseSKU.SKU.SkuPicture.Where(x => !saveID.Contains(x.ID)).ToList())
+                    {
+                        if (DeleteImg("/Uploads/" + item.FileName))
+                        {
+                            try
+                            {
+                                db.SkuPicture.Remove(item);
+                                db.SaveChanges();
+                            }
+                            catch (Exception ex)
+                            {
+
+                                throw;
+                            }
+
+                        }
+                    }
                 }
             }
             return Json(new { status = true, reload = true }, JsonRequestBehavior.AllowGet);

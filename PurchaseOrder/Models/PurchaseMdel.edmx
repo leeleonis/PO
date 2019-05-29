@@ -872,6 +872,7 @@
           <Property Name="CreateAt" Type="datetime" Nullable="false" />
           <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
           <Property Name="UpdateAt" Type="datetime" />
+          <Property Name="PictureType" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="SkuType">
           <Key>
@@ -3146,6 +3147,7 @@
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
           <NavigationProperty Name="GetSku" Relationship="PurchaseOrderModel.FK_SkuPicture_Sku" FromRole="SkuPicture" ToRole="SKU" />
+          <Property Name="PictureType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="SkuTypeLang">
           <Key>
@@ -5111,6 +5113,7 @@
           <EntitySetMapping Name="SkuPicture">
             <EntityTypeMapping TypeName="PurchaseOrderModel.SkuPicture">
               <MappingFragment StoreEntitySet="SkuPicture">
+                <ScalarProperty Name="PictureType" ColumnName="PictureType" />
                 <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
                 <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
                 <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />

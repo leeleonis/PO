@@ -27,6 +27,7 @@
                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                     @Html.HiddenFor(x => x.ID)
                                     <div class="tab-pane" id="hb1">
+                                        <h1><b>PO# @Model.PurchaseOrderID</b></h1>
                                         <fieldset>
                                             <legend>@ViewBag.title</legend>
                                             <div class="col-sm-12 col-lg-6 no-padding">
@@ -43,11 +44,11 @@
                                                     </div>
                                                 </div>
                                                 @*<div class="form-group">
-            @Html.LabelFor(model => model.SKU.SkuLang.First().LangID, htmlAttributes: new { @class = "control-label col-sm-2 col-lg-4" })
-            <div class="col-sm-8 col-lg-4">
-                @Html.DropDownList("LangID", LangList, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
-            </div>
-        </div>*@
+                    @Html.LabelFor(model => model.SKU.SkuLang.First().LangID, htmlAttributes: new { @class = "control-label col-sm-2 col-lg-4" })
+                    <div class="col-sm-8 col-lg-4">
+                        @Html.DropDownList("LangID", LangList, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                    </div>
+                </div>*@
                                                 <div class="form-group">
                                                     @Html.LabelFor(model => model.SKU.Company, htmlAttributes: new { @class = "control-label col-sm-2 col-lg-4" })
                                                     <div class="col-sm-8 col-lg-4">
@@ -79,16 +80,17 @@
                                                         @Html.Editor("ReceivedDate", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                                                     </div>
                                                 </div>
+                                                @*<div class="form-group">
+                    @Html.Label("QTY Received:", htmlAttributes: new { @class = "control-label col-sm-2 col-lg-4" })
+                    <div class="col-sm-8 col-lg-4">
+                        @Html.EditorFor(x => Model.QTYReceived, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    </div>
+                </div>*@
                                                 <div class="form-group">
-                                                    @Html.Label("QTY Received:", htmlAttributes: new { @class = "control-label col-sm-2 col-lg-4" })
+                                                    @Html.Label("Warehouse:", htmlAttributes: new { @class = "control-label col-sm-2 col-lg-4" })
                                                     <div class="col-sm-8 col-lg-4">
-                                                        @Html.EditorFor(x => Model.QTYReceived, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                        @Html.EditorFor(model => model.PurchaseOrder.WarehousePO.Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2 col-lg-4">
-                                                        Warehouse:@Model.PurchaseOrder.WarehousePO.Name
-                                                    </label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-12 col-lg-6 no-padding">
@@ -120,43 +122,42 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <div class="col-sm-8 col-sm-offset-3">
+                                                    <div class="col-sm-9 ">
                                                         @{
-                                                            var ImagePath = Model.SKU.Logistic?.ImagePath;
-                                                            if (!string.IsNullOrWhiteSpace(ImagePath))
+                                                            foreach (var item in Model.SKU.SkuPicture)
                                                             {
-                                                                <img src="../../Uploads/@(Model.SKU.Logistic?.ImagePath)" style="width:300px" />
+                                                                <img src="../../Uploads/@(item.FileName)" style="width:200px" />
                                                             }
                                                         }
                                                     </div>
                                                 </div>
                                             </div>
                                         </fieldset>
-                                    <fieldset>
-                                        <legend>
-                                        </legend>
-                                        <div class="row">
-                                            <article class="col-xs-12">
-                                                <div class="form-group">
-                                                    @Html.Label("Serial:", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                    <div class="col-sm-9 col-lg-2">
-                                                        @Html.Editor("Serial", new { htmlAttributes = new { @class = "form-control" } })
+                                        <fieldset>
+                                            <legend>
+                                            </legend>
+                                            <div class="row">
+                                                <article class="col-xs-12">
+                                                    <div class="form-group">
+                                                        @Html.Label("Serial:", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                        <div class="col-sm-9 col-lg-2">
+                                                            @Html.Editor("Serial", new { htmlAttributes = new { @class = "form-control" } })
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                @{
-                                                    var SerialsLlist = Model.SerialsLlist.Where(x => x.SerialsType == "PO");
-                                                }
-                                                <label>Serial # ( <label id="Serialcount">@SerialsLlist.Count()</label> /@(Model.QTYOrdered ?? 0))</label>
-                                                <ul style="list-style-type:none;list-style-position: inside;padding-left: 0px;padding-left: 0px;" id="SerialList">
-                                                    @foreach (var item in SerialsLlist)
-                                                    {
-                                                    <li><button type="button" class="glyphicon glyphicon-remove btn-danger delserials" val="@item.SerialsNo"></button>@item.SerialsNo　　@item.CreateAt.ToLocalTime()</li>
+                                                    @{
+                                                        var SerialsLlist = Model.SerialsLlist.Where(x => x.SerialsType == "PO");
                                                     }
-                                                </ul>
-                                            </article>
-                                        </div>
-                                    </fieldset>
-                                </div>
+                                                    <label>Serial # ( <label id="Serialcount">@SerialsLlist.Count()</label> /@(Model.QTYOrdered ?? 0))</label>
+                                                    <ul style="list-style-type:none;list-style-position: inside;padding-left: 0px;padding-left: 0px;" id="SerialList">
+                                                        @foreach (var item in SerialsLlist)
+                                                        {
+                                                            <li><button type="button" class="glyphicon glyphicon-remove btn-danger delserials" val="@item.SerialsNo"></button>@item.SerialsNo　　@item.CreateAt.ToLocalTime()</li>
+                                                        }
+                                                    </ul>
+                                                </article>
+                                            </div>
+                                        </fieldset>
+                                    </div>
                                 </div>
                                 <div class="widget-footer">
                                    <button type="submit" class="btn btn-primary" id="save">儲存</button>
