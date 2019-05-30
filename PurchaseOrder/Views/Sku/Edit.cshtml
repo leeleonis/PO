@@ -718,16 +718,16 @@
                                                 </div>
 
                                                 <div class="col-sm-12 col-lg-5 col-lg-offset-1 no-padding">
-                                                    <input type="file" class="btn btn-default" name="LogisticImg">
+                                                    <input type="file" class="btn btn-default" name="LogisticImg" multiple>
 
                                                     <p class="help-block">圖檔大小不能超過 4MB</p>
 
-                                                    <p class="help-block">
-                                                        @if (!string.IsNullOrEmpty(Model.Logistic?.ImagePath))
-                                                        {
-                                                            <img src="/Uploads/@Model.Logistic.ImagePath" style="max-width:80%;" />
-                                                        }
-                                                    </p>
+                                                    @foreach (var image in Model.SkuPicture.Where(p => p.PictureType.Equals("Logistic")))
+                                                    {
+                                                        <p class="help-block">
+                                                            <img src="/FileUploads/Sku/@Model.SkuID/@image.FileName" style="max-width:80%;" />
+                                                        </p>
+                                                    }
                                                 </div>
                                             </div>
                                         </fieldset>

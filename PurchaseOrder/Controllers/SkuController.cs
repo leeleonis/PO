@@ -133,7 +133,7 @@ namespace PurchaseOrderSys.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(SKU updateData, SkuLang langData, List<Dictionary<string, string>> eBayTitle, int[] DiverseAttribute, Sku_Attribute[] VariationValue, KitSku[] KitSku, Sku_PackageContent[] SkuContent, string[] KeyFeature, Sku_Attribute[] AttributeValue, HttpPostedFileBase picture, PriceGroup[] PriceGroup, Logistic Logistic, HttpPostedFileBase LogisticImg, bool Sync = false)
+        public ActionResult Edit(SKU updateData, SkuLang langData, List<Dictionary<string, string>> eBayTitle, int[] DiverseAttribute, Sku_Attribute[] VariationValue, KitSku[] KitSku, Sku_PackageContent[] SkuContent, string[] KeyFeature, Sku_Attribute[] AttributeValue, HttpPostedFileBase picture, PriceGroup[] PriceGroup, Logistic Logistic, HttpPostedFileBase[] LogisticImg, bool Sync = false)
         {
             SKU sku = db.SKU.Find(updateData.SkuID);
             if (sku == null) return HttpNotFound();
@@ -411,7 +411,7 @@ namespace PurchaseOrderSys.Controllers
                 var mainPicture = db.SkuPicture.FirstOrDefault(p => p.IsMain && p.Sku.Equals(sku.SkuID));
                 if (mainPicture != null)
                 {
-                    System.IO.File.Delete(string.Format(Server.MapPath("~/Uploads/Sku/{0}/{1}"), mainPicture.Sku, mainPicture.FileName));
+                    System.IO.File.Delete(string.Format(Server.MapPath("~/FileUploads/Sku/{0}/{1}"), mainPicture.Sku, mainPicture.FileName));
                     db.SkuPicture.Remove(mainPicture);
                 }
 
@@ -443,21 +443,41 @@ namespace PurchaseOrderSys.Controllers
                 db.SaveChanges();
             }
 
-            if (LogisticImg != null && LogisticImg.ContentLength > 0)
+            if (LogisticImg != null && LogisticImg.Count() > 0)
             {
-                var fileExtension = Path.GetExtension(LogisticImg.FileName);
-                var fileName = Guid.NewGuid().ToString() + fileExtension;
-                var filePath = Server.MapPath("~/Uploads/Sku/" + sku.SkuID);
-                if (!Directory.Exists(filePath)) Directory.CreateDirectory(filePath);
-
-                var path = Path.Combine(filePath, fileName);
-                LogisticImg.SaveAs(path);
-
-                if (System.IO.File.Exists(Server.MapPath("~/Uploads/" + sku.Logistic.ImagePath)))
+                foreach(var image in LogisticImg.Take(3))
                 {
-                    System.IO.File.Delete(string.Format(Server.MapPath("~/Uploads/" + sku.Logistic.ImagePath)));
+                    var fileExtension = Path.GetExtension(image.FileName);
+                    var fileName = Guid.NewGuid().ToString() + fileExtension;
+                    var filePath = Server.MapPath("~/FileUploads/Sku/" + sku.SkuID);
+                    if (!Directory.Exists(filePath)) Directory.CreateDirectory(filePath);
+
+                    var path = Path.Combine(filePath, fileName);
+                    image.SaveAs(path);
+
+                    sku.SkuPicture.Add(new SkuPicture()
+                    {
+                        IsMain = false,
+                        Sku = sku.SkuID,
+                        PictureType = "Logistic",
+                        FileName = fileName,
+                        FileSize = image.ContentLength,
+                        CreateAt = DateTime.UtcNow,
+                        CreateBy = Session["AdminName"].ToString()
+                    });
                 }
-                sku.Logistic.ImagePath = string.Format("Sku/{0}/{1}", sku.SkuID, fileName);
+
+                db.SaveChanges();
+
+                foreach (var image in sku.SkuPicture.OrderByDescending(p => p.ID).Skip(3))
+                {
+                    if (System.IO.File.Exists(Server.MapPath("~/FileUploads/" + string.Format("Sku/{0}/{1}", sku.SkuID, image.FileName))))
+                    {
+                        System.IO.File.Delete(string.Format(Server.MapPath("~/FileUploads/" + string.Format("Sku/{0}/{1}", sku.SkuID, image.FileName))));
+                    }
+                    db.SkuPicture.Remove(image);
+                }
+
                 db.SaveChanges();
             }
 
@@ -526,7 +546,7 @@ namespace PurchaseOrderSys.Controllers
         {
             AjaxResult result = new AjaxResult();
 
-            var pictureList = db.SkuPicture.Where(p => !p.IsMain && p.Sku.Equals(sku)).OrderBy(p => p.Order).ToList();
+            var pictureList = db.SkuPicture.Where(p => !p.IsMain && p.Sku.Equals(sku) && p.PictureType.Equals("Pictrue")).OrderBy(p => p.Order).ToList();
             result.data = pictureList.Select(p => new { p.ID, name = p.FileName, size = p.FileSize, p.Order }).ToList();
 
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -574,7 +594,7 @@ namespace PurchaseOrderSys.Controllers
                     {
                         var fileExtension = Path.GetExtension(file.FileName);
                         var fileName = Guid.NewGuid().ToString() + fileExtension;
-                        var filePath = Server.MapPath("~/Uploads/Sku/" + ID);
+                        var filePath = Server.MapPath("~/FileUploads/Sku/" + ID);
                         if (!Directory.Exists(filePath)) Directory.CreateDirectory(filePath);
 
                         var path = Path.Combine(filePath, fileName);
@@ -584,6 +604,7 @@ namespace PurchaseOrderSys.Controllers
                         {
                             IsMain = isMain,
                             Sku = ID,
+                            PictureType ="Picture",
                             FileName = fileName,
                             FileSize = file.ContentLength,
                             Order = Order++,
@@ -619,7 +640,7 @@ namespace PurchaseOrderSys.Controllers
 
                 if (picture == null) throw new Exception("Not find picture!");
 
-                System.IO.File.Delete(string.Format(Server.MapPath("~/Uploads/Sku/{0}/{1}"), picture.Sku, picture.FileName));
+                System.IO.File.Delete(string.Format(Server.MapPath("~/FileUploads/Sku/{0}/{1}"), picture.Sku, picture.FileName));
 
                 db.SkuPicture.Remove(picture);
                 db.SaveChanges();
