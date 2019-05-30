@@ -125,7 +125,7 @@ namespace PurchaseOrderSys.Controllers
                     Serial = x.SKU.SerialTracking ? "Yes" : "No",
                     SerialQTY = x.SerialsLlist.Where(y => y.SerialsType == "PO").Sum(y => y.SerialsQTY),
                     SerialTracking = x.SKU.SerialTracking,
-                    Url = x.SKU.SkuPicture.FirstOrDefault()?.FileName,
+                    Url = x.SKU.SkuPicture.Where(y => y.PictureType == "Logistic").FirstOrDefault()?.FileName,
                     Size = GetSize(x)
                 }).ToList();
                 int recordsTotal = odataList.Count();
@@ -694,7 +694,7 @@ namespace PurchaseOrderSys.Controllers
                 GetImgVM.MaxCount = 3;
                 var PurchaseSKU = db.PurchaseSKU.Find(id);
                 //俢改2019/03/11 SKYPE，改成品號內的圖檔
-                foreach (var item in PurchaseSKU.SKU.SkuPicture)
+                foreach (var item in PurchaseSKU.SKU.SkuPicture.Where(x=> x.PictureType == "Logistic"))
                 {
                     GetImgVM.imglist.Add("../../Uploads/" + item.FileName);
                 }
@@ -710,7 +710,6 @@ namespace PurchaseOrderSys.Controllers
         {
             if (key == "SKU")
             {
-                var MaxCount = 3;
                 var PurchaseSKU = db.PurchaseSKU.Find(id);
                 if (ImgFile != null && ImgFile.Any())
                 {
@@ -774,8 +773,8 @@ namespace PurchaseOrderSys.Controllers
                     }
                     db.SaveChanges();
                     //只留3張，剩下的刪除
-                    var saveID = PurchaseSKU.SKU.SkuPicture.OrderByDescending(x => x.CreateAt).Take(3).Select(x => x.ID);
-                    foreach (var item in PurchaseSKU.SKU.SkuPicture.Where(x => !saveID.Contains(x.ID)).ToList())
+                    var saveID = PurchaseSKU.SKU.SkuPicture.Where(x => x.PictureType == "Logistic").OrderByDescending(x => x.CreateAt).Take(3).Select(x => x.ID);
+                    foreach (var item in PurchaseSKU.SKU.SkuPicture.Where(x => !saveID.Contains(x.ID) && x.PictureType == "Logistic").ToList())
                     {
                         if (DeleteImg("/Uploads/" + item.FileName))
                         {
@@ -1186,7 +1185,7 @@ namespace PurchaseOrderSys.Controllers
                     Length = (s.Logistic?.ShippingLength ?? 0).ToString(),
                     Weight = (s.Logistic?.ShippingWeight ?? 500).ToString(),
                     s.SkuType.HSCode,
-                    ImagePath = s.Logistic?.ImagePath ?? ""
+                    ImagePath = s.SkuPicture.Where(x => x.PictureType == "Logistic").Select(x => x.FileName)
                 }).ToList();
             }
             catch (Exception e)
