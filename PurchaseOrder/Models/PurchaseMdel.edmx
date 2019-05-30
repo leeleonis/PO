@@ -941,6 +941,14 @@
           <Property Name="SkuNo" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="200" />
         </EntityType>
+        <EntityType Name="VendorBrand">
+          <Key>
+            <PropertyRef Name="VendorID" />
+            <PropertyRef Name="BrandID" />
+          </Key>
+          <Property Name="VendorID" Type="int" Nullable="false" />
+          <Property Name="BrandID" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="VendorLIst">
           <Key>
             <PropertyRef Name="ID" />
@@ -1848,6 +1856,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_VendorBrand_Brand">
+          <End Role="Brand" Type="Self.Brand" Multiplicity="1" />
+          <End Role="VendorBrand" Type="Self.VendorBrand" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Brand">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="VendorBrand">
+              <PropertyRef Name="BrandID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VendorBrand_VendorLIst">
+          <End Role="VendorLIst" Type="Self.VendorLIst" Multiplicity="1" />
+          <End Role="VendorBrand" Type="Self.VendorBrand" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="VendorLIst">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="VendorBrand">
+              <PropertyRef Name="VendorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_WarehouseSummary_Warehouse">
           <End Role="Warehouse" Type="Self.Warehouse" Multiplicity="1" />
           <End Role="WarehouseSummary" Type="Self.WarehouseSummary" Multiplicity="*" />
@@ -1934,6 +1966,7 @@
           <EntitySet Name="SkuTypeLang" EntityType="Self.SkuTypeLang" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Transfer" EntityType="Self.Transfer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TransferSKU" EntityType="Self.TransferSKU" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VendorBrand" EntityType="Self.VendorBrand" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VendorLIst" EntityType="Self.VendorLIst" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Warehouse" EntityType="Self.Warehouse" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WarehouseSummary" EntityType="Self.WarehouseSummary" Schema="dbo" store:Type="Tables" />
@@ -2213,6 +2246,14 @@
           <AssociationSet Name="FK_TransferSKU_Transfer" Association="Self.FK_TransferSKU_Transfer">
             <End Role="Transfer" EntitySet="Transfer" />
             <End Role="TransferSKU" EntitySet="TransferSKU" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VendorBrand_Brand" Association="Self.FK_VendorBrand_Brand">
+            <End Role="Brand" EntitySet="Brand" />
+            <End Role="VendorBrand" EntitySet="VendorBrand" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VendorBrand_VendorLIst" Association="Self.FK_VendorBrand_VendorLIst">
+            <End Role="VendorLIst" EntitySet="VendorLIst" />
+            <End Role="VendorBrand" EntitySet="VendorBrand" />
           </AssociationSet>
           <AssociationSet Name="FK_WarehouseSummary_Warehouse" Association="Self.FK_WarehouseSummary_Warehouse">
             <End Role="Warehouse" EntitySet="Warehouse" />
@@ -2573,6 +2614,10 @@
             <End Role="RMA" EntitySet="RMA" />
             <End Role="CreditMemo" EntitySet="CreditMemo" />
           </AssociationSet>
+          <AssociationSet Name="VendorBrand" Association="PurchaseOrderModel.VendorBrand">
+            <End Role="Brand" EntitySet="Brand" />
+            <End Role="VendorLIst" EntitySet="VendorLIst" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="AdminGroup">
           <Key>
@@ -2652,6 +2697,7 @@
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
           <NavigationProperty Name="SKU" Relationship="PurchaseOrderModel.FK_Sku_Brand" FromRole="Brand" ToRole="SKU" />
           <Property Name="SCID" Type="Int32" />
+          <NavigationProperty Name="VendorLIst" Relationship="PurchaseOrderModel.VendorBrand" FromRole="Brand" ToRole="VendorLIst" />
         </EntityType>
         <EntityType Name="CMCreditNote">
           <Key>
@@ -3210,6 +3256,7 @@
           <NavigationProperty Name="PurchaseOrder" Relationship="PurchaseOrderModel.FK_PurchaseOrder_VendorLIst" FromRole="VendorLIst" ToRole="PurchaseOrder" />
           <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="EmailCC" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Brand" Relationship="PurchaseOrderModel.VendorBrand" FromRole="VendorLIst" ToRole="Brand" />
         </EntityType>
         <EntityType Name="Warehouse">
           <Key>
@@ -4596,6 +4643,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="VendorBrand">
+          <End Type="PurchaseOrderModel.Brand" Role="Brand" Multiplicity="*" />
+          <End Type="PurchaseOrderModel.VendorLIst" Role="VendorLIst" Multiplicity="*" />
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -5659,6 +5710,14 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <AssociationSetMapping Name="VendorBrand" TypeName="PurchaseOrderModel.VendorBrand" StoreEntitySet="VendorBrand">
+            <EndProperty Name="VendorLIst">
+              <ScalarProperty Name="ID" ColumnName="VendorID" />
+            </EndProperty>
+            <EndProperty Name="Brand">
+              <ScalarProperty Name="ID" ColumnName="BrandID" />
+            </EndProperty>
+          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

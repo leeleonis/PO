@@ -31,11 +31,21 @@ namespace PurchaseOrderSys.Controllers
         }
         public ActionResult Edit(int id)
         {
-          var VendorLIst= db.VendorLIst.Find(id);
+            var VendorLIst = db.VendorLIst.Find(id);
+            var BrandList = db.Brand.Where(x => x.IsEnable).ToList();
+            if (!VendorLIst.Brand.Any())
+            {
+                foreach (var item in BrandList)
+                {
+                    VendorLIst.Brand.Add(item);
+                }
+                db.SaveChanges();
+            }
+            ViewBag.BrandList = BrandList;
             return View(VendorLIst);
         }
         [HttpPost]
-        public ActionResult Edit(VendorLIst VendorLIst)
+        public ActionResult Edit(VendorLIst VendorLIst ,List<int> Brand)
         {
             var oVendorLIst = db.VendorLIst.Find(VendorLIst.ID);
             oVendorLIst.VendorNo = VendorLIst.VendorNo;
@@ -51,6 +61,16 @@ namespace PurchaseOrderSys.Controllers
             oVendorLIst.EmailCC = VendorLIst.EmailCC;
             oVendorLIst.UpdateBy = UserBy;
             oVendorLIst.UpdateAt = DateTime.UtcNow;
+
+            var BrandList = db.Brand.Where(x => x.IsEnable&& Brand.Contains(x.ID)).ToList();
+            foreach (var item in oVendorLIst.Brand.ToList())
+            {
+                oVendorLIst.Brand.Remove(item);
+            }
+            foreach (var item in BrandList)
+            {
+                oVendorLIst.Brand.Add(item);
+            }
             db.SaveChanges();
             return RedirectToAction("Index");
         }

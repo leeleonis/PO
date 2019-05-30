@@ -3,6 +3,7 @@
     ViewBag.title = "修改供應商";
     var CurrencyDDL = EnumData.CurrencyDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var DefaultSelect = PurchaseOrderSys.App_GlobalResources.Resource.DefaultSelect;
+    var BrandList = (List<Brand>)ViewBag.BrandList;
 }
 <div id="content">
     <section id="widget-grid" class="">
@@ -14,7 +15,9 @@
 
                         <h2>修改</h2>
                         <ul class="nav nav-tabs pull-right">
-                            <li><a data-toggle="tab" href="#hb1">@ViewBag.title</a></li>
+                            <li>
+                                <a data-toggle="tab" href="#hb1">@ViewBag.title</a>
+                            </li>
                         </ul>
                     </header>
                     <div>
@@ -81,28 +84,47 @@
                                                 </div>
                                             </div>
                                         </fieldset>
-                                        @*<fieldset>
+                                        <fieldset>
                                             <legend></legend>
                                             <div class="row">
                                                 <article class="col-xs-12">
                                                     <table id="DataGrid" class="table table-striped table-bordered">
                                                         <thead>
                                                             <tr>
+                                                                <th>
+                                                                    <input type="checkbox" />
+                                                                </th>
                                                                 <th>品牌ID</th>
-                                                                <th>Neto ID</th>
-                                                                <th>SCID</th>
                                                                 <th>名稱</th>
-                                                                <th>Appreved For Export</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-
+                                                            @if (BrandList != null)
+                                                            {
+                                                                foreach (var item in BrandList)
+                                                                {                                                                   
+                                                                    <tr>
+                                                                        <td>
+                                                                            @if (Model.Brand.Contains(item))
+                                                                            {
+                                                                                <input type="checkbox" name="Brand" value="@item.ID" checked>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <input type="checkbox" name="Brand" value="@item.ID">
+                                                                            }
+                                                                        </td>
+                                                                        <td>@item.ID</td>
+                                                                        <td>@item.Name</td>
+                                                                    </tr>
+                                                                }
+                                                            }
                                                         </tbody>
                                                         <tfoot></tfoot>
                                                     </table>
                                                 </article>
                                             </div>
-                                        </fieldset>*@
+                                        </fieldset>
                                     </div>
                                 </div>
 

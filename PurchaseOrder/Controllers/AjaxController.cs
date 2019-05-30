@@ -1250,7 +1250,10 @@ namespace PurchaseOrderSys.Controllers
                             UpdateBy = "RMAAPI",
                             UpdateAt = dt
                         };
-
+                        if (order.Items == null || order.Items.Count() == 0)
+                        {
+                            result.SetError("Items無資料");
+                        }
                         foreach (var item in order.Items)
                         {
                             var SKU = db.SKU.Find(item.ProductID)?.SkuLang.Where(x => x.LangID == "en-US").FirstOrDefault();

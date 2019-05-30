@@ -435,28 +435,31 @@ namespace PurchaseOrderSys.Controllers
             OldRMA.Carrier = RMA.Carrier;
             OldRMA.UpdateBy = UserBy;
             OldRMA.UpdateAt = dt;
-            foreach (var RMAListitem in RMAList)
+            if (RMAList != null)
             {
-                foreach (var RMASKUitem in OldRMA.RMASKU.Where(x => x.IsEnable))
+                foreach (var RMAListitem in RMAList)
                 {
-                    if (RMAListitem.ID == RMASKUitem.ID)
+                    foreach (var RMASKUitem in OldRMA.RMASKU.Where(x => x.IsEnable))
                     {
-                        if (!string.IsNullOrWhiteSpace(RMAListitem.Reason) && RMAListitem.Reason != RMASKUitem.Reason)
+                        if (RMAListitem.ID == RMASKUitem.ID)
                         {
-                            RMASKUitem.Reason = RMAListitem.Reason;
-                            RMASKUitem.UpdateBy = UserBy;
-                            RMASKUitem.UpdateAt = dt;
-                        }
-                        if (RMAListitem.Warehouse.HasValue && RMAListitem.Warehouse != RMASKUitem.WarehouseID)
-                        {
-                            RMASKUitem.WarehouseID = RMAListitem.Warehouse;
-                            RMASKUitem.UpdateBy = UserBy;
-                            RMASKUitem.UpdateAt = dt;
+                            if (!string.IsNullOrWhiteSpace(RMAListitem.Reason) && RMAListitem.Reason != RMASKUitem.Reason)
+                            {
+                                RMASKUitem.Reason = RMAListitem.Reason;
+                                RMASKUitem.UpdateBy = UserBy;
+                                RMASKUitem.UpdateAt = dt;
+                            }
+                            if (RMAListitem.Warehouse.HasValue && RMAListitem.Warehouse != RMASKUitem.WarehouseID)
+                            {
+                                RMASKUitem.WarehouseID = RMAListitem.Warehouse;
+                                RMASKUitem.UpdateBy = UserBy;
+                                RMASKUitem.UpdateAt = dt;
+                            }
                         }
                     }
                 }
+                db.SaveChanges();
             }
-            db.SaveChanges();
             //return RedirectToAction("Index");
             return RedirectToAction("Edit", new { id = RMA.ID });
         }

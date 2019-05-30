@@ -18,6 +18,7 @@ namespace PurchaseOrderSys.Models
         public VendorLIst()
         {
             this.PurchaseOrder = new HashSet<PurchaseOrder>();
+            this.Brand = new HashSet<Brand>();
         }
     
         public bool IsEnable { get; set; }
@@ -42,5 +43,7 @@ namespace PurchaseOrderSys.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseOrder> PurchaseOrder { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Brand> Brand { get; set; }
     }
 }
