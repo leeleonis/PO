@@ -665,13 +665,21 @@
                     url: "@Url.Action("SkuNumberList", "Ajax")",
                     data: function (d) {
                         var Skulist = $("#gebruikerId").val();
+                        var VendorID = $("#VendorID").val();
                         d.Skulist = Skulist;
-                        d.SID="@Html.Display("SID")",
+                        d.SID = "@Html.Display("SID")";
+                        d.VendorID = VendorID;
                         $("#gebruikerId").val(null).trigger('change');
-                    }
-                },
+                    },
+                    "dataSrc": function (json) {
+                        if (json.ErrMsg!="") {
+                            alert(json.ErrMsg);
+                        }
+                        return json.data;
+                    }       
+                 },      
                 serverSide: true,//啟用ServerSide模式
-                //deferLoading: 0, //初始化DataTable時，不發出ajax
+                deferLoading: 0, //初始化DataTable時，不發出ajax
                 orderMulti: false,
                 "paging": false,
                 "ordering": false,
@@ -768,7 +776,13 @@
                 });
             });
             $("#addsku").click(function () {
-                DataGridC.draw();
+                var VendorID = $("#VendorID").val();
+                if (VendorID == "") {
+                    alert("請選擇供應商");
+                }
+                else {
+                    DataGridC.draw();
+                }         
             });
               $("#POType").change(function () {
                 window.location.href = "@Url.Action("Create")?POTypeVal=" + $(this).val();

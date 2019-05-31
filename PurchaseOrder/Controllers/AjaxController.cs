@@ -360,8 +360,10 @@ namespace PurchaseOrderSys.Controllers
             };
             return Json(returnObj, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult SkuNumberList(int? draw, int? start, int? length, string SID, string[] Skulist)
+        public ActionResult SkuNumberList(int? draw, int? start, int? length, string SID, int? VendorID, string[] Skulist)
         {
+            var ErrMsg = "";
+
             var odataList = (List<PoSKUVM>)Session["SkuNumberList" + SID];
             if (odataList == null)
             {
@@ -396,13 +398,25 @@ namespace PurchaseOrderSys.Controllers
                     item.Subtotal = (QTYOrdered * (Price - Discount));
                 }
                 odataList.AddRange(dataList);
-                Session["SkuNumberList" + SID] = odataList;
             }
+            if (VendorID.HasValue)
+            {
+                var SkuIDlist = db.SKU.Where(x => x.GetBrand.VendorLIst.Where(y => y.ID == VendorID).Any()).Select(x => x.SkuID);//檢查供應商是否可以用SKU;
+                var NotAddSKU = odataList.Where(x => !SkuIDlist.Contains(x.SKU)).Select(x => x.SKU).ToList();//不態用的SKU
+                if (NotAddSKU.Any())
+                {
+                    var BrandNameList = db.SKU.Where(x => NotAddSKU.Contains(x.SkuID)).Select(x => x.GetBrand.Name);
+                    ErrMsg = string.Format("This supplier isn't approved for these brands: {0}. Choose an approved supplier instead.", string.Join(",", BrandNameList));
+                }
+                odataList = odataList.Where(x => SkuIDlist.Contains(x.SKU)).ToList();
+            }
+            Session["SkuNumberList" + SID] = odataList;
             odataList = odataList.Where(x => x.Model != "D").ToList();
             int recordsTotal = odataList.Count();
             var returnObj =
             new
             {
+                ErrMsg = ErrMsg,
                 draw = draw,
                 recordsTotal = recordsTotal,
                 recordsFiltered = recordsTotal,

@@ -61,7 +61,7 @@
                                                 </div>
                                                 @Html.LabelFor(model => model.VendorID, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownListFor(model => model.VendorID, VendorDDL, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.DropDownListFor(model => model.VendorID, VendorDDL, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
                                                 </div>
                                                 @Html.LabelFor(model => model.CreditMemo.FirstOrDefault().ID, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
