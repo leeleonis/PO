@@ -21,7 +21,7 @@ namespace PurchaseOrderSys.Controllers
     {
         protected string ApiUrl = "http://internal.qd.com.tw/";
         //protected string ApiUrl = "http://localhost:49920/";
-        protected string FileUploads = "~/FileUploads";
+        protected string FileUploads = "~/Uploads";
         public static string UserBy = "test";
         public static string LangID = "en-US";
         public static string ApiUserName = "test@qd.com.tw";

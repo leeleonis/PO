@@ -725,7 +725,7 @@
                                                     @foreach (var image in Model.SkuPicture.Where(p => p.PictureType.Equals("Logistic")))
                                                     {
                                                         <p class="help-block">
-                                                            <img src="/FileUploads/Sku/@Model.SkuID/@image.FileName" style="max-width:80%;" />
+                                                            <img src="/Uploads/@image.FileName" style="max-width:80%;" />
                                                         </p>
                                                     }
                                                 </div>
