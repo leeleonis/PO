@@ -411,7 +411,7 @@ namespace PurchaseOrderSys.Controllers
                 var mainPicture = db.SkuPicture.FirstOrDefault(p => p.IsMain && p.Sku.Equals(sku.SkuID));
                 if (mainPicture != null)
                 {
-                    System.IO.File.Delete(string.Format(Server.MapPath("~/FileUploads/Sku/{0}/{1}"), mainPicture.Sku, mainPicture.FileName));
+                    System.IO.File.Delete(string.Format(Server.MapPath("~/Uploads/{0}"), mainPicture.FileName));
                     db.SkuPicture.Remove(mainPicture);
                 }
 
@@ -449,7 +449,7 @@ namespace PurchaseOrderSys.Controllers
                 {
                     var fileExtension = Path.GetExtension(image.FileName);
                     var fileName = Guid.NewGuid().ToString() + fileExtension;
-                    var filePath = Server.MapPath("~/FileUploads/Sku/" + sku.SkuID);
+                    var filePath = Server.MapPath("~/Uploads/Sku/" + sku.SkuID);
                     if (!Directory.Exists(filePath)) Directory.CreateDirectory(filePath);
 
                     var path = Path.Combine(filePath, fileName);
@@ -471,9 +471,9 @@ namespace PurchaseOrderSys.Controllers
 
                 foreach (var image in sku.SkuPicture.OrderByDescending(p => p.ID).Skip(3))
                 {
-                    if (System.IO.File.Exists(Server.MapPath("~/FileUploads/" + string.Format("Sku/{0}/{1}", sku.SkuID, image.FileName))))
+                    if (System.IO.File.Exists(Server.MapPath("~/Uploads/" + string.Format("Sku/{0}/{1}", sku.SkuID, image.FileName))))
                     {
-                        System.IO.File.Delete(string.Format(Server.MapPath("~/FileUploads/" + string.Format("Sku/{0}/{1}", sku.SkuID, image.FileName))));
+                        System.IO.File.Delete(string.Format(Server.MapPath("~/Uploads/" + string.Format("Sku/{0}/{1}", sku.SkuID, image.FileName))));
                     }
                     db.SkuPicture.Remove(image);
                 }
@@ -594,7 +594,7 @@ namespace PurchaseOrderSys.Controllers
                     {
                         var fileExtension = Path.GetExtension(file.FileName);
                         var fileName = Guid.NewGuid().ToString() + fileExtension;
-                        var filePath = Server.MapPath("~/FileUploads/Sku/" + ID);
+                        var filePath = Server.MapPath("~/Uploads/Sku/" + ID);
                         if (!Directory.Exists(filePath)) Directory.CreateDirectory(filePath);
 
                         var path = Path.Combine(filePath, fileName);
@@ -605,7 +605,7 @@ namespace PurchaseOrderSys.Controllers
                             IsMain = isMain,
                             Sku = ID,
                             PictureType ="Picture",
-                            FileName = fileName,
+                            FileName = string.Format("Sku/{0}/{1}", ID, fileName),
                             FileSize = file.ContentLength,
                             Order = Order++,
                             CreateAt = DateTime.UtcNow,
@@ -640,7 +640,7 @@ namespace PurchaseOrderSys.Controllers
 
                 if (picture == null) throw new Exception("Not find picture!");
 
-                System.IO.File.Delete(string.Format(Server.MapPath("~/FileUploads/Sku/{0}/{1}"), picture.Sku, picture.FileName));
+                System.IO.File.Delete(string.Format(Server.MapPath("~/Uploads/{0}"), picture.FileName));
 
                 db.SkuPicture.Remove(picture);
                 db.SaveChanges();
