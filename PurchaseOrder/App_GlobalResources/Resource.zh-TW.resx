@@ -2025,4 +2025,10 @@
   <data name="PriceGroup_CurrentPrice" xml:space="preserve">
     <value>目前價錢</value>
   </data>
+  <data name="AddSerialsPictureMsg1" xml:space="preserve">
+    <value>請在＂掃入序號以前＂確認圖片與實際物品吻合</value>
+  </data>
+  <data name="AddSerialsPictureMsg2" xml:space="preserve">
+    <value>若有問題，立即停止入庫作業並且告知主管！</value>
+  </data>
 </root>

@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using inventorySKU.NetoDeveloper;
 using Newtonsoft.Json;
 using PurchaseOrderSys.Models;
+using PurchaseOrderSys.PurchaseOrderService;
 
 namespace PurchaseOrderSys.Controllers
 {
@@ -22,6 +23,20 @@ namespace PurchaseOrderSys.Controllers
         public string MyTitle { get; set; }
         public int MyMoney { get; set; }
 
+    }
+    public class ShipResult
+    {
+        private bool status;
+        private string message;
+
+        public bool Status { get { return status; } }
+        public string Message { get { return message; } }
+
+        public ShipResult(bool status = false, string message = "")
+        {
+            this.status = status;
+            this.message = message;
+        }
     }
     public class TestController : BaseController
     {
@@ -358,5 +373,53 @@ namespace PurchaseOrderSys.Controllers
                 Response.Write(string.Format("{0} - {1}<br />", brand.ID, brand.ManufacturerName));
             }
         }
+        //private ShipResult DropShip()
+        //{
+        //       Orders order= new Orders();
+        //    try
+        //    {
+        //        int CompanyID = order.CompanyID.Value; // SCWS.Get_CurrentCompanyID();
+        //        POVendor VendorData = SCWS.Get_Vendor_All(CompanyID).FirstOrDefault(v => v.DisplayName.Equals(warehouse.Name));
+
+        //        Purchase newPurchase = SCWS.Create_PurchaseOrder(new Purchase()
+        //        {
+        //            ID = 0,
+        //            CompanyID = CompanyID,
+        //            Priority = PriorityCodeType.Normal,
+        //            Status = PurchaseOrderService.PurchaseStatus.Ordered,
+        //            PurchaseTitle = string.Format("{0} dropship {1} {2}", warehouse.Name, package.OrderID.Value, SCWS.SyncOn.ToString("MMddyyyy")),
+        //            VendorID = VendorData != null ? VendorData.ID : 0,
+        //            VendorInvoiceNumber = "",
+        //            Memo = !string.IsNullOrEmpty(package.SupplierComment) ? package.SupplierComment : "",
+        //            DefaultWarehouseID = warehouse.ID,
+        //            CreatedBy = SCWS.UserID,
+        //            CreatedOn = SCWS.SyncOn
+        //        });
+
+        //        foreach (Items item in package.Items.Where(i => i.IsEnable.Equals(true)).ToList())
+        //        {
+        //            PurchaseItem newPurchaseItem = SCWS.Create_PurchaseOrder_Item(new PurchaseItem()
+        //            {
+        //                PurchaseID = newPurchase.ID,
+        //                ProductID = item.ProductID,
+        //                ProductName = item.Skus.ProductName,
+        //                UPC = item.Skus.UPC,
+        //                QtyOrdered = item.Qty.Value,
+        //                QtyReceived = 0,
+        //                QtyReceivedToDate = 0,
+        //                DefaultWarehouseID = warehouse.ID
+        //            });
+        //        }
+
+        //        package.POId = newPurchase.ID;
+        //        //MyHelp.Log("PurchaseOrder", package.OrderID, string.Format("開啟 Purchase Order【{0}】成功", package.POId));
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return new ShipResult(false, e.Message);
+        //    }
+
+        //    return new ShipResult(true);
+        //}
     }
 }

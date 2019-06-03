@@ -552,4 +552,10 @@
   <data name="SkuLang_FeatureContent" xml:space="preserve">
     <value>Feature Content</value>
   </data>
+  <data name="AddSerialsPictureMsg1" xml:space="preserve">
+    <value>Thoroughly inspect the items to make sure they match the pictures BEFORE you scan the serials.</value>
+  </data>
+  <data name="AddSerialsPictureMsg2" xml:space="preserve">
+    <value>If you find any inconsistencies, STOP receiving and report to the management IMMEDIATELY!</value>
+  </data>
 </root>

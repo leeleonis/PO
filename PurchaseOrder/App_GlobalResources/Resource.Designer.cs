@@ -61,6 +61,24 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查詢類似 Thoroughly inspect the items to make sure they match the pictures BEFORE you scan the serials. 的當地語系化字串。
+        /// </summary>
+        public static string AddSerialsPictureMsg1 {
+            get {
+                return ResourceManager.GetString("AddSerialsPictureMsg1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 If you find any inconsistencies, STOP receiving and report to the management IMMEDIATELY! 的當地語系化字串。
+        /// </summary>
+        public static string AddSerialsPictureMsg2 {
+            get {
+                return ResourceManager.GetString("AddSerialsPictureMsg2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
         public static string AdminGroup_Auth {

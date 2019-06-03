@@ -412,10 +412,10 @@ namespace SellerCloud_WebService
         //    return PO_SellerCloud.GetCurrentCompanyID(PO_AuthHeader);
         //}
 
-        //public Purchase Create_PurchaseOrder(Purchase PurchaseOrder)
-        //{
-        //    return PO_SellerCloud.CreateNewPurchaseOrder(PO_AuthHeader, PurchaseOrder);
-        //}
+        public Purchase Create_PurchaseOrder(Purchase PurchaseOrder)
+        {
+            return PO_SellerCloud.CreateNewPurchaseOrder(PO_AuthHeader, PurchaseOrder);
+        }
 
         //public PurchaseItem Create_PurchaseOrder_Item(PurchaseItem PurchaseItem)
         //{
