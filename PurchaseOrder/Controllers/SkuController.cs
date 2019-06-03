@@ -460,7 +460,7 @@ namespace PurchaseOrderSys.Controllers
                         IsMain = false,
                         Sku = sku.SkuID,
                         PictureType = "Logistic",
-                        FileName = fileName,
+                        FileName = string.Format("Sku/{0}/{1}", sku.SkuID, fileName),
                         FileSize = image.ContentLength,
                         CreateAt = DateTime.UtcNow,
                         CreateBy = Session["AdminName"].ToString()
