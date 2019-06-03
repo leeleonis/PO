@@ -54,7 +54,7 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "SkuPicture_FileName", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(100, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  FileName { get; set; }
     
     		    
