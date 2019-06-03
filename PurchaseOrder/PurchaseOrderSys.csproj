@@ -7586,11 +7586,11 @@
     <Content Include="Views\Shared\GetRMASerialList.cshtml" />
     <Content Include="Views\RMA\Returnedserials.cshtml" />
     <Content Include="Views\RMA\GetOrderList.cshtml" />
+    <Content Include="Views\Order\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Base\" />
-    <Folder Include="Views\Order\" />
     <Folder Include="Views\SkuSerials\" />
   </ItemGroup>
   <ItemGroup>

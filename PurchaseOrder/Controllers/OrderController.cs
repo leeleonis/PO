@@ -44,15 +44,11 @@ namespace PurchaseOrderSys.Controllers
         // GET: Order/Edit/5
         public ActionResult Edit(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
             Order order = db.Order.Find(id);
-            if (order == null)
-            {
-                return HttpNotFound();
-            }
+            if (order == null) return HttpNotFound();
+
             return View(order);
         }
 
