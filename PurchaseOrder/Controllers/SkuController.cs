@@ -133,7 +133,7 @@ namespace PurchaseOrderSys.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(SKU updateData, SkuLang langData, List<Dictionary<string, string>> eBayTitle, int[] DiverseAttribute, Sku_Attribute[] VariationValue, KitSku[] KitSku, Sku_PackageContent[] SkuContent, string[] KeyFeature, Sku_Attribute[] AttributeValue, HttpPostedFileBase picture, PriceGroup[] PriceGroup, Logistic Logistic, HttpPostedFileBase[] LogisticImg, bool Sync = false)
+        public ActionResult Edit(SKU updateData, SkuLang langData, List<Dictionary<string, string>> eBayTitle, int[] DiverseAttribute, Sku_Attribute[] VariationValue, KitSku[] KitSku, Sku_PackageContent[] SkuContent, string[] KeyFeature, Sku_Attribute[] AttributeValue, HttpPostedFileBase picture, PriceGroup[] PriceGroup, Logistic Logistic, HttpPostedFileBase[] LogisticImg = null, bool Sync = false)
         {
             SKU sku = db.SKU.Find(updateData.SkuID);
             if (sku == null) return HttpNotFound();
@@ -443,9 +443,9 @@ namespace PurchaseOrderSys.Controllers
                 db.SaveChanges();
             }
 
-            if (LogisticImg != null && LogisticImg.Count() > 0)
+            if (LogisticImg != null)
             {
-                foreach(var image in LogisticImg.Take(3))
+                foreach (var image in LogisticImg.Where(img => img != null && img.ContentLength > 0).Take(3))
                 {
                     var fileExtension = Path.GetExtension(image.FileName);
                     var fileName = Guid.NewGuid().ToString() + fileExtension;
@@ -604,7 +604,7 @@ namespace PurchaseOrderSys.Controllers
                         {
                             IsMain = isMain,
                             Sku = ID,
-                            PictureType ="Picture",
+                            PictureType = "Picture",
                             FileName = string.Format("Sku/{0}/{1}", ID, fileName),
                             FileSize = file.ContentLength,
                             Order = Order++,
