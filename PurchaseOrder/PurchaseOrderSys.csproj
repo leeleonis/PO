@@ -7585,6 +7585,8 @@
     <Content Include="Views\Inventory\Index.cshtml" />
     <Content Include="Views\Sku\_KeyFeature.cshtml" />
     <Content Include="Views\WarehouseInventory\IndexAll.cshtml" />
+    <Content Include="Views\SkuType\_AttributeGroup.cshtml" />
+    <Content Include="Views\SkuType\_AttributeType.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,14 @@
+﻿@{
+    var type = ViewData["type"] as SkuAttributeType;
+    var lang = ViewData["lang"] as SkuAttributeLang;
+}
+<li class="dd-item dd3-item" data-id="@lang.AttrID">
+    <div class="dd-handle dd3-handle">&nbsp;</div>
+    <div class="dd3-content">
+        @lang.Name
+        @Html.Hidden(string.Format("AttributeGroup[{0}][]", type.ID), lang.AttrID)
+        <div class="pull-right">
+            <button type="button" class="btn btn-default" style="margin-top:-7px;" onclick="AttrDel(this);">刪除</button>
+        </div>
+    </div>
+</li>

@@ -1,0 +1,42 @@
+﻿@{
+    var LangID = (string)ViewBag.LangID;
+    string DefaultLangID = EnumData.DataLangList().First().Key;
+    var type = ViewData["type"] as SkuAttributeType;
+    var group = ViewData["group"] as int[];
+}
+<li class="dd-item dd3-item" data-id="@type.ID">
+    @{
+        var attributeLangList = type.SkuAttribute.Where(a => a.IsEnable).Select(a => a.SkuAttributeLang.First(l => l.LangID.Equals(a.SkuAttributeLang.Any(ll => ll.LangID.Equals(LangID)) ? LangID : DefaultLangID)));
+        var selectItem = attributeLangList.Select(l => new SelectListItem() { Text = l.Name, Value = l.AttrID.ToString() });
+        var name = string.Format("AttributeGroup[{0}][]", type.ID);
+    }
+    <div class="dd-handle dd3-handle">&nbsp;</div>
+    <div class="dd3-content">
+        @type.Name
+        @Html.Hidden(name, 0)
+        <div class="pull-right">
+            <button type="button" class="btn btn-default" style="margin-top:-7px; margin-left:5px;" onclick="TypeDel(this);">刪除</button>
+        </div>
+        <div class="input-group pull-right col-sm-2" style="margin-top:-7px; margin-left:5px;">
+            @Html.TextBox("Attr", "", new { @class = "form-control", @rel= type.ID })
+            <div class="input-group-btn">
+                <button type="button" class="btn btn-default" onclick="AttrAdd(@type.ID)">新增</button>
+            </div>
+        </div>
+        <div class="input-group pull-right col-sm-3" style="margin-top:-7px; margin-left:5px;">
+            @Html.DropDownList("Attr", selectItem, htmlAttributes: new { @class = "form-control", @rel = type.ID })
+            <div class="input-group-btn">
+                <button type="button" class="btn btn-default" onclick="AttrJoin(@type.ID)">加入</button>
+            </div>
+        </div>
+    </div>
+    <ol class="dd-list">
+        @if (group != null)
+        {
+            foreach (var attrID in group.Except(new int[] { 0 }))
+            {
+                Html.RenderPartial("_AttributeType", new ViewDataDictionary() { { "type", type }, { "lang", attributeLangList.First(l => l.AttrID.Equals(attrID)) } });
+            }
+        }
+    </ol>
+</li>

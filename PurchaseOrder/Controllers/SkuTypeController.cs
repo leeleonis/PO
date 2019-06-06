@@ -295,7 +295,127 @@ namespace PurchaseOrderSys.Controllers
                 db.PackageContent.Remove(content);
                 db.SaveChanges();
             }
-            catch(Exception e)
+            catch (Exception e)
+            {
+                result.status = false;
+                result.message = e.InnerException != null && !string.IsNullOrEmpty(e.InnerException.Message) ? e.InnerException.Message : e.Message;
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult JoinType(string LangID, int typeID)
+        {
+            AjaxResult result = new AjaxResult();
+
+            try
+            {
+                var type = db.SkuAttributeType.Find(typeID);
+
+                if (type == null) throw new Exception("Not found type!");
+
+                ViewDataDictionary viewData = new ViewDataDictionary() { { "LangID", LangID }, { "type", type }, { "group", new int[] { } } };
+                result.data = RenderViewToString(ControllerContext, "_AttributeGroup", type, viewData);
+            }
+            catch (Exception e)
+            {
+                result.status = false;
+                result.message = e.InnerException != null && !string.IsNullOrEmpty(e.InnerException.Message) ? e.InnerException.Message : e.Message;
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult AddType(string LangID, string newType)
+        {
+            AjaxResult result = new AjaxResult();
+
+            try
+            {
+                var type = new SkuAttributeType()
+                {
+                    IsEnable = true,
+                    Name = newType,
+                    Order = db.SkuAttributeType.Max(t => t.Order) + 1,
+                    CreateAt = DateTime.UtcNow,
+                    CreateBy = Session["AdminName"].ToString()
+                };
+
+                db.SkuAttributeType.Add(type);
+                db.SaveChanges();
+
+                ViewDataDictionary viewData = new ViewDataDictionary() { { "LangID", LangID }, { "type", type }, { "group", new int[] { } } };
+                result.data = RenderViewToString(ControllerContext, "_AttributeGroup", null, viewData);
+            }
+            catch (Exception e)
+            {
+                result.status = false;
+                result.message = e.InnerException != null && !string.IsNullOrEmpty(e.InnerException.Message) ? e.InnerException.Message : e.Message;
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult JoinAttribute(string LangID, int attrID)
+        {
+            AjaxResult result = new AjaxResult();
+
+            try
+            {
+                var attr = db.SkuAttribute.Find(attrID);
+
+                if (attr == null) throw new Exception("Not found attribute!");
+
+                var DefaultLangID = EnumData.DataLangList().First().Key;
+                result.data = RenderViewToString(ControllerContext, "_AttributeType", null, new ViewDataDictionary() {
+                    { "type", attr.SkuAttributeType },
+                    { "lang", attr.SkuAttributeLang.First(l => l.LangID.Equals(attr.SkuAttributeLang.Any(ll => ll.LangID.Equals(LangID)) ? LangID : DefaultLangID)) }
+                });
+            }
+            catch (Exception e)
+            {
+                result.status = false;
+                result.message = e.InnerException != null && !string.IsNullOrEmpty(e.InnerException.Message) ? e.InnerException.Message : e.Message;
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public ActionResult AddAttribute(string LangID, int typeID, string newAttr)
+        {
+            AjaxResult result = new AjaxResult();
+
+            try
+            {
+                var type = db.SkuAttributeType.Find(typeID);
+
+                if (type == null) throw new Exception("Not found type!");
+
+                var attr = new SkuAttribute()
+                {
+                    IsEnable = true,
+                    Type = typeID,
+                    CreateAt = DateTime.UtcNow,
+                    CreateBy = Session["AdminName"].ToString()
+                };
+
+                var lang = new SkuAttributeLang()
+                {
+                    LangID = LangID,
+                    Name = newAttr,
+                    CreateAt = DateTime.UtcNow,
+                    CreateBy = Session["AdminName"].ToString()
+                };
+
+                attr.SkuAttributeLang.Add(lang);
+                db.SkuAttribute.Add(attr);
+                db.SaveChanges();
+
+                result.data = RenderViewToString(ControllerContext, "_AttributeType", null, new ViewDataDictionary() { { "type", type }, { "lang", lang } });
+            }
+            catch (Exception e)
             {
                 result.status = false;
                 result.message = e.InnerException != null && !string.IsNullOrEmpty(e.InnerException.Message) ? e.InnerException.Message : e.Message;
