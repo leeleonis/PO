@@ -11,6 +11,8 @@ using inventorySKU.NetoDeveloper;
 using Newtonsoft.Json;
 using PurchaseOrderSys.Models;
 using PurchaseOrderSys.PurchaseOrderService;
+using PurchaseOrderSys.SCService;
+using SellerCloud_WebService;
 
 namespace PurchaseOrderSys.Controllers
 {
@@ -56,7 +58,8 @@ namespace PurchaseOrderSys.Controllers
         // GET: Test
         public ActionResult Index()
         {
-          var  Warehouse3PList = new NewApi.Winit_API().Warehouse3P();
+            DropShip();
+          //var  Warehouse3PList = new NewApi.Winit_API().Warehouse3P();
             //var SerialsLlist = new List<SerialsLlist>();
             //var POSerialsLlist = new List<SerialsLlist>();
             //var DSerialsLlist = new List<SerialsLlist>();
@@ -189,7 +192,7 @@ namespace PurchaseOrderSys.Controllers
             var conditionList = db.Condition.Where(c => c.IsEnable).ToList();
 
             SKU sku;
-            Brand brand;
+            Models.Brand brand;
             SkuType category;
             Dictionary<string, string> VariationList = new Dictionary<string, string>();
             int page = 0, limit = 100, categoryID;
@@ -250,7 +253,7 @@ namespace PurchaseOrderSys.Controllers
                                     brand = db.Brand.FirstOrDefault(b => b.Name.ToLower().Equals(brandName.ToLower()));
                                     if (brand == null)
                                     {
-                                        brand = new Brand()
+                                        brand = new Models.Brand()
                                         {
                                             IsEnable = true,
                                             Name = brandName,
@@ -373,53 +376,112 @@ namespace PurchaseOrderSys.Controllers
                 Response.Write(string.Format("{0} - {1}<br />", brand.ID, brand.ManufacturerName));
             }
         }
-        //private ShipResult DropShip()
-        //{
-        //       Orders order= new Orders();
-        //    try
-        //    {
-        //        int CompanyID = order.CompanyID.Value; // SCWS.Get_CurrentCompanyID();
-        //        POVendor VendorData = SCWS.Get_Vendor_All(CompanyID).FirstOrDefault(v => v.DisplayName.Equals(warehouse.Name));
+        private ShipResult DropShip()
+        {
+            //Orders order = new Orders();
+            try
+            {
+                var ProductID = "TestPOSKU";
+                SCWS = new SC_WebService(ApiUserName, ApiPassword);
+                var Company = SCWS.Get_AllCompany();
+                var CompanyID = Company.FirstOrDefault().ID;
+                //int CompanyID = order.CompanyID.Value; // SCWS.Get_CurrentCompanyID();
+                POVendor VendorData = SCWS.Get_Vendor_All(CompanyID).FirstOrDefault(v => v.DisplayName.Equals("TWN"));
+                var SyncOn = SCWS.SyncOn.ToString("yyyyMMddHHmmss");
+                var WarehouseID = 120;
+                Purchase newPurchase = SCWS.Create_PurchaseOrder(new Purchase()
+                {
+                    ID = 0,
+                    CompanyID = CompanyID,
+                    Priority = PriorityCodeType.Normal,
+                    Status = PurchaseOrderService.PurchaseStatus.Ordered,
+                    PurchaseTitle = "Test" + SyncOn,
+                    VendorID = VendorData != null ? VendorData.ID : 0,
+                    VendorInvoiceNumber = "",
+                    // Memo = !string.IsNullOrEmpty(package.SupplierComment) ? package.SupplierComment : "",
+                    DefaultWarehouseID = WarehouseID,
+                    CreatedBy = SCWS.UserID,
+                    CreatedOn = SCWS.SyncOn
+                });
 
-        //        Purchase newPurchase = SCWS.Create_PurchaseOrder(new Purchase()
-        //        {
-        //            ID = 0,
-        //            CompanyID = CompanyID,
-        //            Priority = PriorityCodeType.Normal,
-        //            Status = PurchaseOrderService.PurchaseStatus.Ordered,
-        //            PurchaseTitle = string.Format("{0} dropship {1} {2}", warehouse.Name, package.OrderID.Value, SCWS.SyncOn.ToString("MMddyyyy")),
-        //            VendorID = VendorData != null ? VendorData.ID : 0,
-        //            VendorInvoiceNumber = "",
-        //            Memo = !string.IsNullOrEmpty(package.SupplierComment) ? package.SupplierComment : "",
-        //            DefaultWarehouseID = warehouse.ID,
-        //            CreatedBy = SCWS.UserID,
-        //            CreatedOn = SCWS.SyncOn
-        //        });
+                PurchaseItem newPurchaseItem = SCWS.Create_PurchaseOrder_Item(new PurchaseItem()
+                {
+                    PurchaseID = newPurchase.ID,
+                    ProductID = ProductID,//SKU
+                    ProductName = "TestPOSKUName",
+                    UPC = "UPC",
+                    QtyOrdered = 1,
+                    QtyReceived = 0,
+                    QtyReceivedToDate = 0,
+                    DefaultWarehouseID = WarehouseID
+                });
+                var purchaseOrder = SCWS.Get_PurchaseOrder(newPurchase.ID);
+                var receiveRequest = new PurchaseItemReceiveRequest() { PurchaseID = purchaseOrder.ID };
+                var receiveRequestProduct = new List<PurchaseItemReceiveRequestProduct>();
+                //List<PurchaseItemReceive> PurchaseItemList = PurchaseItems.GetAll(true).Where(p => p.WarehouseName.Equals(WarehouseData.Name)).ToList();
+                //string[] SerialList = PurchaseItemList.Select(p => p.SerialNumber).Distinct().ToArray();
+                foreach (var purchaseItem in purchaseOrder.Products)
+                {
+                    int qty = 1;
+                    receiveRequestProduct.Add(new PurchaseItemReceiveRequestProduct()
+                    {
+                        QtyReceived = qty,
+                        WarehouseID = purchaseItem.DefaultWarehouseID,
+                        PurchaseItemID = purchaseItem.ID,
+                        PurchaseID = purchaseItem.PurchaseID
+                    });
+                }
+                PurchaseItemReceive[] purchaseItemReceive = null;
+                var receiveSerial = new List<PurchaseOrderService.PurchaseItemReceiveSerial>();
+                if (receiveRequestProduct.Any())
+                {
+                    receiveRequest.Products = receiveRequestProduct.ToArray();
+                    purchaseItemReceive = SCWS.Create_PurchaseOrder_ItemReceive(receiveRequest);
 
-        //        foreach (Items item in package.Items.Where(i => i.IsEnable.Equals(true)).ToList())
-        //        {
-        //            PurchaseItem newPurchaseItem = SCWS.Create_PurchaseOrder_Item(new PurchaseItem()
-        //            {
-        //                PurchaseID = newPurchase.ID,
-        //                ProductID = item.ProductID,
-        //                ProductName = item.Skus.ProductName,
-        //                UPC = item.Skus.UPC,
-        //                QtyOrdered = item.Qty.Value,
-        //                QtyReceived = 0,
-        //                QtyReceivedToDate = 0,
-        //                DefaultWarehouseID = warehouse.ID
-        //            });
-        //        }
+                    receiveSerial = new List<PurchaseOrderService.PurchaseItemReceiveSerial>();
+                    receiveSerial.Add(new PurchaseOrderService.PurchaseItemReceiveSerial()
+                    {
+                        PurchaseID = newPurchase.ID,
+                        WarehouseID = WarehouseID,
+                        ProductID = ProductID,
+                        PurchaseReceiveID = purchaseItemReceive.FirstOrDefault().Id,
+                        SerialNumber = "TestSerial01"
+                    });
+                    //foreach (SerialNumbers SerialNumber in SerialNumberList)
+                    //{
+                    //    PurchaseOrderService.PurchaseItemReceive itemReceive = purchaseItemReceive.First(i => i.ProductID.Equals(SerialNumber.ProductID));
 
-        //        package.POId = newPurchase.ID;
-        //        //MyHelp.Log("PurchaseOrder", package.OrderID, string.Format("開啟 Purchase Order【{0}】成功", package.POId));
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return new ShipResult(false, e.Message);
-        //    }
 
-        //    return new ShipResult(true);
-        //}
+                    //}
+
+                    SCWS.Update_PurchaseOrder_ItemReceive_Serials(receiveSerial.ToArray());
+                }
+
+
+                //foreach (Items item in package.Items.Where(i => i.IsEnable.Equals(true)).ToList())
+                //{
+                //    PurchaseItem newPurchaseItem = SCWS.Create_PurchaseOrder_Item(new PurchaseItem()
+                //    {
+                //        PurchaseID = newPurchase.ID,
+                //        ProductID = item.ProductID,//SKU
+                //        ProductName = item.Skus.ProductName,
+                //        UPC = item.Skus.UPC,
+                //        QtyOrdered = item.Qty.Value,
+                //        QtyReceived = 0,
+                //        QtyReceivedToDate = 0,
+                //        DefaultWarehouseID = warehouse.ID
+                //    });
+                //}
+
+                //package.POId = newPurchase.ID;
+                //MyHelp.Log("PurchaseOrder", package.OrderID, string.Format("開啟 Purchase Order【{0}】成功", package.POId));
+            }
+            catch (Exception e)
+            {
+                return new ShipResult(false, e.Message);
+            }
+
+            return new ShipResult(true);
+        }
     }
 }

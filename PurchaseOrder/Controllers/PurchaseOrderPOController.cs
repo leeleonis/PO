@@ -307,6 +307,10 @@ namespace PurchaseOrderSys.Controllers
                 {
                     dataList = dataList.Where(x => x.Balance == filter.Balance);
                 }
+                if (filter.QTYReceived.HasValue)
+                {
+                    dataList = dataList.Where(x => x.QTYReceived == filter.QTYReceived);
+                }
                 total = dataList.Count();
 
                 int length = rows;

@@ -397,10 +397,10 @@ namespace SellerCloud_WebService
         }
 
         /***** 採購單 *****/
-        //public Purchase Get_PurchaseOrder(int POId)
-        //{
-        //    return PO_SellerCloud.GetPurchaseOrder(PO_AuthHeader, PO_Options, POId);
-        //}
+        public Purchase Get_PurchaseOrder(int POId)
+        {
+            return PO_SellerCloud.GetPurchaseOrder(PO_AuthHeader, PO_Options, POId);
+        }
 
         //public PurchaseOrderInfo Get_PurchaseOrder_Info(int PurchaseID, int WarehouseID)
         //{
@@ -417,25 +417,28 @@ namespace SellerCloud_WebService
             return PO_SellerCloud.CreateNewPurchaseOrder(PO_AuthHeader, PurchaseOrder);
         }
 
-        //public PurchaseItem Create_PurchaseOrder_Item(PurchaseItem PurchaseItem)
-        //{
-        //    return PO_SellerCloud.PurchaseOrderItems_CreateNew(PO_AuthHeader, PurchaseItem);
-        //}
+        public PurchaseItem Create_PurchaseOrder_Item(PurchaseItem PurchaseItem)
+        {
+            return PO_SellerCloud.PurchaseOrderItems_CreateNew(PO_AuthHeader, PurchaseItem);
+        }
 
-        //public PurchaseItemReceive[] Create_PurchaseOrder_ItemReceive(PurchaseItemReceiveRequest Receive)
-        //{
-        //    return PO_SellerCloud.PurchaseItemReceive_AddNew_Bulk(PO_AuthHeader, Receive);
-        //}
-
+        public PurchaseItemReceive[] Create_PurchaseOrder_ItemReceive(PurchaseItemReceiveRequest Receive)
+        {
+            return PO_SellerCloud.PurchaseItemReceive_AddNew_Bulk(PO_AuthHeader, Receive);
+        }
+        public PurchaseItemReceive[] PurchaseItemReceive_AddNew2(PurchaseItemReceiveRequest Receive)
+        {
+            return PO_SellerCloud.PurchaseItemReceive_AddNew2(PO_AuthHeader, Receive);
+        }
         //public bool Update_PurchaseOrder(Purchase PurchaseOrder)
         //{
         //    return PO_SellerCloud.UpdatePurchaseOrder(PO_AuthHeader, PurchaseOrder);
         //}
 
-        //public bool Update_PurchaseOrder_ItemReceive_Serials(QDLogistics.PurchaseOrderService.PurchaseItemReceiveSerial[] Serials)
-        //{
-        //    return PO_SellerCloud.PurchaseItem_SerialNumbersNew_SaveMultiple(PO_AuthHeader, Serials);
-        //}
+        public bool Update_PurchaseOrder_ItemReceive_Serials(PurchaseOrderSys.PurchaseOrderService.PurchaseItemReceiveSerial[] Serials)
+        {
+            return PO_SellerCloud.PurchaseItem_SerialNumbersNew_SaveMultiple(PO_AuthHeader, Serials);
+        }
 
         //public bool Delete_PurchaseOrder(int POId)
         //{
