@@ -89,35 +89,56 @@ namespace PurchaseOrderSys.Models
             newSku.SkuLang.Add(newLang);
             db.SKU.Add(newSku);
 
-            if (newSku.Type.Equals((byte)EnumData.SkuType.Single) && newSku.Condition.Equals(1))
-            {
-                foreach (var condition in db.Condition.Where(c => c.IsEnable && !c.ID.Equals(newSku.Condition)).ToList())
-                {
-                    SKU sku_suffix = SkuInherit(newSku, newSku.SkuID + condition.Suffix, (byte)EnumData.SkuType.Single);
-                    sku_suffix.Condition = condition.ID;
-                    sku_suffix.ParentShadow = newSku.SkuID;
-                    sku_suffix.CreateAt = newSku.CreateAt;
-                    sku_suffix.CreateBy = newSku.CreateBy;
-
-                    sku_suffix.SkuLang.Add(new SkuLang()
-                    {
-                        Sku = sku_suffix.SkuID,
-                        LangID = newLang.LangID,
-                        Name = newLang.Name,
-                        Model = newLang.Model,
-                        CreateAt = newLang.CreateAt,
-                        CreateBy = newLang.CreateBy
-                    });
-
-                    db.SKU.Add(sku_suffix);
-                }
-            }
-
             db.SaveChanges();
             skuData = newSku;
 
+            UpdateSku_Suffix(newLang);
+
             return newSku;
         }
+
+        public void UpdateSku_Suffix(SkuLang skuLang = null)
+        {
+            if (skuData.Type.Equals((byte)EnumData.SkuType.Single) && skuData.Condition.Equals(1))
+            {
+                foreach (var condition in db.Condition.Where(c => c.IsEnable && !c.ID.Equals(skuData.Condition)).ToList())
+                {
+                    SKU sku_suffix = db.SKU.Find(skuData.SkuID + condition.Suffix);
+                    if (sku_suffix == null)
+                    {
+                        sku_suffix = new SKU()
+                        {
+                            IsEnable = true,
+                            SkuID = skuData.SkuID + condition.Suffix,
+                            Type = (byte)EnumData.SkuType.Single,
+                            Condition = condition.ID,
+                            ParentShadow = skuData.SkuID,
+                            CreateAt = skuData.UpdateAt.Value,
+                            CreateBy = skuData.UpdateBy
+                        };
+                    }
+
+                    SkuInherit(sku_suffix, skuData, skuLang);
+
+                    if(skuData.Logistic != null)
+                    {
+                        if (sku_suffix.Logistic == null)
+                        {
+                            sku_suffix.Logistic = new Logistic()
+                            {
+                                Sku = sku_suffix.SkuID,
+                                CreateAt = skuData.UpdateAt.Value,
+                                CreateBy = skuData.UpdateBy
+                            };
+                        }
+                        LogisticInherit(sku_suffix.Logistic, skuData.Logistic);
+                    }
+                }
+
+                db.SaveChanges();
+            }
+        }
+
         /// <summary>
         /// 建立Sku的Variation
         /// </summary>
@@ -125,10 +146,18 @@ namespace PurchaseOrderSys.Models
         /// <returns></returns>
         private SKU CreateSkuVariation(SKU parentSku)
         {
-            SKU shadow = SkuInherit(parentSku, parentSku.SkuID + "_var", (byte)EnumData.SkuType.Shadow);
-            shadow.ParentShadow = parentSku.SkuID;
-            shadow.CreateAt = parentSku.UpdateAt.Value;
-            shadow.CreateBy = parentSku.UpdateBy;
+            SKU shadow = new SKU()
+            {
+                IsEnable = true,
+                SkuID = parentSku.SkuID + "_var",
+                Condition = parentSku.Condition,
+                Type = (byte)EnumData.SkuType.Shadow,
+                ParentShadow = parentSku.SkuID,
+                CreateAt = parentSku.UpdateAt.Value,
+                CreateBy = parentSku.UpdateBy
+            };
+
+            SkuInherit(shadow, parentSku);
 
             foreach (var lang in parentSku.SkuLang)
             {
@@ -214,25 +243,63 @@ namespace PurchaseOrderSys.Models
         /// <summary>
         /// 繼承Parent Sku的資料
         /// </summary>
+        /// <param name="childSku">子類品號資料</param>
         /// <param name="parentSku">父類品號資料</param>
-        /// <param name="sku">品號</param>
-        /// <param name="type">品號類型</param>
+        /// <param name="langData">語系資料</param>
         /// <returns></returns>
-        public SKU SkuInherit(SKU parentSku, string sku, byte type)
+        public void SkuInherit(SKU childSku, SKU parentSku, SkuLang langData = null)
         {
-            return new SKU()
+            childSku.Company = parentSku.Company;
+            childSku.Category = parentSku.Category;
+            childSku.Brand = parentSku.Brand;
+            childSku.UPC = parentSku.UPC;
+            childSku.EAN = parentSku.EAN;
+            childSku.eBayTitle = parentSku.eBayTitle;
+            childSku.Replenishable = parentSku.Replenishable;
+            childSku.Status = parentSku.Status;
+            childSku.SerialTracking = parentSku.SerialTracking;
+            childSku.UpdateAt = parentSku.UpdateAt;
+            childSku.UpdateBy = parentSku.UpdateBy;
+
+            if (langData != null)
             {
-                IsEnable = true,
-                SkuID = sku,
-                Company = parentSku.Company,
-                Type = type,
-                Category = parentSku.Category,
-                Brand = parentSku.Brand,
-                Condition = parentSku.Condition,
-                EAN = parentSku.EAN,
-                UPC = parentSku.UPC,
-                Status = (byte)EnumData.SkuStatus.Inactive
-            };
+                SkuLang lang;
+                bool isExist = childSku.SkuLang.Any(l => l.LangID.Equals(langData.LangID));
+                if (isExist)
+                {
+                    lang = childSku.SkuLang.First(l => l.LangID.Equals(langData.LangID));
+                }
+                else
+                {
+                    lang = new SkuLang() { Sku = childSku.SkuID, LangID = langData.LangID };
+                }
+
+                lang.Name = langData.Name;
+                lang.Model = lang.Model;
+                lang.Description = lang.Description;
+                lang.PackageContent = lang.PackageContent;
+                lang.SpecContent = lang.SpecContent;
+                lang.FeatureContent = lang.FeatureContent;
+                lang.KeyFeature = lang.KeyFeature;
+
+                if (!isExist) childSku.SkuLang.Add(lang);
+            }
+        }
+
+        public void LogisticInherit(Logistic origin, Logistic logistic)
+        {
+            origin.BoxID = logistic.BoxID;
+            origin.OriginCountry = logistic.OriginCountry;
+            origin.CaseHeight = logistic.CaseHeight;
+            origin.CaseLength = logistic.CaseLength;
+            origin.CaseWeight = logistic.CaseWeight;
+            origin.CaseWidth = logistic.CaseWidth;
+            origin.ShippingHeight = logistic.ShippingHeight;
+            origin.ShippingLength = logistic.ShippingLength;
+            origin.ShippingWeight = logistic.ShippingWeight;
+            origin.ShippingWidth = logistic.ShippingWidth;
+            origin.UpdateAt = logistic.UpdateAt.Value;
+            origin.UpdateBy = logistic.UpdateBy;
         }
 
         public UpdateItemResponseItem UpdateSkuToNeto()
@@ -249,6 +316,7 @@ namespace PurchaseOrderSys.Models
             var skuLang = skuData.SkuLang.First(l => l.LangID.Equals(LangID));
             var eBayTitle = !string.IsNullOrEmpty(skuData.eBayTitle) ? Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<int, string>>(skuData.eBayTitle) : new Dictionary<int, string> { };
 
+            var updateSku = skuData.Type.Equals((byte)EnumData.SkuType.Single) && !skuData.Condition.Equals(1) && !string.IsNullOrEmpty(skuData.ParentShadow) ? db.SKU.Find(skuData.ParentShadow) : skuData;
             var update = new UpdateItemItem()
             {
                 SKU = skuData.SkuID,
@@ -275,15 +343,15 @@ namespace PurchaseOrderSys.Models
                 Misc20 = eBayTitle.ContainsKey(20) ? eBayTitle[20] : "",
                 Misc22 = eBayTitle.ContainsKey(22) ? eBayTitle[22] : "",
 
+                Categories = new UpdateItemItemCategoryGroup() { Category = new UpdateItemItemCategory[] { new UpdateItemItemCategory() { CategoryID = skuData.SkuType.NetoID.Value.ToString() } } },
                 PriceGroups = new UpdateItemItemPriceGroups()
                 {
-                    PriceGroup = skuData.PriceGroup.Where(p => p.GetMarket.NetoGroup.HasValue)
+                    PriceGroup = updateSku.PriceGroup.Where(p => p.GetMarket.NetoGroup.HasValue)
                     .Select(p => new UpdateItemItemPriceGroup() { Group = p.GetMarket.GetNetoGroup.Name, Price = !p.CurrentPrice.Equals(0) ? p.CurrentPrice : p.Price, PriceSpecified = true, MaximumQuantity = p.Max.ToString(), MinimumQuantity = p.Min.ToString() }).ToArray()
                 },
-                Categories = new UpdateItemItemCategoryGroup() { Category = new UpdateItemItemCategory[] { new UpdateItemItemCategory() { CategoryID = skuData.SkuType.NetoID.Value.ToString() } } },
                 ItemSpecifics = new UpdateItemItemItemSpecificGroup()
                 {
-                    ItemSpecific = skuData.Sku_Attribute.Where(a => skuData.Type.Equals((byte)EnumData.SkuType.Variation) ? !a.IsDiverse : true)
+                    ItemSpecific = updateSku.Sku_Attribute.Where(a => skuData.Type.Equals((byte)EnumData.SkuType.Variation) ? !a.IsDiverse : true)
                     .Where(a => a.eBay).GroupBy(a => a.AttrID).Where(g => g.Any(a => a.LangID.Equals(LangID))).Select(g => g.First(a => a.LangID.Equals(LangID)))
                     .Select(g => new UpdateItemItemItemSpecific() { Name = g.SkuAttribute.SkuAttributeLang.First(l => l.LangID.Equals(LangID)).Name, Value = g.Value }).ToArray()
                 }
@@ -312,7 +380,7 @@ namespace PurchaseOrderSys.Models
 
             if (!netoApi.GetItemBySku(skuData.SkuID + "_var").Item.Any())
                 CreateSkuToNeto("_var");
-            
+
             var skuLang = skuData.SkuLang.First(l => l.LangID.Equals(LangID));
 
             var update = new UpdateItemItem()

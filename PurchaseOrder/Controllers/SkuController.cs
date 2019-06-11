@@ -17,6 +17,7 @@ namespace PurchaseOrderSys.Controllers
     public class SkuController : BaseController
     {
         readonly string[] EditList = new string[] { "ParentSku", "Condition", "Category", "Brand", "EAN", "UPC", "Replenishable", "SerialTracking", "Battery", "Status" };
+        readonly string[] LangList = new string[] { "Name", "Model", "Description", "PackageContent", "SpecContent", "FeatureContent" };
         readonly string[] LogisticList = new string[] { "BoxID", "CaseWidth", "CaseLength", "CaseHeight", "CaseWeight", "ShippingWidth", "ShippingLength", "ShippingHeight", "ShippingWeight" };
 
         // GET: Sku
@@ -144,7 +145,7 @@ namespace PurchaseOrderSys.Controllers
             if (sku.SkuLang.Any(l => l.LangID.Equals(langData.LangID)))
             {
                 SkuLang skuLang = sku.SkuLang.First(l => l.LangID.Equals(langData.LangID));
-                SetUpdateData(skuLang, langData, new string[] { "Name", "Model", "Description", "PackageContent", "SpecContent" });
+                SetUpdateData(skuLang, langData, LangList);
                 skuLang.KeyFeature = JsonConvert.SerializeObject(KeyFeature);
             }
             else
@@ -170,36 +171,6 @@ namespace PurchaseOrderSys.Controllers
             }
 
             db.SaveChanges();
-
-            if (sku.Type.Equals((byte)EnumData.SkuType.Single) && sku.Condition.Equals(1))
-            {
-                using (StockKeepingUnit SKU = new StockKeepingUnit())
-                {
-                    foreach (var condition in db.Condition.Where(c => c.IsEnable && !c.ID.Equals(sku.Condition)).ToList())
-                    {
-                        if (!db.SKU.Any(s => s.SkuID.Equals(sku.SkuID + condition.Suffix)))
-                        {
-                            SKU sku_suffix = SKU.SkuInherit(sku, sku.SkuID + condition.Suffix, (byte)EnumData.SkuType.Single);
-                            sku_suffix.Condition = condition.ID;
-                            sku_suffix.ParentShadow = sku.SkuID;
-                            sku_suffix.CreateAt = sku.UpdateAt.Value;
-                            sku_suffix.CreateBy = sku.UpdateBy;
-
-                            sku_suffix.SkuLang.Add(new SkuLang()
-                            {
-                                Sku = sku_suffix.SkuID,
-                                LangID = langData.LangID,
-                                Name = langData.Name,
-                                Model = langData.Model,
-                                CreateAt = sku.UpdateAt.Value,
-                                CreateBy = sku.UpdateBy
-                            });
-
-                            db.SKU.Add(sku_suffix);
-                        }
-                    }
-                }
-            }
 
             if (VariationValue != null && VariationValue.Any())
             {
@@ -242,10 +213,16 @@ namespace PurchaseOrderSys.Controllers
                             SKU newSku;
                             using (StockKeepingUnit SKU = new StockKeepingUnit())
                             {
-                                newSku = SKU.SkuInherit(sku, "", (byte)EnumData.SkuType.Single);
-                                newSku.ParentSku = sku.SkuID;
-                                newSku.CreateAt = sku.UpdateAt.Value;
-                                newSku.CreateBy = sku.UpdateBy;
+                                newSku = new SKU()
+                                {
+                                    IsEnable = true,
+                                    Type = (byte)EnumData.SkuType.Single,
+                                    Condition = sku.Condition,
+                                    ParentSku = sku.SkuID,
+                                    CreateAt = sku.UpdateAt.Value,
+                                    CreateBy = sku.CreateBy
+                                };
+                                SKU.SkuInherit(newSku, sku);
 
                                 SkuLang newLang = new SkuLang()
                                 {
@@ -253,7 +230,10 @@ namespace PurchaseOrderSys.Controllers
                                     Name = langData.Name + " " + string.Join(" ", variationList.Select(a => a.Value).ToArray()),
                                     Model = langData.Model,
                                     Description = langData.Description,
-                                    PackageContent = langData.PackageContent
+                                    PackageContent = langData.PackageContent,
+                                    FeatureContent = langData.FeatureContent,
+                                    SpecContent = langData.SpecContent,
+                                    KeyFeature = langData.KeyFeature
                                 };
 
                                 newSku = SKU.CreateSku(newSku, newLang);
@@ -367,7 +347,7 @@ namespace PurchaseOrderSys.Controllers
                 {
                     foreach (SKU childSku in db.SKU.Where(s => s.IsEnable && s.ParentSku.Equals(sku.SkuID)).ToList())
                     {
-                        attributeData.AddRange(AttributeValue.Where(a => !a.IsDiverse).Select(a => new Sku_Attribute()
+                        attributeData.AddRange(attributeData.Where(a => !a.IsDiverse).Select(a => new Sku_Attribute()
                         {
                             Sku = childSku.SkuID,
                             LangID = a.LangID,
@@ -393,15 +373,20 @@ namespace PurchaseOrderSys.Controllers
                 // 更新Spec
                 foreach (var updateAttr in attributeList)
                 {
-                    var update = attributeData.First(a => a.Sku.Equals(updateAttr.Sku) && a.AttrID.Equals(updateAttr.AttrID));
-                    updateAttr.IsDiverse = update.IsDiverse;
-                    updateAttr.Value = update.Value;
-                    updateAttr.Html = update.Html;
-                    updateAttr.eBay = update.eBay;
-                    updateAttr.UpdateAt = sku.UpdateAt.Value;
-                    updateAttr.UpdateBy = sku.UpdateBy;
-                    db.Entry(updateAttr).State = EntityState.Modified;
+                    var update = attributeData.FirstOrDefault(a => a.Sku.Equals(updateAttr.Sku) && a.AttrID.Equals(updateAttr.AttrID));
+                    if (update != null)
+                    {
+                        updateAttr.IsDiverse = update.IsDiverse;
+                        updateAttr.Value = update.Value;
+                        updateAttr.Html = update.Html;
+                        updateAttr.eBay = update.eBay;
+                        updateAttr.UpdateAt = sku.UpdateAt.Value;
+                        updateAttr.UpdateBy = sku.UpdateBy;
+                    }
                 }
+
+                // 刪除Spec
+                db.Sku_Attribute.RemoveRange(attributeList.Except(attributeData).ToList());
 
                 db.SaveChanges();
             }
@@ -481,6 +466,25 @@ namespace PurchaseOrderSys.Controllers
                 db.SaveChanges();
             }
 
+            if (sku.Type.Equals((byte)EnumData.SkuType.Single) && sku.Condition.Equals(1))
+            {
+                using (StockKeepingUnit SKU = new StockKeepingUnit(sku))
+                {
+                    SKU.UpdateSku_Suffix(langData);
+                }
+            }
+            else if (sku.Type.Equals((byte)EnumData.SkuType.Variation))
+            {
+                using (StockKeepingUnit SKU = new StockKeepingUnit())
+                {
+                    foreach (var childSku in db.SKU.Where(s => s.IsEnable && s.ParentSku.Equals(sku.SkuID)))
+                    {
+                        SKU.SetSkuData(childSku.SkuID);
+                        SKU.UpdateSku_Suffix();
+                    }
+                }
+            }
+
             if (Sync)
             {
                 using (StockKeepingUnit SKU = new StockKeepingUnit(sku))
@@ -494,6 +498,16 @@ namespace PurchaseOrderSys.Controllers
                         if (sku.Type.Equals((byte)EnumData.SkuType.Variation))
                         {
                             SKU.UpdateVariationToNeto();
+                        }
+
+                        if (sku.Type.Equals((byte)EnumData.SkuType.Single) && sku.Condition.Equals(1))
+                        {
+                            foreach (var condition in db.Condition.Where(c => c.IsEnable && !c.ID.Equals(sku.Condition)).ToList())
+                            {
+                                SKU.SetSkuData(sku.SkuID + condition.Suffix);
+                                SKU.UpdateSkuToNeto();
+                                SKU.UpdateSkuToSC();
+                            }
                         }
                     }
                     catch (Exception e)
