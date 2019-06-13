@@ -59,6 +59,7 @@ namespace PurchaseOrderSys.Controllers
             oVendorLIst.Tax = VendorLIst.Tax;
             oVendorLIst.Email = VendorLIst.Email;
             oVendorLIst.EmailCC = VendorLIst.EmailCC;
+            oVendorLIst.SCID = VendorLIst.SCID;
             oVendorLIst.UpdateBy = UserBy;
             oVendorLIst.UpdateAt = DateTime.UtcNow;
 

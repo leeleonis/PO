@@ -843,6 +843,8 @@ namespace PurchaseOrderSys.Controllers
                     try
                     {
                         db.SaveChanges();
+                        //檢查SC上的資料並寫入
+                        AddSerialListToSC(PurchaseSKU, ExcelSerialslist);
                     }
                     catch (Exception ex)
                     {
@@ -991,6 +993,9 @@ namespace PurchaseOrderSys.Controllers
                         try
                         {
                             db.SaveChanges();
+                            //檢查SC上的資料並寫入
+                            CreatSCPObyExcel(PurchaseOrder);
+                          
                             return Json(new { status = true, reload = true }, JsonRequestBehavior.AllowGet);
                         }
                         catch (Exception ex)
@@ -1166,6 +1171,8 @@ namespace PurchaseOrderSys.Controllers
             }
         }
 
+    
+
         [HttpPost]
         public ActionResult GateVendorCurrency(int id)
         {
@@ -1306,7 +1313,7 @@ namespace PurchaseOrderSys.Controllers
                                         }
                                     }
                                 }
-                                SCWS.Delete_ItemSerials(item.OrderID, item.ID);//SC上的序號移除
+                                //SCWS.Delete_ItemSerials(item.OrderID, item.ID);//SC上的序號移除
                             }
                             //建立RMASKU資料
                             var UnitPrice = 0m;

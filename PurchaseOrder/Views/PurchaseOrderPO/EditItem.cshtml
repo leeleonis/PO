@@ -491,8 +491,8 @@
                                                 <div class="form-group">
                                                     @Html.LabelFor(model => model.Warehouse, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                     <div class="col-sm-9 col-lg-2">
-                                                        @Html.DropDownListFor(model => model.Warehouse, Warehouselist, htmlAttributes: new { @class = "form-control" })
-                                                        @Html.ValidationMessageFor(model => model.Warehouse, "", new { @class = "text-danger" })
+                                                        @Html.DropDownListFor(model => model.WarehouseID, Warehouselist, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.WarehouseID, "", new { @class = "text-danger" })
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -526,6 +526,7 @@
                                                         </div>*@
                                                     <div class="col-lg-offset-10">
                                                         <a class='btn btn-danger btn-sm' id='CreateCM'>Create CM</a>
+                                                        <a type="button" href="@Url.Action("ReceiveItems",new {Model.ID})" class='btn btn-danger btn-sm'>Receive Items</a>
                                                         <a class='btn btn-danger btn-sm Excel' valID=" @Model.ID">Create by Excel</a>
                                                         @*<a type="button" href="@Url.Action("ReceiveItems",new {Model.ID})" class='btn btn-danger btn-sm'>Receive Items</a>*@
                                                     </div>

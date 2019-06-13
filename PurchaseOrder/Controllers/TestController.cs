@@ -383,7 +383,18 @@ namespace PurchaseOrderSys.Controllers
             {
                 var ProductID = "TestPOSKU";
                 SCWS = new SC_WebService(ApiUserName, ApiPassword);
+
+                var purchaseOrder = SCWS.Get_PurchaseOrder(22901);
+                foreach (var item in purchaseOrder.Products)
+                {
+                 var Serial_All=   SCWS.PurchaseItemReceiveSerial_All_New(item.ProductID, purchaseOrder.ID);
+                }
+
                 var Company = SCWS.Get_AllCompany();
+                foreach (var item in purchaseOrder.Products)
+                {
+                    SCWS.PurchaseItem_DeleteSerials(item.ProductID, purchaseOrder.ID, item.DefaultWarehouseID, "SerialTest02");//SC上的序號移除
+                }
                 var CompanyID = Company.FirstOrDefault().ID;
                 //int CompanyID = order.CompanyID.Value; // SCWS.Get_CurrentCompanyID();
                 POVendor VendorData = SCWS.Get_Vendor_All(CompanyID).FirstOrDefault(v => v.DisplayName.Equals("TWN"));
@@ -415,7 +426,7 @@ namespace PurchaseOrderSys.Controllers
                     QtyReceivedToDate = 0,
                     DefaultWarehouseID = WarehouseID
                 });
-                var purchaseOrder = SCWS.Get_PurchaseOrder(newPurchase.ID);
+                 purchaseOrder = SCWS.Get_PurchaseOrder(newPurchase.ID);
                 var receiveRequest = new PurchaseItemReceiveRequest() { PurchaseID = purchaseOrder.ID };
                 var receiveRequestProduct = new List<PurchaseItemReceiveRequestProduct>();
                 //List<PurchaseItemReceive> PurchaseItemList = PurchaseItems.GetAll(true).Where(p => p.WarehouseName.Equals(WarehouseData.Name)).ToList();

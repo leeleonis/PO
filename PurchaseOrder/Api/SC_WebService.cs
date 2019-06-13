@@ -332,10 +332,21 @@ namespace SellerCloud_WebService
             return OCS_SellerCloud.OrderItem_Delete(OCS_AuthHeader, OrderID, ItemID);
         }
 
-        public bool Delete_ItemSerials(int OrderID, int ItemID)
-        {
-            
+        public bool Delete_ItemAllSerials(int OrderID, int ItemID)
+        {            
             return OCS_SellerCloud.OrderItem_DeleteAllSerialsByOrderItemID(OCS_AuthHeader, OrderID, ItemID);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ProductID"></param>
+        /// <param name="PurchaseID"></param>
+        /// <param name="WarehouseID"></param>
+        /// <param name="SerialsList"></param>
+        /// <returns></returns>
+        public bool PurchaseItem_DeleteSerials(string ProductID, int PurchaseID, int WarehouseID, string SerialsList)
+        {
+            return PO_SellerCloud.PurchaseItem_DeleteSerials(PO_AuthHeader, ProductID, PurchaseID, WarehouseID, 0, SerialsList);
         }
         /***** 刪除資料 *****/
 
@@ -430,31 +441,38 @@ namespace SellerCloud_WebService
         {
             return PO_SellerCloud.PurchaseItemReceive_AddNew2(PO_AuthHeader, Receive);
         }
-        //public bool Update_PurchaseOrder(Purchase PurchaseOrder)
-        //{
-        //    return PO_SellerCloud.UpdatePurchaseOrder(PO_AuthHeader, PurchaseOrder);
-        //}
+        public bool Update_PurchaseOrder(Purchase PurchaseOrder)
+        {
+            return PO_SellerCloud.UpdatePurchaseOrder(PO_AuthHeader, PurchaseOrder);
+        }
 
         public bool Update_PurchaseOrder_ItemReceive_Serials(PurchaseOrderSys.PurchaseOrderService.PurchaseItemReceiveSerial[] Serials)
         {
             return PO_SellerCloud.PurchaseItem_SerialNumbersNew_SaveMultiple(PO_AuthHeader, Serials);
         }
+        public PurchaseItem PurchaseOrderItems_Update(PurchaseItem PurchaseItem)
+        {
+            return PO_SellerCloud.PurchaseOrderItems_Update(PO_AuthHeader, PurchaseItem);
+        }
+        public bool Delete_PurchaseOrder(int POId)
+        {
+            return PO_SellerCloud.DeletePurchaseOrder(PO_AuthHeader, POId);
+        }
 
-        //public bool Delete_PurchaseOrder(int POId)
-        //{
-        //    return PO_SellerCloud.DeletePurchaseOrder(PO_AuthHeader, POId);
-        //}
+        public bool Delete_PurchaseOrder_ItemReceive(PurchaseItemReceive Receive)
+        {
+            return PO_SellerCloud.PurchaseItemReceive_Delete(PO_AuthHeader, Receive.Id);
+        }
 
-        //public bool Delete_PurchaseOrder_ItemReceive(PurchaseItemReceive Receive)
-        //{
-        //    return PO_SellerCloud.PurchaseItemReceive_Delete(PO_AuthHeader, Receive.Id);
-        //}
-
-        //public bool Delete_PurchaseOrder_ItemReceive_Serials(QDLogistics.PurchaseOrderService.PurchaseItemReceiveSerial[] Serials)
-        //{
-        //    return PO_SellerCloud.PurchaseItem_SerialNumbersNew_DeleteMultiple(PO_AuthHeader, Serials);
-        //}
-
+        public bool Delete_PurchaseOrder_ItemReceive_Serials(PurchaseOrderSys.PurchaseOrderService.PurchaseItemReceiveSerial[] Serials)
+        {
+            return PO_SellerCloud.PurchaseItem_SerialNumbersNew_DeleteMultiple(PO_AuthHeader, Serials);
+        }
+        public PurchaseItemReceive_All_Response PurchaseItemReceiveSerial_All_New(string ProductID, int PONumber)
+        {
+            PurchaseOrderSys.SCService.ServiceOptions ServiceOptions = new PurchaseOrderSys.SCService.ServiceOptions();
+            return OS_SellerCloud.PurchaseItemReceiveSerial_All_New(OS_AuthHeader, ServiceOptions, ProductID, PONumber);
+        }
         public void Dispose()
         {
             Dispose(true);

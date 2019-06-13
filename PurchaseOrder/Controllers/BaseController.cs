@@ -557,6 +557,42 @@ namespace PurchaseOrderSys.Controllers
             }
         }
         /// <summary>
+        /// 序號用EXCEL檔寫入SC
+        /// </summary>
+        /// <param name="PurchaseOrder"></param>
+        public void CreatSCPObyExcel(PurchaseOrder PurchaseOrder)
+        {
+            CreatAndEditPOSKUbySC(PurchaseOrder);
+            foreach (var SKUitem in PurchaseOrder.PurchaseSKU.Where(x=>x.IsEnable))
+            {
+                CreatAndEditPOSKUbySC(PurchaseOrder);
+                foreach (var Serialitem in SKUitem.SerialsLlist.Where(x=>x.SerialsType=="PO"||x.SerialsType== "DropshpOrderIn"))
+                {
+                    AddSerialToSC(SKUitem, Serialitem.SerialsNo);
+                }
+                if (PurchaseOrder.POType == "DropshpOrder")
+                {
+                    foreach (var Serialitem in SKUitem.SerialsLlist.Where(x => x.SerialsType == "DropshpOrderOut"))
+                    {
+                        DelSerialToSC(SKUitem, Serialitem.SerialsNo);
+                    }
+                }
+            }
+        }
+        /// <summary>
+        /// SC批次寫入序號
+        /// </summary>
+        /// <param name="purchaseSKU"></param>
+        /// <param name="excelSerialslist"></param>
+        public void AddSerialListToSC(PurchaseSKU purchaseSKU, List<string> excelSerialslist)
+        {
+            foreach (var Serialitem in excelSerialslist)
+            {
+                AddSerialToSC(purchaseSKU, Serialitem);
+            }
+        }
+
+        /// <summary>
         /// 已出貨的訂單
         /// </summary>
         /// <param name="OrderID">訂單號</param>
@@ -1206,8 +1242,137 @@ namespace PurchaseOrderSys.Controllers
                     //WNoList.AddRange(SerialsLlist.Select(x => x.ID));
                 }
             }
-
             return count;
+        }
+        /// <summary>
+        /// 建立PO單內的SKU,如果沒資料就新增，有數量就修改
+        /// </summary>
+        /// <param name="nPurchaseOrder"></param>
+        public void CreatAndEditPOSKUbySC(PurchaseOrder nPurchaseOrder)
+        {
+            if (nPurchaseOrder.SCPurchaseID.HasValue)
+            {
+                var SCPurchase = SCWS.Get_PurchaseOrder(nPurchaseOrder.SCPurchaseID.Value);
+                foreach (var skuitem in nPurchaseOrder.PurchaseSKU)
+                {
+                    var Products = SCPurchase.Products.Where(x => x.ProductID == skuitem.SkuNo);
+                    if (!Products.Any())
+                    {
+                        var newPurchaseItem = SCWS.Create_PurchaseOrder_Item(new PurchaseOrderService.PurchaseItem()
+                        {
+                            PurchaseID = SCPurchase.ID,
+                            ProductID = skuitem.SkuNo,//SKU
+                            ProductName = skuitem.Name,
+                            UPC = skuitem.UPCEAN,
+                            QtyOrdered = skuitem.QTYOrdered ?? 0,
+                            QtyReceived = 0,
+                            QtyReceivedToDate = 0,
+                            DefaultWarehouseID = SCPurchase.DefaultWarehouseID
+                        });
+                    }
+                    else
+                    {
+                        var Product = Products.FirstOrDefault();
+                        if (Product.QtyOrdered != skuitem.QTYOrdered)
+                        {
+                            Product.QtyOrdered = skuitem.QTYOrdered ?? 0;
+                            var UpProduct = SCWS.PurchaseOrderItems_Update(Product);
+                        }
+                    }
+                }
+            }
+        }
+        /// <summary>
+        /// 建立SC的PO單
+        /// </summary>
+        /// <param name="nPurchaseOrder"></param>
+        /// <returns></returns>
+        public PurchaseOrderService.Purchase CreatPObySC(PurchaseOrder nPurchaseOrder)
+        {
+
+            //SCWS = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
+            var WarehouseID = 0;
+            var Warehouse = db.Warehouse.Find(nPurchaseOrder.WarehouseID);
+            var SCID = Warehouse.WarehouseSummary.Where(x => x.Type == "SCID").FirstOrDefault().Val;
+            var VendorID = db.VendorLIst.Find(nPurchaseOrder.VendorID).SCID;
+            int.TryParse(SCID, out WarehouseID);
+            var newPurchase = SCWS.Create_PurchaseOrder(new PurchaseOrderService.Purchase()//建立PO表頭
+            {
+                ID = 0,
+                CompanyID = nPurchaseOrder.CompanyID.Value,
+                Priority = PurchaseOrderService.PriorityCodeType.Normal,
+                Status = PurchaseOrderService.PurchaseStatus.Ordered,
+                PurchaseTitle = "PO:" + nPurchaseOrder.ID,
+                VendorID = VendorID ?? 0,
+                VendorInvoiceNumber = nPurchaseOrder.VendorLIst.VendorNo,
+                //Memo = nPurchaseOrder.Memo,
+                DefaultWarehouseID = WarehouseID,
+                CreatedBy = SCWS.UserID,
+                CreatedOn = SCWS.SyncOn
+            });
+            return newPurchase;
+        }
+        /// <summary>
+        /// 序號入庫SC
+        /// </summary>
+        /// <param name="PurchaseSKU"></param>
+        /// <param name="SerialsNo"></param>
+        public void AddSerialToSC(PurchaseSKU PurchaseSKU, string SerialsNo)
+        {
+            var purchaseOrder = SCWS.Get_PurchaseOrder(PurchaseSKU.PurchaseOrder.SCPurchaseID.Value);
+            var receiveRequest = new PurchaseOrderService.PurchaseItemReceiveRequest() { PurchaseID = purchaseOrder.ID };
+            var receiveRequestProduct = new List<PurchaseOrderService.PurchaseItemReceiveRequestProduct>();
+            foreach (var purchaseItem in purchaseOrder.Products.Where(x => x.ProductID == PurchaseSKU.SkuNo))
+            {
+                receiveRequestProduct.Add(new PurchaseOrderService.PurchaseItemReceiveRequestProduct()
+                {
+                    QtyReceived = 1,
+                    WarehouseID = purchaseItem.DefaultWarehouseID,
+                    PurchaseItemID = purchaseItem.ID,
+                    PurchaseID = purchaseItem.PurchaseID
+                });
+
+                PurchaseOrderService.PurchaseItemReceive[] purchaseItemReceive = null;
+                var receiveSerial = new List<PurchaseOrderService.PurchaseItemReceiveSerial>();
+                if (receiveRequestProduct.Any())
+                {
+                    receiveRequest.Products = receiveRequestProduct.ToArray();
+                    purchaseItemReceive = SCWS.Create_PurchaseOrder_ItemReceive(receiveRequest);
+
+                    receiveSerial = new List<PurchaseOrderService.PurchaseItemReceiveSerial>();
+
+                    var Serial_All = SCWS.PurchaseItemReceiveSerial_All_New(purchaseItem.ProductID, purchaseItem.PurchaseID);
+                    if (!Serial_All.SerialsList.Where(x=>x.SerialNumber== SerialsNo).Any())//沒有序號才能新增
+                    {
+                        receiveSerial.Add(new PurchaseOrderService.PurchaseItemReceiveSerial()
+                        {
+                            PurchaseID = purchaseOrder.ID,
+                            WarehouseID = purchaseOrder.DefaultWarehouseID,
+                            ProductID = purchaseItem.ProductID,
+                            PurchaseReceiveID = purchaseItemReceive.FirstOrDefault().Id,
+                            SerialNumber = SerialsNo
+                        });
+                        SCWS.Update_PurchaseOrder_ItemReceive_Serials(receiveSerial.ToArray());
+                    }
+                }
+            }
+        }
+        /// <summary>
+        /// 刪除sc上的序號
+        /// </summary>
+        /// <param name="PurchaseSKU"></param>
+        /// <param name="SerialsNo"></param>
+        public void DelSerialToSC(PurchaseSKU PurchaseSKU, string SerialsNo)
+        {
+            var purchaseOrder = SCWS.Get_PurchaseOrder(PurchaseSKU.PurchaseOrder.SCPurchaseID.Value);
+            foreach (var purchaseItem in purchaseOrder.Products.Where(x => x.ProductID == PurchaseSKU.SkuNo))
+            {
+                var Serial_All = SCWS.PurchaseItemReceiveSerial_All_New(purchaseItem.ProductID, purchaseOrder.ID);
+                if (Serial_All.SerialsList.Where(x => x.SerialNumber == SerialsNo).Any())//有序號才能刪除
+                {
+                    SCWS.PurchaseItem_DeleteSerials(purchaseItem.ProductID, purchaseOrder.ID, purchaseItem.DefaultWarehouseID, SerialsNo);//SC上的序號移除
+                }
+            }
         }
     }
 }

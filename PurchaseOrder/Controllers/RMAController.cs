@@ -629,7 +629,7 @@ namespace PurchaseOrderSys.Controllers
                             {
                                 try
                                 {
-                                    SCWS.Delete_ItemSerials(SCOrderID, item.ID);//SC上的序號移除
+                                    SCWS.Delete_ItemAllSerials(SCOrderID, item.ID);//SC上的序號移除
                                 }
                                 catch (Exception)
                                 {

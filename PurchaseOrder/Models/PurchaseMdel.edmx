@@ -567,6 +567,8 @@
           <Property Name="WarehouseID" Type="int" />
           <Property Name="ShippingCost" Type="decimal" Precision="18" Scale="2" />
           <Property Name="Other" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="SCPurchaseID" Type="int" />
+          <Property Name="Memo" Type="text" />
         </EntityType>
         <EntityType Name="PurchaseSKU">
           <Key>
@@ -972,6 +974,7 @@
           <Property Name="DelAt" Type="datetime" />
           <Property Name="Email" Type="ntext" />
           <Property Name="EmailCC" Type="ntext" />
+          <Property Name="SCID" Type="int" />
         </EntityType>
         <EntityType Name="Warehouse">
           <Key>
@@ -2988,6 +2991,8 @@
           <NavigationProperty Name="PurchaseSKU" Relationship="PurchaseOrderModel.FK_PurchaseSKU_PurchaseOrder" FromRole="PurchaseOrder" ToRole="PurchaseSKU" />
           <NavigationProperty Name="ImgFile" Relationship="PurchaseOrderModel.FK_ImgFile_PurchaseOrder" FromRole="PurchaseOrder" ToRole="ImgFile" />
           <NavigationProperty Name="Company" Relationship="PurchaseOrderModel.FK_PurchaseOrder_Company" FromRole="PurchaseOrder" ToRole="Company" />
+          <Property Name="SCPurchaseID" Type="Int32" />
+          <Property Name="Memo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="PurchaseSKU">
           <Key>
@@ -3185,7 +3190,7 @@
           <Property Name="IsMain" Type="Boolean" Nullable="false" />
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Sku" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="FileName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="FileName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="FileSize" Type="Int32" Nullable="false" />
           <Property Name="Order" Type="Int32" Nullable="false" />
           <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -3257,6 +3262,7 @@
           <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="EmailCC" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Brand" Relationship="PurchaseOrderModel.VendorBrand" FromRole="VendorLIst" ToRole="Brand" />
+          <Property Name="SCID" Type="Int32" />
         </EntityType>
         <EntityType Name="Warehouse">
           <Key>
@@ -4966,6 +4972,8 @@
           <EntitySetMapping Name="PurchaseOrder">
             <EntityTypeMapping TypeName="PurchaseOrderModel.PurchaseOrder">
               <MappingFragment StoreEntitySet="PurchaseOrder">
+                <ScalarProperty Name="Memo" ColumnName="Memo" />
+                <ScalarProperty Name="SCPurchaseID" ColumnName="SCPurchaseID" />
                 <ScalarProperty Name="Other" ColumnName="Other" />
                 <ScalarProperty Name="ShippingCost" ColumnName="ShippingCost" />
                 <ScalarProperty Name="WarehouseID" ColumnName="WarehouseID" />
@@ -5214,6 +5222,7 @@
           <EntitySetMapping Name="VendorLIst">
             <EntityTypeMapping TypeName="PurchaseOrderModel.VendorLIst">
               <MappingFragment StoreEntitySet="VendorLIst">
+                <ScalarProperty Name="SCID" ColumnName="SCID" />
                 <ScalarProperty Name="EmailCC" ColumnName="EmailCC" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="DelAt" ColumnName="DelAt" />

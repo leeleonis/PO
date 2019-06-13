@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using inventorySKU;
 using PurchaseOrderSys.Helpers;
 using OfficeOpenXml;
+using SellerCloud_WebService;
 
 namespace PurchaseOrderSys.Controllers
 {
@@ -23,6 +24,12 @@ namespace PurchaseOrderSys.Controllers
         }
         public ActionResult Create(string POTypeVal = "PurchaseOrder")
         {
+
+            //SCWS = new SC_WebService(ApiUserName, ApiPassword);
+            //var Company = SCWS.Get_AllCompany();
+            //var CompanyID = Company.FirstOrDefault().ID;
+            //var VendorData = SCWS.Get_Vendor_All(CompanyID);
+            //var Vendor = VendorData.Where(x => x.DisplayName.Contains("Senao"));
             Session["SkuNumberList"] = null;
             Session["POPurchaseNote"] = null;
             ViewBag.SID = DateTime.Now.ToString("HHmmss");
@@ -33,25 +40,24 @@ namespace PurchaseOrderSys.Controllers
         [HttpPost]
         public ActionResult Create(PurchaseOrder filter, IEnumerable<HttpPostedFileBase> VendorInvoice, IEnumerable<HttpPostedFileBase> PaymentProofList, string SID)
         {
-            //var PurchaseOrder = new PurchaseOrder
-            //{
-            //    IsEnable = true,
-            //    CompanyID = filter.CompanyID,
-            //    VendorID = filter.VendorID,
-            //    PODate = filter.PODate,
-            //    POStatus = filter.POStatus,
-            //    POType = filter.POType,
-            //    CreateBy = UserBy,
-            //    CreateAt = DateTime.UtcNow
-            //};
-            filter.IsEnable = true;
-            if (!filter.PODate.HasValue)
+            var CreateAt = DateTime.UtcNow;
+            var nPurchaseOrder = new PurchaseOrder
             {
-                filter.PODate = DateTime.Today;
-            }
-            filter.CreateBy = UserBy;
-            filter.CreateAt = DateTime.UtcNow;
-            db.PurchaseOrder.Add(filter);
+                IsEnable = true,
+                WarehouseID=filter.WarehouseID,
+                CompanyID = filter.CompanyID,
+                VendorID = filter.VendorID,
+                PODate = DateTime.Today,
+                POStatus = filter.POStatus,
+                POType = filter.POType,
+                ReceiveStatus=filter.ReceiveStatus,
+                PaymentStatus=filter.PaymentStatus,
+                Currency=filter.Currency,
+                Tax=filter.Tax,
+                CreateBy = UserBy,
+                CreateAt = CreateAt
+            };       
+            db.PurchaseOrder.Add(nPurchaseOrder);
             var dataList = (List<PoSKUVM>)Session["SkuNumberList" + SID];
             if (dataList != null)
             {
@@ -68,11 +74,11 @@ namespace PurchaseOrderSys.Controllers
                     DiscountedPrice = x.DiscountedPrice,
                     Credit = x.Credit,
                     CreateBy = UserBy,
-                    CreateAt = DateTime.UtcNow
+                    CreateAt = CreateAt
                 });
                 foreach (var item in PurchaseSKUlist)
                 {
-                    filter.PurchaseSKU.Add(item);
+                    nPurchaseOrder.PurchaseSKU.Add(item);
                 }
             }
             var PurchaseNoteLlist = (List<PurchaseNote>)Session["POPurchaseNote" + SID];
@@ -85,7 +91,7 @@ namespace PurchaseOrderSys.Controllers
                         item.Note = SaveImg(item.Note, item.NoteType);
                         item.NoteType = "Url";
                     }
-                    filter.PurchaseNote.Add(item);
+                    nPurchaseOrder.PurchaseNote.Add(item);
                 }
             }
 
@@ -97,13 +103,13 @@ namespace PurchaseOrderSys.Controllers
                     if (file != null)
                     {
                         var Url = SaveImg(file);
-                        filter.ImgFile.Add(new ImgFile
+                        nPurchaseOrder.ImgFile.Add(new ImgFile
                         {
                             IsEnable = true,
                             ImgType = "VendorInvoice",
                             Url = Url,
                             CreateBy = UserBy,
-                            CreateAt = DateTime.UtcNow
+                            CreateAt = CreateAt
                         });
                     }
 
@@ -116,13 +122,13 @@ namespace PurchaseOrderSys.Controllers
                     if (file != null)
                     {
                         var Url = SaveImg(file);
-                        filter.ImgFile.Add(new ImgFile
+                        nPurchaseOrder.ImgFile.Add(new ImgFile
                         {
                             IsEnable = true,
                             ImgType = "PaymentProof",
                             Url = Url,
                             CreateBy = UserBy,
-                            CreateAt = DateTime.UtcNow
+                            CreateAt = CreateAt
                         });
                     }
                 }
@@ -131,17 +137,26 @@ namespace PurchaseOrderSys.Controllers
             try
             {
                 db.SaveChanges();
+                //存檔後建立SC的資料
+
+                var SCPurchase = CreatPObySC(nPurchaseOrder);
+                nPurchaseOrder.SCPurchaseID = SCPurchase.ID;
+                db.SaveChanges();
+                CreatAndEditPOSKUbySC(nPurchaseOrder);
+                
             }
             catch (DbEntityValidationException ex)
             {
 
                 var e = ex;
             }
+            catch(Exception ex)
+            {
 
-            return RedirectToAction("EditItem", new { filter.ID });
+            }
+
+            return RedirectToAction("EditItem", new { nPurchaseOrder.ID });
         }
-
-
         public ActionResult GetData(PurchaseOrderPOVM filter, string Type, int? DetailID, int page = 1, int rows = 100)
         {
             if (Type == "Master")
@@ -280,8 +295,8 @@ namespace PurchaseOrderSys.Controllers
                 {
                     x.ID,
                     x.POType,
-                    VendorID = x.VendorID.ToString(),
-                    PODate = x.PODate.Value.ToLocalTime().ToString("yyyy/MM/dd"),
+                    VendorID = x.VendorID?.ToString(),
+                    PODate = x.PODate?.ToLocalTime().ToString("yyyy/MM/dd"),
                     QTY = x.PurchaseSKU.Where(y => y.IsEnable).Sum(y => y.QTYOrdered),
                     QTYReceived = x.PurchaseSKU.Where(y => y.IsEnable).Sum(y => GetQTYReceived(y)),
                     GrandTotal = x.PurchaseSKU.Where(y => y.IsEnable).Sum(y => (y.QTYOrdered * y.Price)),
@@ -311,7 +326,16 @@ namespace PurchaseOrderSys.Controllers
                 {
                     dataList = dataList.Where(x => x.QTYReceived == filter.QTYReceived);
                 }
-                total = dataList.Count();
+                try
+                {
+                    total = dataList.Count();
+                }
+                catch (Exception ex)
+                {
+
+                    throw;
+                }
+                
 
                 int length = rows;
                 int start = (page - 1) * length;
@@ -642,6 +666,8 @@ namespace PurchaseOrderSys.Controllers
             try
             {
                 db.SaveChanges();
+                //檢查SC上的資料
+                CreatAndEditPOSKUbySC(PurchaseOrder);
             }
             catch (Exception ex)
             {
@@ -810,7 +836,6 @@ namespace PurchaseOrderSys.Controllers
                     var nSerialsLlistIn = new SerialsLlist
                     {
                         IsEnable = true,
-                        PurchaseSKUID = PurchaseSKUID,
                         SerialsType = "DropshpOrderIn",
                         SerialsNo = serials,
                         SerialsQTY = 1,
@@ -819,7 +844,7 @@ namespace PurchaseOrderSys.Controllers
                         CreateBy = UserBy,
                         CreateAt = dt
                     };
-                    db.SerialsLlist.Add(nSerialsLlistIn);
+                    PurchaseSKU.SerialsLlist.Add(nSerialsLlistIn);
                     var nSerialsLlistOut = new SerialsLlist
                     {
                         IsEnable = true,
@@ -836,6 +861,8 @@ namespace PurchaseOrderSys.Controllers
                     try
                     {
                         db.SaveChanges();
+                        AddSerialToSC(PurchaseSKU, serials);
+                        DelSerialToSC(PurchaseSKU, serials);
                         return Json(new { status = true }, JsonRequestBehavior.AllowGet);
                     }
                     catch (Exception ex)
@@ -869,7 +896,9 @@ namespace PurchaseOrderSys.Controllers
                     db.SerialsLlist.Add(nSerialsLlist);
                     try
                     {
-                        db.SaveChanges();
+                        //db.SaveChanges();
+                        //SC入庫
+                        AddSerialToSC(PurchaseSKU, serials);
                         return Json(new { status = true }, JsonRequestBehavior.AllowGet);
                     }
                     catch (Exception ex)
@@ -883,7 +912,6 @@ namespace PurchaseOrderSys.Controllers
                 }
             }
         }
-
         [HttpPost]
         public ActionResult CreatNote(int? ID,string SID, string Note)
         {
@@ -1056,7 +1084,7 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult GetSerialList(int ID)
         {
             var PurchaseSKU = db.PurchaseSKU.Find(ID);
-            var SerialsLlist = PurchaseSKU.SerialsLlist.Where(x => x.SerialsType == "PO").Select(x => x.SerialsNo).ToList();
+            var SerialsLlist = PurchaseSKU.SerialsLlist.Where(x => x.SerialsType == "PO"|| x.SerialsType == "DropshpOrderIn").Select(x => x.SerialsNo).ToList();
             var partial = ControlToString("~/Views/Shared/GetSerialList.cshtml", SerialsLlist);
             //var partial = Engine.Razor.RunCompile(template, "templateKey", null, new { Name = "World" });
             return Json(new { status = true, partial }, JsonRequestBehavior.AllowGet);

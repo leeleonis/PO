@@ -147,7 +147,7 @@
                                                         </div>
                                                     </div>
                                                     @{
-                                                        var SerialsLlist = Model.SerialsLlist.Where(x => x.SerialsType == "PO");
+                                                        var SerialsLlist = Model.SerialsLlist.Where(x => x.SerialsType == "PO" || x.SerialsType == "DropshpOrderIn");
                                                     }
                                                     <label>Serial # ( <label id="Serialcount">@SerialsLlist.Count()</label> /@(Model.QTYOrdered ?? 0))</label>
                                                     <ul style="list-style-type:none;list-style-position: inside;padding-left: 0px;padding-left: 0px;" id="SerialList">
