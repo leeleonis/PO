@@ -2,6 +2,7 @@
 @{
     string LangID = ViewData["LangID"].ToString();
     string DefaultLangID = EnumData.DataLangList().First().Key;
+    var AttributeTypeList = (List<SkuAttributeType>)ViewData["AttributeTypeList"];
 }
 
 <table border="0" cellpadding="8" cellspacing="0" style="border-width: 0px;" width="679">
@@ -16,17 +17,19 @@
         </tr>
         @{
             Dictionary<int, int[]> attributeGroup = JsonConvert.DeserializeObject<Dictionary<int, int[]>>(Model.SkuType.AttributeGroup);
-            foreach (SkuAttributeType type in (List<SkuAttributeType>)ViewData["AttributeTypeList"])
+            foreach (var typeID in attributeGroup.Keys.Except(new int[] { 0 }))
             {
-                if (attributeGroup.ContainsKey(type.ID) && attributeGroup[type.ID].Any() && Model.Sku_Attribute.Any(s => attributeGroup[type.ID].Contains(s.AttrID) && s.LangID.Equals(LangID) && s.Html))
+                var type = AttributeTypeList.First(t => t.ID.Equals(typeID));
+                if (attributeGroup[type.ID].Any() && Model.Sku_Attribute.Any(s => attributeGroup[type.ID].Contains(s.AttrID) && s.LangID.Equals(LangID) && s.Html))
                 {
                     <tr>
                         <td align="left" bgcolor="#cccccc" colspan="2">
                             <p style="margin: 3px;"><b><font color="#333333" face="Verdana" style="font-size: 9pt;">@type.Name</font></b></p>
                         </td>
                     </tr>
-                    foreach (var attribute in type.SkuAttribute.Where(a => a.IsEnable && attributeGroup[type.ID].Contains(a.ID)))
+                    foreach (var attrID in attributeGroup[type.ID].Except(new int[] { 0 }))
                     {
+                        var attribute = type.SkuAttribute.First(a => a.ID.Equals(attrID));
                         Sku_Attribute value = Model.Sku_Attribute.FirstOrDefault(s => s.AttrID.Equals(attribute.ID) && s.LangID.Equals(LangID) && s.Html);
                         if (value != null && !string.IsNullOrEmpty(value.Value))
                         {
