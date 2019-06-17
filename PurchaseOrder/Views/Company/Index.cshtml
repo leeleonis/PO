@@ -93,6 +93,11 @@
                         return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
                     }
                 }, {
+                    field: "CompanySCID", title: "SCID", width: 250, align: "center", sortable: false,
+                    formatter: function (value, row, index) {
+                        return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
+                    }
+                }, {
                     field: "Action", title: "Action", width: 80, align: "center", sortable: false,
                     formatter: function (value, row, index) {
                         if (website.IsEmpty(row.IsFilter)) {
@@ -201,7 +206,8 @@
                 RelateID: $("select#RelateID:eq(" + index + ")").val(),
                 CurrencyID: $("select#CurrencyID:eq(" + index + ")").val(),
                 eBayAccountID: $("input#eBayAccountID:eq(" + index + ")").val(),
-                AmazonAccountID: $("input#AmazonAccountID:eq(" + index + ")").val()
+                AmazonAccountID: $("input#AmazonAccountID:eq(" + index + ")").val(),
+                CompanySCID: $("input#CompanySCID:eq(" + index + ")").val()
             }
         }
     </script>

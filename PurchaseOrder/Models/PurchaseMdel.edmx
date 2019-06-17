@@ -196,6 +196,7 @@
           <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
           <Property Name="UpdateAt" Type="datetime" />
           <Property Name="CompanyNo" Type="nvarchar" MaxLength="20" />
+          <Property Name="CompanySCID" Type="int" />
         </EntityType>
         <EntityType Name="Condition">
           <Key>
@@ -550,7 +551,7 @@
           <Property Name="Carrier" Type="nvarchar" MaxLength="20" />
           <Property Name="Tracking" Type="nvarchar" MaxLength="20" />
           <Property Name="InvoiceDate" Type="datetime" />
-          <Property Name="InvoiceNo" Type="nvarchar" MaxLength="20" />
+          <Property Name="InvoiceNo" Type="nvarchar" MaxLength="100" />
           <Property Name="PaymentProof" Type="nvarchar(max)" />
           <Property Name="PaymentStatus" Type="nvarchar" MaxLength="20" />
           <Property Name="PaymentDate" Type="datetime" />
@@ -867,7 +868,7 @@
           <Property Name="IsMain" Type="bit" Nullable="false" />
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Sku" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="FileName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="FileName" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="FileSize" Type="int" Nullable="false" />
           <Property Name="Order" Type="int" Nullable="false" />
           <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
@@ -2965,7 +2966,7 @@
           <Property Name="Carrier" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="Tracking" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="InvoiceDate" Type="DateTime" Precision="3" />
-          <Property Name="InvoiceNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="InvoiceNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="PaymentProof" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="PaymentStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="PaymentDate" Type="DateTime" Precision="3" />
@@ -3190,7 +3191,7 @@
           <Property Name="IsMain" Type="Boolean" Nullable="false" />
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Sku" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="FileName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FileName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="FileSize" Type="Int32" Nullable="false" />
           <Property Name="Order" Type="Int32" Nullable="false" />
           <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -3918,6 +3919,7 @@
           <Property Name="CurrencyID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Currency" Relationship="PurchaseOrderModel.FK_Company_Currency" FromRole="Company" ToRole="Currency" />
           <NavigationProperty Name="Marketplace" Relationship="PurchaseOrderModel.FK_Marketplace_Company" FromRole="Company" ToRole="Marketplace" />
+          <Property Name="CompanySCID" Type="Int32" />
         </EntityType>
         <Association Name="FK_PurchaseOrder_Company">
           <End Type="PurchaseOrderModel.Company" Role="Company" Multiplicity="0..1" />
@@ -5439,6 +5441,7 @@
           <EntitySetMapping Name="Company">
             <EntityTypeMapping TypeName="PurchaseOrderModel.Company">
               <MappingFragment StoreEntitySet="Company">
+                <ScalarProperty Name="CompanySCID" ColumnName="CompanySCID" />
                 <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
                 <ScalarProperty Name="CompanyNo" ColumnName="CompanyNo" />
                 <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />

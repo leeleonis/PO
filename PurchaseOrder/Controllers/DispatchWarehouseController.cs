@@ -461,40 +461,45 @@ namespace PurchaseOrderSys.Controllers
             var SerialsLlistGroup = SerialsLlist.GroupBy(x => x.PurchaseSKU).Select(x => x);
             foreach (var item in SerialsLlistGroup)
             {
-                var SerialsQTY = item.Sum(x => x.SerialsQTY);
-                if (SerialsQTY != 0)
+                if (item != null && item.Any())
                 {
-                    var Serial = item.OrderByDescending(x => x.CreateAt).FirstOrDefault();
-                    ExcelQTYList.Add(new ExcelQTY
+                    var SerialsQTY = item.Sum(x => x.SerialsQTY);
+                    if (SerialsQTY != 0)
                     {
-                        WarehouseID = Serial.PurchaseSKU.PurchaseOrder.WarehouseID,
-                        WarehouseName = Serial.PurchaseSKU.PurchaseOrder.WarehousePO.Name,
-                        SKU = Serial.PurchaseSKU.SkuNo,
-                        SKUName = Serial.PurchaseSKU.SKU.SkuLang.Where(x => x.LangID == "en-US").FirstOrDefault().Name,
-                        QTY = SerialsQTY
-                    });
+                        var Serial = item.OrderByDescending(x => x.CreateAt).FirstOrDefault();
+                        ExcelQTYList.Add(new ExcelQTY
+                        {
+                            WarehouseID = Serial.PurchaseSKU.PurchaseOrder.WarehouseID,
+                            WarehouseName = Serial.PurchaseSKU.PurchaseOrder.WarehousePO.Name,
+                            SKU = Serial.PurchaseSKU.SkuNo,
+                            SKUName = Serial.PurchaseSKU.SKU.SkuLang.Where(x => x.LangID == LangID).FirstOrDefault().Name,
+                            QTY = SerialsQTY
+                        });
 
-                    //sheet1.Cells[index, 5].Value = Serial.SerialsType;
+                        //sheet1.Cells[index, 5].Value = Serial.SerialsType;
+                    }
                 }
             }
-
             var RMASerialsLlist = db.RMASerialsLlist.Where(x => x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable);
             var RMASerialsLlistGroup = RMASerialsLlist.GroupBy(x => x.RMASKU).Select(x => x);
             foreach (var item in RMASerialsLlistGroup)
             {
-                var SerialsQTY = item.Sum(x => x.SerialsQTY);
-                if (SerialsQTY != 0)
+                if (item != null && item.Any())
                 {
-                    var Serial = item.OrderByDescending(x => x.CreateAt).FirstOrDefault();
-                    ExcelQTYList.Add(new ExcelQTY
+                    var SerialsQTY = item.Sum(x => x.SerialsQTY);
+                    if (SerialsQTY != 0)
                     {
-                        WarehouseID = Serial.WarehouseID,
-                        WarehouseName = Serial.Warehouse.Name,
-                        SKU = Serial.RMASKU.SkuNo,
-                        SKUName = Serial.RMASKU.SKU.SkuLang.Where(x => x.LangID == "en-US").FirstOrDefault().Name,
-                        QTY = SerialsQTY
-                    });
-                    //sheet1.Cells[index, 5].Value = Serial.SerialsType;
+                        var Serial = item.OrderByDescending(x => x.CreateAt).FirstOrDefault();
+                        ExcelQTYList.Add(new ExcelQTY
+                        {
+                            WarehouseID = Serial?.WarehouseID,
+                            WarehouseName = Serial?.Warehouse?.Name,
+                            SKU = Serial?.RMASKU?.SkuNo,
+                            SKUName = Serial?.RMASKU?.SKU.SkuLang.Where(x => x.LangID == LangID).FirstOrDefault().Name,
+                            QTY = SerialsQTY
+                        });
+                        //sheet1.Cells[index, 5].Value = Serial.SerialsType;
+                    }
                 }
             }
 
@@ -503,13 +508,13 @@ namespace PurchaseOrderSys.Controllers
             {
                 ExcelQTYList = ExcelQTYList.Where(x => x.WarehouseID == WarehouseID).ToList();
             }
-            foreach (var item in ExcelQTYList.OrderBy(x => x.WarehouseID))
+            foreach (var Gitem in ExcelQTYList.GroupBy(x => new { x.SKU, x.WarehouseID }).OrderBy(x => x.Key.WarehouseID))
             {
-                sheet1.Cells[index, 1].Value = item.WarehouseID;
-                sheet1.Cells[index, 2].Value = item.WarehouseName;
-                sheet1.Cells[index, 3].Value = item.SKU;
-                sheet1.Cells[index, 4].Value = item.SKUName;
-                sheet1.Cells[index, 5].Value = item.QTY;
+                sheet1.Cells[index, 1].Value = Gitem.FirstOrDefault().WarehouseID;
+                sheet1.Cells[index, 2].Value = Gitem.FirstOrDefault().WarehouseName;
+                sheet1.Cells[index, 3].Value = Gitem.FirstOrDefault().SKU;
+                sheet1.Cells[index, 4].Value = Gitem.FirstOrDefault().SKUName;
+                sheet1.Cells[index, 5].Value = Gitem.Sum(x => x.QTY);
                 index++;
             }
             sheet1.Column(1).AutoFit(); //自動欄寬

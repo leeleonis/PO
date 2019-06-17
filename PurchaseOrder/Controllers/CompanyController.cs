@@ -133,15 +133,17 @@ namespace PurchaseOrderSys.Controllers
             if (filter.CurrencyID.HasValue) CompanyFilter = CompanyFilter.Where(c => c.CurrencyID.Equals(filter.CurrencyID.Value));
             if (!string.IsNullOrEmpty(filter.eBayAccountID)) CompanyFilter = CompanyFilter.Where(c => c.eBayAccountID.ToLower().Contains(filter.eBayAccountID.ToLower()));
             if (!string.IsNullOrEmpty(filter.AmazonAccountID)) CompanyFilter = CompanyFilter.Where(c => c.AmazonAccountID.ToLower().Contains(filter.AmazonAccountID.ToLower()));
-            var CompanyList = CompanyFilter.Select(x => new  {
-                AmazonAccountID = x.AmazonAccountID,
-                CompanyNo = x.CompanyNo,
-                eBayAccountID = x.eBayAccountID,
-                ID = x.ID,
-                Name = x.Name,
-                ShadowSuffix = x.ShadowSuffix,
+            var CompanyList = CompanyFilter.Select(x => new
+            {
+                x.AmazonAccountID,
+                x.CompanyNo,
+                x.eBayAccountID,
+                x.ID,
+                x.Name,
+                x.ShadowSuffix,
                 ParentID = x.ParentID.ToString(),
                 RelateID = x.RelateID.ToString(),
+                x.CompanySCID,
                 x.CurrencyID,
                 x.CreateAt
             }).ToList();
@@ -163,7 +165,7 @@ namespace PurchaseOrderSys.Controllers
             AjaxResult result = new AjaxResult();
 
             Company company = db.Company.Find(updateData.ID);
-            SetUpdateData(company, updateData, new string[] { "Name", "ShadowSuffix", "ParentID", "RelateID", "CurrencyID", "eBayAccountID", "AmazonAccountID" });
+            SetUpdateData(company, updateData, new string[] { "Name", "ShadowSuffix", "ParentID", "RelateID", "CurrencyID", "eBayAccountID", "AmazonAccountID", "CompanySCID" });
             db.SaveChanges();
 
             return Json(result, JsonRequestBehavior.AllowGet);

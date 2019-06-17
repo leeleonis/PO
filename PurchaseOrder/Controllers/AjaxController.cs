@@ -1440,11 +1440,118 @@ namespace PurchaseOrderSys.Controllers
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult CreateDropShipPO(DropshpOrderBySC DropshpOrderBySC)
+        {
+            AjaxResult result = new AjaxResult();
+            try
+            {
+                if (DropshpOrderBySC.PuchaseID == 0)//沒有值就新增
+                {
+                    var CreateAt = DateTime.UtcNow;
+                    var CompanyID = db.Company.Where(x => x.CompanySCID == DropshpOrderBySC.CompanyID).FirstOrDefault().ID;
+                    var Vendor = db.VendorLIst.Where(x => x.SCID == DropshpOrderBySC.VendorID).FirstOrDefault();
+                    var WarehouseID = db.WarehouseSummary.Where(x => x.Type == "SCID" && x.Val == DropshpOrderBySC.DefaultWarehouseID.ToString()).FirstOrDefault().WarehouseID;
+                    var nPurchaseOrder = new Models.PurchaseOrder
+                    {
+                        IsEnable = true,
+                        Tracking = DropshpOrderBySC.TrackingNumber,
+                        WarehouseID = WarehouseID,
+                        CompanyID = CompanyID,
+                        VendorID = Vendor.ID,
+                        PODate = DateTime.Today,
+                        POStatus = "Opened",
+                        POType = "DropshpOrder",
+                        Currency = Vendor.Currency,
+                        Tax = Vendor.Tax,
+                        CreateBy = UserBy,
+                        CreateAt = CreateAt
+                    };
+                    foreach (var item in DropshpOrderBySC.Items)
+                    {
+                        var SkuLang = db.SKU.Find(item.Sku).SkuLang.Where(x => x.LangID == LangID).FirstOrDefault();
+                        var nPurchaseSKU = new PurchaseSKU {
+                            IsEnable = true,
+                            Name = SkuLang.Name,
+                            SkuNo = item.Sku,
+                            QTYOrdered = item.Qty,
+                            CreateBy = UserBy,
+                            CreateAt = CreateAt
+                        };
+                        nPurchaseOrder.PurchaseSKU.Add(nPurchaseSKU);
+                        foreach (var SerialNumberitem in item.SerialNumber)
+                        {
+                            var dt = DateTime.UtcNow;
+                            var nSerialsLlistIn = new SerialsLlist
+                            {
+                                IsEnable = true,
+                                SerialsType = "DropshpOrderIn",
+                                SerialsNo = SerialNumberitem,
+                                SerialsQTY = 1,
+                                ReceivedBy = UserBy,
+                                ReceivedAt = dt,
+                                CreateBy = UserBy,
+                                CreateAt = dt
+                            };
+                            nPurchaseSKU.SerialsLlist.Add(nSerialsLlistIn);
+                            var nSerialsLlistOut = new SerialsLlist
+                            {
+                                IsEnable = true,
+                                PurchaseSKUID = nPurchaseSKU.ID,
+                                SerialsType = "DropshpOrderOut",
+                                SerialsNo = SerialNumberitem,
+                                SerialsQTY = -1,
+                                ReceivedBy = UserBy,
+                                ReceivedAt = dt,
+                                CreateBy = UserBy,
+                                CreateAt = dt
+                            };
+                            nSerialsLlistIn.SerialsLlistC.Add(nSerialsLlistOut);
+                        }
+                    }
+                    var SCPurchase = CreatPObySC(nPurchaseOrder);
+                    result.data = SCPurchase;
+                    nPurchaseOrder.SCPurchaseID = SCPurchase.ID;
+                    db.SaveChanges();
+                    CreatAndEditPOSKUbySC(nPurchaseOrder);
+                    foreach (var PurchaseSKU in nPurchaseOrder.PurchaseSKU)
+                    {
+                        foreach (var serial in PurchaseSKU.SerialsLlist.Where(x=>x.SerialsType == "DropshpOrderIn"))
+                        {
+                            AddSerialToSC(PurchaseSKU, serial.SerialsNo);
+                        }
+                    }
+                  
+                }
+                else//有值就更新
+                {
 
-       
+                }
+            }
+            catch (Exception ex)
+            {
+                result.SetError(ex.ToString());
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
     }
-
-
+    public class DropshpOrderBySC
+    {
+        public int PuchaseID { get; set; }
+        public int CompanyID { get; set; }
+        public int VendorID { get; set; }
+        public string PurchaseTitle { get; set; }
+        public int DefaultWarehouseID { get; set; }
+        public string TrackingNumber { get; set; }
+        public string Memo { get; set; }
+        public DropshpOrderBySCItem[] Items { get; set; }
+    }
+    public class DropshpOrderBySCItem
+    {
+        public string Sku { get; set; }
+        public int Qty { get; set; }
+        public string[] SerialNumber { get; set; }
+    }
     public class ShipmentOrder
     {
         public int OrderID { get; set; }

@@ -44,19 +44,23 @@ namespace PurchaseOrderSys.Controllers
             var nPurchaseOrder = new PurchaseOrder
             {
                 IsEnable = true,
-                WarehouseID=filter.WarehouseID,
+                WarehouseID = filter.WarehouseID,
                 CompanyID = filter.CompanyID,
                 VendorID = filter.VendorID,
                 PODate = DateTime.Today,
                 POStatus = filter.POStatus,
                 POType = filter.POType,
-                ReceiveStatus=filter.ReceiveStatus,
-                PaymentStatus=filter.PaymentStatus,
-                Currency=filter.Currency,
-                Tax=filter.Tax,
+                ReceiveStatus = filter.ReceiveStatus,
+                PaymentStatus = filter.PaymentStatus,
+                PaymentDate = filter.PaymentDate,
+                PaidAmount = filter.PaidAmount,
+                Currency = filter.Currency,
+                InvoiceDate = filter.InvoiceDate,
+                InvoiceNo = filter.InvoiceNo,
+                Tax = filter.Tax,
                 CreateBy = UserBy,
                 CreateAt = CreateAt
-            };       
+            };   
             db.PurchaseOrder.Add(nPurchaseOrder);
             var dataList = (List<PoSKUVM>)Session["SkuNumberList" + SID];
             if (dataList != null)
@@ -704,6 +708,7 @@ namespace PurchaseOrderSys.Controllers
             }
             oPurchaseOrder.UpdateAt = UpdateAt;
             oPurchaseOrder.UpdateBy = UserBy;
+            var UpdateSKUList = new List<PurchaseSKU>();
             foreach (var QTYReceiveditem in QTYReceived)
             {
                 if (!string.IsNullOrWhiteSpace(QTYReceiveditem.val))
@@ -713,20 +718,32 @@ namespace PurchaseOrderSys.Controllers
                     {
                         foreach (var item in oPurchaseOrder.PurchaseSKU.Where(x => x.ID == QTYReceiveditem.ID && x.IsEnable))
                         {
+                            
                             item.QTYReceived = val;
                             //產生隨機序號
-                            GetFreeSerials(item, UpdateAt);
+                            UpdateSKUList.Add(GetFreeSerials(item, UpdateAt));
                         }
                     }
 
                 }
             }
             db.SaveChanges();
+            foreach (var PurchaseSKU in UpdateSKUList)//有新增才更新SC
+            {
+                foreach (var serial in PurchaseSKU.SerialsLlist)
+                {
+                    AddSerialToSC(PurchaseSKU, serial.SerialsNo);
+                }
+               
+            }
+
+         
             return View(oPurchaseOrder);
         }
 
-        private void GetFreeSerials(PurchaseSKU PurchaseSKU, DateTime UpdateAt)
+        private PurchaseSKU GetFreeSerials(PurchaseSKU PurchaseSKU, DateTime UpdateAt)
         {
+            var nPurchaseSKU = new PurchaseSKU {SkuNo= PurchaseSKU.SkuNo };
             var count = PurchaseSKU.QTYReceived;
             var SerialsLlistCount = PurchaseSKU.SerialsLlist.Where(x => x.SerialsType == "PO").Count();
             if (count > SerialsLlistCount)
@@ -734,19 +751,22 @@ namespace PurchaseOrderSys.Controllers
                 for (int i = SerialsLlistCount; i < count; i++)
                 {
                     var dt = DateTime.UtcNow;
-                    PurchaseSKU.SerialsLlist.Add(new SerialsLlist
+                    var nSerialsLlist = new SerialsLlist
                     {
                         IsEnable = true,
-                        SerialsNo = "POA" +  PurchaseSKU.ID + dt.ToString("MMddHHmmssfff") + i,
+                        SerialsNo = "POA" + PurchaseSKU.ID + dt.ToString("MMddHHmmssfff") + i,
                         SerialsType = "PO",
                         SerialsQTY = 1,
                         ReceivedBy = UserBy,
                         ReceivedAt = UpdateAt,
                         CreateBy = UserBy,
                         CreateAt = UpdateAt
-                    });
+                    };
+                    PurchaseSKU.SerialsLlist.Add(nSerialsLlist);
+                    nPurchaseSKU.SerialsLlist.Add(nSerialsLlist);
                 }
             }
+            return nPurchaseSKU;
         }
 
         public ActionResult Addserials(int ID)
@@ -896,7 +916,7 @@ namespace PurchaseOrderSys.Controllers
                     db.SerialsLlist.Add(nSerialsLlist);
                     try
                     {
-                        //db.SaveChanges();
+                        db.SaveChanges();
                         //SC入庫
                         AddSerialToSC(PurchaseSKU, serials);
                         return Json(new { status = true }, JsonRequestBehavior.AllowGet);
