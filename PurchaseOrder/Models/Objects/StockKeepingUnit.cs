@@ -113,8 +113,8 @@ namespace PurchaseOrderSys.Models
                             Type = (byte)EnumData.SkuType.Single,
                             Condition = condition.ID,
                             ParentShadow = skuData.SkuID,
-                            CreateAt = skuData.UpdateAt.Value,
-                            CreateBy = skuData.UpdateBy
+                            CreateAt = skuData.UpdateAt ?? skuData.CreateAt,
+                            CreateBy = skuData.UpdateBy ?? skuData.CreateBy
                         };
                     }
 
@@ -127,8 +127,8 @@ namespace PurchaseOrderSys.Models
                             sku_suffix.Logistic = new Logistic()
                             {
                                 Sku = sku_suffix.SkuID,
-                                CreateAt = skuData.UpdateAt.Value,
-                                CreateBy = skuData.UpdateBy
+                                CreateAt = skuData.UpdateAt ?? skuData.CreateAt,
+                                CreateBy = skuData.UpdateBy ?? skuData.CreateBy
                             };
                         }
                         LogisticInherit(sku_suffix.Logistic, skuData.Logistic);
