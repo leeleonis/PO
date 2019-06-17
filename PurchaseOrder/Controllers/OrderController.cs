@@ -47,7 +47,10 @@ namespace PurchaseOrderSys.Controllers
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
             Order order = db.Order.Find(id);
+
             if (order == null) return HttpNotFound();
+
+            ViewBag.CompanyList = db.Company.Where(c => c.IsEnable).OrderBy(c => c.Name).Select(c => new SelectListItem() { Text = c.Name, Value = c.ID.ToString() }).ToList();
 
             return View(order);
         }
@@ -57,7 +60,7 @@ namespace PurchaseOrderSys.Controllers
         // 詳細資訊，請參閱 https://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "IsEnable,IsRush,ID,OrderParent,OrderSourceID,SCID,Company,OrderType,OrderStatus,OrderDate,PaymentStatus,PaymentDate,FulfillmentStatus,FulfilledDate,Update_by,Update_at,Create_by,Create_at")] Order order)
+        public ActionResult Edit(Order order)
         {
             if (ModelState.IsValid)
             {

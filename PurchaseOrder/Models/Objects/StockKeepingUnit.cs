@@ -363,7 +363,7 @@ namespace PurchaseOrderSys.Models
                     {
                         result = result && SC_Api.Update_ProductFullInfo(new ProductFullInfo()
                         {
-                            ID = skuData.SkuID + company.ShandowSuffix,
+                            ID = skuData.SkuID + company.ShadowSuffix,
                             CompanyID = company.ID,
                             ProductName = skuLang.Name,
                             ProductTypeID = skuData.SkuType.SCID.Value,
@@ -472,7 +472,7 @@ namespace PurchaseOrderSys.Models
                     {
                         result = result && SC_Api.Create_ProductFullInfo(new ProductFullInfo()
                         {
-                            ID = newSku.ID + company.ShandowSuffix,
+                            ID = newSku.ID + company.ShadowSuffix,
                             CompanyID = company.ID,
                             ProductName = skuLang.Name,
                             ProductTypeID = newSku.ProductTypeID,

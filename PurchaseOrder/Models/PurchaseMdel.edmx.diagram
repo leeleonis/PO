@@ -136,6 +136,7 @@
         <AssociationConnector Association="PurchaseOrderModel.FK_RMAOrderSerialsLlist_RMASKU1" />
         <AssociationConnector Association="PurchaseOrderModel.FK_CreditMemo_RMA" />
         <EntityTypeShape EntityType="PurchaseOrderModel.Order" Width="1.5" PointX="29.625" PointY="1.5" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_Order_Company" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -7587,6 +7587,7 @@
     <Content Include="Views\RMA\Returnedserials.cshtml" />
     <Content Include="Views\RMA\GetOrderList.cshtml" />
     <Content Include="Views\Order\Edit.cshtml" />
+    <Content Include="Views\Order\_PackageDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

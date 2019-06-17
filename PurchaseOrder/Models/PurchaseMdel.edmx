@@ -185,7 +185,7 @@
           <Property Name="IsEnable" Type="bit" Nullable="false" />
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="ShandowSuffix" Type="nvarchar" MaxLength="10" />
+          <Property Name="ShadowSuffix" Type="nvarchar" MaxLength="10" />
           <Property Name="ParentID" Type="int" />
           <Property Name="RelateID" Type="int" />
           <Property Name="eBayAccountID" Type="nvarchar" MaxLength="50" />
@@ -415,6 +415,7 @@
           <Property Name="OrderSourceID" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="SCID" Type="int" Nullable="false" />
           <Property Name="Company" Type="int" Nullable="false" />
+          <Property Name="Channel" Type="tinyint" Nullable="false" />
           <Property Name="OrderType" Type="tinyint" Nullable="false" />
           <Property Name="OrderStatus" Type="tinyint" Nullable="false" />
           <Property Name="OrderDate" Type="datetime" Nullable="false" />
@@ -530,6 +531,7 @@
           <Property Name="Sku" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="ItemID" Type="nvarchar" MaxLength="50" />
           <Property Name="Marketplace" Type="int" />
+          <Property Name="CurrentPrice" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="Price" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="Max" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="Min" Type="decimal" Precision="18" Scale="2" Nullable="false" />
@@ -853,7 +855,7 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="IsEnable" Type="bit" Nullable="false" />
-          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Order" Type="int" Nullable="false" />
           <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
@@ -873,6 +875,8 @@
           <Property Name="Description" Type="text" />
           <Property Name="PackageContent" Type="text" />
           <Property Name="SpecContent" Type="text" />
+          <Property Name="KeyFeature" Type="text" />
+          <Property Name="FeatureContent" Type="text" />
           <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="CreateAt" Type="datetime" Nullable="false" />
           <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
@@ -885,13 +889,14 @@
           <Property Name="IsMain" Type="bit" Nullable="false" />
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Sku" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="FileName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="FileName" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="FileSize" Type="int" Nullable="false" />
           <Property Name="Order" Type="int" Nullable="false" />
           <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="CreateAt" Type="datetime" Nullable="false" />
           <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
           <Property Name="UpdateAt" Type="datetime" />
+          <Property Name="PictureType" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="SkuType">
           <Key>
@@ -1288,6 +1293,18 @@
             </Principal>
             <Dependent Role="NetoGroup">
               <PropertyRef Name="CurrencyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_Company">
+          <End Role="Company" Type="Self.Company" Multiplicity="1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="Company" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2042,6 +2059,10 @@
             <End Role="Currency" EntitySet="Currency" />
             <End Role="NetoGroup" EntitySet="NetoGroup" />
           </AssociationSet>
+          <AssociationSet Name="FK_Order_Company" Association="Self.FK_Order_Company">
+            <End Role="Company" EntitySet="Company" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
           <AssociationSet Name="FK_OrderLog_Warehouse" Association="Self.FK_OrderLog_Warehouse">
             <End Role="Warehouse" EntitySet="Warehouse" />
             <End Role="OrderLog" EntitySet="OrderLog" />
@@ -2594,6 +2615,10 @@
             <End Role="CreditMemo" EntitySet="CreditMemo" />
           </AssociationSet>
           <EntitySet Name="Order" EntityType="PurchaseOrderModel.Order" />
+          <AssociationSet Name="FK_Order_Company" Association="PurchaseOrderModel.FK_Order_Company">
+            <End Role="Company" EntitySet="Company" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="AdminGroup">
           <Key>
@@ -3160,7 +3185,7 @@
           <Property Name="IsMain" Type="Boolean" Nullable="false" />
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Sku" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="FileName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FileName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="FileSize" Type="Int32" Nullable="false" />
           <Property Name="Order" Type="Int32" Nullable="false" />
           <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -3168,6 +3193,7 @@
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
           <NavigationProperty Name="GetSku" Relationship="PurchaseOrderModel.FK_SkuPicture_Sku" FromRole="SkuPicture" ToRole="SKU" />
+          <Property Name="PictureType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="SkuTypeLang">
           <Key>
@@ -3693,6 +3719,8 @@
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
           <NavigationProperty Name="GetSku" Relationship="PurchaseOrderModel.FK_SkuLang_Sku" FromRole="SkuLang" ToRole="SKU" />
+          <Property Name="KeyFeature" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="FeatureContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK_SkuLang_Sku">
           <End Type="PurchaseOrderModel.SKU" Role="SKU" Multiplicity="1" />
@@ -3801,6 +3829,7 @@
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
           <NavigationProperty Name="GetMarket" Relationship="PurchaseOrderModel.FK_PriceGroup_Marketplace" FromRole="PriceGroup" ToRole="Marketplace" />
           <NavigationProperty Name="GetSku" Relationship="PurchaseOrderModel.FK_PriceGroup_SKU" FromRole="PriceGroup" ToRole="SKU" />
+          <Property Name="CurrentPrice" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="Marketplace">
           <Key>
@@ -3867,7 +3896,7 @@
           <Property Name="IsEnable" Type="Boolean" Nullable="false" />
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ShandowSuffix" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="ShadowSuffix" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="ParentID" Type="Int32" />
           <Property Name="RelateID" Type="Int32" />
           <Property Name="eBayAccountID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -3882,6 +3911,7 @@
           <Property Name="CurrencyID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Currency" Relationship="PurchaseOrderModel.FK_Company_Currency" FromRole="Company" ToRole="Currency" />
           <NavigationProperty Name="Marketplace" Relationship="PurchaseOrderModel.FK_Marketplace_Company" FromRole="Company" ToRole="Marketplace" />
+          <NavigationProperty Name="Order" Relationship="PurchaseOrderModel.FK_Order_Company" FromRole="Company" ToRole="Order" />
         </EntityType>
         <Association Name="FK_PurchaseOrder_Company">
           <End Type="PurchaseOrderModel.Company" Role="Company" Multiplicity="0..1" />
@@ -4624,6 +4654,7 @@
           <Property Name="OrderSourceID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="SCID" Type="Int32" Nullable="false" />
           <Property Name="Company" Type="Int32" Nullable="false" />
+          <Property Name="Channel" Type="Byte" Nullable="false" />
           <Property Name="OrderType" Type="Byte" Nullable="false" />
           <Property Name="OrderStatus" Type="Byte" Nullable="false" />
           <Property Name="OrderDate" Type="DateTime" Nullable="false" Precision="3" />
@@ -4635,7 +4666,20 @@
           <Property Name="Update_at" Type="DateTime" Precision="3" />
           <Property Name="Create_by" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Create_at" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="GetCompany" Relationship="PurchaseOrderModel.FK_Order_Company" FromRole="Order" ToRole="Company" />
         </EntityType>
+        <Association Name="FK_Order_Company">
+          <End Type="PurchaseOrderModel.Company" Role="Company" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.Order" Role="Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="Company" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -5153,6 +5197,7 @@
           <EntitySetMapping Name="SkuPicture">
             <EntityTypeMapping TypeName="PurchaseOrderModel.SkuPicture">
               <MappingFragment StoreEntitySet="SkuPicture">
+                <ScalarProperty Name="PictureType" ColumnName="PictureType" />
                 <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
                 <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
                 <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
@@ -5313,6 +5358,8 @@
           <EntitySetMapping Name="SkuLang">
             <EntityTypeMapping TypeName="PurchaseOrderModel.SkuLang">
               <MappingFragment StoreEntitySet="SkuLang">
+                <ScalarProperty Name="FeatureContent" ColumnName="FeatureContent" />
+                <ScalarProperty Name="KeyFeature" ColumnName="KeyFeature" />
                 <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
                 <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
                 <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
@@ -5378,6 +5425,7 @@
           <EntitySetMapping Name="PriceGroup">
             <EntityTypeMapping TypeName="PurchaseOrderModel.PriceGroup">
               <MappingFragment StoreEntitySet="PriceGroup">
+                <ScalarProperty Name="CurrentPrice" ColumnName="CurrentPrice" />
                 <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
                 <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
                 <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
@@ -5415,6 +5463,7 @@
           <EntitySetMapping Name="Company">
             <EntityTypeMapping TypeName="PurchaseOrderModel.Company">
               <MappingFragment StoreEntitySet="Company">
+                <ScalarProperty Name="ShadowSuffix" ColumnName="ShadowSuffix" />
                 <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
                 <ScalarProperty Name="CompanyNo" ColumnName="CompanyNo" />
                 <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
@@ -5425,7 +5474,6 @@
                 <ScalarProperty Name="eBayAccountID" ColumnName="eBayAccountID" />
                 <ScalarProperty Name="RelateID" ColumnName="RelateID" />
                 <ScalarProperty Name="ParentID" ColumnName="ParentID" />
-                <ScalarProperty Name="ShandowSuffix" ColumnName="ShandowSuffix" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
@@ -5698,6 +5746,7 @@
           <EntitySetMapping Name="Order">
             <EntityTypeMapping TypeName="PurchaseOrderModel.Order">
               <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="Channel" ColumnName="Channel" />
                 <ScalarProperty Name="FulfilledDate" ColumnName="FulfilledDate" />
                 <ScalarProperty Name="FulfillmentStatus" ColumnName="FulfillmentStatus" />
                 <ScalarProperty Name="OrderType" ColumnName="OrderType" />

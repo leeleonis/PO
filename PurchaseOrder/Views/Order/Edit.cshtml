@@ -4,6 +4,10 @@
         .middle {
             vertical-align: middle !important;
         }
+
+        #list-package span.text + input.input {
+            display: none;
+        }
     </style>
 }
 
@@ -18,7 +22,7 @@
 
                         <h2>編輯</h2>
                         <ul class="nav nav-tabs pull-right">
-                            <li><a data-toggle="tab" href="#hb1">基本資料</a></li>
+                            <li><a data-toggle="tab" href="#hb1">訂單資料</a></li>
                         </ul>
                     </header>
 
@@ -31,37 +35,260 @@
                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                     <div class="tab-pane" id="hb1">
                                         <fieldset>
-                                            <legend>基本資料</legend>
+                                            <legend>訂單資料</legend>
 
                                             <div class="form-group">
-                                                @Html.LabelFor(model => model.OrderParent, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-3">
-                                                    @Html.EditorFor(model => model.OrderParent, new { htmlAttributes = new { @class = "form-control" } })
-                                                    @Html.ValidationMessageFor(model => model.OrderParent, "", new { @class = "text-danger" })
-                                                </div>
-                                            </div>
+                                                <div class="col-sm-10">
+                                                    <div class="form-group">
+                                                        <div class="col-sm-4">
+                                                            <table class="table table-bordered text-center">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="text-center" colspan="2">Order</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tr>
+                                                                    <td width="130">Order #：</td>
+                                                                    <td>@Model.ID</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Order Type：</td>
+                                                                    <td>@EnumData.OrderTypeList()[Model.OrderType]</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Company：</td>
+                                                                    <td>@Model.GetCompany.Name)</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Channel：</td>
+                                                                    <td>@EnumData.OrderChannelList()[Model.Channel]</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Source Order #：</td>
+                                                                    <td>@Model.OrderSourceID</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Rush Order：</td>
+                                                                    <td class="no-padding">@Html.DropDownListFor(Model => Model.IsRush, Enum.GetValues(typeof(EnumData.YesNo)).Cast<EnumData.YesNo>().Select(s => new SelectListItem() { Text = s.ToString(), Value = (byte)s == 1 ? bool.TrueString : bool.FalseString }), htmlAttributes: new { @class = "form-control" })</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>SC Order #：</td>
+                                                                    <td>@Model.SCID</td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
 
-                                            <div class="form-group">
-                                                @Html.LabelFor(model => model.Company, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownList("Company", (IEnumerable<SelectListItem>)ViewBag.CompanyList, htmlAttributes: new { @class = "form-control" })
-                                                </div>
-                                            </div>
-                                        </fieldset>
-                                        <fieldset>
-                                            <legend>Package Content</legend>
+                                                        <div class="col-sm-4 col-lg-3 col-lg-offset-1">
+                                                            <table class="table table-bordered text-center">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="text-center" colspan="2">Sold To</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td colspan="2" rowspan="8" class="no-padding">
+                                                                            <textarea class="form-control" style="font-size:20px;" rows="8" readonly></textarea>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
 
-                                            <div class="col-sm-6 col-lg-3">
-                                                <div class="table-responsive col-sm-12">
-                                                    <table class="table table-bordered table-striped text-center">
+                                                        <div class="col-sm-4 col-lg-3 col-lg-offset-1">
+                                                            <table class="table table-bordered">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="text-center" colspan="2">
+                                                                            Ship To
+                                                                            <div style="position: absolute;top: 2px;right: 16px;">
+                                                                                <button type="button" class="btn btn-default btn-sm" onclick="$(this).parent('div').hide().siblings('div').show(); $('#address-ship').show().siblings('tbody').hide();">Edit</button>
+                                                                            </div>
+                                                                            <div style="position: absolute;top: 2px;right: 16px;display: none;">
+                                                                                <button type="button" class="btn btn-default btn-sm" onclick="$('#address-ship').find('input').each(function (i, input) { $(input).val($(input).data('reset'));});">Reset</button>
+                                                                                <button type="button" class="btn btn-default btn-sm" onclick="$(this).parent('div').hide().siblings('div').show(); $('#address-ship').hide().siblings('tbody').show();">Save</button>
+                                                                            </div>
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td colspan="2" rowspan="8" class="no-padding">
+                                                                            <textarea class="form-control" style="font-size:20px;" rows="8" readonly></textarea>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                                <tbody id="address-ship" style="display:none;">
+                                                                    <tr>
+                                                                        <td width="123">First Name：</td>
+                                                                        <td class="no-padding"><input type="text" class="form-control" data-reset="123" /></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Last Name：</td>
+                                                                        <td class="no-padding"><input type="text" class="form-control" /></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Address Line 1：</td>
+                                                                        <td class="no-padding"><input type="text" class="form-control" /></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Address Line 2：</td>
+                                                                        <td class="no-padding"><input type="text" class="form-control" /></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>City：</td>
+                                                                        <td class="no-padding"><input type="text" class="form-control" /></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>State：</td>
+                                                                        <td class="no-padding"><input type="text" class="form-control" /></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Postcode：</td>
+                                                                        <td class="no-padding"><input type="text" class="form-control" /></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Country：</td>
+                                                                        <td class="no-padding"><input type="text" class="form-control" /></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <div class="col-sm-8 col-lg-5">
+                                                            <table class="table table-bordered">
+                                                                <tr>
+                                                                    <td width="164">Customer User ID：</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Customer User Email:：</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+
+                                                        <div class="col-sm-4 col-lg-offset-1">
+                                                            <div class="input-group input-group-lg">
+                                                                <span class="input-group-addon">Shipping Actions</span>
+                                                                <select class="form-control">
+                                                                    <optgroup label="Normal">
+                                                                        <option value="1">Split package</option>
+                                                                        <option value="2">Split carrier box</option>
+                                                                        <option value="3">Combine</option>
+                                                                    </optgroup>
+                                                                    <option value="4">Cancel Dispatch</option>
+                                                                    <optgroup label="Shipped">
+                                                                        <option value="5">Create RMA</option>
+                                                                        <option value="6">Create Replacement</option>
+                                                                    </optgroup>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group" id="list-package">
+                                                        @{
+                                                            Html.RenderPartial("_PackageDetail");
+                                                        }
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-2">
+                                                    <table class="table table-bordered">
+                                                        <tr>
+                                                            <td width="120">Order Date：</td>
+                                                            <td>@Model.OrderDate.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Payment Date：</td>
+                                                            <td>@(Model.PaymentDate?.ToString("dd/MM/yyyy HH:mm:ss") ?? "")</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Fulfilled Date：</td>
+                                                            <td>@(Model.FulfilledDate?.ToString("dd/MM/yyyy HH:mm:ss") ?? "")</td>
+                                                        </tr>
+                                                    </table>
+
+                                                    <table class="table table-bordered">
                                                         <thead>
                                                             <tr>
-                                                                <th class="text-center">Content</th>
-                                                                <th width="50"><button type="button" class="btn btn-default btn-sm" onclick="ContentAdd(null, 0, '');">＋</button></th>
+                                                                <th class="text-center" colspan="2">Status</th>
                                                             </tr>
                                                         </thead>
+                                                        <tr>
+                                                            <td width="120">Order：</td>
+                                                            <td class="no-padding">@Html.DropDownListFor(Model => Model.OrderStatus, EnumData.OrderStatusList().Select(s => new SelectListItem() { Text = s.Value, Value = s.Key.ToString() }), htmlAttributes: new { @class = "form-control" })</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Payment：</td>
+                                                            <td>@EnumData.OrderPaymentStatusList()[Model.PaymentStatus]</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Fulfilled：</td>
+                                                            <td>@Enum.GetName(typeof(EnumData.OrderFulfilledStatus), Model.FulfillmentStatus)</td>
+                                                        </tr>
+                                                    </table>
 
-                                                        <tbody id="list-content"></tbody>
+                                                    <table class="table table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="text-center" colspan="2">Payment</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tr>
+                                                            <td width="134">Status：</td>
+                                                            <td>@EnumData.OrderPaymentStatusList()[Model.PaymentStatus]</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Date：</td>
+                                                            <td></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Gateway：</td>
+                                                            <td></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Total Value：</td>
+                                                            <td></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Shipping：</td>
+                                                            <td></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Insurance：</td>
+                                                            <td></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Grand Total：</td>
+                                                            <td></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Payment Total：</td>
+                                                            <td></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Refund：</td>
+                                                            <td></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Balance：</td>
+                                                            <td></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2">Other Payment Details</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Transaction ID #：</td>
+                                                            <td></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Payment Email：</td>
+                                                            <td></td>
+                                                        </tr>
                                                     </table>
                                                 </div>
                                             </div>
@@ -71,7 +298,7 @@
 
                                 <div class="widget-footer">
                                     <button type="submit" class="btn btn-primary" id="save">儲存</button>
-                                    <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index", "SkuType")'">返回</button>
+                                    @*<button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index", "SkuType")'">返回</button>*@
                                 </div>
                             </form>
                         </div>
@@ -87,6 +314,7 @@
         $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
         $('.tab-pane').eq(hash.substr(1)).addClass('active');
 
+        var $packageList = $('#list-package');
 
         $(document).ready(function () {
         });

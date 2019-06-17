@@ -27,6 +27,7 @@ namespace PurchaseOrderSys.Models
         public string OrderSourceID { get; set; }
         public int SCID { get; set; }
         public int Company { get; set; }
+        public byte Channel { get; set; }
         public byte OrderType { get; set; }
         public byte OrderStatus { get; set; }
         public System.DateTime OrderDate { get; set; }
@@ -38,5 +39,7 @@ namespace PurchaseOrderSys.Models
         public Nullable<System.DateTime> Update_at { get; set; }
         public string Create_by { get; set; }
         public System.DateTime Create_at { get; set; }
+    
+        public virtual Company GetCompany { get; set; }
     }
 }
