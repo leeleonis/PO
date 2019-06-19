@@ -101,41 +101,48 @@ namespace PurchaseOrderSys.Models
         {
             if (skuData.Type.Equals((byte)EnumData.SkuType.Single) && skuData.Condition.Equals(1))
             {
-                foreach (var condition in db.Condition.Where(c => c.IsEnable && !c.ID.Equals(skuData.Condition)).ToList())
+                try
                 {
-                    SKU sku_suffix = db.SKU.Find(skuData.SkuID + condition.Suffix);
-                    if (sku_suffix == null)
+                    foreach (var condition in db.Condition.Where(c => c.IsEnable && !c.ID.Equals(skuData.Condition)).ToList())
                     {
-                        sku_suffix = new SKU()
+                        SKU sku_suffix = db.SKU.Find(skuData.SkuID + condition.Suffix);
+                        if (sku_suffix == null)
                         {
-                            IsEnable = true,
-                            SkuID = skuData.SkuID + condition.Suffix,
-                            Type = (byte)EnumData.SkuType.Single,
-                            Condition = condition.ID,
-                            ParentShadow = skuData.SkuID,
-                            CreateAt = skuData.UpdateAt ?? skuData.CreateAt,
-                            CreateBy = skuData.UpdateBy ?? skuData.CreateBy
-                        };
-                    }
-
-                    SkuInherit(sku_suffix, skuData, skuLang);
-
-                    if(skuData.Logistic != null)
-                    {
-                        if (sku_suffix.Logistic == null)
-                        {
-                            sku_suffix.Logistic = new Logistic()
+                            sku_suffix = new SKU()
                             {
-                                Sku = sku_suffix.SkuID,
+                                IsEnable = true,
+                                SkuID = skuData.SkuID + condition.Suffix,
+                                Type = (byte)EnumData.SkuType.Single,
+                                Condition = condition.ID,
+                                ParentShadow = skuData.SkuID,
                                 CreateAt = skuData.UpdateAt ?? skuData.CreateAt,
                                 CreateBy = skuData.UpdateBy ?? skuData.CreateBy
                             };
                         }
-                        LogisticInherit(sku_suffix.Logistic, skuData.Logistic);
-                    }
-                }
 
-                db.SaveChanges();
+                        SkuInherit(sku_suffix, skuData, skuLang);
+
+                        if (skuData.Logistic != null)
+                        {
+                            if (sku_suffix.Logistic == null)
+                            {
+                                sku_suffix.Logistic = new Logistic()
+                                {
+                                    Sku = sku_suffix.SkuID,
+                                    CreateAt = skuData.UpdateAt ?? skuData.CreateAt,
+                                    CreateBy = skuData.UpdateBy ?? skuData.CreateBy
+                                };
+                            }
+                            LogisticInherit(sku_suffix.Logistic, skuData.Logistic);
+                        }
+                    }
+
+                    db.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("Suffix Error：" + e.InnerException?.Message ?? e.Message);
+                }
             }
         }
 
@@ -258,8 +265,8 @@ namespace PurchaseOrderSys.Models
             childSku.Replenishable = parentSku.Replenishable;
             childSku.Status = parentSku.Status;
             childSku.SerialTracking = parentSku.SerialTracking;
-            childSku.UpdateAt = parentSku.UpdateAt;
-            childSku.UpdateBy = parentSku.UpdateBy;
+            childSku.UpdateAt = parentSku.UpdateAt ?? parentSku.CreateAt;
+            childSku.UpdateBy = parentSku.UpdateBy ?? parentSku.CreateBy;
 
             if (langData != null)
             {
@@ -271,7 +278,13 @@ namespace PurchaseOrderSys.Models
                 }
                 else
                 {
-                    lang = new SkuLang() { Sku = childSku.SkuID, LangID = langData.LangID };
+                    lang = new SkuLang()
+                    {
+                        Sku = childSku.SkuID,
+                        LangID = langData.LangID,
+                        CreateAt = langData.UpdateAt ?? langData.CreateAt,
+                        CreateBy = langData.UpdateBy ?? langData.CreateBy
+                    };
                 }
 
                 lang.Name = langData.Name;
@@ -281,6 +294,8 @@ namespace PurchaseOrderSys.Models
                 lang.SpecContent = lang.SpecContent;
                 lang.FeatureContent = lang.FeatureContent;
                 lang.KeyFeature = lang.KeyFeature;
+                lang.UpdateAt = langData.UpdateAt ?? langData.CreateAt;
+                lang.UpdateBy = langData.UpdateBy ?? langData.CreateBy;
 
                 if (!isExist) childSku.SkuLang.Add(lang);
             }
@@ -298,8 +313,8 @@ namespace PurchaseOrderSys.Models
             origin.ShippingLength = logistic.ShippingLength;
             origin.ShippingWeight = logistic.ShippingWeight;
             origin.ShippingWidth = logistic.ShippingWidth;
-            origin.UpdateAt = logistic.UpdateAt.Value;
-            origin.UpdateBy = logistic.UpdateBy;
+            origin.UpdateAt = logistic.UpdateAt ?? logistic.CreateAt;
+            origin.UpdateBy = logistic.UpdateBy ?? logistic.CreateBy;
         }
 
         public UpdateItemResponseItem UpdateSkuToNeto()

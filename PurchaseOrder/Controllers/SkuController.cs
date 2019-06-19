@@ -466,23 +466,30 @@ namespace PurchaseOrderSys.Controllers
                 db.SaveChanges();
             }
 
-            if (sku.Type.Equals((byte)EnumData.SkuType.Single) && sku.Condition.Equals(1))
+            try
             {
-                using (StockKeepingUnit SKU = new StockKeepingUnit(sku))
+                if (sku.Type.Equals((byte)EnumData.SkuType.Single) && sku.Condition.Equals(1))
                 {
-                    SKU.UpdateSku_Suffix(langData);
-                }
-            }
-            else if (sku.Type.Equals((byte)EnumData.SkuType.Variation))
-            {
-                using (StockKeepingUnit SKU = new StockKeepingUnit())
-                {
-                    foreach (var childSku in db.SKU.Where(s => s.IsEnable && s.ParentSku.Equals(sku.SkuID)))
+                    using (StockKeepingUnit SKU = new StockKeepingUnit(sku))
                     {
-                        SKU.SetSkuData(childSku.SkuID);
-                        SKU.UpdateSku_Suffix();
+                        SKU.UpdateSku_Suffix(langData);
                     }
                 }
+                else if (sku.Type.Equals((byte)EnumData.SkuType.Variation))
+                {
+                    using (StockKeepingUnit SKU = new StockKeepingUnit())
+                    {
+                        foreach (var childSku in db.SKU.Where(s => s.IsEnable && s.ParentSku.Equals(sku.SkuID)))
+                        {
+                            SKU.SetSkuData(childSku.SkuID);
+                            SKU.UpdateSku_Suffix();
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                TempData["ErrorMsg"] = e.InnerException?.Message ?? e.Message;
             }
 
             if (Sync)

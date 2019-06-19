@@ -294,6 +294,7 @@ namespace PurchaseOrderSys.Controllers
                                             Description = item.Description,
                                             PackageContent = item.Misc01,
                                             SpecContent = item.Specifications,
+                                            FeatureContent = item.Features,
                                             CreateAt = sku.CreateAt,
                                             CreateBy = sku.CreateBy
                                         };

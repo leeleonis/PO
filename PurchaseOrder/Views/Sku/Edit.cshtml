@@ -981,10 +981,10 @@
         var $variationList = $('#list-variation'), $kitList = $('#list-kit'), $contentList = $('#list-content'), $featureList = $('#list-feature'), $attributeList = $("#list-attribute"), $attributeTypeList = $('#list-attributeType');
 
         $(document).ready(function () {
-            CKEDITOR.replace('Description', { height: '500px' });
-            CKEDITOR.replace('PackageContent', { height: '500px' });
-            CKEDITOR.replace('FeatureContent', { height: '500px' });
-            CKEDITOR.replace('SpecContent', { height: '1000px' });
+            CKEDITOR.replace('Description', { height: '500px', allowedContent: true });
+            CKEDITOR.replace('PackageContent', { height: '500px', allowedContent: true });
+            CKEDITOR.replace('FeatureContent', { height: '500px', allowedContent: true });
+            CKEDITOR.replace('SpecContent', { height: '1000px', allowedContent: true });
 
             $('#LangID').change(function () {
                 website.AjaxUrl('@Url.Action("GetLangData", "Sku", new { ID = Model.SkuID })', 'get', { LangID: $(this).val() }).done(function (response) {

@@ -53,6 +53,7 @@ namespace PurchaseOrderSys.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Name,ShadowSuffix,ParentID,RelateID,eBayAccountID,AmazonAccountID,CurrencyID")] Company company)
         {
+            company.IsEnable = true;
             company.CreateAt = DateTime.UtcNow;
             company.CreateBy = Session["AdminName"].ToString();
 
