@@ -387,7 +387,7 @@ namespace PurchaseOrderSys.Controllers
         {
             ViewBag.WarehouseID = WarehouseID;
             var SKUName = db.SkuLang.Where(x => x.Sku == SKU && x.LangID == LangID).FirstOrDefault().Name;
-            var RMASerialsLlist = db.RMASerialsLlist.Where(x => x.WarehouseID == WarehouseID && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && (x.RMASKU.SkuNo == SKU || x.NewSkuNo == SKU)).ToList();
+            var RMASerialsLlist = db.RMASerialsLlist.Where(x => x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && (x.RMASKU.SkuNo == SKU || x.NewSkuNo == SKU)).ToList();
             var PurchaseSKU = db.PurchaseSKU.Where(x => x.IsEnable && x.SkuNo == SKU);
             var TransferSKU = db.TransferSKU.Where(x => x.IsEnable && x.SkuNo == SKU);
             var CompanyName = PurchaseSKU.FirstOrDefault()?.PurchaseOrder.Company.Name;

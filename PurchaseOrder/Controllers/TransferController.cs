@@ -169,7 +169,7 @@ namespace PurchaseOrderSys.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(Transfer Transfer, string SID, bool? saveexit)
+        public ActionResult Edit(Transfer Transfer, string SID, bool? saveexit, bool? Requestedval)
         {          
             var dt = DateTime.UtcNow;
             var oTransfer = db.Transfer.Find(Transfer.ID);
@@ -181,6 +181,14 @@ namespace PurchaseOrderSys.Controllers
             if (Transfer.Interim.HasValue) oTransfer.Interim = Transfer.Interim;
             if (!string.IsNullOrWhiteSpace(Transfer.Carrier)) oTransfer.Carrier = Transfer.Carrier;
             if (!string.IsNullOrWhiteSpace(Transfer.Tracking)) oTransfer.Tracking = Transfer.Tracking;
+            if (Requestedval.HasValue&& Requestedval.Value)
+            {
+                if (oTransfer.Status == "Pending")
+                {
+                    oTransfer.Status = "Requested";
+                }
+            }
+
             oTransfer.UpdateBy = UserBy;
             oTransfer.UpdateAt = dt;
 
@@ -852,7 +860,7 @@ namespace PurchaseOrderSys.Controllers
                 var odataList = (List<TranSKUVM>)Session["TSkuNumberList" + SID];
                 foreach (var item in IDList)
                 {
-                    foreach (var odataListitem in odataList.Where(x => x.ID.ToString() == item || x.SKU == item))
+                    foreach (var odataListitem in odataList.Where(x => x.ck.ToString() == item || x.ID.ToString() == item || x.SKU == item))
                     {
                         if (odataListitem.ID.HasValue)
                         {

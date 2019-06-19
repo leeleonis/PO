@@ -141,12 +141,11 @@ namespace PurchaseOrderSys.Controllers
             try
             {
                 db.SaveChanges();
-                //存檔後建立SC的資料
-
-                var SCPurchase = CreatPObySC(nPurchaseOrder);
-                nPurchaseOrder.SCPurchaseID = SCPurchase.ID;
-                db.SaveChanges();
-                CreatAndEditPOSKUbySC(nPurchaseOrder);
+                ////存檔後建立SC的資料
+                //var SCPurchase = CreatPObySC(nPurchaseOrder);
+                //nPurchaseOrder.SCPurchaseID = SCPurchase.ID;
+                //db.SaveChanges();
+                //CreatAndEditPOSKUbySC(nPurchaseOrder);
                 
             }
             catch (DbEntityValidationException ex)
@@ -307,6 +306,7 @@ namespace PurchaseOrderSys.Controllers
                     x.PaidAmount,
                     Balance = x.PurchaseSKU.Where(y => y.IsEnable).Sum(y => (y.QTYOrdered * y.Price)),
                     x.POStatus,
+                    x.Description,
                     CMID= GetCMData(x)
                 });
 
@@ -526,7 +526,7 @@ namespace PurchaseOrderSys.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditItem(PurchaseOrder filter, IEnumerable<HttpPostedFileBase> VendorInvoice, IEnumerable<HttpPostedFileBase> PaymentProofList, bool? saveexit)
+        public ActionResult EditItem(PurchaseOrder filter, IEnumerable<HttpPostedFileBase> VendorInvoice, IEnumerable<HttpPostedFileBase> PaymentProofList, bool? saveexit,bool? UpdateSC)
         {
             var dt = DateTime.UtcNow;
             var PurchaseOrder = db.PurchaseOrder.Find(filter.ID);
@@ -670,12 +670,34 @@ namespace PurchaseOrderSys.Controllers
             try
             {
                 db.SaveChanges();
-                //檢查SC上的資料
-                CreatAndEditPOSKUbySC(PurchaseOrder);
+                if (UpdateSC.HasValue && UpdateSC.Value)
+                {
+                    //檢查SC上的資料
+                    if (!PurchaseOrder.SCPurchaseID.HasValue)
+                    {
+                        var SCPurchase = CreatPObySC(PurchaseOrder);
+                        PurchaseOrder.SCPurchaseID = SCPurchase.ID;
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        UpdatePObySC(PurchaseOrder);
+                    }
+                  
+                    CreatAndEditPOSKUbySC(PurchaseOrder);
+                    foreach (var PurchaseSKU in PurchaseOrder.PurchaseSKU)
+                    {
+                        foreach (var item in PurchaseSKU.SerialsLlist)
+                        {
+                            AddSerialToSC(PurchaseSKU, item.SerialsNo);
+                        }
+
+                    }
+                }
             }
             catch (Exception ex)
             {
-
+                
                 var s = ex.ToString();
             }
             if (saveexit.HasValue && saveexit.Value)

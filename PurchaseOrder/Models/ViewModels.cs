@@ -335,6 +335,15 @@ namespace PurchaseOrderSys.Models
         public int? ID { get; set; }
 
         /// <summary>
+        /// Description
+        /// </summary>
+        [Display(Name = "PurchaseOrder_Description", ResourceType = typeof(App_GlobalResources.Resource))]
+        [MaxLength(100, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+        [DataGrid(Align = "center", Widths = 150, ColumnsType = "input")]
+        public string Description { get; set; }
+
+
+        /// <summary>
         /// 採購單類別 
         /// Purchase Order: 採購單. 款項支出, 貨物支入. 
         /// Dropshp Order: 直發單.款項支出, 貨物支入, 再立即發貨.

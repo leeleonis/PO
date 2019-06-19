@@ -176,6 +176,11 @@
                                                         @Html.EditorFor(model => model.Tracking, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
                                                         @Html.ValidationMessageFor(model => model.Tracking, "", new { @class = "text-danger" })
                                                     </div>
+                                                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.EditorFor(model => model.Description, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                                    </div>
                                                 </div>
                                             </fieldset>
                                             <fieldset>
@@ -447,6 +452,11 @@
                                                     <div class="col-sm-9 col-lg-2">
                                                         @Html.EditorFor(model => model.Tracking, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
                                                         @Html.ValidationMessageFor(model => model.Tracking, "", new { @class = "text-danger" })
+                                                    </div>
+                                                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.EditorFor(model => model.Description, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                                                     </div>
                                                 </div>
                                             </fieldset>

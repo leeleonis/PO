@@ -52,7 +52,6 @@ namespace PurchaseOrderSys.Models
     		/// Title
     		/// </summary>        
     	    [Display(Name = "Transfer_Title", ResourceType = typeof(App_GlobalResources.Resource))]
-            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  Title { get; set; }
     
@@ -61,14 +60,16 @@ namespace PurchaseOrderSys.Models
     		/// From WID
     		/// </summary>        
     	    [Display(Name = "Transfer_FromWID", ResourceType = typeof(App_GlobalResources.Resource))]
-    		public Nullable<int>  FromWID { get; set; }
+            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+            public Nullable<int>  FromWID { get; set; }
     
     		    
     		/// <summary>
     		/// To WID
     		/// </summary>        
     	    [Display(Name = "Transfer_ToWID", ResourceType = typeof(App_GlobalResources.Resource))]
-    		public Nullable<int>  ToWID { get; set; }
+            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+            public Nullable<int>  ToWID { get; set; }
     
     		    
     		/// <summary>
@@ -125,6 +126,7 @@ namespace PurchaseOrderSys.Models
     		/// Interim
     		/// </summary>        
     	    [Display(Name = "Transfer_Interim", ResourceType = typeof(App_GlobalResources.Resource))]
+            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
             public Nullable<int> Interim { get; set; }
     
     		    

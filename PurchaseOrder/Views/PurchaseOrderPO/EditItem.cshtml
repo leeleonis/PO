@@ -191,6 +191,11 @@
                                                         @Html.EditorFor(model => model.Tracking, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
                                                         @Html.ValidationMessageFor(model => model.Tracking, "", new { @class = "text-danger" })
                                                     </div>
+                                                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.EditorFor(model => model.Description, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                                    </div>
                                                 </div>
                                         </fieldset>
                                         <fieldset>
@@ -198,7 +203,14 @@
                                             <div class="form-group">
                                                 @Html.LabelFor(model => model.Warehouse, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownListFor(model => model.WarehouseID, Warehouselist, htmlAttributes: new { @class = "form-control" })
+                                                    @if (Model.PurchaseSKU.Where(x => x.SerialsLlist.Any()).Any())
+                                                    {
+                                                        @Html.DropDownListFor(model => model.WarehouseID, Warehouselist, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.DropDownListFor(model => model.WarehouseID, Warehouselist, htmlAttributes: new { @class = "form-control" })
+                                                    }
                                                     @Html.ValidationMessageFor(model => model.WarehouseID, "", new { @class = "text-danger" })
                                                 </div>
                                             </div>
@@ -485,6 +497,11 @@
                                                     @Html.EditorFor(model => model.Tracking, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
                                                     @Html.ValidationMessageFor(model => model.Tracking, "", new { @class = "text-danger" })
                                                 </div>
+                                                @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new Dictionary<string, object> { { "class", "form-control" } } })
+                                                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                                </div>
                                             </div>
                                         </fieldset>
                                         <fieldset>
@@ -492,7 +509,14 @@
                                             <div class="form-group">
                                                 @Html.LabelFor(model => model.Warehouse, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownListFor(model => model.WarehouseID, Warehouselist, htmlAttributes: new { @class = "form-control" })
+                                                    @if (Model.PurchaseSKU.Where(x => x.SerialsLlist.Any()).Any())
+                                                    {
+                                                        @Html.DropDownListFor(model => model.WarehouseID, Warehouselist, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.DropDownListFor(model => model.WarehouseID, Warehouselist, htmlAttributes: new { @class = "form-control" })
+                                                    }
                                                     @Html.ValidationMessageFor(model => model.WarehouseID, "", new { @class = "text-danger" })
                                                 </div>
                                             </div>
@@ -645,6 +669,7 @@
                                 </div>
 
                                 <div class="widget-footer">
+                                    <button type="button" class="btn btn-primary" id="UpdateSC">更新SC</button>
                                     <button type="button" class="btn btn-info" id="POEmail">Email PO to Vendor</button>
                                     <button type="submit" class="btn btn-primary" id="save">儲存</button>
                                     <button type="button" class="btn btn-primary" id="saveexit">儲存並返回</button>
@@ -1085,7 +1110,13 @@
                 }
 
             });
-
+            $("body").on("click", "#UpdateSC", function () {
+                if (confirm("是否確定更新SC上的資料")) {
+                    $("form").prepend('<input type="hidden" name="UpdateSC" value="true" />');
+                    $(this).prop("disabled", "disabled");
+                    $("form").submit();
+                }
+            });
         });
 
         function Calculation(x, type, SKU, oval, ID) {

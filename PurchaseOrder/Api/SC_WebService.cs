@@ -427,12 +427,18 @@ namespace SellerCloud_WebService
         {
             return PO_SellerCloud.CreateNewPurchaseOrder(PO_AuthHeader, PurchaseOrder);
         }
-
+        public bool UpdatePurchaseOrder(Purchase PurchaseOrder)
+        {
+            return PO_SellerCloud.UpdatePurchaseOrder(PO_AuthHeader, PurchaseOrder);
+        }
         public PurchaseItem Create_PurchaseOrder_Item(PurchaseItem PurchaseItem)
         {
             return PO_SellerCloud.PurchaseOrderItems_CreateNew(PO_AuthHeader, PurchaseItem);
         }
-
+        public PurchaseItem PurchaseOrderItems_Update(PurchaseItem PurchaseItem)
+        {
+            return PO_SellerCloud.PurchaseOrderItems_Update(PO_AuthHeader, PurchaseItem);
+        }
         public PurchaseItemReceive[] Create_PurchaseOrder_ItemReceive(PurchaseItemReceiveRequest Receive)
         {
             return PO_SellerCloud.PurchaseItemReceive_AddNew_Bulk(PO_AuthHeader, Receive);
@@ -449,10 +455,6 @@ namespace SellerCloud_WebService
         public bool Update_PurchaseOrder_ItemReceive_Serials(PurchaseOrderSys.PurchaseOrderService.PurchaseItemReceiveSerial[] Serials)
         {
             return PO_SellerCloud.PurchaseItem_SerialNumbersNew_SaveMultiple(PO_AuthHeader, Serials);
-        }
-        public PurchaseItem PurchaseOrderItems_Update(PurchaseItem PurchaseItem)
-        {
-            return PO_SellerCloud.PurchaseOrderItems_Update(PO_AuthHeader, PurchaseItem);
         }
         public bool Delete_PurchaseOrder(int POId)
         {
@@ -473,6 +475,7 @@ namespace SellerCloud_WebService
             PurchaseOrderSys.SCService.ServiceOptions ServiceOptions = new PurchaseOrderSys.SCService.ServiceOptions();
             return OS_SellerCloud.PurchaseItemReceiveSerial_All_New(OS_AuthHeader, ServiceOptions, ProductID, PONumber);
         }
+        
         public void Dispose()
         {
             Dispose(true);

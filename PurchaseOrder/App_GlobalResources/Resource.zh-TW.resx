@@ -2031,4 +2031,7 @@
   <data name="AddSerialsPictureMsg2" xml:space="preserve">
     <value>若有問題，立即停止入庫作業並且告知主管！</value>
   </data>
+  <data name="PurchaseOrder_Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
 </root>

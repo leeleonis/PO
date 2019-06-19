@@ -271,7 +271,7 @@ namespace PurchaseOrderSys.Controllers
                                 }
                                 else
                                 {
-                                    var sku = SKU.SkuLang.Where(x => x.LangID == "en-US" && x.Sku == SKUNo).FirstOrDefault();
+                                    var sku = SKU.SkuLang.Where(x => x.LangID == LangID && x.Sku == SKUNo).FirstOrDefault();
                                     var ProductName = sku?.Name;
                                     var UPC = sku?.GetSku.UPC + sku?.GetSku.EAN;
                                     var Serial = "";

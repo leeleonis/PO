@@ -570,6 +570,7 @@
           <Property Name="Other" Type="decimal" Precision="18" Scale="2" />
           <Property Name="SCPurchaseID" Type="int" />
           <Property Name="Memo" Type="text" />
+          <Property Name="Description" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="PurchaseSKU">
           <Key>
@@ -2994,6 +2995,7 @@
           <NavigationProperty Name="Company" Relationship="PurchaseOrderModel.FK_PurchaseOrder_Company" FromRole="PurchaseOrder" ToRole="Company" />
           <Property Name="SCPurchaseID" Type="Int32" />
           <Property Name="Memo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="PurchaseSKU">
           <Key>
@@ -4974,6 +4976,7 @@
           <EntitySetMapping Name="PurchaseOrder">
             <EntityTypeMapping TypeName="PurchaseOrderModel.PurchaseOrder">
               <MappingFragment StoreEntitySet="PurchaseOrder">
+                <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Memo" ColumnName="Memo" />
                 <ScalarProperty Name="SCPurchaseID" ColumnName="SCPurchaseID" />
                 <ScalarProperty Name="Other" ColumnName="Other" />

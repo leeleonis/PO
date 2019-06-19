@@ -2878,6 +2878,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查詢類似 Description 的當地語系化字串。
+        /// </summary>
+        public static string PurchaseOrder_Description {
+            get {
+                return ResourceManager.GetString("PurchaseOrder_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 ID 的當地語系化字串。
         /// </summary>
         public static string PurchaseOrder_ID {

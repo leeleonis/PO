@@ -57,6 +57,7 @@ namespace PurchaseOrderSys.Models
         public Nullable<decimal> Other { get; set; }
         public Nullable<int> SCPurchaseID { get; set; }
         public string Memo { get; set; }
+        public string Description { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CMCreditNote> CMCreditNote { get; set; }

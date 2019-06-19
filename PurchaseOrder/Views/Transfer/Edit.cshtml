@@ -94,11 +94,11 @@
                                                             <a class='btn btn-info btn-sm' href="~/File/TransferExample.xlsx">Transfer Example</a>
                                                             <a class='btn btn-danger btn-sm Excel' valID=" @Model.ID">Create by Excel</a>
                                                         </div>
-                                                        <a type="button" href="@Url.Action("Requested", new { Model.ID })" class='btn btn-default btn-sm' id='Request'>Request</a>
+                                                        <button type="button"  class='btn btn-default btn-sm' id='Request'>Request</button>
                                                     }
                                                     else if (Model.Status == "Requested")
                                                     {
-                                                        <a type = "button" href = "@Url.Action("Prep", new { Model.ID })" class='btn btn-default btn-sm' id='Prep'>Prep</a>
+                                                        <a type="button" href="@Url.Action("Prep", new { Model.ID })" class='btn btn-default btn-sm' id='Prep'>Prep</a>
                                                         <a type="button" href="@Url.Action("Requested", new { Model.ID })" class='btn btn-default btn-sm' id='Request'>UnRequest</a>
                                                         <a type="button" href="@Url.Action("PrintAWB", new { Model.ID })" class='btn btn-default btn-sm' id='PrintAWB'>Print AWB</a>
                                                         if (Model.TransferSKU.Where(x => x.IsEnable).Where(x => x.SerialsLlist.Where(y => y.SerialsType == "TransferOut").Any() || x.RMASerialsLlist.Where(y => y.SerialsType == "TransferOut").Any()).Any())
@@ -361,19 +361,19 @@
 
                 }
             });
-            $("#Request").click(function () {
-                var Msg = "";
-                $("table").find("input[type='text']").each(function () {
-                    if ($(this).val() < 1) {
-                        $(this).closest("td").addClass("error");
-                        Msg = "Err"
-                    }
-                })
-                if (Msg == "") {
-                    ajaxpost(this)
-                }
-                return false;
-            });
+            //$("#Request").click(function () {
+            //    var Msg = "";
+            //    $("table").find("input[type='text']").each(function () {
+            //        if ($(this).val() < 1) {
+            //            $(this).closest("td").addClass("error");
+            //            Msg = "Err"
+            //        }
+            //    })
+            //    if (Msg == "") {
+            //        ajaxpost(this)
+            //    }
+            //    return false;
+            //});
             $("#DeleteSKU").click(function () {
                 var dataList = [];
                 $(DataGrid.$('input[type="checkbox"]:checked').each(function () {
@@ -420,6 +420,11 @@
                     }
                 });
                 return false;
+            });
+            $("body").on("click", "#Request", function () {
+                $("form").prepend('<input type="hidden" name="Requestedval" value="true" />');
+                $(this).prop("disabled", "disabled");
+                $("form").submit();
             });
         });
         function ajaxpost(e) {

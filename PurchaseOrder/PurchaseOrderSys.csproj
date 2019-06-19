@@ -239,6 +239,7 @@
     <Compile Include="Controllers\SkuTypeController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\TransferController.cs" />
+    <Compile Include="Controllers\TransferWinitController.cs" />
     <Compile Include="Controllers\VendorController.cs" />
     <Compile Include="Controllers\WarehouseInventoryController.cs" />
     <Compile Include="Controllers\WarehouseController.cs" />
@@ -7587,6 +7588,7 @@
     <Content Include="Views\WarehouseInventory\IndexAll.cshtml" />
     <Content Include="Views\SkuType\_AttributeGroup.cshtml" />
     <Content Include="Views\SkuType\_AttributeType.cshtml" />
+    <Content Include="Views\TransferWinit\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
