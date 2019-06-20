@@ -254,7 +254,11 @@ namespace PurchaseOrderSys.Helpers
                     aHtml.Attributes.Add("href", "http://internal.qd.com.tw:8080/RMA/Edit/" + data.ToString());
                     break;
                 case "SKU Page":
-                    aHtml.Attributes.Add("href", "http://internal.qd.com.tw:8080/Sku/edit/" + data.ToString());
+                    aHtml.Attributes.Add("href", "http://internal.qd.com.tw:8080/Sku/Edit/" + data.ToString());
+                    break;
+                case "TransferIn":
+                case "TransferOut":
+                    aHtml.Attributes.Add("href", "http://internal.qd.com.tw:8080/Transfer/Edit/" + data.ToString());
                     break;
                 default:
                     aHtml.Attributes.Add("href", "javascript:;");

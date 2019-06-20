@@ -60,7 +60,7 @@
                                 @Html.AntiForgeryToken()
                                 <div id="content" class="tab-content">
                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                                    @Html.Hidden("Sync", false);
+                                    @Html.Hidden("Sync", false)
                                     <div class="form-group">
                                         <div class="col-sm-12 col-lg-6 no-padding">
                                             <div class="form-group">
@@ -736,14 +736,15 @@
                                     @{
                                         var SCList = WarehouseList.SelectMany(w => w.WarehouseSummary.Where(ws => ws.IsEnable && ws.Type.Equals("SCID"))).ToDictionary(s => s.Val, s => s.WarehouseID);
                                         var TypeList = new Dictionary<string, string>() { { "PO", "PO" }, { "CM", "Credit Memo" }, { "Order", "Order Dispatch" }, { "TransferOut", "Transfer (Out)" }, { "TransferIn", "Transfer (In)" }, { "RMAIn", "RMA (In)" }, { "Change", "" } };
-                                        var SerialList = PurchaseSku.SelectMany(sku => sku.SerialsLlist).Where(s => !(s.TransferSKUID.HasValue && (!s.TransferSKU.IsEnable || !s.TransferSKU.Transfer.IsEnable))).Select(s => new
+                                        var data = PurchaseSku.SelectMany(sku => sku.SerialsLlist).Where(s => !(s.TransferSKUID.HasValue && (!s.TransferSKU.IsEnable || !s.TransferSKU.Transfer.IsEnable))).Where(s => s.SerialsNo.Equals("352468100952483")).ToList();
+                                        var SerialList = data.Select(s => new
                                         {
                                             SKU = s.PurchaseSKU.SkuNo,
                                             Date = s.CreateAt.ToLocalTime(),
                                             Supplier = s.PurchaseSKU.PurchaseOrder?.VendorLIst.Name ?? s.PurchaseSKU.CreditMemo?.PurchaseOrder.VendorLIst.Name,
                                             Type = s.SerialsType,
-                                            ExtendID = (s.TransferSKUID ?? s.OrderID ?? s.PurchaseSKU.PurchaseOrderID ?? s.PurchaseSKU.CreditMemoID).Value,
-                                            WID = (s.SerialsType.Equals("TransferIn") ? s.TransferSKU.Transfer.ToWID : s.PurchaseSKU.PurchaseOrder?.WarehouseID ?? s.PurchaseSKU.CreditMemo?.PurchaseOrder.WarehouseID).Value,
+                                            ExtendID = (s.TransferSKU?.TransferID ?? s.OrderID ?? s.PurchaseSKU.PurchaseOrderID ?? s.PurchaseSKU.CreditMemoID).Value,
+                                            WID = (s.TransferSKUID.HasValue ? (s.SerialsType.Equals("TransferIn") ? s.TransferSKU.Transfer.ToWID : s.TransferSKU.Transfer.FromWID) : s.PurchaseSKU.PurchaseOrder?.WarehouseID ?? s.PurchaseSKU.CreditMemo?.PurchaseOrder.WarehouseID).Value,
                                             Serial = s.SerialsNo,
                                             QTY = s.SerialsQTY.Value,
                                             Price = s.PurchaseSKU.Price ?? 0,
