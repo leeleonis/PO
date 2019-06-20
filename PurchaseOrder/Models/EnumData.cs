@@ -401,5 +401,6 @@ namespace PurchaseOrderSys.Models
         }
 
         public enum OrderFulfilledStatus { Unfulfilled, Partial, Fulfilled };
+        public enum OrderShippingStatus { Unmanage, Awaiting, Dispatch, Fulfilled }
     }
 }

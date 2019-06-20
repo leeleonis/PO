@@ -51,6 +51,7 @@ namespace PurchaseOrderSys.Controllers
             if (order == null) return HttpNotFound();
 
             ViewBag.CompanyList = db.Company.Where(c => c.IsEnable).OrderBy(c => c.Name).Select(c => new SelectListItem() { Text = c.Name, Value = c.ID.ToString() }).ToList();
+            ViewBag.WarehouseList = db.Warehouse.Where(w => w.IsEnable && w.IsSellable).OrderBy(w => w.Name).Select(w => new SelectListItem() { Text = w.Name, Value = w.ID.ToString() }).ToList();
 
             return View(order);
         }

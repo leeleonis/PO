@@ -5,8 +5,21 @@
             vertical-align: middle !important;
         }
 
-        #list-package span.text + input.input {
+        #list-package > div + div {
+            margin-top: 25px;
+        }
+
+        #list-package > div:not(.edit) td.text span + input, #list-package > div:not(.edit) button.save {
             display: none;
+        }
+
+        #list-package > div.edit td.text {
+            padding: 0px;
+        }
+        
+        #list-package > div.edit td.text span, #list-package > div.edit button.edit {
+            display: none;
+
         }
     </style>
 }
@@ -191,8 +204,55 @@
 
                                                     <div class="form-group" id="list-package">
                                                         @{
-                                                            Html.RenderPartial("_PackageDetail");
+                                                            Html.RenderPartial("_PackageDetail", new ViewDataDictionary { { "WarehouseList", ViewBag.WarehouseList } });
                                                         }
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <div class="col-sm-4">
+                                                            <table class="table table-bordered">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <td>Buyer Note</td>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td class="no-padding">
+                                                                            <textarea class="form-control" style="font-size:20px;" rows="8" readonly></textarea>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        <div class="col-sm-8">
+                                                            <table class="table table-bordered">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <td>Comment</td>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td class="no-padding">
+                                                                            <textarea class="form-control" style="font-size:20px;" rows="8" readonly></textarea>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                                <tfoot>
+                                                                    <tr>
+                                                                        <td class="no-padding">
+                                                                            <div class="input-group">
+                                                                                <input type="text" class="form-control" />
+                                                                                <div class="input-group-btn">
+                                                                                    <button type="button" class="btn btn-default">Add</button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tfoot>
+                                                            </table>
+                                                        </div>
                                                     </div>
                                                 </div>
 
@@ -289,6 +349,35 @@
                                                             <td>Payment Email：</td>
                                                             <td></td>
                                                         </tr>
+                                                    </table>
+
+                                                    <table class="table table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Logs</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td class="no-padding">
+                                                                    <textarea class="form-control" rows="20" readonly>Order: created.
+User/System
+DD/MM/YYY Hr:Min:Sec
+------------------------------
+Order: On Hold.
+User/System
+DD/MM/YYY Hr:Min:Sec
+------------------------------
+Payment: Full.
+User/System
+DD/MM/YYY Hr:Min:Sec
+------------------------------
+Fulfillment: Fulfilled.
+User/System
+DD/MM/YYY Hr:Min:Sec</textarea>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
                                                     </table>
                                                 </div>
                                             </div>

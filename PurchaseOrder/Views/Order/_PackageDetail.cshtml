@@ -2,38 +2,51 @@
     <table class="table table-bordered text-center">
         <thead>
             <tr>
-                <td>Package ID</td>
-                <td>Carrier Box #</td>
-                <td>SKU</td>
+                <td width="120">
+                    <div>
+                        <label class="checkbox" style="padding: 0px; min-height: 17px;">
+                            <input type="checkbox" id="chk-package" value="123" />
+                            <i></i>Package ID
+                        </label>
+                    </div>
+                </td>
+                <td width="100">Carrier Box #</td>
+                <td width="150">SKU</td>
                 <td>Product Name</td>
-                <td>Serials</td>
-                <td>Unit Price</td>
-                <td>QTY</td>
-                <td>Value</td>
-                <td>Currency</td>
-                <td>RMA #</td>
+                <td width="300">Serials</td>
+                <td width="80">Unit Price</td>
+                <td width="50">QTY</td>
+                <td width="100">Value</td>
+                <td width="80">Currency</td>
+                <td width="90">
+                    RMA #
+                    <div style="position: absolute; top: -35px; right: 15px;">
+                        <button type="button" class="btn btn-default btn-sm edit">Edit</button>
+                        <button type="button" class="btn btn-default btn-sm save">Save</button>
+                    </div>
+                </td>
             </tr>
         </thead>
         <tbody>
             <tr data-item="321">
                 <td>123</td>
                 <td>234</td>
-                <td>
-                    <span class="text">123456789</span>
-                    <input type="text" class="form-control input" value="123456789" />
+                <td class="text">
+                    <span>123456789</span>
+                    <input type="text" class="form-control" value="123456789" />
                 </td>
                 <td>SKU Test-1</td>
-                <td>
-                    <span class="text">abcdefghijklmn</span>
-                    <input type="text" class="form-control input" value="abcdefghijklmn" />
+                <td class="text">
+                    <span>abcdefghijklmn</span>
+                    <input type="text" class="form-control" value="abcdefghijklmn" />
                 </td>
-                <td>
-                    <span class="text">345.67</span>
-                    <input type="text" class="form-control input" value="345.67" />
+                <td class="text">
+                    <span>345.67</span>
+                    <input type="text" class="form-control" value="345.67" />
                 </td>
-                <td>
-                    <span class="text">1</span>
-                    <input type="text" class="form-control input" value="1" />
+                <td class="text">
+                    <span>1</span>
+                    <input type="text" class="form-control" value="1" />
                 </td>
                 <td>345.67</td>
                 <td>USA</td>
@@ -41,4 +54,130 @@
             </tr>
         </tbody>
     </table>
+    <div class="form-group">
+        <div class="col-sm-6 col-lg-4">
+            <table class="table table-bordered text-center">
+                <tr>
+                    <td width="33%">Shipping Status</td>
+                    <td>@Enum.GetName(typeof(EnumData.OrderShippingStatus), 3)</td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-sm-6 col-lg-4 col-lg-offset-4">
+            <div class="input-group">
+                <span class="input-group-addon">Warehouse</span>
+                @Html.DropDownList("Warehouse", (List<SelectListItem>)ViewData["WarehouseList"], htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-6 col-lg-3">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-center" colspan="2">Export Settings</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td width="126">Export：</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Export Method：</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Export Value：</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Currency：</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-center" colspan="2">Shipping Settings</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td width="189">Default Shipping Method：</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Shipping Method：</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Upload Tracking：</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Tracking：</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-center" colspan="2">DL Export Settings</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td width="151">DL Export：</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>DL Export Method：</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>DL Export Value：</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>DL Export Currency：</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-center" colspan="2">DL Shipping Settings</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td width="141">First Mile：</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Shipping Method：</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Upload Tracking：</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Tracking：</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
