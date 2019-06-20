@@ -736,8 +736,7 @@
                                     @{
                                         var SCList = WarehouseList.SelectMany(w => w.WarehouseSummary.Where(ws => ws.IsEnable && ws.Type.Equals("SCID"))).ToDictionary(s => s.Val, s => s.WarehouseID);
                                         var TypeList = new Dictionary<string, string>() { { "PO", "PO" }, { "CM", "Credit Memo" }, { "Order", "Order Dispatch" }, { "TransferOut", "Transfer (Out)" }, { "TransferIn", "Transfer (In)" }, { "RMAIn", "RMA (In)" }, { "Change", "" } };
-                                        var data = PurchaseSku.SelectMany(sku => sku.SerialsLlist).Where(s => !(s.TransferSKUID.HasValue && (!s.TransferSKU.IsEnable || !s.TransferSKU.Transfer.IsEnable))).Where(s => s.SerialsNo.Equals("352468100952483")).ToList();
-                                        var SerialList = data.Select(s => new
+                                        var SerialList = PurchaseSku.SelectMany(sku => sku.SerialsLlist).Where(s => !(s.TransferSKUID.HasValue && (!s.TransferSKU.IsEnable || !s.TransferSKU.Transfer.IsEnable))).Select(s => new
                                         {
                                             SKU = s.PurchaseSKU.SkuNo,
                                             Date = s.CreateAt.ToLocalTime(),
