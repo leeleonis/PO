@@ -3,11 +3,6 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-
 namespace PurchaseOrderSys.Models
 {
 
@@ -54,7 +49,7 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "SkuPicture_FileName", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(100, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  FileName { get; set; }
     
     		    
@@ -107,6 +102,14 @@ namespace PurchaseOrderSys.Models
     	    [Display(Name = "SkuPicture_UpdateAt", ResourceType = typeof(App_GlobalResources.Resource))]
             [UIHint("DateTime")]
     		public Nullable<System.DateTime>  UpdateAt { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Picture Type
+    		/// </summary>        
+    	    [Display(Name = "SkuPicture_PictureType", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  PictureType { get; set; }
     
     		    
     	}

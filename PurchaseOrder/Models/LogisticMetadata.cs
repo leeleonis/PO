@@ -3,14 +3,9 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// Logistic class
     /// </summary>
@@ -70,7 +65,7 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "Logistic_CaseWeight", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public double  CaseWeight { get; set; }
+    		public int  CaseWeight { get; set; }
     
     		    
     		/// <summary>
@@ -102,7 +97,7 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "Logistic_ShippingWeight", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public double  ShippingWeight { get; set; }
+    		public int  ShippingWeight { get; set; }
     
     		    
     		/// <summary>

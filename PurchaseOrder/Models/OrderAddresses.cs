@@ -14,7 +14,7 @@ namespace PurchaseOrderSys.Models
     
     public partial class OrderAddresses
     {
-        public long IsEnable { get; set; }
+        public bool IsEnable { get; set; }
         public int ID { get; set; }
         public Nullable<int> SCID { get; set; }
         public int OrderID { get; set; }
@@ -33,6 +33,6 @@ namespace PurchaseOrderSys.Models
         public string Create_by { get; set; }
         public System.DateTime Create_at { get; set; }
     
-        public virtual Orders Orders { get; set; }
+        public virtual Orders GetOrder { get; set; }
     }
 }

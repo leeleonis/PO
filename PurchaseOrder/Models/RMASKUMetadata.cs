@@ -3,12 +3,6 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-using System; 
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-
 namespace PurchaseOrderSys.Models
 {
     
@@ -136,6 +130,42 @@ namespace PurchaseOrderSys.Models
     	    [Display(Name = "RMASKU_ReceivedAt", ResourceType = typeof(App_GlobalResources.Resource))]
             [UIHint("DateTime")]
     		public Nullable<System.DateTime>  ReceivedAt { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Warehouse ID
+    		/// </summary>        
+    	    [Display(Name = "RMASKU_WarehouseID", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  WarehouseID { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Reason
+    		/// </summary>        
+    	    [Display(Name = "RMASKU_Reason", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(20, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  Reason { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Unit Price
+    		/// </summary>        
+    	    [Display(Name = "RMASKU_UnitPrice", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<decimal>  UnitPrice { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// RMAItem ID
+    		/// </summary>        
+    	    [Display(Name = "RMASKU_RMAItemID", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  RMAItemID { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Credit Memo ID
+    		/// </summary>        
+    	    [Display(Name = "RMASKU_CreditMemoID", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  CreditMemoID { get; set; }
     
     		    
     	}

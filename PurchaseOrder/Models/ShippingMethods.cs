@@ -17,6 +17,7 @@ namespace PurchaseOrderSys.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ShippingMethods()
         {
+            this.IsEnable = true;
             this.GetPackage = new HashSet<Packages>();
         }
     

@@ -3,16 +3,6 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-using System; 
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-using System; 
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
 
 namespace PurchaseOrderSys.Models
 {
@@ -35,7 +25,7 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "OrderAddresses_IsEnable", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public long  IsEnable { get; set; }
+    		public bool  IsEnable { get; set; }
     
     		    
     		/// <summary>

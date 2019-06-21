@@ -3,12 +3,6 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-using System; 
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-
 namespace PurchaseOrderSys.Models
 {
     
@@ -174,6 +168,42 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "RMA_WarehouseID", ResourceType = typeof(App_GlobalResources.Resource))]
     		public Nullable<int>  WarehouseID { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Final Shipping Fee
+    		/// </summary>        
+    	    [Display(Name = "RMA_FinalShippingFee", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<decimal>  FinalShippingFee { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Restocking Fee
+    		/// </summary>        
+    	    [Display(Name = "RMA_RestockingFee", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<decimal>  RestockingFee { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Other Costs
+    		/// </summary>        
+    	    [Display(Name = "RMA_OtherCosts", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<decimal>  OtherCosts { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Return Shipping Cos
+    		/// </summary>        
+    	    [Display(Name = "RMA_ReturnShippingCos", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<decimal>  ReturnShippingCos { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// SCUser ID
+    		/// </summary>        
+    	    [Display(Name = "RMA_SCUserID", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  SCUserID { get; set; }
     
     		    
     	}

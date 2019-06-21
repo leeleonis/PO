@@ -17,11 +17,12 @@ namespace PurchaseOrderSys.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Orders()
         {
+            this.IsEnable = true;
             this.Items = new HashSet<Items>();
-            this.OrderActionLogs = new HashSet<OrderActionLogs>();
-            this.OrderAddresses = new HashSet<OrderAddresses>();
+            this.ActionLogs = new HashSet<OrderActionLogs>();
             this.Packages = new HashSet<Packages>();
             this.Payments = new HashSet<Payments>();
+            this.Addresses = new HashSet<OrderAddresses>();
         }
     
         public bool IsEnable { get; set; }
@@ -52,12 +53,12 @@ namespace PurchaseOrderSys.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Items> Items { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OrderActionLogs> OrderActionLogs { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OrderAddresses> OrderAddresses { get; set; }
+        public virtual ICollection<OrderActionLogs> ActionLogs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Packages> Packages { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Payments> Payments { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<OrderAddresses> Addresses { get; set; }
     }
 }

@@ -76,11 +76,11 @@ namespace PurchaseOrderSys.Models
         public virtual DbSet<RMAOrderSerialsLlist> RMAOrderSerialsLlist { get; set; }
         public virtual DbSet<Items> Items { get; set; }
         public virtual DbSet<OrderActionLogs> OrderActionLogs { get; set; }
-        public virtual DbSet<OrderAddresses> OrderAddresses { get; set; }
         public virtual DbSet<Orders> Orders { get; set; }
         public virtual DbSet<Packages> Packages { get; set; }
         public virtual DbSet<Payments> Payments { get; set; }
         public virtual DbSet<ShippingMethods> ShippingMethods { get; set; }
         public virtual DbSet<ApiSetting> ApiSetting { get; set; }
+        public virtual DbSet<OrderAddresses> OrderAddresses { get; set; }
     }
 }

@@ -17,7 +17,8 @@ namespace PurchaseOrderSys.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Carriers()
         {
-            this.ShippingMethods = new HashSet<ShippingMethods>();
+            this.IsEnable = true;
+            this.Methods = new HashSet<ShippingMethods>();
         }
     
         public bool IsEnable { get; set; }
@@ -32,7 +33,7 @@ namespace PurchaseOrderSys.Models
         public System.DateTime Create_at { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ShippingMethods> ShippingMethods { get; set; }
+        public virtual ICollection<ShippingMethods> Methods { get; set; }
         public virtual ApiSetting ApiSetting { get; set; }
     }
 }

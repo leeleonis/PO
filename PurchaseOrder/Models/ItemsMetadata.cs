@@ -3,17 +3,6 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-using System; 
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-using System; 
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-
 namespace PurchaseOrderSys.Models
 {
     
@@ -103,11 +92,11 @@ namespace PurchaseOrderSys.Models
     
     		    
     		/// <summary>
-    		/// e Bay Item ID1
+    		/// e Bay Item ID
     		/// </summary>        
-    	    [Display(Name = "Items_eBayItemID1", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "Items_eBayItemID", ResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public string  eBayItemID1 { get; set; }
+    		public string  eBayItemID { get; set; }
     
     		    
     		/// <summary>
@@ -119,18 +108,10 @@ namespace PurchaseOrderSys.Models
     
     		    
     		/// <summary>
-    		/// e Bay Item ID
+    		/// RMAID
     		/// </summary>        
-    	    [Display(Name = "Items_eBayItemID", ResourceType = typeof(App_GlobalResources.Resource))]
-            [MaxLength(10, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public string  eBayItemID { get; set; }
-    
-    		    
-    		/// <summary>
-    		/// RMA
-    		/// </summary>        
-    	    [Display(Name = "Items_RMA", ResourceType = typeof(App_GlobalResources.Resource))]
-    		public Nullable<int>  RMA { get; set; }
+    	    [Display(Name = "Items_RMAID", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  RMAID { get; set; }
     
     		    
     		/// <summary>

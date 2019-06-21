@@ -17,8 +17,9 @@ namespace PurchaseOrderSys.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Packages()
         {
+            this.IsEnable = true;
             this.Items = new HashSet<Items>();
-            this.OrderActionLogs = new HashSet<OrderActionLogs>();
+            this.ActionLogs = new HashSet<OrderActionLogs>();
         }
     
         public bool IsEnable { get; set; }
@@ -51,8 +52,8 @@ namespace PurchaseOrderSys.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Items> Items { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OrderActionLogs> OrderActionLogs { get; set; }
+        public virtual ICollection<OrderActionLogs> ActionLogs { get; set; }
         public virtual Orders GetOrder { get; set; }
-        public virtual ShippingMethods ShippingMethods { get; set; }
+        public virtual ShippingMethods Method { get; set; }
     }
 }

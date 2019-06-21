@@ -3,14 +3,10 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// Brand class
     /// </summary>
@@ -97,6 +93,13 @@ namespace PurchaseOrderSys.Models
     	    [Display(Name = "Brand_UpdateAt", ResourceType = typeof(App_GlobalResources.Resource))]
             [UIHint("DateTime")]
     		public Nullable<System.DateTime>  UpdateAt { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// SCID
+    		/// </summary>        
+    	    [Display(Name = "Brand_SCID", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  SCID { get; set; }
     
     		    
     	}

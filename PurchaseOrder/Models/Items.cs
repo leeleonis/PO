@@ -14,6 +14,12 @@ namespace PurchaseOrderSys.Models
     
     public partial class Items
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Items()
+        {
+            this.IsEnable = true;
+        }
+    
         public bool IsEnable { get; set; }
         public int ID { get; set; }
         public Nullable<int> SCID { get; set; }
@@ -23,10 +29,9 @@ namespace PurchaseOrderSys.Models
         public decimal UnitPrice { get; set; }
         public int Qty { get; set; }
         public int Currency { get; set; }
-        public string eBayItemID1 { get; set; }
-        public string SalesRecordNumber { get; set; }
         public string eBayItemID { get; set; }
-        public Nullable<int> RMA { get; set; }
+        public string SalesRecordNumber { get; set; }
+        public Nullable<int> RMAID { get; set; }
         public string Update_by { get; set; }
         public Nullable<System.DateTime> Update_at { get; set; }
         public string Create_by { get; set; }

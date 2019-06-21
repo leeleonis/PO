@@ -29,11 +29,11 @@ namespace PurchaseOrderSys.Controllers
         // 詳細資訊，請參閱 https://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IsEnable,IsRush,ID,OrderParent,OrderSourceID,SCID,Company,OrderType,OrderStatus,OrderDate,PaymentStatus,PaymentDate,FulfillmentStatus,FulfilledDate,Update_by,Update_at,Create_by,Create_at")] Order order)
+        public ActionResult Create([Bind(Include = "IsEnable,IsRush,ID,OrderParent,OrderSourceID,SCID,Company,OrderType,OrderStatus,OrderDate,PaymentStatus,PaymentDate,FulfillmentStatus,FulfilledDate,Update_by,Update_at,Create_by,Create_at")] Orders order)
         {
             if (ModelState.IsValid)
             {
-                db.Order.Add(order);
+                db.Orders.Add(order);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -46,7 +46,7 @@ namespace PurchaseOrderSys.Controllers
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            Order order = db.Order.Find(id);
+            Orders order = db.Orders.Find(id);
 
             if (order == null) return HttpNotFound();
 
@@ -61,7 +61,7 @@ namespace PurchaseOrderSys.Controllers
         // 詳細資訊，請參閱 https://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Order order)
+        public ActionResult Edit(Orders order)
         {
             if (ModelState.IsValid)
             {
@@ -79,7 +79,7 @@ namespace PurchaseOrderSys.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Order order = db.Order.Find(id);
+            Orders order = db.Orders.Find(id);
             if (order == null)
             {
                 return HttpNotFound();
@@ -92,8 +92,8 @@ namespace PurchaseOrderSys.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Order order = db.Order.Find(id);
-            db.Order.Remove(order);
+            Orders order = db.Orders.Find(id);
+            db.Orders.Remove(order);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

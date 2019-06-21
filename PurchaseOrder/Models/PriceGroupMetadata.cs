@@ -3,14 +3,9 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// PriceGroup class
     /// </summary>
@@ -121,6 +116,14 @@ namespace PurchaseOrderSys.Models
     	    [Display(Name = "PriceGroup_UpdateAt", ResourceType = typeof(App_GlobalResources.Resource))]
             [UIHint("DateTime")]
     		public Nullable<System.DateTime>  UpdateAt { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Current Price
+    		/// </summary>        
+    	    [Display(Name = "PriceGroup_CurrentPrice", ResourceType = typeof(App_GlobalResources.Resource))]
+            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public decimal  CurrentPrice { get; set; }
     
     		    
     	}

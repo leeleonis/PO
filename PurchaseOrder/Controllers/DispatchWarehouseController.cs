@@ -289,6 +289,7 @@ namespace PurchaseOrderSys.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+
         public ActionResult ShippingMethodData()
         {
             string Shippingmethods = "";
@@ -304,8 +305,8 @@ namespace PurchaseOrderSys.Controllers
 
             List<dynamic> dataList = new List<dynamic>();
             List<dynamic> dataListOut = new List<dynamic>();
-            var results = db.ShippingMethod.Where(m => m.IsEnable).OrderBy(m => m.ID).ToList();
-            var carrierList = db.Carriers.Where(c => c.IsEnable && c.CarrierAPI != null && c.CarrierAPI.IsEnable).ToDictionary(c => c.ID, c => Enum.GetName(typeof(EnumData.CarrierType), c.CarrierAPI.Type));
+            var results = db.ShippingMethods.Where(m => m.IsEnable).OrderBy(m => m.ID).ToList();
+            var carrierList = db.Carriers.Where(c => c.IsEnable && c.ApiSetting != null && c.ApiSetting.IsEnable).ToDictionary(c => c.ID, c => Enum.GetName(typeof(EnumData.CarrierType), c.ApiSetting.Type));
             if (results.Any())
             {
 
@@ -316,8 +317,8 @@ namespace PurchaseOrderSys.Controllers
                 dataList.AddRange(results.OrderBy(m => m.Name).Select(m => new
                 {
                     m.ID,
-                    CarrierType = carrierList.ContainsKey(m.CarrierID.Value) ? carrierList[m.CarrierID.Value] : "",
-                    m.IsDirectLine,
+                    CarrierType = carrierList.ContainsKey(m.CarrierID) ? carrierList[m.CarrierID] : "",
+                    IsDirectLine = false,
                     m.Name,
                     m.CarrierID,
                     MethodTypeID = m.MethodType,
