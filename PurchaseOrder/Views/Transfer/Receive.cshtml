@@ -84,11 +84,11 @@
                     {
                         data: "QTY"
                         , render: function (data, type, row, meta) {
-                            if (row.SerialTracking) {
-                                return data;
+                            if (row.Full || row.SerialTracking) {
+                                return '<input type="hidden" name="Prep[' + meta.row + '].ID" value=' + row.ID + ' />' + data;
                             }
                             else {
-                                return '<input class="form-control" type="number"   id="Prep[' + row.SKU + ']" name="Prep[' + meta.row + '].val"  ><input type="hidden" name="Prep[' + meta.row + '].ID" value = ' + row.SKU + ' />' + data;
+                                return '<input class="form-control" type="number"  max=' + row.MaxQTY + '   id="Prep[' + meta.row + ']" name="Prep[' + meta.row + '].val"  ><input type="hidden" name="Prep[' + meta.row + '].ID" value = ' + row.ID + ' />' + data;
                             }
                         }
                     },

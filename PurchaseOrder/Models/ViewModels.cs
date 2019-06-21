@@ -1225,6 +1225,7 @@ namespace PurchaseOrderSys.Models
     }
     public class TransferItemVM
     {
+        public int ID { get; set; }
         public int? WarehouseID { get; set; }
         public string SKU { get; set; }
         public string Name { get; set; }
@@ -1235,6 +1236,7 @@ namespace PurchaseOrderSys.Models
     }
     public class PrepTable
     {
+        public int ID { get; set; }
         public string SKU { get; set; }
         public string Name { get; set; }
         public string QTY { get; set; }
@@ -1246,6 +1248,8 @@ namespace PurchaseOrderSys.Models
         /// </summary>
         public bool SerialTracking { get; set; }
         public int? count { get; set; }
+        public bool Full { get; set; }
+        public int? MaxQTY { get; set; }
     }
     public class GetImgVM
     {

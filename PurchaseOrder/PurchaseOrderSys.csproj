@@ -7589,6 +7589,7 @@
     <Content Include="Views\SkuType\_AttributeGroup.cshtml" />
     <Content Include="Views\SkuType\_AttributeType.cshtml" />
     <Content Include="Views\TransferWinit\Index.cshtml" />
+    <Content Include="Views\TransferWinit\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

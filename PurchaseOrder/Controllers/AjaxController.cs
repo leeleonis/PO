@@ -404,8 +404,8 @@ namespace PurchaseOrderSys.Controllers
             }
             if (VendorID.HasValue)
             {
-                var SkuIDlist = db.SKU.Where(x => x.GetBrand.VendorLIst.Where(y => y.ID == VendorID).Any()).Select(x => x.SkuID);//檢查供應商是否可以用SKU;
-                var NotAddSKU = odataList.Where(x => !SkuIDlist.Contains(x.SKU)).Select(x => x.SKU).ToList();//不態用的SKU
+                var SkuIDlist = db.SKU.Where(x => x.GetBrand.VendorLIst.Where(y => y.ID == VendorID).Any()).Select(x => x.SkuID).ToList();//檢查供應商是否可以用SKU;
+                var NotAddSKU = odataList.Where(x => !SkuIDlist.Contains(x.SKU)).Select(x => x.SKU).ToList();//不能用的SKU
                 if (NotAddSKU.Any())
                 {
                     var BrandNameList = db.SKU.Where(x => NotAddSKU.Contains(x.SkuID)).Select(x => x.GetBrand.Name);
@@ -632,7 +632,7 @@ namespace PurchaseOrderSys.Controllers
                     QTY = Serialsitem.QTY;
                 }
                 var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == Serialsitem.SerialsNo);//檢查是否有序號
-                var PurchaseSKUs = db.PurchaseSKU.Where(x => x.SkuNo == Serialsitem.SkuNo && x.PurchaseOrder.IsEnable && x.IsEnable);
+                var PurchaseSKUs = db.PurchaseSKU.Where(x => x.SkuNo == Serialsitem.SkuNo && x.PurchaseOrder.IsEnable && x.IsEnable && x.SKU.SerialTracking);//無開序號管理才能任意取
                 PurchaseSKUs = PurchaseSKUs.Where(x => x.SerialsLlist.Where(y => y.SerialsQTY > 0 && (y.SerialsType == "PO" || y.SerialsType == "TransferIn") && !y.SerialsLlistC.Any()).Any());
                 if (SerialsLlist.Any())
                 {
@@ -1448,27 +1448,28 @@ namespace PurchaseOrderSys.Controllers
             AjaxResult result = new AjaxResult();
             try
             {
-                var CreateAt = DateTime.UtcNow;
-                var CompanyID = db.Company.Where(x => x.CompanySCID == DropshpOrderBySC.CompanyID).FirstOrDefault()?.ID;
-                if (!CompanyID.HasValue)
-                {
-                    result.SetError("SCID" + DropshpOrderBySC.CompanyID + "沒有對應的公司");
-                    return Json(result, JsonRequestBehavior.AllowGet);
-                }
-                var Vendor = db.VendorLIst.Where(x => x.SCID == DropshpOrderBySC.VendorID).FirstOrDefault();
-                if (Vendor == null)
-                {
-                    result.SetError("SCID" + DropshpOrderBySC.VendorID + "沒有對應的供應商");
-                    return Json(result, JsonRequestBehavior.AllowGet);
-                }
-                var WarehouseID = db.WarehouseSummary.Where(x => x.Type == "SCID" && x.Val == DropshpOrderBySC.DefaultWarehouseID.ToString()).FirstOrDefault()?.WarehouseID;
-                if (!WarehouseID.HasValue)
-                {
-                    result.SetError("SCID" + DropshpOrderBySC.DefaultWarehouseID + "沒有對應的倉庫");
-                    return Json(result, JsonRequestBehavior.AllowGet);
-                }
                 if (DropshpOrderBySC.PuchaseID == 0)//沒有值就新增
                 {
+                    var CreateAt = DateTime.UtcNow;
+                    var CompanyID = db.Company.Where(x => x.CompanySCID == DropshpOrderBySC.CompanyID).FirstOrDefault()?.ID;
+                    if (!CompanyID.HasValue)
+                    {
+                        result.SetError("SCID" + DropshpOrderBySC.CompanyID + "沒有對應的公司");
+                        return Json(result, JsonRequestBehavior.AllowGet);
+                    }
+                    var Vendor = db.VendorLIst.Where(x => x.SCID == DropshpOrderBySC.VendorID).FirstOrDefault();
+                    if (Vendor == null)
+                    {
+                        result.SetError("SCID" + DropshpOrderBySC.VendorID + "沒有對應的供應商");
+                        return Json(result, JsonRequestBehavior.AllowGet);
+                    }
+                    var WarehouseID = db.WarehouseSummary.Where(x => x.Type == "SCID" && x.Val == DropshpOrderBySC.DefaultWarehouseID.ToString()).FirstOrDefault()?.WarehouseID;
+                    if (!WarehouseID.HasValue)
+                    {
+                        result.SetError("SCID" + DropshpOrderBySC.DefaultWarehouseID + "沒有對應的倉庫");
+                        return Json(result, JsonRequestBehavior.AllowGet);
+                    }
+
 
                     var nPurchaseOrder = new Models.PurchaseOrder
                     {
@@ -1561,7 +1562,7 @@ namespace PurchaseOrderSys.Controllers
                         oPurchaseOrder.InvoiceNo = DropshpOrderBySC.Invoice;
                         foreach (var item in DropshpOrderBySC.Items)
                         {
-                         var oPurchaseSKU =  oPurchaseOrder.PurchaseSKU.Where(x => x.SkuNo == item.Sku).FirstOrDefault();
+                            var oPurchaseSKU = oPurchaseOrder.PurchaseSKU.Where(x => x.SkuNo == item.Sku).FirstOrDefault();
                             if (oPurchaseSKU != null && item.SerialNumber != null)
                             {
                                 foreach (var SerialNumberitem in item.SerialNumber)

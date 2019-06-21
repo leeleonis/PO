@@ -191,7 +191,7 @@ namespace PurchaseOrderSys.Controllers
                         Supplier = SerialsLlistitem.PurchaseSKU.PurchaseOrder.VendorLIst.Name;
                         ISType = "Order Dispatch";
                         ID = SerialsLlistitem.OrderID;
-                        Warehouse = SerialsLlistitem.PurchaseSKU.PurchaseOrder.WarehousePO.Name;
+                        Warehouse = GetOrderWarehouseName(SerialsLlistitem);
                     }
                     else if (SerialsLlistitem.SerialsType == "TransferOut")
                     {
@@ -377,6 +377,22 @@ namespace PurchaseOrderSys.Controllers
                 }
             }
             return View(StatementVM.OrderByDescending(x => x.Date));
+        }
+
+        private string GetOrderWarehouseName(SerialsLlist serialsLlistitem)
+        {
+            if (serialsLlistitem.SerialsLlistP.TransferSKUID.HasValue)
+            {
+                return serialsLlistitem.SerialsLlistP.TransferSKU.Transfer.WarehouseTo.Name;
+            }
+            else if (serialsLlistitem.SerialsLlistP.PurchaseSKUID.HasValue)
+            {
+                return serialsLlistitem.SerialsLlistP.PurchaseSKU.PurchaseOrder.WarehousePO.Name;
+            }
+            else
+            {
+                return "";
+            }
         }
 
         public ActionResult Create()

@@ -1278,6 +1278,11 @@ namespace PurchaseOrderSys.Controllers
                             Product.QtyOrdered = skuitem.QTYOrdered ?? 0;
                             var UpProduct = SCWS.PurchaseOrderItems_Update(Product);
                         }
+                        if (Product.DefaultWarehouseID != SCPurchase.DefaultWarehouseID)
+                        {
+                            Product.DefaultWarehouseID = SCPurchase.DefaultWarehouseID;
+                            var UpProduct = SCWS.PurchaseOrderItems_Update(Product);
+                        }
                     }
                 }
             }
