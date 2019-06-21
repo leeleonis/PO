@@ -12,34 +12,31 @@ namespace PurchaseOrderSys.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Order
+    public partial class ApiSetting
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Order()
+        public ApiSetting()
         {
-            this.IsEnable = true;
+            this.Carriers = new HashSet<Carriers>();
         }
     
         public bool IsEnable { get; set; }
-        public bool IsRush { get; set; }
-        public int ID { get; set; }
-        public Nullable<int> OrderParent { get; set; }
-        public string OrderSourceID { get; set; }
-        public int SCID { get; set; }
-        public int Company { get; set; }
-        public byte Channel { get; set; }
-        public byte OrderType { get; set; }
-        public byte OrderStatus { get; set; }
-        public System.DateTime OrderDate { get; set; }
-        public byte PaymentStatus { get; set; }
-        public Nullable<System.DateTime> PaymentDate { get; set; }
-        public byte FulfillmentStatus { get; set; }
-        public Nullable<System.DateTime> FulfilledDate { get; set; }
+        public bool IsTest { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public Nullable<byte> Type { get; set; }
+        public string AccountID { get; set; }
+        public string ApiKey { get; set; }
+        public string ApiPassword { get; set; }
+        public string ApiAccount { get; set; }
+        public string ApiMeter { get; set; }
+        public string ApiHub { get; set; }
         public string Update_by { get; set; }
         public Nullable<System.DateTime> Update_at { get; set; }
         public string Create_by { get; set; }
         public System.DateTime Create_at { get; set; }
     
-        public virtual Company GetCompany { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Carriers> Carriers { get; set; }
     }
 }

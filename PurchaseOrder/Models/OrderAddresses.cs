@@ -12,27 +12,27 @@ namespace PurchaseOrderSys.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Carriers
+    public partial class OrderAddresses
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Carriers()
-        {
-            this.ShippingMethods = new HashSet<ShippingMethods>();
-        }
-    
-        public bool IsEnable { get; set; }
+        public long IsEnable { get; set; }
         public int ID { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public Nullable<int> Api { get; set; }
-        public string PrinterName { get; set; }
+        public Nullable<int> SCID { get; set; }
+        public int OrderID { get; set; }
+        public bool Type { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string AddressLine1 { get; set; }
+        public string AddressLine2 { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string Postcode { get; set; }
+        public string CountryCode { get; set; }
+        public string CountryName { get; set; }
         public string Update_by { get; set; }
         public Nullable<System.DateTime> Update_at { get; set; }
         public string Create_by { get; set; }
         public System.DateTime Create_at { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ShippingMethods> ShippingMethods { get; set; }
-        public virtual ApiSetting ApiSetting { get; set; }
+        public virtual Orders Orders { get; set; }
     }
 }

@@ -3,13 +3,10 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-using System;
-using System.ComponentModel.DataAnnotations;
-
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// Carriers class
     /// </summary>
@@ -60,6 +57,48 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "Carriers_Api", ResourceType = typeof(App_GlobalResources.Resource))]
     		public Nullable<int>  Api { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Printer Name
+    		/// </summary>        
+    	    [Display(Name = "Carriers_PrinterName", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  PrinterName { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Update_by
+    		/// </summary>        
+    	    [Display(Name = "Carriers_Update_by", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  Update_by { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Update_at
+    		/// </summary>        
+    	    [Display(Name = "Carriers_Update_at", ResourceType = typeof(App_GlobalResources.Resource))]
+            [UIHint("DateTime")]
+    		public Nullable<System.DateTime>  Update_at { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Create_by
+    		/// </summary>        
+    	    [Display(Name = "Carriers_Create_by", ResourceType = typeof(App_GlobalResources.Resource))]
+            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  Create_by { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Create_at
+    		/// </summary>        
+    	    [Display(Name = "Carriers_Create_at", ResourceType = typeof(App_GlobalResources.Resource))]
+            [UIHint("DateTime")]
+            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public System.DateTime  Create_at { get; set; }
     
     		    
     	}

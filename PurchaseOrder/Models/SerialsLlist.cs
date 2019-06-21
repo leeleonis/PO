@@ -38,7 +38,6 @@ namespace PurchaseOrderSys.Models
         public bool IsEnable { get; set; }
         public Nullable<int> RMASKUID { get; set; }
     
-        public virtual Orders Orders { get; set; }
         public virtual PurchaseSKU PurchaseSKU { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SerialsLlist> SerialsLlistC { get; set; }

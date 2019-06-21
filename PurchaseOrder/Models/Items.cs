@@ -12,27 +12,28 @@ namespace PurchaseOrderSys.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Carriers
+    public partial class Items
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Carriers()
-        {
-            this.ShippingMethods = new HashSet<ShippingMethods>();
-        }
-    
         public bool IsEnable { get; set; }
         public int ID { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public Nullable<int> Api { get; set; }
-        public string PrinterName { get; set; }
+        public Nullable<int> SCID { get; set; }
+        public int OrderID { get; set; }
+        public int PackageID { get; set; }
+        public string Sku { get; set; }
+        public decimal UnitPrice { get; set; }
+        public int Qty { get; set; }
+        public int Currency { get; set; }
+        public string eBayItemID1 { get; set; }
+        public string SalesRecordNumber { get; set; }
+        public string eBayItemID { get; set; }
+        public Nullable<int> RMA { get; set; }
         public string Update_by { get; set; }
         public Nullable<System.DateTime> Update_at { get; set; }
         public string Create_by { get; set; }
         public System.DateTime Create_at { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ShippingMethods> ShippingMethods { get; set; }
-        public virtual ApiSetting ApiSetting { get; set; }
+        public virtual Orders GetOrder { get; set; }
+        public virtual Packages GetPackage { get; set; }
+        public virtual SKU GetSku { get; set; }
     }
 }

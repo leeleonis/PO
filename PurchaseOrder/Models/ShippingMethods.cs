@@ -12,22 +12,23 @@ namespace PurchaseOrderSys.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ShippingMethod
+    public partial class ShippingMethods
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public ShippingMethods()
+        {
+            this.GetPackage = new HashSet<Packages>();
+        }
+    
         public bool IsEnable { get; set; }
-        public bool IsDirectLine { get; set; }
+        public bool IsExport { get; set; }
+        public bool IsBattery { get; set; }
         public int ID { get; set; }
         public string Name { get; set; }
-        public Nullable<int> CarrierID { get; set; }
-        public Nullable<int> MethodType { get; set; }
+        public int CarrierID { get; set; }
+        public int MethodType { get; set; }
+        public int BoxType { get; set; }
         public bool InBox { get; set; }
-        public Nullable<int> BoxType { get; set; }
-        public int DirectLine { get; set; }
-        public string PrinterName { get; set; }
-        public Nullable<bool> IsExport { get; set; }
-        public Nullable<bool> IsBattery { get; set; }
-        public string CountryData { get; set; }
-        public Nullable<System.DateTime> SyncOn { get; set; }
         public string ContactName { get; set; }
         public string ConpanyName { get; set; }
         public string PhoneNumber { get; set; }
@@ -38,7 +39,13 @@ namespace PurchaseOrderSys.Models
         public string StreetLine2 { get; set; }
         public string StateName { get; set; }
         public string PostalCode { get; set; }
+        public string Update_by { get; set; }
+        public Nullable<System.DateTime> Update_at { get; set; }
+        public string Create_by { get; set; }
+        public System.DateTime Create_at { get; set; }
     
-        public virtual Carriers Carriers { get; set; }
+        public virtual Carriers GetCarrier { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Packages> GetPackage { get; set; }
     }
 }

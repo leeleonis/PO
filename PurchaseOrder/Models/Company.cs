@@ -20,7 +20,7 @@ namespace PurchaseOrderSys.Models
             this.PurchaseOrder = new HashSet<PurchaseOrder>();
             this.SKU = new HashSet<SKU>();
             this.Marketplace = new HashSet<Marketplace>();
-            this.Order = new HashSet<Order>();
+            this.Orders = new HashSet<Orders>();
         }
     
         public bool IsEnable { get; set; }
@@ -37,6 +37,7 @@ namespace PurchaseOrderSys.Models
         public Nullable<System.DateTime> UpdateAt { get; set; }
         public string CompanyNo { get; set; }
         public int CurrencyID { get; set; }
+        public Nullable<int> CompanySCID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseOrder> PurchaseOrder { get; set; }
@@ -46,6 +47,6 @@ namespace PurchaseOrderSys.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Marketplace> Marketplace { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Order> Order { get; set; }
+        public virtual ICollection<Orders> Orders { get; set; }
     }
 }
