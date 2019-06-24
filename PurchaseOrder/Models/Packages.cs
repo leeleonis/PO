@@ -27,18 +27,17 @@ namespace PurchaseOrderSys.Models
         public Nullable<int> SCID { get; set; }
         public int OrderID { get; set; }
         public string CarrierBox { get; set; }
+        public int ShippingMethod { get; set; }
         public bool Export { get; set; }
         public bool ExportMethod { get; set; }
         public decimal ExportValue { get; set; }
         public int ExportCurrency { get; set; }
-        public int ShippingMethod { get; set; }
         public bool UploadTracking { get; set; }
         public string Tracking { get; set; }
         public bool DLExport { get; set; }
         public bool DLExportMethod { get; set; }
         public decimal DLExportValue { get; set; }
         public int DLExportCurrency { get; set; }
-        public int DLShippingMethod { get; set; }
         public bool DLUploadTracking { get; set; }
         public string DLTracking { get; set; }
         public int ShipWarehouse { get; set; }

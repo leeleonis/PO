@@ -18,12 +18,15 @@ namespace PurchaseOrderSys.Models
         public Carriers()
         {
             this.IsEnable = true;
-            this.Methods = new HashSet<ShippingMethods>();
+            this.FirstMiles = new HashSet<ShippingMethods>();
+            this.LastMiles = new HashSet<ShippingMethods>();
         }
     
         public bool IsEnable { get; set; }
         public int ID { get; set; }
         public string Name { get; set; }
+        public int MethodType { get; set; }
+        public int BoxType { get; set; }
         public string Email { get; set; }
         public Nullable<int> Api { get; set; }
         public string PrinterName { get; set; }
@@ -32,8 +35,10 @@ namespace PurchaseOrderSys.Models
         public string Create_by { get; set; }
         public System.DateTime Create_at { get; set; }
     
+        public virtual ApiSetting GetApi { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ShippingMethods> Methods { get; set; }
-        public virtual ApiSetting ApiSetting { get; set; }
+        public virtual ICollection<ShippingMethods> FirstMiles { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ShippingMethods> LastMiles { get; set; }
     }
 }

@@ -14,7 +14,7 @@
         <EntityTypeShape EntityType="PurchaseOrderModel.Condition" Width="1.5" PointX="0.75" PointY="11.875" />
         <EntityTypeShape EntityType="PurchaseOrderModel.ConditionLang" Width="1.5" PointX="3" PointY="12.5" />
         <EntityTypeShape EntityType="PurchaseOrderModel.CreditMemo" Width="1.5" PointX="21.25" PointY="10.125" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.DirectLine" Width="1.5" PointX="15" PointY="1.75" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.DirectLine" Width="1.5" PointX="11.75" PointY="54.75" />
         <EntityTypeShape EntityType="PurchaseOrderModel.KitSku" Width="1.5" PointX="8.25" PointY="8.625" />
         <EntityTypeShape EntityType="PurchaseOrderModel.Menu" Width="1.5" PointX="0.75" PointY="2.125" />
         <EntityTypeShape EntityType="PurchaseOrderModel.MenuLang" Width="1.5" PointX="3" PointY="2.5" />
@@ -135,7 +135,6 @@
         <EntityTypeShape EntityType="PurchaseOrderModel.Packages" Width="1.5" PointX="18.75" PointY="45.5" />
         <EntityTypeShape EntityType="PurchaseOrderModel.Payments" Width="1.5" PointX="11.5" PointY="45" />
         <EntityTypeShape EntityType="PurchaseOrderModel.ShippingMethods" Width="1.5" PointX="13.875" PointY="50.875" />
-        <AssociationConnector Association="PurchaseOrderModel.FK_ShippingMethod_Carriers1" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Order_Company1" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Item_Order" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Item_Package" />
@@ -149,6 +148,10 @@
         <AssociationConnector Association="PurchaseOrderModel.FK_Carriers_CarrierAPI" />
         <EntityTypeShape EntityType="PurchaseOrderModel.OrderAddresses" Width="1.5" PointX="16.125" PointY="50.375" />
         <AssociationConnector Association="PurchaseOrderModel.FK_ShippingAddress_Order" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_ShippingMethods_Carriers" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_ShippingMethods_DirectLine" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_DirectLine_ApiSetting" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_ShippingMethods_Carriers11" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

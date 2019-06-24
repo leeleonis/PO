@@ -26,27 +26,20 @@ namespace PurchaseOrderSys.Models
         public bool IsBattery { get; set; }
         public int ID { get; set; }
         public string Name { get; set; }
-        public int CarrierID { get; set; }
-        public int MethodType { get; set; }
-        public int BoxType { get; set; }
+        public byte Type { get; set; }
+        public Nullable<int> DirectLine { get; set; }
+        public Nullable<int> FirstMileCarrier { get; set; }
+        public int LastMileCarrier { get; set; }
         public bool InBox { get; set; }
-        public string ContactName { get; set; }
-        public string ConpanyName { get; set; }
-        public string PhoneNumber { get; set; }
-        public string CountryName { get; set; }
-        public string CountryCode { get; set; }
-        public string City { get; set; }
-        public string StreetLine1 { get; set; }
-        public string StreetLine2 { get; set; }
-        public string StateName { get; set; }
-        public string PostalCode { get; set; }
         public string Update_by { get; set; }
         public Nullable<System.DateTime> Update_at { get; set; }
         public string Create_by { get; set; }
         public System.DateTime Create_at { get; set; }
     
-        public virtual Carriers GetCarrier { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Packages> GetPackage { get; set; }
+        public virtual Carriers FirstMile { get; set; }
+        public virtual Carriers LastMile { get; set; }
+        public virtual DirectLine GetDirectLine { get; set; }
     }
 }

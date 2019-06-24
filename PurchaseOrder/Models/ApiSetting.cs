@@ -19,6 +19,7 @@ namespace PurchaseOrderSys.Models
         {
             this.IsEnable = true;
             this.Carriers = new HashSet<Carriers>();
+            this.DirectLines = new HashSet<DirectLine>();
         }
     
         public bool IsEnable { get; set; }
@@ -39,5 +40,7 @@ namespace PurchaseOrderSys.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Carriers> Carriers { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DirectLine> DirectLines { get; set; }
     }
 }

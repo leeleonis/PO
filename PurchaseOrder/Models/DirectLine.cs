@@ -14,10 +14,18 @@ namespace PurchaseOrderSys.Models
     
     public partial class DirectLine
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public DirectLine()
+        {
+            this.IsEnable = true;
+            this.GetMethod = new HashSet<ShippingMethods>();
+        }
+    
         public bool IsEnable { get; set; }
         public int ID { get; set; }
         public string Name { get; set; }
         public string Abbreviation { get; set; }
+        public Nullable<int> Api { get; set; }
         public string Email { get; set; }
         public string ContactName { get; set; }
         public string CompanyName { get; set; }
@@ -33,5 +41,9 @@ namespace PurchaseOrderSys.Models
         public System.DateTime CreateAt { get; set; }
         public string UpdateBy { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ShippingMethods> GetMethod { get; set; }
+        public virtual ApiSetting GetApi { get; set; }
     }
 }

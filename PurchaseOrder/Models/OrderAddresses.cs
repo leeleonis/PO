@@ -14,6 +14,12 @@ namespace PurchaseOrderSys.Models
     
     public partial class OrderAddresses
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public OrderAddresses()
+        {
+            this.IsEnable = true;
+        }
+    
         public bool IsEnable { get; set; }
         public int ID { get; set; }
         public Nullable<int> SCID { get; set; }
