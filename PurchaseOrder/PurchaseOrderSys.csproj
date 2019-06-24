@@ -432,6 +432,12 @@
     <Compile Include="Models\Orders.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\OrderSerials.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OrderSerialsMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\OrdersMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>

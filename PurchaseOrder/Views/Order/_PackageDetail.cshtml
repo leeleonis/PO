@@ -1,11 +1,13 @@
-﻿<div class="col-sm-12" data-package="123">
+﻿@model Packages
+
+<div class="col-sm-12" data-package="@Model.ID">
     <table class="table table-bordered text-center">
         <thead>
             <tr>
                 <td width="120">
                     <div>
                         <label class="checkbox" style="padding: 0px; min-height: 17px;">
-                            <input type="checkbox" id="chk-package" value="123" />
+                            <input type="checkbox" id="chk-package" value="@Model.ID" />
                             <i></i>Package ID
                         </label>
                     </div>
@@ -21,7 +23,7 @@
                 <td width="90">
                     RMA #
                     <div style="position: absolute; top: -35px; right: 15px;">
-                        <button type="button" class="btn btn-default btn-sm edit">Edit</button>
+                        <button type="button" class="btn btn-default btn-sm edit" onclick="PackageEdit(@Model.ID)">Edit</button>
                         <button type="button" class="btn btn-default btn-sm save">Save</button>
                     </div>
                 </td>
@@ -29,8 +31,8 @@
         </thead>
         <tbody>
             <tr data-item="321">
-                <td>123</td>
-                <td>234</td>
+                <td>@Model.ID</td>
+                <td>@Model.CarrierBox</td>
                 <td class="text">
                     <span>123456789</span>
                     <input type="text" class="form-control" value="123456789" />
@@ -55,7 +57,7 @@
         </tbody>
     </table>
     <div class="form-group">
-        <div class="col-sm-6 col-lg-4">
+        <div class="col-sm-3">
             <table class="table table-bordered text-center">
                 <tr>
                     <td width="33%">Shipping Status</td>
@@ -63,118 +65,120 @@
                 </tr>
             </table>
         </div>
-        <div class="col-sm-6 col-lg-4 col-lg-offset-4">
-            <div class="input-group">
-                <span class="input-group-addon">Warehouse</span>
-                @Html.DropDownList("Warehouse", (List<SelectListItem>)ViewData["WarehouseList"], htmlAttributes: new { @class = "form-control" })
-            </div>
+        <div class="col-sm-4 col-sm-offset-1">
+            <table class="table table-bordered text-center">
+                <tr>
+                    <td width="33%">Shipping Method</td>
+                    <td class="text">
+                        <span>@Model.GetMethod.Name</span>
+                        @Html.DropDownListFor(Model => Model.ShippingMethod, (List<SelectListItem>)ViewData["MethodList"], htmlAttributes: new { @class = "form-control" })
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-sm-3 col-sm-offset-1">
+            <table class="table table-bordered text-center">
+                <tr>
+                    <td width="33%">Warehouse</td>
+                    <td class="text">
+                        <span>@Model.GetWarehouse.Name</span>
+                        @Html.DropDownListFor(Model => Model.ShipWarehouse, (List<SelectListItem>)ViewData["WarehouseList"], htmlAttributes: new { @class = "form-control" })
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
     <div class="form-group">
-        <div class="col-sm-6 col-lg-3">
+        <div class="col-sm-6">
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th class="text-center" colspan="2">Export Settings</th>
+                        <th class="text-center" colspan="4">Shipping Setting</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td width="126">Export：</td>
-                        <td></td>
+                        <td class="text">
+                            <span>@Enum.GetName(typeof(EnumData.Export), Model.Export)</span>
+                            @Html.DropDownListFor(Model => Model.Export, Enum.GetValues(typeof(EnumData.Export)).Cast<EnumData.Export>().Select(s => new SelectListItem() { Text = s.ToString(), Value = ((byte)s).ToString() }), htmlAttributes: new { @class = "form-control" })
+                        </td>
+                        <td width="135">Currency：</td>
+                        <td class="text">
+                            <span>@Model.GetCurrency.Name</span>
+                            @Html.DropDownListFor(Model => Model.ExportCurrency, (List<SelectListItem>)ViewData["CurrencyList"], htmlAttributes: new { @class = "form-control" })
+                        </td>
                     </tr>
                     <tr>
                         <td>Export Method：</td>
-                        <td></td>
+                        <td class="text">
+                            <span>@EnumData.ExportMethodList()[Model.ExportMethod]</span>
+                            @Html.DropDownListFor(Model => Model.ExportMethod, EnumData.ExportMethodList().Select(s => new SelectListItem() { Text = s.Value, Value = s.Key.ToString() }), htmlAttributes: new { @class = "form-control" })
+                        </td>
+                        <td>Upload Tracking：</td>
+                        <td class="text">
+                            <span>@Enum.GetName(typeof(EnumData.YesNo), Model.UploadTracking)</span>
+                            @Html.DropDownListFor(Model => Model.UploadTracking, Enum.GetValues(typeof(EnumData.YesNo)).Cast<EnumData.YesNo>().Select(s => new SelectListItem() { Text = s.ToString(), Value = (byte)s == 1 ? bool.TrueString : bool.FalseString }), htmlAttributes: new { @class = "form-control" })
+                        </td>
                     </tr>
                     <tr>
                         <td>Export Value：</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Currency：</td>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="col-sm-6 col-lg-3">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th class="text-center" colspan="2">Shipping Settings</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td width="189">Default Shipping Method：</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Shipping Method：</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Upload Tracking：</td>
-                        <td></td>
-                    </tr>
-                    <tr>
+                        <td class="text">
+                            <span>@Model.ExportValue</span>
+                            @Html.TextBoxFor(Model => Model.ExportValue, htmlAttributes: new { @class = "form-control" })
+                        </td>
                         <td>Tracking：</td>
-                        <td></td>
+                        <td class="text">
+                            <span>@(Model.Tracking ?? "")</span>
+                            @Html.TextBoxFor(Model => Model.Tracking, htmlAttributes: new { @class = "form-control" })
+                        </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <div class="col-sm-6 col-lg-3">
+        <div class="col-sm-6">
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th class="text-center" colspan="2">DL Export Settings</th>
+                        <th class="text-center" colspan="4">DL Shipping Settings</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td width="151">DL Export：</td>
-                        <td></td>
+                        <td width="126">Export：</td>
+                        <td class="text">
+                            <span>@Enum.GetName(typeof(EnumData.Export), Model.DLExport)</span>
+                            @Html.DropDownListFor(Model => Model.DLExport, Enum.GetValues(typeof(EnumData.Export)).Cast<EnumData.Export>().Select(s => new SelectListItem() { Text = s.ToString(), Value = ((byte)s).ToString() }), htmlAttributes: new { @class = "form-control" })
+                        </td>
+                        <td width="135">Currency：</td>
+                        <td class="text">
+                            <span>@(Model.GetDLCurrency.Name)</span>
+                            @Html.DropDownListFor(Model => Model.DLExportCurrency, (List<SelectListItem>)ViewData["CurrencyList"], htmlAttributes: new { @class = "form-control" })
+                        </td>
                     </tr>
                     <tr>
-                        <td>DL Export Method：</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>DL Export Value：</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>DL Export Currency：</td>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="col-sm-6 col-lg-3">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th class="text-center" colspan="2">DL Shipping Settings</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td width="141">First Mile：</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Shipping Method：</td>
-                        <td></td>
-                    </tr>
-                    <tr>
+                        <td>Export Method：</td>
+                        <td class="text">
+                            <span>@EnumData.ExportMethodList()[Model.DLExportMethod]</span>
+                            @Html.DropDownListFor(Model => Model.DLExportMethod, EnumData.ExportMethodList().Select(s => new SelectListItem() { Text = s.Value, Value = s.Key.ToString() }), htmlAttributes: new { @class = "form-control" })
+                        </td>
                         <td>Upload Tracking：</td>
-                        <td></td>
+                        <td class="text">
+                            <span>@Enum.GetName(typeof(EnumData.YesNo), Model.DLUploadTracking)</span>
+                            @Html.DropDownListFor(Model => Model.DLUploadTracking, Enum.GetValues(typeof(EnumData.YesNo)).Cast<EnumData.YesNo>().Select(s => new SelectListItem() { Text = s.ToString(), Value = (byte)s == 1 ? bool.TrueString : bool.FalseString }), htmlAttributes: new { @class = "form-control" })
+                        </td>
                     </tr>
                     <tr>
+                        <td>Export Value：</td>
+                        <td class="text">
+                            <span>@Model.DLExportValue</span>
+                            @Html.TextBoxFor(Model => Model.DLExportValue, htmlAttributes: new { @class = "form-control" })
+                        </td>
                         <td>Tracking：</td>
-                        <td></td>
+                        <td class="text">
+                            <span>@(Model.DLTracking ?? "")</span>
+                            @Html.TextBoxFor(Model => Model.DLTracking, htmlAttributes: new { @class = "form-control" })
+                        </td>
                     </tr>
                 </tbody>
             </table>

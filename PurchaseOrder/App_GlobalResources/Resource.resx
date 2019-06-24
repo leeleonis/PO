@@ -2243,4 +2243,538 @@
   <data name="RMAOrderSerialsLlist_CreateAt" xml:space="preserve">
     <value>CreateAt</value>
   </data>
+  <data name="ApiSetting_IsEnable" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ApiSetting_IsTest" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ApiSetting_Id" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ApiSetting_Name" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ApiSetting_Type" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ApiSetting_AccountID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ApiSetting_ApiKey" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ApiSetting_ApiPassword" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ApiSetting_ApiAccount" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ApiSetting_ApiMeter" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ApiSetting_ApiHub" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ApiSetting_Update_by" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ApiSetting_Update_at" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ApiSetting_Create_by" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ApiSetting_Create_at" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Carriers_IsEnable" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Carriers_ID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Carriers_Name" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Carriers_MethodType" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Carriers_BoxType" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Carriers_Email" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Carriers_Api" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Carriers_PrinterName" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Carriers_Update_by" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Carriers_Update_at" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Carriers_Create_by" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Carriers_Create_at" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="DirectLine_IsEnable" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="DirectLine_ID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="DirectLine_Name" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="DirectLine_Abbreviation" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="DirectLine_Api" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="DirectLine_Email" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="DirectLine_ContactName" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="DirectLine_CompanyName" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="DirectLine_PhoneNumber" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="DirectLine_CountryName" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="DirectLine_CountryCode" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="DirectLine_City" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="DirectLine_StreetLine1" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="DirectLine_StreetLine2" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="DirectLine_StateName" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="DirectLine_PostalCode" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="DirectLine_CreateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="DirectLine_CreateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="DirectLine_UpdateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="DirectLine_UpdateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Items_IsEnable" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Items_ID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Items_SCID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Items_OrderID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Items_PackageID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Items_Sku" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Items_UnitPrice" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Items_Qty" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Items_Currency" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Items_eBayItemID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Items_SalesRecordNumber" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Items_RMAID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Items_Update_by" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Items_Update_at" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Items_Create_by" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Items_Create_at" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OrderActionLogs_ID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OrderActionLogs_OrderID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OrderActionLogs_PackageID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OrderActionLogs_Item" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OrderActionLogs_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OrderActionLogs_CreateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OrderActionLogs_CreateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OrderAddresses_IsEnable" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OrderAddresses_ID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OrderAddresses_SCID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OrderAddresses_OrderID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OrderAddresses_Type" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OrderAddresses_FirstName" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OrderAddresses_LastName" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OrderAddresses_AddressLine1" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OrderAddresses_AddressLine2" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OrderAddresses_City" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OrderAddresses_State" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OrderAddresses_Postcode" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OrderAddresses_CountryCode" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OrderAddresses_CountryName" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OrderAddresses_Update_by" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OrderAddresses_Update_at" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OrderAddresses_Create_by" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OrderAddresses_Create_at" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Orders_IsEnable" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Orders_IsRush" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Orders_ID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Orders_OrderParent" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Orders_OrderSourceID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Orders_SCID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Orders_Company" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Orders_Channel" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Orders_CustomerID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Orders_CustomerEmail" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Orders_OrderType" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Orders_OrderStatus" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Orders_OrderDate" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Orders_PaymentStatus" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Orders_PaymentDate" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Orders_FulfillmentStatus" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Orders_FulfilledDate" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Orders_BuyerNote" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Orders_Comment" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Orders_Update_by" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Orders_Update_at" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Orders_Create_by" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Orders_Create_at" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OrderSerials_IsEnable" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OrderSerials_SerialNumber" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OrderSerials_OrderID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OrderSerials_ItemID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OrderSerials_Sku" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OrderSerials_Update_by" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OrderSerials_Update_at" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OrderSerials_Create_by" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OrderSerials_Create_at" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Packages_IsEnable" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Packages_ID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Packages_SCID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Packages_OrderID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Packages_CarrierBox" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Packages_ShippingMethod" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Packages_Export" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Packages_ExportMethod" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Packages_ExportValue" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Packages_ExportCurrency" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Packages_UploadTracking" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Packages_Tracking" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Packages_DLExport" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Packages_DLExportMethod" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Packages_DLExportValue" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Packages_DLExportCurrency" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Packages_DLUploadTracking" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Packages_DLTracking" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Packages_ShipWarehouse" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Packages_ReturnWarehouse" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Packages_ShippingStatus" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Packages_Update_by" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Packages_Update_at" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Packages_Create_by" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Packages_Create_at" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Payments_IsEnable" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Payments_ID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Payments_SCID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Payments_OrderID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Payments_Status" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Payments_Date" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Payments_Gateway" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Payments_TotalValue" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Payments_InsuranceCharge" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Payments_GrandTotal" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Payments_PaymentTotal" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Payments_Refund" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Payments_Balance" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Payments_TransactionID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Payments_PaymentEmail" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Payments_Update_by" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Payments_Update_at" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Payments_Create_by" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Payments_Create_at" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ShippingMethods_IsEnable" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ShippingMethods_IsExport" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ShippingMethods_IsBattery" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ShippingMethods_ID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ShippingMethods_Name" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ShippingMethods_Type" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ShippingMethods_DirectLine" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ShippingMethods_InBox" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ShippingMethods_FirstMileCarrier" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ShippingMethods_LastMileCarrier" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ShippingMethods_Update_by" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ShippingMethods_Update_at" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ShippingMethods_Create_by" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ShippingMethods_Create_at" xml:space="preserve">
+    <value></value>
+  </data>
 </root>

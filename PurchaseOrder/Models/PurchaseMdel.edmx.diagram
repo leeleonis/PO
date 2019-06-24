@@ -59,10 +59,9 @@
         <AssociationConnector Association="PurchaseOrderModel.FK_Sku_PackageContent_SKU" />
         <AssociationConnector Association="PurchaseOrderModel.FK_SkuPicture_Sku" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Sku_Attribute_SkuAttribute" ManuallyRouted="true" >
-          <ConnectorPoint PointX="10.5" PointY="5.768515977464574" />
+          <ConnectorPoint PointX="10.5" PointY="5.7729184910722608" />
           <ConnectorPoint PointX="10.875" PointY="7.6528376668669855" />
-          <ConnectorPoint PointX="10.875" PointY="58.326403890652124" />
-          <ConnectorPoint PointX="11.25" PointY="15.523580729166666" />
+          <ConnectorPoint PointX="11.25" PointY="13.827193591285415" />
         </AssociationConnector>
         <AssociationConnector Association="PurchaseOrderModel.FK_SkuAttribute_SkuAttributeType" />
         <AssociationConnector Association="PurchaseOrderModel.FK_SkuAttributeLang_SkuAttribute" />
@@ -152,6 +151,14 @@
         <AssociationConnector Association="PurchaseOrderModel.FK_ShippingMethods_DirectLine" />
         <AssociationConnector Association="PurchaseOrderModel.FK_DirectLine_ApiSetting" />
         <AssociationConnector Association="PurchaseOrderModel.FK_ShippingMethods_Carriers11" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.OrderSerials" Width="1.5" PointX="13.875" PointY="39.375" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_OrderSerials_Items" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_OrderSerials_Orders" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_OrderSerials_SKU" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_Packages_Currency" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_Packages_Currency1" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_Packages_Warehouse" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_Packages_Warehouse1" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

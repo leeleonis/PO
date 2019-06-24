@@ -23,6 +23,7 @@ namespace PurchaseOrderSys.Models
             this.Packages = new HashSet<Packages>();
             this.Payments = new HashSet<Payments>();
             this.Addresses = new HashSet<OrderAddresses>();
+            this.Serials = new HashSet<OrderSerials>();
         }
     
         public bool IsEnable { get; set; }
@@ -60,5 +61,7 @@ namespace PurchaseOrderSys.Models
         public virtual ICollection<Payments> Payments { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderAddresses> Addresses { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<OrderSerials> Serials { get; set; }
     }
 }

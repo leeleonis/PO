@@ -59,6 +59,14 @@ namespace PurchaseOrderSys.Models
     
     		    
     		/// <summary>
+    		/// Shipping Method
+    		/// </summary>        
+    	    [Display(Name = "Packages_ShippingMethod", ResourceType = typeof(App_GlobalResources.Resource))]
+            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public int  ShippingMethod { get; set; }
+    
+    		    
+    		/// <summary>
     		/// Export
     		/// </summary>        
     	    [Display(Name = "Packages_Export", ResourceType = typeof(App_GlobalResources.Resource))]
@@ -88,14 +96,6 @@ namespace PurchaseOrderSys.Models
     	    [Display(Name = "Packages_ExportCurrency", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public int  ExportCurrency { get; set; }
-    
-    		    
-    		/// <summary>
-    		/// Shipping Method
-    		/// </summary>        
-    	    [Display(Name = "Packages_ShippingMethod", ResourceType = typeof(App_GlobalResources.Resource))]
-            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public int  ShippingMethod { get; set; }
     
     		    
     		/// <summary>
@@ -144,14 +144,6 @@ namespace PurchaseOrderSys.Models
     	    [Display(Name = "Packages_DLExportCurrency", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public int  DLExportCurrency { get; set; }
-    
-    		    
-    		/// <summary>
-    		/// DLShipping Method
-    		/// </summary>        
-    	    [Display(Name = "Packages_DLShippingMethod", ResourceType = typeof(App_GlobalResources.Resource))]
-            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public int  DLShippingMethod { get; set; }
     
     		    
     		/// <summary>

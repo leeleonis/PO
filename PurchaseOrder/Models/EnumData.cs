@@ -402,5 +402,14 @@ namespace PurchaseOrderSys.Models
 
         public enum OrderFulfilledStatus { Unfulfilled, Partial, Fulfilled };
         public enum OrderShippingStatus { Unmanage, Awaiting, Dispatch, Fulfilled }
+
+        public enum Export { 正式, 簡易 };
+        public enum ExportMethod { 外貨復出口, 國貨出口 };
+        public static Dictionary<byte, string> ExportMethodList()
+        {
+            string[] Method = new string[] { "G3-81 (外貨復出口)", "G5-02 (國貨出口)" };
+
+            return Enum.GetValues(typeof(ExportMethod)).Cast<ExportMethod>().ToDictionary(s => (byte)s, s => Method[(byte)s]);
+        }
     }
 }

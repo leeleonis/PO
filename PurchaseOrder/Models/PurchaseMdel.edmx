@@ -495,6 +495,21 @@
           <Property Name="Create_by" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Create_at" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="OrderSerials">
+          <Key>
+            <PropertyRef Name="SerialNumber" />
+            <PropertyRef Name="ItemID" />
+          </Key>
+          <Property Name="IsEnable" Type="bit" Nullable="false" />
+          <Property Name="SerialNumber" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="OrderID" Type="int" Nullable="false" />
+          <Property Name="ItemID" Type="int" Nullable="false" />
+          <Property Name="Sku" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Update_by" Type="nvarchar" MaxLength="50" />
+          <Property Name="Update_at" Type="datetime" />
+          <Property Name="Create_by" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Create_at" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="PackageContent">
           <Key>
             <PropertyRef Name="ID" />
@@ -530,14 +545,14 @@
           <Property Name="OrderID" Type="int" Nullable="false" />
           <Property Name="CarrierBox" Type="nvarchar" MaxLength="50" />
           <Property Name="ShippingMethod" Type="int" Nullable="false" />
-          <Property Name="Export" Type="bit" Nullable="false" />
-          <Property Name="ExportMethod" Type="bit" Nullable="false" />
+          <Property Name="Export" Type="tinyint" Nullable="false" />
+          <Property Name="ExportMethod" Type="tinyint" Nullable="false" />
           <Property Name="ExportValue" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="ExportCurrency" Type="int" Nullable="false" />
           <Property Name="UploadTracking" Type="bit" Nullable="false" />
           <Property Name="Tracking" Type="nvarchar" MaxLength="50" />
-          <Property Name="DLExport" Type="bit" Nullable="false" />
-          <Property Name="DLExportMethod" Type="bit" Nullable="false" />
+          <Property Name="DLExport" Type="tinyint" Nullable="false" />
+          <Property Name="DLExportMethod" Type="tinyint" Nullable="false" />
           <Property Name="DLExportValue" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="DLExportCurrency" Type="int" Nullable="false" />
           <Property Name="DLUploadTracking" Type="bit" Nullable="false" />
@@ -1438,6 +1453,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_OrderSerials_Items">
+          <End Role="Items" Type="Self.Items" Multiplicity="1" />
+          <End Role="OrderSerials" Type="Self.OrderSerials" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Items">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrderSerials">
+              <PropertyRef Name="ItemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderSerials_Orders">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="1" />
+          <End Role="OrderSerials" Type="Self.OrderSerials" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrderSerials">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderSerials_SKU">
+          <End Role="SKU" Type="Self.SKU" Multiplicity="1" />
+          <End Role="OrderSerials" Type="Self.OrderSerials" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SKU">
+              <PropertyRef Name="SkuID" />
+            </Principal>
+            <Dependent Role="OrderSerials">
+              <PropertyRef Name="Sku" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Package_Order">
           <End Role="Orders" Type="Self.Orders" Multiplicity="1" />
           <End Role="Packages" Type="Self.Packages" Multiplicity="*" />
@@ -1474,6 +1525,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Packages_Currency">
+          <End Role="Currency" Type="Self.Currency" Multiplicity="1" />
+          <End Role="Packages" Type="Self.Packages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Packages">
+              <PropertyRef Name="ExportCurrency" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Packages_Currency1">
+          <End Role="Currency" Type="Self.Currency" Multiplicity="1" />
+          <End Role="Packages" Type="Self.Packages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Packages">
+              <PropertyRef Name="DLExportCurrency" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Packages_ShippingMethods">
           <End Role="ShippingMethods" Type="Self.ShippingMethods" Multiplicity="1" />
           <End Role="Packages" Type="Self.Packages" Multiplicity="*" />
@@ -1483,6 +1558,30 @@
             </Principal>
             <Dependent Role="Packages">
               <PropertyRef Name="ShippingMethod" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Packages_Warehouse">
+          <End Role="Warehouse" Type="Self.Warehouse" Multiplicity="1" />
+          <End Role="Packages" Type="Self.Packages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Warehouse">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Packages">
+              <PropertyRef Name="ShipWarehouse" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Packages_Warehouse1">
+          <End Role="Warehouse" Type="Self.Warehouse" Multiplicity="1" />
+          <End Role="Packages" Type="Self.Packages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Warehouse">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Packages">
+              <PropertyRef Name="ReturnWarehouse" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2126,6 +2225,7 @@
           <EntitySet Name="OrderAddresses" EntityType="Self.OrderAddresses" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrderLog" EntityType="Self.OrderLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderSerials" EntityType="Self.OrderSerials" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PackageContent" EntityType="Self.PackageContent" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PackageContentLang" EntityType="Self.PackageContentLang" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Packages" EntityType="Self.Packages" Schema="dbo" store:Type="Tables" />
@@ -2272,6 +2372,18 @@
             <End Role="Warehouse" EntitySet="Warehouse" />
             <End Role="OrderLog" EntitySet="OrderLog" />
           </AssociationSet>
+          <AssociationSet Name="FK_OrderSerials_Items" Association="Self.FK_OrderSerials_Items">
+            <End Role="Items" EntitySet="Items" />
+            <End Role="OrderSerials" EntitySet="OrderSerials" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderSerials_Orders" Association="Self.FK_OrderSerials_Orders">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="OrderSerials" EntitySet="OrderSerials" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderSerials_SKU" Association="Self.FK_OrderSerials_SKU">
+            <End Role="SKU" EntitySet="SKU" />
+            <End Role="OrderSerials" EntitySet="OrderSerials" />
+          </AssociationSet>
           <AssociationSet Name="FK_Package_Order" Association="Self.FK_Package_Order">
             <End Role="Orders" EntitySet="Orders" />
             <End Role="Packages" EntitySet="Packages" />
@@ -2284,8 +2396,24 @@
             <End Role="PackageContent" EntitySet="PackageContent" />
             <End Role="PackageContentLang" EntitySet="PackageContentLang" />
           </AssociationSet>
+          <AssociationSet Name="FK_Packages_Currency" Association="Self.FK_Packages_Currency">
+            <End Role="Currency" EntitySet="Currency" />
+            <End Role="Packages" EntitySet="Packages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Packages_Currency1" Association="Self.FK_Packages_Currency1">
+            <End Role="Currency" EntitySet="Currency" />
+            <End Role="Packages" EntitySet="Packages" />
+          </AssociationSet>
           <AssociationSet Name="FK_Packages_ShippingMethods" Association="Self.FK_Packages_ShippingMethods">
             <End Role="ShippingMethods" EntitySet="ShippingMethods" />
+            <End Role="Packages" EntitySet="Packages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Packages_Warehouse" Association="Self.FK_Packages_Warehouse">
+            <End Role="Warehouse" EntitySet="Warehouse" />
+            <End Role="Packages" EntitySet="Packages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Packages_Warehouse1" Association="Self.FK_Packages_Warehouse1">
+            <End Role="Warehouse" EntitySet="Warehouse" />
             <End Role="Packages" EntitySet="Packages" />
           </AssociationSet>
           <AssociationSet Name="FK_Payment_Order" Association="Self.FK_Payment_Order">
@@ -2891,6 +3019,35 @@
             <End Role="Carriers" EntitySet="Carriers" />
             <End Role="ShippingMethods" EntitySet="ShippingMethods" />
           </AssociationSet>
+          <EntitySet Name="OrderSerials" EntityType="PurchaseOrderModel.OrderSerials" />
+          <AssociationSet Name="FK_OrderSerials_Items" Association="PurchaseOrderModel.FK_OrderSerials_Items">
+            <End Role="Items" EntitySet="Items" />
+            <End Role="OrderSerials" EntitySet="OrderSerials" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderSerials_Orders" Association="PurchaseOrderModel.FK_OrderSerials_Orders">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="OrderSerials" EntitySet="OrderSerials" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderSerials_SKU" Association="PurchaseOrderModel.FK_OrderSerials_SKU">
+            <End Role="SKU" EntitySet="SKU" />
+            <End Role="OrderSerials" EntitySet="OrderSerials" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Packages_Currency" Association="PurchaseOrderModel.FK_Packages_Currency">
+            <End Role="Currency" EntitySet="Currency" />
+            <End Role="Packages" EntitySet="Packages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Packages_Currency1" Association="PurchaseOrderModel.FK_Packages_Currency1">
+            <End Role="Currency" EntitySet="Currency" />
+            <End Role="Packages" EntitySet="Packages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Packages_Warehouse" Association="PurchaseOrderModel.FK_Packages_Warehouse">
+            <End Role="Warehouse" EntitySet="Warehouse" />
+            <End Role="Packages" EntitySet="Packages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Packages_Warehouse1" Association="PurchaseOrderModel.FK_Packages_Warehouse1">
+            <End Role="Warehouse" EntitySet="Warehouse" />
+            <End Role="Packages" EntitySet="Packages" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="AdminGroup">
           <Key>
@@ -3324,6 +3481,7 @@
           <NavigationProperty Name="RMASKU" Relationship="PurchaseOrderModel.FK_RMASKU_SKU" FromRole="SKU" ToRole="RMASKU" />
           <NavigationProperty Name="RMASerialsLlist" Relationship="PurchaseOrderModel.FK_RMASerialsLlist_SKU" FromRole="SKU" ToRole="RMASerialsLlist" />
           <NavigationProperty Name="OrderItems" Relationship="PurchaseOrderModel.FK_Item_SKU" FromRole="SKU" ToRole="Items" />
+          <NavigationProperty Name="OrderSerials" Relationship="PurchaseOrderModel.FK_OrderSerials_SKU" FromRole="SKU" ToRole="OrderSerials" />
         </EntityType>
         <EntityType Name="Sku_Attribute">
           <Key>
@@ -3526,6 +3684,8 @@
           <NavigationProperty Name="RMA" Relationship="PurchaseOrderModel.FK_RMA_Warehouse" FromRole="Warehouse" ToRole="RMA" />
           <NavigationProperty Name="RMASKU" Relationship="PurchaseOrderModel.FK_RMASKU_Warehouse" FromRole="Warehouse" ToRole="RMASKU" />
           <NavigationProperty Name="RMASerialsLlist" Relationship="PurchaseOrderModel.FK_RMASerialsLlist_Warehouse" FromRole="Warehouse" ToRole="RMASerialsLlist" />
+          <NavigationProperty Name="Packages" Relationship="PurchaseOrderModel.FK_Packages_Warehouse" FromRole="Warehouse" ToRole="Packages" />
+          <NavigationProperty Name="ReturnPackages" Relationship="PurchaseOrderModel.FK_Packages_Warehouse1" FromRole="Warehouse" ToRole="Packages" />
         </EntityType>
         <EntityType Name="WarehouseSummary">
           <Key>
@@ -3990,6 +4150,8 @@
           <NavigationProperty Name="Marketplace" Relationship="PurchaseOrderModel.FK_Marketplace_Currency" FromRole="Currency" ToRole="Marketplace" />
           <NavigationProperty Name="Company" Relationship="PurchaseOrderModel.FK_Company_Currency" FromRole="Currency" ToRole="Company" />
           <NavigationProperty Name="NetoGroup" Relationship="PurchaseOrderModel.FK_NetoGroup_Currency" FromRole="Currency" ToRole="NetoGroup" />
+          <NavigationProperty Name="Packages" Relationship="PurchaseOrderModel.FK_Packages_Currency" FromRole="Currency" ToRole="Packages" />
+          <NavigationProperty Name="DLPackages" Relationship="PurchaseOrderModel.FK_Packages_Currency1" FromRole="Currency" ToRole="Packages" />
         </EntityType>
         <EntityType Name="NetoGroup">
           <Key>
@@ -4794,6 +4956,7 @@
           <NavigationProperty Name="GetOrder" Relationship="PurchaseOrderModel.FK_Item_Order" FromRole="Items" ToRole="Orders" />
           <NavigationProperty Name="GetPackage" Relationship="PurchaseOrderModel.FK_Item_Package" FromRole="Items" ToRole="Packages" />
           <NavigationProperty Name="GetSku" Relationship="PurchaseOrderModel.FK_Item_SKU" FromRole="Items" ToRole="SKU" />
+          <NavigationProperty Name="Serials" Relationship="PurchaseOrderModel.FK_OrderSerials_Items" FromRole="Items" ToRole="OrderSerials" />
         </EntityType>
         <EntityType Name="OrderActionLogs">
           <Key>
@@ -4842,6 +5005,7 @@
           <NavigationProperty Name="Packages" Relationship="PurchaseOrderModel.FK_Package_Order" FromRole="Orders" ToRole="Packages" />
           <NavigationProperty Name="Payments" Relationship="PurchaseOrderModel.FK_Payment_Order" FromRole="Orders" ToRole="Payments" />
           <NavigationProperty Name="Addresses" Relationship="PurchaseOrderModel.FK_ShippingAddress_Order" FromRole="Orders" ToRole="OrderAddresses" />
+          <NavigationProperty Name="Serials" Relationship="PurchaseOrderModel.FK_OrderSerials_Orders" FromRole="Orders" ToRole="OrderSerials" />
         </EntityType>
         <EntityType Name="Packages">
           <Key>
@@ -4853,14 +5017,14 @@
           <Property Name="OrderID" Type="Int32" Nullable="false" />
           <Property Name="CarrierBox" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ShippingMethod" Type="Int32" Nullable="false" />
-          <Property Name="Export" Type="Boolean" Nullable="false" />
-          <Property Name="ExportMethod" Type="Boolean" Nullable="false" />
+          <Property Name="Export" Type="Byte" Nullable="false" />
+          <Property Name="ExportMethod" Type="Byte" Nullable="false" />
           <Property Name="ExportValue" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="ExportCurrency" Type="Int32" Nullable="false" />
           <Property Name="UploadTracking" Type="Boolean" Nullable="false" />
           <Property Name="Tracking" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="DLExport" Type="Boolean" Nullable="false" />
-          <Property Name="DLExportMethod" Type="Boolean" Nullable="false" />
+          <Property Name="DLExport" Type="Byte" Nullable="false" />
+          <Property Name="DLExportMethod" Type="Byte" Nullable="false" />
           <Property Name="DLExportValue" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="DLExportCurrency" Type="Int32" Nullable="false" />
           <Property Name="DLUploadTracking" Type="Boolean" Nullable="false" />
@@ -4875,7 +5039,11 @@
           <NavigationProperty Name="Items" Relationship="PurchaseOrderModel.FK_Item_Package" FromRole="Packages" ToRole="Items" />
           <NavigationProperty Name="ActionLogs" Relationship="PurchaseOrderModel.FK_OrderActionLog_Package" FromRole="Packages" ToRole="OrderActionLogs" />
           <NavigationProperty Name="GetOrder" Relationship="PurchaseOrderModel.FK_Package_Order" FromRole="Packages" ToRole="Orders" />
-          <NavigationProperty Name="Method" Relationship="PurchaseOrderModel.FK_Packages_ShippingMethods" FromRole="Packages" ToRole="ShippingMethods" />
+          <NavigationProperty Name="GetMethod" Relationship="PurchaseOrderModel.FK_Packages_ShippingMethods" FromRole="Packages" ToRole="ShippingMethods" />
+          <NavigationProperty Name="GetCurrency" Relationship="PurchaseOrderModel.FK_Packages_Currency" FromRole="Packages" ToRole="Currency" />
+          <NavigationProperty Name="GetDLCurrency" Relationship="PurchaseOrderModel.FK_Packages_Currency1" FromRole="Packages" ToRole="Currency" />
+          <NavigationProperty Name="GetWarehouse" Relationship="PurchaseOrderModel.FK_Packages_Warehouse" FromRole="Packages" ToRole="Warehouse" />
+          <NavigationProperty Name="GetReturnWarehouse" Relationship="PurchaseOrderModel.FK_Packages_Warehouse1" FromRole="Packages" ToRole="Warehouse" />
         </EntityType>
         <EntityType Name="Payments">
           <Key>
@@ -5149,6 +5317,108 @@
             </Principal>
             <Dependent Role="ShippingMethods">
               <PropertyRef Name="LastMileCarrier" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="OrderSerials">
+          <Key>
+            <PropertyRef Name="SerialNumber" />
+            <PropertyRef Name="ItemID" />
+          </Key>
+          <Property Name="IsEnable" Type="Boolean" Nullable="false" DefaultValue="true" />
+          <Property Name="SerialNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OrderID" Type="Int32" Nullable="false" />
+          <Property Name="ItemID" Type="Int32" Nullable="false" />
+          <Property Name="Sku" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Update_by" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Update_at" Type="DateTime" Precision="3" />
+          <Property Name="Create_by" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Create_at" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Items" Relationship="PurchaseOrderModel.FK_OrderSerials_Items" FromRole="OrderSerials" ToRole="Items" />
+          <NavigationProperty Name="Orders" Relationship="PurchaseOrderModel.FK_OrderSerials_Orders" FromRole="OrderSerials" ToRole="Orders" />
+          <NavigationProperty Name="GetSku" Relationship="PurchaseOrderModel.FK_OrderSerials_SKU" FromRole="OrderSerials" ToRole="SKU" />
+        </EntityType>
+        <Association Name="FK_OrderSerials_Items">
+          <End Type="PurchaseOrderModel.Items" Role="Items" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.OrderSerials" Role="OrderSerials" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Items">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrderSerials">
+              <PropertyRef Name="ItemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderSerials_Orders">
+          <End Type="PurchaseOrderModel.Orders" Role="Orders" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.OrderSerials" Role="OrderSerials" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrderSerials">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderSerials_SKU">
+          <End Type="PurchaseOrderModel.SKU" Role="SKU" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.OrderSerials" Role="OrderSerials" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SKU">
+              <PropertyRef Name="SkuID" />
+            </Principal>
+            <Dependent Role="OrderSerials">
+              <PropertyRef Name="Sku" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Packages_Currency">
+          <End Type="PurchaseOrderModel.Currency" Role="Currency" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.Packages" Role="Packages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Packages">
+              <PropertyRef Name="ExportCurrency" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Packages_Currency1">
+          <End Type="PurchaseOrderModel.Currency" Role="Currency" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.Packages" Role="Packages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Packages">
+              <PropertyRef Name="DLExportCurrency" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Packages_Warehouse">
+          <End Type="PurchaseOrderModel.Warehouse" Role="Warehouse" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.Packages" Role="Packages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Warehouse">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Packages">
+              <PropertyRef Name="ShipWarehouse" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Packages_Warehouse1">
+          <End Type="PurchaseOrderModel.Warehouse" Role="Warehouse" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.Packages" Role="Packages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Warehouse">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Packages">
+              <PropertyRef Name="ReturnWarehouse" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -6285,6 +6555,21 @@
                 <ScalarProperty Name="OrderID" ColumnName="OrderID" />
                 <ScalarProperty Name="SCID" ColumnName="SCID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderSerials">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.OrderSerials">
+              <MappingFragment StoreEntitySet="OrderSerials">
+                <ScalarProperty Name="Create_at" ColumnName="Create_at" />
+                <ScalarProperty Name="Create_by" ColumnName="Create_by" />
+                <ScalarProperty Name="Update_at" ColumnName="Update_at" />
+                <ScalarProperty Name="Update_by" ColumnName="Update_by" />
+                <ScalarProperty Name="Sku" ColumnName="Sku" />
+                <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="SerialNumber" ColumnName="SerialNumber" />
                 <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
               </MappingFragment>
             </EntityTypeMapping>

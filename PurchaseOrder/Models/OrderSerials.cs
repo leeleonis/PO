@@ -12,36 +12,26 @@ namespace PurchaseOrderSys.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Items
+    public partial class OrderSerials
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Items()
+        public OrderSerials()
         {
             this.IsEnable = true;
-            this.Serials = new HashSet<OrderSerials>();
         }
     
         public bool IsEnable { get; set; }
-        public int ID { get; set; }
-        public Nullable<int> SCID { get; set; }
+        public string SerialNumber { get; set; }
         public int OrderID { get; set; }
-        public int PackageID { get; set; }
+        public int ItemID { get; set; }
         public string Sku { get; set; }
-        public decimal UnitPrice { get; set; }
-        public int Qty { get; set; }
-        public int Currency { get; set; }
-        public string eBayItemID { get; set; }
-        public string SalesRecordNumber { get; set; }
-        public Nullable<int> RMAID { get; set; }
         public string Update_by { get; set; }
         public Nullable<System.DateTime> Update_at { get; set; }
         public string Create_by { get; set; }
         public System.DateTime Create_at { get; set; }
     
-        public virtual Orders GetOrder { get; set; }
-        public virtual Packages GetPackage { get; set; }
+        public virtual Items Items { get; set; }
+        public virtual Orders Orders { get; set; }
         public virtual SKU GetSku { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OrderSerials> Serials { get; set; }
     }
 }

@@ -28,14 +28,14 @@ namespace PurchaseOrderSys.Models
         public int OrderID { get; set; }
         public string CarrierBox { get; set; }
         public int ShippingMethod { get; set; }
-        public bool Export { get; set; }
-        public bool ExportMethod { get; set; }
+        public byte Export { get; set; }
+        public byte ExportMethod { get; set; }
         public decimal ExportValue { get; set; }
         public int ExportCurrency { get; set; }
         public bool UploadTracking { get; set; }
         public string Tracking { get; set; }
-        public bool DLExport { get; set; }
-        public bool DLExportMethod { get; set; }
+        public byte DLExport { get; set; }
+        public byte DLExportMethod { get; set; }
         public decimal DLExportValue { get; set; }
         public int DLExportCurrency { get; set; }
         public bool DLUploadTracking { get; set; }
@@ -53,6 +53,10 @@ namespace PurchaseOrderSys.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderActionLogs> ActionLogs { get; set; }
         public virtual Orders GetOrder { get; set; }
-        public virtual ShippingMethods Method { get; set; }
+        public virtual ShippingMethods GetMethod { get; set; }
+        public virtual Currency GetCurrency { get; set; }
+        public virtual Currency GetDLCurrency { get; set; }
+        public virtual Warehouse GetWarehouse { get; set; }
+        public virtual Warehouse GetReturnWarehouse { get; set; }
     }
 }

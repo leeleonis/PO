@@ -54,6 +54,13 @@ namespace PurchaseOrderSys.Models
     
     		    
     		/// <summary>
+    		/// Api
+    		/// </summary>        
+    	    [Display(Name = "DirectLine_Api", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  Api { get; set; }
+    
+    		    
+    		/// <summary>
     		/// Email
     		/// </summary>        
     	    [Display(Name = "DirectLine_Email", ResourceType = typeof(App_GlobalResources.Resource))]

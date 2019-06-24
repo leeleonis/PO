@@ -9,15 +9,15 @@
             margin-top: 25px;
         }
 
-        #list-package > div:not(.edit) td.text span + input, #list-package > div:not(.edit) button.save {
+        #list-package > div:not(.edit) .text span + input, #list-package > div:not(.edit) .text span + select, #list-package > div:not(.edit) button.save {
             display: none;
         }
 
-        #list-package > div.edit td.text {
+        #list-package > div.edit .text {
             padding: 0px;
         }
         
-        #list-package > div.edit td.text span, #list-package > div.edit button.edit {
+        #list-package > div.edit .text span, #list-package > div.edit button.edit {
             display: none;
 
         }
@@ -204,7 +204,16 @@
 
                                                     <div class="form-group" id="list-package">
                                                         @{
-                                                            Html.RenderPartial("_PackageDetail", new ViewDataDictionary { { "WarehouseList", ViewBag.WarehouseList } });
+                                                            var ViewData = new ViewDataDictionary()
+                                                            {
+                                                                { "MethodList", ViewBag.MethodList },
+                                                                { "WarehouseList", ViewBag.WarehouseList },
+                                                                { "CurrencyList", ViewBag.CurrencyList }
+                                                            };
+
+                                                            foreach (var package in Model.Packages.Where(p => p.IsEnable)) {
+                                                                Html.RenderPartial("_PackageDetail", package, ViewData);
+                                                            }
                                                         }
                                                     </div>
 
@@ -407,5 +416,14 @@ DD/MM/YYY Hr:Min:Sec</textarea>
 
         $(document).ready(function () {
         });
+
+        var PackageEdit = function (ID) {
+            $packageList.children("div").each(function () {
+                if ($(this).data('package') == ID) {
+                    return $(this).addClass('edit');
+                }
+                alert("Not found!");
+            });
+        };
     </script>
 }   

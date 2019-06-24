@@ -82,5 +82,6 @@ namespace PurchaseOrderSys.Models
         public virtual DbSet<ShippingMethods> ShippingMethods { get; set; }
         public virtual DbSet<ApiSetting> ApiSetting { get; set; }
         public virtual DbSet<OrderAddresses> OrderAddresses { get; set; }
+        public virtual DbSet<OrderSerials> OrderSerials { get; set; }
     }
 }
