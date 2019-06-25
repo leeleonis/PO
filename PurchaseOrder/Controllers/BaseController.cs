@@ -1253,7 +1253,7 @@ namespace PurchaseOrderSys.Controllers
             if (nPurchaseOrder.SCPurchaseID.HasValue)
             {
                 var SCPurchase = SCWS.Get_PurchaseOrder(nPurchaseOrder.SCPurchaseID.Value);
-                foreach (var skuitem in nPurchaseOrder.PurchaseSKU)
+                foreach (var skuitem in nPurchaseOrder.PurchaseSKU.Where(x=>x.IsEnable))
                 {
                     var Products = SCPurchase.Products.Where(x => x.ProductID == skuitem.SkuNo);
                     if (!Products.Any())

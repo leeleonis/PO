@@ -554,7 +554,7 @@ namespace PurchaseOrderSys.Controllers
                             WarehouseID = Serial.PurchaseSKU.PurchaseOrder.WarehouseID,
                             WarehouseName = Serial.PurchaseSKU.PurchaseOrder.WarehousePO.Name,
                             SKU = Serial.PurchaseSKU.SkuNo,
-                            SKUName = Serial.PurchaseSKU.SKU.SkuLang.Where(x => x.LangID == "en-US").FirstOrDefault().Name,
+                            SKUName = Serial.PurchaseSKU.SKU.SkuLang.Where(x => x.LangID == LangID).FirstOrDefault().Name,
                             Serial = item.SerialsNo
                         });
                     }
@@ -578,7 +578,7 @@ namespace PurchaseOrderSys.Controllers
                             WarehouseID = Serial.WarehouseID,
                             WarehouseName = Serial.Warehouse.Name,
                             SKU = Serial.RMASKU.SkuNo,
-                            SKUName = Serial.RMASKU.SKU.SkuLang.Where(x => x.LangID == "en-US").FirstOrDefault().Name,
+                            SKUName = Serial.RMASKU.SKU.SkuLang.Where(x => x.LangID == LangID).FirstOrDefault().Name,
                             Serial = item.SerialsNo
                         });
                     }

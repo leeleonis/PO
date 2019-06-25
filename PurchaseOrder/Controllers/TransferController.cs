@@ -103,7 +103,7 @@ namespace PurchaseOrderSys.Controllers
                     ck = item.ID,
                     sk = item.SkuNo,
                     SKU = item.SkuNo,
-                    ProductName = item.SKU.SkuLang.Where(x => x.LangID == "en-US").FirstOrDefault()?.Name,
+                    ProductName = item.SKU.SkuLang.Where(x => x.LangID == LangID).FirstOrDefault()?.Name,
                     QTY = item.QTY,
                     TotalReceive = item.SerialsLlist.Where(x => x.SerialsType == "TransferIn").Sum(x => x.SerialsQTY),
                     Serial = GetSerialMulti(item),

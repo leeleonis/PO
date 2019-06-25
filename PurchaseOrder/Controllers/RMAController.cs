@@ -179,7 +179,7 @@ namespace PurchaseOrderSys.Controllers
                                 }
                             }
                             var UnitPrice = OrderItemDataitem.Items.Where(x => x.SKU == Skuitem.SKU).FirstOrDefault()?.UnitPrice;
-                            var ProductName = db.SkuLang.Where(x => x.LangID == "en-US" && x.Sku == Skuitem.SKU).FirstOrDefault()?.Name;
+                            var ProductName = db.SkuLang.Where(x => x.LangID == LangID && x.Sku == Skuitem.SKU).FirstOrDefault()?.Name;
                             foreach (var RMAListitem in RMAList.Where(x => x.SKU == Skuitem.SKU))
                             {
                                 var newRMASKU = new RMASKU
@@ -361,7 +361,7 @@ namespace PurchaseOrderSys.Controllers
                 foreach (var SKUitemList in item.Items)
                 {
                     var SKUNo = SKUitemList.SKU;
-                    var ProductName = db.SkuLang.Where(x => x.LangID == "en-US" && x.Sku == SKUNo).FirstOrDefault()?.Name;
+                    var ProductName = db.SkuLang.Where(x => x.LangID == LangID && x.Sku == SKUNo).FirstOrDefault()?.Name;
                     RMAModelVMList.Add(new RMAModelVM { ck = item.OrderID, Order = item.OrderID, QTY = item.Items.FirstOrDefault().QTY, SKU = SKUNo, ProductName = ProductName});
                 }
             }
@@ -376,7 +376,7 @@ namespace PurchaseOrderSys.Controllers
             foreach (var item in RMA.RMASKU)
             {
                 var SKUNo = item.SkuNo;
-                var ProductName = db.SkuLang.Where(x => x.LangID == "en-US" && x.Sku == SKUNo).FirstOrDefault()?.Name;
+                var ProductName = db.SkuLang.Where(x => x.LangID == LangID && x.Sku == SKUNo).FirstOrDefault()?.Name;
                 RMAModelVMList.Add(new RMAModelVM { QTY = item.ReturnedQTY, SKU = SKUNo, ProductName = ProductName, Warehouse = item.WarehouseID, Reason=item.Reason });
             }
            
@@ -406,7 +406,7 @@ namespace PurchaseOrderSys.Controllers
                 }
              
                 nRMAEdit.QTYOrdered = item.QTYOrdered;
-                nRMAEdit.ProductName = item.SKU.SkuLang.Where(y => y.LangID == "en-US").FirstOrDefault()?.Name;
+                nRMAEdit.ProductName = item.SKU.SkuLang.Where(y => y.LangID == LangID).FirstOrDefault()?.Name;
                 nRMAEdit.ReturnedSerialsNo = RMASerial?.SerialsNo;
                 nRMAEdit.OrderSerialsNo = item.RMAOrderSerialsLlist.FirstOrDefault()?.SerialsNo;
                 nRMAEdit.UPCEAN = item.SKU.UPC + "/" + item.SKU.EAN;
@@ -766,7 +766,7 @@ namespace PurchaseOrderSys.Controllers
                     Model = "L",
                     SKU = x.SkuNo,
                     QTYOrdered = x.QTYOrdered,
-                    ProductName = x.SKU.SkuLang.Where(y => y.LangID == "en-US").FirstOrDefault()?.Name,
+                    ProductName = x.SKU.SkuLang.Where(y => y.LangID == LangID).FirstOrDefault()?.Name,
                     ReturnedSerialsNo = x.RMASerialsLlist.FirstOrDefault()?.SerialsNo,
                     OrderSerialsNo = x.RMAOrderSerialsLlist.FirstOrDefault()?.SerialsNo,
                     UPCEAN = x.SKU.UPC + "/" + x.SKU.EAN,

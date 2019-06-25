@@ -82,14 +82,14 @@ namespace PurchaseOrderSys.Controllers
 
         public ActionResult SkuNumberGet(string Search)
         {
-            var dataList = db.SkuLang.Where(x => x.LangID == "en-US" && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
+            var dataList = db.SkuLang.Where(x => x.LangID == LangID && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
             return Json(new { items = dataList }, JsonRequestBehavior.AllowGet);
         }
         public ActionResult TSkuNumberGet(string Search, int FromWID)
         { 
             var SKUList = new List<string>();
             SKUList = SearchSkuByWarehouse(Search, FromWID);
-            var dataList = db.SkuLang.Where(x => x.LangID == "en-US" && SKUList.Contains(x.Sku) && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
+            var dataList = db.SkuLang.Where(x => x.LangID == LangID && SKUList.Contains(x.Sku) && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
             //var dataList = db.SkuLang.Where(x => x.LangID == "zh-tw" && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
             return Json(new { items = dataList }, JsonRequestBehavior.AllowGet);
         }
@@ -99,7 +99,7 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult CMSkuNumberGet(string Search, int PurchaseOrderID)
         {
             var PurchaseSKUList = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.IsEnable && x.PurchaseOrderID == PurchaseOrderID && x.SerialsLlist.Sum(y => y.SerialsQTY) > 0).Select(x => x.SkuNo);
-            var dataList = db.SkuLang.Where(x => x.LangID == "en-US" && PurchaseSKUList.Contains(x.Sku) && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
+            var dataList = db.SkuLang.Where(x => x.LangID == LangID && PurchaseSKUList.Contains(x.Sku) && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
             //var dataList = db.SkuLang.Where(x => x.LangID == "zh-tw" && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
             return Json(new { items = dataList }, JsonRequestBehavior.AllowGet);
         }
@@ -374,7 +374,7 @@ namespace PurchaseOrderSys.Controllers
             }
             if (Skulist != null && Skulist.Where(x => !string.IsNullOrWhiteSpace(x)).Any())
             {
-                var dataList = db.SkuLang.Where(x => x.LangID == "en-US" && Skulist.Contains(x.Sku)).Select(x =>
+                var dataList = db.SkuLang.Where(x => x.LangID == LangID && Skulist.Contains(x.Sku)).Select(x =>
                 new PoSKUVM
                 {
                     ck = x.Sku,
@@ -876,33 +876,36 @@ namespace PurchaseOrderSys.Controllers
                     for (int row = 2; worksheet.Cells[row, 1].Value != null; row++)
                     {
                         var SKU = worksheet.Cells[row, 1].Value?.ToString();
-                        var serials = worksheet.Cells[row, 2].Value?.ToString();
-                        var ProductName = worksheet.Cells[row, 3].Value?.ToString();
-                        var Price = 0m;
-                        decimal.TryParse(worksheet.Cells[row, 4].Value?.ToString(), out Price);
-                        var Discount = 0m;
-                        decimal.TryParse(worksheet.Cells[row, 5].Value?.ToString(), out Discount);
-                        if (PurchaseOrder.PurchaseSKU.Where(x => x.IsEnable && x.SkuNo == SKU && x.Price == Price).Any())
+                        if (!string.IsNullOrWhiteSpace(SKU))
                         {
-                            EditSKUserialsVMList.Add(new AddSKUserialsVM
+                            var serials = worksheet.Cells[row, 2].Value?.ToString();
+                            var ProductName = worksheet.Cells[row, 3].Value?.ToString();
+                            var Price = 0m;
+                            decimal.TryParse(worksheet.Cells[row, 4].Value?.ToString(), out Price);
+                            var Discount = 0m;
+                            decimal.TryParse(worksheet.Cells[row, 5].Value?.ToString(), out Discount);
+                            if (PurchaseOrder.PurchaseSKU.Where(x => x.IsEnable && x.SkuNo == SKU && x.Price == Price).Any())
                             {
-                                Discount = Discount,
-                                Price = Price,
-                                ProductName = ProductName,
-                                serials = serials,
-                                SKU = SKU
-                            });
-                        }
-                        else
-                        {
-                            AddSKUserialsVMList.Add(new AddSKUserialsVM
+                                EditSKUserialsVMList.Add(new AddSKUserialsVM
+                                {
+                                    Discount = Discount,
+                                    Price = Price,
+                                    ProductName = ProductName,
+                                    serials = serials,
+                                    SKU = SKU
+                                });
+                            }
+                            else
                             {
-                                Discount = Discount,
-                                Price = Price,
-                                ProductName = ProductName,
-                                serials = serials,
-                                SKU = SKU
-                            });
+                                AddSKUserialsVMList.Add(new AddSKUserialsVM
+                                {
+                                    Discount = Discount,
+                                    Price = Price,
+                                    ProductName = ProductName,
+                                    serials = serials,
+                                    SKU = SKU
+                                });
+                            }
                         }
                     }
                     #region 直接匯入序號
@@ -922,6 +925,10 @@ namespace PurchaseOrderSys.Controllers
                             if (SKU == null)
                             {
                                 return Json(new { status = false, Msg = "SKU：" + item.Key.SKU + "不存在" }, JsonRequestBehavior.AllowGet);
+                            }
+                            if (!SKU.SerialTracking && item.QTYOrdered > 0)//有開序號管理
+                            {
+                                return Json(new { status = false, Msg = "SKU：" + item.Key.SKU + "沒開啟序號管理. 請至操作頁面開啟." }, JsonRequestBehavior.AllowGet);
                             }
                             try
                             {
@@ -1051,7 +1058,7 @@ namespace PurchaseOrderSys.Controllers
                             SKUList = SearchSkuByWarehouse(Gserialitem.Key, FromWID.Value);
                             if (SKUList.Any())
                             {
-                                var SKU = db.SKU.Find(Gserialitem.Key)?.SkuLang.Where(x => x.LangID == "en-US").FirstOrDefault();
+                                var SKU = db.SKU.Find(Gserialitem.Key)?.SkuLang.Where(x => x.LangID == LangID).FirstOrDefault();
                                 var nTransferSKU = Transfer.TransferSKU.Where(x=>x.SkuNo== Gserialitem.Key).FirstOrDefault();
                                 if (nTransferSKU == null)//沒有資料就新增
                                 {
@@ -1280,7 +1287,7 @@ namespace PurchaseOrderSys.Controllers
                         }
                         foreach (var item in order.Items)
                         {
-                            var SKU = db.SKU.Find(item.ProductID)?.SkuLang.Where(x => x.LangID == "en-US").FirstOrDefault();
+                            var SKU = db.SKU.Find(item.ProductID)?.SkuLang.Where(x => x.LangID == LangID).FirstOrDefault();
                             if (SKU == null)
                             {
                                 result.SetError(item.ProductID + "：無此SKU資料");

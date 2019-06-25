@@ -685,7 +685,7 @@ namespace PurchaseOrderSys.Controllers
                     }
                   
                     CreatAndEditPOSKUbySC(PurchaseOrder);
-                    foreach (var PurchaseSKU in PurchaseOrder.PurchaseSKU)
+                    foreach (var PurchaseSKU in PurchaseOrder.PurchaseSKU.Where(x=>x.IsEnable))
                     {
                         foreach (var item in PurchaseSKU.SerialsLlist)
                         {
