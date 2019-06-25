@@ -57,10 +57,11 @@ namespace PurchaseOrderSys.Controllers
                 Currency = filter.Currency,
                 InvoiceDate = filter.InvoiceDate,
                 InvoiceNo = filter.InvoiceNo,
+                Description = filter.Description,
                 Tax = filter.Tax,
                 CreateBy = UserBy,
                 CreateAt = CreateAt
-            };   
+            };
             db.PurchaseOrder.Add(nPurchaseOrder);
             var dataList = (List<PoSKUVM>)Session["SkuNumberList" + SID];
             if (dataList != null)
@@ -553,6 +554,7 @@ namespace PurchaseOrderSys.Controllers
             PurchaseOrder.Tax = filter.Tax;
             PurchaseOrder.ShippingCost = filter.ShippingCost;
             PurchaseOrder.Other = filter.Other;
+            PurchaseOrder.Description= filter.Description;
             PurchaseOrder.UpdateBy = UserBy;
             PurchaseOrder.UpdateAt = dt;
 

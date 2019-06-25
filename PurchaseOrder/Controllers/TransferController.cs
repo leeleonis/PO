@@ -122,51 +122,9 @@ namespace PurchaseOrderSys.Controllers
             return View(Transfer);
         }
 
-        private int? PrepSerialChk(TransferSKU item)
-        {
-            var tQTY = item.QTY;
-            var SerialsLlist = item.SerialsLlist.Where(x => x.SerialsType == "TransferOut").Sum(x=>x.SerialsQTY);
-            var RMASerialsLlist = item.RMASerialsLlist.Where(x => x.SerialsType == "TransferOut").Sum(x => x.SerialsQTY);
-            return SerialsLlist + RMASerialsLlist + tQTY;
 
 
-        }
-
-        private string GetSerialMulti(TransferSKU item)
-        {
-            var SerialsLlist = item.SerialsLlist.Where(x => x.SerialsType == "TransferOut");
-            var RMASerialsLlist = item.RMASerialsLlist.Where(x => x.SerialsType == "TransferOut");
-            if (SerialsLlist.Any() && RMASerialsLlist.Any())
-            {
-                return "Multi";
-            }
-            else if (SerialsLlist.Any())
-            {
-                if (SerialsLlist.Count() > 1)
-                {
-                    return "Multi";
-                }
-                else
-                {
-                    return SerialsLlist.FirstOrDefault().SerialsNo;
-                }
-            }
-            else if (RMASerialsLlist.Any())
-            {
-                if (RMASerialsLlist.Count() > 1)
-                {
-                    return "Multi";
-                }
-                else
-                {
-                    return RMASerialsLlist.FirstOrDefault().SerialsNo;
-                }
-            }
-            else
-            {
-                return "";
-            }
-        }
+      
 
         [HttpPost]
         public ActionResult Edit(Transfer Transfer, string SID, bool? saveexit, bool? Requestedval)
@@ -774,80 +732,8 @@ namespace PurchaseOrderSys.Controllers
                 return Json(new { status = false, Errmsg = "序號不存在，此序號不能移倉" }, JsonRequestBehavior.AllowGet);
             }
         }
-        public ActionResult PrepVMList(string SID)
-        {
-            var PrepVMList = (List<TransferItemVM>)Session["PrepVMList"+ SID];
-            var PrepTableList = new List<PrepTable>();
-            if (PrepVMList != null)
-            {
-                foreach (var item in PrepVMList)
-                {
-                    if (item.SerialsLlist.Any()|| item.RMASerialsLlist.Any()) 
-                    {
-                        foreach (var SerialsLlistitem in item.SerialsLlist)//一般
-                        {
-                            PrepTableList.Add(new PrepTable { ID = item.ID, SKU = item.SKU, Name = item.Name, Serial = SerialsLlistitem.SerialsNo, QTY = (item.SerialsLlist.Count() + item.RMASerialsLlist.Count()) + "/" + item.QTY, SerialTracking = GetSerialTracking(item.SKU), Full = (item.SerialsLlist.Count() + item.RMASerialsLlist.Count()) == item.QTY, MaxQTY = item.QTY });
-                        }
-                   
-                        foreach (var RMASerialsLlistitem in item.RMASerialsLlist)//RMA
-                        {
-                            PrepTableList.Add(new PrepTable { ID = item.ID, SKU = item.SKU, Name = item.Name, Serial = RMASerialsLlistitem.SerialsNo, QTY =  (item.SerialsLlist.Count() + item.RMASerialsLlist.Count()) + "/" + item.QTY, SerialTracking = GetSerialTracking(item.SKU), Full = (item.SerialsLlist.Count() + item.RMASerialsLlist.Count()) == item.QTY, MaxQTY = item.QTY });
-                        }
-                    }
-                    else
-                    {
-                        PrepTableList.Add(new PrepTable { ID = item.ID, SKU = item.SKU, Name = item.Name, QTY = (item.SerialsLlist.Count() + item.RMASerialsLlist.Count()) + "/" + item.QTY, SerialTracking = GetSerialTracking(item.SKU), Full = (item.SerialsLlist.Count() + item.RMASerialsLlist.Count()) == item.QTY, MaxQTY = item.QTY });
-                    }
-                }
-            }
-            int recordsTotal = PrepTableList.Count();
-            var returnObj =
-           new
-           {
-               recordsFiltered = recordsTotal,
-               data = PrepTableList//分頁後的資料 
-           };
-            return Json(returnObj, JsonRequestBehavior.AllowGet);
-        }
-        public ActionResult ReceiveVMList(string SID)
-        {
-            var ReceiveVMList = (List<TransferItemVM>)Session["ReceiveVMList" + SID];
-            var PrepTableList = new List<PrepTable>();
-            if (ReceiveVMList != null)
-            {
-                foreach (var item in ReceiveVMList)
-                {
-                    if (item.SerialsLlist.Any()|| item.RMASerialsLlist.Any())
-                    {
-                        foreach (var SerialsLlistitem in item.SerialsLlist)
-                        {
-                            PrepTableList.Add(new PrepTable { ID = item.ID, SKU = item.SKU, Name = item.Name, Serial = SerialsLlistitem.SerialsNo, QTY = item.SerialsLlist.Count() + "/" + item.QTY, SerialTracking = GetSerialTracking(item.SKU), count = (item.QTY - item.SerialsLlist.Count()), Full = (item.SerialsLlist.Count() + item.RMASerialsLlist.Count()) == item.QTY, MaxQTY = item.QTY });
-                        }
-                        foreach (var RMASerialsLlistitem in item.RMASerialsLlist)
-                        {
-                            PrepTableList.Add(new PrepTable { ID = item.ID, SKU = item.SKU, Name = item.Name, Serial = RMASerialsLlistitem.SerialsNo, QTY = item.RMASerialsLlist.Count() + "/" + item.QTY, SerialTracking = GetSerialTracking(item.SKU), count = (item.QTY - item.RMASerialsLlist.Count()), Full = (item.SerialsLlist.Count() + item.RMASerialsLlist.Count()) == item.QTY, MaxQTY = item.QTY });
-                        }
-                    }
-                    else
-                    {
-                        PrepTableList.Add(new PrepTable { ID = item.ID, SKU = item.SKU, Name = item.Name, QTY = item.SerialsLlist.Count() + "/" + item.QTY, SerialTracking = GetSerialTracking(item.SKU), count = (item.QTY - item.SerialsLlist.Count()), Full = (item.SerialsLlist.Count() + item.RMASerialsLlist.Count()) == item.QTY, MaxQTY = item.QTY });
-                    }
-                }
-            }
-            int recordsTotal = PrepTableList.Count();
-            var returnObj =
-           new
-           {
-               recordsFiltered = recordsTotal,
-               data = PrepTableList//分頁後的資料 
-           };
-            return Json(returnObj, JsonRequestBehavior.AllowGet);
-        }
-
-        private bool GetSerialTracking(string SKU)
-        {
-            return db.SKU.Find(SKU).SerialTracking;
-        }
+      
+  
 
         public ActionResult Requested(int ID)
         {

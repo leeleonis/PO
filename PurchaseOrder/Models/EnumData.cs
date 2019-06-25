@@ -134,7 +134,6 @@ namespace PurchaseOrderSys.Models
             using (var db = new PurchaseOrderEntities())
             {
                 list = db.Warehouse.Where(x => x.Type != "Interim").ToDictionary(y => y.ID.ToString(), y => y.Name);
-                //list = db.VendorLIst.ToDictionary(y => y.ID.ToString(), y => y.VendorNo + "_" + y.Name);
             }
             return list;
         }
@@ -148,11 +147,35 @@ namespace PurchaseOrderSys.Models
             using (var db = new PurchaseOrderEntities())
             {
                 list = db.Warehouse.Where(x => x.Type == "Interim").ToDictionary(y => y.ID.ToString(), y => y.Name);
-                //list = db.VendorLIst.ToDictionary(y => y.ID.ToString(), y => y.VendorNo + "_" + y.Name);
             }
             return list;
         }
-
+        /// <summary>
+        /// Winit倉庫列表
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<string, string> WinitWarehouseDDL()
+        {
+            var list = new Dictionary<string, string>();
+            using (var db = new PurchaseOrderEntities())
+            {
+                list = db.Warehouse.Where(x => x.Type == "Winit").ToDictionary(y => y.ID.ToString(), y => y.Name);
+            }
+            return list;
+        }
+        /// <summary>
+        /// Winit倉庫列表
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<string, string> NotWinitWarehouseDDL()
+        {
+            var list = new Dictionary<string, string>();
+            using (var db = new PurchaseOrderEntities())
+            {
+                list = db.Warehouse.Where(x => x.Type != "Winit" && x.Type != "Interim").ToDictionary(y => y.ID.ToString(), y => y.Name);
+            }
+            return list;
+        }
         /// <summary>
         /// 供應商列表
         /// </summary>

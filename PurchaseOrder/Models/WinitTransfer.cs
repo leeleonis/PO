@@ -12,36 +12,26 @@ namespace PurchaseOrderSys.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class TransferSKU
+    public partial class WinitTransfer
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public TransferSKU()
+        public WinitTransfer()
         {
-            this.SerialsLlist = new HashSet<SerialsLlist>();
-            this.RMASerialsLlist = new HashSet<RMASerialsLlist>();
+            this.WinitTransferBox = new HashSet<WinitTransferBox>();
         }
     
         public bool IsEnable { get; set; }
         public int ID { get; set; }
         public Nullable<int> TransferID { get; set; }
+        public Nullable<int> CompleteBoxes { get; set; }
+        public Nullable<decimal> TotalVal { get; set; }
         public string CreateBy { get; set; }
         public System.DateTime CreateAt { get; set; }
         public string UpdateBy { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }
-        public Nullable<int> QTY { get; set; }
-        public Nullable<decimal> TotalReceive { get; set; }
-        public Nullable<int> TWN { get; set; }
-        public Nullable<int> Winit { get; set; }
-        public Nullable<int> Action { get; set; }
-        public string SkuNo { get; set; }
-        public string Name { get; set; }
-        public string WinitNo { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SerialsLlist> SerialsLlist { get; set; }
         public virtual Transfer Transfer { get; set; }
-        public virtual SKU SKU { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<RMASerialsLlist> RMASerialsLlist { get; set; }
+        public virtual ICollection<WinitTransferBox> WinitTransferBox { get; set; }
     }
 }

@@ -1,65 +1,53 @@
-using System;
+using System; 
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
-    /// ImgFile class
+    /// WinitTransferBoxItem class
     /// </summary>
-    [MetadataType(typeof(ImgFileMetadata))]
-    public  partial class ImgFile
+    [MetadataType(typeof(WinitTransferBoxItemMetadata))]
+    public  partial class WinitTransferBoxItem
     {
     
     	/// <summary>
-    	/// ImgFile Metadata class
+    	/// WinitTransferBoxItem Metadata class
     	/// </summary>
-    	public   class ImgFileMetadata
+    	public   class WinitTransferBoxItemMetadata
     	{
     		    
     		/// <summary>
-    		/// Is Enable
+    		/// Winit Transfer Box ID
     		/// </summary>        
-    	    [Display(Name = "ImgFile_IsEnable", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "WinitTransferBoxItem_WinitTransferBoxID", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public bool  IsEnable { get; set; }
+    		public int  WinitTransferBoxID { get; set; }
     
     		    
     		/// <summary>
-    		/// ID
+    		/// Serials Llist ID
     		/// </summary>        
-    	    [Display(Name = "ImgFile_ID", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "WinitTransferBoxItem_SerialsLlistID", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public int  ID { get; set; }
+    		public int  SerialsLlistID { get; set; }
     
     		    
     		/// <summary>
-    		/// Purchase Order ID
+    		/// Bar Code
     		/// </summary>        
-    	    [Display(Name = "ImgFile_PurchaseOrderID", ResourceType = typeof(App_GlobalResources.Resource))]
-    		public Nullable<int>  PurchaseOrderID { get; set; }
-    
-    		    
-    		/// <summary>
-    		/// Credit Memo ID
-    		/// </summary>        
-    	    [Display(Name = "ImgFile_CreditMemoID", ResourceType = typeof(App_GlobalResources.Resource))]
-    		public Nullable<int>  CreditMemoID { get; set; }
-    
-    		    
-    		/// <summary>
-    		/// Url
-    		/// </summary>        
-    	    [Display(Name = "ImgFile_Url", ResourceType = typeof(App_GlobalResources.Resource))]
-    		public string  Url { get; set; }
+    	    [Display(Name = "WinitTransferBoxItem_BarCode", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  BarCode { get; set; }
     
     		    
     		/// <summary>
     		/// Create By
     		/// </summary>        
-    	    [Display(Name = "ImgFile_CreateBy", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "WinitTransferBoxItem_CreateBy", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  CreateBy { get; set; }
@@ -68,7 +56,7 @@ namespace PurchaseOrderSys.Models
     		/// <summary>
     		/// Create At
     		/// </summary>        
-    	    [Display(Name = "ImgFile_CreateAt", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "WinitTransferBoxItem_CreateAt", ResourceType = typeof(App_GlobalResources.Resource))]
             [UIHint("DateTime")]
             [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
@@ -78,7 +66,7 @@ namespace PurchaseOrderSys.Models
     		/// <summary>
     		/// Update By
     		/// </summary>        
-    	    [Display(Name = "ImgFile_UpdateBy", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "WinitTransferBoxItem_UpdateBy", ResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  UpdateBy { get; set; }
     
@@ -86,9 +74,16 @@ namespace PurchaseOrderSys.Models
     		/// <summary>
     		/// Update At
     		/// </summary>        
-    	    [Display(Name = "ImgFile_UpdateAt", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "WinitTransferBoxItem_UpdateAt", ResourceType = typeof(App_GlobalResources.Resource))]
             [UIHint("DateTime")]
     		public Nullable<System.DateTime>  UpdateAt { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Value
+    		/// </summary>        
+    	    [Display(Name = "WinitTransferBoxItem_Value", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<decimal>  Value { get; set; }
     
     		    
     	}

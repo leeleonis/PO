@@ -44,5 +44,6 @@ namespace PurchaseOrderSys.Models
         public virtual ICollection<SerialsLlist> SerialsLlistC { get; set; }
         public virtual SerialsLlist SerialsLlistP { get; set; }
         public virtual TransferSKU TransferSKU { get; set; }
+        public virtual WinitTransferBoxItem WinitTransferBoxItem { get; set; }
     }
 }

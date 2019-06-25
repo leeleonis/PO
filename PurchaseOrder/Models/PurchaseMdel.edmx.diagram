@@ -133,6 +133,13 @@
         <AssociationConnector Association="PurchaseOrderModel.FK_RMAOrderSerialsLlist_RMASKU1" />
         <AssociationConnector Association="PurchaseOrderModel.FK_CreditMemo_RMA" />
         <AssociationConnector Association="PurchaseOrderModel.VendorBrand" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.WinitTransfer" Width="1.5" PointX="15" PointY="27.5" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.WinitTransferBox" Width="1.5" PointX="17.25" PointY="27.25" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.WinitTransferBoxItem" Width="1.5" PointX="29.25" PointY="40.125" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_WinitTransferBoxItem_SerialsLlist" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_WinitTransfer_Transfer" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_WinitTransferBox_WinitTransfer" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_WinitTransferBoxItem_WinitTransferBox" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
