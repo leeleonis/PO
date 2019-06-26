@@ -23,6 +23,5 @@ namespace PurchaseOrderSys.Models
         public System.DateTime CreateAt { get; set; }
     
         public virtual Orders GetOrder { get; set; }
-        public virtual Packages GetPackage { get; set; }
     }
 }

@@ -439,7 +439,7 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="SCID" Type="int" />
           <Property Name="OrderID" Type="int" Nullable="false" />
-          <Property Name="Type" Type="bit" Nullable="false" />
+          <Property Name="Type" Type="tinyint" Nullable="false" />
           <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="AddressLine1" Type="nvarchar" MaxLength="100" Nullable="false" />
@@ -573,7 +573,7 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="SCID" Type="int" />
           <Property Name="OrderID" Type="int" Nullable="false" />
-          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="Status" Type="tinyint" Nullable="false" />
           <Property Name="Date" Type="datetime" />
           <Property Name="Gateway" Type="int" />
           <Property Name="TotalValue" Type="decimal" Precision="18" Scale="2" Nullable="false" />
@@ -1426,18 +1426,6 @@
             </Principal>
             <Dependent Role="OrderActionLogs">
               <PropertyRef Name="OrderID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_OrderActionLog_Package">
-          <End Role="Packages" Type="Self.Packages" Multiplicity="1" />
-          <End Role="OrderActionLogs" Type="Self.OrderActionLogs" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Packages">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="OrderActionLogs">
-              <PropertyRef Name="PackageID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2364,10 +2352,6 @@
             <End Role="Orders" EntitySet="Orders" />
             <End Role="OrderActionLogs" EntitySet="OrderActionLogs" />
           </AssociationSet>
-          <AssociationSet Name="FK_OrderActionLog_Package" Association="Self.FK_OrderActionLog_Package">
-            <End Role="Packages" EntitySet="Packages" />
-            <End Role="OrderActionLogs" EntitySet="OrderActionLogs" />
-          </AssociationSet>
           <AssociationSet Name="FK_OrderLog_Warehouse" Association="Self.FK_OrderLog_Warehouse">
             <End Role="Warehouse" EntitySet="Warehouse" />
             <End Role="OrderLog" EntitySet="OrderLog" />
@@ -2975,10 +2959,6 @@
           </AssociationSet>
           <AssociationSet Name="FK_OrderActionLog_Order" Association="PurchaseOrderModel.FK_OrderActionLog_Order">
             <End Role="Orders" EntitySet="Orders" />
-            <End Role="OrderActionLogs" EntitySet="OrderActionLogs" />
-          </AssociationSet>
-          <AssociationSet Name="FK_OrderActionLog_Package" Association="PurchaseOrderModel.FK_OrderActionLog_Package">
-            <End Role="Packages" EntitySet="Packages" />
             <End Role="OrderActionLogs" EntitySet="OrderActionLogs" />
           </AssociationSet>
           <AssociationSet Name="FK_Package_Order" Association="PurchaseOrderModel.FK_Package_Order">
@@ -4970,7 +4950,6 @@
           <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="GetOrder" Relationship="PurchaseOrderModel.FK_OrderActionLog_Order" FromRole="OrderActionLogs" ToRole="Orders" />
-          <NavigationProperty Name="GetPackage" Relationship="PurchaseOrderModel.FK_OrderActionLog_Package" FromRole="OrderActionLogs" ToRole="Packages" />
         </EntityType>
         <EntityType Name="Orders">
           <Key>
@@ -5037,7 +5016,6 @@
           <Property Name="Create_by" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Create_at" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Items" Relationship="PurchaseOrderModel.FK_Item_Package" FromRole="Packages" ToRole="Items" />
-          <NavigationProperty Name="ActionLogs" Relationship="PurchaseOrderModel.FK_OrderActionLog_Package" FromRole="Packages" ToRole="OrderActionLogs" />
           <NavigationProperty Name="GetOrder" Relationship="PurchaseOrderModel.FK_Package_Order" FromRole="Packages" ToRole="Orders" />
           <NavigationProperty Name="GetMethod" Relationship="PurchaseOrderModel.FK_Packages_ShippingMethods" FromRole="Packages" ToRole="ShippingMethods" />
           <NavigationProperty Name="GetCurrency" Relationship="PurchaseOrderModel.FK_Packages_Currency" FromRole="Packages" ToRole="Currency" />
@@ -5053,7 +5031,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="SCID" Type="Int32" />
           <Property Name="OrderID" Type="Int32" Nullable="false" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Byte" Nullable="false" />
           <Property Name="Date" Type="DateTime" Precision="3" />
           <Property Name="Gateway" Type="Int32" />
           <Property Name="TotalValue" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
@@ -5154,18 +5132,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_OrderActionLog_Package">
-          <End Type="PurchaseOrderModel.Packages" Role="Packages" Multiplicity="1" />
-          <End Type="PurchaseOrderModel.OrderActionLogs" Role="OrderActionLogs" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Packages">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="OrderActionLogs">
-              <PropertyRef Name="PackageID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Package_Order">
           <End Type="PurchaseOrderModel.Orders" Role="Orders" Multiplicity="1" />
           <End Type="PurchaseOrderModel.Packages" Role="Packages" Multiplicity="*" />
@@ -5244,7 +5210,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="SCID" Type="Int32" />
           <Property Name="OrderID" Type="Int32" Nullable="false" />
-          <Property Name="Type" Type="Boolean" Nullable="false" />
+          <Property Name="Type" Type="Byte" Nullable="false" />
           <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="AddressLine1" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />

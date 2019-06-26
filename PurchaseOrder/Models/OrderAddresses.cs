@@ -24,7 +24,7 @@ namespace PurchaseOrderSys.Models
         public int ID { get; set; }
         public Nullable<int> SCID { get; set; }
         public int OrderID { get; set; }
-        public bool Type { get; set; }
+        public byte Type { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string AddressLine1 { get; set; }

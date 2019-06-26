@@ -374,6 +374,8 @@ namespace PurchaseOrderSys.Models
             return Enum.GetValues(typeof(OrderType)).Cast<OrderType>().ToDictionary(s => (byte)s, s => Status[(byte)s]);
         }
 
+        public enum OrderAddressType { Sold, Shipped, Billed }
+
         public enum OrderChannel { eBay, Amazon, FBA, Website };
         public static Dictionary<byte, string> OrderChannelList(bool bySC = false)
         {

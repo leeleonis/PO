@@ -139,7 +139,6 @@
         <AssociationConnector Association="PurchaseOrderModel.FK_Item_Package" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Item_SKU" />
         <AssociationConnector Association="PurchaseOrderModel.FK_OrderActionLog_Order" />
-        <AssociationConnector Association="PurchaseOrderModel.FK_OrderActionLog_Package" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Package_Order" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Payment_Order" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Packages_ShippingMethods" />

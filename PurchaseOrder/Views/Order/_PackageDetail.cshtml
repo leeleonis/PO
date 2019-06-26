@@ -1,5 +1,8 @@
 ﻿@model Packages
-
+@{
+    var LangID = EnumData.DataLangList().First().Key;
+    int index = (int)ViewData["index"];
+}
 <div class="col-sm-12" data-package="@Model.ID">
     <table class="table table-bordered text-center">
         <thead>
@@ -19,7 +22,6 @@
                 <td width="80">Unit Price</td>
                 <td width="50">QTY</td>
                 <td width="100">Value</td>
-                <td width="80">Currency</td>
                 <td width="90">
                     RMA #
                     <div style="position: absolute; top: -35px; right: 15px;">
@@ -30,30 +32,40 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-item="321">
-                <td>@Model.ID</td>
-                <td>@Model.CarrierBox</td>
-                <td class="text">
-                    <span>123456789</span>
-                    <input type="text" class="form-control" value="123456789" />
-                </td>
-                <td>SKU Test-1</td>
-                <td class="text">
-                    <span>abcdefghijklmn</span>
-                    <input type="text" class="form-control" value="abcdefghijklmn" />
-                </td>
-                <td class="text">
-                    <span>345.67</span>
-                    <input type="text" class="form-control" value="345.67" />
-                </td>
-                <td class="text">
-                    <span>1</span>
-                    <input type="text" class="form-control" value="1" />
-                </td>
-                <td>345.67</td>
-                <td>USA</td>
-                <td>987</td>
-            </tr>
+            @foreach (var item in Model.Items.Where(i => i.IsEnable))
+            {
+                @Html.Hidden("ID", item.ID);
+                <tr data-item="@item.ID">
+                    <td>@Model.ID</td>
+                    <td>@Model.CarrierBox</td>
+                    <td class="text">
+                        <span>@item.Sku</span>
+                        <input type="text" class="form-control" value="@item.Sku" />
+                    </td>
+                    <td>@(item.GetSku.SkuLang.FirstOrDefault(l => l.LangID.Equals(LangID))?.Name ?? "")</td>
+                    <td class="text">
+                        @{
+                            var Serial = "";
+                            if (item.Serials.Any())
+                            {
+                                Serial = string.Join(",", item.Serials.Select(s => s.SerialNumber).ToArray());
+                                <span>@Serial</span>
+                            }
+                        }
+                        <input type="text" class="form-control" value="@Serial" />
+                    </td>
+                    <td class="text">
+                        <span>@item.UnitPrice</span>
+                        <input type="text" class="form-control" value="@item.UnitPrice" />
+                    </td>
+                    <td class="text">
+                        <span>@item.Qty</span>
+                        <input type="text" class="form-control" value="@item.Qty" />
+                    </td>
+                    <td>@(item.UnitPrice * item.Qty)</td>
+                    <td>@item.RMAID</td>
+                </tr>
+            }
         </tbody>
     </table>
     <div class="form-group">

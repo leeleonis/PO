@@ -16,11 +16,10 @@
         #list-package > div.edit .text {
             padding: 0px;
         }
-        
-        #list-package > div.edit .text span, #list-package > div.edit button.edit {
-            display: none;
 
-        }
+            #list-package > div.edit .text span, #list-package > div.edit button.edit {
+                display: none;
+            }
     </style>
 }
 
@@ -101,7 +100,12 @@
                                                                 <tbody>
                                                                     <tr>
                                                                         <td colspan="2" rowspan="8" class="no-padding">
-                                                                            <textarea class="form-control" style="font-size:20px;" rows="8" readonly></textarea>
+                                                                            @{
+                                                                                var SoldAddress = Model.Addresses.First(a => a.Type.Equals((byte)EnumData.OrderAddressType.Sold));
+                                                                                var SoldArray = new string[] { SoldAddress.AddressLine1, SoldAddress.AddressLine2, SoldAddress.City, SoldAddress.State, SoldAddress.Postcode, SoldAddress.CountryName };
+                                                                                var SoldTo = new string[] { string.Format("{0}, {1}", SoldAddress.FirstName, SoldAddress.LastName), string.Join("\r\n", SoldArray.Except(new string[] { "", null })) };
+                                                                            }
+                                                                            <textarea class="form-control" style="font-size:20px;" rows="8" readonly>@string.Join("\r\n", SoldTo)</textarea>
                                                                         </td>
                                                                     </tr>
                                                                 </tbody>
@@ -127,42 +131,63 @@
                                                                 <tbody>
                                                                     <tr>
                                                                         <td colspan="2" rowspan="8" class="no-padding">
-                                                                            <textarea class="form-control" style="font-size:20px;" rows="8" readonly></textarea>
+                                                                            @{
+                                                                                var ShipAddress = Model.Addresses.First(a => a.Type.Equals((byte)EnumData.OrderAddressType.Shipped));
+                                                                                var ShipsArray = new string[] { SoldAddress.AddressLine1, SoldAddress.AddressLine2, SoldAddress.City, SoldAddress.State, SoldAddress.Postcode, SoldAddress.CountryName };
+                                                                                var ShipTo = new string[] { string.Format("{0}, {1}", SoldAddress.FirstName, SoldAddress.LastName), string.Join("\r\n", ShipsArray.Except(new string[] { "", null })) };
+                                                                            }
+                                                                            <textarea class="form-control" style="font-size:20px;" rows="8" readonly>@string.Join("\r\n", ShipTo)</textarea>
                                                                         </td>
                                                                     </tr>
                                                                 </tbody>
                                                                 <tbody id="address-ship" style="display:none;">
                                                                     <tr>
                                                                         <td width="123">First Name：</td>
-                                                                        <td class="no-padding"><input type="text" class="form-control" data-reset="123" /></td>
+                                                                        <td class="no-padding">
+                                                                            <input type="text" class="form-control" name="FirstName" value="@ShipAddress.FirstName" data-reset="@ShipAddress.FirstName" />
+                                                                        </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>Last Name：</td>
-                                                                        <td class="no-padding"><input type="text" class="form-control" /></td>
+                                                                        <td class="no-padding">
+                                                                            <input type="text" class="form-control" name="LastName" value="@ShipAddress.LastName" data-reset="@ShipAddress.LastName" />
+                                                                        </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>Address Line 1：</td>
-                                                                        <td class="no-padding"><input type="text" class="form-control" /></td>
+                                                                        <td class="no-padding">
+                                                                            <input type="text" class="form-control" name="AddressLine1" value="@ShipAddress.AddressLine1" data-reset="@ShipAddress.AddressLine1" />
+                                                                        </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>Address Line 2：</td>
-                                                                        <td class="no-padding"><input type="text" class="form-control" /></td>
+                                                                        <td class="no-padding">
+                                                                            <input type="text" class="form-control" name="AddressLine2" value="@ShipAddress.AddressLine2" data-reset="@ShipAddress.AddressLine2" />
+                                                                        </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>City：</td>
-                                                                        <td class="no-padding"><input type="text" class="form-control" /></td>
+                                                                        <td class="no-padding">
+                                                                            <input type="text" class="form-control" name="City" value="@ShipAddress.City" data-reset="@ShipAddress.City" />
+                                                                        </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>State：</td>
-                                                                        <td class="no-padding"><input type="text" class="form-control" /></td>
+                                                                        <td class="no-padding">
+                                                                            <input type="text" class="form-control" name="State" value="@ShipAddress.State" data-reset="@ShipAddress.State" />
+                                                                        </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>Postcode：</td>
-                                                                        <td class="no-padding"><input type="text" class="form-control" /></td>
+                                                                        <td class="no-padding">
+                                                                            <input type="text" class="form-control" name="Postcode" value="@ShipAddress.Postcode" data-reset="@ShipAddress.Postcode" />
+                                                                        </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>Country：</td>
-                                                                        <td class="no-padding"><input type="text" class="form-control" /></td>
+                                                                        <td class="no-padding">
+                                                                            @Html.DropDownList("CountryCode", EnumData.CountryList().Select(c => new SelectListItem() { Text = c.Value, Value = c.Key, Selected = c.Key.Equals(ShipAddress.CountryCode.ToUpper()) }).ToList(), htmlAttributes: new { @class = "form-control" })
+                                                                        </td>
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
@@ -174,11 +199,11 @@
                                                             <table class="table table-bordered">
                                                                 <tr>
                                                                     <td width="164">Customer User ID：</td>
-                                                                    <td></td>
+                                                                    <td>@Model.CustomerID</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td>Customer User Email:：</td>
-                                                                    <td></td>
+                                                                    <td>@Model.CustomerEmail</td>
                                                                 </tr>
                                                             </table>
                                                         </div>
@@ -204,14 +229,10 @@
 
                                                     <div class="form-group" id="list-package">
                                                         @{
-                                                            var ViewData = new ViewDataDictionary()
-                                                            {
-                                                                { "MethodList", ViewBag.MethodList },
-                                                                { "WarehouseList", ViewBag.WarehouseList },
-                                                                { "CurrencyList", ViewBag.CurrencyList }
-                                                            };
+                                                            var ViewData = new ViewDataDictionary() { { "MethodList", ViewBag.MethodList }, { "WarehouseList", ViewBag.WarehouseList }, { "CurrencyList", ViewBag.CurrencyList } };
 
-                                                            foreach (var package in Model.Packages.Where(p => p.IsEnable)) {
+                                                            foreach (var package in Model.Packages.Where(p => p.IsEnable))
+                                                            {
                                                                 Html.RenderPartial("_PackageDetail", package, ViewData);
                                                             }
                                                         }
@@ -228,7 +249,7 @@
                                                                 <tbody>
                                                                     <tr>
                                                                         <td class="no-padding">
-                                                                            <textarea class="form-control" style="font-size:20px;" rows="8" readonly></textarea>
+                                                                            <textarea class="form-control" style="font-size:20px;" rows="8" readonly>@Model.BuyerNote</textarea>
                                                                         </td>
                                                                     </tr>
                                                                 </tbody>
@@ -244,7 +265,7 @@
                                                                 <tbody>
                                                                     <tr>
                                                                         <td class="no-padding">
-                                                                            <textarea class="form-control" style="font-size:20px;" rows="8" readonly></textarea>
+                                                                            <textarea class="form-control" style="font-size:20px;" rows="8" readonly>@Model.Comment</textarea>
                                                                         </td>
                                                                     </tr>
                                                                 </tbody>
@@ -300,7 +321,9 @@
                                                             <td>@Enum.GetName(typeof(EnumData.OrderFulfilledStatus), Model.FulfillmentStatus)</td>
                                                         </tr>
                                                     </table>
-
+                                                    @{
+                                                        var payment = Model.Payments.FirstOrDefault(p => p.IsEnable);
+                                                    }
                                                     <table class="table table-bordered">
                                                         <thead>
                                                             <tr>
@@ -309,11 +332,11 @@
                                                         </thead>
                                                         <tr>
                                                             <td width="134">Status：</td>
-                                                            <td>@EnumData.OrderPaymentStatusList()[Model.PaymentStatus]</td>
+                                                            <td>@EnumData.OrderPaymentStatusList()[payment?.Status ?? Model.PaymentStatus]</td>
                                                         </tr>
                                                         <tr>
                                                             <td>Date：</td>
-                                                            <td></td>
+                                                            <td>@(payment.Date?.ToString("dd/MM/yyyy HH:mm:ss") ?? "")</td>
                                                         </tr>
                                                         <tr>
                                                             <td>Gateway：</td>
@@ -321,42 +344,42 @@
                                                         </tr>
                                                         <tr>
                                                             <td>Total Value：</td>
-                                                            <td></td>
+                                                            <td>@payment.TotalValue</td>
                                                         </tr>
                                                         <tr>
                                                             <td>Shipping：</td>
-                                                            <td></td>
+                                                            <td>@payment.ShippingCharge</td>
                                                         </tr>
                                                         <tr>
                                                             <td>Insurance：</td>
-                                                            <td></td>
+                                                            <td>@payment.InsuranceCharge</td>
                                                         </tr>
                                                         <tr>
                                                             <td>Grand Total：</td>
-                                                            <td></td>
+                                                            <td>@payment.GrandTotal</td>
                                                         </tr>
                                                         <tr>
                                                             <td>Payment Total：</td>
-                                                            <td></td>
+                                                            <td>@payment.PaymentTotal</td>
                                                         </tr>
                                                         <tr>
                                                             <td>Refund：</td>
-                                                            <td></td>
+                                                            <td>@payment.Refund</td>
                                                         </tr>
                                                         <tr>
                                                             <td>Balance：</td>
-                                                            <td></td>
+                                                            <td>@payment.Balance</td>
                                                         </tr>
                                                         <tr>
                                                             <td colspan="2">Other Payment Details</td>
                                                         </tr>
                                                         <tr>
                                                             <td>Transaction ID #：</td>
-                                                            <td></td>
+                                                            <td>@payment.TransactionID</td>
                                                         </tr>
                                                         <tr>
                                                             <td>Payment Email：</td>
-                                                            <td></td>
+                                                            <td>@payment.PaymentEmail</td>
                                                         </tr>
                                                     </table>
 
@@ -369,21 +392,11 @@
                                                         <tbody>
                                                             <tr>
                                                                 <td class="no-padding">
-                                                                    <textarea class="form-control" rows="20" readonly>Order: created.
-User/System
-DD/MM/YYY Hr:Min:Sec
-------------------------------
-Order: On Hold.
-User/System
-DD/MM/YYY Hr:Min:Sec
-------------------------------
-Payment: Full.
-User/System
-DD/MM/YYY Hr:Min:Sec
-------------------------------
-Fulfillment: Fulfilled.
-User/System
-DD/MM/YYY Hr:Min:Sec</textarea>
+                                                                    @{
+                                                                        var ActionLogs = Model.ActionLogs.OrderBy(l => l.CreateAt)
+                                                                            .Select(l => string.Format("{0}：{1}\r\n{2}\r\n{3}", l.Item, l.Description, l.CreateBy, l.CreateAt.ToString("dd/MM/yyyy HH:mm:ss"))).ToList();
+                                                                    }
+                                                                    <textarea class="form-control" rows="20" readonly>@(ActionLogs.Any() ? string.Join("\r\n┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄\r\n", ActionLogs) : "")</textarea>
                                                                 </td>
                                                             </tr>
                                                         </tbody>
