@@ -140,6 +140,36 @@
         <AssociationConnector Association="PurchaseOrderModel.FK_WinitTransfer_Transfer" />
         <AssociationConnector Association="PurchaseOrderModel.FK_WinitTransferBox_WinitTransfer" />
         <AssociationConnector Association="PurchaseOrderModel.FK_WinitTransferBoxItem_WinitTransferBox" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.Items" Width="1.5" PointX="18.625" PointY="39.875" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.OrderActionLogs" Width="1.5" PointX="16.125" PointY="46.875" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.Orders" Width="1.5" PointX="13.875" PointY="43.5" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.Packages" Width="1.5" PointX="18.75" PointY="45.5" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.Payments" Width="1.5" PointX="11.5" PointY="45" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.ShippingMethods" Width="1.5" PointX="13.875" PointY="50.875" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_Order_Company1" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_Item_Order" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_Item_Package" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_Item_SKU" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_OrderActionLog_Order" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_Package_Order" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_Payment_Order" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_Packages_ShippingMethods" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.ApiSetting" Width="1.5" PointX="9.375" PointY="49.875" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_Carriers_CarrierAPI" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.OrderAddresses" Width="1.5" PointX="16.125" PointY="50.375" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_ShippingAddress_Order" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_ShippingMethods_Carriers" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_ShippingMethods_DirectLine" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_DirectLine_ApiSetting" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_ShippingMethods_Carriers11" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.OrderSerials" Width="1.5" PointX="13.875" PointY="39.375" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_OrderSerials_Items" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_OrderSerials_Orders" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_OrderSerials_SKU" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_Packages_Currency" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_Packages_Currency1" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_Packages_Warehouse" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_Packages_Warehouse1" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

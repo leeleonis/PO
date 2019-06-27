@@ -389,5 +389,53 @@ namespace PurchaseOrderSys.Models
                 { 3, "Other" }
             };
         }
+
+        public enum OrderType { Normal, Dropship, DirectLine, FBA };
+        public static Dictionary<byte, string> OrderTypeList()
+        {
+            string[] Status = new string[] { "Normal", "Dropship", "Direct Line", "FBA" };
+
+            return Enum.GetValues(typeof(OrderType)).Cast<OrderType>().ToDictionary(s => (byte)s, s => Status[(byte)s]);
+        }
+
+        public enum OrderAddressType { Sold, Shipped, Billed }
+
+        public enum OrderChannel { eBay, Amazon, FBA, Website };
+        public static Dictionary<byte, string> OrderChannelList(bool bySC = false)
+        {
+            byte[] SC_Chennel = new byte[] { 1, 4, 14, 6 };
+
+            return Enum.GetValues(typeof(OrderChannel)).Cast<OrderChannel>().ToDictionary(s => bySC ? SC_Chennel[(byte)s] : (byte)s, s => s.ToString());
+        }
+
+        public enum OrderStatus { InProcess, OnHold, Completed, Cancel };
+        public static Dictionary<byte, string> OrderStatusList(bool bySC = false)
+        {
+            byte[] SC_Status = new byte[] { 2, 5, 3, 0 };
+            string[] Status = new string[] { "In Process", "On Hold", "Completed", "Cancel" };
+
+            return Enum.GetValues(typeof(OrderStatus)).Cast<OrderStatus>().ToDictionary(s => bySC ? SC_Status[(byte)s] : (byte)s, s => Status[(byte)s]);
+        }
+
+        public enum OrderPaymentStatus { None, Partial, Full, OverPaid, Refunded };
+        public static Dictionary<byte, string> OrderPaymentStatusList(bool bySC = false)
+        {
+            byte[] SC_Status = new byte[] { 0, 4, 2, 9, 5 };
+            string[] Status = new string[] { "None", "Partial", "Full", "Over Paid", "Refunded" };
+
+            return Enum.GetValues(typeof(OrderPaymentStatus)).Cast<OrderPaymentStatus>().ToDictionary(s => bySC ? SC_Status[(byte)s] : (byte)s, s => Status[(byte)s]);
+        }
+
+        public enum OrderFulfilledStatus { Unfulfilled, Partial, Fulfilled };
+        public enum OrderShippingStatus { Unmanage, Awaiting, Dispatch, Fulfilled }
+
+        public enum Export { 正式, 簡易 };
+        public enum ExportMethod { 外貨復出口, 國貨出口 };
+        public static Dictionary<byte, string> ExportMethodList()
+        {
+            string[] Method = new string[] { "G3-81 (外貨復出口)", "G5-02 (國貨出口)" };
+
+            return Enum.GetValues(typeof(ExportMethod)).Cast<ExportMethod>().ToDictionary(s => (byte)s, s => Method[(byte)s]);
+        }
     }
 }

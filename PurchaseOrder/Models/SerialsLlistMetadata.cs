@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// SerialsLlist class
     /// </summary>
@@ -53,7 +53,7 @@ namespace PurchaseOrderSys.Models
     		/// Serials QTY
     		/// </summary>        
     	    [Display(Name = "SerialsLlist_SerialsQTY", ResourceType = typeof(App_GlobalResources.Resource))]
-            public Nullable<int> SerialsQTY { get; set; }
+    		public Nullable<int>  SerialsQTY { get; set; }
     
     		    
     		/// <summary>
@@ -118,14 +118,36 @@ namespace PurchaseOrderSys.Models
     		/// Order ID
     		/// </summary>        
     	    [Display(Name = "SerialsLlist_OrderID", ResourceType = typeof(App_GlobalResources.Resource))]
-    		public Nullable<int>  OrderID { get; set; }  
-    		    
+    		public Nullable<int>  OrderID { get; set; }
+    
     		/// <summary>
     		/// Serials Type
     		/// </summary>        
     	    [Display(Name = "SerialsLlist_SerialsType", ResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(20, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-            public string SerialsType { get; set; }
+    		public string  SerialsType { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Memo
+    		/// </summary>        
+    	    [Display(Name = "SerialsLlist_Memo", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  Memo { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Is Enable
+    		/// </summary>        
+    	    [Display(Name = "SerialsLlist_IsEnable", ResourceType = typeof(App_GlobalResources.Resource))]
+            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public bool  IsEnable { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// RMASKUID
+    		/// </summary>        
+    	    [Display(Name = "SerialsLlist_RMASKUID", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  RMASKUID { get; set; }
     
     		    
     	}

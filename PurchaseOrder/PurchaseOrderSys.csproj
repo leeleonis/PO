@@ -228,6 +228,7 @@
     <Compile Include="Controllers\MarketplaceController.cs" />
     <Compile Include="Controllers\MenusController.cs" />
     <Compile Include="Controllers\NetoGroupController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\PurchaseOrderCMController.cs" />
     <Compile Include="Controllers\PurchaseOrderPOController.cs" />
     <Compile Include="Controllers\PurchaseSKUController.cs" />
@@ -262,10 +263,10 @@
     <Compile Include="Models\AdminUserMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\API.cs">
+    <Compile Include="Models\ApiSetting.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\APIMetadata.cs">
+    <Compile Include="Models\ApiSettingMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Auth.cs">
@@ -284,12 +285,6 @@
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\BrandMetadata.cs">
-      <DependentUpon>ModelTemplate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\CarrierAPI.cs">
-      <DependentUpon>PurchaseMdel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\CarrierAPIMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Carriers.cs">
@@ -354,6 +349,12 @@
     <Compile Include="Models\ImgFileMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Items.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ItemsMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\KitSku.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
     </Compile>
@@ -413,6 +414,18 @@
     <Compile Include="Models\Objects\Neto\Schema\GetWarehouseResponse.cs" />
     <Compile Include="Models\Objects\Neto\Schema\UpdateItem.cs" />
     <Compile Include="Models\Objects\Neto\Schema\UpdateItemResponse.cs" />
+    <Compile Include="Models\OrderActionLogs.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OrderActionLogsMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OrderAddresses.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OrderAddressesMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\OrderLog.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
     </Compile>
@@ -421,6 +434,12 @@
     </Compile>
     <Compile Include="Models\Orders.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OrderSerials.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OrderSerialsMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\OrdersMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
@@ -435,6 +454,18 @@
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PackageContentMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Packages.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PackagesMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Payments.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PaymentsMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PriceGroup.cs">
@@ -507,10 +538,10 @@
     <Compile Include="Models\SerialsLlistMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ShippingMethod.cs">
+    <Compile Include="Models\ShippingMethods.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ShippingMethodMetadata.cs">
+    <Compile Include="Models\ShippingMethodsMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SKU.cs">
@@ -7610,6 +7641,8 @@
     <Content Include="Views\TransferWinit\Create.cshtml" />
     <Content Include="Views\TransferWinit\Edit.cshtml" />
     <Content Include="Views\TransferWinit\Prep.cshtml" />
+    <Content Include="Views\Order\Edit.cshtml" />
+    <Content Include="Views\Order\_PackageDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

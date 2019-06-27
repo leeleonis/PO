@@ -84,6 +84,35 @@ namespace PurchaseOrderSys.Models
     		public Nullable<System.DateTime>  UpdateAt { get; set; }
     
     		    
+    		/// <summary>
+    		/// Note Type
+    		/// </summary>        
+    	    [Display(Name = "PurchaseNote_NoteType", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(20, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  NoteType { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Credit Memo ID
+    		/// </summary>        
+    	    [Display(Name = "PurchaseNote_CreditMemoID", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  CreditMemoID { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Transfer ID
+    		/// </summary>        
+    	    [Display(Name = "PurchaseNote_TransferID", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  TransferID { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// RMAID
+    		/// </summary>        
+    	    [Display(Name = "PurchaseNote_RMAID", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  RMAID { get; set; }
+    
+    		    
     	}
     }
     

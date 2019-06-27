@@ -12,12 +12,14 @@ namespace PurchaseOrderSys.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class CarrierAPI
+    public partial class ApiSetting
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public CarrierAPI()
+        public ApiSetting()
         {
+            this.IsEnable = true;
             this.Carriers = new HashSet<Carriers>();
+            this.DirectLines = new HashSet<DirectLine>();
         }
     
         public bool IsEnable { get; set; }
@@ -31,8 +33,14 @@ namespace PurchaseOrderSys.Models
         public string ApiAccount { get; set; }
         public string ApiMeter { get; set; }
         public string ApiHub { get; set; }
+        public string Update_by { get; set; }
+        public Nullable<System.DateTime> Update_at { get; set; }
+        public string Create_by { get; set; }
+        public System.DateTime Create_at { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Carriers> Carriers { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DirectLine> DirectLines { get; set; }
     }
 }

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// Company class
     /// </summary>
@@ -45,7 +45,7 @@ namespace PurchaseOrderSys.Models
     
     		    
     		/// <summary>
-    		/// Shandow Suffix
+    		/// Shadow Suffix
     		/// </summary>        
     	    [Display(Name = "Company_ShadowSuffix", ResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(10, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
@@ -131,6 +131,13 @@ namespace PurchaseOrderSys.Models
     	    [Display(Name = "Company_CurrencyID", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public int  CurrencyID { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Company SCID
+    		/// </summary>        
+    	    [Display(Name = "Company_CompanySCID", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  CompanySCID { get; set; }
     
     		    
     	}

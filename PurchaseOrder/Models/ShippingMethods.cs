@@ -12,33 +12,34 @@ namespace PurchaseOrderSys.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Carriers
+    public partial class ShippingMethods
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Carriers()
+        public ShippingMethods()
         {
             this.IsEnable = true;
-            this.FirstMiles = new HashSet<ShippingMethods>();
-            this.LastMiles = new HashSet<ShippingMethods>();
+            this.GetPackage = new HashSet<Packages>();
         }
     
         public bool IsEnable { get; set; }
+        public bool IsExport { get; set; }
+        public bool IsBattery { get; set; }
         public int ID { get; set; }
         public string Name { get; set; }
-        public int MethodType { get; set; }
-        public int BoxType { get; set; }
-        public string Email { get; set; }
-        public Nullable<int> Api { get; set; }
-        public string PrinterName { get; set; }
+        public byte Type { get; set; }
+        public Nullable<int> DirectLine { get; set; }
+        public Nullable<int> FirstMileCarrier { get; set; }
+        public int LastMileCarrier { get; set; }
+        public bool InBox { get; set; }
         public string Update_by { get; set; }
         public Nullable<System.DateTime> Update_at { get; set; }
         public string Create_by { get; set; }
         public System.DateTime Create_at { get; set; }
     
-        public virtual ApiSetting GetApi { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ShippingMethods> FirstMiles { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ShippingMethods> LastMiles { get; set; }
+        public virtual ICollection<Packages> GetPackage { get; set; }
+        public virtual Carriers FirstMile { get; set; }
+        public virtual Carriers LastMile { get; set; }
+        public virtual DirectLine GetDirectLine { get; set; }
     }
 }

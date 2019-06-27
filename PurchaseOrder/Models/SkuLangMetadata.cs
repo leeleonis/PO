@@ -127,6 +127,21 @@ namespace PurchaseOrderSys.Models
     		public Nullable<System.DateTime>  UpdateAt { get; set; }
     
     		    
+    		/// <summary>
+    		/// Key Feature
+    		/// </summary>        
+    	    [Display(Name = "SkuLang_KeyFeature", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  KeyFeature { get; set; }
+
+
+            /// <summary>
+            /// Feature Content
+            /// </summary>        
+            [AllowHtml]
+            [Display(Name = "SkuLang_FeatureContent", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  FeatureContent { get; set; }
+    
+    		    
     	}
     }
     

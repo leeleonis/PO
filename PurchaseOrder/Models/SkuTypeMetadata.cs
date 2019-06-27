@@ -36,10 +36,25 @@ namespace PurchaseOrderSys.Models
     
     		    
     		/// <summary>
+    		/// HSCode
+    		/// </summary>        
+    	    [Display(Name = "SkuType_HSCode", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  HSCode { get; set; }
+    
+    		    
+    		/// <summary>
     		/// Neto ID
     		/// </summary>        
     	    [Display(Name = "SkuType_NetoID", ResourceType = typeof(App_GlobalResources.Resource))]
     		public Nullable<int>  NetoID { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// SCID
+    		/// </summary>        
+    	    [Display(Name = "SkuType_SCID", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  SCID { get; set; }
     
     		    
     		/// <summary>

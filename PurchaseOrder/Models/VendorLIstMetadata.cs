@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// VendorLIst class
     /// </summary>
@@ -156,6 +156,27 @@ namespace PurchaseOrderSys.Models
     	    [Display(Name = "VendorLIst_DelAt", ResourceType = typeof(App_GlobalResources.Resource))]
             [UIHint("DateTime")]
     		public Nullable<System.DateTime>  DelAt { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Email
+    		/// </summary>        
+    	    [Display(Name = "VendorLIst_Email", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  Email { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Email CC
+    		/// </summary>        
+    	    [Display(Name = "VendorLIst_EmailCC", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  EmailCC { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// SCID
+    		/// </summary>        
+    	    [Display(Name = "VendorLIst_SCID", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  SCID { get; set; }
     
     		    
     	}
