@@ -29,18 +29,11 @@ namespace PurchaseOrderSys.Models
     
     		    
     		/// <summary>
-    		/// ID
-    		/// </summary>        
-    	    [Display(Name = "WinitTransfer_ID", ResourceType = typeof(App_GlobalResources.Resource))]
-            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public int  ID { get; set; }
-    
-    		    
-    		/// <summary>
     		/// Transfer ID
     		/// </summary>        
     	    [Display(Name = "WinitTransfer_TransferID", ResourceType = typeof(App_GlobalResources.Resource))]
-    		public Nullable<int>  TransferID { get; set; }
+            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public int  TransferID { get; set; }
     
     		    
     		/// <summary>

@@ -20,6 +20,7 @@ namespace PurchaseOrderSys.Controllers
         protected static bool UpdateSC = true;
         public RMAController()
         {
+            SCWS = new SC_WebService(ApiUserName, ApiPassword);
             var TestMod = ConfigurationManager.AppSettings["TestMod"];
             if (TestMod == "true")
             {
@@ -304,6 +305,7 @@ namespace PurchaseOrderSys.Controllers
                     //過濾已開RMA的SKU
                     if (RMAModelVMList.Any())
                     {
+                        var ReRma = new List<int>();
                         var Orderlist = RMAModelVMList.Select(x => x.Order).Distinct().ToList();
                         var RMAList = db.RMA.Where(x => x.IsEnable && Orderlist.Contains(x.OrderID.Value));
                         foreach (var RMAitem in RMAList)
@@ -313,13 +315,19 @@ namespace PurchaseOrderSys.Controllers
                                 var chkRMAModelVMList = RMAModelVMList.Where(x => x.Order == RMAitem.OrderID && x.SKU == RMASKUitem.SkuNo).ToList();
                                 if (chkRMAModelVMList.Any())
                                 {
+                                    ReRma.Add(RMAitem.ID);
                                     RMAModelVMList.Remove(chkRMAModelVMList.FirstOrDefault());
                                 }
                             }
                         }
                         if (!RMAModelVMList.Any())
                         {
-                            return Json(new { success = false, errmsg = "無可開RMA的訂單" }, JsonRequestBehavior.AllowGet);
+                            var Errmsg = "無可開RMA的訂單";
+                            if (ReRma.Any())
+                            {
+                                Errmsg = "已開過RMA單 " + string.Join(";", ReRma.Distinct());
+                            }
+                            return Json(new { success = false, errmsg = Errmsg }, JsonRequestBehavior.AllowGet);
                         }
                     }
                     //排除已入PO

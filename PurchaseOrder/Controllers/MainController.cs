@@ -67,12 +67,6 @@ namespace PurchaseOrderSys.Controllers
         {
             if (ValidateUser(username, password))
             {
-                SCLogin(ApiUserName, ApiPassword);
-                //System.Threading.Tasks.Task.Factory.StartNew(() =>
-                //{
-                //    var Is_login = SCWS.Is_login;
-                //    var ss = SCWS.Get_RMA_Reason_List().Select(x => new { x.ID, x.Reason }).OrderBy(x => x.ID).ToList();
-                //});
                 return RedirectToAction("Index");
             }
             return RedirectToAction("Login");

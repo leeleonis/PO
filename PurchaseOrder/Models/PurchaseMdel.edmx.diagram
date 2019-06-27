@@ -5,39 +5,39 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="5872b44f309a44909e8a45ca6f67f469" Name="Diagram1" ZoomLevel="86" ShowGrid="true">
-        <EntityTypeShape EntityType="PurchaseOrderModel.AdminGroup" Width="2" PointX="3.75" PointY="79.5" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.AdminUser" Width="2" PointX="6.5" PointY="78.75" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.AdminGroup" Width="2" PointX="3.75" PointY="21.5" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.AdminUser" Width="2" PointX="6.5" PointY="20.75" />
         <EntityTypeShape EntityType="PurchaseOrderModel.API" Width="2" PointX="6.75" PointY="0.75" />
         <EntityTypeShape EntityType="PurchaseOrderModel.Auth" Width="2" PointX="9.75" PointY="0.75" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.Brand" Width="2" PointX="6.5" PointY="65.625" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.CMCreditNote" Width="2" PointX="9" PointY="59.375" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.CMReplacement" Width="2" PointX="9" PointY="52.875" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.Condition" Width="2" PointX="6.5" PointY="36" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.ConditionLang" Width="2" PointX="9.25" PointY="36.625" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.CreditMemo" Width="2" PointX="12" PointY="55.625" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.Brand" Width="2" PointX="3.5" PointY="55.625" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.CMCreditNote" Width="2" PointX="12" PointY="55.5" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.CMReplacement" Width="2" PointX="12" PointY="42" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.Condition" Width="2" PointX="3.5" PointY="51.125" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.ConditionLang" Width="2" PointX="6.25" PointY="64.75" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.CreditMemo" Width="2" PointX="15" PointY="44.75" />
         <EntityTypeShape EntityType="PurchaseOrderModel.DirectLine" Width="2" PointX="0.75" PointY="10.75" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.KitSku" Width="2" PointX="12" PointY="66.625" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.KitSku" Width="2" PointX="9" PointY="69.875" />
         <EntityTypeShape EntityType="PurchaseOrderModel.Menu" Width="2" PointX="0.75" PointY="1" />
         <EntityTypeShape EntityType="PurchaseOrderModel.MenuLang" Width="2" PointX="3.5" PointY="1.25" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.PackageContent" Width="2" PointX="12.25" PointY="36.375" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.PackageContentLang" Width="2" PointX="15" PointY="36.625" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.PurchaseNote" Width="2" PointX="17.75" PointY="54.375" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.PurchaseOrder" Width="2" PointX="6.25" PointY="46.75" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.PurchaseSKU" Width="2" PointX="20.75" PointY="49.625" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.PackageContent" Width="2" PointX="12.25" PointY="62.5" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.PackageContentLang" Width="2" PointX="15" PointY="62.625" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.PurchaseNote" Width="2" PointX="17.75" PointY="42.875" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.PurchaseOrder" Width="2" PointX="9.25" PointY="43.5" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.PurchaseSKU" Width="2" PointX="20.75" PointY="41.625" />
         <EntityTypeShape EntityType="PurchaseOrderModel.ShippingMethod" Width="2" PointX="9.25" PointY="5.125" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.SKU" Width="2" PointX="9.25" PointY="44.125" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.Sku_Attribute" Width="2" PointX="12" PointY="40.125" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.Sku_PackageContent" Width="2" PointX="15" PointY="41.25" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.SkuAttribute" Width="2" PointX="9.25" PointY="27.25" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.SkuAttributeLang" Width="2" PointX="12" PointY="22.625" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.SkuAttributeType" Width="2" PointX="6.5" PointY="27.5" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.SkuPicture" Width="2" PointX="12" PointY="74.375" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.SkuTypeLang" Width="2" PointX="9.25" PointY="31.375" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.TransferSKU" Width="2" PointX="15" PointY="51.625" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.VendorLIst" Width="2" PointX="3.5" PointY="51.5" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.Warehouse" Width="2" PointX="6.5" PointY="70.125" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.WarehouseSummary" Width="2" PointX="9.25" PointY="81.125" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.WarehouseUser" Width="2" PointX="9.25" PointY="66.25" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.SKU" Width="2" PointX="6.25" PointY="47.125" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.Sku_Attribute" Width="2" PointX="9" PointY="53.25" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.Sku_PackageContent" Width="2" PointX="15" PointY="52.375" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.SkuAttribute" Width="2" PointX="6.25" PointY="60.375" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.SkuAttributeLang" Width="2" PointX="9" PointY="63.625" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.SkuAttributeType" Width="2" PointX="3.5" PointY="60.625" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.SkuPicture" Width="2" PointX="9" PointY="77.625" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.SkuTypeLang" Width="2" PointX="6.25" PointY="55.875" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.TransferSKU" Width="2" PointX="9" PointY="57.625" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.VendorLIst" Width="2" PointX="6.5" PointY="35.25" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.Warehouse" Width="2" PointX="6.5" PointY="26.125" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.WarehouseSummary" Width="2" PointX="9.25" PointY="34.125" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.WarehouseUser" Width="2" PointX="9.25" PointY="26.25" />
         <AssociationConnector Association="PurchaseOrderModel.FK_AdminUser_AdminGroup" />
         <AssociationConnector Association="PurchaseOrderModel.FK_WarehouseUser_AdminUser" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Sku_Brand" />
@@ -70,14 +70,14 @@
         <EntityTypeShape EntityType="PurchaseOrderModel.Carriers" Width="2" PointX="6.5" PointY="6.75" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Carriers_CarrierAPI" />
         <AssociationConnector Association="PurchaseOrderModel.FK_ShippingMethod_Carriers" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.SkuLang" Width="2" PointX="12" PointY="70" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.SkuLang" Width="2" PointX="9" PointY="73.25" />
         <AssociationConnector Association="PurchaseOrderModel.FK_SkuLang_Sku" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.ImgFile" Width="2" PointX="23.5" PointY="52.5" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.ImgFile" Width="2" PointX="23.5" PointY="44.125" />
         <AssociationConnector Association="PurchaseOrderModel.FK_ImgFile_CreditMemo" />
         <AssociationConnector Association="PurchaseOrderModel.FK_ImgFile_PurchaseOrder" />
         <EntityTypeShape EntityType="PurchaseOrderModel.Currency" Width="2" PointX="0.75" PointY="39.375" />
         <EntityTypeShape EntityType="PurchaseOrderModel.NetoGroup" Width="2" PointX="3.5" PointY="36.75" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.PriceGroup" Width="2" PointX="12" PointY="44.5" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.PriceGroup" Width="2" PointX="12" PointY="49.125" />
         <EntityTypeShape EntityType="PurchaseOrderModel.Marketplace" Width="2" PointX="6.25" PointY="41.375" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Marketplace_Currency" />
         <AssociationConnector Association="PurchaseOrderModel.FK_PriceGroup_Marketplace" />
@@ -85,21 +85,21 @@
         <EntityTypeShape EntityType="PurchaseOrderModel.Company" Width="2" PointX="3.5" PointY="45.625" />
         <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseOrder_Company" />
         <AssociationConnector Association="PurchaseOrderModel.FK_SKU_Company" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.Orders" Width="2" PointX="23.75" PointY="40.75" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.Orders" Width="2" PointX="20.75" PointY="60.625" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Company_Currency" />
         <AssociationConnector Association="PurchaseOrderModel.FK_NetoGroup_Currency" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Marketplace_NetoGroup" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Marketplace_Company" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.SerialsLlist" Width="2" PointX="26.5" PointY="50.5" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.SerialsLlist" Width="2" PointX="23.5" PointY="49.25" />
         <AssociationConnector Association="PurchaseOrderModel.FK_SerialsLlist_Orders" />
         <AssociationConnector Association="PurchaseOrderModel.FK_SerialsLlist_PurchaseSKU" />
         <AssociationConnector Association="PurchaseOrderModel.FK_SerialsLlist_SerialsLlist" />
         <AssociationConnector Association="PurchaseOrderModel.FK_SerialsLlist_TransferSKU" />
         <AssociationConnector Association="PurchaseOrderModel.FK_ImgFile_PurchaseSKU" />
         <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseNote_CreditMemo" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.OrderLog" Width="2" PointX="9.25" PointY="77.75" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.OrderLog" Width="2" PointX="9.25" PointY="30.75" />
         <AssociationConnector Association="PurchaseOrderModel.FK_OrderLog_Warehouse" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.Transfer" Width="2" PointX="12.25" PointY="26.5" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.Transfer" Width="2" PointX="15" PointY="38.375" />
         <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseNote_Transfer" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Transfer_Warehouse" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Transfer_Warehouse1" />
@@ -107,21 +107,21 @@
         <AssociationConnector Association="PurchaseOrderModel.FK_Transfer_WarehouseInterim" />
         <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseSKU_SKU" />
         <AssociationConnector Association="PurchaseOrderModel.FK_TransferSKU_SKU" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.BoxType" Width="2" PointX="12.25" PointY="32.25" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.Logistic" Width="2" PointX="15" PointY="45.625" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.BoxType" Width="2" PointX="12.25" PointY="66.375" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.Logistic" Width="2" PointX="15" PointY="56.75" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Logistic_BoxType" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Logistic_SKU" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.RMASKU" Width="2" PointX="12" PointY="49.125" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.SkuType" Width="2" PointX="6.5" PointY="31.5" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.RMASKU" Width="2" PointX="18" PointY="48.25" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.SkuType" Width="2" PointX="3.5" PointY="41" />
         <AssociationConnector Association="PurchaseOrderModel.FK_PackageContent_SkuType" />
         <AssociationConnector Association="PurchaseOrderModel.FK_Sku_SkuType" />
         <AssociationConnector Association="PurchaseOrderModel.FK_SkuTypeLang_SkuType" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.RMA" Width="2" PointX="9.25" PointY="70.75" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.RMA" Width="2" PointX="12.25" PointY="34.875" />
         <AssociationConnector Association="PurchaseOrderModel.FK_RMA_Warehouse" />
         <AssociationConnector Association="PurchaseOrderModel.FK_RMASKU_RMA" />
         <AssociationConnector Association="PurchaseOrderModel.FK_RMASKU_Warehouse" />
         <AssociationConnector Association="PurchaseOrderModel.FK_RMASKU_SKU" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.RMASerialsLlist" Width="2" PointX="17.75" PointY="47.125" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.RMASerialsLlist" Width="2" PointX="20.75" PointY="53.75" />
         <AssociationConnector Association="PurchaseOrderModel.FK_RMASerialsLlist_RMASKU" />
         <AssociationConnector Association="PurchaseOrderModel.FK_RMASerialsLlist_Warehouse" />
         <AssociationConnector Association="PurchaseOrderModel.FK_RMASerialsLlist_TransferSKU" ManuallyRouted="false" >
@@ -129,17 +129,17 @@
         <AssociationConnector Association="PurchaseOrderModel.FK_RMASerialsLlist_RMASerialsLlist" />
         <AssociationConnector Association="PurchaseOrderModel.FK_RMASerialsLlist_SKU" />
         <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseNote_RMA" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.RMAOrderSerialsLlist" Width="2" PointX="14.75" PointY="57.625" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.RMAOrderSerialsLlist" Width="2" PointX="20.75" PointY="49.625" />
         <AssociationConnector Association="PurchaseOrderModel.FK_RMAOrderSerialsLlist_RMASKU1" />
         <AssociationConnector Association="PurchaseOrderModel.FK_CreditMemo_RMA" />
         <AssociationConnector Association="PurchaseOrderModel.VendorBrand" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.WinitTransfer" Width="1.5" PointX="15" PointY="27.5" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.WinitTransferBox" Width="1.5" PointX="17.25" PointY="27.25" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.WinitTransferBoxItem" Width="1.5" PointX="29.25" PointY="40.125" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.WinitTransferBox" Width="1.5" PointX="24" PointY="37.125" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.WinitTransferBoxItem" Width="1.5" PointX="26.25" PointY="50.5" />
         <AssociationConnector Association="PurchaseOrderModel.FK_WinitTransferBoxItem_SerialsLlist" />
-        <AssociationConnector Association="PurchaseOrderModel.FK_WinitTransfer_Transfer" />
-        <AssociationConnector Association="PurchaseOrderModel.FK_WinitTransferBox_WinitTransfer" />
         <AssociationConnector Association="PurchaseOrderModel.FK_WinitTransferBoxItem_WinitTransferBox" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.WinitTransfer" Width="1.5" PointX="21.75" PointY="37.5" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_WinitTransfer_Transfer1" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_WinitTransferBox_WinitTransfer" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

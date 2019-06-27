@@ -41,7 +41,7 @@ namespace PurchaseOrderSys.NewApi
         public string passWord { get; set; }
     }
 
-    public class Token2 : Token
+    public class TokenSign : Token
     {
         public string format { get; set; }
         public string language { get; set; }
@@ -51,7 +51,11 @@ namespace PurchaseOrderSys.NewApi
         public string timestamp { get; set; }
         public string version { get; set; }
     }
-    public class queryWarehouse : Token2
+
+
+
+
+    public class QueryToken : TokenSign
     {
         public object data { get; set; }
     }
@@ -62,7 +66,7 @@ namespace PurchaseOrderSys.NewApi
         public string warehouseID { get; set; }
         public string warehouseAddress { get; set; }
     }
-    public class Winit_API : IDisposable
+    public class Winit_APIToken : IDisposable
     {
         private bool disposed = false;
 
@@ -73,9 +77,9 @@ namespace PurchaseOrderSys.NewApi
         private string api_password = "rqOHRYOqSA%b22%g6tzb"; //"gubu67qaP5e$ra*t";
         private string api_token = "";
         private string api_version = "2.0";
+        private string client_secret = "";
 
-
-        public Winit_API()
+        public Winit_APIToken()
         {
             var token = new getToken();
             token.action = action;
@@ -84,7 +88,7 @@ namespace PurchaseOrderSys.NewApi
             var refjson = req<Received>(api_url, token);
             if (refjson.code.Equals("0"))
             {
-                api_token = refjson.data;
+                api_token = refjson.data;//取token
             }
         }
         //public Received Received <T>(string action, object data) where T : new()
@@ -92,9 +96,14 @@ namespace PurchaseOrderSys.NewApi
         //    var request = _RequestInit<T>(action, JsonConvert.SerializeObject(data));
         //    return null;
         //}
+
+        /// <summary>
+        /// 取倉庫資料
+        /// </summary>
+        /// <returns></returns>
         public List<warehouseData> WarehouseDataList()
         {
-            queryWarehouse request = _RequestInit<queryWarehouse>("queryWarehouse", JsonConvert.SerializeObject(new { }));
+            QueryToken request = _RequestInit<QueryToken>("queryWarehouse", JsonConvert.SerializeObject(new { }));
             request.data = new { };
 
             var result = req<Received>(api_url, request);
@@ -125,7 +134,7 @@ namespace PurchaseOrderSys.NewApi
             return Warehouse3PList;
             // 
         }
-        private string _Get_UserSign(string action, string data, string timestamp)
+        private string _Get_UserSign(string actionValue, string data, string timestamp)
         {
             string sign = "";
             MD5 md5 = MD5.Create();
@@ -143,7 +152,25 @@ namespace PurchaseOrderSys.NewApi
 
             return sign;
         }
-        private T _RequestInit<T>(string action, string data) where T : Token2, new()
+        private string _Get_UserClient_sign(string action, string data, string timestamp)
+        {
+            string sign = "";
+            MD5 md5 = MD5.Create();
+
+            string formatValue = "json", platformValue = "SELLERERP", sign_methodValue = "md5", versionValue = api_version;
+            var combine = client_secret + "action" + action + "app_key" + api_key + "data" + data + "format" + formatValue + "platform" + platformValue + "sign_method" + sign_methodValue + "timestamp" + timestamp + "version" + versionValue + client_secret;
+            byte[] Original = Encoding.ASCII.GetBytes(combine); //將字串來源轉為Byte[] 
+            byte[] Change = md5.ComputeHash(Original);
+            String a = Convert.ToBase64String(Change);
+
+            for (int i = 0; i < Change.Length; i++)
+            {
+                sign = sign + Change[i].ToString("X2");
+            }
+
+            return sign;
+        }
+        private T _RequestInit<T>(string action, string data) where T : TokenSign, new()
         {
             string timestamp = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
 
@@ -215,5 +242,26 @@ namespace PurchaseOrderSys.NewApi
             }
             disposed = true;
         }
+        /// <summary>
+        /// 查询商品
+        /// </summary>
+        /// <returns></returns>
+        public List<warehouseData> SKUList()
+        {
+            QueryToken request = _RequestInit<QueryToken>("winit.mms.item.list", JsonConvert.SerializeObject(new { }));
+            request.data = new { pageNo = 1, pageSize = 10, skuCode = "" };
+
+            var result = req<Received>(api_url, request);
+            if (result.code.Equals("0"))
+            {
+                return result.data.ToObject<List<warehouseData>>();
+
+            }
+            else
+            {
+                return null;
+            }
+        }
+
     }
 }

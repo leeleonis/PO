@@ -7610,6 +7610,7 @@
     <Content Include="Views\TransferWinit\Create.cshtml" />
     <Content Include="Views\TransferWinit\Edit.cshtml" />
     <Content Include="Views\TransferWinit\Prep.cshtml" />
+    <Content Include="Views\TransferWinit\Boxitem.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

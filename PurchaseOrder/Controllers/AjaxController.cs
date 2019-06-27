@@ -1452,6 +1452,7 @@ namespace PurchaseOrderSys.Controllers
         }
         public ActionResult CreateDropShipPO(DropshpOrderBySC DropshpOrderBySC)
         {
+            SCWS = new SC_WebService(ApiUserName, ApiPassword);
             AjaxResult result = new AjaxResult();
             try
             {

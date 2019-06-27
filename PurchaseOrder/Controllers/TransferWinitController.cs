@@ -193,6 +193,7 @@ namespace PurchaseOrderSys.Controllers
         }
         public ActionResult Prep(int ID)
         {
+            //var WinitPrepTable = new WinitPrepTable { ID = ID, BoxID = "testBOXID" };
             var oTransfer = db.Transfer.Find(ID);
             var PrepVMList = new List<TransferItemVM>();
             foreach (var item in oTransfer.TransferSKU.Where(x => x.IsEnable))
@@ -209,6 +210,16 @@ namespace PurchaseOrderSys.Controllers
                 });
             }
             Session["PrepVMList" + ID] = PrepVMList;
+            if (oTransfer.WinitTransfer == null)
+            {
+                var CreateBy = UserBy;
+                var CreateAt = DateTime.UtcNow;
+                var WinitTransfer = new WinitTransfer { IsEnable = true, CreateBy = CreateBy, CreateAt = CreateAt };
+                WinitTransfer.WinitTransferBox.Add(new WinitTransferBox { IsEnable = true, CreateBy = CreateBy, CreateAt = CreateAt });
+                oTransfer.WinitTransfer = WinitTransfer;
+                db.SaveChanges();
+            }
+            Session["WinitTransferBox" + ID] = oTransfer.WinitTransfer.WinitTransferBox.ToList();
             return View(oTransfer);
         }
 
@@ -247,37 +258,6 @@ namespace PurchaseOrderSys.Controllers
                         if (!item.SerialsLlist.Where(x => x.SerialsNo == Serial.SerialsNo).Any())
                         {
                             item.SerialsLlist.Add(Serial);
-                        }
-                    }
-                }
-
-                //RMA
-                foreach (var PrepVM in PrepVMList.Where(x => x.SKU == item.SkuNo))
-                {
-                    var nRMASerialsLlist = PrepVM.RMASerialsLlist.Select(x => new RMASerialsLlist
-                    {
-                        IsEnable = true,
-                        TransferSKUID = item.ID,
-                        PID = x.ID,
-                        WarehouseID = x.WarehouseID,
-                        CreateAt = CreateAt,
-                        CreateBy = CreateBy,
-                        UpdateAt = CreateAt,
-                        UpdateBy = CreateBy,
-                        //OrderID = x.OrderID,
-                        RMASKUID = x.RMASKUID,
-                        //RMAID = x.RMAID,
-                        NewSkuNo = x.NewSkuNo,
-                        SerialsNo = x.SerialsNo,
-                        SerialsQTY = -1,
-                        SerialsType = "TransferOut"//等待移倉
-                    }).ToList();
-                    //db.SerialsLlist.AddRange(nSerialsLlist);
-                    foreach (var Serial in nRMASerialsLlist)
-                    {
-                        if (!item.RMASerialsLlist.Where(x => x.SerialsNo == Serial.SerialsNo).Any())
-                        {
-                            item.RMASerialsLlist.Add(Serial);
                         }
                     }
                 }
@@ -346,6 +326,7 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult PrepSaveserials(string serials, string SID)
         {
             var PrepVMList = (List<TransferItemVM>)Session["PrepVMList" + SID];
+            var WinitTransferBoxList = (List<WinitTransferBox>)Session["WinitTransferBox" + SID];
             var WarehouseID = PrepVMList.FirstOrDefault().WarehouseID;
             var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials && !x.SerialsLlistC.Any() && x.SerialsQTY > 0);//找到序號
             SerialsLlist = SerialsLlist.Where(x => (x.TransferSKUID.HasValue && x.TransferSKU.Transfer.ToWID == WarehouseID) || (x.PurchaseSKUID.HasValue && x.PurchaseSKU.PurchaseOrder.WarehouseID == WarehouseID));
@@ -373,7 +354,17 @@ namespace PurchaseOrderSys.Controllers
                             if (!PrepVMList.Where(x => x.SerialsLlist.Where(y => y.SerialsNo == serials).Any()).Any() && !PrepVMList.Where(x => x.RMASerialsLlist.Where(y => y.SerialsNo == serials).Any()).Any())
                             {
                                 PrepVM.SerialsLlist.Add(Serial);
+                                var WinitTransferBox = WinitTransferBoxList.LastOrDefault();
+                                WinitTransferBox.WinitTransferBoxItem.Add(new WinitTransferBoxItem
+                                {
+                                    SerialsLlistID = Serial.ID,
+                                    SerialsNo= Serial.SerialsNo,
+                                    SkuNo = Serial.PurchaseSKU.SkuNo,
+                                    Name = Serial.PurchaseSKU.Name,
+                                    Weight = Serial.PurchaseSKU.SKU.Logistic?.ShippingWeight ?? 0
+                                });
                                 Session["PrepVMList" + SID] = PrepVMList;
+                                Session["WinitTransferBox" + SID] = WinitTransferBoxList;
                                 return Json(new { status = true }, JsonRequestBehavior.AllowGet);
                             }
                             else
@@ -444,6 +435,52 @@ namespace PurchaseOrderSys.Controllers
             {
                 return Json(new { status = false, Errmsg = "序號不存在或是已在清單" }, JsonRequestBehavior.AllowGet);
             }
+        }
+        public ActionResult AddBox(int ID)
+        {
+            var WinitTransferBoxList = (List<WinitTransferBox>)Session["WinitTransferBox" + ID];
+            WinitTransferBoxList.Add(new WinitTransferBox());
+            Session["WinitTransferBox" + ID] = WinitTransferBoxList;
+            return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult BoxValChange(int ID,string name,string val)
+        {
+            var index = 0;
+            var boxNo = 0;
+            var newval = 0m;
+            var keylist = name.Split('_');
+            var WinitTransferBoxList = (List<WinitTransferBox>)Session["WinitTransferBox" + ID];
+            int.TryParse(keylist[1], out boxNo);
+            decimal.TryParse(val, out newval);
+            foreach (var item in WinitTransferBoxList)
+            {
+                if (index == boxNo)
+                {
+                    switch (keylist[0])
+                    {
+                        case "Length":
+                            item.Length = newval;
+                            break;
+                        case "Width":
+                            item.Width = newval;
+                            break;
+                        case "Heigth":
+                            item.Heigth = newval;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                index++;
+            }
+            Session["WinitTransferBox" + ID] = WinitTransferBoxList;
+            return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult BoxChange(int ID)
+        {
+            var WinitTransferBoxList = (List<WinitTransferBox>)Session["WinitTransferBox" + ID];
+            var html = RenderPartialViewToString("Boxitem", WinitTransferBoxList);
+            return Json(new { status = true, html }, JsonRequestBehavior.AllowGet);
         }
     }
 }

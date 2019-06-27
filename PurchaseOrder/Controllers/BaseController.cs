@@ -28,6 +28,7 @@ namespace PurchaseOrderSys.Controllers
         public static string ApiPassword = "prU$U9R7CHl3O#uXU6AcH6ch";
         protected PurchaseOrderEntities db = new PurchaseOrderEntities();
         public static SellerCloud_WebService.SC_WebService SCWS;
+      
         protected string RenderPartialViewToString()
         {
             return RenderPartialViewToString(null, null);
@@ -1298,8 +1299,6 @@ namespace PurchaseOrderSys.Controllers
         /// <returns></returns>
         public PurchaseOrderService.Purchase CreatPObySC(PurchaseOrder nPurchaseOrder)
         {
-
-            //SCWS = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
             var WarehouseID = 0;
             var Warehouse = db.Warehouse.Find(nPurchaseOrder.WarehouseID);
             var SCID = Warehouse.WarehouseSummary.Where(x => x.Type == "SCID").FirstOrDefault().Val;

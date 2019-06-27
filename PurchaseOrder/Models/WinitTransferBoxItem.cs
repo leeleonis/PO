@@ -22,6 +22,10 @@ namespace PurchaseOrderSys.Models
         public string UpdateBy { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }
         public Nullable<decimal> Value { get; set; }
+        public string SerialsNo { get; set; }
+        public string SkuNo { get; set; }
+        public string Name { get; set; }
+        public Nullable<decimal> Weight { get; set; }
     
         public virtual SerialsLlist SerialsLlist { get; set; }
         public virtual WinitTransferBox WinitTransferBox { get; set; }

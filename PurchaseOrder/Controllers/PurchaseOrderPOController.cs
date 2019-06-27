@@ -16,6 +16,10 @@ namespace PurchaseOrderSys.Controllers
     [CheckSession]
     public class PurchaseOrderPOController : BaseController
     {
+        public PurchaseOrderPOController()
+        {
+            SCWS = new SC_WebService(ApiUserName, ApiPassword);
+        }
         // GET: PurchaseOrder
         public ActionResult Index(PurchaseOrderPOVMQ PurchaseOrderPOVM)
         {
@@ -674,6 +678,7 @@ namespace PurchaseOrderSys.Controllers
                 db.SaveChanges();
                 if (UpdateSC.HasValue && UpdateSC.Value)
                 {
+                    //SCWS = new SC_WebService(ApiUserName, ApiPassword);
                     //檢查SC上的資料
                     if (!PurchaseOrder.SCPurchaseID.HasValue)
                     {

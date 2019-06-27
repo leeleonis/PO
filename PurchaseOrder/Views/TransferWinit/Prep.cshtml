@@ -1,6 +1,6 @@
 ﻿@model Transfer
 @{
-    ViewBag.title = "TransferOut Serials";
+    ViewBag.title = "Winit TransferOut Serials";
 }
 <div id="content">
     <section id="widget-grid" class="">
@@ -42,8 +42,6 @@
                                                                         <th>Name</th>
                                                                         <th>QTY (Prep)</th>
                                                                         <th>Serial</th>
-                                                                        <th>Label</th>
-                                                                        <th>Download</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody></tbody>
@@ -52,6 +50,50 @@
                                                     </div>
                                                 </article>
                                             </div>
+                                        </fieldset>
+
+                                        <fieldset>
+                                            <legend>Box List</legend>
+                                            <div class="row">
+                                                <div class="form-group">
+                                                    @Html.Label("Box ID:", htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                    <div class="col-sm-4 col-lg-2">
+                                                        @Html.Label("BoxID", htmlAttributes: new { @class = "control-label" })
+                                                    </div>
+                                                    <div class="col-sm-4 col-lg-3">
+                                                        <button type="button" class="btn btn-default" id="addbox">Add Box</button>
+                                                    </div>
+                                                    @Html.Label("Total Value:", htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                    <div class="col-sm-4 col-lg-2">
+                                                        @Html.Label("TotalValue", htmlAttributes: new { @class = "control-label" })
+                                                    </div>
+                                                    <div class="col-sm-4 col-lg-2">
+                                                        <button type="button" class="btn btn-default">取消/上一步</button>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    @Html.Label("Carrier:", htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                    <div class="col-sm-4 col-lg-2">
+                                                        @Html.Label("Carrier", htmlAttributes: new { @class = "control-label" })
+                                                    </div>
+                                                    @Html.Label("Complete Boxes", htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                    <div class="col-sm-4 col-lg-2">
+                                                        @Html.Label("CompleteBoxes", htmlAttributes: new { @class = "control-label" })
+                                                    </div>
+                                                    <div class="col-sm-4 col-lg-3">
+                                                        <button type="button" class="btn btn-default">補印Lable</button>
+                                                        <button type="button" class="btn btn-default">補印AWB</button>
+                                                        <button type="button" class="btn btn-default">保留Box</button>
+                                                    </div>
+                                                    <div class="col-sm-5 col-lg-2">
+                                                        <button type="button" class="btn btn-default">打印Box</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+
+                                        <fieldset id="boxitem">
+                                            @Html.Partial("Boxitem",Model.WinitTransfer.WinitTransferBox)
                                         </fieldset>
                                     </div>
                                 </div>
@@ -75,35 +117,28 @@
         $('.tab-pane').eq(hash.substr(1)).addClass('active');
         var DataGrid;
         var tableID = "#DataGrid";
-                $(document).ready(function () {
+        $(document).ready(function () {
             DataGrid = $(tableID).DataTable({
                 columns: [
-                    { data: "SKU"},
+                    { data: "SKU" },
                     { data: "Name" },
                     {
                         data: "QTY"
                         , render: function (data, type, row, meta) {
-                            if (row.Full || row.SerialTracking) {
-                                return '<input type="hidden" name="Prep[' + meta.row + '].ID" value=' + row.ID + ' />' + data;
-                            }
-                            else {
-                                return '<input class="form-control" type="number"  max=' + row.MaxQTY + '   id="Prep[' + meta.row + ']" name="Prep[' + meta.row + '].val"  ><input type="hidden" name="Prep[' + meta.row + '].ID" value = ' + row.ID + ' />' + data;
-                            }
+                            return data;
                         }
                     },
                     {
                         data: "Serial"
-                    },
-                    { data: "Label" },
-                    { data: "Download" }
+                    }
                 ],
-                rowsGroup:[0,1,2],
+                rowsGroup: [0, 1, 2],
                 ajax: {
                     traditional: true,
                     method: "get",//或post，自由決定，影響到Server端用FormCollection取值或Request.QueryString取得DataTables傳遞的資訊
                     url: "@Url.Action("PrepVMList")",
                     data: function (d) {
-                        d.SID=@Model.ID
+                        d.SID =@Model.ID
                     }
                 },
                 serverSide: true,//啟用ServerSide模式
@@ -129,6 +164,7 @@
                         success: function (data) {
                             if (data.status) {
                                 DataGrid.draw();
+                                boxchange();
                                 $("#Serial").val("");
                                 $("#Serial").focus();
                             }
@@ -139,6 +175,67 @@
                     });
                 }
             });
+            $("#addbox").click(function () {
+                $.ajax({
+                    traditional: true,
+                    type: "post",
+                    url: "@Url.Action("AddBox")",
+                    data: {
+                        ID:"@Html.Display("ID")"
+                    },
+                    success: function (data) {
+                        if (data.status) {
+                            boxchange();
+                        }
+                        else {
+                            alert(data.Errmsg);
+                        }
+                    }
+                });
+            });
+            $("body").on("change", ".postval", function () {
+                var val = $(this).val();
+                var name = $(this).attr('id');
+                $.ajax({
+                    traditional: true,
+                    type: "post",
+                    url: "@Url.Action("BoxValChange")",
+                    data: {
+                        ID: "@Html.Display("ID")",
+                        name: name,
+                        val: val
+                    },
+                    success: function (data) {
+                        if (data.status) {
+                            boxchange();
+                        }
+                        else {
+                            alert(data.Errmsg);
+                        }
+                    }
+                });
+            });
         });
+        function boxchange() {
+                $.ajax({
+                    traditional: true,
+                    type: "post",
+                    url: "@Url.Action("BoxValChange")",
+                    data: {
+                        ID: "@Html.Display("ID")",
+                        name: name,
+                        val: val
+                    },
+                    success: function (data) {
+                        if (data.status) {
+                            $("#boxitem").html(data.html)
+                            DataGrid.draw();
+                        }
+                        else {
+                            alert(data.Errmsg);
+                        }
+                    }
+                });
+        }
     </script>
 }

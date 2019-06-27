@@ -58,8 +58,9 @@ namespace PurchaseOrderSys.Controllers
         // GET: Test
         public ActionResult Index()
         {
-            DropShip();
-          //var  Warehouse3PList = new NewApi.Winit_API().Warehouse3P();
+          var  Warehouse3PList = new NewApi.Winit_APIToken().Warehouse3P();
+            var SKUList = new NewApi.Winit_APIToken().SKUList();
+            //DropShip();
             //var SerialsLlist = new List<SerialsLlist>();
             //var POSerialsLlist = new List<SerialsLlist>();
             //var DSerialsLlist = new List<SerialsLlist>();

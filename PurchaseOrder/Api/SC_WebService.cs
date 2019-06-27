@@ -32,7 +32,6 @@ namespace SellerCloud_WebService
         public int UserID;
         public DateTime SyncOn;
         private bool disposed = false;
-
         public bool Is_login
         {
             get

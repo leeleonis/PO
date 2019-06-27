@@ -561,4 +561,91 @@
   <data name="PurchaseOrder_Description" xml:space="preserve">
     <value>Description</value>
   </data>
+  <data name="PriceGroup_CurrentPrice" xml:space="preserve">
+    <value>Current Price</value>
+  </data>
+  <data name="WinitTransfer_IsEnable" xml:space="preserve">
+    <value>IsEnable</value>
+  </data>
+  <data name="WinitTransfer_TransferID" xml:space="preserve">
+    <value>TransferID</value>
+  </data>
+  <data name="WinitTransfer_CompleteBoxes" xml:space="preserve">
+    <value>CompleteBoxes</value>
+  </data>
+  <data name="WinitTransfer_TotalVal" xml:space="preserve">
+    <value>TotalVal</value>
+  </data>
+  <data name="WinitTransfer_CreateBy" xml:space="preserve">
+    <value>CreateBy</value>
+  </data>
+  <data name="WinitTransfer_CreateAt" xml:space="preserve">
+    <value>CreateAt</value>
+  </data>
+  <data name="WinitTransfer_UpdateBy" xml:space="preserve">
+    <value>UpdateBy</value>
+  </data>
+  <data name="WinitTransfer_UpdateAt" xml:space="preserve">
+    <value>UpdateAt</value>
+  </data>
+  <data name="WinitTransferBox_IsEnable" xml:space="preserve">
+    <value>IsEnable</value>
+  </data>
+  <data name="WinitTransferBox_ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="WinitTransferBox_WinitTransferID" xml:space="preserve">
+    <value>WinitTransferID</value>
+  </data>
+  <data name="WinitTransferBox_Length" xml:space="preserve">
+    <value>Length</value>
+  </data>
+  <data name="WinitTransferBox_Width" xml:space="preserve">
+    <value>Width</value>
+  </data>
+  <data name="WinitTransferBox_Heigth" xml:space="preserve">
+    <value>Heigth</value>
+  </data>
+  <data name="WinitTransferBox_Weight" xml:space="preserve">
+    <value>Weight</value>
+  </data>
+  <data name="WinitTransferBox_BarCode" xml:space="preserve">
+    <value>BarCode</value>
+  </data>
+  <data name="WinitTransferBox_CreateBy" xml:space="preserve">
+    <value>CreateBy</value>
+  </data>
+  <data name="WinitTransferBox_CreateAt" xml:space="preserve">
+    <value>CreateAt</value>
+  </data>
+  <data name="WinitTransferBox_UpdateBy" xml:space="preserve">
+    <value>UpdateBy</value>
+  </data>
+  <data name="WinitTransferBox_UpdateAt" xml:space="preserve">
+    <value>UpdateAt</value>
+  </data>
+  <data name="WinitTransferBoxItem_WinitTransferBoxID" xml:space="preserve">
+    <value>WinitTransferBoxID</value>
+  </data>
+  <data name="WinitTransferBoxItem_SerialsLlistID" xml:space="preserve">
+    <value>SerialsLlistID</value>
+  </data>
+  <data name="WinitTransferBoxItem_BarCode" xml:space="preserve">
+    <value>BarCode</value>
+  </data>
+  <data name="WinitTransferBoxItem_CreateBy" xml:space="preserve">
+    <value>CreateBy</value>
+  </data>
+  <data name="WinitTransferBoxItem_CreateAt" xml:space="preserve">
+    <value>CreateAt</value>
+  </data>
+  <data name="WinitTransferBoxItem_UpdateBy" xml:space="preserve">
+    <value>UpdateBy</value>
+  </data>
+  <data name="WinitTransferBoxItem_UpdateAt" xml:space="preserve">
+    <value>UpdateAt</value>
+  </data>
+  <data name="WinitTransferBoxItem_Value" xml:space="preserve">
+    <value>Value</value>
+  </data>
 </root>

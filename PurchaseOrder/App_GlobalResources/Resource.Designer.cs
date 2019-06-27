@@ -286,6 +286,141 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string ApiSetting_AccountID {
+            get {
+                return ResourceManager.GetString("ApiSetting_AccountID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string ApiSetting_ApiAccount {
+            get {
+                return ResourceManager.GetString("ApiSetting_ApiAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string ApiSetting_ApiHub {
+            get {
+                return ResourceManager.GetString("ApiSetting_ApiHub", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string ApiSetting_ApiKey {
+            get {
+                return ResourceManager.GetString("ApiSetting_ApiKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string ApiSetting_ApiMeter {
+            get {
+                return ResourceManager.GetString("ApiSetting_ApiMeter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string ApiSetting_ApiPassword {
+            get {
+                return ResourceManager.GetString("ApiSetting_ApiPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string ApiSetting_Create_at {
+            get {
+                return ResourceManager.GetString("ApiSetting_Create_at", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string ApiSetting_Create_by {
+            get {
+                return ResourceManager.GetString("ApiSetting_Create_by", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string ApiSetting_Id {
+            get {
+                return ResourceManager.GetString("ApiSetting_Id", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string ApiSetting_IsEnable {
+            get {
+                return ResourceManager.GetString("ApiSetting_IsEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string ApiSetting_IsTest {
+            get {
+                return ResourceManager.GetString("ApiSetting_IsTest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string ApiSetting_Name {
+            get {
+                return ResourceManager.GetString("ApiSetting_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string ApiSetting_Type {
+            get {
+                return ResourceManager.GetString("ApiSetting_Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string ApiSetting_Update_at {
+            get {
+                return ResourceManager.GetString("ApiSetting_Update_at", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string ApiSetting_Update_by {
+            get {
+                return ResourceManager.GetString("ApiSetting_Update_by", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 buteErr 的當地語系化字串。
         /// </summary>
         public static string AttributeErr {
@@ -480,6 +615,114 @@ namespace PurchaseOrderSys.App_GlobalResources {
         public static string Brand_UpdateBy {
             get {
                 return ResourceManager.GetString("Brand_UpdateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Carriers_Api {
+            get {
+                return ResourceManager.GetString("Carriers_Api", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Carriers_BoxType {
+            get {
+                return ResourceManager.GetString("Carriers_BoxType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Carriers_Create_at {
+            get {
+                return ResourceManager.GetString("Carriers_Create_at", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Carriers_Create_by {
+            get {
+                return ResourceManager.GetString("Carriers_Create_by", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Carriers_Email {
+            get {
+                return ResourceManager.GetString("Carriers_Email", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Carriers_ID {
+            get {
+                return ResourceManager.GetString("Carriers_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Carriers_IsEnable {
+            get {
+                return ResourceManager.GetString("Carriers_IsEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Carriers_MethodType {
+            get {
+                return ResourceManager.GetString("Carriers_MethodType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Carriers_Name {
+            get {
+                return ResourceManager.GetString("Carriers_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Carriers_PrinterName {
+            get {
+                return ResourceManager.GetString("Carriers_PrinterName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Carriers_Update_at {
+            get {
+                return ResourceManager.GetString("Carriers_Update_at", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Carriers_Update_by {
+            get {
+                return ResourceManager.GetString("Carriers_Update_by", resourceCulture);
             }
         }
         
@@ -1654,6 +1897,186 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string DirectLine_Abbreviation {
+            get {
+                return ResourceManager.GetString("DirectLine_Abbreviation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string DirectLine_Api {
+            get {
+                return ResourceManager.GetString("DirectLine_Api", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string DirectLine_City {
+            get {
+                return ResourceManager.GetString("DirectLine_City", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string DirectLine_CompanyName {
+            get {
+                return ResourceManager.GetString("DirectLine_CompanyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string DirectLine_ContactName {
+            get {
+                return ResourceManager.GetString("DirectLine_ContactName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string DirectLine_CountryCode {
+            get {
+                return ResourceManager.GetString("DirectLine_CountryCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string DirectLine_CountryName {
+            get {
+                return ResourceManager.GetString("DirectLine_CountryName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string DirectLine_CreateAt {
+            get {
+                return ResourceManager.GetString("DirectLine_CreateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string DirectLine_CreateBy {
+            get {
+                return ResourceManager.GetString("DirectLine_CreateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string DirectLine_Email {
+            get {
+                return ResourceManager.GetString("DirectLine_Email", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string DirectLine_ID {
+            get {
+                return ResourceManager.GetString("DirectLine_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string DirectLine_IsEnable {
+            get {
+                return ResourceManager.GetString("DirectLine_IsEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string DirectLine_Name {
+            get {
+                return ResourceManager.GetString("DirectLine_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string DirectLine_PhoneNumber {
+            get {
+                return ResourceManager.GetString("DirectLine_PhoneNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string DirectLine_PostalCode {
+            get {
+                return ResourceManager.GetString("DirectLine_PostalCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string DirectLine_StateName {
+            get {
+                return ResourceManager.GetString("DirectLine_StateName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string DirectLine_StreetLine1 {
+            get {
+                return ResourceManager.GetString("DirectLine_StreetLine1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string DirectLine_StreetLine2 {
+            get {
+                return ResourceManager.GetString("DirectLine_StreetLine2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string DirectLine_UpdateAt {
+            get {
+                return ResourceManager.GetString("DirectLine_UpdateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string DirectLine_UpdateBy {
+            get {
+                return ResourceManager.GetString("DirectLine_UpdateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 Grand Total 的當地語系化字串。
         /// </summary>
         public static string GrandTotal {
@@ -1740,6 +2163,150 @@ namespace PurchaseOrderSys.App_GlobalResources {
         public static string ImgFile_Url {
             get {
                 return ResourceManager.GetString("ImgFile_Url", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Items_Create_at {
+            get {
+                return ResourceManager.GetString("Items_Create_at", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Items_Create_by {
+            get {
+                return ResourceManager.GetString("Items_Create_by", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Items_Currency {
+            get {
+                return ResourceManager.GetString("Items_Currency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Items_eBayItemID {
+            get {
+                return ResourceManager.GetString("Items_eBayItemID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Items_ID {
+            get {
+                return ResourceManager.GetString("Items_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Items_IsEnable {
+            get {
+                return ResourceManager.GetString("Items_IsEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Items_OrderID {
+            get {
+                return ResourceManager.GetString("Items_OrderID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Items_PackageID {
+            get {
+                return ResourceManager.GetString("Items_PackageID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Items_Qty {
+            get {
+                return ResourceManager.GetString("Items_Qty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Items_RMAID {
+            get {
+                return ResourceManager.GetString("Items_RMAID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Items_SalesRecordNumber {
+            get {
+                return ResourceManager.GetString("Items_SalesRecordNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Items_SCID {
+            get {
+                return ResourceManager.GetString("Items_SCID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Items_Sku {
+            get {
+                return ResourceManager.GetString("Items_Sku", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Items_UnitPrice {
+            get {
+                return ResourceManager.GetString("Items_UnitPrice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Items_Update_at {
+            get {
+                return ResourceManager.GetString("Items_Update_at", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Items_Update_by {
+            get {
+                return ResourceManager.GetString("Items_Update_by", resourceCulture);
             }
         }
         
@@ -2338,6 +2905,231 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string OrderActionLogs_CreateAt {
+            get {
+                return ResourceManager.GetString("OrderActionLogs_CreateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string OrderActionLogs_CreateBy {
+            get {
+                return ResourceManager.GetString("OrderActionLogs_CreateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string OrderActionLogs_Description {
+            get {
+                return ResourceManager.GetString("OrderActionLogs_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string OrderActionLogs_ID {
+            get {
+                return ResourceManager.GetString("OrderActionLogs_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string OrderActionLogs_Item {
+            get {
+                return ResourceManager.GetString("OrderActionLogs_Item", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string OrderActionLogs_OrderID {
+            get {
+                return ResourceManager.GetString("OrderActionLogs_OrderID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string OrderActionLogs_PackageID {
+            get {
+                return ResourceManager.GetString("OrderActionLogs_PackageID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string OrderAddresses_AddressLine1 {
+            get {
+                return ResourceManager.GetString("OrderAddresses_AddressLine1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string OrderAddresses_AddressLine2 {
+            get {
+                return ResourceManager.GetString("OrderAddresses_AddressLine2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string OrderAddresses_City {
+            get {
+                return ResourceManager.GetString("OrderAddresses_City", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string OrderAddresses_CountryCode {
+            get {
+                return ResourceManager.GetString("OrderAddresses_CountryCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string OrderAddresses_CountryName {
+            get {
+                return ResourceManager.GetString("OrderAddresses_CountryName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string OrderAddresses_Create_at {
+            get {
+                return ResourceManager.GetString("OrderAddresses_Create_at", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string OrderAddresses_Create_by {
+            get {
+                return ResourceManager.GetString("OrderAddresses_Create_by", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string OrderAddresses_FirstName {
+            get {
+                return ResourceManager.GetString("OrderAddresses_FirstName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string OrderAddresses_ID {
+            get {
+                return ResourceManager.GetString("OrderAddresses_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string OrderAddresses_IsEnable {
+            get {
+                return ResourceManager.GetString("OrderAddresses_IsEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string OrderAddresses_LastName {
+            get {
+                return ResourceManager.GetString("OrderAddresses_LastName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string OrderAddresses_OrderID {
+            get {
+                return ResourceManager.GetString("OrderAddresses_OrderID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string OrderAddresses_Postcode {
+            get {
+                return ResourceManager.GetString("OrderAddresses_Postcode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string OrderAddresses_SCID {
+            get {
+                return ResourceManager.GetString("OrderAddresses_SCID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string OrderAddresses_State {
+            get {
+                return ResourceManager.GetString("OrderAddresses_State", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string OrderAddresses_Type {
+            get {
+                return ResourceManager.GetString("OrderAddresses_Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string OrderAddresses_Update_at {
+            get {
+                return ResourceManager.GetString("OrderAddresses_Update_at", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string OrderAddresses_Update_by {
+            get {
+                return ResourceManager.GetString("OrderAddresses_Update_by", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 Date 的當地語系化字串。
         /// </summary>
         public static string OrderLog_Date {
@@ -2406,6 +3198,294 @@ namespace PurchaseOrderSys.App_GlobalResources {
         public static string OrderLog_WarehouseID {
             get {
                 return ResourceManager.GetString("OrderLog_WarehouseID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Orders_BuyerNote {
+            get {
+                return ResourceManager.GetString("Orders_BuyerNote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Orders_Channel {
+            get {
+                return ResourceManager.GetString("Orders_Channel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Orders_Comment {
+            get {
+                return ResourceManager.GetString("Orders_Comment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Orders_Company {
+            get {
+                return ResourceManager.GetString("Orders_Company", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Orders_Create_at {
+            get {
+                return ResourceManager.GetString("Orders_Create_at", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Orders_Create_by {
+            get {
+                return ResourceManager.GetString("Orders_Create_by", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Orders_CustomerEmail {
+            get {
+                return ResourceManager.GetString("Orders_CustomerEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Orders_CustomerID {
+            get {
+                return ResourceManager.GetString("Orders_CustomerID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Orders_FulfilledDate {
+            get {
+                return ResourceManager.GetString("Orders_FulfilledDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Orders_FulfillmentStatus {
+            get {
+                return ResourceManager.GetString("Orders_FulfillmentStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Orders_ID {
+            get {
+                return ResourceManager.GetString("Orders_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Orders_IsEnable {
+            get {
+                return ResourceManager.GetString("Orders_IsEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Orders_IsRush {
+            get {
+                return ResourceManager.GetString("Orders_IsRush", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Orders_OrderDate {
+            get {
+                return ResourceManager.GetString("Orders_OrderDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Orders_OrderParent {
+            get {
+                return ResourceManager.GetString("Orders_OrderParent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Orders_OrderSourceID {
+            get {
+                return ResourceManager.GetString("Orders_OrderSourceID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Orders_OrderStatus {
+            get {
+                return ResourceManager.GetString("Orders_OrderStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Orders_OrderType {
+            get {
+                return ResourceManager.GetString("Orders_OrderType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Orders_PaymentDate {
+            get {
+                return ResourceManager.GetString("Orders_PaymentDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Orders_PaymentStatus {
+            get {
+                return ResourceManager.GetString("Orders_PaymentStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Orders_SCID {
+            get {
+                return ResourceManager.GetString("Orders_SCID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Orders_Update_at {
+            get {
+                return ResourceManager.GetString("Orders_Update_at", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Orders_Update_by {
+            get {
+                return ResourceManager.GetString("Orders_Update_by", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string OrderSerials_Create_at {
+            get {
+                return ResourceManager.GetString("OrderSerials_Create_at", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string OrderSerials_Create_by {
+            get {
+                return ResourceManager.GetString("OrderSerials_Create_by", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string OrderSerials_IsEnable {
+            get {
+                return ResourceManager.GetString("OrderSerials_IsEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string OrderSerials_ItemID {
+            get {
+                return ResourceManager.GetString("OrderSerials_ItemID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string OrderSerials_OrderID {
+            get {
+                return ResourceManager.GetString("OrderSerials_OrderID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string OrderSerials_SerialNumber {
+            get {
+                return ResourceManager.GetString("OrderSerials_SerialNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string OrderSerials_Sku {
+            get {
+                return ResourceManager.GetString("OrderSerials_Sku", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string OrderSerials_Update_at {
+            get {
+                return ResourceManager.GetString("OrderSerials_Update_at", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string OrderSerials_Update_by {
+            get {
+                return ResourceManager.GetString("OrderSerials_Update_by", resourceCulture);
             }
         }
         
@@ -2536,6 +3616,231 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Packages_CarrierBox {
+            get {
+                return ResourceManager.GetString("Packages_CarrierBox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Packages_Create_at {
+            get {
+                return ResourceManager.GetString("Packages_Create_at", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Packages_Create_by {
+            get {
+                return ResourceManager.GetString("Packages_Create_by", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Packages_DLExport {
+            get {
+                return ResourceManager.GetString("Packages_DLExport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Packages_DLExportCurrency {
+            get {
+                return ResourceManager.GetString("Packages_DLExportCurrency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Packages_DLExportMethod {
+            get {
+                return ResourceManager.GetString("Packages_DLExportMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Packages_DLExportValue {
+            get {
+                return ResourceManager.GetString("Packages_DLExportValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Packages_DLTracking {
+            get {
+                return ResourceManager.GetString("Packages_DLTracking", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Packages_DLUploadTracking {
+            get {
+                return ResourceManager.GetString("Packages_DLUploadTracking", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Packages_Export {
+            get {
+                return ResourceManager.GetString("Packages_Export", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Packages_ExportCurrency {
+            get {
+                return ResourceManager.GetString("Packages_ExportCurrency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Packages_ExportMethod {
+            get {
+                return ResourceManager.GetString("Packages_ExportMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Packages_ExportValue {
+            get {
+                return ResourceManager.GetString("Packages_ExportValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Packages_ID {
+            get {
+                return ResourceManager.GetString("Packages_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Packages_IsEnable {
+            get {
+                return ResourceManager.GetString("Packages_IsEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Packages_OrderID {
+            get {
+                return ResourceManager.GetString("Packages_OrderID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Packages_ReturnWarehouse {
+            get {
+                return ResourceManager.GetString("Packages_ReturnWarehouse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Packages_SCID {
+            get {
+                return ResourceManager.GetString("Packages_SCID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Packages_ShippingMethod {
+            get {
+                return ResourceManager.GetString("Packages_ShippingMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Packages_ShippingStatus {
+            get {
+                return ResourceManager.GetString("Packages_ShippingStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Packages_ShipWarehouse {
+            get {
+                return ResourceManager.GetString("Packages_ShipWarehouse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Packages_Tracking {
+            get {
+                return ResourceManager.GetString("Packages_Tracking", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Packages_Update_at {
+            get {
+                return ResourceManager.GetString("Packages_Update_at", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Packages_Update_by {
+            get {
+                return ResourceManager.GetString("Packages_Update_by", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Packages_UploadTracking {
+            get {
+                return ResourceManager.GetString("Packages_UploadTracking", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 PaidAmount 的當地語系化字串。
         /// </summary>
         public static string PaidAmount {
@@ -2550,6 +3855,177 @@ namespace PurchaseOrderSys.App_GlobalResources {
         public static string Password {
             get {
                 return ResourceManager.GetString("Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Payments_Balance {
+            get {
+                return ResourceManager.GetString("Payments_Balance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Payments_Create_at {
+            get {
+                return ResourceManager.GetString("Payments_Create_at", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Payments_Create_by {
+            get {
+                return ResourceManager.GetString("Payments_Create_by", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Payments_Date {
+            get {
+                return ResourceManager.GetString("Payments_Date", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Payments_Gateway {
+            get {
+                return ResourceManager.GetString("Payments_Gateway", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Payments_GrandTotal {
+            get {
+                return ResourceManager.GetString("Payments_GrandTotal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Payments_ID {
+            get {
+                return ResourceManager.GetString("Payments_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Payments_InsuranceCharge {
+            get {
+                return ResourceManager.GetString("Payments_InsuranceCharge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Payments_IsEnable {
+            get {
+                return ResourceManager.GetString("Payments_IsEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Payments_OrderID {
+            get {
+                return ResourceManager.GetString("Payments_OrderID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Payments_PaymentEmail {
+            get {
+                return ResourceManager.GetString("Payments_PaymentEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Payments_PaymentTotal {
+            get {
+                return ResourceManager.GetString("Payments_PaymentTotal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Payments_Refund {
+            get {
+                return ResourceManager.GetString("Payments_Refund", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Payments_SCID {
+            get {
+                return ResourceManager.GetString("Payments_SCID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Payments_Status {
+            get {
+                return ResourceManager.GetString("Payments_Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Payments_TotalValue {
+            get {
+                return ResourceManager.GetString("Payments_TotalValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Payments_TransactionID {
+            get {
+                return ResourceManager.GetString("Payments_TransactionID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Payments_Update_at {
+            get {
+                return ResourceManager.GetString("Payments_Update_at", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Payments_Update_by {
+            get {
+                return ResourceManager.GetString("Payments_Update_by", resourceCulture);
             }
         }
         
@@ -2662,7 +4138,7 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
-        ///   查詢類似  的當地語系化字串。
+        ///   查詢類似 Current Price 的當地語系化字串。
         /// </summary>
         public static string PriceGroup_CurrentPrice {
             get {
@@ -4044,6 +5520,132 @@ namespace PurchaseOrderSys.App_GlobalResources {
         public static string SerialsLlist_UpdateBy {
             get {
                 return ResourceManager.GetString("SerialsLlist_UpdateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string ShippingMethods_Create_at {
+            get {
+                return ResourceManager.GetString("ShippingMethods_Create_at", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string ShippingMethods_Create_by {
+            get {
+                return ResourceManager.GetString("ShippingMethods_Create_by", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string ShippingMethods_DirectLine {
+            get {
+                return ResourceManager.GetString("ShippingMethods_DirectLine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string ShippingMethods_FirstMileCarrier {
+            get {
+                return ResourceManager.GetString("ShippingMethods_FirstMileCarrier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string ShippingMethods_ID {
+            get {
+                return ResourceManager.GetString("ShippingMethods_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string ShippingMethods_InBox {
+            get {
+                return ResourceManager.GetString("ShippingMethods_InBox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string ShippingMethods_IsBattery {
+            get {
+                return ResourceManager.GetString("ShippingMethods_IsBattery", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string ShippingMethods_IsEnable {
+            get {
+                return ResourceManager.GetString("ShippingMethods_IsEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string ShippingMethods_IsExport {
+            get {
+                return ResourceManager.GetString("ShippingMethods_IsExport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string ShippingMethods_LastMileCarrier {
+            get {
+                return ResourceManager.GetString("ShippingMethods_LastMileCarrier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string ShippingMethods_Name {
+            get {
+                return ResourceManager.GetString("ShippingMethods_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string ShippingMethods_Type {
+            get {
+                return ResourceManager.GetString("ShippingMethods_Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string ShippingMethods_Update_at {
+            get {
+                return ResourceManager.GetString("ShippingMethods_Update_at", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string ShippingMethods_Update_by {
+            get {
+                return ResourceManager.GetString("ShippingMethods_Update_by", resourceCulture);
             }
         }
         
@@ -5808,6 +7410,258 @@ namespace PurchaseOrderSys.App_GlobalResources {
         public static string WarehouseUser_WarehouseID {
             get {
                 return ResourceManager.GetString("WarehouseUser_WarehouseID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CompleteBoxes 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransfer_CompleteBoxes {
+            get {
+                return ResourceManager.GetString("WinitTransfer_CompleteBoxes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CreateAt 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransfer_CreateAt {
+            get {
+                return ResourceManager.GetString("WinitTransfer_CreateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CreateBy 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransfer_CreateBy {
+            get {
+                return ResourceManager.GetString("WinitTransfer_CreateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 IsEnable 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransfer_IsEnable {
+            get {
+                return ResourceManager.GetString("WinitTransfer_IsEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 TotalVal 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransfer_TotalVal {
+            get {
+                return ResourceManager.GetString("WinitTransfer_TotalVal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 TransferID 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransfer_TransferID {
+            get {
+                return ResourceManager.GetString("WinitTransfer_TransferID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UpdateAt 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransfer_UpdateAt {
+            get {
+                return ResourceManager.GetString("WinitTransfer_UpdateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UpdateBy 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransfer_UpdateBy {
+            get {
+                return ResourceManager.GetString("WinitTransfer_UpdateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 BarCode 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransferBox_BarCode {
+            get {
+                return ResourceManager.GetString("WinitTransferBox_BarCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CreateAt 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransferBox_CreateAt {
+            get {
+                return ResourceManager.GetString("WinitTransferBox_CreateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CreateBy 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransferBox_CreateBy {
+            get {
+                return ResourceManager.GetString("WinitTransferBox_CreateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Heigth 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransferBox_Heigth {
+            get {
+                return ResourceManager.GetString("WinitTransferBox_Heigth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ID 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransferBox_ID {
+            get {
+                return ResourceManager.GetString("WinitTransferBox_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 IsEnable 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransferBox_IsEnable {
+            get {
+                return ResourceManager.GetString("WinitTransferBox_IsEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Length 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransferBox_Length {
+            get {
+                return ResourceManager.GetString("WinitTransferBox_Length", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UpdateAt 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransferBox_UpdateAt {
+            get {
+                return ResourceManager.GetString("WinitTransferBox_UpdateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UpdateBy 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransferBox_UpdateBy {
+            get {
+                return ResourceManager.GetString("WinitTransferBox_UpdateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Weight 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransferBox_Weight {
+            get {
+                return ResourceManager.GetString("WinitTransferBox_Weight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Width 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransferBox_Width {
+            get {
+                return ResourceManager.GetString("WinitTransferBox_Width", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 WinitTransferID 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransferBox_WinitTransferID {
+            get {
+                return ResourceManager.GetString("WinitTransferBox_WinitTransferID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 BarCode 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransferBoxItem_BarCode {
+            get {
+                return ResourceManager.GetString("WinitTransferBoxItem_BarCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CreateAt 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransferBoxItem_CreateAt {
+            get {
+                return ResourceManager.GetString("WinitTransferBoxItem_CreateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CreateBy 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransferBoxItem_CreateBy {
+            get {
+                return ResourceManager.GetString("WinitTransferBoxItem_CreateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 SerialsLlistID 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransferBoxItem_SerialsLlistID {
+            get {
+                return ResourceManager.GetString("WinitTransferBoxItem_SerialsLlistID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UpdateAt 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransferBoxItem_UpdateAt {
+            get {
+                return ResourceManager.GetString("WinitTransferBoxItem_UpdateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UpdateBy 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransferBoxItem_UpdateBy {
+            get {
+                return ResourceManager.GetString("WinitTransferBoxItem_UpdateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Value 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransferBoxItem_Value {
+            get {
+                return ResourceManager.GetString("WinitTransferBoxItem_Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 WinitTransferBoxID 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransferBoxItem_WinitTransferBoxID {
+            get {
+                return ResourceManager.GetString("WinitTransferBoxItem_WinitTransferBoxID", resourceCulture);
             }
         }
     }
