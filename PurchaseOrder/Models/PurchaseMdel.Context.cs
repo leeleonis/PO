@@ -74,9 +74,6 @@ namespace PurchaseOrderSys.Models
         public virtual DbSet<RMA> RMA { get; set; }
         public virtual DbSet<RMASerialsLlist> RMASerialsLlist { get; set; }
         public virtual DbSet<RMAOrderSerialsLlist> RMAOrderSerialsLlist { get; set; }
-        public virtual DbSet<WinitTransfer> WinitTransfer { get; set; }
-        public virtual DbSet<WinitTransferBox> WinitTransferBox { get; set; }
-        public virtual DbSet<WinitTransferBoxItem> WinitTransferBoxItem { get; set; }
         public virtual DbSet<Items> Items { get; set; }
         public virtual DbSet<OrderActionLogs> OrderActionLogs { get; set; }
         public virtual DbSet<Orders> Orders { get; set; }
@@ -86,5 +83,8 @@ namespace PurchaseOrderSys.Models
         public virtual DbSet<ApiSetting> ApiSetting { get; set; }
         public virtual DbSet<OrderAddresses> OrderAddresses { get; set; }
         public virtual DbSet<OrderSerials> OrderSerials { get; set; }
+        public virtual DbSet<WinitTransfer> WinitTransfer { get; set; }
+        public virtual DbSet<WinitTransferBox> WinitTransferBox { get; set; }
+        public virtual DbSet<WinitTransferBoxItem> WinitTransferBoxItem { get; set; }
     }
 }

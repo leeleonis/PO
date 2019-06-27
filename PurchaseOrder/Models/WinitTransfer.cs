@@ -21,8 +21,7 @@ namespace PurchaseOrderSys.Models
         }
     
         public bool IsEnable { get; set; }
-        public int ID { get; set; }
-        public Nullable<int> TransferID { get; set; }
+        public int TransferID { get; set; }
         public Nullable<int> CompleteBoxes { get; set; }
         public Nullable<decimal> TotalVal { get; set; }
         public string CreateBy { get; set; }

@@ -19,7 +19,6 @@ namespace PurchaseOrderSys.Models
         {
             this.PurchaseNote = new HashSet<PurchaseNote>();
             this.TransferSKU = new HashSet<TransferSKU>();
-            this.WinitTransfer = new HashSet<WinitTransfer>();
         }
     
         public bool IsEnable { get; set; }
@@ -46,7 +45,6 @@ namespace PurchaseOrderSys.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TransferSKU> TransferSKU { get; set; }
         public virtual Warehouse WarehouseInterim { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<WinitTransfer> WinitTransfer { get; set; }
+        public virtual WinitTransfer WinitTransfer { get; set; }
     }
 }

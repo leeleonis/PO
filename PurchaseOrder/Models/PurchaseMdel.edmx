@@ -662,10 +662,7 @@
           <Property Name="Other" Type="decimal" Precision="18" Scale="2" />
           <Property Name="SCPurchaseID" Type="int" />
           <Property Name="Memo" Type="text" />
-<<<<<<< HEAD
           <Property Name="Description" Type="nvarchar" MaxLength="100" />
-=======
->>>>>>> CreateOrderPage
         </EntityType>
         <EntityType Name="PurchaseSKU">
           <Key>
@@ -1122,11 +1119,10 @@
         </EntityType>
         <EntityType Name="WinitTransfer">
           <Key>
-            <PropertyRef Name="ID" />
+            <PropertyRef Name="TransferID" />
           </Key>
           <Property Name="IsEnable" Type="bit" Nullable="false" />
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="TransferID" Type="int" />
+          <Property Name="TransferID" Type="int" Nullable="false" />
           <Property Name="CompleteBoxes" Type="int" />
           <Property Name="TotalVal" Type="decimal" Precision="18" Scale="2" />
           <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
@@ -2268,9 +2264,9 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_WinitTransfer_Transfer">
-          <End Role="Transfer" Type="Self.Transfer" Multiplicity="0..1" />
-          <End Role="WinitTransfer" Type="Self.WinitTransfer" Multiplicity="*" />
+        <Association Name="FK_WinitTransfer_Transfer1">
+          <End Role="Transfer" Type="Self.Transfer" Multiplicity="1" />
+          <End Role="WinitTransfer" Type="Self.WinitTransfer" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="Transfer">
               <PropertyRef Name="ID" />
@@ -2285,7 +2281,7 @@
           <End Role="WinitTransferBox" Type="Self.WinitTransferBox" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="WinitTransfer">
-              <PropertyRef Name="ID" />
+              <PropertyRef Name="TransferID" />
             </Principal>
             <Dependent Role="WinitTransferBox">
               <PropertyRef Name="WinitTransferID" />
@@ -2747,7 +2743,7 @@
             <End Role="Warehouse" EntitySet="Warehouse" />
             <End Role="WarehouseUser" EntitySet="WarehouseUser" />
           </AssociationSet>
-          <AssociationSet Name="FK_WinitTransfer_Transfer" Association="Self.FK_WinitTransfer_Transfer">
+          <AssociationSet Name="FK_WinitTransfer_Transfer1" Association="Self.FK_WinitTransfer_Transfer1">
             <End Role="Transfer" EntitySet="Transfer" />
             <End Role="WinitTransfer" EntitySet="WinitTransfer" />
           </AssociationSet>
@@ -3094,30 +3090,10 @@
             <End Role="RMA" EntitySet="RMA" />
             <End Role="CreditMemo" EntitySet="CreditMemo" />
           </AssociationSet>
-<<<<<<< HEAD
           <AssociationSet Name="VendorBrand" Association="PurchaseOrderModel.VendorBrand">
             <End Role="Brand" EntitySet="Brand" />
             <End Role="VendorLIst" EntitySet="VendorLIst" />
           </AssociationSet>
-          <EntitySet Name="WinitTransfer" EntityType="PurchaseOrderModel.WinitTransfer" />
-          <EntitySet Name="WinitTransferBox" EntityType="PurchaseOrderModel.WinitTransferBox" />
-          <EntitySet Name="WinitTransferBoxItem" EntityType="PurchaseOrderModel.WinitTransferBoxItem" />
-          <AssociationSet Name="FK_WinitTransferBoxItem_SerialsLlist" Association="PurchaseOrderModel.FK_WinitTransferBoxItem_SerialsLlist">
-            <End Role="SerialsLlist" EntitySet="SerialsLlist" />
-            <End Role="WinitTransferBoxItem" EntitySet="WinitTransferBoxItem" />
-          </AssociationSet>
-          <AssociationSet Name="FK_WinitTransfer_Transfer" Association="PurchaseOrderModel.FK_WinitTransfer_Transfer">
-            <End Role="Transfer" EntitySet="Transfer" />
-            <End Role="WinitTransfer" EntitySet="WinitTransfer" />
-          </AssociationSet>
-          <AssociationSet Name="FK_WinitTransferBox_WinitTransfer" Association="PurchaseOrderModel.FK_WinitTransferBox_WinitTransfer">
-            <End Role="WinitTransfer" EntitySet="WinitTransfer" />
-            <End Role="WinitTransferBox" EntitySet="WinitTransferBox" />
-          </AssociationSet>
-          <AssociationSet Name="FK_WinitTransferBoxItem_WinitTransferBox" Association="PurchaseOrderModel.FK_WinitTransferBoxItem_WinitTransferBox">
-            <End Role="WinitTransferBox" EntitySet="WinitTransferBox" />
-            <End Role="WinitTransferBoxItem" EntitySet="WinitTransferBoxItem" />
-=======
           <EntitySet Name="Items" EntityType="PurchaseOrderModel.Items" />
           <EntitySet Name="OrderActionLogs" EntityType="PurchaseOrderModel.OrderActionLogs" />
           <EntitySet Name="Orders" EntityType="PurchaseOrderModel.Orders" />
@@ -3210,7 +3186,25 @@
           <AssociationSet Name="FK_Packages_Warehouse1" Association="PurchaseOrderModel.FK_Packages_Warehouse1">
             <End Role="Warehouse" EntitySet="Warehouse" />
             <End Role="Packages" EntitySet="Packages" />
->>>>>>> CreateOrderPage
+          </AssociationSet>
+          <EntitySet Name="WinitTransfer" EntityType="PurchaseOrderModel.WinitTransfer" />
+          <EntitySet Name="WinitTransferBox" EntityType="PurchaseOrderModel.WinitTransferBox" />
+          <EntitySet Name="WinitTransferBoxItem" EntityType="PurchaseOrderModel.WinitTransferBoxItem" />
+          <AssociationSet Name="FK_WinitTransferBoxItem_SerialsLlist" Association="PurchaseOrderModel.FK_WinitTransferBoxItem_SerialsLlist">
+            <End Role="SerialsLlist" EntitySet="SerialsLlist" />
+            <End Role="WinitTransferBoxItem" EntitySet="WinitTransferBoxItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WinitTransfer_Transfer1" Association="PurchaseOrderModel.FK_WinitTransfer_Transfer1">
+            <End Role="Transfer" EntitySet="Transfer" />
+            <End Role="WinitTransfer" EntitySet="WinitTransfer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WinitTransferBox_WinitTransfer" Association="PurchaseOrderModel.FK_WinitTransferBox_WinitTransfer">
+            <End Role="WinitTransfer" EntitySet="WinitTransfer" />
+            <End Role="WinitTransferBox" EntitySet="WinitTransferBox" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WinitTransferBoxItem_WinitTransferBox" Association="PurchaseOrderModel.FK_WinitTransferBoxItem_WinitTransferBox">
+            <End Role="WinitTransferBox" EntitySet="WinitTransferBox" />
+            <End Role="WinitTransferBoxItem" EntitySet="WinitTransferBoxItem" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="AdminGroup">
@@ -3568,10 +3562,7 @@
           <NavigationProperty Name="Company" Relationship="PurchaseOrderModel.FK_PurchaseOrder_Company" FromRole="PurchaseOrder" ToRole="Company" />
           <Property Name="SCPurchaseID" Type="Int32" />
           <Property Name="Memo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-<<<<<<< HEAD
           <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-=======
->>>>>>> CreateOrderPage
         </EntityType>
         <EntityType Name="PurchaseSKU">
           <Key>
@@ -3813,10 +3804,7 @@
           <NavigationProperty Name="PurchaseOrder" Relationship="PurchaseOrderModel.FK_PurchaseOrder_VendorLIst" FromRole="VendorLIst" ToRole="PurchaseOrder" />
           <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="EmailCC" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-<<<<<<< HEAD
           <NavigationProperty Name="Brand" Relationship="PurchaseOrderModel.VendorBrand" FromRole="VendorLIst" ToRole="Brand" />
-=======
->>>>>>> CreateOrderPage
           <Property Name="SCID" Type="Int32" />
         </EntityType>
         <EntityType Name="Warehouse">
@@ -4245,16 +4233,14 @@
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="PackageContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="SpecContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="KeyFeature" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="FeatureContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="KeyFeature" Type="String" Unicode="false" FixedLength="false" MaxLength="Max" />
+          <Property Name="FeatureContent" Type="String" Unicode="false" FixedLength="false" MaxLength="Max" />
           <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
           <NavigationProperty Name="GetSku" Relationship="PurchaseOrderModel.FK_SkuLang_Sku" FromRole="SkuLang" ToRole="SKU" />
-          <Property Name="KeyFeature" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="FeatureContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-        </EntityType>
+          </EntityType>
         <Association Name="FK_SkuLang_Sku">
           <End Type="PurchaseOrderModel.SKU" Role="SKU" Multiplicity="1" />
           <End Type="PurchaseOrderModel.SkuLang" Role="SkuLang" Multiplicity="*" />
@@ -4365,7 +4351,6 @@
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
           <NavigationProperty Name="GetMarket" Relationship="PurchaseOrderModel.FK_PriceGroup_Marketplace" FromRole="PriceGroup" ToRole="Marketplace" />
           <NavigationProperty Name="GetSku" Relationship="PurchaseOrderModel.FK_PriceGroup_SKU" FromRole="PriceGroup" ToRole="SKU" />
-          <Property Name="CurrentPrice" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="Marketplace">
           <Key>
@@ -4448,10 +4433,7 @@
           <NavigationProperty Name="Currency" Relationship="PurchaseOrderModel.FK_Company_Currency" FromRole="Company" ToRole="Currency" />
           <NavigationProperty Name="Marketplace" Relationship="PurchaseOrderModel.FK_Marketplace_Company" FromRole="Company" ToRole="Marketplace" />
           <Property Name="CompanySCID" Type="Int32" />
-<<<<<<< HEAD
-=======
           <NavigationProperty Name="Orders" Relationship="PurchaseOrderModel.FK_Order_Company1" FromRole="Company" ToRole="Orders" />
->>>>>>> CreateOrderPage
         </EntityType>
         <Association Name="FK_PurchaseOrder_Company">
           <End Type="PurchaseOrderModel.Company" Role="Company" Multiplicity="0..1" />
@@ -4663,7 +4645,7 @@
           <NavigationProperty Name="TransferSKU" Relationship="PurchaseOrderModel.FK_TransferSKU_Transfer" FromRole="Transfer" ToRole="TransferSKU" />
           <NavigationProperty Name="WarehouseInterim" Relationship="PurchaseOrderModel.FK_Transfer_WarehouseInterim" FromRole="Transfer" ToRole="Warehouse" />
           <Property Name="TransferType" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="WinitTransfer" Relationship="PurchaseOrderModel.FK_WinitTransfer_Transfer" FromRole="Transfer" ToRole="WinitTransfer" />
+          <NavigationProperty Name="WinitTransfer" Relationship="PurchaseOrderModel.FK_WinitTransfer_Transfer1" FromRole="Transfer" ToRole="WinitTransfer" />
         </EntityType>
         <Association Name="FK_PurchaseNote_Transfer">
           <End Type="PurchaseOrderModel.Transfer" Role="Transfer" Multiplicity="0..1" />
@@ -5116,107 +5098,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-<<<<<<< HEAD
         <Association Name="VendorBrand">
           <End Type="PurchaseOrderModel.Brand" Role="Brand" Multiplicity="*" />
           <End Type="PurchaseOrderModel.VendorLIst" Role="VendorLIst" Multiplicity="*" />
         </Association>
-        <EntityType Name="WinitTransfer">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TransferID" Type="Int32" />
-          <Property Name="CompleteBoxes" Type="Int32" />
-          <Property Name="TotalVal" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="Transfer" Relationship="PurchaseOrderModel.FK_WinitTransfer_Transfer" FromRole="WinitTransfer" ToRole="Transfer" />
-          <NavigationProperty Name="WinitTransferBox" Relationship="PurchaseOrderModel.FK_WinitTransferBox_WinitTransfer" FromRole="WinitTransfer" ToRole="WinitTransferBox" />
-        </EntityType>
-        <EntityType Name="WinitTransferBox">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="WinitTransferID" Type="Int32" />
-          <Property Name="Length" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Width" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Heigth" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Weight" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="BarCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="WinitTransfer" Relationship="PurchaseOrderModel.FK_WinitTransferBox_WinitTransfer" FromRole="WinitTransferBox" ToRole="WinitTransfer" />
-          <NavigationProperty Name="WinitTransferBoxItem" Relationship="PurchaseOrderModel.FK_WinitTransferBoxItem_WinitTransferBox" FromRole="WinitTransferBox" ToRole="WinitTransferBoxItem" />
-        </EntityType>
-        <EntityType Name="WinitTransferBoxItem">
-          <Key>
-            <PropertyRef Name="SerialsLlistID" />
-          </Key>
-          <Property Name="WinitTransferBoxID" Type="Int32" Nullable="false" />
-          <Property Name="SerialsLlistID" Type="Int32" Nullable="false" />
-          <Property Name="BarCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
-          <Property Name="Value" Type="Decimal" Precision="18" Scale="2" />
-          <NavigationProperty Name="SerialsLlist" Relationship="PurchaseOrderModel.FK_WinitTransferBoxItem_SerialsLlist" FromRole="WinitTransferBoxItem" ToRole="SerialsLlist" />
-          <NavigationProperty Name="WinitTransferBox" Relationship="PurchaseOrderModel.FK_WinitTransferBoxItem_WinitTransferBox" FromRole="WinitTransferBoxItem" ToRole="WinitTransferBox" />
-        </EntityType>
-        <Association Name="FK_WinitTransferBoxItem_SerialsLlist">
-          <End Type="PurchaseOrderModel.SerialsLlist" Role="SerialsLlist" Multiplicity="1" />
-          <End Type="PurchaseOrderModel.WinitTransferBoxItem" Role="WinitTransferBoxItem" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="SerialsLlist">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="WinitTransferBoxItem">
-              <PropertyRef Name="SerialsLlistID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_WinitTransfer_Transfer">
-          <End Type="PurchaseOrderModel.Transfer" Role="Transfer" Multiplicity="0..1" />
-          <End Type="PurchaseOrderModel.WinitTransfer" Role="WinitTransfer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Transfer">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="WinitTransfer">
-              <PropertyRef Name="TransferID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_WinitTransferBox_WinitTransfer">
-          <End Type="PurchaseOrderModel.WinitTransfer" Role="WinitTransfer" Multiplicity="0..1" />
-          <End Type="PurchaseOrderModel.WinitTransferBox" Role="WinitTransferBox" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="WinitTransfer">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="WinitTransferBox">
-              <PropertyRef Name="WinitTransferID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_WinitTransferBoxItem_WinitTransferBox">
-          <End Type="PurchaseOrderModel.WinitTransferBox" Role="WinitTransferBox" Multiplicity="1" />
-          <End Type="PurchaseOrderModel.WinitTransferBoxItem" Role="WinitTransferBoxItem" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="WinitTransferBox">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="WinitTransferBoxItem">
-              <PropertyRef Name="WinitTransferBoxID" />
-=======
         <EntityType Name="Items">
           <Key>
             <PropertyRef Name="ID" />
@@ -5690,7 +5575,103 @@
             </Principal>
             <Dependent Role="Packages">
               <PropertyRef Name="ReturnWarehouse" />
->>>>>>> CreateOrderPage
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="WinitTransfer">
+          <Key>
+            <PropertyRef Name="TransferID" />
+          </Key>
+          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
+          <Property Name="TransferID" Type="Int32" Nullable="false" />
+          <Property Name="CompleteBoxes" Type="Int32" />
+          <Property Name="TotalVal" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Transfer" Relationship="PurchaseOrderModel.FK_WinitTransfer_Transfer1" FromRole="WinitTransfer" ToRole="Transfer" />
+          <NavigationProperty Name="WinitTransferBox" Relationship="PurchaseOrderModel.FK_WinitTransferBox_WinitTransfer" FromRole="WinitTransfer" ToRole="WinitTransferBox" />
+        </EntityType>
+        <EntityType Name="WinitTransferBox">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="WinitTransferID" Type="Int32" />
+          <Property Name="Length" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Width" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Heigth" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Weight" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="BarCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="WinitTransfer" Relationship="PurchaseOrderModel.FK_WinitTransferBox_WinitTransfer" FromRole="WinitTransferBox" ToRole="WinitTransfer" />
+          <NavigationProperty Name="WinitTransferBoxItem" Relationship="PurchaseOrderModel.FK_WinitTransferBoxItem_WinitTransferBox" FromRole="WinitTransferBox" ToRole="WinitTransferBoxItem" />
+        </EntityType>
+        <EntityType Name="WinitTransferBoxItem">
+          <Key>
+            <PropertyRef Name="SerialsLlistID" />
+          </Key>
+          <Property Name="WinitTransferBoxID" Type="Int32" Nullable="false" />
+          <Property Name="SerialsLlistID" Type="Int32" Nullable="false" />
+          <Property Name="BarCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <Property Name="Value" Type="Decimal" Precision="18" Scale="2" />
+          <NavigationProperty Name="SerialsLlist" Relationship="PurchaseOrderModel.FK_WinitTransferBoxItem_SerialsLlist" FromRole="WinitTransferBoxItem" ToRole="SerialsLlist" />
+          <NavigationProperty Name="WinitTransferBox" Relationship="PurchaseOrderModel.FK_WinitTransferBoxItem_WinitTransferBox" FromRole="WinitTransferBoxItem" ToRole="WinitTransferBox" />
+        </EntityType>
+        <Association Name="FK_WinitTransferBoxItem_SerialsLlist">
+          <End Type="PurchaseOrderModel.SerialsLlist" Role="SerialsLlist" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.WinitTransferBoxItem" Role="WinitTransferBoxItem" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="SerialsLlist">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="WinitTransferBoxItem">
+              <PropertyRef Name="SerialsLlistID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_WinitTransfer_Transfer1">
+          <End Type="PurchaseOrderModel.Transfer" Role="Transfer" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.WinitTransfer" Role="WinitTransfer" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Transfer">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="WinitTransfer">
+              <PropertyRef Name="TransferID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_WinitTransferBox_WinitTransfer">
+          <End Type="PurchaseOrderModel.WinitTransfer" Role="WinitTransfer" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.WinitTransferBox" Role="WinitTransferBox" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WinitTransfer">
+              <PropertyRef Name="TransferID" />
+            </Principal>
+            <Dependent Role="WinitTransferBox">
+              <PropertyRef Name="WinitTransferID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_WinitTransferBoxItem_WinitTransferBox">
+          <End Type="PurchaseOrderModel.WinitTransferBox" Role="WinitTransferBox" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.WinitTransferBoxItem" Role="WinitTransferBoxItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WinitTransferBox">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="WinitTransferBoxItem">
+              <PropertyRef Name="WinitTransferBoxID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -5732,29 +5713,6 @@
                 <ScalarProperty Name="Group" ColumnName="Group" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
-<<<<<<< HEAD
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="API">
-            <EntityTypeMapping TypeName="PurchaseOrderModel.API">
-              <MappingFragment StoreEntitySet="API">
-                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
-                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
-                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
-                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-                <ScalarProperty Name="ApiHub" ColumnName="ApiHub" />
-                <ScalarProperty Name="ApiMeter" ColumnName="ApiMeter" />
-                <ScalarProperty Name="ApiPassword" ColumnName="ApiPassword" />
-                <ScalarProperty Name="ApiAccount" ColumnName="ApiAccount" />
-                <ScalarProperty Name="ApiKey" ColumnName="ApiKey" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="IsTest" ColumnName="IsTest" />
-                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
-=======
->>>>>>> CreateOrderPage
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -6017,10 +5975,7 @@
           <EntitySetMapping Name="PurchaseOrder">
             <EntityTypeMapping TypeName="PurchaseOrderModel.PurchaseOrder">
               <MappingFragment StoreEntitySet="PurchaseOrder">
-<<<<<<< HEAD
                 <ScalarProperty Name="Description" ColumnName="Description" />
-=======
->>>>>>> CreateOrderPage
                 <ScalarProperty Name="Memo" ColumnName="Memo" />
                 <ScalarProperty Name="SCPurchaseID" ColumnName="SCPurchaseID" />
                 <ScalarProperty Name="Other" ColumnName="Other" />
@@ -6450,10 +6405,6 @@
             <EntityTypeMapping TypeName="PurchaseOrderModel.Company">
               <MappingFragment StoreEntitySet="Company">
                 <ScalarProperty Name="CompanySCID" ColumnName="CompanySCID" />
-<<<<<<< HEAD
-=======
-                <ScalarProperty Name="ShadowSuffix" ColumnName="ShadowSuffix" />
->>>>>>> CreateOrderPage
                 <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
                 <ScalarProperty Name="CompanyNo" ColumnName="CompanyNo" />
                 <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
@@ -6464,10 +6415,7 @@
                 <ScalarProperty Name="eBayAccountID" ColumnName="eBayAccountID" />
                 <ScalarProperty Name="RelateID" ColumnName="RelateID" />
                 <ScalarProperty Name="ParentID" ColumnName="ParentID" />
-<<<<<<< HEAD
                 <ScalarProperty Name="ShadowSuffix" ColumnName="ShadowSuffix" />
-=======
->>>>>>> CreateOrderPage
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
@@ -6681,7 +6629,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-<<<<<<< HEAD
           <AssociationSetMapping Name="VendorBrand" TypeName="PurchaseOrderModel.VendorBrand" StoreEntitySet="VendorBrand">
             <EndProperty Name="VendorLIst">
               <ScalarProperty Name="ID" ColumnName="VendorID" />
@@ -6690,17 +6637,6 @@
               <ScalarProperty Name="ID" ColumnName="BrandID" />
             </EndProperty>
           </AssociationSetMapping>
-          <EntitySetMapping Name="WinitTransfer">
-            <EntityTypeMapping TypeName="PurchaseOrderModel.WinitTransfer">
-              <MappingFragment StoreEntitySet="WinitTransfer">
-                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
-                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
-                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
-                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-                <ScalarProperty Name="TotalVal" ColumnName="TotalVal" />
-                <ScalarProperty Name="CompleteBoxes" ColumnName="CompleteBoxes" />
-                <ScalarProperty Name="TransferID" ColumnName="TransferID" />
-=======
           <EntitySetMapping Name="Items">
             <EntityTypeMapping TypeName="PurchaseOrderModel.Items">
               <MappingFragment StoreEntitySet="Items">
@@ -6719,28 +6655,11 @@
                 <ScalarProperty Name="PackageID" ColumnName="PackageID" />
                 <ScalarProperty Name="OrderID" ColumnName="OrderID" />
                 <ScalarProperty Name="SCID" ColumnName="SCID" />
->>>>>>> CreateOrderPage
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-<<<<<<< HEAD
-          <EntitySetMapping Name="WinitTransferBox">
-            <EntityTypeMapping TypeName="PurchaseOrderModel.WinitTransferBox">
-              <MappingFragment StoreEntitySet="WinitTransferBox">
-                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
-                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
-                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
-                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-                <ScalarProperty Name="BarCode" ColumnName="BarCode" />
-                <ScalarProperty Name="Weight" ColumnName="Weight" />
-                <ScalarProperty Name="Heigth" ColumnName="Heigth" />
-                <ScalarProperty Name="Width" ColumnName="Width" />
-                <ScalarProperty Name="Length" ColumnName="Length" />
-                <ScalarProperty Name="WinitTransferID" ColumnName="WinitTransferID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-=======
           <EntitySetMapping Name="OrderActionLogs">
             <EntityTypeMapping TypeName="PurchaseOrderModel.OrderActionLogs">
               <MappingFragment StoreEntitySet="OrderActionLogs">
@@ -6779,24 +6698,10 @@
                 <ScalarProperty Name="OrderParent" ColumnName="OrderParent" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="IsRush" ColumnName="IsRush" />
->>>>>>> CreateOrderPage
                 <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-<<<<<<< HEAD
-          <EntitySetMapping Name="WinitTransferBoxItem">
-            <EntityTypeMapping TypeName="PurchaseOrderModel.WinitTransferBoxItem">
-              <MappingFragment StoreEntitySet="WinitTransferBoxItem">
-                <ScalarProperty Name="Value" ColumnName="Value" />
-                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
-                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
-                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
-                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-                <ScalarProperty Name="BarCode" ColumnName="BarCode" />
-                <ScalarProperty Name="SerialsLlistID" ColumnName="SerialsLlistID" />
-                <ScalarProperty Name="WinitTransferBoxID" ColumnName="WinitTransferBoxID" />
-=======
           <EntitySetMapping Name="Packages">
             <EntityTypeMapping TypeName="PurchaseOrderModel.Packages">
               <MappingFragment StoreEntitySet="Packages">
@@ -6931,7 +6836,52 @@
                 <ScalarProperty Name="OrderID" ColumnName="OrderID" />
                 <ScalarProperty Name="SerialNumber" ColumnName="SerialNumber" />
                 <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
->>>>>>> CreateOrderPage
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WinitTransfer">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.WinitTransfer">
+              <MappingFragment StoreEntitySet="WinitTransfer">
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="TotalVal" ColumnName="TotalVal" />
+                <ScalarProperty Name="CompleteBoxes" ColumnName="CompleteBoxes" />
+                <ScalarProperty Name="TransferID" ColumnName="TransferID" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WinitTransferBox">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.WinitTransferBox">
+              <MappingFragment StoreEntitySet="WinitTransferBox">
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="BarCode" ColumnName="BarCode" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="Heigth" ColumnName="Heigth" />
+                <ScalarProperty Name="Width" ColumnName="Width" />
+                <ScalarProperty Name="Length" ColumnName="Length" />
+                <ScalarProperty Name="WinitTransferID" ColumnName="WinitTransferID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WinitTransferBoxItem">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.WinitTransferBoxItem">
+              <MappingFragment StoreEntitySet="WinitTransferBoxItem">
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="BarCode" ColumnName="BarCode" />
+                <ScalarProperty Name="SerialsLlistID" ColumnName="SerialsLlistID" />
+                <ScalarProperty Name="WinitTransferBoxID" ColumnName="WinitTransferBoxID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

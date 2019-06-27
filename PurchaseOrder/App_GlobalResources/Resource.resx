@@ -2258,8 +2258,9 @@
   <data name="AddSerialsPictureMsg2" xml:space="preserve">
     <value>If you find any inconsistencies, STOP receiving and report to the management IMMEDIATELY!</value>
   </data>
-  <data name="PurchaseOrder_Description" xml:space="preserve">
+	<data name="PurchaseOrder_Description" xml:space="preserve">
     <value>Description</value>
+	  </data>
   <data name="ApiSetting_IsEnable" xml:space="preserve">
     <value></value>
   </data>

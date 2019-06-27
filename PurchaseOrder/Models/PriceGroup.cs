@@ -27,7 +27,6 @@ namespace PurchaseOrderSys.Models
         public System.DateTime CreateAt { get; set; }
         public string UpdateBy { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }
-        public decimal CurrentPrice { get; set; }
     
         public virtual Marketplace GetMarket { get; set; }
         public virtual SKU GetSku { get; set; }
