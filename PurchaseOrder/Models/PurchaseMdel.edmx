@@ -316,8 +316,9 @@
           <Property Name="PackageID" Type="int" Nullable="false" />
           <Property Name="Sku" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="UnitPrice" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="ExportValue" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="DLExportValue" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="Qty" Type="int" Nullable="false" />
-          <Property Name="Currency" Type="int" Nullable="false" />
           <Property Name="eBayItemID" Type="nvarchar" MaxLength="50" />
           <Property Name="SalesRecordNumber" Type="nvarchar" MaxLength="50" />
           <Property Name="RMAID" Type="int" />
@@ -4924,8 +4925,9 @@
           <Property Name="PackageID" Type="Int32" Nullable="false" />
           <Property Name="Sku" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UnitPrice" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="ExportValue" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="DLExportValue" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="Qty" Type="Int32" Nullable="false" />
-          <Property Name="Currency" Type="Int32" Nullable="false" />
           <Property Name="eBayItemID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="SalesRecordNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="RMAID" Type="Int32" />
@@ -6342,6 +6344,8 @@
           <EntitySetMapping Name="Items">
             <EntityTypeMapping TypeName="PurchaseOrderModel.Items">
               <MappingFragment StoreEntitySet="Items">
+                <ScalarProperty Name="DLExportValue" ColumnName="DLExportValue" />
+                <ScalarProperty Name="ExportValue" ColumnName="ExportValue" />
                 <ScalarProperty Name="RMAID" ColumnName="RMAID" />
                 <ScalarProperty Name="Create_at" ColumnName="Create_at" />
                 <ScalarProperty Name="Create_by" ColumnName="Create_by" />
@@ -6349,7 +6353,6 @@
                 <ScalarProperty Name="Update_by" ColumnName="Update_by" />
                 <ScalarProperty Name="eBayItemID" ColumnName="eBayItemID" />
                 <ScalarProperty Name="SalesRecordNumber" ColumnName="SalesRecordNumber" />
-                <ScalarProperty Name="Currency" ColumnName="Currency" />
                 <ScalarProperty Name="Qty" ColumnName="Qty" />
                 <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
                 <ScalarProperty Name="Sku" ColumnName="Sku" />

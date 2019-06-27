@@ -28,8 +28,9 @@ namespace PurchaseOrderSys.Models
         public int PackageID { get; set; }
         public string Sku { get; set; }
         public decimal UnitPrice { get; set; }
+        public decimal ExportValue { get; set; }
+        public decimal DLExportValue { get; set; }
         public int Qty { get; set; }
-        public int Currency { get; set; }
         public string eBayItemID { get; set; }
         public string SalesRecordNumber { get; set; }
         public Nullable<int> RMAID { get; set; }

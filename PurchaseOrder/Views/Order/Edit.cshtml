@@ -9,7 +9,7 @@
             margin-top: 25px;
         }
 
-        #list-package > div:not(.edit) .text span + input, #list-package > div:not(.edit) .text span + select, #list-package > div:not(.edit) button.save {
+        #list-package > div:not(.edit) .text span + input, #list-package > div:not(.edit) .text div + input, #list-package > div:not(.edit) .text span + select, #list-package > div:not(.edit) button.save {
             display: none;
         }
 
@@ -428,11 +428,15 @@
         var $packageList = $('#list-package');
 
         $(document).ready(function () {
+            $('[rel="popover"]').popover();
         });
 
         var PackageEdit = function (ID) {
             $packageList.children("div").each(function () {
                 if ($(this).data('package') == ID) {
+                    var data = $(this).find('input, select').serializeArray();
+                    console.log(data);
+
                     return $(this).addClass('edit');
                 }
                 alert("Not found!");
