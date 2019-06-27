@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// PackageContentLang class
     /// </summary>

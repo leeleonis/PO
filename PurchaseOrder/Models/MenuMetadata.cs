@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// Menu class
     /// </summary>

@@ -1,90 +1,71 @@
-using System;
+using System; 
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace PurchaseOrderSys.Models
 {
     
     /// <summary>
-    /// Carriers class
+    /// OrderSerials class
     /// </summary>
-    [MetadataType(typeof(CarriersMetadata))]
-    public  partial class Carriers
+    [MetadataType(typeof(OrderSerialsMetadata))]
+    public  partial class OrderSerials
     {
     
     	/// <summary>
-    	/// Carriers Metadata class
+    	/// OrderSerials Metadata class
     	/// </summary>
-    	public   class CarriersMetadata
+    	public   class OrderSerialsMetadata
     	{
     		    
     		/// <summary>
     		/// Is Enable
     		/// </summary>        
-    	    [Display(Name = "Carriers_IsEnable", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "OrderSerials_IsEnable", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public bool  IsEnable { get; set; }
     
     		    
     		/// <summary>
-    		/// ID
+    		/// Serial Number
     		/// </summary>        
-    	    [Display(Name = "Carriers_ID", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "OrderSerials_SerialNumber", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public int  ID { get; set; }
-    
-    		    
-    		/// <summary>
-    		/// Name
-    		/// </summary>        
-    	    [Display(Name = "Carriers_Name", ResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public string  Name { get; set; }
+    		public string  SerialNumber { get; set; }
     
     		    
     		/// <summary>
-    		/// Method Type
+    		/// Order ID
     		/// </summary>        
-    	    [Display(Name = "Carriers_MethodType", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "OrderSerials_OrderID", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public int  MethodType { get; set; }
+    		public int  OrderID { get; set; }
     
     		    
     		/// <summary>
-    		/// Box Type
+    		/// Item ID
     		/// </summary>        
-    	    [Display(Name = "Carriers_BoxType", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "OrderSerials_ItemID", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public int  BoxType { get; set; }
+    		public int  ItemID { get; set; }
     
     		    
     		/// <summary>
-    		/// Email
+    		/// Sku
     		/// </summary>        
-    	    [Display(Name = "Carriers_Email", ResourceType = typeof(App_GlobalResources.Resource))]
-            [MaxLength(150, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public string  Email { get; set; }
-    
-    		    
-    		/// <summary>
-    		/// Api
-    		/// </summary>        
-    	    [Display(Name = "Carriers_Api", ResourceType = typeof(App_GlobalResources.Resource))]
-    		public Nullable<int>  Api { get; set; }
-    
-    		    
-    		/// <summary>
-    		/// Printer Name
-    		/// </summary>        
-    	    [Display(Name = "Carriers_PrinterName", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "OrderSerials_Sku", ResourceType = typeof(App_GlobalResources.Resource))]
+            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public string  PrinterName { get; set; }
+    		public string  Sku { get; set; }
     
     		    
     		/// <summary>
     		/// Update_by
     		/// </summary>        
-    	    [Display(Name = "Carriers_Update_by", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "OrderSerials_Update_by", ResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  Update_by { get; set; }
     
@@ -92,7 +73,7 @@ namespace PurchaseOrderSys.Models
     		/// <summary>
     		/// Update_at
     		/// </summary>        
-    	    [Display(Name = "Carriers_Update_at", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "OrderSerials_Update_at", ResourceType = typeof(App_GlobalResources.Resource))]
             [UIHint("DateTime")]
     		public Nullable<System.DateTime>  Update_at { get; set; }
     
@@ -100,7 +81,7 @@ namespace PurchaseOrderSys.Models
     		/// <summary>
     		/// Create_by
     		/// </summary>        
-    	    [Display(Name = "Carriers_Create_by", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "OrderSerials_Create_by", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  Create_by { get; set; }
@@ -109,7 +90,7 @@ namespace PurchaseOrderSys.Models
     		/// <summary>
     		/// Create_at
     		/// </summary>        
-    	    [Display(Name = "Carriers_Create_at", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "OrderSerials_Create_at", ResourceType = typeof(App_GlobalResources.Resource))]
             [UIHint("DateTime")]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public System.DateTime  Create_at { get; set; }

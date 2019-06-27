@@ -21,6 +21,8 @@ namespace PurchaseOrderSys.Models
             this.Marketplace = new HashSet<Marketplace>();
             this.Company = new HashSet<Company>();
             this.NetoGroup = new HashSet<NetoGroup>();
+            this.Packages = new HashSet<Packages>();
+            this.DLPackages = new HashSet<Packages>();
         }
     
         public bool IsDefault { get; set; }
@@ -39,5 +41,9 @@ namespace PurchaseOrderSys.Models
         public virtual ICollection<Company> Company { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<NetoGroup> NetoGroup { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Packages> Packages { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Packages> DLPackages { get; set; }
     }
 }

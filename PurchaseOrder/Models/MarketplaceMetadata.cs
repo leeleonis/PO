@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// Marketplace class
     /// </summary>
@@ -60,10 +60,24 @@ namespace PurchaseOrderSys.Models
     
     		    
     		/// <summary>
+    		/// Company ID
+    		/// </summary>        
+    	    [Display(Name = "Marketplace_CompanyID", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  CompanyID { get; set; }
+    
+    		    
+    		/// <summary>
     		/// Currency ID
     		/// </summary>        
     	    [Display(Name = "Marketplace_CurrencyID", ResourceType = typeof(App_GlobalResources.Resource))]
     		public Nullable<int>  CurrencyID { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Neto Group
+    		/// </summary>        
+    	    [Display(Name = "Marketplace_NetoGroup", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  NetoGroup { get; set; }
     
     		    
     		/// <summary>
@@ -106,20 +120,6 @@ namespace PurchaseOrderSys.Models
     	    [Display(Name = "Marketplace_UpdateAt", ResourceType = typeof(App_GlobalResources.Resource))]
             [UIHint("DateTime")]
     		public Nullable<System.DateTime>  UpdateAt { get; set; }
-    
-    		    
-    		/// <summary>
-    		/// Company ID
-    		/// </summary>        
-    	    [Display(Name = "Marketplace_CompanyID", ResourceType = typeof(App_GlobalResources.Resource))]
-    		public Nullable<int>  CompanyID { get; set; }
-    
-    		    
-    		/// <summary>
-    		/// Neto Group
-    		/// </summary>        
-    	    [Display(Name = "Marketplace_NetoGroup", ResourceType = typeof(App_GlobalResources.Resource))]
-    		public Nullable<int>  NetoGroup { get; set; }
     
     		    
     	}

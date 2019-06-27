@@ -12,33 +12,33 @@ namespace PurchaseOrderSys.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Carriers
+    public partial class OrderAddresses
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Carriers()
+        public OrderAddresses()
         {
             this.IsEnable = true;
-            this.FirstMiles = new HashSet<ShippingMethods>();
-            this.LastMiles = new HashSet<ShippingMethods>();
         }
     
         public bool IsEnable { get; set; }
         public int ID { get; set; }
-        public string Name { get; set; }
-        public int MethodType { get; set; }
-        public int BoxType { get; set; }
-        public string Email { get; set; }
-        public Nullable<int> Api { get; set; }
-        public string PrinterName { get; set; }
+        public Nullable<int> SCID { get; set; }
+        public int OrderID { get; set; }
+        public byte Type { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string AddressLine1 { get; set; }
+        public string AddressLine2 { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string Postcode { get; set; }
+        public string CountryCode { get; set; }
+        public string CountryName { get; set; }
         public string Update_by { get; set; }
         public Nullable<System.DateTime> Update_at { get; set; }
         public string Create_by { get; set; }
         public System.DateTime Create_at { get; set; }
     
-        public virtual ApiSetting GetApi { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ShippingMethods> FirstMiles { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ShippingMethods> LastMiles { get; set; }
+        public virtual Orders GetOrder { get; set; }
     }
 }

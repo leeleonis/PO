@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// DirectLine class
     /// </summary>
@@ -51,6 +51,13 @@ namespace PurchaseOrderSys.Models
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  Abbreviation { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Api
+    		/// </summary>        
+    	    [Display(Name = "DirectLine_Api", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  Api { get; set; }
     
     		    
     		/// <summary>

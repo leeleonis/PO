@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// CreditMemo class
     /// </summary>
@@ -61,7 +61,7 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "CreditMemo_InvoiceDate", ResourceType = typeof(App_GlobalResources.Resource))]
             [UIHint("FDate")]
-            public Nullable<System.DateTime>  InvoiceDate { get; set; }
+    		public Nullable<System.DateTime>  InvoiceDate { get; set; }
     
     		    
     		/// <summary>
@@ -94,7 +94,7 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "CreditMemo_CMDate", ResourceType = typeof(App_GlobalResources.Resource))]
             [UIHint("FDate")]
-            public Nullable<System.DateTime>  CMDate { get; set; }
+    		public Nullable<System.DateTime>  CMDate { get; set; }
     
     		    
     		/// <summary>
@@ -110,7 +110,7 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "CreditMemo_ShippedDate", ResourceType = typeof(App_GlobalResources.Resource))]
             [UIHint("FDate")]
-            public Nullable<System.DateTime>  ShippedDate { get; set; }
+    		public Nullable<System.DateTime>  ShippedDate { get; set; }
     
     		    
     		/// <summary>
@@ -142,7 +142,7 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "CreditMemo_CreditDate", ResourceType = typeof(App_GlobalResources.Resource))]
             [UIHint("FDate")]
-            public Nullable<System.DateTime>  CreditDate { get; set; }
+    		public Nullable<System.DateTime>  CreditDate { get; set; }
     
     		    
     		/// <summary>
@@ -201,6 +201,13 @@ namespace PurchaseOrderSys.Models
     	    [Display(Name = "CreditMemo_ReceivedAt", ResourceType = typeof(App_GlobalResources.Resource))]
             [UIHint("DateTime")]
     		public Nullable<System.DateTime>  ReceivedAt { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// RMAID
+    		/// </summary>        
+    	    [Display(Name = "CreditMemo_RMAID", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  RMAID { get; set; }
     
     		    
     	}

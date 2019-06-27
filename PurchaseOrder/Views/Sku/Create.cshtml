@@ -27,6 +27,13 @@
                                             <legend>基本資料</legend>
 
                                             <div class="form-group">
+                                                <label class="control-label col-sm-2">繼承SKU</label>
+                                                <div class="col-sm-9 col-lg-3">
+                                                    @Html.TextBox("CopySku", "", htmlAttributes: new { @class = "form-control" })
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
                                                 @Html.LabelFor(model => model.Company, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.DropDownListFor(model => model.Company, null, htmlAttributes: new { @class = "form-control" })
@@ -123,6 +130,13 @@
         $('.tab-pane').eq(hash.substr(1)).addClass('active');
 
         $(document).ready(function () {
+            $('#CopySku').autocomplete({
+                minLength: 5,
+                autoSelect: false,
+                resolverSettings: {
+                    url: 'Sku/SearchSkuData'
+                }
+            });
         });
     </script>
 }

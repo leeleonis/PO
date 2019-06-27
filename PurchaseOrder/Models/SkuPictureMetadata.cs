@@ -104,6 +104,14 @@ namespace PurchaseOrderSys.Models
     		public Nullable<System.DateTime>  UpdateAt { get; set; }
     
     		    
+    		/// <summary>
+    		/// Picture Type
+    		/// </summary>        
+    	    [Display(Name = "SkuPicture_PictureType", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  PictureType { get; set; }
+    
+    		    
     	}
     }
     

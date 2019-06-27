@@ -129,6 +129,53 @@ namespace PurchaseOrderSys.Models
     		public Nullable<int>  ServiceID { get; set; }
     
     		    
+    		/// <summary>
+    		/// Reason
+    		/// </summary>        
+    	    [Display(Name = "RMASerialsLlist_Reason", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(20, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  Reason { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Transfer SKUID
+    		/// </summary>        
+    	    [Display(Name = "RMASerialsLlist_TransferSKUID", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  TransferSKUID { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// New Sku No
+    		/// </summary>        
+    	    [Display(Name = "RMASerialsLlist_NewSkuNo", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  NewSkuNo { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// New SKUCreate By
+    		/// </summary>        
+    	    [Display(Name = "RMASerialsLlist_NewSKUCreateBy", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  NewSKUCreateBy { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// New SKUCreate At
+    		/// </summary>        
+    	    [Display(Name = "RMASerialsLlist_NewSKUCreateAt", ResourceType = typeof(App_GlobalResources.Resource))]
+            [UIHint("DateTime")]
+    		public Nullable<System.DateTime>  NewSKUCreateAt { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Is Enable
+    		/// </summary>        
+    	    [Display(Name = "RMASerialsLlist_IsEnable", ResourceType = typeof(App_GlobalResources.Resource))]
+            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public bool  IsEnable { get; set; }
+    
+    		    
     	}
     }
     

@@ -1,11 +1,12 @@
-using System;
+using System; 
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Web.Mvc;
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// SkuLang class
     /// </summary>
@@ -59,21 +60,21 @@ namespace PurchaseOrderSys.Models
             [AllowHtml]
     	    [Display(Name = "SkuLang_Description", ResourceType = typeof(App_GlobalResources.Resource))]
     		public string  Description { get; set; }
-
-
-            /// <summary>
-            /// Package Content
-            /// </summary>            
+    
+    		    
+    		/// <summary>
+    		/// Package Content
+    		/// </summary>        
             [AllowHtml]
-            [Display(Name = "SkuLang_PackageContent", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "SkuLang_PackageContent", ResourceType = typeof(App_GlobalResources.Resource))]
     		public string  PackageContent { get; set; }
-
-
-            /// <summary>
-            /// Spec Content
-            /// </summary>            
+    
+    		    
+    		/// <summary>
+    		/// Spec Content
+    		/// </summary>        
             [AllowHtml]
-            [Display(Name = "SkuLang_SpecContent", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "SkuLang_SpecContent", ResourceType = typeof(App_GlobalResources.Resource))]
     		public string  SpecContent { get; set; }
     
     		    
@@ -82,13 +83,13 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "SkuLang_KeyFeature", ResourceType = typeof(App_GlobalResources.Resource))]
     		public string  KeyFeature { get; set; }
-
-
-            /// <summary>
-            /// Feature Content
-            /// </summary>            
+    
+    		    
+    		/// <summary>
+    		/// Feature Content
+    		/// </summary>        
             [AllowHtml]
-            [Display(Name = "SkuLang_FeatureContent", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "SkuLang_FeatureContent", ResourceType = typeof(App_GlobalResources.Resource))]
     		public string  FeatureContent { get; set; }
     
     		    

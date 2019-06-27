@@ -27,7 +27,6 @@ namespace PurchaseOrderSys.Models
     
         public virtual DbSet<AdminGroup> AdminGroup { get; set; }
         public virtual DbSet<AdminUser> AdminUser { get; set; }
-        public virtual DbSet<API> API { get; set; }
         public virtual DbSet<Auth> Auth { get; set; }
         public virtual DbSet<Brand> Brand { get; set; }
         public virtual DbSet<CMCreditNote> CMCreditNote { get; set; }
@@ -44,7 +43,6 @@ namespace PurchaseOrderSys.Models
         public virtual DbSet<PurchaseNote> PurchaseNote { get; set; }
         public virtual DbSet<PurchaseOrder> PurchaseOrder { get; set; }
         public virtual DbSet<PurchaseSKU> PurchaseSKU { get; set; }
-        public virtual DbSet<ShippingMethod> ShippingMethod { get; set; }
         public virtual DbSet<SKU> SKU { get; set; }
         public virtual DbSet<Sku_Attribute> Sku_Attribute { get; set; }
         public virtual DbSet<Sku_PackageContent> Sku_PackageContent { get; set; }
@@ -58,7 +56,6 @@ namespace PurchaseOrderSys.Models
         public virtual DbSet<Warehouse> Warehouse { get; set; }
         public virtual DbSet<WarehouseSummary> WarehouseSummary { get; set; }
         public virtual DbSet<WarehouseUser> WarehouseUser { get; set; }
-        public virtual DbSet<CarrierAPI> CarrierAPI { get; set; }
         public virtual DbSet<Carriers> Carriers { get; set; }
         public virtual DbSet<SkuLang> SkuLang { get; set; }
         public virtual DbSet<ImgFile> ImgFile { get; set; }
@@ -67,7 +64,6 @@ namespace PurchaseOrderSys.Models
         public virtual DbSet<PriceGroup> PriceGroup { get; set; }
         public virtual DbSet<Marketplace> Marketplace { get; set; }
         public virtual DbSet<Company> Company { get; set; }
-        public virtual DbSet<Orders> Orders { get; set; }
         public virtual DbSet<SerialsLlist> SerialsLlist { get; set; }
         public virtual DbSet<OrderLog> OrderLog { get; set; }
         public virtual DbSet<Transfer> Transfer { get; set; }
@@ -78,8 +74,17 @@ namespace PurchaseOrderSys.Models
         public virtual DbSet<RMA> RMA { get; set; }
         public virtual DbSet<RMASerialsLlist> RMASerialsLlist { get; set; }
         public virtual DbSet<RMAOrderSerialsLlist> RMAOrderSerialsLlist { get; set; }
+        public virtual DbSet<Items> Items { get; set; }
+        public virtual DbSet<OrderActionLogs> OrderActionLogs { get; set; }
+        public virtual DbSet<Orders> Orders { get; set; }
+        public virtual DbSet<Packages> Packages { get; set; }
+        public virtual DbSet<Payments> Payments { get; set; }
+        public virtual DbSet<ShippingMethods> ShippingMethods { get; set; }
+        public virtual DbSet<ApiSetting> ApiSetting { get; set; }
+        public virtual DbSet<OrderAddresses> OrderAddresses { get; set; }
+        public virtual DbSet<OrderSerials> OrderSerials { get; set; }
+        public virtual DbSet<WinitTransfer> WinitTransfer { get; set; }
         public virtual DbSet<WinitTransferBox> WinitTransferBox { get; set; }
         public virtual DbSet<WinitTransferBoxItem> WinitTransferBoxItem { get; set; }
-        public virtual DbSet<WinitTransfer> WinitTransfer { get; set; }
     }
 }

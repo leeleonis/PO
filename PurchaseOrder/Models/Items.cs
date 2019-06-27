@@ -12,33 +12,37 @@ namespace PurchaseOrderSys.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Carriers
+    public partial class Items
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Carriers()
+        public Items()
         {
             this.IsEnable = true;
-            this.FirstMiles = new HashSet<ShippingMethods>();
-            this.LastMiles = new HashSet<ShippingMethods>();
+            this.Serials = new HashSet<OrderSerials>();
         }
     
         public bool IsEnable { get; set; }
         public int ID { get; set; }
-        public string Name { get; set; }
-        public int MethodType { get; set; }
-        public int BoxType { get; set; }
-        public string Email { get; set; }
-        public Nullable<int> Api { get; set; }
-        public string PrinterName { get; set; }
+        public Nullable<int> SCID { get; set; }
+        public int OrderID { get; set; }
+        public int PackageID { get; set; }
+        public string Sku { get; set; }
+        public decimal UnitPrice { get; set; }
+        public decimal ExportValue { get; set; }
+        public decimal DLExportValue { get; set; }
+        public int Qty { get; set; }
+        public string eBayItemID { get; set; }
+        public string SalesRecordNumber { get; set; }
+        public Nullable<int> RMAID { get; set; }
         public string Update_by { get; set; }
         public Nullable<System.DateTime> Update_at { get; set; }
         public string Create_by { get; set; }
         public System.DateTime Create_at { get; set; }
     
-        public virtual ApiSetting GetApi { get; set; }
+        public virtual Orders GetOrder { get; set; }
+        public virtual Packages GetPackage { get; set; }
+        public virtual SKU GetSku { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ShippingMethods> FirstMiles { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ShippingMethods> LastMiles { get; set; }
+        public virtual ICollection<OrderSerials> Serials { get; set; }
     }
 }

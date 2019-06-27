@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// SKU class
     /// </summary>
@@ -114,25 +114,25 @@ namespace PurchaseOrderSys.Models
     	    [Display(Name = "SKU_Replenishable", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public bool  Replenishable { get; set; }
-
-            /// <summary>
-            /// SerialTracking
-            /// </summary>        
-            [Display(Name = "SKU_SerialTracking", ResourceType = typeof(App_GlobalResources.Resource))]
+    
+    		/// <summary>
+    		/// Serial Tracking
+    		/// </summary>        
+    	    [Display(Name = "SKU_SerialTracking", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-            public bool SerialTracking { get; set; }
-
-            /// <summary>
-            /// Battery
-            /// </summary>        
-            [Display(Name = "SKU_Battery", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public bool  SerialTracking { get; set; }
+    
+    		/// <summary>
+    		/// Battery
+    		/// </summary>        
+    	    [Display(Name = "SKU_Battery", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-            public bool Battery { get; set; }
-            
-            /// <summary>
-            /// Status
-            /// </summary>        
-            [Display(Name = "SKU_Status", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public bool  Battery { get; set; }
+    
+    		/// <summary>
+    		/// Status
+    		/// </summary>        
+    	    [Display(Name = "SKU_Status", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public byte  Status { get; set; }
     

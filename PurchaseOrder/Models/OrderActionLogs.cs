@@ -12,21 +12,16 @@ namespace PurchaseOrderSys.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class API
+    public partial class OrderActionLogs
     {
-        public bool IsEnable { get; set; }
-        public bool IsTest { get; set; }
         public int ID { get; set; }
-        public string Name { get; set; }
-        public byte Type { get; set; }
-        public string ApiKey { get; set; }
-        public string ApiAccount { get; set; }
-        public string ApiPassword { get; set; }
-        public string ApiMeter { get; set; }
-        public string ApiHub { get; set; }
+        public int OrderID { get; set; }
+        public int PackageID { get; set; }
+        public string Item { get; set; }
+        public string Description { get; set; }
         public string CreateBy { get; set; }
         public System.DateTime CreateAt { get; set; }
-        public string UpdateBy { get; set; }
-        public Nullable<System.DateTime> UpdateAt { get; set; }
+    
+        public virtual Orders GetOrder { get; set; }
     }
 }
