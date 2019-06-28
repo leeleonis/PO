@@ -633,10 +633,10 @@ namespace PurchaseOrderSys.Controllers
                 }
                 var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == Serialsitem.SerialsNo);//檢查是否有序號
                 var PurchaseSKUs = db.PurchaseSKU.Where(x => x.SkuNo == Serialsitem.SkuNo && x.PurchaseOrder.IsEnable && x.IsEnable && x.SKU.SerialTracking);//無開序號管理才能任意取
-                PurchaseSKUs = PurchaseSKUs.Where(x => x.SerialsLlist.Where(y => y.SerialsQTY > 0 && (y.SerialsType == "PO" || y.SerialsType == "TransferIn") && !y.SerialsLlistC.Any()).Any());
+                PurchaseSKUs = PurchaseSKUs.Where(x => x.SerialsLlist.Where(y => y.SerialsQTY > 0 && (y.SerialsType == "PO" || y.SerialsType == "TransferIn"|| y.SerialsType == "DropshpOrderIn") && !y.SerialsLlistC.Any()).Any());
                 if (SerialsLlist.Any())
                 {
-                    SerialsLlist = SerialsLlist.Where(x => x.SerialsQTY > 0 && (x.SerialsType == "PO" || x.SerialsType == "TransferIn") && !x.SerialsLlistC.Any());//PO和TransferIn才能出貨
+                    SerialsLlist = SerialsLlist.Where(x => x.SerialsQTY > 0 && (x.SerialsType == "PO" || x.SerialsType == "TransferIn" || x.SerialsType == "DropshpOrderIn") && !x.SerialsLlistC.Any());//PO和TransferIn才能出貨
                     if (SerialsLlist.Sum(x => x.SerialsQTY) > 0)
                     {
                         var nSerials = new SerialsLlist
@@ -1529,19 +1529,19 @@ namespace PurchaseOrderSys.Controllers
                                         CreateAt = dt
                                     };
                                     nPurchaseSKU.SerialsLlist.Add(nSerialsLlistIn);
-                                    var nSerialsLlistOut = new SerialsLlist
-                                    {
-                                        IsEnable = true,
-                                        PurchaseSKUID = nPurchaseSKU.ID,
-                                        SerialsType = "DropshpOrderOut",
-                                        SerialsNo = SerialNumberitem,
-                                        SerialsQTY = -1,
-                                        ReceivedBy = UserBy,
-                                        ReceivedAt = dt,
-                                        CreateBy = UserBy,
-                                        CreateAt = dt
-                                    };
-                                    nSerialsLlistIn.SerialsLlistC.Add(nSerialsLlistOut);
+                                    //var nSerialsLlistOut = new SerialsLlist
+                                    //{
+                                    //    IsEnable = true,
+                                    //    PurchaseSKUID = nPurchaseSKU.ID,
+                                    //    SerialsType = "DropshpOrderOut",
+                                    //    SerialsNo = SerialNumberitem,
+                                    //    SerialsQTY = -1,
+                                    //    ReceivedBy = UserBy,
+                                    //    ReceivedAt = dt,
+                                    //    CreateBy = UserBy,
+                                    //    CreateAt = dt
+                                    //};
+                                    //nSerialsLlistIn.SerialsLlistC.Add(nSerialsLlistOut);
                                 }
                             }
                         }
@@ -1588,19 +1588,19 @@ namespace PurchaseOrderSys.Controllers
                                         CreateAt = dt
                                     };
                                     oPurchaseSKU.SerialsLlist.Add(nSerialsLlistIn);
-                                    var nSerialsLlistOut = new SerialsLlist
-                                    {
-                                        IsEnable = true,
-                                        PurchaseSKUID = oPurchaseSKU.ID,
-                                        SerialsType = "DropshpOrderOut",
-                                        SerialsNo = SerialNumberitem,
-                                        SerialsQTY = -1,
-                                        ReceivedBy = UserBy,
-                                        ReceivedAt = dt,
-                                        CreateBy = UserBy,
-                                        CreateAt = dt
-                                    };
-                                    nSerialsLlistIn.SerialsLlistC.Add(nSerialsLlistOut);
+                                    //var nSerialsLlistOut = new SerialsLlist
+                                    //{
+                                    //    IsEnable = true,
+                                    //    PurchaseSKUID = oPurchaseSKU.ID,
+                                    //    SerialsType = "DropshpOrderOut",
+                                    //    SerialsNo = SerialNumberitem,
+                                    //    SerialsQTY = -1,
+                                    //    ReceivedBy = UserBy,
+                                    //    ReceivedAt = dt,
+                                    //    CreateBy = UserBy,
+                                    //    CreateAt = dt
+                                    //};
+                                    //nSerialsLlistIn.SerialsLlistC.Add(nSerialsLlistOut);
                                 }
                             }
                         }

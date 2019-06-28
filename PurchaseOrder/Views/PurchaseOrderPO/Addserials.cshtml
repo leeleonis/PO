@@ -194,7 +194,7 @@
                         },
                         success: function (data) {
                             if (data.status) {
-                                $("#SerialList").prepend("<li><button type='button' class='glyphicon glyphicon-remove btn-danger'></button>" + serials + "</li>");
+                                $("#SerialList").prepend("<li><button type='button' class='glyphicon glyphicon-remove btn-danger delserials'></button>" + serials + "</li>");
                                 $("#Serialcount").text($("#SerialList li").length);
                                 $("#Serial").val("");
                             }

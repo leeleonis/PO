@@ -217,7 +217,6 @@ namespace PurchaseOrderSys.Controllers
                 var WinitTransfer = new WinitTransfer { IsEnable = true, CreateBy = CreateBy, CreateAt = CreateAt };
                 WinitTransfer.WinitTransferBox.Add(new WinitTransferBox { IsEnable = true, CreateBy = CreateBy, CreateAt = CreateAt });
                 oTransfer.WinitTransfer = WinitTransfer;
-                db.SaveChanges();
             }
             Session["WinitTransferBox" + ID] = oTransfer.WinitTransfer.WinitTransferBox.ToList();
             return View(oTransfer);
@@ -323,7 +322,7 @@ namespace PurchaseOrderSys.Controllers
                 return RedirectToAction("Prep", new { ID });
             }
         }
-        public ActionResult PrepSaveserials(string serials, string SID)
+        public ActionResult PrepSaveserials(string serials, string SID,int boxitemset)
         {
             var PrepVMList = (List<TransferItemVM>)Session["PrepVMList" + SID];
             var WinitTransferBoxList = (List<WinitTransferBox>)Session["WinitTransferBox" + SID];
@@ -354,7 +353,7 @@ namespace PurchaseOrderSys.Controllers
                             if (!PrepVMList.Where(x => x.SerialsLlist.Where(y => y.SerialsNo == serials).Any()).Any() && !PrepVMList.Where(x => x.RMASerialsLlist.Where(y => y.SerialsNo == serials).Any()).Any())
                             {
                                 PrepVM.SerialsLlist.Add(Serial);
-                                var WinitTransferBox = WinitTransferBoxList.LastOrDefault();
+                                var WinitTransferBox = WinitTransferBoxList.Skip(boxitemset).Take(1).FirstOrDefault();
                                 WinitTransferBox.WinitTransferBoxItem.Add(new WinitTransferBoxItem
                                 {
                                     SerialsLlistID = Serial.ID,
@@ -480,7 +479,36 @@ namespace PurchaseOrderSys.Controllers
         {
             var WinitTransferBoxList = (List<WinitTransferBox>)Session["WinitTransferBox" + ID];
             var html = RenderPartialViewToString("Boxitem", WinitTransferBoxList);
-            return Json(new { status = true, html }, JsonRequestBehavior.AllowGet);
+            var set = WinitTransferBoxList.Count() - 1;
+            return Json(new { status = true, html, set }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult DelSerialsNo(string serial, int ID)
+        {
+            var WinitTransferBoxList = (List<WinitTransferBox>)Session["WinitTransferBox" + ID];
+            var PrepVMList = (List<TransferItemVM>)Session["PrepVMList" + ID];
+            foreach (var Boxitem in WinitTransferBoxList)
+            {
+                foreach (var item in Boxitem.WinitTransferBoxItem.ToList())
+                {
+                    if (item.SerialsNo.Trim() == serial.Trim())
+                    {
+                        Boxitem.WinitTransferBoxItem.Remove(item);
+                    }
+                }
+            }
+            foreach (var Prepitem in PrepVMList)
+            {
+                foreach (var item in Prepitem.SerialsLlist.ToList())
+                {
+                    if (item.SerialsNo.Trim() == serial.Trim())
+                    {
+                        Prepitem.SerialsLlist.Remove(item);
+                    }
+                }
+            }
+            Session["WinitTransferBox" + ID] = WinitTransferBoxList;
+            Session["PrepVMList" + ID] = PrepVMList;
+            return Json(new { status = true }, JsonRequestBehavior.AllowGet);
         }
     }
 }

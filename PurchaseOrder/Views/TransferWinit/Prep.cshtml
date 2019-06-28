@@ -1,7 +1,13 @@
 ﻿@model Transfer
 @{
     ViewBag.title = "Winit TransferOut Serials";
+    ViewBag.boxitemset = Model.WinitTransfer.WinitTransferBox.Count() - 1;
 }
+<style>
+    .boxselect{
+        color:red;
+    }
+</style>
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -22,6 +28,7 @@
                             <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="IsEnable" value="True">
+                               @Html.Hidden("boxitemset")
                                 <div id="content" class="tab-content">
                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                     <div class="tab-pane" id="hb1">
@@ -93,13 +100,13 @@
                                         </fieldset>
 
                                         <fieldset id="boxitem">
-                                            @Html.Partial("Boxitem",Model.WinitTransfer.WinitTransferBox)
+                                            @Html.Partial("Boxitem", Model.WinitTransfer.WinitTransferBox)
                                         </fieldset>
                                     </div>
                                 </div>
                                 <div class="widget-footer">
-                                    <button type="submit" class="btn btn-primary" id="save">儲存</button>
-                                    <button type="button" class="btn btn-primary" id="saveexit">儲存並返回</button>
+                                    @*<button type="submit" class="btn btn-primary" id="save">儲存</button>
+                                    <button type="button" class="btn btn-primary" id="saveexit">儲存並返回</button>*@
                                     <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Edit", new {Model.ID })'">返回</button>
                                 </div>
                             </form>
@@ -160,7 +167,9 @@
                         url: "@Url.Action("PrepSaveserials")",
                         data: {
                             serials: serials,
-                            SID:@Html.Display("ID")},
+                            SID:@Html.Display("ID"),
+                            boxitemset: $("#boxitemset").val()
+                        },
                         success: function (data) {
                             if (data.status) {
                                 DataGrid.draw();
@@ -215,20 +224,47 @@
                     }
                 });
             });
+            $("body").on("click", ".boxitemset", function () {
+                $("#boxitemset").val($(this).attr("val"));
+                $("legend").removeClass("boxselect");
+                $(this).parent().prev("legend").addClass("boxselect");
+            });
+            $("body").on("click", ".delserials", function () {
+                var serial = $(this).attr("value");
+                if (confirm("是否確定刪除：" + serial)) {
+                    $.ajax({
+                        type: "post",
+                        url: "@Url.Action("DelSerialsNo")",
+                        data: {
+                            ID: "@Html.Display("ID")",
+                            serial: serial
+                        },
+                        success: function (data) {
+                            if (data.status) {
+                                boxchange();
+                            }
+                            else {
+                                alert(data.Errmsg);
+                            }
+                        }
+                    });
+                }
+                return false;
+            });
+
         });
         function boxchange() {
                 $.ajax({
                     traditional: true,
                     type: "post",
-                    url: "@Url.Action("BoxValChange")",
+                    url: "@Url.Action("BoxChange")",
                     data: {
-                        ID: "@Html.Display("ID")",
-                        name: name,
-                        val: val
+                        ID: "@Html.Display("ID")"
                     },
                     success: function (data) {
                         if (data.status) {
-                            $("#boxitem").html(data.html)
+                            $("#boxitem").html(data.html);
+                            $("#boxitemset").val(data.set);
                             DataGrid.draw();
                         }
                         else {
