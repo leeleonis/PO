@@ -58,22 +58,61 @@ namespace PurchaseOrderSys.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(SKU sku, SkuLang langData)
+        public ActionResult Create(SKU sku, SkuLang langData, string Copy)
         {
-            if (db.SKU.AsNoTracking().Any(s => s.SkuID.Equals(sku.SkuID))) return RedirectToAction("Create");
+            if (db.SKU.AsNoTracking().Any(s => s.SkuID.Equals(sku.SkuID)))
+            {
+                TempData["ErrorMsg"] = string.Format("SKU【{0}】已存在", sku.SkuID);
 
+                return RedirectToAction("Create");
+            }
+
+            SKU copySku = null;
             using (StockKeepingUnit SKU = new StockKeepingUnit())
             {
                 sku.CreateAt = DateTime.UtcNow;
                 sku.CreateBy = Session["AdminName"].ToString();
+
+                if (!string.IsNullOrEmpty(Copy))
+                {
+                    copySku = db.SKU.Find(Copy);
+
+                    if (copySku == null)
+                    {
+                        TempData["ErrorMsg"] = string.Format("繼承 SKU【{0}】找不到", sku.SkuID);
+
+                        return RedirectToAction("Create");
+                    }
+
+                    SKU.SkuInherit(sku, copySku);
+                }
+
                 langData.LangID = EnumData.DataLangList().Keys.First();
                 sku = SKU.CreateSku(sku, langData);
-
+                
                 try
                 {
-                    SKU.CreateSkuToNeto();
-                    SKU.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
-                    SKU.CreateSkuToSC();
+                    if (copySku != null)
+                    {
+                        copySku.UpdateAt = sku.CreateAt;
+                        copySku.UpdateBy = sku.UpdateBy;
+                        SKU.SkuInherit(sku, copySku, copySku.SkuLang.First(l => l.LangID.Equals(langData.LangID)));
+
+                        if (copySku.Logistic != null)
+                        {
+                            copySku.Logistic.UpdateAt = sku.CreateAt;
+                            copySku.Logistic.UpdateBy = sku.CreateBy;
+                            SKU.LogisticInherit(sku.Logistic, copySku.Logistic);
+                        }
+
+                        db.SaveChanges();
+
+                        SKU.UpdateSku_Suffix(sku.SkuLang.First(l => l.LangID.Equals(langData.LangID)));
+                    }
+
+                    //SKU.CreateSkuToNeto();
+                    //SKU.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
+                    //SKU.CreateSkuToSC();
                 }
                 catch (Exception e)
                 {
@@ -744,6 +783,23 @@ namespace PurchaseOrderSys.Controllers
             }
 
             return Json(new { total, rows = dataList }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult SearchSkuData(string term)
+        {
+            var list = new List<object>();
+
+            if (!string.IsNullOrEmpty(term))
+            {
+                var LangID = EnumData.DataLangList().First().Key;
+                var skuList = db.SKU.Include(s => s.SkuLang).Where(s => s.SkuID.Contains(term) || s.SkuLang.Any(l => l.Name.Contains(term))).ToList();
+                if (skuList.Any())
+                {
+                    list.AddRange(skuList.OrderBy(s => s.SkuID).Select(s => new { label = s.SkuID + " - " + s.SkuLang.FirstOrDefault()?.Name ?? "Not found sku name", value = s.SkuID }).ToList());
+                }
+            }
+
+            return Json(list, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetParent(SkuFilter data, string filter)
