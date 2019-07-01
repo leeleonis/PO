@@ -84,6 +84,10 @@ namespace PurchaseOrderSys.Controllers
                         return RedirectToAction("Create");
                     }
 
+                    sku.Type = copySku.Type;
+                    sku.Condition = copySku.Condition;
+                    sku.ParentSku = copySku.ParentSku;
+                    sku.ParentShadow = copySku.ParentShadow;
                     SKU.SkuInherit(sku, copySku);
                 }
 
@@ -105,14 +109,44 @@ namespace PurchaseOrderSys.Controllers
                             SKU.LogisticInherit(sku.Logistic, copySku.Logistic);
                         }
 
+                        foreach(var attr in copySku.Sku_Attribute)
+                        {
+                            db.Sku_Attribute.Add(new Sku_Attribute()
+                            {
+                                IsDiverse = attr.IsDiverse,
+                                Sku = sku.SkuID,
+                                AttrID = attr.AttrID,
+                                LangID = attr.LangID,
+                                Value = attr.Value,
+                                eBay = attr.eBay,
+                                Html = attr.Html,
+                                CreateAt = sku.CreateAt,
+                                CreateBy = sku.CreateBy
+                            });
+                        }
+
+                        foreach(var packageContent in copySku.Sku_PackageContent)
+                        {
+                            db.Sku_PackageContent.Add(new Sku_PackageContent()
+                            {
+                                Sku = sku.SkuID,
+                                ItemID = packageContent.ItemID,
+                                LangID = packageContent.LangID,
+                                Model = packageContent.Model,
+                                Html = packageContent.Html,
+                                CreateAt = sku.CreateAt,
+                                CreateBy = sku.CreateBy
+                            });
+                        }
+
                         db.SaveChanges();
 
                         SKU.UpdateSku_Suffix(sku.SkuLang.First(l => l.LangID.Equals(langData.LangID)));
                     }
 
-                    //SKU.CreateSkuToNeto();
-                    //SKU.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
-                    //SKU.CreateSkuToSC();
+                    SKU.CreateSkuToNeto();
+                    SKU.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
+                    SKU.CreateSkuToSC();
                 }
                 catch (Exception e)
                 {

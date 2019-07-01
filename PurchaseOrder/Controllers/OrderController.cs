@@ -18,29 +18,6 @@ namespace PurchaseOrderSys.Controllers
             return View();
         }
 
-        // GET: Order/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Order/Create
-        // 若要免於過量張貼攻擊，請啟用想要繫結的特定屬性，如需
-        // 詳細資訊，請參閱 https://go.microsoft.com/fwlink/?LinkId=317598。
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IsEnable,IsRush,ID,OrderParent,OrderSourceID,SCID,Company,OrderType,OrderStatus,OrderDate,PaymentStatus,PaymentDate,FulfillmentStatus,FulfilledDate,Update_by,Update_at,Create_by,Create_at")] Orders order)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Orders.Add(order);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            return View(order);
-        }
-
         // GET: Order/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -99,6 +76,24 @@ namespace PurchaseOrderSys.Controllers
             db.Orders.Remove(order);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public ActionResult PackageSave(Packages updatePackage)
+        {
+            AjaxResult result = new AjaxResult();
+
+            var package = db.Packages.Find(updatePackage.ID);
+
+            try
+            {
+                if (package == null) throw new Exception("Not found package!");
+            }
+            catch(Exception e)
+            {
+                result.SetError(e.InnerException?.Message ?? e.Message);
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)

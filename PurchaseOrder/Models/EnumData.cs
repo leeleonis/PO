@@ -437,5 +437,13 @@ namespace PurchaseOrderSys.Models
 
             return Enum.GetValues(typeof(ExportMethod)).Cast<ExportMethod>().ToDictionary(s => (byte)s, s => Method[(byte)s]);
         }
+
+        public enum ShippingMethodType { Normal, DirectLine, DropShip, DS_DirectLine }
+        public static Dictionary<byte, string> ShippingMethodTypeList()
+        {
+            string[] Type = new string[] { "Normal", "Direct Line", "Drop Ship", "Drop Ship Direct Line" };
+
+            return Enum.GetValues(typeof(ShippingMethodType)).Cast<ShippingMethodType>().ToDictionary(s => (byte)s, s => Type[(byte)s]);
+        }
     }
 }

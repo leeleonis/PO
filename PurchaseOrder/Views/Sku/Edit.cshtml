@@ -1161,8 +1161,10 @@
             TableInit('table-statement');
 
             $('#btn-sync').click(function () {
-                $('#Sync').val(true);
-                $('#btn-save').trigger('click');
+                if (confirm('將會上傳更新至Neto & SC，確定要繼續?')) {
+                    $('#Sync').val(true);
+                    $('#btn-save').trigger('click');
+                }
             });
         });
 
