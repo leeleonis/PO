@@ -4255,6 +4255,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查詢類似 Credit Memo ID 的當地語系化字串。
+        /// </summary>
+        public static string PurchaseNote_CreditMemoID {
+            get {
+                return ResourceManager.GetString("PurchaseNote_CreditMemoID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 ID 的當地語系化字串。
         /// </summary>
         public static string PurchaseNote_ID {
@@ -4282,11 +4291,38 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查詢類似 Note Type 的當地語系化字串。
+        /// </summary>
+        public static string PurchaseNote_NoteType {
+            get {
+                return ResourceManager.GetString("PurchaseNote_NoteType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 PurchaseOrderID 的當地語系化字串。
         /// </summary>
         public static string PurchaseNote_PurchaseOrderID {
             get {
                 return ResourceManager.GetString("PurchaseNote_PurchaseOrderID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 RMAID 的當地語系化字串。
+        /// </summary>
+        public static string PurchaseNote_RMAID {
+            get {
+                return ResourceManager.GetString("PurchaseNote_RMAID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Transfer ID 的當地語系化字串。
+        /// </summary>
+        public static string PurchaseNote_TransferID {
+            get {
+                return ResourceManager.GetString("PurchaseNote_TransferID", resourceCulture);
             }
         }
         
@@ -4975,11 +5011,38 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查詢類似 Other Costs 的當地語系化字串。
+        /// </summary>
+        public static string RMA_OtherCosts {
+            get {
+                return ResourceManager.GetString("RMA_OtherCosts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 Reason 的當地語系化字串。
         /// </summary>
         public static string RMA_Reason {
             get {
                 return ResourceManager.GetString("RMA_Reason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 RestockingFee 的當地語系化字串。
+        /// </summary>
+        public static string RMA_RestockingFee {
+            get {
+                return ResourceManager.GetString("RMA_RestockingFee", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Return Shipping Cost 的當地語系化字串。
+        /// </summary>
+        public static string RMA_ReturnShippingCos {
+            get {
+                return ResourceManager.GetString("RMA_ReturnShippingCos", resourceCulture);
             }
         }
         
@@ -4998,6 +5061,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         public static string RMA_SCRMA {
             get {
                 return ResourceManager.GetString("RMA_SCRMA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 SC User ID 的當地語系化字串。
+        /// </summary>
+        public static string RMA_SCUserID {
+            get {
+                return ResourceManager.GetString("RMA_SCUserID", resourceCulture);
             }
         }
         
@@ -5142,6 +5214,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         public static string RMASerialsLlist_ID {
             get {
                 return ResourceManager.GetString("RMASerialsLlist_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 IsEnable 的當地語系化字串。
+        /// </summary>
+        public static string RMASerialsLlist_IsEnable {
+            get {
+                return ResourceManager.GetString("RMASerialsLlist_IsEnable", resourceCulture);
             }
         }
         
@@ -5299,6 +5380,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查詢類似 Reason 的當地語系化字串。
+        /// </summary>
+        public static string RMASKU_Reason {
+            get {
+                return ResourceManager.GetString("RMASKU_Reason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 ReceivedAt 的當地語系化字串。
         /// </summary>
         public static string RMASKU_ReceivedAt {
@@ -5403,6 +5493,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         public static string SerialsLlist_ID {
             get {
                 return ResourceManager.GetString("SerialsLlist_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 IsEnable 的當地語系化字串。
+        /// </summary>
+        public static string SerialsLlist_IsEnable {
+            get {
+                return ResourceManager.GetString("SerialsLlist_IsEnable", resourceCulture);
             }
         }
         

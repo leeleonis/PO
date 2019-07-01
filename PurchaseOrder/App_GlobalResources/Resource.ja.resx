@@ -402,9 +402,6 @@
   <data name="RMA_Action" xml:space="preserve">
     <value>Action</value>
   </data>
-  <data name="RMA_Reason" xml:space="preserve">
-    <value>Reason</value>
-  </data>
   <data name="RMA_ReturnTracking" xml:space="preserve">
     <value>ReturnTracking</value>
   </data>
@@ -647,5 +644,41 @@
   </data>
   <data name="WinitTransferBoxItem_Value" xml:space="preserve">
     <value>Value</value>
+  </data>
+  <data name="RMA_SCUserID" xml:space="preserve">
+    <value>SC User ID</value>
+  </data>
+  <data name="RMA_RestockingFee" xml:space="preserve">
+    <value>RestockingFee</value>
+  </data>
+  <data name="SerialsLlist_IsEnable" xml:space="preserve">
+    <value>IsEnable</value>
+  </data>
+  <data name="RMA_OtherCosts" xml:space="preserve">
+    <value>Other Costs</value>
+  </data>
+  <data name="RMA_ReturnShippingCos" xml:space="preserve">
+    <value>Return Shipping Cost</value>
+  </data>
+  <data name="RMA_Reason" xml:space="preserve">
+    <value>Reason</value>
+  </data>
+  <data name="RMASerialsLlist_IsEnable" xml:space="preserve">
+    <value>IsEnable</value>
+  </data>
+  <data name="RMASKU_Reason" xml:space="preserve">
+    <value>Reason</value>
+  </data>
+  <data name="PurchaseNote_NoteType" xml:space="preserve">
+    <value>Note Type</value>
+  </data>
+  <data name="PurchaseNote_CreditMemoID" xml:space="preserve">
+    <value>Credit Memo ID</value>
+  </data>
+  <data name="PurchaseNote_TransferID" xml:space="preserve">
+    <value>Transfer ID</value>
+  </data>
+  <data name="PurchaseNote_RMAID" xml:space="preserve">
+    <value>RMAID</value>
   </data>
 </root>
