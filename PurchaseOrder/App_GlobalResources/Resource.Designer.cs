@@ -5227,11 +5227,47 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查詢類似 New SKU CreateAt 的當地語系化字串。
+        /// </summary>
+        public static string RMASerialsLlist_NewSKUCreateAt {
+            get {
+                return ResourceManager.GetString("RMASerialsLlist_NewSKUCreateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 New SKU CreateBy 的當地語系化字串。
+        /// </summary>
+        public static string RMASerialsLlist_NewSKUCreateBy {
+            get {
+                return ResourceManager.GetString("RMASerialsLlist_NewSKUCreateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 New Sku No 的當地語系化字串。
+        /// </summary>
+        public static string RMASerialsLlist_NewSkuNo {
+            get {
+                return ResourceManager.GetString("RMASerialsLlist_NewSkuNo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 PID 的當地語系化字串。
         /// </summary>
         public static string RMASerialsLlist_PID {
             get {
                 return ResourceManager.GetString("RMASerialsLlist_PID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Reason 的當地語系化字串。
+        /// </summary>
+        public static string RMASerialsLlist_Reason {
+            get {
+                return ResourceManager.GetString("RMASerialsLlist_Reason", resourceCulture);
             }
         }
         
@@ -5295,6 +5331,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         public static string RMASerialsLlist_ServiceID {
             get {
                 return ResourceManager.GetString("RMASerialsLlist_ServiceID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Transfer SKU ID 的當地語系化字串。
+        /// </summary>
+        public static string RMASerialsLlist_TransferSKUID {
+            get {
+                return ResourceManager.GetString("RMASerialsLlist_TransferSKUID", resourceCulture);
             }
         }
         

@@ -20,7 +20,7 @@ namespace PurchaseOrderSys.Controllers
         {
             Session["CMPurchaseNote"] = null;
             Session["CMSkuNumberList"] = null;
-            var SID = DateTime.Now.ToString("HHmmss");
+            var SID = DateTime.Now.ToString("HHmmssfff");
             ViewBag.SID = SID;
             var PurchaseOrder = db.PurchaseOrder.Find(ID);
             var cmvm = new CMVM

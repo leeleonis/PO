@@ -2685,4 +2685,19 @@
   <data name="PurchaseNote_RMAID" xml:space="preserve">
     <value>RMAID</value>
   </data>
+  <data name="RMASerialsLlist_NewSKUCreateAt" xml:space="preserve">
+    <value>New SKU CreateAt</value>
+  </data>
+  <data name="RMASerialsLlist_NewSKUCreateBy" xml:space="preserve">
+    <value>New SKU CreateBy</value>
+  </data>
+  <data name="RMASerialsLlist_NewSkuNo" xml:space="preserve">
+    <value>New Sku No</value>
+  </data>
+  <data name="RMASerialsLlist_TransferSKUID" xml:space="preserve">
+    <value>Transfer SKU ID</value>
+  </data>
+  <data name="RMASerialsLlist_Reason" xml:space="preserve">
+    <value>Reason</value>
+  </data>
 </root>

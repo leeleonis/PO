@@ -36,7 +36,7 @@ namespace PurchaseOrderSys.Controllers
             //var Vendor = VendorData.Where(x => x.DisplayName.Contains("Senao"));
             Session["SkuNumberList"] = null;
             Session["POPurchaseNote"] = null;
-            ViewBag.SID = DateTime.Now.ToString("HHmmss");
+            ViewBag.SID = DateTime.Now.ToString("HHmmssfff");
             var PurchaseOrder = new PurchaseOrder();
             PurchaseOrder.POType = POTypeVal;
             return View(PurchaseOrder);

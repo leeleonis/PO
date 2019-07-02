@@ -381,20 +381,39 @@ namespace PurchaseOrderSys.Controllers
 
         private string GetOrderWarehouseName(SerialsLlist serialsLlistitem)
         {
-            if (serialsLlistitem.SerialsLlistP.TransferSKUID.HasValue)
+            if (serialsLlistitem.SerialsLlistP == null)
             {
-                return serialsLlistitem.SerialsLlistP.TransferSKU.Transfer.WarehouseTo.Name;
-            }
-            else if (serialsLlistitem.SerialsLlistP.PurchaseSKUID.HasValue)
-            {
-                return serialsLlistitem.SerialsLlistP.PurchaseSKU.PurchaseOrder.WarehousePO.Name;
+                if (serialsLlistitem.TransferSKUID.HasValue)
+                {
+                    return serialsLlistitem.TransferSKU.Transfer.WarehouseTo.Name;
+                }
+                else if (serialsLlistitem.PurchaseSKUID.HasValue)
+                {
+                    return serialsLlistitem.PurchaseSKU.PurchaseOrder.WarehousePO.Name;
+                }
+                else
+                {
+                    return "";
+                }
             }
             else
             {
-                return "";
+
+
+                if (serialsLlistitem.SerialsLlistP.TransferSKUID.HasValue)
+                {
+                    return serialsLlistitem.SerialsLlistP.TransferSKU.Transfer.WarehouseTo.Name;
+                }
+                else if (serialsLlistitem.SerialsLlistP.PurchaseSKUID.HasValue)
+                {
+                    return serialsLlistitem.SerialsLlistP.PurchaseSKU.PurchaseOrder.WarehousePO.Name;
+                }
+                else
+                {
+                    return "";
+                }
             }
         }
-
         public ActionResult Create()
         {
             return View();
@@ -423,10 +442,11 @@ namespace PurchaseOrderSys.Controllers
                         var Transfer =SerialsLlist.Where(x => x.TransferSKUID.HasValue).FirstOrDefault()?.TransferSKU.TransferID;
                         var WarehouseName = "";
                         var Location = "";
+                        var Stock = 0;
                         var lastSerial = SerialsLlist.OrderByDescending(x => x.CreateAt).FirstOrDefault();//最後一筆資料
                         WarehouseName = lastWarehouse(lastSerial);
-                        
-                        
+                        Stock = lastSerial.SerialsQTY ?? 0;
+
                         var Price = SerialsLlist.Where(x => x.PurchaseSKU.Price.HasValue).FirstOrDefault()?.PurchaseSKU.Price;
                         var CreateAt = lastSerial?.CreateAt;
                         //if (FRMA?.CreateAt > CreateAt)
@@ -444,6 +464,7 @@ namespace PurchaseOrderSys.Controllers
                             DispatchLocation = Location,
                             Order = Order,
                             Transfer= Transfer,
+                             Stock= Stock,
                             //RMA = RMA,
                             Serial = SerialsNoitem,
                             Value = Price,
@@ -526,7 +547,6 @@ namespace PurchaseOrderSys.Controllers
             };
             return View(InventorySerials);
         }
-
         private string lastWarehouse(SerialsLlist lastSerial)
         {
             var WarehouseName = "";

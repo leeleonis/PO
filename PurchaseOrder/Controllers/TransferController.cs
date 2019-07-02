@@ -64,7 +64,7 @@ namespace PurchaseOrderSys.Controllers
         }
         public ActionResult Create()
         {
-            var SID = DateTime.Now.ToString("HHmmss");
+            var SID = DateTime.Now.ToString("HHmmssfff");
             ViewBag.SID = SID;
             Session["TSkuNumberList" + SID] = null;
             return View();

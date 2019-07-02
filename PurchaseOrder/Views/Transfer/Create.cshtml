@@ -1,12 +1,24 @@
 ﻿@model Transfer
 @{
     ViewBag.ptitle = "Transfer Summary";
+    var ShippingList = new List<SelectListItem>();
     var Warehouselist = EnumData.WarehouseDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var InterimList = EnumData.InterimDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var TransferStatusDDL = EnumData.TransferStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var DefaultSelect = PurchaseOrderSys.App_GlobalResources.Resource.DefaultSelect;
-    var ShippingList = new PurchaseOrderSys.Api.Shipping_API().ShippingList().data.shippingMethod.Select(x => new SelectListItem { Text = x.text, Value = x.value.ToString() }).ToList();
+    var Shipping_API = new PurchaseOrderSys.Api.Shipping_API().ShippingList();
+    if (Shipping_API.status)
+    {
+        ShippingList = Shipping_API.data.shippingMethod.Select(x => new SelectListItem { Text = x.text, Value = x.value.ToString() }).ToList();
+    }
+    else
+    {
+        <script>
+            alert(@(Shipping_API.data));
+        </script>
+    }
 }
+
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
