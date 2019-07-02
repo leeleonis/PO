@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+
 namespace PurchaseOrderSys.Models
 {
     
@@ -76,19 +77,27 @@ namespace PurchaseOrderSys.Models
     
     		    
     		/// <summary>
+    		/// Export Value
+    		/// </summary>        
+    	    [Display(Name = "Items_ExportValue", ResourceType = typeof(App_GlobalResources.Resource))]
+            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public decimal  ExportValue { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// DLExport Value
+    		/// </summary>        
+    	    [Display(Name = "Items_DLExportValue", ResourceType = typeof(App_GlobalResources.Resource))]
+            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public decimal  DLExportValue { get; set; }
+    
+    		    
+    		/// <summary>
     		/// Qty
     		/// </summary>        
     	    [Display(Name = "Items_Qty", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public int  Qty { get; set; }
-    
-    		    
-    		/// <summary>
-    		/// Currency
-    		/// </summary>        
-    	    [Display(Name = "Items_Currency", ResourceType = typeof(App_GlobalResources.Resource))]
-            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public int  Currency { get; set; }
     
     		    
     		/// <summary>
