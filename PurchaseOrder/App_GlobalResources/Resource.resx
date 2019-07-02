@@ -2423,9 +2423,6 @@
   <data name="Items_Qty" xml:space="preserve">
     <value></value>
   </data>
-  <data name="Items_Currency" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="Items_eBayItemID" xml:space="preserve">
     <value></value>
   </data>
@@ -2911,5 +2908,11 @@
   </data>
   <data name="PurchaseNote_RMAID" xml:space="preserve">
     <value>RMAID</value>
+  </data>
+  <data name="Items_ExportValue" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Items_DLExportValue" xml:space="preserve">
+    <value></value>
   </data>
 </root>

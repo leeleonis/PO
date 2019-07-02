@@ -434,13 +434,21 @@
         var PackageEdit = function (ID) {
             $packageList.children("div").each(function () {
                 if ($(this).data('package') == ID) {
+                    return $(this).addClass('edit');
+                }
+            });
+        };
+
+        var PackageSave = function (ID) {
+            $packageList.children("div").each(function () {
+                if ($(this).data('package') == ID) {
                     var data = $(this).find('input, select').serializeArray();
 
-                    website.AjaxUrl('PackageSave', 'post', data).done(function (response) {
+                    website.AjaxUrl('../PackageSave', 'post', data).done(function (response) {
                         if (response.status) {
                             alert('Update success!');
 
-                            return $(this).addClass('edit');
+                            return $(this).appendTo(response.data).remove();
                         } else {
                             return alert(response.message);
                         }

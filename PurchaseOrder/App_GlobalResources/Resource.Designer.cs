@@ -2187,9 +2187,9 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string Items_Currency {
+        public static string Items_DLExportValue {
             get {
-                return ResourceManager.GetString("Items_Currency", resourceCulture);
+                return ResourceManager.GetString("Items_DLExportValue", resourceCulture);
             }
         }
         
@@ -2199,6 +2199,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         public static string Items_eBayItemID {
             get {
                 return ResourceManager.GetString("Items_eBayItemID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Items_ExportValue {
+            get {
+                return ResourceManager.GetString("Items_ExportValue", resourceCulture);
             }
         }
         

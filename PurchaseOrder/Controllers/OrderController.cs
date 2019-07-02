@@ -78,6 +78,7 @@ namespace PurchaseOrderSys.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
         public ActionResult PackageSave(Packages updatePackage)
         {
             AjaxResult result = new AjaxResult();
