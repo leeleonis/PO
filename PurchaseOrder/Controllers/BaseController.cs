@@ -1530,5 +1530,28 @@ namespace PurchaseOrderSys.Controllers
         {
             return db.SKU.Find(SKU).SerialTracking;
         }
+        public string GetNameSize(SkuLang x)
+        {
+            string name = "";
+            name = x.Name + "<br/>";
+            var Size = "";
+            var iSize = "";
+            var inch = 0.0393700787;
+            var lbs = 0.00220462262;
+            if (x.GetSku.Logistic != null)
+            {
+
+                name += "Shipping Weight:" + x.GetSku.Logistic.ShippingWeight + "g/" + (x.GetSku.Logistic.ShippingWeight * lbs).ToString("f2") + "lbs<br/>"; ;
+                Size += x.GetSku.Logistic.ShippingLength + "x";
+                iSize += (x.GetSku.Logistic.ShippingLength * inch).ToString("f2");
+                Size += x.GetSku.Logistic.ShippingWidth + "x";
+                iSize += (x.GetSku.Logistic.ShippingWidth * inch).ToString("f2");
+                Size += x.GetSku.Logistic.ShippingHeight;
+                iSize += (x.GetSku.Logistic.ShippingHeight * inch).ToString("f2");
+                name += "Shipping Dimension:" + Size + "mm/" + iSize + "inch";
+            }
+            return name;
+        }
+
     }
 }

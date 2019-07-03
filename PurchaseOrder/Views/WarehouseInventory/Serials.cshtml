@@ -47,6 +47,7 @@
                                                                 <th>PO</th>
                                                                 <th>CM</th>
                                                                 <th>Transfer</th>
+                                                                <th>Is Type</th>
                                                                 <th>Stock Status</th>
                                                                 <th>Warehouse</th>
                                                                 <th>Dispatch Location</th>
@@ -98,7 +99,8 @@
 
                                                                     }
                                                                 </td>
-                                                                <td>@Skuitem.Stock</td>
+                                                                <td>@Skuitem.IStype</td>
+                                                                <td>@(Skuitem.Stock == 1 ? "In" : Skuitem.Stock == -1 ? "Out" : "")</td>
                                                                 <td>@Skuitem.Warehouse</td>
                                                                 <td>@Skuitem.DispatchLocation</td>
                                                                 <td>@Skuitem.Value</td>

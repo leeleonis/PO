@@ -433,7 +433,7 @@ namespace PurchaseOrderSys.Controllers
                 {
                     foreach (var SerialsNoitem in Skuitem.SerialsLlist.Where(x => x.SerialsType == "PO").Select(x => x.SerialsNo).Distinct())
                     {
-                        var SerialsLlist = Skuitem.SerialsLlist.Where(x => x.SerialsNo == SerialsNoitem).ToList();
+                        var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == SerialsNoitem).OrderByDescending(x => x.CreateAt);
                         var Order = SerialsLlist.Where(x => x.OrderID.HasValue).FirstOrDefault()?.OrderID;
                         //var FRMA = RMASerialsLlist.Where(x => x.SerialsNo == SerialsNoitem).FirstOrDefault();
                         //var RMA = FRMA?.RMASKU.RMAID;
@@ -443,7 +443,7 @@ namespace PurchaseOrderSys.Controllers
                         var WarehouseName = "";
                         var Location = "";
                         var Stock = 0;
-                        var lastSerial = SerialsLlist.OrderByDescending(x => x.CreateAt).FirstOrDefault();//最後一筆資料
+                        var lastSerial = SerialsLlist.FirstOrDefault();//最後一筆資料
                         WarehouseName = lastWarehouse(lastSerial);
                         Stock = lastSerial.SerialsQTY ?? 0;
 
@@ -463,13 +463,14 @@ namespace PurchaseOrderSys.Controllers
                             PO = PO,
                             DispatchLocation = Location,
                             Order = Order,
-                            Transfer= Transfer,
-                             Stock= Stock,
+                            Transfer = Transfer,
+                            Stock = Stock,
                             //RMA = RMA,
                             Serial = SerialsNoitem,
                             Value = Price,
                             Warehouse = WarehouseName,
                             Date = CreateAt.Value.ToLocalTime(),
+                            IStype = lastSerial.SerialsType
                         });
                     }
                 }
@@ -489,6 +490,7 @@ namespace PurchaseOrderSys.Controllers
                                 Serialitem.Date = item.CreateAt.ToLocalTime();
                                 Serialitem.DispatchLocation = TransferSKUitem.Transfer.WarehouseTo.Name;
                                 Serialitem.Warehouse = TransferSKUitem.Transfer.WarehouseFrom.Name;
+                                Serialitem.IStype = item.SerialsType;
                             }
                         }
                     }
@@ -504,6 +506,7 @@ namespace PurchaseOrderSys.Controllers
                             //Value = item.RMASKU.UnitPrice,
                             Warehouse = TransferSKUitem.Transfer.WarehouseFrom.Name,
                             Date = item.CreateAt.ToLocalTime(),
+                            IStype = item.SerialsType
                         });
                     }
                 }
@@ -520,6 +523,9 @@ namespace PurchaseOrderSys.Controllers
                         if (item.CreateAt.ToLocalTime() > Serialitem.Date)
                         {
                             Serialitem.Date = item.CreateAt.ToLocalTime();
+                            Serialitem.Stock = item.SerialsQTY;
+                            Serialitem.Warehouse = item.Warehouse.Name;
+                            Serialitem.IStype = item.SerialsType;
                         }
                     }
                 }
@@ -527,14 +533,15 @@ namespace PurchaseOrderSys.Controllers
                 {
                     InventorySerialsItem.Add(new InventorySerialsItem
                     {
-                      
                         DispatchLocation = item.Warehouse.Name,
                         Order = item.RMASKU.RMA.OrderID,
                         RMA = item.RMASKU.RMAID,
                         Serial = item.SerialsNo,
                         Value = item.RMASKU.UnitPrice,
                         Warehouse = item.Warehouse.Name,
+                        Stock = item.SerialsQTY,
                         Date = item.CreateAt.ToLocalTime(),
+                        IStype = item.SerialsType
                     });
                 }
             }

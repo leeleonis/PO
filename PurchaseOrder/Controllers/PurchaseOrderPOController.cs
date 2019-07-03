@@ -429,7 +429,7 @@ namespace PurchaseOrderSys.Controllers
                 ID = x.ID,
                 ck = x.SkuNo,
                 sk = x.SkuNo,
-                Name = x.Name,
+                Name = GetNameSize(x.SKU.SkuLang.Where(y => y.LangID == LangID).FirstOrDefault()),
                 SKU = x.SkuNo,
                 VendorSKU = x.VendorSKU,
                 QTYOrdered = x.QTYOrdered,

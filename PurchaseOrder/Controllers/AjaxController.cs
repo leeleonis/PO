@@ -380,7 +380,7 @@ namespace PurchaseOrderSys.Controllers
                     ck = x.Sku,
                     sk = x.Sku,
                     SKU = x.Sku,
-                    Name = x.Name,
+                    Name = GetNameSize(x),
                     VendorSKU = "",
                     Model = "E"
                 }
@@ -427,6 +427,7 @@ namespace PurchaseOrderSys.Controllers
             };
             return Json(returnObj, JsonRequestBehavior.AllowGet);
         }
+
         [HttpPost]
         public ActionResult SkuNumberListEdit(string SKU, string type, decimal? oval, decimal? val, int? ID, string SID)
         {
