@@ -13,11 +13,12 @@ namespace PurchaseOrderSys.Models
     [MetadataType(typeof(ItemsMetadata))]
     public  partial class Items
     {
-    
-    	/// <summary>
-    	/// Items Metadata class
-    	/// </summary>
-    	public   class ItemsMetadata
+        public string SerialEdit { get; set; }
+
+        /// <summary>
+        /// Items Metadata class
+        /// </summary>
+        public   class ItemsMetadata
     	{
     		    
     		/// <summary>
@@ -155,9 +156,7 @@ namespace PurchaseOrderSys.Models
             [UIHint("DateTime")]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public System.DateTime  Create_at { get; set; }
-    
-    		    
-    	}
+        }
     }
     
 }

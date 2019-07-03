@@ -88,8 +88,50 @@ namespace PurchaseOrderSys.Controllers
             try
             {
                 if (package == null) throw new Exception("Not found package!");
+
+                SetUpdateData(package, updatePackage, new string[] { "ShippingMethod", "Export", "ExportMethod", "ExportValue", "UploadTracking", "Tracking", "DLExport", "DLExportMethod", "DLExportValue", "DLUploadTracking", "DLTracking", "ShipWarehouse" });
+                //foreach(var item in package.Items.Where(i => i.IsEnable))
+                //{
+                //    var updateItem = updatePackage.Items.First(i => i.ID.Equals(item.ID));
+                //    SetUpdateData(item, updateItem, new string[] { "ExportValue", "DLExportValue", "Qty" });
+
+                //    if(item.Sku != updateItem.Sku)
+                //    {
+                //        item.Sku = updateItem.Sku;
+                //    }
+
+                //    var updateSerial = !string.IsNullOrEmpty(item.SerialEdit) ? item.SerialEdit.Split(',').Select(s => s.Trim()).ToArray() : new string[] { };
+                //    foreach(var serial in item.Serials)
+                //    {
+                //        serial.IsEnable = updateSerial.Contains(serial.SerialNumber);
+                //        serial.Update_at = package.Update_at.Value;
+                //        serial.Update_by = package.Update_by;
+                //    }
+
+                //    foreach(var newSerial in updateSerial.Except(item.Serials.Select(s => s.SerialNumber).ToArray()))
+                //    {
+                //        item.Serials.Add(new OrderSerials()
+                //        {
+                //            OrderID = item.OrderID,
+                //            ItemID = item.ID,
+                //            Sku = item.Sku,
+                //            SerialNumber = newSerial,
+                //            Create_by = package.Update_by
+                //        });
+                //    }
+                //}
+
+                db.SaveChanges();
+
+                var ViewData = new ViewDataDictionary() {
+                    { "MethodList", db.ShippingMethods.AsNoTracking().Where(m => m.IsEnable).OrderBy(m => m.Name).Select(m => new SelectListItem() { Text = m.Name, Value = m.ID.ToString() }).ToList() },
+                    { "WarehouseList", db.Warehouse.AsNoTracking().Where(w => w.IsEnable && w.IsSellable).OrderBy(w => w.Name).Select(w => new SelectListItem() { Text = w.Name, Value = w.ID.ToString() }).ToList() },
+                    { "CurrencyList", db.Currency.AsNoTracking().Select(c => new SelectListItem() { Text = c.Code + " - " + c.Name, Value = c.ID.ToString() }).OrderBy(c => c.Text).ToList() }
+                };
+
+                result.data = RenderViewToString(ControllerContext, "_PackageDetail", package, ViewData);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 result.SetError(e.InnerException?.Message ?? e.Message);
             }

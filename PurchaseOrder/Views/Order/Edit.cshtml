@@ -448,13 +448,14 @@
         var PackageSave = function (ID) {
             $packageList.children("div").each(function () {
                 if ($(this).data('package') == ID) {
+                    var package = $(this);
                     var data = $(this).find('input, select').serializeArray();
 
                     website.AjaxUrl('../PackageSave', 'post', data).done(function (response) {
                         if (response.status) {
                             alert('Update success!');
 
-                            return $(this).after(response.data).remove();
+                            return package.after(response.data).remove();
                         } else {
                             return alert(response.message);
                         }

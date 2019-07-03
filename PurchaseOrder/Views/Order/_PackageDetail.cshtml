@@ -60,7 +60,7 @@
                                 }
                             }
                         }
-                        @Html.TextBox(string.Format("Items[{0}][Serials]", index), Serial, htmlAttributes: new { @class = "form-control" })
+                        @Html.TextBox(string.Format("Items[{0}][SerialEdit]", index), Serial, htmlAttributes: new { @class = "form-control" })
                     </td>
                     <td>@item.UnitPrice</td>
                     <td class="text">
@@ -73,7 +73,7 @@
                     </td>
                     <td class="text">
                         <span>@item.Qty</span>
-                        @Html.TextBox(string.Format("Items[{0}][Qty]", index), item.Qty, htmlAttributes: new { @class = "form-control" })
+                        @Html.TextBox(string.Format("Items[{0}][Qty]", index++), item.Qty, htmlAttributes: new { @class = "form-control" })
                     </td>
                     <td>@(item.UnitPrice * item.Qty)</td>
                     <td>@item.RMAID</td>
