@@ -7,8 +7,8 @@
     @Html.Hidden("ID", Model.ID)
     <table class="table table-bordered text-center">
         <thead>
-            <tr>
-                <td width="120">
+            <tr style="font-weight:bold;">
+                <td class="font-bg" width="120">
                     <div>
                         <label class="checkbox" style="padding: 0px; min-height: 17px;">
                             <input type="checkbox" id="chk-package" value="@Model.ID" />
@@ -16,15 +16,15 @@
                         </label>
                     </div>
                 </td>
-                <td width="120">SKU</td>
-                <td>Product Name</td>
-                <td width="200">Serials</td>
-                <td width="80">Unit Price</td>
-                <td width="95">Export Value</td>
-                <td width="115">DL Export Value</td>
-                <td width="50">QTY</td>
-                <td width="100">Value</td>
-                <td width="80">
+                <td class="font-bg" width="120">SKU</td>
+                <td class="font-bg">Product Name</td>
+                <td class="font-bg" width="200">Serials</td>
+                <td class="font-bg" width="80">Unit Price</td>
+                <td class="font-bg" width="95">Export Value</td>
+                <td class="font-bg" width="115">DL Export Value</td>
+                <td class="font-bg" width="50">QTY</td>
+                <td class="font-bg" width="100">Value</td>
+                <td class="font-bg" width="80">
                     RMA #
                     <div style="position: absolute; top: -35px; right: 15px;">
                         <button type="button" class="btn btn-default btn-sm edit" onclick="PackageEdit(@Model.ID)">Edit</button>
@@ -44,13 +44,20 @@
                         @Html.TextBox(string.Format("Items[{0}][Sku]", index), item.Sku, htmlAttributes: new { @class = "form-control" })
                     </td>
                     <td>@(item.GetSku.SkuLang.FirstOrDefault(l => l.LangID.Equals(LangID))?.Name ?? "")</td>
-                    <td class="text no-padding">
+                    <td class="text">
                         @{
                             var Serial = "";
                             if (item.Serials.Any())
                             {
                                 Serial = string.Join(",", item.Serials.Select(s => s.SerialNumber).ToArray());
-                                <span class="glyphicon glyphicon-list" rel="popover" data-placement="top" data-html="true" data-content="@string.Join("<br />", item.Serials.Select(s => s.SerialNumber).ToArray())" style="font-size: 20px;line-height: 20px;padding: 5px;"></span>
+                                if (item.Serials.Count() > 1)
+                                {
+                                    <span rel="popover" data-placement="top" data-html="true" data-content="@string.Join("<br />", item.Serials.Select(s => s.SerialNumber).ToArray())" style="cursor:pointer;">Multi</span>
+                                }
+                                else
+                                {
+                                    <span>@Serial</span>
+                                }
                             }
                         }
                         @Html.TextBox(string.Format("Items[{0}][Serials]", index), Serial, htmlAttributes: new { @class = "form-control" })
@@ -75,18 +82,18 @@
         </tbody>
     </table>
     <div class="form-group">
-        <div class="col-sm-3">
+        <div class="col-sm-3 col-lg-offset-1">
             <table class="table table-bordered text-center">
                 <tr>
-                    <td width="33%">Shipping Status</td>
+                    <td class="font-bg" width="33%">Shipping Status</td>
                     <td>@Enum.GetName(typeof(EnumData.OrderShippingStatus), 3)</td>
                 </tr>
             </table>
         </div>
-        <div class="col-sm-4 col-sm-offset-1">
+        <div class="col-sm-4">
             <table class="table table-bordered text-center">
                 <tr>
-                    <td width="33%">Shipping Method</td>
+                    <td class="font-bg" width="33%">Shipping Method</td>
                     <td class="text">
                         <span>@Model.GetMethod.Name</span>
                         @Html.DropDownListFor(Model => Model.ShippingMethod, (List<SelectListItem>)ViewData["MethodList"], htmlAttributes: new { @class = "form-control" })
@@ -94,10 +101,10 @@
                 </tr>
             </table>
         </div>
-        <div class="col-sm-3 col-sm-offset-1">
+        <div class="col-sm-3">
             <table class="table table-bordered text-center">
                 <tr>
-                    <td width="33%">Warehouse</td>
+                    <td class="font-bg" width="33%">Warehouse</td>
                     <td class="text">
                         <span>@Model.GetWarehouse.Name</span>
                         @Html.DropDownListFor(Model => Model.ShipWarehouse, (List<SelectListItem>)ViewData["WarehouseList"], htmlAttributes: new { @class = "form-control" })
@@ -107,10 +114,10 @@
         </div>
     </div>
     <div class="form-group">
-        <div class="col-sm-6">
+        <div class="col-sm-6 col-lg-5 col-lg-offset-1">
             <table class="table table-bordered">
                 <thead>
-                    <tr>
+                    <tr class="font-title">
                         <th class="text-center" colspan="4">Shipping Setting</th>
                     </tr>
                 </thead>
@@ -121,10 +128,10 @@
                             <span>@Enum.GetName(typeof(EnumData.Export), Model.Export)</span>
                             @Html.DropDownListFor(Model => Model.Export, Enum.GetValues(typeof(EnumData.Export)).Cast<EnumData.Export>().Select(s => new SelectListItem() { Text = s.ToString(), Value = ((byte)s).ToString() }), htmlAttributes: new { @class = "form-control" })
                         </td>
-                        <td width="135">Currency：</td>
-                        <td class="text">
-                            <span>@Model.GetCurrency.Name</span>
-                            @Html.DropDownListFor(Model => Model.ExportCurrency, (List<SelectListItem>)ViewData["CurrencyList"], htmlAttributes: new { @class = "form-control" })
+                        <td width="135">Export Currency：</td>
+                        <td>
+                            @Model.GetCurrency.Name
+                            @*@Html.DropDownListFor(Model => Model.ExportCurrency, (List<SelectListItem>)ViewData["CurrencyList"], htmlAttributes: new { @class = "form-control" })*@
                         </td>
                     </tr>
                     <tr>
@@ -154,10 +161,10 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-sm-6">
+        <div class="col-sm-6 col-lg-5">
             <table class="table table-bordered">
                 <thead>
-                    <tr>
+                    <tr class="font-title">
                         <th class="text-center" colspan="4">DL Shipping Settings</th>
                     </tr>
                 </thead>
@@ -168,10 +175,10 @@
                             <span>@Enum.GetName(typeof(EnumData.Export), Model.DLExport)</span>
                             @Html.DropDownListFor(Model => Model.DLExport, Enum.GetValues(typeof(EnumData.Export)).Cast<EnumData.Export>().Select(s => new SelectListItem() { Text = s.ToString(), Value = ((byte)s).ToString() }), htmlAttributes: new { @class = "form-control" })
                         </td>
-                        <td width="135">Currency：</td>
-                        <td class="text">
-                            <span>@(Model.GetDLCurrency.Name)</span>
-                            @Html.DropDownListFor(Model => Model.DLExportCurrency, (List<SelectListItem>)ViewData["CurrencyList"], htmlAttributes: new { @class = "form-control" })
+                        <td width="135">Export Currency：</td>
+                        <td>
+                            @(Model.GetDLCurrency.Name)
+                            @*@Html.DropDownListFor(Model => Model.DLExportCurrency, (List<SelectListItem>)ViewData["CurrencyList"], htmlAttributes: new { @class = "form-control" })*@
                         </td>
                     </tr>
                     <tr>
