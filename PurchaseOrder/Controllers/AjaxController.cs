@@ -374,7 +374,7 @@ namespace PurchaseOrderSys.Controllers
             }
             if (Skulist != null && Skulist.Where(x => !string.IsNullOrWhiteSpace(x)).Any())
             {
-                var dataList = db.SkuLang.Where(x => x.LangID == LangID && Skulist.Contains(x.Sku)).Select(x =>
+                var dataList = db.SkuLang.Where(x => x.LangID == LangID && Skulist.Contains(x.Sku)).AsEnumerable().Select(x =>
                 new PoSKUVM
                 {
                     ck = x.Sku,
@@ -1053,6 +1053,7 @@ namespace PurchaseOrderSys.Controllers
                         var ErrSKU = new List<string>();
                         var Errserial = new List<string>();
                         var Repserial = new List<string>();
+                        var Noserial = new List<string>();
                         foreach (var Gserialitem in groupserials)
                         {
                             var SKUList = new List<string>();
@@ -1080,10 +1081,19 @@ namespace PurchaseOrderSys.Controllers
                                     nTransferSKU.UpdateBy = UserBy;
                                     nTransferSKU.UpdateAt = dt;
                                 }
+                                var SerialTracking = SKU.GetSku.SerialTracking;
                                 foreach (var item in Gserialitem.item)
                                 {
-                                    var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == item.serials && !x.SerialsLlistC.Any() && x.SerialsQTY > 0);//找到序號
-                                    SerialsLlist = SerialsLlist.Where(x => (x.TransferSKUID.HasValue && x.TransferSKU.Transfer.ToWID == FromWID) || (x.PurchaseSKUID.HasValue && x.PurchaseSKU.PurchaseOrder.WarehouseID == FromWID));
+                                    var SerialsLlist = db.SerialsLlist.Where(x => !x.SerialsLlistC.Any() && x.SerialsQTY > 0);
+                                    if (SerialTracking)
+                                    {
+                                        SerialsLlist= SerialsLlist.Where(x => x.SerialsNo == item.serials);//找到序號
+                                    }
+                                    else
+                                    {
+                                        SerialsLlist = SerialsLlist.Where(x => x.PurchaseSKU.SkuNo == SKU.GetSku.SkuID);//找到序號
+                                    }
+                                    SerialsLlist = SerialsLlist.Where(x => (x.TransferSKUID.HasValue && x.TransferSKU.Transfer.ToWID == FromWID) || (x.PurchaseSKUID.HasValue && x.PurchaseSKU.PurchaseOrder.WarehouseID == FromWID)).Take(1);
                                     var RMASerialsLlist = db.RMASerialsLlist.Where(x => x.SerialsNo == item.serials && !x.RMASerialsLlistC.Any() && x.SerialsQTY > 0 && x.WarehouseID == FromWID);//找到RMA序號
                                     if (SerialsLlist.Any() || RMASerialsLlist.Any())
                                     {
@@ -1137,7 +1147,14 @@ namespace PurchaseOrderSys.Controllers
                                     }
                                     else
                                     {
-                                        Errserial.Add(item.serials);
+                                        if (SerialTracking)
+                                        {
+                                            Errserial.Add(item.serials);
+                                        }
+                                        else
+                                        {
+                                            Noserial.Add(item.SKU);
+                                        }
                                     }
                                 }
                             }
@@ -1148,17 +1165,30 @@ namespace PurchaseOrderSys.Controllers
                         }
                         if (Repserial.Any())
                         {
-                            return Json(new { status = false, Msg = string.Join(Environment.NewLine, Repserial) + Environment.NewLine + "序號重複" }, JsonRequestBehavior.AllowGet);
+                            return Json(new { status = false, Msg = string.Join(Environment.NewLine, Repserial.Distinct()) + Environment.NewLine + "序號重複" }, JsonRequestBehavior.AllowGet);
                         }
                         if (ErrSKU.Any())
                         {
-                            return Json(new { status = false, Msg = string.Join(Environment.NewLine, ErrSKU) + Environment.NewLine + "出貨倉無此SKU" }, JsonRequestBehavior.AllowGet);
+                            return Json(new { status = false, Msg = string.Join(Environment.NewLine, ErrSKU.Distinct()) + Environment.NewLine + "出貨倉無此SKU" }, JsonRequestBehavior.AllowGet);
                         }
                         else
                         {
-                            if (Errserial.Any())
+                            if (Errserial.Any() || Noserial.Any())
                             {
-                                return Json(new { status = false, Msg = string.Join(Environment.NewLine, Errserial)+ Environment.NewLine + "出貨倉無此序號" }, JsonRequestBehavior.AllowGet);
+                                string Emsg = "";
+                                if (Errserial.Any())
+                                {
+                                    Emsg = Emsg + string.Join(Environment.NewLine, Errserial.Distinct()) + Environment.NewLine + "出貨倉無此序號";
+                                }
+                                if (Noserial.Any())
+                                {
+                                    Emsg = Emsg + "此SKU" + Environment.NewLine + string.Join(Environment.NewLine, Noserial.Distinct()) + Environment.NewLine + "無可移倉的序號";
+                                }
+                                return Json(new
+                                {
+                                    status = false,
+                                    Msg = Emsg
+                                }, JsonRequestBehavior.AllowGet);
                             }
                             else
                             {

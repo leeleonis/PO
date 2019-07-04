@@ -58,8 +58,22 @@ namespace PurchaseOrderSys.Controllers
         // GET: Test
         public ActionResult Index()
         {
-          var  Warehouse3PList = new NewApi.Winit_APIToken().Warehouse3P();
-            var SKUList = new NewApi.Winit_APIToken().SKUList();
+          //var  Warehouse3PList = new NewApi.Winit_APIToken().Warehouse3P();
+            var SKUList = new NewApi.Winit_API().SKUList();
+            var PostPrintV2Data = new NewApi.PostPrintV2Data
+            {
+                labelType = "LZ7050",
+                madeIn = "China",
+                singleItems = new List<NewApi.SingleItem>
+                {
+                     new NewApi.SingleItem
+                     {
+                          productCode="111106002-AU",
+                          printQty=2,
+                     },
+                }
+            };
+            NewApi.ReturnPrintV2 PrintV2 = new NewApi.Winit_API().GetPrintV2(PostPrintV2Data);
             //DropShip();
             //var SerialsLlist = new List<SerialsLlist>();
             //var POSerialsLlist = new List<SerialsLlist>();

@@ -51,11 +51,23 @@ namespace PurchaseOrderSys.NewApi
         public string timestamp { get; set; }
         public string version { get; set; }
     }
-
-
-
-
+    public class clientSign : Token
+    {
+        public string client_id { get; set; }
+        public string client_sign { get; set; }
+        public string format { get; set; }
+        public string language { get; set; }
+        public string platform { get; set; }
+        public string sign { get; set; }
+        public string sign_method { get; set; }
+        public string timestamp { get; set; }
+        public string version { get; set; }
+    }
     public class QueryToken : TokenSign
+    {
+        public object data { get; set; }
+    }
+    public class Queryclient : clientSign
     {
         public object data { get; set; }
     }
@@ -66,31 +78,123 @@ namespace PurchaseOrderSys.NewApi
         public string warehouseID { get; set; }
         public string warehouseAddress { get; set; }
     }
-    public class Winit_APIToken : IDisposable
+    #region Winit SKU Data
+    public class PageParams
+    {
+        public int pageNo { get; set; }
+        public int pageSize { get; set; }
+        public int totalCount { get; set; }
+    }
+
+    public class CustomsDeclarationList
+    {
+        public string countryCode { get; set; }
+        public string declareName { get; set; }
+        public decimal? importPrice { get; set; }
+        public decimal? exportPrice { get; set; }
+        public decimal? rebateRate { get; set; }
+        public decimal? importRate { get; set; }
+        public string firstWayType { get; set; }
+        public decimal? vatRate { get; set; }
+        public decimal? length { get; set; }
+        public decimal? width { get; set; }
+        public decimal? height { get; set; }
+        public decimal? volume { get; set; }
+        public decimal? weight { get; set; }
+        public decimal? registerWeight { get; set; }
+        public decimal? registerLength { get; set; }
+        public decimal? registerWidth { get; set; }
+        public decimal? registerHeight { get; set; }
+        public decimal? registerVolume { get; set; }
+        public object recommendDeclarePrice { get; set; }
+        public string isNew { get; set; }
+        public string cargoTypeSpec { get; set; }
+        public object qty { get; set; }
+    }
+
+    public class WinitSKUList
+    {
+        public object id { get; set; }
+        public string code { get; set; }
+        public string skuCode { get; set; }
+        public string specification { get; set; }
+        public string cnName { get; set; }
+        public string name { get; set; }
+        public decimal? length { get; set; }
+        public decimal? width { get; set; }
+        public decimal? height { get; set; }
+        public decimal? volume { get; set; }
+        public decimal? weight { get; set; }
+        public decimal? registerWeight { get; set; }
+        public decimal? registerLength { get; set; }
+        public decimal? registerWidth { get; set; }
+        public decimal? registerHeight { get; set; }
+        public decimal? registerVolume { get; set; }
+        public string supervisorMode { get; set; }
+        public string brandName { get; set; }
+        public string model { get; set; }
+        public string isPlus { get; set; }
+        public string isBattery { get; set; }
+        public string displayPageUrl { get; set; }
+        public string isActive { get; set; }
+        public string sourceType { get; set; }
+        public List<CustomsDeclarationList> customsDeclarationList { get; set; }
+        public object itemThirdVos { get; set; }
+    }
+
+    public class WinitSKU
+    {
+        public PageParams pageParams { get; set; }
+        public List<WinitSKUList> list { get; set; }
+    }
+    #endregion
+    #region Wint 標籤資料
+    public class SingleItem
+    {
+        public string productCode { get; set; }
+        public string specification { get; set; }
+        public int printQty { get; set; }
+    }
+
+    public class PostPrintV2Data
+    {
+        public List<SingleItem> singleItems { get; set; }
+        public string labelType { get; set; }
+        public string madeIn { get; set; }
+    }
+    public class ReturnPrintV2
+    {
+        public string formatType { get; set; }
+        public string itemBarcodeFile { get; set; }
+        public List<string> itemBarcodeList { get; set; }
+    }
+    #endregion
+    public class Winit_API : IDisposable
     {
         private bool disposed = false;
 
         private string api_url = "http://openapi.winit.com.cn/openapi/service";
-        private string action = "getToken";
-        private string api_key = "system@qd.com.tw";//"peter0626@hotmail.com";
-        private string api_userName = "system@qd.com.tw"; //"peter0626@hotmail.com";
-        private string api_password = "rqOHRYOqSA%b22%g6tzb"; //"gubu67qaP5e$ra*t";
-        private string api_token = "";
-        private string api_version = "2.0";
-        private string client_secret = "";
-
-        public Winit_APIToken()
-        {
-            var token = new getToken();
-            token.action = action;
-            token.app_key = api_key;
-            token.data = new getTokendata { userName = api_userName, passWord = api_password };
-            var refjson = req<Received>(api_url, token);
-            if (refjson.code.Equals("0"))
-            {
-                api_token = refjson.data;//取token
-            }
-        }
+        //private string action = "getToken";
+        private string api_key = "peter0626@hotmail.com";//"peter0626@hotmail.com";
+        //private string api_userName = "system@qd.com.tw"; //"peter0626@hotmail.com";
+        //private string api_password = "W7oBeN3Vu!rL_rU-ITH-"; //"gubu67qaP5e$ra*t";
+        private string api_token = "54F9B02195FCDFE9B2E80341402C9BDD";
+        private string api_version = "1.0";
+        private string client_id = "NTU5YTUYZWITYZA3ZI00YWVKLTLKNWUTZJZLZDLIMMEXYTU2";
+        private string client_secret = "NTJIZWUZNZITNGVINI00NZNHLWFIYZITNWQ4YZEWZWFHM2U5MZG4NDG2ODC5NZAXMZC3NG==";
+        private string platformval = "testapi";
+        //public Winit_APIToken()
+        //{
+        //    var token = new getToken();
+        //    token.action = action;
+        //    token.app_key = api_key;
+        //    token.data = new getTokendata { userName = api_userName, passWord = api_password };
+        //    var refjson = req<Received>(api_url, token);
+        //    if (refjson.code.Equals("0"))
+        //    {
+        //        api_token = refjson.data;//取token
+        //    }
+        //}
         //public Received Received <T>(string action, object data) where T : new()
         //{
         //    var request = _RequestInit<T>(action, JsonConvert.SerializeObject(data));
@@ -139,8 +243,8 @@ namespace PurchaseOrderSys.NewApi
             string sign = "";
             MD5 md5 = MD5.Create();
 
-            string format = "json", platform = "SELLERERP", sign_method = "md5", version = api_version;
-            var combine = api_token + "action" + action + "app_key" + api_key + "data" + data + "format" + format + "platform" + platform + "sign_method" + sign_method + "timestamp" + timestamp + "version" + version + api_token;
+            string format = "json", platform = platformval, sign_method = "md5", version = api_version;
+            var combine = api_token + "action" + actionValue + "app_key" + api_key + "data" + data + "format" + format + "platform" + platform + "sign_method" + sign_method + "timestamp" + timestamp + "version" + version + api_token;
             byte[] Original = Encoding.ASCII.GetBytes(combine); //將字串來源轉為Byte[] 
             byte[] Change = md5.ComputeHash(Original);
             String a = Convert.ToBase64String(Change);
@@ -152,13 +256,13 @@ namespace PurchaseOrderSys.NewApi
 
             return sign;
         }
-        private string _Get_UserClient_sign(string action, string data, string timestamp)
+        private string _Get_UserClient_sign(string actionValue, string data, string timestamp)
         {
             string sign = "";
             MD5 md5 = MD5.Create();
 
-            string formatValue = "json", platformValue = "SELLERERP", sign_methodValue = "md5", versionValue = api_version;
-            var combine = client_secret + "action" + action + "app_key" + api_key + "data" + data + "format" + formatValue + "platform" + platformValue + "sign_method" + sign_methodValue + "timestamp" + timestamp + "version" + versionValue + client_secret;
+            string formatValue = "json", platformValue = platformval, sign_methodValue = "md5", versionValue = api_version;
+            var combine = client_secret + "action" + actionValue + "app_key" + api_key + "data" + data + "format" + formatValue + "platform" + platformValue + "sign_method" + sign_methodValue + "timestamp" + timestamp + "version" + versionValue + client_secret;
             byte[] Original = Encoding.ASCII.GetBytes(combine); //將字串來源轉為Byte[] 
             byte[] Change = md5.ComputeHash(Original);
             String a = Convert.ToBase64String(Change);
@@ -180,7 +284,7 @@ namespace PurchaseOrderSys.NewApi
                 app_key = api_key,
                 format = "json",
                 language = "zh_CN",
-                platform = "SELLERERP",
+                platform = platformval,
                 sign = _Get_UserSign(action, data, timestamp),
                 sign_method = "md5",
                 timestamp = timestamp,
@@ -189,8 +293,29 @@ namespace PurchaseOrderSys.NewApi
 
             return request;
         }
+        private T _RequestInitNew<T>(string action, object data) where T : Queryclient, new()
+        {
+            var dataVal = JsonConvert.SerializeObject(data);
+            string timestamp = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
 
+            T request = new T()
+            {
+                action = action,
+                app_key = api_key,
+                client_id = client_id,
+                client_sign = _Get_UserClient_sign(action, dataVal, timestamp),
+                data = data,
+                format = "json",
+                language = "zh_CN",
+                platform = platformval,
+                sign = _Get_UserSign(action, dataVal, timestamp),
+                sign_method = "md5",
+                timestamp = timestamp,
+                version = api_version
+            };
 
+            return request;
+        }
         /// <summary>
         /// 做HTTP Request
         /// </summary>
@@ -246,15 +371,16 @@ namespace PurchaseOrderSys.NewApi
         /// 查询商品
         /// </summary>
         /// <returns></returns>
-        public List<warehouseData> SKUList()
+        public WinitSKU SKUList()
         {
-            QueryToken request = _RequestInit<QueryToken>("winit.mms.item.list", JsonConvert.SerializeObject(new { }));
-            request.data = new { pageNo = 1, pageSize = 10, skuCode = "" };
+            var data = new { pageNo = 1, pageSize = 10, skuCode = "" };
+            Queryclient request = _RequestInitNew<Queryclient>("winit.mms.item.list",data);
+            request.data = data;
 
             var result = req<Received>(api_url, request);
             if (result.code.Equals("0"))
             {
-                return result.data.ToObject<List<warehouseData>>();
+                return result.data.ToObject<WinitSKU>();
 
             }
             else
@@ -263,5 +389,21 @@ namespace PurchaseOrderSys.NewApi
             }
         }
 
+        internal ReturnPrintV2 GetPrintV2(PostPrintV2Data postPrintV2Data)
+        {
+            Queryclient request = _RequestInitNew<Queryclient>("winit.singleitem.label.print.v2", postPrintV2Data);
+            request.data = postPrintV2Data;
+
+            var result = req<Received>(api_url, request);
+            if (result.code.Equals("0"))
+            {
+                return result.data.ToObject<ReturnPrintV2>();
+
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }
