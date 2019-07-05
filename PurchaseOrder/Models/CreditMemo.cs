@@ -17,9 +17,9 @@ namespace PurchaseOrderSys.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public CreditMemo()
         {
+            this.PurchaseSKU = new HashSet<PurchaseSKU>();
             this.ImgFile = new HashSet<ImgFile>();
             this.PurchaseNote = new HashSet<PurchaseNote>();
-            this.PurchaseSKU = new HashSet<PurchaseSKU>();
         }
     
         public bool IsEnable { get; set; }
@@ -48,12 +48,12 @@ namespace PurchaseOrderSys.Models
         public Nullable<int> RMAID { get; set; }
     
         public virtual PurchaseOrder PurchaseOrder { get; set; }
-        public virtual RMA RMA { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PurchaseSKU> PurchaseSKU { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ImgFile> ImgFile { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseNote> PurchaseNote { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PurchaseSKU> PurchaseSKU { get; set; }
+        public virtual RMA RMA { get; set; }
     }
 }

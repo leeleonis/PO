@@ -28,9 +28,9 @@ namespace PurchaseOrderSys.Models
         public string Name { get; set; }
         public byte Type { get; set; }
         public Nullable<int> DirectLine { get; set; }
-        public bool InBox { get; set; }
         public Nullable<int> FirstMileCarrier { get; set; }
         public int LastMileCarrier { get; set; }
+        public bool InBox { get; set; }
         public string UpdateBy { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }
         public string CreateBy { get; set; }

@@ -24,7 +24,7 @@ namespace PurchaseOrderSys.Models
     
         public bool IsEnable { get; set; }
         public bool IsTest { get; set; }
-        public int ID { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public Nullable<byte> Type { get; set; }
         public string AccountID { get; set; }

@@ -188,7 +188,7 @@ namespace PurchaseOrderSys.Models
     
     		    
     		/// <summary>
-    		/// Update Bt
+    		/// Update By
     		/// </summary>        
     	    [Display(Name = "Packages_UpdateBy", ResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
@@ -204,12 +204,12 @@ namespace PurchaseOrderSys.Models
     
     		    
     		/// <summary>
-    		/// Create Bt
+    		/// Create By
     		/// </summary>        
-    	    [Display(Name = "Packages_CreateBt", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "Packages_CreateBy", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public string  CreateBt { get; set; }
+    		public string  CreateBy { get; set; }
     
     		    
     		/// <summary>

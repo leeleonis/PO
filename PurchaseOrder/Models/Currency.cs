@@ -18,8 +18,8 @@ namespace PurchaseOrderSys.Models
         public Currency()
         {
             this.EXRate = 1m;
-            this.Company = new HashSet<Company>();
             this.Marketplace = new HashSet<Marketplace>();
+            this.Company = new HashSet<Company>();
             this.NetoGroup = new HashSet<NetoGroup>();
             this.Packages = new HashSet<Packages>();
             this.DLPackages = new HashSet<Packages>();
@@ -36,9 +36,9 @@ namespace PurchaseOrderSys.Models
         public Nullable<System.DateTime> UpdateAt { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Company> Company { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Marketplace> Marketplace { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Company> Company { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<NetoGroup> NetoGroup { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
