@@ -45,10 +45,10 @@ namespace PurchaseOrderSys.Models
         public Nullable<System.DateTime> FulfilledDate { get; set; }
         public string BuyerNote { get; set; }
         public string Comment { get; set; }
-        public string UpdateBy { get; set; }
-        public Nullable<System.DateTime> UpdateAt { get; set; }
-        public string CreateBy { get; set; }
-        public System.DateTime CreateAt { get; set; }
+        public string Update_by { get; set; }
+        public Nullable<System.DateTime> Update_at { get; set; }
+        public string Create_by { get; set; }
+        public System.DateTime Create_at { get; set; }
     
         public virtual Company GetCompany { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

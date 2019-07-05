@@ -34,10 +34,10 @@ namespace PurchaseOrderSys.Models
         public string eBayItemID { get; set; }
         public string SalesRecordNumber { get; set; }
         public Nullable<int> RMAID { get; set; }
-        public string UpdateBy { get; set; }
-        public Nullable<System.DateTime> UpdateAt { get; set; }
-        public string CreateBy { get; set; }
-        public System.DateTime CreateAt { get; set; }
+        public string Update_by { get; set; }
+        public Nullable<System.DateTime> Update_at { get; set; }
+        public string Create_by { get; set; }
+        public System.DateTime Create_at { get; set; }
     
         public virtual Orders GetOrder { get; set; }
         public virtual Packages GetPackage { get; set; }

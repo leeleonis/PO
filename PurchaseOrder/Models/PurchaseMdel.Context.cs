@@ -83,8 +83,8 @@ namespace PurchaseOrderSys.Models
         public virtual DbSet<ApiSetting> ApiSetting { get; set; }
         public virtual DbSet<OrderAddresses> OrderAddresses { get; set; }
         public virtual DbSet<OrderSerials> OrderSerials { get; set; }
-        public virtual DbSet<WinitTransfer> WinitTransfer { get; set; }
         public virtual DbSet<WinitTransferBox> WinitTransferBox { get; set; }
         public virtual DbSet<WinitTransferBoxItem> WinitTransferBoxItem { get; set; }
+        public virtual DbSet<WinitTransfer> WinitTransfer { get; set; }
     }
 }

@@ -3,6 +3,11 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+using System; 
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 
 namespace PurchaseOrderSys.Models
 {
@@ -37,11 +42,11 @@ namespace PurchaseOrderSys.Models
     
     		    
     		/// <summary>
-    		/// ID
+    		/// Id
     		/// </summary>        
-    	    [Display(Name = "ApiSetting_ID", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "ApiSetting_Id", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public int  ID { get; set; }
+    		public int  Id { get; set; }
     
     		    
     		/// <summary>
@@ -108,38 +113,37 @@ namespace PurchaseOrderSys.Models
     
     		    
     		/// <summary>
-    		/// Update By
+    		/// Update_by
     		/// </summary>        
-    	    [Display(Name = "ApiSetting_UpdateBy", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "ApiSetting_Update_by", ResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public string  UpdateBy { get; set; }
+    		public string  Update_by { get; set; }
     
     		    
     		/// <summary>
-    		/// Update At
+    		/// Update_at
     		/// </summary>        
-    	    [Display(Name = "ApiSetting_UpdateAt", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "ApiSetting_Update_at", ResourceType = typeof(App_GlobalResources.Resource))]
             [UIHint("DateTime")]
-    		public Nullable<System.DateTime>  UpdateAt { get; set; }
+    		public Nullable<System.DateTime>  Update_at { get; set; }
     
     		    
     		/// <summary>
-    		/// Create By
+    		/// Create_by
     		/// </summary>        
-    	    [Display(Name = "ApiSetting_CreateBy", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "ApiSetting_Create_by", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public string  CreateBy { get; set; }
+    		public string  Create_by { get; set; }
     
     		    
     		/// <summary>
-    		/// Create At
+    		/// Create_at
     		/// </summary>        
-    	    [Display(Name = "ApiSetting_CreateAt", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "ApiSetting_Create_at", ResourceType = typeof(App_GlobalResources.Resource))]
             [UIHint("DateTime")]
-            [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public System.DateTime  CreateAt { get; set; }
+    		public System.DateTime  Create_at { get; set; }
     
     		    
     	}

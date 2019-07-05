@@ -130,8 +130,8 @@ namespace PurchaseOrderSys.Controllers
                     foreach (var serial in item.Serials)
                     {
                         serial.IsEnable = updateSerial.Contains(serial.SerialNumber);
-                        serial.UpdateAt = package.UpdateAt.Value;
-                        serial.UpdateBy = package.UpdateBy;
+                        serial.Create_at = package.Create_at;
+                        serial.Update_by = package.Update_by;
                     }
 
                     foreach (var newSerial in updateSerial.Except(item.Serials.Select(s => s.SerialNumber).ToArray()))
@@ -142,7 +142,7 @@ namespace PurchaseOrderSys.Controllers
                             ItemID = item.ID,
                             Sku = item.Sku,
                             SerialNumber = newSerial,
-                            CreateAt = package.CreateAt
+                            Create_by = package.Update_by
                         });
                     }
                 }
