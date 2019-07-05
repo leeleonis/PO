@@ -40,11 +40,11 @@
         </EntityType>
         <EntityType Name="ApiSetting">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="ID" />
           </Key>
           <Property Name="IsEnable" Type="bit" Nullable="false" />
           <Property Name="IsTest" Type="bit" Nullable="false" />
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
           <Property Name="Type" Type="tinyint" />
           <Property Name="AccountID" Type="nvarchar" MaxLength="50" />
@@ -272,6 +272,7 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Abbreviation" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="MaxDeclared" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="Api" Type="int" />
           <Property Name="Email" Type="nvarchar" MaxLength="50" />
           <Property Name="ContactName" Type="nvarchar" MaxLength="100" />
@@ -1176,12 +1177,12 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Carriers_CarrierAPI">
+        <Association Name="FK_Carriers_ApiSetting">
           <End Role="ApiSetting" Type="Self.ApiSetting" Multiplicity="0..1" />
           <End Role="Carriers" Type="Self.Carriers" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ApiSetting">
-              <PropertyRef Name="Id" />
+              <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Carriers">
               <PropertyRef Name="Api" />
@@ -1265,7 +1266,7 @@
           <End Role="DirectLine" Type="Self.DirectLine" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ApiSetting">
-              <PropertyRef Name="Id" />
+              <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="DirectLine">
               <PropertyRef Name="Api" />
@@ -2383,7 +2384,7 @@
             <End Role="AdminGroup" EntitySet="AdminGroup" />
             <End Role="AdminUser" EntitySet="AdminUser" />
           </AssociationSet>
-          <AssociationSet Name="FK_Carriers_CarrierAPI" Association="Self.FK_Carriers_CarrierAPI">
+          <AssociationSet Name="FK_Carriers_ApiSetting" Association="Self.FK_Carriers_ApiSetting">
             <End Role="ApiSetting" EntitySet="ApiSetting" />
             <End Role="Carriers" EntitySet="Carriers" />
           </AssociationSet>
@@ -3136,11 +3137,6 @@
             <End Role="ShippingMethods" EntitySet="ShippingMethods" />
             <End Role="Packages" EntitySet="Packages" />
           </AssociationSet>
-          <EntitySet Name="ApiSetting" EntityType="PurchaseOrderModel.ApiSetting" />
-          <AssociationSet Name="FK_Carriers_CarrierAPI" Association="PurchaseOrderModel.FK_Carriers_CarrierAPI">
-            <End Role="ApiSetting" EntitySet="ApiSetting" />
-            <End Role="Carriers" EntitySet="Carriers" />
-          </AssociationSet>
           <EntitySet Name="OrderAddresses" EntityType="PurchaseOrderModel.OrderAddresses" />
           <AssociationSet Name="FK_ShippingAddress_Order" Association="PurchaseOrderModel.FK_ShippingAddress_Order">
             <End Role="Orders" EntitySet="Orders" />
@@ -3153,10 +3149,6 @@
           <AssociationSet Name="FK_ShippingMethods_DirectLine" Association="PurchaseOrderModel.FK_ShippingMethods_DirectLine">
             <End Role="DirectLine" EntitySet="DirectLine" />
             <End Role="ShippingMethods" EntitySet="ShippingMethods" />
-          </AssociationSet>
-          <AssociationSet Name="FK_DirectLine_ApiSetting" Association="PurchaseOrderModel.FK_DirectLine_ApiSetting">
-            <End Role="ApiSetting" EntitySet="ApiSetting" />
-            <End Role="DirectLine" EntitySet="DirectLine" />
           </AssociationSet>
           <AssociationSet Name="FK_ShippingMethods_Carriers11" Association="PurchaseOrderModel.FK_ShippingMethods_Carriers11">
             <End Role="Carriers" EntitySet="Carriers" />
@@ -3209,6 +3201,15 @@
           <AssociationSet Name="FK_WinitTransferBox_WinitTransfer" Association="PurchaseOrderModel.FK_WinitTransferBox_WinitTransfer">
             <End Role="WinitTransfer" EntitySet="WinitTransfer" />
             <End Role="WinitTransferBox" EntitySet="WinitTransferBox" />
+          </AssociationSet>
+          <EntitySet Name="ApiSetting" EntityType="PurchaseOrderModel.ApiSetting" />
+          <AssociationSet Name="FK_Carriers_ApiSetting" Association="PurchaseOrderModel.FK_Carriers_ApiSetting">
+            <End Role="ApiSetting" EntitySet="ApiSetting" />
+            <End Role="Carriers" EntitySet="Carriers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DirectLine_ApiSetting" Association="PurchaseOrderModel.FK_DirectLine_ApiSetting">
+            <End Role="ApiSetting" EntitySet="ApiSetting" />
+            <End Role="DirectLine" EntitySet="DirectLine" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="AdminGroup">
@@ -3407,6 +3408,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Abbreviation" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MaxDeclared" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="Api" Type="Int32" />
           <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ContactName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
@@ -3423,7 +3425,7 @@
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="GetMethod" Relationship="PurchaseOrderModel.FK_ShippingMethods_DirectLine" FromRole="DirectLine" ToRole="ShippingMethods" />
+          <NavigationProperty Name="Methods" Relationship="PurchaseOrderModel.FK_ShippingMethods_DirectLine" FromRole="DirectLine" ToRole="ShippingMethods" />
           <NavigationProperty Name="GetApi" Relationship="PurchaseOrderModel.FK_DirectLine_ApiSetting" FromRole="DirectLine" ToRole="ApiSetting" />
         </EntityType>
         <EntityType Name="KitSku">
@@ -4221,9 +4223,9 @@
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
           <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="GetApi" Relationship="PurchaseOrderModel.FK_Carriers_CarrierAPI" FromRole="Carriers" ToRole="ApiSetting" />
           <NavigationProperty Name="FirstMiles" Relationship="PurchaseOrderModel.FK_ShippingMethods_Carriers" FromRole="Carriers" ToRole="ShippingMethods" />
           <NavigationProperty Name="LastMiles" Relationship="PurchaseOrderModel.FK_ShippingMethods_Carriers11" FromRole="Carriers" ToRole="ShippingMethods" />
+          <NavigationProperty Name="GetApi" Relationship="PurchaseOrderModel.FK_Carriers_ApiSetting" FromRole="Carriers" ToRole="ApiSetting" />
         </EntityType>
         <EntityType Name="SkuLang">
           <Key>
@@ -5362,40 +5364,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="ApiSetting">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="IsEnable" Type="Boolean" Nullable="false" DefaultValue="true" />
-          <Property Name="IsTest" Type="Boolean" Nullable="false" />
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Type" Type="Byte" />
-          <Property Name="AccountID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ApiKey" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ApiPassword" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ApiAccount" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ApiMeter" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ApiHub" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
-          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="Carriers" Relationship="PurchaseOrderModel.FK_Carriers_CarrierAPI" FromRole="ApiSetting" ToRole="Carriers" />
-          <NavigationProperty Name="DirectLines" Relationship="PurchaseOrderModel.FK_DirectLine_ApiSetting" FromRole="ApiSetting" ToRole="DirectLine" />
-        </EntityType>
-        <Association Name="FK_Carriers_CarrierAPI">
-          <End Type="PurchaseOrderModel.ApiSetting" Role="ApiSetting" Multiplicity="0..1" />
-          <End Type="PurchaseOrderModel.Carriers" Role="Carriers" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ApiSetting">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Carriers">
-              <PropertyRef Name="Api" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="OrderAddresses">
           <Key>
             <PropertyRef Name="ID" />
@@ -5453,18 +5421,6 @@
             </Principal>
             <Dependent Role="ShippingMethods">
               <PropertyRef Name="DirectLine" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_DirectLine_ApiSetting">
-          <End Type="PurchaseOrderModel.ApiSetting" Role="ApiSetting" Multiplicity="0..1" />
-          <End Type="PurchaseOrderModel.DirectLine" Role="DirectLine" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ApiSetting">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="DirectLine">
-              <PropertyRef Name="Api" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -5683,6 +5639,52 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="ApiSetting">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
+          <Property Name="IsTest" Type="Boolean" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="Byte" />
+          <Property Name="AccountID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ApiKey" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ApiPassword" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ApiAccount" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ApiMeter" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ApiHub" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Carriers" Relationship="PurchaseOrderModel.FK_Carriers_ApiSetting" FromRole="ApiSetting" ToRole="Carriers" />
+          <NavigationProperty Name="DirectLines" Relationship="PurchaseOrderModel.FK_DirectLine_ApiSetting" FromRole="ApiSetting" ToRole="DirectLine" />
+        </EntityType>
+        <Association Name="FK_Carriers_ApiSetting">
+          <End Type="PurchaseOrderModel.ApiSetting" Role="ApiSetting" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.Carriers" Role="Carriers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApiSetting">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Carriers">
+              <PropertyRef Name="Api" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DirectLine_ApiSetting">
+          <End Type="PurchaseOrderModel.ApiSetting" Role="ApiSetting" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.DirectLine" Role="DirectLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApiSetting">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DirectLine">
+              <PropertyRef Name="Api" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <!--<EntityType Name="WinitTransfer">
           <Key>
             <PropertyRef Name="TransferID" />
@@ -5888,6 +5890,7 @@
           <EntitySetMapping Name="DirectLine">
             <EntityTypeMapping TypeName="PurchaseOrderModel.DirectLine">
               <MappingFragment StoreEntitySet="DirectLine">
+                <ScalarProperty Name="MaxDeclared" ColumnName="MaxDeclared" />
                 <ScalarProperty Name="Api" ColumnName="Api" />
                 <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
                 <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
@@ -6802,27 +6805,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ApiSetting">
-            <EntityTypeMapping TypeName="PurchaseOrderModel.ApiSetting">
-              <MappingFragment StoreEntitySet="ApiSetting">
-                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
-                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
-                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
-                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
-                <ScalarProperty Name="ApiHub" ColumnName="ApiHub" />
-                <ScalarProperty Name="ApiMeter" ColumnName="ApiMeter" />
-                <ScalarProperty Name="ApiAccount" ColumnName="ApiAccount" />
-                <ScalarProperty Name="ApiPassword" ColumnName="ApiPassword" />
-                <ScalarProperty Name="ApiKey" ColumnName="ApiKey" />
-                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="IsTest" ColumnName="IsTest" />
-                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="OrderAddresses">
             <EntityTypeMapping TypeName="PurchaseOrderModel.OrderAddresses">
               <MappingFragment StoreEntitySet="OrderAddresses">
@@ -6908,6 +6890,27 @@
                 <ScalarProperty Name="TotalVal" ColumnName="TotalVal" />
                 <ScalarProperty Name="CompleteBoxes" ColumnName="CompleteBoxes" />
                 <ScalarProperty Name="TransferID" ColumnName="TransferID" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ApiSetting">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.ApiSetting">
+              <MappingFragment StoreEntitySet="ApiSetting">
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="ApiHub" ColumnName="ApiHub" />
+                <ScalarProperty Name="ApiMeter" ColumnName="ApiMeter" />
+                <ScalarProperty Name="ApiAccount" ColumnName="ApiAccount" />
+                <ScalarProperty Name="ApiPassword" ColumnName="ApiPassword" />
+                <ScalarProperty Name="ApiKey" ColumnName="ApiKey" />
+                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IsTest" ColumnName="IsTest" />
                 <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
               </MappingFragment>
             </EntityTypeMapping>

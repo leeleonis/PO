@@ -80,11 +80,11 @@ namespace PurchaseOrderSys.Models
         public virtual DbSet<Packages> Packages { get; set; }
         public virtual DbSet<Payments> Payments { get; set; }
         public virtual DbSet<ShippingMethods> ShippingMethods { get; set; }
-        public virtual DbSet<ApiSetting> ApiSetting { get; set; }
         public virtual DbSet<OrderAddresses> OrderAddresses { get; set; }
         public virtual DbSet<OrderSerials> OrderSerials { get; set; }
         public virtual DbSet<WinitTransferBox> WinitTransferBox { get; set; }
         public virtual DbSet<WinitTransferBoxItem> WinitTransferBoxItem { get; set; }
         public virtual DbSet<WinitTransfer> WinitTransfer { get; set; }
+        public virtual DbSet<ApiSetting> ApiSetting { get; set; }
     }
 }
