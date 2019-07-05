@@ -3,6 +3,11 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+using System; 
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 
 namespace PurchaseOrderSys.Models
 {
@@ -139,38 +144,37 @@ namespace PurchaseOrderSys.Models
     
     		    
     		/// <summary>
-    		/// Update By
+    		/// Update_by
     		/// </summary>        
-    	    [Display(Name = "OrderAddresses_UpdateBy", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "OrderAddresses_Update_by", ResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public string  UpdateBy { get; set; }
+    		public string  Update_by { get; set; }
     
     		    
     		/// <summary>
-    		/// Update At
+    		/// Update_at
     		/// </summary>        
-    	    [Display(Name = "OrderAddresses_UpdateAt", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "OrderAddresses_Update_at", ResourceType = typeof(App_GlobalResources.Resource))]
             [UIHint("DateTime")]
-    		public Nullable<System.DateTime>  UpdateAt { get; set; }
+    		public Nullable<System.DateTime>  Update_at { get; set; }
     
     		    
     		/// <summary>
-    		/// Create By
+    		/// Create_by
     		/// </summary>        
-    	    [Display(Name = "OrderAddresses_CreateBy", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "OrderAddresses_Create_by", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public string  CreateBy { get; set; }
+    		public string  Create_by { get; set; }
     
     		    
     		/// <summary>
-    		/// Create At
+    		/// Create_at
     		/// </summary>        
-    	    [Display(Name = "OrderAddresses_CreateAt", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "OrderAddresses_Create_at", ResourceType = typeof(App_GlobalResources.Resource))]
             [UIHint("DateTime")]
-            [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public System.DateTime  CreateAt { get; set; }
+    		public System.DateTime  Create_at { get; set; }
     
     		    
     	}

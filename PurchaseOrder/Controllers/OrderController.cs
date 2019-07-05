@@ -130,7 +130,7 @@ namespace PurchaseOrderSys.Controllers
                     foreach (var serial in item.Serials)
                     {
                         serial.IsEnable = updateSerial.Contains(serial.SerialNumber);
-                        serial.Update_at = package.Update_at.Value;
+                        serial.Create_at = package.Create_at;
                         serial.Update_by = package.Update_by;
                     }
 

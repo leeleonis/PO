@@ -24,13 +24,13 @@ namespace PurchaseOrderSys.Models
         public bool IsEnable { get; set; }
         public int ID { get; set; }
         public Nullable<int> NetoID { get; set; }
-        public Nullable<int> SCID { get; set; }
         public string Name { get; set; }
         public bool IsExport { get; set; }
         public string CreateBy { get; set; }
         public System.DateTime CreateAt { get; set; }
         public string UpdateBy { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }
+        public Nullable<int> SCID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SKU> SKU { get; set; }

@@ -24,7 +24,7 @@ namespace PurchaseOrderSys.Models
     
         public bool IsEnable { get; set; }
         public bool IsTest { get; set; }
-        public int ID { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public Nullable<byte> Type { get; set; }
         public string AccountID { get; set; }
@@ -33,10 +33,10 @@ namespace PurchaseOrderSys.Models
         public string ApiAccount { get; set; }
         public string ApiMeter { get; set; }
         public string ApiHub { get; set; }
-        public string UpdateBy { get; set; }
-        public Nullable<System.DateTime> UpdateAt { get; set; }
-        public string CreateBy { get; set; }
-        public System.DateTime CreateAt { get; set; }
+        public string Update_by { get; set; }
+        public Nullable<System.DateTime> Update_at { get; set; }
+        public string Create_by { get; set; }
+        public System.DateTime Create_at { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Carriers> Carriers { get; set; }
