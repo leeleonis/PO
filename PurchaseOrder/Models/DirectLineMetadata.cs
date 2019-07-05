@@ -1,4 +1,5 @@
-using System;
+using System; 
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -51,6 +52,14 @@ namespace PurchaseOrderSys.Models
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  Abbreviation { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Max Declared
+    		/// </summary>        
+    	    [Display(Name = "DirectLine_MaxDeclared", ResourceType = typeof(App_GlobalResources.Resource))]
+            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public decimal  MaxDeclared { get; set; }
     
     		    
     		/// <summary>

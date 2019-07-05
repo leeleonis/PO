@@ -1,4 +1,5 @@
-using System;
+using System; 
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -120,6 +121,14 @@ namespace PurchaseOrderSys.Models
     	    [Display(Name = "SerialsLlist_OrderID", ResourceType = typeof(App_GlobalResources.Resource))]
     		public Nullable<int>  OrderID { get; set; }
     
+    		    
+    		/// <summary>
+    		/// RMASKUID
+    		/// </summary>        
+    	    [Display(Name = "SerialsLlist_RMASKUID", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  RMASKUID { get; set; }
+    
+    		    
     		/// <summary>
     		/// Serials Type
     		/// </summary>        
@@ -141,13 +150,6 @@ namespace PurchaseOrderSys.Models
     	    [Display(Name = "SerialsLlist_IsEnable", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public bool  IsEnable { get; set; }
-    
-    		    
-    		/// <summary>
-    		/// RMASKUID
-    		/// </summary>        
-    	    [Display(Name = "SerialsLlist_RMASKUID", ResourceType = typeof(App_GlobalResources.Resource))]
-    		public Nullable<int>  RMASKUID { get; set; }
     
     		    
     	}

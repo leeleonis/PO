@@ -25,6 +25,7 @@ namespace PurchaseOrderSys.Models
         public int ID { get; set; }
         public string Name { get; set; }
         public string Abbreviation { get; set; }
+        public decimal MaxDeclared { get; set; }
         public Nullable<int> Api { get; set; }
         public string Email { get; set; }
         public string ContactName { get; set; }

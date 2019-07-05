@@ -342,18 +342,18 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string ApiSetting_Create_at {
+        public static string ApiSetting_CreateAt {
             get {
-                return ResourceManager.GetString("ApiSetting_Create_at", resourceCulture);
+                return ResourceManager.GetString("ApiSetting_CreateAt", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string ApiSetting_Create_by {
+        public static string ApiSetting_CreateBy {
             get {
-                return ResourceManager.GetString("ApiSetting_Create_by", resourceCulture);
+                return ResourceManager.GetString("ApiSetting_CreateBy", resourceCulture);
             }
         }
         
@@ -405,18 +405,18 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string ApiSetting_Update_at {
+        public static string ApiSetting_UpdateAt {
             get {
-                return ResourceManager.GetString("ApiSetting_Update_at", resourceCulture);
+                return ResourceManager.GetString("ApiSetting_UpdateAt", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string ApiSetting_Update_by {
+        public static string ApiSetting_UpdateBy {
             get {
-                return ResourceManager.GetString("ApiSetting_Update_by", resourceCulture);
+                return ResourceManager.GetString("ApiSetting_UpdateBy", resourceCulture);
             }
         }
         
@@ -639,18 +639,18 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string Carriers_Create_at {
+        public static string Carriers_CreateAt {
             get {
-                return ResourceManager.GetString("Carriers_Create_at", resourceCulture);
+                return ResourceManager.GetString("Carriers_CreateAt", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string Carriers_Create_by {
+        public static string Carriers_CreateBy {
             get {
-                return ResourceManager.GetString("Carriers_Create_by", resourceCulture);
+                return ResourceManager.GetString("Carriers_CreateBy", resourceCulture);
             }
         }
         
@@ -711,18 +711,18 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string Carriers_Update_at {
+        public static string Carriers_UpdateAt {
             get {
-                return ResourceManager.GetString("Carriers_Update_at", resourceCulture);
+                return ResourceManager.GetString("Carriers_UpdateAt", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string Carriers_Update_by {
+        public static string Carriers_UpdateBy {
             get {
-                return ResourceManager.GetString("Carriers_Update_by", resourceCulture);
+                return ResourceManager.GetString("Carriers_UpdateBy", resourceCulture);
             }
         }
         
@@ -2169,18 +2169,18 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string Items_Create_at {
+        public static string Items_CreateAt {
             get {
-                return ResourceManager.GetString("Items_Create_at", resourceCulture);
+                return ResourceManager.GetString("Items_CreateAt", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string Items_Create_by {
+        public static string Items_CreateBy {
             get {
-                return ResourceManager.GetString("Items_Create_by", resourceCulture);
+                return ResourceManager.GetString("Items_CreateBy", resourceCulture);
             }
         }
         
@@ -2304,18 +2304,18 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string Items_Update_at {
+        public static string Items_UpdateAt {
             get {
-                return ResourceManager.GetString("Items_Update_at", resourceCulture);
+                return ResourceManager.GetString("Items_UpdateAt", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string Items_Update_by {
+        public static string Items_UpdateBy {
             get {
-                return ResourceManager.GetString("Items_Update_by", resourceCulture);
+                return ResourceManager.GetString("Items_UpdateBy", resourceCulture);
             }
         }
         
@@ -3024,18 +3024,18 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string OrderAddresses_Create_at {
+        public static string OrderAddresses_CreateAt {
             get {
-                return ResourceManager.GetString("OrderAddresses_Create_at", resourceCulture);
+                return ResourceManager.GetString("OrderAddresses_CreateAt", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string OrderAddresses_Create_by {
+        public static string OrderAddresses_CreateBy {
             get {
-                return ResourceManager.GetString("OrderAddresses_Create_by", resourceCulture);
+                return ResourceManager.GetString("OrderAddresses_CreateBy", resourceCulture);
             }
         }
         
@@ -3123,18 +3123,18 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string OrderAddresses_Update_at {
+        public static string OrderAddresses_UpdateAt {
             get {
-                return ResourceManager.GetString("OrderAddresses_Update_at", resourceCulture);
+                return ResourceManager.GetString("OrderAddresses_UpdateAt", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string OrderAddresses_Update_by {
+        public static string OrderAddresses_UpdateBy {
             get {
-                return ResourceManager.GetString("OrderAddresses_Update_by", resourceCulture);
+                return ResourceManager.GetString("OrderAddresses_UpdateBy", resourceCulture);
             }
         }
         
@@ -3249,18 +3249,18 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string Orders_Create_at {
+        public static string Orders_CreateAt {
             get {
-                return ResourceManager.GetString("Orders_Create_at", resourceCulture);
+                return ResourceManager.GetString("Orders_CreateAt", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string Orders_Create_by {
+        public static string Orders_CreateBy {
             get {
-                return ResourceManager.GetString("Orders_Create_by", resourceCulture);
+                return ResourceManager.GetString("Orders_CreateBy", resourceCulture);
             }
         }
         
@@ -3402,36 +3402,36 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string Orders_Update_at {
+        public static string Orders_UpdateAt {
             get {
-                return ResourceManager.GetString("Orders_Update_at", resourceCulture);
+                return ResourceManager.GetString("Orders_UpdateAt", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string Orders_Update_by {
+        public static string Orders_UpdateBy {
             get {
-                return ResourceManager.GetString("Orders_Update_by", resourceCulture);
+                return ResourceManager.GetString("Orders_UpdateBy", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string OrderSerials_Create_at {
+        public static string OrderSerials_CreateAt {
             get {
-                return ResourceManager.GetString("OrderSerials_Create_at", resourceCulture);
+                return ResourceManager.GetString("OrderSerials_CreateAt", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string OrderSerials_Create_by {
+        public static string OrderSerials_CreateBy {
             get {
-                return ResourceManager.GetString("OrderSerials_Create_by", resourceCulture);
+                return ResourceManager.GetString("OrderSerials_CreateBy", resourceCulture);
             }
         }
         
@@ -3483,18 +3483,18 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string OrderSerials_Update_at {
+        public static string OrderSerials_UpdateAt {
             get {
-                return ResourceManager.GetString("OrderSerials_Update_at", resourceCulture);
+                return ResourceManager.GetString("OrderSerials_UpdateAt", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string OrderSerials_Update_by {
+        public static string OrderSerials_UpdateBy {
             get {
-                return ResourceManager.GetString("OrderSerials_Update_by", resourceCulture);
+                return ResourceManager.GetString("OrderSerials_UpdateBy", resourceCulture);
             }
         }
         
@@ -3636,18 +3636,18 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string Packages_Create_at {
+        public static string Packages_CreateAt {
             get {
-                return ResourceManager.GetString("Packages_Create_at", resourceCulture);
+                return ResourceManager.GetString("Packages_CreateAt", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string Packages_Create_by {
+        public static string Packages_CreateBy {
             get {
-                return ResourceManager.GetString("Packages_Create_by", resourceCulture);
+                return ResourceManager.GetString("Packages_CreateBy", resourceCulture);
             }
         }
         
@@ -3825,18 +3825,18 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string Packages_Update_at {
+        public static string Packages_UpdateAt {
             get {
-                return ResourceManager.GetString("Packages_Update_at", resourceCulture);
+                return ResourceManager.GetString("Packages_UpdateAt", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string Packages_Update_by {
+        public static string Packages_UpdateBy {
             get {
-                return ResourceManager.GetString("Packages_Update_by", resourceCulture);
+                return ResourceManager.GetString("Packages_UpdateBy", resourceCulture);
             }
         }
         
@@ -3879,18 +3879,18 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string Payments_Create_at {
+        public static string Payments_CreateAt {
             get {
-                return ResourceManager.GetString("Payments_Create_at", resourceCulture);
+                return ResourceManager.GetString("Payments_CreateAt", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string Payments_Create_by {
+        public static string Payments_CreateBy {
             get {
-                return ResourceManager.GetString("Payments_Create_by", resourceCulture);
+                return ResourceManager.GetString("Payments_CreateBy", resourceCulture);
             }
         }
         
@@ -4023,18 +4023,18 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string Payments_Update_at {
+        public static string Payments_UpdateAt {
             get {
-                return ResourceManager.GetString("Payments_Update_at", resourceCulture);
+                return ResourceManager.GetString("Payments_UpdateAt", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string Payments_Update_by {
+        public static string Payments_UpdateBy {
             get {
-                return ResourceManager.GetString("Payments_Update_by", resourceCulture);
+                return ResourceManager.GetString("Payments_UpdateBy", resourceCulture);
             }
         }
         
@@ -5679,18 +5679,18 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string ShippingMethods_Create_at {
+        public static string ShippingMethods_CreateAt {
             get {
-                return ResourceManager.GetString("ShippingMethods_Create_at", resourceCulture);
+                return ResourceManager.GetString("ShippingMethods_CreateAt", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string ShippingMethods_Create_by {
+        public static string ShippingMethods_CreateBy {
             get {
-                return ResourceManager.GetString("ShippingMethods_Create_by", resourceCulture);
+                return ResourceManager.GetString("ShippingMethods_CreateBy", resourceCulture);
             }
         }
         
@@ -5787,18 +5787,18 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string ShippingMethods_Update_at {
+        public static string ShippingMethods_UpdateAt {
             get {
-                return ResourceManager.GetString("ShippingMethods_Update_at", resourceCulture);
+                return ResourceManager.GetString("ShippingMethods_UpdateAt", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string ShippingMethods_Update_by {
+        public static string ShippingMethods_UpdateBy {
             get {
-                return ResourceManager.GetString("ShippingMethods_Update_by", resourceCulture);
+                return ResourceManager.GetString("ShippingMethods_UpdateBy", resourceCulture);
             }
         }
         
