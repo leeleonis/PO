@@ -78,9 +78,14 @@
                                             <div class="form-group">
                                                 @Html.LabelFor(model => model.SkuID, htmlAttributes: new { @class = "control-label col-sm-2 col-lg-4" })
                                                 <div class="col-sm-8 col-lg-6">
-                                                    @Html.EditorFor(model => model.SkuID, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-                                                    @Html.ValidationMessageFor(model => model.SkuID, "", new { @class = "text-danger" })
-                                                    @Html.Hidden("Sku", Model.SkuID)
+                                                    <div class="input-group">
+                                                        @Html.EditorFor(model => model.SkuID, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                        <div class="input-group-btn">
+                                                            <button type="button" class="btn btn-primary" id="btn-sync">儲存 & 更新</button>
+                                                        </div>
+                                                        @Html.ValidationMessageFor(model => model.SkuID, "", new { @class = "text-danger" })
+                                                        @Html.Hidden("Sku", Model.SkuID)
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -913,7 +918,6 @@
 
                                 <div class="widget-footer">
                                     <button type="submit" class="btn btn-primary" id="btn-save">儲存</button>
-                                    <button type="button" class="btn btn-primary" id="btn-sync">儲存 & 更新</button>
                                     <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index", "Sku")'">返回</button>
                                 </div>
                             </form>
@@ -1161,8 +1165,10 @@
             TableInit('table-statement');
 
             $('#btn-sync').click(function () {
-                $('#Sync').val(true);
-                $('#btn-save').trigger('click');
+                if (confirm('將會上傳更新至Neto & SC，確定要繼續?')) {
+                    $('#Sync').val(true);
+                    $('#btn-save').trigger('click');
+                }
             });
         });
 

@@ -1,11 +1,12 @@
-using System;
+using System; 
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// RMA class
     /// </summary>
@@ -173,7 +174,7 @@ namespace PurchaseOrderSys.Models
     		/// <summary>
     		/// Final Shipping Fee
     		/// </summary>        
-    	    [Display(Name = "RMA_FinalShippingFee", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    //[Display(Name = "RMA_FinalShippingFee", ResourceType = typeof(App_GlobalResources.Resource))]
     		public Nullable<decimal>  FinalShippingFee { get; set; }
     
     		    
@@ -201,7 +202,7 @@ namespace PurchaseOrderSys.Models
     		/// <summary>
     		/// SCUser ID
     		/// </summary>        
-    	    [Display(Name = "RMA_SCUserID", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    //[Display(Name = "RMA_SCUserID", ResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  SCUserID { get; set; }
     

@@ -1,11 +1,12 @@
-using System;
+using System; 
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// BoxType class
     /// </summary>
@@ -65,7 +66,7 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "BoxType_Weight", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public double  Weight { get; set; }
+    		public int  Weight { get; set; }
     
     		    
     		/// <summary>

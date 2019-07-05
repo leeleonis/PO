@@ -3202,7 +3202,6 @@
             <End Role="WinitTransferBox" EntitySet="WinitTransferBox" />
             <End Role="WinitTransferBoxItem" EntitySet="WinitTransferBoxItem" />
           </AssociationSet>
-          <EntitySet Name="WinitTransfer" EntityType="PurchaseOrderModel.WinitTransfer" />
           <AssociationSet Name="FK_WinitTransfer_Transfer1" Association="PurchaseOrderModel.FK_WinitTransfer_Transfer1">
             <End Role="Transfer" EntitySet="Transfer" />
             <End Role="WinitTransfer" EntitySet="WinitTransfer" />
@@ -5660,7 +5659,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="WinitTransfer">
+        <!--<EntityType Name="WinitTransfer">
           <Key>
             <PropertyRef Name="TransferID" />
           </Key>
@@ -5674,7 +5673,7 @@
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Transfer" Relationship="PurchaseOrderModel.FK_WinitTransfer_Transfer1" FromRole="WinitTransfer" ToRole="Transfer" />
           <NavigationProperty Name="WinitTransferBox" Relationship="PurchaseOrderModel.FK_WinitTransferBox_WinitTransfer" FromRole="WinitTransfer" ToRole="WinitTransferBox" />
-        </EntityType>
+        </EntityType>-->
         <Association Name="FK_WinitTransfer_Transfer1">
           <End Type="PurchaseOrderModel.Transfer" Role="Transfer" Multiplicity="1" />
           <End Type="PurchaseOrderModel.WinitTransfer" Role="WinitTransfer" Multiplicity="0..1" />

@@ -1429,6 +1429,8 @@ namespace PurchaseOrderSys.Models
         public int? PO { get; set; }
         public int? CM { get; set; }
         public int? Transfer { get; set; }
+        public int? Stock { get; set; }
+        public string IStype { get; set; }
         public string Warehouse { get; set; }
         public string DispatchLocation { get; set; }
         public decimal? Value { get; set; }

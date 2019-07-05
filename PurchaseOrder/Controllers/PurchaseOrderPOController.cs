@@ -36,7 +36,7 @@ namespace PurchaseOrderSys.Controllers
             //var Vendor = VendorData.Where(x => x.DisplayName.Contains("Senao"));
             Session["SkuNumberList"] = null;
             Session["POPurchaseNote"] = null;
-            ViewBag.SID = DateTime.Now.ToString("HHmmss");
+            ViewBag.SID = DateTime.Now.ToString("HHmmssfff");
             var PurchaseOrder = new PurchaseOrder();
             PurchaseOrder.POType = POTypeVal;
             return View(PurchaseOrder);
@@ -429,7 +429,7 @@ namespace PurchaseOrderSys.Controllers
                 ID = x.ID,
                 ck = x.SkuNo,
                 sk = x.SkuNo,
-                Name = x.Name,
+                Name = GetNameSize(x.SKU.SkuLang.Where(y => y.LangID == LangID).FirstOrDefault()),
                 SKU = x.SkuNo,
                 VendorSKU = x.VendorSKU,
                 QTYOrdered = x.QTYOrdered,

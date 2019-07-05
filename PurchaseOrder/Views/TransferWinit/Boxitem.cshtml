@@ -2,30 +2,39 @@
 @{
     Layout = null;
     var i = 0;
+    var count = Model.Count() - 1;
 }
 @foreach (var BoxItem in Model)
 {
-    <legend>Box @(i + 1)</legend>
-    <div class="row">
+    BoxItem.Weight = BoxItem.WinitTransferBoxItem.Sum(x => x.Weight);
+    if (i == count)
+    {
+        <legend class="boxselect">Box @(i + 1)</legend>
+    }
+    else
+    {
+        <legend>Box @(i + 1)</legend>
+    }
+    <div class="row ">
         <div class="form-group">
             @Html.Label("Length:", htmlAttributes: new { @class = "control-label col-sm-1" })
             <div class="col-sm-4 col-lg-1">
-                @Html.EditorFor(model => BoxItem.Length, new { htmlAttributes = new { @class = "form-control postval", index = i, @id = "Length_" + i  } })
+                @Html.EditorFor(model => BoxItem.Length, new { htmlAttributes = new { @class = "form-control postval", index = i, @id = "Length_" + i } })
             </div>
             @Html.Label("Width:", htmlAttributes: new { @class = "control-label col-sm-1" })
             <div class="col-sm-4 col-lg-1">
-                @Html.EditorFor(model => BoxItem.Width, new { htmlAttributes = new { @class = "form-control postval", @id = "Width_" + i  } })
-           </div>
-           @Html.Label("Heigth:", htmlAttributes: new { @class = "control-label col-sm-1" })
+                @Html.EditorFor(model => BoxItem.Width, new { htmlAttributes = new { @class = "form-control postval", @id = "Width_" + i } })
+            </div>
+            @Html.Label("Heigth:", htmlAttributes: new { @class = "control-label col-sm-1" })
             <div class="col-sm-4 col-lg-1">
                 @Html.EditorFor(model => BoxItem.Heigth, new { htmlAttributes = new { @class = "form-control postval", @id = "Heigth_" + i } })
-           </div>
-           @Html.Label("Weight:", htmlAttributes: new { @class = "control-label col-sm-1" })
+            </div>
+            @Html.Label("Weight:", htmlAttributes: new { @class = "control-label col-sm-1" })
             <div class="col-sm-4 col-lg-1">
                 @Html.EditorFor(model => BoxItem.Weight, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
             </div>
         </div>
-        <article class="col-xs-12">
+        <article class="col-xs-12 boxitemset" val="@i">
             <div class="form-group">
                 <div class="col-sm-9 col-lg-8">
                     <table id="DataGrid[@i]" class="table table-striped table-bordered">
@@ -37,7 +46,7 @@
                                 <th>S Barcode</th>
                                 <th>Download</th>
                                 @*<th>Value</th>
-                    <th>Upload Invoice</th>*@
+                                    <th>Upload Invoice</th>*@
                             </tr>
                         </thead>
                         <tbody>
@@ -46,7 +55,7 @@
                                 foreach (var item in BoxItem.WinitTransferBoxItem)
                                 {
                                     <tr>
-                                        <td>@item.SkuNo</td>
+                                        <td><button type='button' class='glyphicon glyphicon-remove btn-danger delserials' value="@item.SerialsNo"></button>@item.SkuNo</td>
                                         <td>@item.Name</td>
                                         <td>@item.SerialsNo</td>
                                         <td>@item.BarCode</td>

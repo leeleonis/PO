@@ -63,7 +63,7 @@ namespace PurchaseOrderSys.Controllers
         }
         public ActionResult Create()
         {
-            var SID = DateTime.Now.ToString("HHmmss");
+            var SID = DateTime.Now.ToString("HHmmssfff");
             ViewBag.SID = SID;
             Session["TSkuNumberList" + SID] = null;
             return View();
@@ -209,7 +209,7 @@ namespace PurchaseOrderSys.Controllers
                     RMASerialsLlist = item.RMASerialsLlist.Where(x => x.SerialsType == "TransferOut").ToList() //RMA序號移倉
                 });
             }
-            Session["PrepVMList" + ID] = PrepVMList;
+            Session["WinitPrepVMList" + ID] = PrepVMList;
             if (oTransfer.WinitTransfer == null)
             {
                 var CreateBy = UserBy;
@@ -217,7 +217,6 @@ namespace PurchaseOrderSys.Controllers
                 var WinitTransfer = new WinitTransfer { IsEnable = true, CreateBy = CreateBy, CreateAt = CreateAt };
                 WinitTransfer.WinitTransferBox.Add(new WinitTransferBox { IsEnable = true, CreateBy = CreateBy, CreateAt = CreateAt });
                 oTransfer.WinitTransfer = WinitTransfer;
-                db.SaveChanges();
             }
             Session["WinitTransferBox" + ID] = oTransfer.WinitTransfer.WinitTransferBox.ToList();
             return View(oTransfer);
@@ -229,7 +228,7 @@ namespace PurchaseOrderSys.Controllers
             Prep = Prep.Where(x => !string.IsNullOrWhiteSpace(x.val)).Distinct().ToList();
             var CreateBy = UserBy;
             var CreateAt = DateTime.UtcNow;
-            var PrepVMList = (List<TransferItemVM>)Session["PrepVMList" + ID];
+            var PrepVMList = (List<TransferItemVM>)Session["WinitPrepVMList" + ID];
             var oTransfer = db.Transfer.Find(ID);
             foreach (var item in oTransfer.TransferSKU.Where(x => x.IsEnable))
             {
@@ -323,9 +322,156 @@ namespace PurchaseOrderSys.Controllers
                 return RedirectToAction("Prep", new { ID });
             }
         }
-        public ActionResult PrepSaveserials(string serials, string SID)
+        public ActionResult Receive(int ID)
         {
-            var PrepVMList = (List<TransferItemVM>)Session["PrepVMList" + SID];
+            var oTransfer = db.Transfer.Find(ID);
+            var ReceiveVMList = new List<TransferItemVM>();
+            foreach (var item in oTransfer.TransferSKU.Where(x => x.IsEnable))
+            {
+                ReceiveVMList.Add(new TransferItemVM
+                {
+                    ID = item.ID,
+                    SKU = item.SkuNo,
+                    Name = item.Name,
+                    QTY = item.QTY,
+                    SerialsLlist = item.SerialsLlist.Where(x => x.SerialsType == "TransferIn").ToList(),//一般
+                    RMASerialsLlist = item.RMASerialsLlist.Where(x => x.SerialsType == "TransferIn").ToList()//RMA
+                });
+            }
+            Session["ReceiveVMList" + ID] = ReceiveVMList;
+            return View(oTransfer);
+        }
+        [HttpPost]
+        public ActionResult Receive(int ID, List<PostList> Prep, bool? saveexit)
+        {
+            Prep = Prep.Where(x => !string.IsNullOrWhiteSpace(x.val)).Distinct().ToList();
+            var CreateBy = UserBy;
+            var CreateAt = DateTime.UtcNow;
+            var ReceiveVMList = (List<TransferItemVM>)Session["ReceiveVMList" + ID];
+            var oTransfer = db.Transfer.Find(ID);
+            foreach (var item in oTransfer.TransferSKU.Where(x => x.IsEnable))
+            {
+                foreach (var ReceiveVM in ReceiveVMList.Where(x => x.SKU == item.SkuNo))
+                {
+                    if (oTransfer.Status != "Received")
+                    {
+                        oTransfer.Status = "Received";
+                        oTransfer.UpdateAt = CreateAt;
+                        oTransfer.UpdateBy = CreateBy;
+                    }
+                    //一般
+                    var nSerialsLlist = ReceiveVM.SerialsLlist.Select(x => new SerialsLlist
+                    {
+                        IsEnable = true,
+                        TransferSKUID = item.ID,
+                        PID = x.ID,
+                        CreateAt = CreateAt,
+                        CreateBy = CreateBy,
+                        ReceivedAt = CreateAt,
+                        ReceivedBy = CreateBy,
+                        //OrderID = x.OrderID,
+                        PurchaseSKUID = x.PurchaseSKUID,
+                        //RMAID = x.RMAID,
+                        SerialsNo = x.SerialsNo,
+                        SerialsQTY = 1,
+                        SerialsType = "TransferIn"
+                    }).ToList();
+                    //db.SerialsLlist.AddRange(nSerialsLlist);
+                    foreach (var Serial in nSerialsLlist)
+                    {
+                        if (!item.SerialsLlist.Where(x => x.SerialsNo == Serial.SerialsNo && x.SerialsType == "TransferIn").Any())
+                        {
+                            item.SerialsLlist.Add(Serial);
+                        }
+                    }
+
+                    //RMA
+                    var nRMASerialsLlist = ReceiveVM.RMASerialsLlist.Select(x => new SerialsLlist
+                    {
+                        IsEnable = true,
+                        TransferSKUID = item.ID,
+                        PID = x.ID,
+                        CreateAt = CreateAt,
+                        CreateBy = CreateBy,
+                        ReceivedAt = CreateAt,
+                        ReceivedBy = CreateBy,
+                        //OrderID = x.OrderID,
+                        //PurchaseSKUID = x.PurchaseSKUID,
+                        //RMAID = x.RMAID,
+                        SerialsNo = x.SerialsNo,
+                        SerialsQTY = 1,
+                        SerialsType = "TransferIn"
+                    }).ToList();
+                    //db.SerialsLlist.AddRange(nSerialsLlist);
+                    foreach (var Serial in nRMASerialsLlist)
+                    {
+                        if (!item.SerialsLlist.Where(x => x.SerialsNo == Serial.SerialsNo && x.SerialsType == "TransferIn").Any())
+                        {
+                            item.SerialsLlist.Add(Serial);
+                        }
+                    }
+                }
+                //無序號
+                if (!item.SKU.SerialTracking)//不用序號
+                {
+                    var TransferOutCount = item.SerialsLlist.Where(x => x.SerialsType == "TransferIn").Count();
+                    foreach (var Prepitem in Prep.Where(x => x.ID == item.ID))
+                    {
+                        var PrepCount = 0;
+                        if (int.TryParse(Prepitem.val, out PrepCount))
+                        {
+                            if (PrepCount > item.QTY)
+                            {
+                                PrepCount = item.QTY.Value;
+                            }
+                            if (PrepCount > TransferOutCount)
+                            {
+                                var TransferOutlist = db.SerialsLlist.Where(x => !x.SerialsLlistC.Any() && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable && x.PurchaseSKU.PurchaseOrder.WarehouseID == oTransfer.FromWID && x.PurchaseSKU.SkuNo == item.SkuNo && x.SerialsType == "TransferOut").Take(PrepCount - TransferOutCount).ToList();
+                                foreach (var SerialOut in TransferOutlist)
+                                {
+                                    SerialOut.SerialsLlistC.Add(new SerialsLlist
+                                    {
+                                        IsEnable = true,
+                                        TransferSKUID = item.ID,
+                                        PID = SerialOut.ID,
+                                        CreateAt = CreateAt,
+                                        CreateBy = CreateBy,
+                                        ReceivedAt = CreateAt,
+                                        ReceivedBy = CreateBy,
+                                        //OrderID = x.OrderID,
+                                        //PurchaseSKUID = x.PurchaseSKUID,
+                                        //RMAID = x.RMAID,
+                                        SerialsNo = SerialOut.SerialsNo,
+                                        SerialsQTY = 1,
+                                        SerialsType = "TransferIn"
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+
+                var s = ex.ToString();
+            }
+            if (saveexit.HasValue && saveexit.Value)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return RedirectToAction("Receive", new { ID });
+            }
+        }
+        public ActionResult PrepSaveserials(string serials, string SID,int boxitemset)
+        {
+            var PrepVMList = (List<TransferItemVM>)Session["WinitPrepVMList" + SID];
             var WinitTransferBoxList = (List<WinitTransferBox>)Session["WinitTransferBox" + SID];
             var WarehouseID = PrepVMList.FirstOrDefault().WarehouseID;
             var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials && !x.SerialsLlistC.Any() && x.SerialsQTY > 0);//找到序號
@@ -354,7 +500,7 @@ namespace PurchaseOrderSys.Controllers
                             if (!PrepVMList.Where(x => x.SerialsLlist.Where(y => y.SerialsNo == serials).Any()).Any() && !PrepVMList.Where(x => x.RMASerialsLlist.Where(y => y.SerialsNo == serials).Any()).Any())
                             {
                                 PrepVM.SerialsLlist.Add(Serial);
-                                var WinitTransferBox = WinitTransferBoxList.LastOrDefault();
+                                var WinitTransferBox = WinitTransferBoxList.Skip(boxitemset).Take(1).FirstOrDefault();
                                 WinitTransferBox.WinitTransferBoxItem.Add(new WinitTransferBoxItem
                                 {
                                     SerialsLlistID = Serial.ID,
@@ -363,7 +509,7 @@ namespace PurchaseOrderSys.Controllers
                                     Name = Serial.PurchaseSKU.Name,
                                     Weight = Serial.PurchaseSKU.SKU.Logistic?.ShippingWeight ?? 0
                                 });
-                                Session["PrepVMList" + SID] = PrepVMList;
+                                Session["WinitPrepVMList" + SID] = PrepVMList;
                                 Session["WinitTransferBox" + SID] = WinitTransferBoxList;
                                 return Json(new { status = true }, JsonRequestBehavior.AllowGet);
                             }
@@ -402,7 +548,7 @@ namespace PurchaseOrderSys.Controllers
                                 if (!PrepVMList.Where(x => x.SerialsLlist.Where(y => y.SerialsNo == serials).Any()).Any() && !PrepVMList.Where(x => x.RMASerialsLlist.Where(y => y.SerialsNo == serials).Any()).Any())
                                 {
                                     RMAPrepVM.RMASerialsLlist.Add(RMASerial);
-                                    Session["PrepVMList" + SID] = PrepVMList;
+                                    Session["WinitPrepVMList" + SID] = PrepVMList;
                                     return Json(new { status = true }, JsonRequestBehavior.AllowGet);
                                 }
                                 else
@@ -480,7 +626,37 @@ namespace PurchaseOrderSys.Controllers
         {
             var WinitTransferBoxList = (List<WinitTransferBox>)Session["WinitTransferBox" + ID];
             var html = RenderPartialViewToString("Boxitem", WinitTransferBoxList);
-            return Json(new { status = true, html }, JsonRequestBehavior.AllowGet);
+            var set = WinitTransferBoxList.Count() - 1;
+            return Json(new { status = true, html, set }, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult DelSerialsNo(string serial, int ID)
+        {
+            var WinitTransferBoxList = (List<WinitTransferBox>)Session["WinitTransferBox" + ID];
+            var PrepVMList = (List<TransferItemVM>)Session["WinitPrepVMList" + ID];
+            foreach (var Boxitem in WinitTransferBoxList)
+            {
+                foreach (var item in Boxitem.WinitTransferBoxItem.ToList())
+                {
+                    if (item.SerialsNo.Trim() == serial.Trim())
+                    {
+                        Boxitem.WinitTransferBoxItem.Remove(item);
+                    }
+                }
+            }
+            foreach (var Prepitem in PrepVMList)
+            {
+                foreach (var item in Prepitem.SerialsLlist.ToList())
+                {
+                    if (item.SerialsNo.Trim() == serial.Trim())
+                    {
+                        Prepitem.SerialsLlist.Remove(item);
+                    }
+                }
+            }
+            Session["WinitTransferBox" + ID] = WinitTransferBoxList;
+            Session["WinitPrepVMList" + ID] = PrepVMList;
+            return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

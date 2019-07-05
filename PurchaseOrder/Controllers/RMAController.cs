@@ -88,7 +88,7 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult Create(int? OrderID)
         {
             ViewBag.OrderID = OrderID;
-            ViewBag.SID = DateTime.Now.ToString("HHmmss");
+            ViewBag.SID = DateTime.Now.ToString("HHmmssfff");
             return View();
         }
         [HttpPost]

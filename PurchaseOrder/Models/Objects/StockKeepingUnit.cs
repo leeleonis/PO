@@ -86,6 +86,14 @@ namespace PurchaseOrderSys.Models
             newLang.CreateAt = newSku.CreateAt;
             newLang.CreateBy = newSku.CreateBy;
 
+            newSku.Logistic = new Logistic()
+            {
+                Sku = newSku.SkuID,
+                BoxID = db.BoxType.First().ID,
+                CreateAt = newSku.CreateAt,
+                CreateBy = newSku.CreateBy
+            };
+
             newSku.SkuLang.Add(newLang);
             db.SKU.Add(newSku);
 
@@ -118,6 +126,8 @@ namespace PurchaseOrderSys.Models
                                 CreateAt = skuData.UpdateAt ?? skuData.CreateAt,
                                 CreateBy = skuData.UpdateBy ?? skuData.CreateBy
                             };
+
+                            db.SKU.Add(sku_suffix);
                         }
 
                         SkuInherit(sku_suffix, skuData, skuLang);
@@ -133,6 +143,7 @@ namespace PurchaseOrderSys.Models
                                     CreateBy = skuData.UpdateBy ?? skuData.CreateBy
                                 };
                             }
+
                             LogisticInherit(sku_suffix.Logistic, skuData.Logistic);
                         }
                     }
@@ -265,6 +276,7 @@ namespace PurchaseOrderSys.Models
             childSku.Replenishable = parentSku.Replenishable;
             childSku.Status = parentSku.Status;
             childSku.SerialTracking = parentSku.SerialTracking;
+            childSku.Battery = parentSku.Battery;
             childSku.UpdateAt = parentSku.UpdateAt ?? parentSku.CreateAt;
             childSku.UpdateBy = parentSku.UpdateBy ?? parentSku.CreateBy;
 
