@@ -294,8 +294,8 @@ namespace PurchaseOrderSys.Controllers
                 var newData = TypeInfoList.FirstOrDefault(info => info.Name.Equals(column)).GetValue(updateData, null);
                 TypeInfoList.FirstOrDefault(info => info.Name.Equals(column)).SetValue(originData, newData);
             }
-            TypeInfoList.FirstOrDefault(info => info.Name.Equals("UpdateBy") || info.Name.Equals("Update_by")).SetValue(originData, Session["AdminName"]);
-            TypeInfoList.FirstOrDefault(info => info.Name.Equals("UpdateAt") || info.Name.Equals("Update_at")).SetValue(originData, DateTime.UtcNow);
+            TypeInfoList.FirstOrDefault(info => info.Name.Equals("UpdateBy")).SetValue(originData, Session["AdminName"]);
+            TypeInfoList.FirstOrDefault(info => info.Name.Equals("UpdateAt")).SetValue(originData, DateTime.UtcNow);
         }
         protected IQueryable<T1> QueryData<T1, T2>(IQueryable<T1> BasicData, T2 QureyData)
         {

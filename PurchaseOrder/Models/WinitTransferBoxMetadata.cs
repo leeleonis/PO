@@ -3,11 +3,6 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-using System; 
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
 
 namespace PurchaseOrderSys.Models
 {
@@ -31,7 +26,7 @@ namespace PurchaseOrderSys.Models
     	    [Display(Name = "WinitTransferBox_IsEnable", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public bool  IsEnable { get; set; }
-    		    
+    
     		/// <summary>
     		/// Winit Transfer ID
     		/// </summary>        

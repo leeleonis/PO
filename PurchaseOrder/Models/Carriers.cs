@@ -30,10 +30,10 @@ namespace PurchaseOrderSys.Models
         public string Email { get; set; }
         public Nullable<int> Api { get; set; }
         public string PrinterName { get; set; }
-        public string Update_by { get; set; }
-        public Nullable<System.DateTime> Update_at { get; set; }
-        public string Create_by { get; set; }
-        public System.DateTime Create_at { get; set; }
+        public string UpdateBy { get; set; }
+        public Nullable<System.DateTime> UpdateAt { get; set; }
+        public string CreateBy { get; set; }
+        public System.DateTime CreateAt { get; set; }
     
         public virtual ApiSetting GetApi { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -41,7 +41,7 @@ namespace PurchaseOrderSys.Controllers
         // 詳細資訊，請參閱 https://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Orders order)
+        public ActionResult Edit([Bind(Include = "IsRush,ID,OrderStatus,Comment")]Orders order)
         {
             if (ModelState.IsValid)
             {
@@ -79,47 +79,73 @@ namespace PurchaseOrderSys.Controllers
         }
 
         [HttpPost]
+        public ActionResult AddressSave(OrderAddresses updateAddress)
+        {
+            AjaxResult result = new AjaxResult();
+
+            var address = db.OrderAddresses.Find(updateAddress.ID);
+
+            try
+            {
+                if (address == null) throw new Exception("Not found address!");
+
+                if (address.CountryCode != updateAddress.CountryCode) address.CountryName = EnumData.CountryList()[updateAddress.CountryCode];
+                SetUpdateData(address, updateAddress, new string[] { "FirstName", "LastName", "AddressLine1", "AddressLine2", "City", "State", "Postcode", "CountryCode" });
+                db.SaveChanges();
+
+                var ShipsArray = new string[] { address.AddressLine1, address.AddressLine2, address.City, address.State, address.Postcode, address.CountryName };
+                result.data = string.Join("\r\n", new string[] { string.Format("{0}, {1}", address.FirstName, address.LastName), string.Join("\r\n", ShipsArray.Except(new string[] { "", null })) });
+            }
+            catch (Exception e)
+            {
+                result.SetError(e.InnerException?.Message ?? e.Message);
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
         public ActionResult PackageSave(Packages updatePackage)
         {
             AjaxResult result = new AjaxResult();
 
-            var package = db.Packages.Find(updatePackage.ID);
+            var package = db.Packages.AsNoTracking().First(p => p.ID.Equals(updatePackage.ID));
 
             try
             {
                 if (package == null) throw new Exception("Not found package!");
 
                 SetUpdateData(package, updatePackage, new string[] { "ShippingMethod", "Export", "ExportMethod", "ExportValue", "UploadTracking", "Tracking", "DLExport", "DLExportMethod", "DLExportValue", "DLUploadTracking", "DLTracking", "ShipWarehouse" });
-                //foreach(var item in package.Items.Where(i => i.IsEnable))
-                //{
-                //    var updateItem = updatePackage.Items.First(i => i.ID.Equals(item.ID));
-                //    SetUpdateData(item, updateItem, new string[] { "ExportValue", "DLExportValue", "Qty" });
+                foreach (var item in package.Items.Where(i => i.IsEnable))
+                {
+                    var updateItem = updatePackage.Items.First(i => i.ID.Equals(item.ID));
+                    SetUpdateData(item, updateItem, new string[] { "ExportValue", "DLExportValue", "Qty" });
 
-                //    if(item.Sku != updateItem.Sku)
-                //    {
-                //        item.Sku = updateItem.Sku;
-                //    }
+                    if (item.Sku != updateItem.Sku)
+                    {
+                        item.Sku = updateItem.Sku;
+                    }
 
-                //    var updateSerial = !string.IsNullOrEmpty(item.SerialEdit) ? item.SerialEdit.Split(',').Select(s => s.Trim()).ToArray() : new string[] { };
-                //    foreach(var serial in item.Serials)
-                //    {
-                //        serial.IsEnable = updateSerial.Contains(serial.SerialNumber);
-                //        serial.Update_at = package.Update_at.Value;
-                //        serial.Update_by = package.Update_by;
-                //    }
+                    var updateSerial = !string.IsNullOrEmpty(item.SerialEdit) ? item.SerialEdit.Split(',').Select(s => s.Trim()).ToArray() : new string[] { };
+                    foreach (var serial in item.Serials)
+                    {
+                        serial.IsEnable = updateSerial.Contains(serial.SerialNumber);
+                        serial.UpdateAt = package.UpdateAt.Value;
+                        serial.UpdateBy = package.UpdateBy;
+                    }
 
-                //    foreach(var newSerial in updateSerial.Except(item.Serials.Select(s => s.SerialNumber).ToArray()))
-                //    {
-                //        item.Serials.Add(new OrderSerials()
-                //        {
-                //            OrderID = item.OrderID,
-                //            ItemID = item.ID,
-                //            Sku = item.Sku,
-                //            SerialNumber = newSerial,
-                //            Create_by = package.Update_by
-                //        });
-                //    }
-                //}
+                    foreach (var newSerial in updateSerial.Except(item.Serials.Select(s => s.SerialNumber).ToArray()))
+                    {
+                        item.Serials.Add(new OrderSerials()
+                        {
+                            OrderID = item.OrderID,
+                            ItemID = item.ID,
+                            Sku = item.Sku,
+                            SerialNumber = newSerial,
+                            CreateBy = package.UpdateBy
+                        });
+                    }
+                }
 
                 db.SaveChanges();
 

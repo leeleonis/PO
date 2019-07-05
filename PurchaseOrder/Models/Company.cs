@@ -17,10 +17,10 @@ namespace PurchaseOrderSys.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Company()
         {
-            this.PurchaseOrder = new HashSet<PurchaseOrder>();
-            this.SKU = new HashSet<SKU>();
             this.Marketplace = new HashSet<Marketplace>();
             this.Orders = new HashSet<Orders>();
+            this.PurchaseOrder = new HashSet<PurchaseOrder>();
+            this.SKU = new HashSet<SKU>();
         }
     
         public bool IsEnable { get; set; }
@@ -31,22 +31,22 @@ namespace PurchaseOrderSys.Models
         public Nullable<int> RelateID { get; set; }
         public string eBayAccountID { get; set; }
         public string AmazonAccountID { get; set; }
+        public int CurrencyID { get; set; }
         public string CreateBy { get; set; }
         public System.DateTime CreateAt { get; set; }
         public string UpdateBy { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }
         public string CompanyNo { get; set; }
-        public int CurrencyID { get; set; }
         public Nullable<int> CompanySCID { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PurchaseOrder> PurchaseOrder { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SKU> SKU { get; set; }
         public virtual Currency Currency { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Marketplace> Marketplace { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Orders> Orders { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PurchaseOrder> PurchaseOrder { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SKU> SKU { get; set; }
     }
 }

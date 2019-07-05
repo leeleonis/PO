@@ -6,10 +6,16 @@
             font-weight: 900 !important;
         }
 
-            .font-title th, .font-bg {
-                background-color: #2196f3 !important;
+            .font-title th {
+                background-color: #909090 !important;
                 color: #fff !important;
             }
+
+        .font-bg {
+            background-color: #2196f3 !important;
+            color: #fff !important;
+        }
+
 
         #list-package > div + div {
             margin-top: 25px;
@@ -111,7 +117,7 @@
                                                                                 var SoldArray = new string[] { SoldAddress?.AddressLine1, SoldAddress?.AddressLine2, SoldAddress?.City, SoldAddress?.State, SoldAddress?.Postcode, SoldAddress?.CountryName };
                                                                                 var SoldTo = new string[] { string.Format("{0}, {1}", SoldAddress?.FirstName, SoldAddress?.LastName), string.Join("\r\n", SoldArray.Except(new string[] { "", null })) };
                                                                             }
-                                                                            <textarea class="form-control" style="font-size:20px;" rows="8" readonly>@string.Join("\r\n", SoldTo)</textarea>
+                                                                            <textarea class="form-control" style="resize:none;font-size:16px;" rows="8" readonly>@string.Join("\r\n", SoldTo)</textarea>
                                                                         </td>
                                                                     </tr>
                                                                 </tbody>
@@ -125,11 +131,11 @@
                                                                         <th class="text-center" colspan="2">
                                                                             Ship To
                                                                             <div style="position: absolute;top: 2px;right: 16px;">
-                                                                                <button type="button" class="btn btn-default" onclick="$(this).parent('div').hide().siblings('div').show(); $('#address-ship').show().siblings('tbody').hide();">Edit</button>
+                                                                                <button type="button" class="btn btn-default" onclick="AddressEdit(this);">Edit</button>
                                                                             </div>
                                                                             <div style="position: absolute;top: 2px;right: 16px;display: none;">
                                                                                 <button type="button" class="btn btn-default" onclick="$('#address-ship').find('input').each(function (i, input) { $(input).val($(input).data('reset'));});">Reset</button>
-                                                                                <button type="button" class="btn btn-default" onclick="$(this).parent('div').hide().siblings('div').show(); $('#address-ship').hide().siblings('tbody').show();">Save</button>
+                                                                                <button type="button" class="btn btn-default" onclick="AddressSave(this);">Save</button>
                                                                             </div>
                                                                         </th>
                                                                     </tr>
@@ -142,14 +148,15 @@
                                                                                 var ShipsArray = new string[] { ShipAddress?.AddressLine1, ShipAddress?.AddressLine2, ShipAddress?.City, ShipAddress?.State, ShipAddress?.Postcode, ShipAddress?.CountryName };
                                                                                 var ShipTo = new string[] { string.Format("{0}, {1}", ShipAddress?.FirstName, ShipAddress?.LastName), string.Join("\r\n", ShipsArray.Except(new string[] { "", null })) };
                                                                             }
-                                                                            <textarea class="form-control" style="font-size:20px;" rows="8" readonly>@string.Join("\r\n", ShipTo)</textarea>
+                                                                            <textarea class="form-control" style="resize:none;font-size:16px;" rows="8" readonly>@string.Join("\r\n", ShipTo)</textarea>
                                                                         </td>
                                                                     </tr>
                                                                 </tbody>
-                                                                <tbody id="address-ship" style="display:none;">
+                                                                <tbody id="edit-address" style="display:none;">
                                                                     <tr>
                                                                         <td width="123">First Name：</td>
                                                                         <td class="no-padding">
+                                                                            <input type="hidden" name="ID" value="@(ShipAddress?.ID)" data-reset="@(ShipAddress?.ID)" />
                                                                             <input type="text" class="form-control" name="FirstName" value="@(ShipAddress?.FirstName)" data-reset="@(ShipAddress?.FirstName)" />
                                                                         </td>
                                                                     </tr>
@@ -215,7 +222,7 @@
                                                         </div>
 
                                                         <div class="col-sm-4 col-lg-offset-1">
-                                                            <div class="input-group input-group-lg">
+                                                            <div class="input-group">
                                                                 <span class="input-group-addon font-bg">Shipping Actions</span>
                                                                 <select class="form-control">
                                                                     <optgroup label="Normal">
@@ -255,7 +262,7 @@
                                                                 <tbody>
                                                                     <tr>
                                                                         <td class="no-padding">
-                                                                            <textarea class="form-control" style="font-size:20px;" rows="8" readonly>@Model.BuyerNote</textarea>
+                                                                            <textarea class="form-control" style="font-size:16px;" rows="8" readonly>@Model.BuyerNote</textarea>
                                                                         </td>
                                                                     </tr>
                                                                 </tbody>
@@ -271,7 +278,7 @@
                                                                 <tbody>
                                                                     <tr>
                                                                         <td class="no-padding">
-                                                                            <textarea class="form-control" style="font-size:20px;" rows="8" readonly>@Model.Comment</textarea>
+                                                                            <textarea class="form-control" id="text-comment" name="Comment" style="font-size:16px;" rows="8" readonly>@Model.Comment</textarea>
                                                                         </td>
                                                                     </tr>
                                                                 </tbody>
@@ -281,7 +288,7 @@
                                                                             <div class="input-group">
                                                                                 <input type="text" class="form-control" />
                                                                                 <div class="input-group-btn">
-                                                                                    <button type="button" class="btn btn-default">Add</button>
+                                                                                    <button type="button" class="btn btn-default" onclick="CommentAdd($(this).parent('div').siblings('input').val())">Add</button>
                                                                                 </div>
                                                                             </div>
                                                                         </td>
@@ -437,6 +444,26 @@
             $('[rel="popover"]').popover();
         });
 
+        var AddressEdit = function (btn) {
+            $(btn).parent('div').hide().siblings('div').show();
+            $('#edit-address').show().siblings('tbody').hide();
+        };
+
+        var AddressSave = function (btn) {
+            var data = $('#edit-address').find('input, select').serializeArray();
+
+            website.AjaxUrl('../AddressSave', 'post', data).done(function (response) {
+                if (response.status) {
+                    alert('Update success!');
+
+                    $('#edit-address').hide().siblings('tbody').show().find('textarea').val(response.data);
+                    return $(btn).parent('div').hide().siblings('div').show();
+                } else {
+                    return alert(response.message);
+                }
+            });
+        };
+
         var PackageEdit = function (ID) {
             $packageList.children("div").each(function () {
                 if ($(this).data('package') == ID) {
@@ -465,6 +492,13 @@
                     alert("Not found!");
                 }
             });
+        };
+
+        var CommentAdd = function (text) {
+            if (!website.IsEmpty(text)) {
+                var comment = $('#text-comment').val().trim();
+                $('#text-comment').val((website.IsEmpty(comment) ? text : comment + '\r\n' + text));
+            }
         };
     </script>
 }   

@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+
 namespace PurchaseOrderSys.Models
 {
     
@@ -71,7 +72,7 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "Packages_Export", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public bool  Export { get; set; }
+    		public byte  Export { get; set; }
     
     		    
     		/// <summary>
@@ -79,7 +80,7 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "Packages_ExportMethod", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public bool  ExportMethod { get; set; }
+    		public byte  ExportMethod { get; set; }
     
     		    
     		/// <summary>
@@ -119,7 +120,7 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "Packages_DLExport", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public bool  DLExport { get; set; }
+    		public byte  DLExport { get; set; }
     
     		    
     		/// <summary>
@@ -127,7 +128,7 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "Packages_DLExportMethod", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public bool  DLExportMethod { get; set; }
+    		public byte  DLExportMethod { get; set; }
     
     		    
     		/// <summary>
@@ -187,37 +188,38 @@ namespace PurchaseOrderSys.Models
     
     		    
     		/// <summary>
-    		/// Update_by
+    		/// Update Bt
     		/// </summary>        
-    	    [Display(Name = "Packages_Update_by", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "Packages_UpdateBy", ResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public string  Update_by { get; set; }
+    		public string  UpdateBy { get; set; }
     
     		    
     		/// <summary>
-    		/// Update_at
+    		/// Update At
     		/// </summary>        
-    	    [Display(Name = "Packages_Update_at", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "Packages_UpdateAt", ResourceType = typeof(App_GlobalResources.Resource))]
             [UIHint("DateTime")]
-    		public Nullable<System.DateTime>  Update_at { get; set; }
+    		public Nullable<System.DateTime>  UpdateAt { get; set; }
     
     		    
     		/// <summary>
-    		/// Create_by
+    		/// Create Bt
     		/// </summary>        
-    	    [Display(Name = "Packages_Create_by", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "Packages_CreateBt", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public string  Create_by { get; set; }
+    		public string  CreateBt { get; set; }
     
     		    
     		/// <summary>
-    		/// Create_at
+    		/// Create At
     		/// </summary>        
-    	    [Display(Name = "Packages_Create_at", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "Packages_CreateAt", ResourceType = typeof(App_GlobalResources.Resource))]
             [UIHint("DateTime")]
+            [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public System.DateTime  Create_at { get; set; }
+    		public System.DateTime  CreateAt { get; set; }
     
     		    
     	}

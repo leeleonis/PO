@@ -1,11 +1,12 @@
-using System;
+using System; 
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// Transfer class
     /// </summary>
@@ -56,7 +57,7 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "Transfer_FromWID", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-            public Nullable<int>  FromWID { get; set; }
+    		public Nullable<int>  FromWID { get; set; }
     
     		    
     		/// <summary>
@@ -64,7 +65,7 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "Transfer_ToWID", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-            public Nullable<int>  ToWID { get; set; }
+    		public Nullable<int>  ToWID { get; set; }
     
     		    
     		/// <summary>
@@ -121,7 +122,7 @@ namespace PurchaseOrderSys.Models
     		/// Interim
     		/// </summary>        
     	    [Display(Name = "Transfer_Interim", ResourceType = typeof(App_GlobalResources.Resource))]
-            public Nullable<int> Interim { get; set; }
+    		public Nullable<int>  Interim { get; set; }
     
     		    
     		/// <summary>

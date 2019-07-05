@@ -1,4 +1,5 @@
-using System;
+using System; 
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -115,6 +116,7 @@ namespace PurchaseOrderSys.Models
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public bool  Replenishable { get; set; }
     
+    		    
     		/// <summary>
     		/// Serial Tracking
     		/// </summary>        
@@ -122,6 +124,7 @@ namespace PurchaseOrderSys.Models
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public bool  SerialTracking { get; set; }
     
+    		    
     		/// <summary>
     		/// Battery
     		/// </summary>        
@@ -129,6 +132,7 @@ namespace PurchaseOrderSys.Models
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public bool  Battery { get; set; }
     
+    		    
     		/// <summary>
     		/// Status
     		/// </summary>        
