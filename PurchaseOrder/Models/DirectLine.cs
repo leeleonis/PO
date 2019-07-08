@@ -18,13 +18,14 @@ namespace PurchaseOrderSys.Models
         public DirectLine()
         {
             this.IsEnable = true;
-            this.GetMethod = new HashSet<ShippingMethods>();
+            this.Methods = new HashSet<ShippingMethods>();
         }
     
         public bool IsEnable { get; set; }
         public int ID { get; set; }
         public string Name { get; set; }
         public string Abbreviation { get; set; }
+        public decimal MaxDeclared { get; set; }
         public Nullable<int> Api { get; set; }
         public string Email { get; set; }
         public string ContactName { get; set; }
@@ -43,7 +44,7 @@ namespace PurchaseOrderSys.Models
         public Nullable<System.DateTime> UpdateAt { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ShippingMethods> GetMethod { get; set; }
+        public virtual ICollection<ShippingMethods> Methods { get; set; }
         public virtual ApiSetting GetApi { get; set; }
     }
 }
