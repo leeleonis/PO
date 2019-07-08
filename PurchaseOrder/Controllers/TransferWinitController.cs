@@ -134,13 +134,7 @@ namespace PurchaseOrderSys.Controllers
             if (Transfer.Interim.HasValue) oTransfer.Interim = Transfer.Interim;
             if (!string.IsNullOrWhiteSpace(Transfer.Carrier)) oTransfer.Carrier = Transfer.Carrier;
             if (!string.IsNullOrWhiteSpace(Transfer.Tracking)) oTransfer.Tracking = Transfer.Tracking;
-            if (Requestedval.HasValue && Requestedval.Value)
-            {
-                if (oTransfer.Status == "Pending")
-                {
-                    oTransfer.Status = "Requested";
-                }
-            }
+
 
             oTransfer.UpdateBy = UserBy;
             oTransfer.UpdateAt = dt;
@@ -181,6 +175,18 @@ namespace PurchaseOrderSys.Controllers
                     }
                 }
             }
+
+            if (Requestedval.HasValue && Requestedval.Value)
+            {
+                if (oTransfer.Status == "Pending" && oTransfer.Status != oTransfer.Status)
+                {
+                    oTransfer.Status = "Requested";
+                    //Winit API 取S BARCODE
+
+                }
+            }
+
+
             db.SaveChanges();
             if (saveexit.HasValue && saveexit.Value)
             {

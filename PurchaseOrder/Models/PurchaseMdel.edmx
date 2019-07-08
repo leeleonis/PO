@@ -3844,9 +3844,9 @@
           <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="OrderLog" Relationship="PurchaseOrderModel.FK_OrderLog_Warehouse" FromRole="Warehouse" ToRole="OrderLog" />
-          <NavigationProperty Name="Transfer" Relationship="PurchaseOrderModel.FK_Transfer_Warehouse" FromRole="Warehouse" ToRole="Transfer" />
-          <NavigationProperty Name="Transfer1" Relationship="PurchaseOrderModel.FK_Transfer_Warehouse1" FromRole="Warehouse" ToRole="Transfer" />
-          <NavigationProperty Name="Transfer2" Relationship="PurchaseOrderModel.FK_Transfer_WarehouseInterim" FromRole="Warehouse" ToRole="Transfer" />
+          <NavigationProperty Name="TransferForm" Relationship="PurchaseOrderModel.FK_Transfer_Warehouse" FromRole="Warehouse" ToRole="Transfer" />
+          <NavigationProperty Name="TransferTo" Relationship="PurchaseOrderModel.FK_Transfer_Warehouse1" FromRole="Warehouse" ToRole="Transfer" />
+          <NavigationProperty Name="TransferInt" Relationship="PurchaseOrderModel.FK_Transfer_WarehouseInterim" FromRole="Warehouse" ToRole="Transfer" />
           <NavigationProperty Name="RMA" Relationship="PurchaseOrderModel.FK_RMA_Warehouse" FromRole="Warehouse" ToRole="RMA" />
           <NavigationProperty Name="RMASKU" Relationship="PurchaseOrderModel.FK_RMASKU_Warehouse" FromRole="Warehouse" ToRole="RMASKU" />
           <NavigationProperty Name="RMASerialsLlist" Relationship="PurchaseOrderModel.FK_RMASerialsLlist_Warehouse" FromRole="Warehouse" ToRole="RMASerialsLlist" />
