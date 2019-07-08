@@ -153,7 +153,7 @@ namespace PurchaseOrderSys.NewApi
     {
         public string productCode { get; set; }
         public string specification { get; set; }
-        public int printQty { get; set; }
+        public int? printQty { get; set; }
     }
 
     public class PostPrintV2Data
@@ -371,9 +371,9 @@ namespace PurchaseOrderSys.NewApi
         /// 查询商品
         /// </summary>
         /// <returns></returns>
-        public WinitSKU SKUList()
+        public WinitSKU SKUList(string skuCode)
         {
-            var data = new { pageNo = 1, pageSize = 10, skuCode = "" };
+            var data = new { pageNo = 1, pageSize = 10, skuCode = skuCode };
             Queryclient request = _RequestInitNew<Queryclient>("winit.mms.item.list",data);
             request.data = data;
 

@@ -1130,6 +1130,8 @@
           <Property Name="CreateAt" Type="datetime" Nullable="false" />
           <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
           <Property Name="UpdateAt" Type="datetime" />
+          <Property Name="SBarcodeLabelType" Type="nvarchar" MaxLength="50" />
+          <Property Name="BoxLabelSize" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="WinitTransferBox">
           <Key>
@@ -1147,6 +1149,11 @@
           <Property Name="CreateAt" Type="datetime" Nullable="false" />
           <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
           <Property Name="UpdateAt" Type="datetime" />
+          <Property Name="ItemBarcodeFile" Type="text" />
+          <Property Name="LabelFile" Type="text" />
+          <Property Name="SkuNo" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="WinitOrderNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="itemBarcodeList" Type="text" />
         </EntityType>
         <EntityType Name="WinitTransferBoxItem">
           <Key>
@@ -1161,9 +1168,9 @@
           <Property Name="UpdateAt" Type="datetime" />
           <Property Name="Value" Type="decimal" Precision="18" Scale="2" />
           <Property Name="SerialsNo" Type="nvarchar" MaxLength="50" />
-          <Property Name="SkuNo" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="200" />
           <Property Name="Weight" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="FilePage" Type="nvarchar" MaxLength="4" />
         </EntityType>
         <Association Name="FK_AdminUser_AdminGroup">
           <End Role="AdminGroup" Type="Self.AdminGroup" Multiplicity="1" />
@@ -5556,6 +5563,11 @@
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
           <NavigationProperty Name="WinitTransferBoxItem" Relationship="PurchaseOrderModel.FK_WinitTransferBoxItem_WinitTransferBox" FromRole="WinitTransferBox" ToRole="WinitTransferBoxItem" />
           <NavigationProperty Name="WinitTransfer" Relationship="PurchaseOrderModel.FK_WinitTransferBox_WinitTransfer" FromRole="WinitTransferBox" ToRole="WinitTransfer" />
+          <Property Name="ItemBarcodeFile" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="LabelFile" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="SkuNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="WinitOrderNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="itemBarcodeList" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="WinitTransferBoxItem">
           <Key>
@@ -5572,9 +5584,9 @@
           <NavigationProperty Name="SerialsLlist" Relationship="PurchaseOrderModel.FK_WinitTransferBoxItem_SerialsLlist" FromRole="WinitTransferBoxItem" ToRole="SerialsLlist" />
           <NavigationProperty Name="WinitTransferBox" Relationship="PurchaseOrderModel.FK_WinitTransferBoxItem_WinitTransferBox" FromRole="WinitTransferBoxItem" ToRole="WinitTransferBox" />
           <Property Name="SerialsNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="SkuNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="Weight" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="FilePage" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_WinitTransferBoxItem_SerialsLlist">
           <End Type="PurchaseOrderModel.SerialsLlist" Role="SerialsLlist" Multiplicity="1" />
@@ -5614,6 +5626,8 @@
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Transfer" Relationship="PurchaseOrderModel.FK_WinitTransfer_Transfer1" FromRole="WinitTransfer" ToRole="Transfer" />
           <NavigationProperty Name="WinitTransferBox" Relationship="PurchaseOrderModel.FK_WinitTransferBox_WinitTransfer" FromRole="WinitTransfer" ToRole="WinitTransferBox" />
+          <Property Name="SBarcodeLabelType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BoxLabelSize" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_WinitTransfer_Transfer1">
           <End Type="PurchaseOrderModel.Transfer" Role="Transfer" Multiplicity="1" />
@@ -6847,6 +6861,11 @@
           <EntitySetMapping Name="WinitTransferBox">
             <EntityTypeMapping TypeName="PurchaseOrderModel.WinitTransferBox">
               <MappingFragment StoreEntitySet="WinitTransferBox">
+                <ScalarProperty Name="itemBarcodeList" ColumnName="itemBarcodeList" />
+                <ScalarProperty Name="WinitOrderNo" ColumnName="WinitOrderNo" />
+                <ScalarProperty Name="SkuNo" ColumnName="SkuNo" />
+                <ScalarProperty Name="LabelFile" ColumnName="LabelFile" />
+                <ScalarProperty Name="ItemBarcodeFile" ColumnName="ItemBarcodeFile" />
                 <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
                 <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
                 <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
@@ -6865,9 +6884,9 @@
           <EntitySetMapping Name="WinitTransferBoxItem">
             <EntityTypeMapping TypeName="PurchaseOrderModel.WinitTransferBoxItem">
               <MappingFragment StoreEntitySet="WinitTransferBoxItem">
+                <ScalarProperty Name="FilePage" ColumnName="FilePage" />
                 <ScalarProperty Name="Weight" ColumnName="Weight" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="SkuNo" ColumnName="SkuNo" />
                 <ScalarProperty Name="SerialsNo" ColumnName="SerialsNo" />
                 <ScalarProperty Name="Value" ColumnName="Value" />
                 <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
@@ -6883,6 +6902,8 @@
           <EntitySetMapping Name="WinitTransfer">
             <EntityTypeMapping TypeName="PurchaseOrderModel.WinitTransfer">
               <MappingFragment StoreEntitySet="WinitTransfer">
+                <ScalarProperty Name="BoxLabelSize" ColumnName="BoxLabelSize" />
+                <ScalarProperty Name="SBarcodeLabelType" ColumnName="SBarcodeLabelType" />
                 <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
                 <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
                 <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />

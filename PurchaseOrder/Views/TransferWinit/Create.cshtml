@@ -5,6 +5,8 @@
     var ToWarehouseDDL = EnumData.WinitWarehouseDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var InterimList = EnumData.InterimDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var TransferStatusDDL = EnumData.TransferStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var BoxLabelSize = EnumData.BoxLabelSize().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
+    var SBarcodeLabelType = EnumData.SBarcodeLabelType().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var DefaultSelect = PurchaseOrderSys.App_GlobalResources.Resource.DefaultSelect;
     var ShippingList = new PurchaseOrderSys.Api.Shipping_API().ShippingList().data.shippingMethod.Select(x => new SelectListItem { Text = x.text, Value = x.value.ToString() }).ToList();
 }
@@ -37,26 +39,30 @@
                                             <legend>Create</legend>
                                             <div class="form-group">
                                                 @*@Html.Label("Transfer #:", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                    <div class="col-sm-9 col-lg-2">
-                                                        @Html.Editor("ID", new { htmlAttributes = new { @class = "form-control" } })
-                                                    </div>*@
+        <div class="col-sm-9 col-lg-2">
+            @Html.Editor("ID", new { htmlAttributes = new { @class = "form-control" } })
+        </div>*@
                                                 @Html.Label("External Transfer #:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("ExternalTra", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
-                                                @Html.Label("Status:", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @Html.Label("Box Label Size:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownListFor(model => model.Status, TransferStatusDDL, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.DropDownList("BoxLabelSize", BoxLabelSize, htmlAttributes: new { @class = "form-control" })
+                                                </div>
+                                                @Html.Label("S Barcode Label Type:", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownList("SBarcodeLabelType", SBarcodeLabelType, htmlAttributes: new { @class = "form-control" })
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 @Html.Label("From:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownList("FromWID", FromWarehouseDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.DropDownList("FromWID", FromWarehouseDDL, DefaultSelect, htmlAttributes: new { @class = "form-control select" })
                                                 </div>
                                                 @Html.Label("To", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownList("ToWID", ToWarehouseDDL, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.DropDownList("ToWID", ToWarehouseDDL, DefaultSelect, htmlAttributes: new { @class = "form-control select" })
                                                 </div>
                                                 @Html.Label("Carrier:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
@@ -197,19 +203,27 @@
                     //{ data: "TWN", render: function (data, type, row) { return thousandComma(data); }  },
                     //{ data: "Winit", render: function (data, type, row) { return thousandComma(data); } }
                 ],
-                ajax: {
-                    traditional: true,
-                    method: "get",//或post，自由決定，影響到Server端用FormCollection取值或Request.QueryString取得DataTables傳遞的資訊
-                    url: "@Url.Action("TSkuNumberList", "Ajax")",
-                    data: function (d) {
-                        var Skulist = $("#gebruikerId").val();
-                        var FromWID = $("#FromWID").val();
-                        d.Skulist = Skulist;
-                        d.FromWID = FromWID;
-                        d.SID ="@Html.Display("SID")";
-                        $("#gebruikerId").val(null).trigger('change');
-                    }
-                },
+                 ajax: {
+                     traditional: true,
+                     method: "get",//或post，自由決定，影響到Server端用FormCollection取值或Request.QueryString取得DataTables傳遞的資訊
+                     url: "@Url.Action("TSkuNumberList", "Ajax")",
+                     data: function (d) {
+                         var Skulist = $("#gebruikerId").val();
+                         var FromWID = $("#FromWID").val();
+                         var ToWID = $("#ToWID").val();
+                         d.Skulist = Skulist;
+                         d.FromWID = FromWID;
+                         d.SID = "@Html.Display("SID")";
+                         d.ToWID = ToWID;
+                         $("#gebruikerId").val(null).trigger('change');
+                     },
+                     "dataSrc": function (json) {
+                         if (json.ErrMsg != "") {
+                             alert(json.ErrMsg);
+                         }
+                         return json.data;
+                     }
+                 },
                 serverSide: true,//啟用ServerSide模式
                 //deferLoading: 0, //初始化DataTable時，不發出ajax
                 orderMulti: false,
@@ -230,8 +244,13 @@
                     delay: 0,
                     data: function (term) {
                         var FromWID = $("#FromWID").val();
+                        var ToWID = $("#ToWID").val();
                         if (FromWID == "") {
                             alert("請選擇移出倉");
+                            return "";
+                        }
+                        else if (ToWID == "") {
+                            alert("請選擇Winit倉");
                             return "";
                         }
                         else {
@@ -288,7 +307,7 @@
                     }
                 });
             });
-            $("select").change(function () {
+            $(".select").change(function () {
                 var FromWID = $("#FromWID").val();
                 var ToWID = $("#ToWID").val();
 
@@ -297,6 +316,9 @@
                         alert("From 和 To 不可重複");
                         $(this).val("");
                     }
+                }
+                else {
+                    DataGrid.draw();
                 }
             });
         });

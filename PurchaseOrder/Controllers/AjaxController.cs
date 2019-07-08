@@ -85,12 +85,12 @@ namespace PurchaseOrderSys.Controllers
             var dataList = db.SkuLang.Where(x => x.LangID == LangID && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
             return Json(new { items = dataList }, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult TSkuNumberGet(string Search, int FromWID)
+        public ActionResult TSkuNumberGet(string Search, int FromWID,string Key)
         { 
             var SKUList = new List<string>();
             SKUList = SearchSkuByWarehouse(Search, FromWID);
             var dataList = db.SkuLang.Where(x => x.LangID == LangID && SKUList.Contains(x.Sku) && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
-            //var dataList = db.SkuLang.Where(x => x.LangID == "zh-tw" && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
+            //var dataList = db.SkuLang.Where(x => x.LangID == "zh-tw" && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });  
             return Json(new { items = dataList }, JsonRequestBehavior.AllowGet);
         }
 
@@ -225,8 +225,9 @@ namespace PurchaseOrderSys.Controllers
             }
         }
 
-        public ActionResult TSkuNumberList(int? draw, int? start, int? length, List<string> Skulist, int? FromWID, string SID)
+        public ActionResult TSkuNumberList(int? draw, int? start, int? length, List<string> Skulist, int? FromWID, string SID, int? ToWID)
         {
+            var ErrMsg = "";
             var odataList = (List<TranSKUVM>)Session["TSkuNumberList" + SID];
             if (odataList == null)
             {
@@ -302,6 +303,23 @@ namespace PurchaseOrderSys.Controllers
                     odataList.AddRange(dataList);
                 }
                 var index =0;
+                if (ToWID.HasValue)//檢查Winit SKU
+                {
+                    var Warehouse = db.Warehouse.Find(ToWID);
+                    if (Warehouse.Type== "Winit")
+                    {
+                        foreach (var item in odataList.ToList())
+                        {
+                            var WSKUList = new NewApi.Winit_API().SKUList(item.SKU + "-" + Warehouse.WinitWarehouse);
+                            if (!WSKUList.list.Any())
+                            {
+                                odataList.Remove(item);
+                                ErrMsg += "Winit無此SKU：" + item.SKU + "-" + Warehouse.WinitWarehouse + Environment.NewLine;
+                            }
+                           
+                        }
+                    }
+                }
                 foreach (var item in odataList)
                 {
                     item.ck= index++;
@@ -313,8 +331,9 @@ namespace PurchaseOrderSys.Controllers
             var returnObj =
             new
             {
-                draw = draw,
-                recordsTotal = recordsTotal,
+                ErrMsg,
+                draw,
+                recordsTotal,
                 recordsFiltered = recordsTotal,
                 data = odataList//分頁後的資料 
             };

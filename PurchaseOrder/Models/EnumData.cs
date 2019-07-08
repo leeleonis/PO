@@ -389,7 +389,32 @@ namespace PurchaseOrderSys.Models
                 { 3, "Other" }
             };
         }
-
+        /// <summary>
+        ///  S Barcode 標籤格式
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<string, string> SBarcodeLabelType()
+        {
+            return new Dictionary<string, string>()
+            {
+               { "LZ7050", "LZ7050" },
+               { "LZ10060", "LZ10060" },
+               { "LZ6040", "LZ6040" }
+            };
+        }
+        /// <summary>
+        /// BOX 標籤格式
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<string, string> BoxLabelSize()
+        {
+            return new Dictionary<string, string>()
+            {
+               { "10x10", "10x10" },
+               { "10x6", "10x6" },
+               { "15x10", "15x10" }
+            };
+        }
         public enum OrderType { Normal, Dropship, DirectLine, FBA };
         public static Dictionary<byte, string> OrderTypeList()
         {

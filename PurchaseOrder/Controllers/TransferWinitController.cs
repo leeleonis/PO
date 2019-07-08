@@ -69,13 +69,21 @@ namespace PurchaseOrderSys.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult Create(Transfer Transfer, string SID)
+        public ActionResult Create(Transfer Transfer, string SID,string BoxLabelSize,string SBarcodeLabelType)
         {
             var CreateBy = UserBy;
             var CreateAt = DateTime.UtcNow;
             Transfer.TransferType = "Winit";
+            Transfer.Status = "Pending";
             Transfer.CreateBy = CreateBy;
             Transfer.CreateAt = CreateAt;
+            Transfer.WinitTransfer = new WinitTransfer
+            {
+                BoxLabelSize = BoxLabelSize,
+                SBarcodeLabelType = SBarcodeLabelType,
+                CreateBy = CreateBy,
+                CreateAt = CreateAt
+            };
             var odataList = (List<TranSKUVM>)Session["TSkuNumberList" + SID];
             if (odataList != null)
             {
@@ -122,7 +130,7 @@ namespace PurchaseOrderSys.Controllers
             return View(Transfer);
         }
         [HttpPost]
-        public ActionResult Edit(Transfer Transfer, string SID, bool? saveexit, bool? Requestedval)
+        public ActionResult Edit(Transfer Transfer, string SID, string BoxLabelSize, string SBarcodeLabelType, bool? saveexit, bool? Requestedval)
         {
             var dt = DateTime.UtcNow;
             var oTransfer = db.Transfer.Find(Transfer.ID);
@@ -138,6 +146,12 @@ namespace PurchaseOrderSys.Controllers
 
             oTransfer.UpdateBy = UserBy;
             oTransfer.UpdateAt = dt;
+
+            oTransfer.WinitTransfer.BoxLabelSize = BoxLabelSize;
+            oTransfer.WinitTransfer.SBarcodeLabelType = SBarcodeLabelType;
+            oTransfer.WinitTransfer.CreateBy = UserBy;
+            oTransfer.WinitTransfer.CreateAt = dt;
+
 
             var odataList = (List<TranSKUVM>)Session["TSkuNumberList" + SID];
 
@@ -175,15 +189,52 @@ namespace PurchaseOrderSys.Controllers
                     }
                 }
             }
-
             if (Requestedval.HasValue && Requestedval.Value)
             {
-                if (oTransfer.Status == "Pending" && oTransfer.Status != oTransfer.Status)
+                if (oTransfer.Status == "Pending")
                 {
                     oTransfer.Status = "Requested";
-                    //Winit API 取S BARCODE
-
+                    var WinitWarehouse = oTransfer.WarehouseTo.WinitWarehouse;
+                    foreach (var item in oTransfer.TransferSKU.Where(x => x.IsEnable))
+                    {
+                        var productCode = item.SkuNo + "-" + WinitWarehouse;
+                        //Winit API 取S BARCODE
+                        var PostPrintV2Data = new NewApi.PostPrintV2Data
+                        {
+                            labelType = oTransfer.WinitTransfer.SBarcodeLabelType,
+                            madeIn = "China",
+                            singleItems = new List<NewApi.SingleItem>()
+                        };
+                        PostPrintV2Data.singleItems.Add(new NewApi.SingleItem
+                        {
+                            productCode = productCode,
+                            printQty = item.QTY,
+                        });
+                        var PrintV2 = new NewApi.Winit_API().GetPrintV2(PostPrintV2Data);
+                        var nWinitTransferBox = new WinitTransferBox
+                        {
+                            SkuNo = productCode,
+                            ItemBarcodeFile = PrintV2.itemBarcodeFile,
+                            itemBarcodeList = string.Join(";", PrintV2.itemBarcodeList),
+                            CreateBy = UserBy,
+                            CreateAt = dt
+                        };
+                        //var FilePage = 0;
+                        //foreach (var itemBarcode in PrintV2.itemBarcodeList)
+                        //{
+                        //    FilePage++;
+                        //    nWinitTransferBox.WinitTransferBoxItem.Add(new WinitTransferBoxItem {
+                        //        SerialsLlistID=0,
+                        //        BarCode= itemBarcode,
+                        //        FilePage= FilePage.ToString(),
+                        //        CreateBy = UserBy,
+                        //        CreateAt = dt
+                        //    });
+                        //}
+                        oTransfer.WinitTransfer.WinitTransferBox.Add(nWinitTransferBox);
+                    }
                 }
+                //PrintV2.itemBarcodeFile
             }
 
 
@@ -511,7 +562,6 @@ namespace PurchaseOrderSys.Controllers
                                 {
                                     SerialsLlistID = Serial.ID,
                                     SerialsNo= Serial.SerialsNo,
-                                    SkuNo = Serial.PurchaseSKU.SkuNo,
                                     Name = Serial.PurchaseSKU.Name,
                                     Weight = Serial.PurchaseSKU.SKU.Logistic?.ShippingWeight ?? 0
                                 });
