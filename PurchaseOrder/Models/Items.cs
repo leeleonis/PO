@@ -32,6 +32,7 @@ namespace PurchaseOrderSys.Models
         public decimal DLExportValue { get; set; }
         public int Qty { get; set; }
         public string eBayItemID { get; set; }
+        public string eBayTransationID { get; set; }
         public string SalesRecordNumber { get; set; }
         public Nullable<int> RMAID { get; set; }
         public string UpdateBy { get; set; }
