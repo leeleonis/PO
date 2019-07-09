@@ -12,23 +12,20 @@ namespace PurchaseOrderSys.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class WinitTransferBoxItem
+    public partial class WinitTransferSKU
     {
-        public int WinitTransferBoxID { get; set; }
-        public int SerialsLlistID { get; set; }
-        public string BarCode { get; set; }
+        public bool IsEnable { get; set; }
+        public int ID { get; set; }
+        public Nullable<int> WinitTransferID { get; set; }
+        public string SkuNo { get; set; }
+        public string itemBarcodeList { get; set; }
         public string CreateBy { get; set; }
         public System.DateTime CreateAt { get; set; }
         public string UpdateBy { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }
-        public Nullable<decimal> Value { get; set; }
-        public string SerialsNo { get; set; }
-        public string Name { get; set; }
-        public Nullable<decimal> Weight { get; set; }
-        public string FilePage { get; set; }
-        public string SkuNo { get; set; }
+        public string ItemBarcodeFile { get; set; }
+        public Nullable<int> IndexNo { get; set; }
     
-        public virtual SerialsLlist SerialsLlist { get; set; }
-        public virtual WinitTransferBox WinitTransferBox { get; set; }
+        public virtual WinitTransfer WinitTransfer { get; set; }
     }
 }

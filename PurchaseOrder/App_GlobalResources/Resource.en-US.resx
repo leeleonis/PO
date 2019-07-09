@@ -1509,4 +1509,34 @@
   <data name="RMASerialsLlist_Reason" xml:space="preserve">
     <value>Reason</value>
   </data>
+  <data name="WinitTransferSKU_IsEnable" xml:space="preserve">
+    <value>IsEnable</value>
+  </data>
+  <data name="WinitTransferSKU_ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="WinitTransferSKU_WinitTransferID" xml:space="preserve">
+    <value>WinitTransferID</value>
+  </data>
+  <data name="WinitTransferSKU_SkuNo" xml:space="preserve">
+    <value>SkuNo</value>
+  </data>
+  <data name="WinitTransferSKU_itemBarcodeList" xml:space="preserve">
+    <value>itemBarcodeList</value>
+  </data>
+  <data name="WinitTransferSKU_CreateBy" xml:space="preserve">
+    <value>CreateBy</value>
+  </data>
+  <data name="WinitTransferSKU_CreateAt" xml:space="preserve">
+    <value>CreateAt</value>
+  </data>
+  <data name="WinitTransferSKU_UpdateBy" xml:space="preserve">
+    <value>UpdateBy</value>
+  </data>
+  <data name="WinitTransferSKU_UpdateAt" xml:space="preserve">
+    <value>UpdateAt</value>
+  </data>
+  <data name="WinitTransferSKU_ItemBarcodeFile" xml:space="preserve">
+    <value>ItemBarcodeFile</value>
+  </data>
 </root>

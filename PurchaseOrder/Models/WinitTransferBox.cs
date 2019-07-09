@@ -32,11 +32,7 @@ namespace PurchaseOrderSys.Models
         public System.DateTime CreateAt { get; set; }
         public string UpdateBy { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }
-        public string ItemBarcodeFile { get; set; }
         public string LabelFile { get; set; }
-        public string SkuNo { get; set; }
-        public string WinitOrderNo { get; set; }
-        public string itemBarcodeList { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<WinitTransferBoxItem> WinitTransferBoxItem { get; set; }

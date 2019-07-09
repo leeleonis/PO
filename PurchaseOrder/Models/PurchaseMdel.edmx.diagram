@@ -167,6 +167,7 @@
         <AssociationConnector Association="PurchaseOrderModel.FK_DirectLine_ApiSetting" />
         <EntityTypeShape EntityType="PurchaseOrderModel.WinitTransferBoxItem" Width="2.125" PointX="32.5" PointY="46.875" />
         <EntityTypeShape EntityType="PurchaseOrderModel.WinitTransferBox" Width="1.5" PointX="6.375" PointY="1" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.WinitTransferSKU" Width="1.5" PointX="0.75" PointY="5.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

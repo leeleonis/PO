@@ -18,6 +18,7 @@ namespace PurchaseOrderSys.Models
         public WinitTransfer()
         {
             this.WinitTransferBox = new HashSet<WinitTransferBox>();
+            this.WinitTransferSKU = new HashSet<WinitTransferSKU>();
         }
     
         public bool IsEnable { get; set; }
@@ -30,9 +31,12 @@ namespace PurchaseOrderSys.Models
         public Nullable<System.DateTime> UpdateAt { get; set; }
         public string SBarcodeLabelType { get; set; }
         public string BoxLabelSize { get; set; }
+        public string WinitOrderNo { get; set; }
     
         public virtual Transfer Transfer { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<WinitTransferBox> WinitTransferBox { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<WinitTransferSKU> WinitTransferSKU { get; set; }
     }
 }
