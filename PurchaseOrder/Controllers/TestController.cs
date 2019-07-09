@@ -203,6 +203,9 @@ namespace PurchaseOrderSys.Controllers
             return Json(returnObj, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// Neto 品號資料同步，慎改!
+        /// </summary>
         public void DoSkuSync()
         {
             NetoApi neto = new NetoApi();
@@ -302,7 +305,7 @@ namespace PurchaseOrderSys.Controllers
                                             CreateAt = DateTime.UtcNow,
                                             CreateBy = "System Scheduling"
                                         };
-                                        
+
                                         if (sku.SkuID.Contains('_')) { sku.ParentShadow = sku.SkuID.Split('_')[0]; }
 
                                         var langData = new SkuLang()
@@ -322,7 +325,7 @@ namespace PurchaseOrderSys.Controllers
                                         sku = SKU.CreateSku(sku, langData);
                                     }
                                 }
-                                catch(Exception e)
+                                catch (Exception e)
                                 {
                                     Response.Write(string.Format("Error:【{0}】{1} <br />", item.SKU, e.InnerException?.Message ?? e.Message));
                                 }
@@ -379,24 +382,24 @@ namespace PurchaseOrderSys.Controllers
             var skuData = netoApi.GetItemBySku(Sku);
         }
 
-        public void GetProductData(string skuID)
+        public void GetOrderData(int OrderID)
         {
-            var SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
-            var sku1 = SC_Api.Get_Product(skuID);
-
-           var netoApi = new NetoApi();
-            var sku2 = netoApi.GetItemBySku(skuID);
+            using (var OM = new OrderManagement(OrderID))
+            {
+                OM.OrderSync(OrderID);
+            }
         }
 
         public void GetProductBrand()
         {
             var SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
             var Brand = SC_Api.Get_Manufacturers();
-            foreach(var brand in Brand.OrderBy(b => b.ID))
+            foreach (var brand in Brand.OrderBy(b => b.ID))
             {
                 Response.Write(string.Format("{0} - {1}<br />", brand.ID, brand.ManufacturerName));
             }
         }
+
         private ShipResult DropShip()
         {
             //Orders order = new Orders();
@@ -408,7 +411,7 @@ namespace PurchaseOrderSys.Controllers
                 var purchaseOrder = SCWS.Get_PurchaseOrder(22901);
                 foreach (var item in purchaseOrder.Products)
                 {
-                 var Serial_All=   SCWS.PurchaseItemReceiveSerial_All_New(item.ProductID, purchaseOrder.ID);
+                    var Serial_All = SCWS.PurchaseItemReceiveSerial_All_New(item.ProductID, purchaseOrder.ID);
                 }
 
                 var Company = SCWS.Get_AllCompany();
@@ -447,7 +450,7 @@ namespace PurchaseOrderSys.Controllers
                     QtyReceivedToDate = 0,
                     DefaultWarehouseID = WarehouseID
                 });
-                 purchaseOrder = SCWS.Get_PurchaseOrder(newPurchase.ID);
+                purchaseOrder = SCWS.Get_PurchaseOrder(newPurchase.ID);
                 var receiveRequest = new PurchaseItemReceiveRequest() { PurchaseID = purchaseOrder.ID };
                 var receiveRequestProduct = new List<PurchaseItemReceiveRequestProduct>();
                 //List<PurchaseItemReceive> PurchaseItemList = PurchaseItems.GetAll(true).Where(p => p.WarehouseName.Equals(WarehouseData.Name)).ToList();
