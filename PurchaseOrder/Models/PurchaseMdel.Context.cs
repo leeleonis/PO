@@ -86,5 +86,6 @@ namespace PurchaseOrderSys.Models
         public virtual DbSet<WinitTransferBoxItem> WinitTransferBoxItem { get; set; }
         public virtual DbSet<WinitTransfer> WinitTransfer { get; set; }
         public virtual DbSet<ApiSetting> ApiSetting { get; set; }
+        public virtual DbSet<WinitTransferSKU> WinitTransferSKU { get; set; }
     }
 }

@@ -7817,5 +7817,95 @@ namespace PurchaseOrderSys.App_GlobalResources {
                 return ResourceManager.GetString("WinitTransferBoxItem_WinitTransferBoxID", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   查詢類似 CreateAt 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransferSKU_CreateAt {
+            get {
+                return ResourceManager.GetString("WinitTransferSKU_CreateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CreateBy 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransferSKU_CreateBy {
+            get {
+                return ResourceManager.GetString("WinitTransferSKU_CreateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ID 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransferSKU_ID {
+            get {
+                return ResourceManager.GetString("WinitTransferSKU_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 IsEnable 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransferSKU_IsEnable {
+            get {
+                return ResourceManager.GetString("WinitTransferSKU_IsEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ItemBarcodeFile 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransferSKU_ItemBarcodeFile {
+            get {
+                return ResourceManager.GetString("WinitTransferSKU_ItemBarcodeFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 itemBarcodeList 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransferSKU_itemBarcodeList {
+            get {
+                return ResourceManager.GetString("WinitTransferSKU_itemBarcodeList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 SkuNo 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransferSKU_SkuNo {
+            get {
+                return ResourceManager.GetString("WinitTransferSKU_SkuNo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UpdateAt 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransferSKU_UpdateAt {
+            get {
+                return ResourceManager.GetString("WinitTransferSKU_UpdateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UpdateBy 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransferSKU_UpdateBy {
+            get {
+                return ResourceManager.GetString("WinitTransferSKU_UpdateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 WinitTransferID 的當地語系化字串。
+        /// </summary>
+        public static string WinitTransferSKU_WinitTransferID {
+            get {
+                return ResourceManager.GetString("WinitTransferSKU_WinitTransferID", resourceCulture);
+            }
+        }
     }
 }

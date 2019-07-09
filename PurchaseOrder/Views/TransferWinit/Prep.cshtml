@@ -28,7 +28,7 @@
                             <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="IsEnable" value="True">
-                               @Html.Hidden("boxitemset")
+                                @Html.Hidden("boxitemset")
                                 <div id="content" class="tab-content">
                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                     <div class="tab-pane" id="hb1">
@@ -105,8 +105,8 @@
                                     </div>
                                 </div>
                                 <div class="widget-footer">
-                                    @*<button type="submit" class="btn btn-primary" id="save">儲存</button>
-                                    <button type="button" class="btn btn-primary" id="saveexit">儲存並返回</button>*@
+                                    <button type="submit" class="btn btn-primary" id="save">儲存</button>
+                                    <button type="button" class="btn btn-primary" id="saveexit">儲存並返回</button>
                                     <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Edit", new {Model.ID })'">返回</button>
                                 </div>
                             </form>
@@ -145,7 +145,8 @@
                     method: "get",//或post，自由決定，影響到Server端用FormCollection取值或Request.QueryString取得DataTables傳遞的資訊
                     url: "@Url.Action("PrepVMList")",
                     data: function (d) {
-                        d.SID =@Model.ID
+                        d.SID =@Model.ID;
+                        d.Key = "Winit";
                     }
                 },
                 serverSide: true,//啟用ServerSide模式
@@ -176,6 +177,7 @@
                                 boxchange();
                                 $("#Serial").val("");
                                 $("#Serial").focus();
+                                javascript: jsWebClientPrint.print(encodeURIComponent(data.print));
                             }
                             else {
                                 alert(data.Errmsg);
@@ -273,5 +275,7 @@
                     }
                 });
         }
+    
     </script>
+    @Html.Raw(ViewBag.WCPScript);
 }
