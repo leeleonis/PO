@@ -357,17 +357,35 @@ namespace PurchaseOrderSys.Controllers
                 db.SaveChanges();
                 foreach (var Boxitem in WinitTransferBoxList)//Winit單
                 {
-                    Boxitem.IsEnable = true;
-                    Boxitem.CreateBy = CreateBy;
-                    Boxitem.UpdateAt = CreateAt;
-                    foreach (var item in Boxitem.WinitTransferBoxItem)
+                    if (Boxitem.ID == 0)
                     {
-                        var Serial = db.SerialsLlist.Where(x => x.IsEnable && x.SerialsNo == item.SerialsNo && x.SerialsType == "TransferOut" && x.TransferSKU.TransferID == ID && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).FirstOrDefault();
-                        item.SerialsLlistID = Serial.ID;
-                        item.CreateBy = CreateBy;
-                        item.UpdateAt = CreateAt;
+                        Boxitem.IsEnable = true;
+                        Boxitem.CreateBy = CreateBy;
+                        Boxitem.CreateAt = CreateAt;
+                        foreach (var item in Boxitem.WinitTransferBoxItem)
+                        {
+                            var Serial = db.SerialsLlist.Where(x => x.IsEnable && x.SerialsNo == item.SerialsNo && x.SerialsType == "TransferOut" && x.TransferSKU.TransferID == ID && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).FirstOrDefault();
+                            item.SerialsLlistID = Serial.ID;
+                            item.CreateBy = CreateBy;
+                            item.CreateAt = CreateAt;
+                        }
+                        oTransfer.WinitTransfer.WinitTransferBox.Add(Boxitem);
                     }
-                    oTransfer.WinitTransfer.WinitTransferBox.Add(Boxitem);
+                    else
+                    {
+                        var WinitTransferBox = db.WinitTransferBox.Find(Boxitem.ID);
+                        foreach (var item in Boxitem.WinitTransferBoxItem)
+                        {
+                            if (!WinitTransferBox.WinitTransferBoxItem.Where(x => x.SerialsNo == item.SerialsNo).Any())
+                            {
+                                var Serial = db.SerialsLlist.Where(x => x.IsEnable && x.SerialsNo == item.SerialsNo && x.SerialsType == "TransferOut" && x.TransferSKU.TransferID == ID && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).FirstOrDefault();
+                                item.SerialsLlistID = Serial.ID;
+                                item.CreateBy = CreateBy;
+                                item.CreateAt = CreateAt;
+                                WinitTransferBox.WinitTransferBoxItem.Add(item);
+                            }
+                        }
+                    }
                 }
                 db.SaveChanges();
             }
@@ -567,12 +585,11 @@ namespace PurchaseOrderSys.Controllers
                                 var itemBarcodeList = WinitTransferSKU.itemBarcodeList.Split(';');
                                 //var IndexNo = WinitTransferSKU.IndexNo;
                                 var FilePage = 0;
-                                var BarCode = "";
                                 PrepVM.SerialsLlist.Add(Serial);
                                 var WinitTransferBox = WinitTransferBoxList.Skip(boxitemset).Take(1).FirstOrDefault();
                                 //var broke = false;
                                     var GBoxList = WinitTransferBoxList.Where(x => x.WinitTransferBoxItem.Where(y => y.SkuNo == SkuNo).Any()).GroupBy(x => x.WinitTransferBoxItem.GroupBy(y => y.SkuNo)).ToList();
-                                    FilePage = GBoxList.Sum(x => x.Sum(y => y.WinitTransferBoxItem.Count())) + 1;
+                                    FilePage = GBoxList.Sum(x => x.Sum(y => y.WinitTransferBoxItem.Where(z => z.SkuNo == SkuNo).Count())) + 1;
                                 //foreach (var itemBarcode in itemBarcodeList)
                                 //{
 
@@ -601,6 +618,7 @@ namespace PurchaseOrderSys.Controllers
                                     Name = Serial.PurchaseSKU.Name,
                                     BarCode = itemBarcodeList[FilePage],
                                     FilePage = FilePage.ToString(),
+                                    WinitTransferSKUID = WinitTransferSKU.ID,
                                     Weight = Serial.PurchaseSKU.SKU.Logistic?.ShippingWeight ?? 0
                                 });
                                 print = "id=" + WinitTransferSKU.ID + "&Page=" + FilePage;

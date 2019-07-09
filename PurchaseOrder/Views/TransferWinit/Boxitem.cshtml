@@ -59,7 +59,10 @@
                                         <td>@item.Name</td>
                                         <td>@item.SerialsNo</td>
                                         <td>@item.BarCode</td>
-                                        <td>@item.FilePage</td>
+                                        <td>
+                                            <input type="button"  onclick="javascript:jsWebClientPrint.print('id=@item.WinitTransferSKUID + &Page=@item.FilePage');" value="@item.SkuNo"/>
+                                            @item.FilePage
+                                        </td>
                                     </tr>
                                 }
                             }

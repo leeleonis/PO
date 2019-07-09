@@ -1170,6 +1170,7 @@
           <Property Name="Weight" Type="decimal" Precision="18" Scale="2" />
           <Property Name="FilePage" Type="nvarchar" MaxLength="4" />
           <Property Name="SkuNo" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="WinitTransferSKUID" Type="int" />
         </EntityType>
         <EntityType Name="WinitTransferSKU">
           <Key>
@@ -5622,6 +5623,7 @@
           <Property Name="Weight" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="FilePage" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
           <Property Name="SkuNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="WinitTransferSKUID" Type="Int32" />
         </EntityType>
         <Association Name="FK_WinitTransferBoxItem_SerialsLlist">
           <End Type="PurchaseOrderModel.SerialsLlist" Role="SerialsLlist" Multiplicity="1" />
@@ -6947,6 +6949,7 @@
           <EntitySetMapping Name="WinitTransferBoxItem">
             <EntityTypeMapping TypeName="PurchaseOrderModel.WinitTransferBoxItem">
               <MappingFragment StoreEntitySet="WinitTransferBoxItem">
+                <ScalarProperty Name="WinitTransferSKUID" ColumnName="WinitTransferSKUID" />
                 <ScalarProperty Name="SkuNo" ColumnName="SkuNo" />
                 <ScalarProperty Name="FilePage" ColumnName="FilePage" />
                 <ScalarProperty Name="Weight" ColumnName="Weight" />

@@ -27,6 +27,7 @@ namespace PurchaseOrderSys.Models
         public Nullable<decimal> Weight { get; set; }
         public string FilePage { get; set; }
         public string SkuNo { get; set; }
+        public Nullable<int> WinitTransferSKUID { get; set; }
     
         public virtual SerialsLlist SerialsLlist { get; set; }
         public virtual WinitTransferBox WinitTransferBox { get; set; }
