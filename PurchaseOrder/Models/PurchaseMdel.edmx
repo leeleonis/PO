@@ -486,11 +486,11 @@
           <Property Name="CustomerEmail" Type="nvarchar" MaxLength="100" />
           <Property Name="OrderType" Type="tinyint" Nullable="false" />
           <Property Name="OrderStatus" Type="tinyint" Nullable="false" />
-          <Property Name="OrderDate" Type="datetime" Nullable="false" />
+          <Property Name="OrderDate" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="PaymentStatus" Type="tinyint" Nullable="false" />
-          <Property Name="PaymentDate" Type="datetime" />
+          <Property Name="PaymentDate" Type="datetime2" Precision="7" />
           <Property Name="FulfillmentStatus" Type="tinyint" Nullable="false" />
-          <Property Name="FulfilledDate" Type="datetime" />
+          <Property Name="FulfilledDate" Type="datetime2" Precision="7" />
           <Property Name="BuyerNote" Type="nvarchar(max)" />
           <Property Name="Comment" Type="nvarchar(max)" />
           <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
@@ -1170,7 +1170,6 @@
           <Property Name="Weight" Type="decimal" Precision="18" Scale="2" />
           <Property Name="FilePage" Type="nvarchar" MaxLength="4" />
           <Property Name="SkuNo" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="WinitTransferSKUID" Type="int" />
         </EntityType>
         <EntityType Name="WinitTransferSKU">
           <Key>
@@ -5209,11 +5208,11 @@
           <Property Name="CustomerEmail" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="OrderType" Type="Byte" Nullable="false" />
           <Property Name="OrderStatus" Type="Byte" Nullable="false" />
-          <Property Name="OrderDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="OrderDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="PaymentStatus" Type="Byte" Nullable="false" />
-          <Property Name="PaymentDate" Type="DateTime" Precision="3" />
+          <Property Name="PaymentDate" Type="DateTime" Precision="7" />
           <Property Name="FulfillmentStatus" Type="Byte" Nullable="false" />
-          <Property Name="FulfilledDate" Type="DateTime" Precision="3" />
+          <Property Name="FulfilledDate" Type="DateTime" Precision="7" />
           <Property Name="BuyerNote" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -6949,7 +6948,6 @@
           <EntitySetMapping Name="WinitTransferBoxItem">
             <EntityTypeMapping TypeName="PurchaseOrderModel.WinitTransferBoxItem">
               <MappingFragment StoreEntitySet="WinitTransferBoxItem">
-                <ScalarProperty Name="WinitTransferSKUID" ColumnName="WinitTransferSKUID" />
                 <ScalarProperty Name="SkuNo" ColumnName="SkuNo" />
                 <ScalarProperty Name="FilePage" ColumnName="FilePage" />
                 <ScalarProperty Name="Weight" ColumnName="Weight" />

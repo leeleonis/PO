@@ -442,6 +442,7 @@ namespace PurchaseOrderSys.Models
             return Enum.GetValues(typeof(OrderStatus)).Cast<OrderStatus>().ToDictionary(s => bySC ? SC_Status[(byte)s] : (byte)s, s => Status[(byte)s]);
         }
 
+        public enum PaymentStatus { Cleared, NotCleared, Unknown };
         public enum OrderPaymentStatus { None, Partial, Full, OverPaid, Refunded };
         public static Dictionary<byte, string> OrderPaymentStatusList(bool bySC = false)
         {

@@ -2733,4 +2733,10 @@
   <data name="WinitTransferSKU_ItemBarcodeFile" xml:space="preserve">
     <value>序號條碼PDF</value>
   </data>
+  <data name="Items_eBayTransationID" xml:space="preserve">
+    <value>NULL</value>
+  </data>
+  <data name="Payments_ShippingCharge" xml:space="preserve">
+    <value>NULL</value>
+  </data>
 </root>
