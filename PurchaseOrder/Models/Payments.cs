@@ -26,7 +26,7 @@ namespace PurchaseOrderSys.Models
         public int OrderID { get; set; }
         public byte Status { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
-        public Nullable<int> Gateway { get; set; }
+        public int Gateway { get; set; }
         public decimal TotalValue { get; set; }
         public decimal ShippingCharge { get; set; }
         public decimal InsuranceCharge { get; set; }

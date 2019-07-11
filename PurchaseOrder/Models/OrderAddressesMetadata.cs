@@ -63,7 +63,6 @@ namespace PurchaseOrderSys.Models
     		/// First Name
     		/// </summary>        
     	    [Display(Name = "OrderAddresses_FirstName", ResourceType = typeof(App_GlobalResources.Resource))]
-            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  FirstName { get; set; }
     
@@ -72,7 +71,6 @@ namespace PurchaseOrderSys.Models
     		/// Last Name
     		/// </summary>        
     	    [Display(Name = "OrderAddresses_LastName", ResourceType = typeof(App_GlobalResources.Resource))]
-            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  LastName { get; set; }
     
@@ -81,8 +79,6 @@ namespace PurchaseOrderSys.Models
     		/// Address Line1
     		/// </summary>        
     	    [Display(Name = "OrderAddresses_AddressLine1", ResourceType = typeof(App_GlobalResources.Resource))]
-            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-            [MaxLength(100, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  AddressLine1 { get; set; }
     
     		    
@@ -90,7 +86,6 @@ namespace PurchaseOrderSys.Models
     		/// Address Line2
     		/// </summary>        
     	    [Display(Name = "OrderAddresses_AddressLine2", ResourceType = typeof(App_GlobalResources.Resource))]
-            [MaxLength(100, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  AddressLine2 { get; set; }
     
     		    
@@ -98,8 +93,7 @@ namespace PurchaseOrderSys.Models
     		/// City
     		/// </summary>        
     	    [Display(Name = "OrderAddresses_City", ResourceType = typeof(App_GlobalResources.Resource))]
-            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-            [MaxLength(20, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  City { get; set; }
     
     		    
@@ -107,7 +101,7 @@ namespace PurchaseOrderSys.Models
     		/// State
     		/// </summary>        
     	    [Display(Name = "OrderAddresses_State", ResourceType = typeof(App_GlobalResources.Resource))]
-            [MaxLength(10, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  State { get; set; }
     
     		    
@@ -115,8 +109,7 @@ namespace PurchaseOrderSys.Models
     		/// Postcode
     		/// </summary>        
     	    [Display(Name = "OrderAddresses_Postcode", ResourceType = typeof(App_GlobalResources.Resource))]
-            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-            [MaxLength(20, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  Postcode { get; set; }
     
     		    
@@ -124,8 +117,7 @@ namespace PurchaseOrderSys.Models
     		/// Country Code
     		/// </summary>        
     	    [Display(Name = "OrderAddresses_CountryCode", ResourceType = typeof(App_GlobalResources.Resource))]
-            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-            [MaxLength(10, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  CountryCode { get; set; }
     
     		    
@@ -133,7 +125,6 @@ namespace PurchaseOrderSys.Models
     		/// Country Name
     		/// </summary>        
     	    [Display(Name = "OrderAddresses_CountryName", ResourceType = typeof(App_GlobalResources.Resource))]
-            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  CountryName { get; set; }
     

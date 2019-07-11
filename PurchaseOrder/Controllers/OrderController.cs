@@ -23,9 +23,31 @@ namespace PurchaseOrderSys.Controllers
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            Orders order = db.Orders.Find(id);
+            //Orders order = db.Orders.FirstOrDefault(o => o.ID.Equals(id.Value) || o.SCID.Value.Equals(id.Value));
+            Orders order;
 
-            if (order == null) return HttpNotFound();
+            using (var OM = new OrderManagement(id))
+            {
+                try
+                {
+                    order = OM.OrderSync(id);
+                    if (order.CreateAt.CompareTo(order.UpdateAt.Value) == 0)
+                    {
+                        order.ActionLogs.Add(new OrderActionLogs()
+                        {
+                            OrderID = order.ID,
+                            Item = "Order",
+                            Description = "Sync Data",
+                            CreateBy = Session["AdminName"].ToString(),
+                            CreateAt = DateTime.UtcNow
+                        });
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw new Exception(e.InnerException?.Message ?? e.Message);
+                }
+            }
 
             ViewBag.CompanyList = db.Company.AsNoTracking().Where(c => c.IsEnable).OrderBy(c => c.Name).Select(c => new SelectListItem() { Text = c.Name, Value = c.ID.ToString() }).ToList();
             ViewBag.MethodList = db.ShippingMethods.AsNoTracking().Where(m => m.IsEnable).OrderBy(m => m.Name).Select(m => new SelectListItem() { Text = m.Name, Value = m.ID.ToString() }).ToList();

@@ -1,11 +1,12 @@
-using System;
+using System; 
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// Packages class
     /// </summary>
@@ -183,7 +184,7 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "Packages_ShippingStatus", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public bool  ShippingStatus { get; set; }
+    		public byte  ShippingStatus { get; set; }
     
     		    
     		/// <summary>

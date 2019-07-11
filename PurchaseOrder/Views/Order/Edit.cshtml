@@ -81,7 +81,7 @@
                                                                 </tr>
                                                                 <tr>
                                                                     <td>Company：</td>
-                                                                    <td>@Model.GetCompany.Name)</td>
+                                                                    <td>@Model.GetCompany.Name</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td>Channel：</td>
@@ -288,7 +288,7 @@
                                                                             <div class="input-group">
                                                                                 <input type="text" class="form-control" />
                                                                                 <div class="input-group-btn">
-                                                                                    <button type="button" class="btn btn-default" onclick="CommentAdd($(this).parent('div').siblings('input').val())">Add</button>
+                                                                                    <button type="button" class="btn btn-default" onclick="CommentAdd($(this).parent('div').siblings('input'));">Add</button>
                                                                                 </div>
                                                                             </div>
                                                                         </td>
@@ -353,7 +353,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td>Gateway：</td>
-                                                            <td></td>
+                                                            <td>@(payment != null ? Enum.GetName(typeof(PurchaseOrderSys.SCService.PaymentMethod), payment.Gateway) : "")</td>
                                                         </tr>
                                                         <tr>
                                                             <td>Total Value：</td>
@@ -383,16 +383,20 @@
                                                             <td>Balance：</td>
                                                             <td>@(payment?.Balance)</td>
                                                         </tr>
-                                                        <tr>
-                                                            <td colspan="2">Other Payment Details</td>
+                                                        <tr class="font-title">
+                                                            <th colspan="2">Other Payment Details</th>
                                                         </tr>
                                                         <tr>
-                                                            <td>Transaction ID #：</td>
-                                                            <td>@(payment?.TransactionID)</td>
+                                                            <td colspan="2">Transaction ID #：</td>
                                                         </tr>
                                                         <tr>
-                                                            <td>Payment Email：</td>
-                                                            <td>@(payment?.PaymentEmail)</td>
+                                                            <td colspan="2" class="text-right">@(payment?.TransactionID)</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2">Payment Email：</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" class="text-right">@(payment?.PaymentEmail)</td>
                                                         </tr>
                                                     </table>
 
@@ -494,10 +498,12 @@
             });
         };
 
-        var CommentAdd = function (text) {
+        var CommentAdd = function (input) {
+            var text = $(input).val();
             if (!website.IsEmpty(text)) {
                 var comment = $('#text-comment').val().trim();
                 $('#text-comment').val((website.IsEmpty(comment) ? text : comment + '\r\n' + text));
+                $(input).val('');
             }
         };
     </script>

@@ -27,6 +27,7 @@ namespace PurchaseOrderSys.Models
         public int OrderID { get; set; }
         public int PackageID { get; set; }
         public string Sku { get; set; }
+        public string OriginSku { get; set; }
         public decimal UnitPrice { get; set; }
         public decimal ExportValue { get; set; }
         public decimal DLExportValue { get; set; }

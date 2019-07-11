@@ -8,7 +8,7 @@
     <table class="table table-bordered text-center">
         <thead>
             <tr style="font-weight:bold;">
-                <td class="font-bg" width="120">
+                <td class="font-bg" width="160">
                     <div>
                         <label class="checkbox" style="padding: 0px; min-height: 17px;">
                             <input type="checkbox" id="chk-package" value="@Model.ID" />
@@ -44,7 +44,7 @@
                         @Html.TextBox(string.Format("Items[{0}][Sku]", index), item.Sku, htmlAttributes: new { @class = "form-control" })
                     </td>
                     <td>@(item.GetSku.SkuLang.FirstOrDefault(l => l.LangID.Equals(LangID))?.Name ?? "")</td>
-                    <td class="text">
+                    <td class="text" style="@(!item.Serials.Any() ? "padding:0;" : "")">
                         @{
                             var Serial = "";
                             if (item.Serials.Any())
@@ -86,7 +86,7 @@
             <table class="table table-bordered text-center">
                 <tr>
                     <td class="font-bg" width="33%">Shipping Status</td>
-                    <td>@Enum.GetName(typeof(EnumData.OrderShippingStatus), 3)</td>
+                    <td>@Enum.GetName(typeof(EnumData.OrderShippingStatus), Model.ShippingStatus)</td>
                 </tr>
             </table>
         </div>
