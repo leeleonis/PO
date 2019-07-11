@@ -2969,4 +2969,10 @@
   <data name="VendorLIst_SCID" xml:space="preserve">
     <value>SCID</value>
   </data>
+  <data name="Items_eBayTransationID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Payments_ShippingCharge" xml:space="preserve">
+    <value></value>
+  </data>
 </root>

@@ -1,10 +1,12 @@
-using System;
+using System; 
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// ShippingMethods class
     /// </summary>
@@ -97,37 +99,38 @@ namespace PurchaseOrderSys.Models
     
     		    
     		/// <summary>
-    		/// Update_by
+    		/// Update By
     		/// </summary>        
-    	    [Display(Name = "ShippingMethods_Update_by", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "ShippingMethods_UpdateBy", ResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public string  Update_by { get; set; }
+    		public string  UpdateBy { get; set; }
     
     		    
     		/// <summary>
-    		/// Update_at
+    		/// Update At
     		/// </summary>        
-    	    [Display(Name = "ShippingMethods_Update_at", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "ShippingMethods_UpdateAt", ResourceType = typeof(App_GlobalResources.Resource))]
             [UIHint("DateTime")]
-    		public Nullable<System.DateTime>  Update_at { get; set; }
+    		public Nullable<System.DateTime>  UpdateAt { get; set; }
     
     		    
     		/// <summary>
-    		/// Create_by
+    		/// Create By
     		/// </summary>        
-    	    [Display(Name = "ShippingMethods_Create_by", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "ShippingMethods_CreateBy", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public string  Create_by { get; set; }
+    		public string  CreateBy { get; set; }
     
     		    
     		/// <summary>
-    		/// Create_at
+    		/// Create At
     		/// </summary>        
-    	    [Display(Name = "ShippingMethods_Create_at", ResourceType = typeof(App_GlobalResources.Resource))]
+    	    [Display(Name = "ShippingMethods_CreateAt", ResourceType = typeof(App_GlobalResources.Resource))]
             [UIHint("DateTime")]
+            [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public System.DateTime  Create_at { get; set; }
+    		public System.DateTime  CreateAt { get; set; }
     
     		    
     	}
