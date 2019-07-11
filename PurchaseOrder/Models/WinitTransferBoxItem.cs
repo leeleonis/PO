@@ -28,8 +28,10 @@ namespace PurchaseOrderSys.Models
         public string FilePage { get; set; }
         public string SkuNo { get; set; }
         public Nullable<int> WinitTransferSKUID { get; set; }
+        public int WinitTransferBoxOrderID { get; set; }
     
         public virtual SerialsLlist SerialsLlist { get; set; }
         public virtual WinitTransferBox WinitTransferBox { get; set; }
+        public virtual WinitTransferBoxOrder WinitTransferBoxOrder { get; set; }
     }
 }

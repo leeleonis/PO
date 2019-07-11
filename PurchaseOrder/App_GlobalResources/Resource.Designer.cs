@@ -7108,6 +7108,24 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查詢類似 Email 的當地語系化字串。
+        /// </summary>
+        public static string VendorLIst_Email {
+            get {
+                return ResourceManager.GetString("VendorLIst_Email", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Email CC 的當地語系化字串。
+        /// </summary>
+        public static string VendorLIst_EmailCC {
+            get {
+                return ResourceManager.GetString("VendorLIst_EmailCC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 Fax 的當地語系化字串。
         /// </summary>
         public static string VendorLIst_Fax {
@@ -7158,6 +7176,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         public static string VendorLIst_Principal {
             get {
                 return ResourceManager.GetString("VendorLIst_Principal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 SCID 的當地語系化字串。
+        /// </summary>
+        public static string VendorLIst_SCID {
+            get {
+                return ResourceManager.GetString("VendorLIst_SCID", resourceCulture);
             }
         }
         

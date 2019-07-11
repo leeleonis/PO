@@ -25,6 +25,7 @@ namespace PurchaseOrderSys.Models
         public Nullable<System.DateTime> UpdateAt { get; set; }
         public string ItemBarcodeFile { get; set; }
         public Nullable<int> IndexNo { get; set; }
+        public string winitProductCode { get; set; }
     
         public virtual WinitTransfer WinitTransfer { get; set; }
     }

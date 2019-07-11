@@ -12,30 +12,28 @@ namespace PurchaseOrderSys.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class WinitTransfer
+    public partial class WinitTransferBoxOrder
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public WinitTransfer()
+        public WinitTransferBoxOrder()
         {
-            this.WinitTransferBox = new HashSet<WinitTransferBox>();
-            this.WinitTransferSKU = new HashSet<WinitTransferSKU>();
+            this.WinitTransferBoxItem = new HashSet<WinitTransferBoxItem>();
         }
     
         public bool IsEnable { get; set; }
-        public int TransferID { get; set; }
-        public Nullable<int> CompleteBoxes { get; set; }
-        public Nullable<decimal> TotalVal { get; set; }
+        public int ID { get; set; }
+        public int WinitTransferBoxID { get; set; }
+        public string WinitOrderNo { get; set; }
+        public string LabelFile { get; set; }
+        public string SkuNo { get; set; }
         public string CreateBy { get; set; }
         public System.DateTime CreateAt { get; set; }
         public string UpdateBy { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }
-        public string SBarcodeLabelType { get; set; }
-        public string BoxLabelSize { get; set; }
+        public string BarCode { get; set; }
     
-        public virtual Transfer Transfer { get; set; }
+        public virtual WinitTransferBox WinitTransferBox { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<WinitTransferBox> WinitTransferBox { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<WinitTransferSKU> WinitTransferSKU { get; set; }
+        public virtual ICollection<WinitTransferBoxItem> WinitTransferBoxItem { get; set; }
     }
 }

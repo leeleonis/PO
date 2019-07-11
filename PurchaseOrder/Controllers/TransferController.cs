@@ -24,7 +24,7 @@ namespace PurchaseOrderSys.Controllers
             }
             if (!string.IsNullOrWhiteSpace(TransferSearchVM.Serial))
             {
-                Transferlist = Transferlist.Where(x => x.TransferSKU.Where(y => y.IsEnable && y.SerialsLlist.Where(z => z.SerialsNo == TransferSearchVM.Serial).Any()).Any());
+                Transferlist = Transferlist.Where(x => x.TransferSKU.Where(y =>y.IsEnable &&  ((y.SerialsLlist.Where(z => z.SerialsNo == TransferSearchVM.Serial).Any())|| ( y.RMASerialsLlist.Where(z => z.SerialsNo == TransferSearchVM.Serial).Any()))).Any());
             }
             if (TransferSearchVM.From.HasValue)
             {

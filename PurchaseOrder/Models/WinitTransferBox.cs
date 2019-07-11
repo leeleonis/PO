@@ -18,6 +18,7 @@ namespace PurchaseOrderSys.Models
         public WinitTransferBox()
         {
             this.WinitTransferBoxItem = new HashSet<WinitTransferBoxItem>();
+            this.WinitTransferBoxOrder = new HashSet<WinitTransferBoxOrder>();
         }
     
         public bool IsEnable { get; set; }
@@ -27,15 +28,15 @@ namespace PurchaseOrderSys.Models
         public Nullable<decimal> Width { get; set; }
         public Nullable<decimal> Heigth { get; set; }
         public Nullable<decimal> Weight { get; set; }
-        public string BarCode { get; set; }
         public string CreateBy { get; set; }
         public System.DateTime CreateAt { get; set; }
         public string UpdateBy { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }
-        public string LabelFile { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<WinitTransferBoxItem> WinitTransferBoxItem { get; set; }
         public virtual WinitTransfer WinitTransfer { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<WinitTransferBoxOrder> WinitTransferBoxOrder { get; set; }
     }
 }

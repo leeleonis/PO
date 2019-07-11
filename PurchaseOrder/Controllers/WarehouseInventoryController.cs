@@ -526,6 +526,7 @@ namespace PurchaseOrderSys.Controllers
                             Serialitem.Stock = item.SerialsQTY;
                             Serialitem.Warehouse = item.Warehouse.Name;
                             Serialitem.IStype = item.SerialsType;
+                            Serialitem.Transfer = item.TransferSKU?.TransferID;
                         }
                     }
                 }
@@ -541,7 +542,8 @@ namespace PurchaseOrderSys.Controllers
                         Warehouse = item.Warehouse.Name,
                         Stock = item.SerialsQTY,
                         Date = item.CreateAt.ToLocalTime(),
-                        IStype = item.SerialsType
+                        IStype = item.SerialsType,
+                        Transfer = item.TransferSKU?.TransferID,
                     });
                 }
             }

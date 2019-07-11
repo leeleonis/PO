@@ -2,6 +2,8 @@
 @{
     ViewBag.title = "Winit TransferOut Serials";
     ViewBag.boxitemset = Model.WinitTransfer.WinitTransferBox.Count() - 1;
+    var ShippingList = new PurchaseOrderSys.Api.Shipping_API().ShippingList().data.shippingMethod.Select(x => new SelectListItem { Text = x.text, Value = x.value.ToString() }).ToList();
+    var Carrier = ShippingList.Where(x => x.Value == Model.Carrier).FirstOrDefault()?.Text;
 }
 <style>
     .boxselect{
@@ -81,7 +83,7 @@
                                                 <div class="form-group">
                                                     @Html.Label("Carrier:", htmlAttributes: new { @class = "control-label col-sm-1" })
                                                     <div class="col-sm-4 col-lg-2">
-                                                        @Html.Label("Carrier", htmlAttributes: new { @class = "control-label" })
+                                                        @Html.Label(Carrier, htmlAttributes: new { @class = "control-label" })
                                                     </div>
                                                     @Html.Label("Complete Boxes", htmlAttributes: new { @class = "control-label col-sm-1" })
                                                     <div class="col-sm-4 col-lg-2">
@@ -93,7 +95,7 @@
                                                         <button type="button" class="btn btn-default">保留Box</button>
                                                     </div>
                                                     <div class="col-sm-5 col-lg-2">
-                                                        <button type="button" class="btn btn-default">打印Box</button>
+                                                        <button type="button" class="btn btn-default" id="printAll">打印Box</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -193,6 +195,24 @@
                     url: "@Url.Action("AddBox")",
                     data: {
                         ID:"@Html.Display("ID")"
+                    },
+                    success: function (data) {
+                        if (data.status) {
+                            boxchange();
+                        }
+                        else {
+                            alert(data.Errmsg);
+                        }
+                    }
+                });
+            });
+            $("#printAll").click(function () {
+                $.ajax({
+                    traditional: true,
+                    type: "post",
+                    url: "@Url.Action("PrintBox")",
+                    data: {
+                        ID: "@Html.Display("ID")"
                     },
                     success: function (data) {
                         if (data.status) {

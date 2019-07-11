@@ -111,7 +111,7 @@
                                                     else if (Model.Status == "Requested")
                                                     {
                                                         <a type="button" href="@Url.Action("Prep", new { Model.ID })" class='btn btn-default btn-sm' id='Prep'>Prep</a>
-                                                        <a type="button" href="@Url.Action("Requested", new { Model.ID })" class='btn btn-default btn-sm' id='Request'>UnRequest</a>
+                                                        <a type="button" class='btn btn-default btn-sm' id='UnRequest'>UnRequest</a>
                                                         <a type="button" href="@Url.Action("PrintAWB", new { Model.ID })" class='btn btn-default btn-sm' id='PrintAWB'>Print AWB</a>
                                                         if (Model.TransferSKU.Where(x => x.IsEnable).Where(x => x.SerialsLlist.Where(y => y.SerialsType == "TransferOut").Any() || x.RMASerialsLlist.Where(y => y.SerialsType == "TransferOut").Any()).Any())
                                                         {
@@ -408,6 +408,24 @@
                 autoOpen: false,
                 width: 800
             });
+            $("body").on("click", "#UnRequest", function () {
+                var url ="@Url.Action("Requested")";
+                $.ajax({
+                    url: url,
+                    data: {
+                        id: @Html.Display("ID"),
+                    },
+                    success: function (data) {
+                        if (data.status) {
+                            window.location.reload();
+                        }
+                        else {
+                            alert(data.Errmsg)
+                        }
+                    }
+                });
+                return false;
+            });
             $("body").on("click", ".Excel", function () {
                 var url = '@Url.Action("SerialsExcel", "Ajax")'
                 $.ajax({
@@ -448,7 +466,7 @@
             var div = $('<div style="border:2px blue solid;" />').addClass('loading').text('Loading...');
             $.ajax({
                 type: "post",
-                url: "@Url.Action("GetSerialList")",
+                url: "@Url.Action("GetSerialList", "Transfer")",
                 data: {
                     ID: d.ID
                 },

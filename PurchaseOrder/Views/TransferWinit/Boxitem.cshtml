@@ -44,9 +44,6 @@
                                 <th>Name</th>
                                 <th>Serial</th>
                                 <th>S Barcode</th>
-                                <th>Download</th>
-                                @*<th>Value</th>
-                                    <th>Upload Invoice</th>*@
                             </tr>
                         </thead>
                         <tbody>
@@ -58,10 +55,9 @@
                                         <td><button type='button' class='glyphicon glyphicon-remove btn-danger delserials' value="@item.SerialsLlistID"></button>@item.SkuNo</td>
                                         <td>@item.Name</td>
                                         <td>@item.SerialsNo</td>
-                                        <td>@item.BarCode</td>
                                         <td>
-                                            <input type="button"  onclick="javascript:jsWebClientPrint.print('id=@item.WinitTransferSKUID + &Page=@item.FilePage');" value="@item.SkuNo"/>
-                                            @item.FilePage
+                                            @item.BarCode
+                                            <input type="button" onclick="javascript:jsWebClientPrint.print('id=@item.WinitTransferSKUID + &Page=@item.FilePage');" value="補印" />
                                         </td>
                                     </tr>
                                 }

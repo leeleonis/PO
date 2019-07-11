@@ -2733,4 +2733,13 @@
   <data name="WinitTransferSKU_ItemBarcodeFile" xml:space="preserve">
     <value>序號條碼PDF</value>
   </data>
+  <data name="VendorLIst_Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="VendorLIst_EmailCC" xml:space="preserve">
+    <value>Email CC</value>
+  </data>
+  <data name="VendorLIst_SCID" xml:space="preserve">
+    <value>SCID</value>
+  </data>
 </root>

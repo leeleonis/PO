@@ -61,12 +61,7 @@ namespace PurchaseOrderSys.Models
     		public Nullable<decimal>  Weight { get; set; }
     
     		    
-    		/// <summary>
-    		/// Bar Code
-    		/// </summary>        
-    	    [Display(Name = "WinitTransferBox_BarCode", ResourceType = typeof(App_GlobalResources.Resource))]
-            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public string  BarCode { get; set; }
+
     
     		    
     		/// <summary>

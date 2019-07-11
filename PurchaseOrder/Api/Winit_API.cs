@@ -67,25 +67,29 @@ namespace PurchaseOrderSys.Api
         private bool disposed = false;
 
         private string api_url = "http://api.winit.com.cn/ADInterface/api";
-        private string action = "getToken";
-        private string api_key = "peter0626@hotmail.com";
-        private string api_userName = "peter0626@hotmail.com";
-        private string api_password = "gubu67qaP5e$ra*t";
-        private string api_token = "";
+        private string api_key = "peter0626@hotmail.com";//"peter0626@hotmail.com";
+        //private string api_userName = "peter0626@hotmail.com"; //"peter0626@hotmail.com";
+        //private string api_password = "W7oBeN3Vu!rL_rU-ITH-"; //"gubu67qaP5e$ra*t";
+        private string api_token = "54F9B02195FCDFE9B2E80341402C9BDD";
+        //private string action = "getToken";
+        //private string api_key = "peter0626@hotmail.com";
+        //private string api_userName = "peter0626@hotmail.com";
+        //private string api_password = "gubu67qaP5e$ra*t";
+        //private string api_token = "";
 
         public  List<SelectListItem> Warehouse3P()
         {
             var Warehouse3PList = new List<SelectListItem>();
-            var token = new getToken();
-            token.action = action;
-            token.app_key = api_key;
-            token.data = new getTokendata { userName = api_userName, passWord = api_password };
+            //var token = new getToken();
+            //token.action = action;
+            //token.app_key = api_key;
+            //token.data = new getTokendata { userName = api_userName, passWord = api_password };
 
-            var refjson = req<Received>(api_url, token);
-            if (refjson.code.Equals("0"))
-            {
-                api_token = refjson.data;
-            }
+            //var refjson = req<Received>(api_url, token);
+            //if (refjson.code.Equals("0"))
+            //{
+            //    api_token = refjson.data;
+            //}
             queryWarehouse request = _RequestInit<queryWarehouse>("queryWarehouse", JsonConvert.SerializeObject(new { }));
             request.data = new { };
 

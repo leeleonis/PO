@@ -339,7 +339,7 @@ namespace PurchaseOrderSys.Controllers
                         m.CarrierType,
                         m.IsDirectLine,
                         m.Name,
-                        m.CarrierID,
+                        //m.CarrierID,
                         m.MethodTypeID,
                         m.BoxTypeID,
                         m.Carrier,

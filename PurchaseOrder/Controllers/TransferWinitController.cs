@@ -1,4 +1,5 @@
 ﻿using PurchaseOrderSys.Models;
+using PurchaseOrderSys.NewApi;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -79,6 +80,7 @@ namespace PurchaseOrderSys.Controllers
             Transfer.CreateAt = CreateAt;
             Transfer.WinitTransfer = new WinitTransfer
             {
+                IsEnable = true,
                 BoxLabelSize = BoxLabelSize,
                 SBarcodeLabelType = SBarcodeLabelType,
                 CreateBy = CreateBy,
@@ -213,6 +215,7 @@ namespace PurchaseOrderSys.Controllers
                         var PrintV2 = new NewApi.Winit_API().GetPrintV2(PostPrintV2Data);
                         oTransfer.WinitTransfer.WinitTransferSKU.Add(new WinitTransferSKU
                         {
+                            IsEnable = true,
                             SkuNo = productCode,
                             ItemBarcodeFile = PrintV2.itemBarcodeFile,
                             itemBarcodeList = string.Join(";", PrintV2.itemBarcodeList),
@@ -234,6 +237,29 @@ namespace PurchaseOrderSys.Controllers
             {
                 return RedirectToAction("Edit", new { Transfer.ID });
             }
+        }
+        public ActionResult Requested(int ID)
+        {
+            var Transfer = db.Transfer.Find(ID);
+            if (Transfer.Status == "Pending")
+            {
+                Transfer.Status = "Requested";
+            }
+            else
+            {
+                if (Transfer.TransferSKU.Where(x => x.SerialsLlist.Any()).Any())
+                {
+                    return Json(new { status = false, Errmsg = "已輸入序號，無法修改" }, JsonRequestBehavior.AllowGet);
+                }
+                Transfer.Status = "Pending";
+                db.WinitTransferSKU.RemoveRange(Transfer.WinitTransfer.WinitTransferSKU.ToList());
+            }
+
+            Transfer.UpdateBy = UserBy;
+            Transfer.UpdateAt = DateTime.UtcNow;
+            db.SaveChanges();
+
+            return Json(new { status = true }, JsonRequestBehavior.AllowGet);
         }
         public ActionResult Prep(int ID)
         {
@@ -266,9 +292,21 @@ namespace PurchaseOrderSys.Controllers
         [HttpPost]
         public ActionResult Prep(int ID, List<PostList> Prep, bool? saveexit)
         {
+            SavePrep(ID, Prep);
+            if (saveexit.HasValue && saveexit.Value)
+            {
+                return RedirectToAction("Edit", new { ID });
+            }
+            else
+            {
+                return RedirectToAction("Prep", new { ID });
+            }
+        }
+
+        private void SavePrep(int ID, List<PostList> Prep)
+        {
             if (Prep != null)
             {
-
                 Prep = Prep.Where(x => !string.IsNullOrWhiteSpace(x.val)).Distinct().ToList();
             }
             var PrepVMList = (List<TransferItemVM>)Session["WinitPrepVMList" + ID];
@@ -394,15 +432,8 @@ namespace PurchaseOrderSys.Controllers
 
                 var s = ex.ToString();
             }
-            if (saveexit.HasValue && saveexit.Value)
-            {
-                return RedirectToAction("Edit", new { ID });
-            }
-            else
-            {
-                return RedirectToAction("Prep", new { ID });
-            }
         }
+
         public ActionResult Receive(int ID)
         {
             var oTransfer = db.Transfer.Find(ID);
@@ -588,8 +619,8 @@ namespace PurchaseOrderSys.Controllers
                                 PrepVM.SerialsLlist.Add(Serial);
                                 var WinitTransferBox = WinitTransferBoxList.Skip(boxitemset).Take(1).FirstOrDefault();
                                 //var broke = false;
-                                    var GBoxList = WinitTransferBoxList.Where(x => x.WinitTransferBoxItem.Where(y => y.SkuNo == SkuNo).Any()).GroupBy(x => x.WinitTransferBoxItem.GroupBy(y => y.SkuNo)).ToList();
-                                    FilePage = GBoxList.Sum(x => x.Sum(y => y.WinitTransferBoxItem.Where(z => z.SkuNo == SkuNo).Count())) + 1;
+                                var GBoxList = WinitTransferBoxList.Where(x => x.WinitTransferBoxItem.Where(y => y.SkuNo == SkuNo).Any()).GroupBy(x => x.WinitTransferBoxItem.GroupBy(y => y.SkuNo)).ToList();
+                                FilePage = GBoxList.Sum(x => x.Sum(y => y.WinitTransferBoxItem.Where(z => z.SkuNo == SkuNo).Count())) + 1;
                                 //foreach (var itemBarcode in itemBarcodeList)
                                 //{
 
@@ -616,7 +647,7 @@ namespace PurchaseOrderSys.Controllers
                                     SerialsLlistID = Serial.ID,
                                     SerialsNo = Serial.SerialsNo,
                                     Name = Serial.PurchaseSKU.Name,
-                                    BarCode = itemBarcodeList[FilePage],
+                                    BarCode = itemBarcodeList[FilePage - 1],
                                     FilePage = FilePage.ToString(),
                                     WinitTransferSKUID = WinitTransferSKU.ID,
                                     Weight = Serial.PurchaseSKU.SKU.Logistic?.ShippingWeight ?? 0
@@ -703,6 +734,59 @@ namespace PurchaseOrderSys.Controllers
             Session["WinitTransferBox" + ID] = WinitTransferBoxList;
             return Json(new { status = true }, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult PrintBox(int ID)
+        {
+                    var importDeclarationRuleCode = "CIOR";
+                    var exportDeclarationType = "CEOR";
+            var WinitTransfer = db.WinitTransfer.Find(ID);
+            var WinitProducts = new Winit_API().getWinitProducts("OW0103");
+            var winitProductCode = WinitProducts.FirstOrDefault().productCode;
+            var WarehouseList = new Winit_API().getWarehouseList(winitProductCode, "INSJ", "DW", null);
+            var warehouseCode = WarehouseList.warehouseList[1].warehouseCode;
+            var IORList = new Winit_API().IORList(warehouseCode, winitProductCode);
+            var EorList = new Winit_API().EorList();
+            var LogisticsPlan = new Winit_API().getLogisticsPlan(winitProductCode, warehouseCode, warehouseCode);
+            var AvailableMerchandise = new Winit_API().getAvailableMerchandise("WC", winitProductCode, warehouseCode);
+            foreach (var Box in WinitTransfer.WinitTransferBox)
+            {
+                if (!Box.WinitTransferBoxOrder.Any())//沒有取過訂單
+                {
+                    foreach (var item in Box.WinitTransferBoxItem)
+                    {
+
+                    }
+                    
+
+                        
+
+                    var destinationWarehouseCode = warehouseCode;
+                    string importerCode = null;
+                    string exporterCode = null;
+                    string logisticsPlanNo = null;
+                    // 產生WINIT訂單
+                    var nWinitCreateOrder = new WinitCreateOrder
+                    {
+                        orderType = "DW",
+                        winitProductCode = winitProductCode,
+                        destinationWarehouseCode = destinationWarehouseCode,
+                        sellerOrderNo = ID.ToString(),
+                        inspectionWarehouseCode = destinationWarehouseCode,
+                        importDeclarationRuleCode = importDeclarationRuleCode,
+                        packageList = new List<PackageList> { },
+                        importerCode= importerCode,
+                        exportDeclarationType= exportDeclarationType,
+                        exporterCode= exporterCode,
+                        logisticsPlanNo= logisticsPlanNo,
+                        sendPortInfo=new SendPortInfo()
+
+                    };
+                }
+            }
+
+
+
+            return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+        }
         public ActionResult BoxValChange(int ID,string name,string val)
         {
             var index = 0;
@@ -770,6 +854,17 @@ namespace PurchaseOrderSys.Controllers
             Session["WinitTransferBox" + ID] = WinitTransferBoxList;
             Session["WinitPrepVMList" + ID] = PrepVMList;
             return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult Ship(int ID)
+        {
+            var Transfer = db.Transfer.Find(ID);
+            Transfer.Status = "Shipped";
+            Transfer.UpdateBy = UserBy;
+            Transfer.UpdateAt = DateTime.UtcNow;
+            db.SaveChanges();
+
+            return RedirectToAction("Edit", new { ID });
+            //return Json(new { status = true }, JsonRequestBehavior.AllowGet);
         }
         [AllowAnonymous]
         public void PrintMyFiles(int id,string Page)

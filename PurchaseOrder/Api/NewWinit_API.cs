@@ -13,7 +13,7 @@ namespace PurchaseOrderSys.NewApi
 {
     #region 回傳資料
 
-   
+
     /// <summary>
     /// 回傳資料
     /// </summary>
@@ -169,11 +169,198 @@ namespace PurchaseOrderSys.NewApi
         public List<string> itemBarcodeList { get; set; }
     }
     #endregion
+    #region 建立訂單
+    public class MerchandiseList
+    {
+        public string merchandiseCode { get; set; }
+        public string quantity { get; set; }
+        public string specification { get; set; }
+    }
+
+    public class PackageList
+    {
+        public List<MerchandiseList> merchandiseList { get; set; }
+        public string sellerCaseNo { get; set; }
+        public string thirdPartyCaseNo { get; set; }
+        public string sellerHeight { get; set; }
+        public string sellerLength { get; set; }
+        public string sellerWeight { get; set; }
+        public string sellerWidth { get; set; }
+    }
+
+    public class SendPortInfo
+    {
+        public string sendPortType { get; set; }
+        public string pickupCartonAddressCode { get; set; }
+        public string sendPortDate { get; set; }
+        public string containerNo { get; set; }
+        public string sealNo { get; set; }
+    }
+    public class WinitCreateOrder
+    {
+
+        public string orderType { get; set; }
+        public string winitProductCode { get; set; }
+        public string destinationWarehouseCode { get; set; }
+        public string sellerOrderNo { get; set; }
+        public string inspectionWarehouseCode { get; set; }
+        public string importDeclarationRuleCode { get; set; }
+        public List<PackageList> packageList { get; set; }
+        public string importerCode { get; set; }
+        public string exportDeclarationType { get; set; }
+        public string exporterCode { get; set; }
+        public string logisticsPlanNo { get; set; }
+        public SendPortInfo sendPortInfo { get; set; }
+    }
+    #endregion
+
+    /// <summary>
+    /// 查詢頭程服務
+    /// </summary>
+    public class WinitProducts
+    {
+        /// <summary>
+        /// Winit產品編碼
+        /// </summary>
+        public string productCode { get; set; }
+        /// <summary>
+        /// Winit產品名稱
+        /// </summary>
+        public string description { get; set; }
+        /// <summary>
+        /// Winit產品描述
+        /// </summary>
+        public string productName { get; set; }
+    }
+    /// <summary>
+    /// 查詢驗貨/目的倉
+    /// </summary>
+    public class WinitWarehouse
+    {
+        /// <summary>
+        /// 倉庫Code
+        /// </summary>
+        public string countryCode { get; set; }
+        /// <summary>
+        /// 倉庫名稱
+        /// </summary>
+        public string warehouseName { get; set; }
+        /// <summary>
+        /// 國家編碼
+        /// </summary>
+        public string warehouseCode { get; set; }
+    }
+
+    public class WinitWarehouseList
+    {
+        public List<WinitWarehouse> warehouseList { get; set; }
+    }
+
+    /// <summary>
+    /// 查詢進口報關-IOR規則
+    /// </summary>
+    public class IORList
+    {
+        /// <summary>
+        /// 進口報關規則編碼
+        /// </summary>
+        public string code { get; set; }
+        /// <summary>
+        /// 進口報關規則名稱
+        /// </summary>
+        public string iorName { get; set; }
+        /// <summary>
+        /// IOR類型編碼進口報關類型: TIOR-第三方進口商 CIOR-自有進口商
+        /// </summary>
+        public string iorCode { get; set; }
+        /// <summary>
+        /// IOR類型名稱
+        /// </summary>
+        public string name { get; set; }
+    }
+
+    public class EorList
+    {
+        /// <summary>
+        /// EOR類型編碼
+        /// </summary>
+        public string code { get; set; }
+        /// <summary>
+        /// EOR類型名稱 TEOR-第三方出口商 FEOR-金融出口商(需要開通才能使用，詳情可諮詢商務） CEOR-自有出口商
+        /// </summary>
+        public string name { get; set; }
+    }
+    #region 查詢物流計劃
+    public class PlanList
+    {
+        /// <summary>
+        /// 預計發貨時間
+        /// </summary>
+        public string planOutboudDate { get; set; }
+        /// <summary>
+        /// 物流計劃類型：sea-海運,air-空運
+        /// </summary>
+        public string planType { get; set; }
+        /// <summary>
+        /// 截止收貨時間
+        /// </summary>
+        public string pickupPackageDeadline { get; set; }
+        /// <summary>
+        /// 物流計劃名稱
+        /// </summary>
+        public string planName { get; set; }
+        /// <summary>
+        /// 截止下單時間
+        /// </summary>
+        public string createOrderDeadline { get; set; }
+        /// <summary>
+        /// 預計上架時間
+        /// </summary>
+        public string planShelfDate { get; set; }
+        /// <summary>
+        /// 物流計劃編碼
+        /// </summary>
+        public string planCode { get; set; }
+    }
+
+    public class LogisticsPlan
+    {
+        public List<PlanList> planList { get; set; }
+    }
+    #endregion
+    /// <summary>
+    /// 入庫可選商品
+    /// </summary>
+    public class AvailableMerchandise
+    {
+        /// <summary>
+        /// 中文名稱
+        /// </summary>
+        public string merchandiseNameCn { get; set; }
+        /// <summary>
+        /// M碼
+        /// </summary>
+        public string winitMerchandiseCode { get; set; }
+        /// <summary>
+        /// 規格
+        /// </summary>
+        public string specification { get; set; }
+        /// <summary>
+        /// 名稱
+        /// </summary>
+        public string merchandiseName { get; set; }
+        /// <summary>
+        /// 商品編碼
+        /// </summary>
+        public string merchandiseCode { get; set; }
+    }
+
     public class Winit_API : IDisposable
     {
         private bool disposed = false;
 
         private string api_url = "http://openapi.winit.com.cn/openapi/service";
+        private string WinitAccountID = "1004244";
         //private string action = "getToken";
         private string api_key = "peter0626@hotmail.com";//"peter0626@hotmail.com";
         //private string api_userName = "system@qd.com.tw"; //"peter0626@hotmail.com";
@@ -213,8 +400,8 @@ namespace PurchaseOrderSys.NewApi
             var result = req<Received>(api_url, request);
             if (result.code.Equals("0"))
             {
-               return result.data.ToObject<List<warehouseData>>();
-             
+                return result.data.ToObject<List<warehouseData>>();
+
             }
             else
             {
@@ -367,43 +554,97 @@ namespace PurchaseOrderSys.NewApi
             }
             disposed = true;
         }
+        internal T GetAPI<T>(string action, object data)
+        {
+            Queryclient request = _RequestInitNew<Queryclient>(action, data);
+            request.data = data;
+
+            var result = req<Received>(api_url, request);
+            if (result.code.Equals("0"))
+            {
+                return result.data.ToObject<T>();
+
+            }
+            else
+            {
+                return default(T);
+            }
+        }
         /// <summary>
         /// 查询商品
         /// </summary>
         /// <returns></returns>
         public WinitSKU SKUList(string skuCode)
         {
-            var data = new { pageNo = 1, pageSize = 10, skuCode = skuCode };
-            Queryclient request = _RequestInitNew<Queryclient>("winit.mms.item.list",data);
-            request.data = data;
-
-            var result = req<Received>(api_url, request);
-            if (result.code.Equals("0"))
-            {
-                return result.data.ToObject<WinitSKU>();
-
-            }
-            else
-            {
-                return null;
-            }
+            var data = new { pageNo = 1, pageSize = 10, skuCode };
+            return GetAPI<WinitSKU>("winit.mms.item.list", data);
         }
 
         internal ReturnPrintV2 GetPrintV2(PostPrintV2Data postPrintV2Data)
         {
-            Queryclient request = _RequestInitNew<Queryclient>("winit.singleitem.label.print.v2", postPrintV2Data);
-            request.data = postPrintV2Data;
+            return GetAPI<ReturnPrintV2>("winit.singleitem.label.print.v2", postPrintV2Data);
+        }
 
-            var result = req<Received>(api_url, request);
-            if (result.code.Equals("0"))
-            {
-                return result.data.ToObject<ReturnPrintV2>();
 
-            }
-            else
-            {
-                return null;
-            }
+
+        internal List<WinitProducts> getWinitProducts(string productType)
+        {
+            var data = new { productType };
+            return GetAPI<List<WinitProducts>>("winit.wh.pms.getWinitProducts", data);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="winitProductCode">Winit產品編碼</param>
+        /// <param name="warehouseType">驗貨倉：INSJ  目的倉：DEST</param>
+        /// <param name="orderType">訂單類型編碼 SD-標準海外倉入庫（Winit國內驗貨且走Winit頭程 DW-直發海外驗入庫(Winit海外驗貨，頭程僅限賣家直發）DI-直發國內驗入庫（Winit國內驗貨或者賣家自驗，頭程僅限賣家直發）</param>
+        /// <param name="inspectionWarehouseCode">驗貨倉編碼,當warehouseType=DEST時，必填</param>
+        /// <returns></returns>
+        internal WinitWarehouseList getWarehouseList(string winitProductCode, string warehouseType, string orderType, string inspectionWarehouseCode)
+        {
+            var action = "winit.pms.getWarehouseList";
+            return GetAPI<WinitWarehouseList>(action, new { winitProductCode, warehouseType, orderType, inspectionWarehouseCode });
+
+        }
+        /// <summary>
+        /// 查詢進口報關-IOR規則
+        /// </summary>
+        /// <param name="endWarehouseCode">目的倉庫編碼</param>
+        /// <param name="productCode">產品編碼</param>
+        /// <returns></returns>
+        internal List<IORList> IORList(string endWarehouseCode, string productCode)
+        {
+            return GetAPI<List<IORList>>("winit.ups.importDeclarationRule.queryList", new { endWarehouseCode, productCode });
+        }
+        /// <summary>
+        /// 查詢出口報關-EOR類型
+        /// </summary>
+        /// <returns></returns>
+        internal List<EorList> EorList()
+        {
+            return GetAPI<List<EorList>>("winit.ups.eorType.queryEorList", new {});
+        }
+        /// <summary>
+        /// 查詢物流計劃
+        /// </summary>
+        /// <param name="winitProductCode">WINIT產品編碼</param>
+        /// <param name="inspectionWarehouseCode">驗貨倉編碼</param>
+        /// <param name="destinationWarehouseCode">目的倉編碼</param>
+        /// <returns></returns>
+        internal LogisticsPlan getLogisticsPlan(string winitProductCode, string inspectionWarehouseCode, string destinationWarehouseCode)
+        {
+            return GetAPI<LogisticsPlan>("winit.tms.getLogisticsPlan", new { winitProductCode, inspectionWarehouseCode, destinationWarehouseCode });
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="firstLegType">頭程類型： WC-Winit承運,NS-直發, 說明：標準海外倉入庫的頭程類型為WC,國內直發驗入庫與海外直發驗入庫的頭程類型為NS</param>
+        /// <param name="winitProductCode">WINIT產品編碼</param>
+        /// <param name="destinationWarehouseCode">目的倉編碼</param>
+        /// <returns></returns>
+        internal List<AvailableMerchandise> getAvailableMerchandise( string firstLegType, string winitProductCode, string destinationWarehouseCode)
+        {
+            return GetAPI<List<AvailableMerchandise>>("winit.wh.mms.getAvailableMerchandise", new { WinitAccountID, firstLegType, winitProductCode , destinationWarehouseCode });
         }
     }
 }

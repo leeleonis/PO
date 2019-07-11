@@ -415,6 +415,19 @@ namespace PurchaseOrderSys.Models
                { "15x10", "15x10" }
             };
         }
+        /// <summary>
+        /// Winit訂單類型編碼
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<string, string> WinitOrderType()
+        {
+            return new Dictionary<string, string>()
+            {
+               { "DW", "直發海外驗入庫" },
+               { "SD", "標準海外倉入庫" },
+               { "DI", "直發國內驗入庫" }
+            };
+        }
         public enum OrderType { Normal, Dropship, DirectLine, FBA };
         public static Dictionary<byte, string> OrderTypeList()
         {
