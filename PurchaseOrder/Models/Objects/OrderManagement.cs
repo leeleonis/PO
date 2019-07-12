@@ -32,13 +32,13 @@ namespace PurchaseOrderSys.Models
             orderData = db.Orders.FirstOrDefault(o => o.ID.Equals(ID) || o.SCID.Value.Equals(ID));
         }
 
-        public void OrderSync(int? OrderSCID)
+        public Orders OrderSync(int? OrderSCID)
         {
             var result = Request<Orders>("Api/GetOrderData", "Post", new { OrderID = orderData?.SCID ?? OrderSCID });
 
             try
             {
-                if (!result.Status) throw new Exception("Ajax error：" + result.Message);
+                if (!result.Status) throw new Exception(result.Message);
 
                 var order = result.Data;
                 order.OrderStatus = EnumData.OrderStatusList().First(s => s.Value.Equals(EnumData.OrderStatusList(true)[order.OrderStatus])).Key;
@@ -50,7 +50,7 @@ namespace PurchaseOrderSys.Models
                 }
                 else
                 {
-                    orderData = new Orders() { CreateBy = AdminName };
+                    orderData = new Orders() { CreateBy = AdminName, CreateAt = UtcNow };
                     SetUpdateData(orderData, order, new string[] { "IsRush", "OrderParent", "OrderSourceID", "SCID", "CustomerID", "CustomerEmail", "OrderStatus", "OrderDate", "PaymentStatus", "PaymentDate",  "FulfilledDate", "BuyerNote", "Comment" });
                     orderData.Company = db.Company.AsNoTracking().First(c => c.CompanySCID.Value.Equals(order.Company)).ID;
                     orderData.Channel = EnumData.OrderChannelList().First(c => c.Value.Equals(EnumData.OrderChannelList(true)[order.Channel])).Key;
@@ -64,16 +64,19 @@ namespace PurchaseOrderSys.Models
                     package.ShipWarehouse = db.WarehouseSummary.AsNoTracking().First(w => w.IsEnable && w.Type.Equals("SCID") && w.Val.Equals(package.ShipWarehouse.ToString())).WarehouseID;
                     package.ReturnWarehouse = db.WarehouseSummary.AsNoTracking().First(w => w.IsEnable && w.Type.Equals("SCID") && w.Val.Equals(package.ReturnWarehouse.ToString())).WarehouseID;
 
-                    if (orderData.Packages.Any(p => p.SCID.Equals(package.SCID)))
+                    if (orderData.Packages.Any(p => p.SCID.Value.Equals(package.SCID.Value)))
                     {
-                        var packageData = orderData.Packages.First(p => p.SCID.Equals(package.SCID));
+                        var packageData = orderData.Packages.First(p => p.SCID.Value.Equals(package.SCID.Value));
                         SetUpdateData(packageData, package, new string[] { "IsEnable", "CarrierBox", "ShippingMethod", "Export", "ExportMethod", "ExportValue", "UploadTracking", "Tracking", "DLExport", "DLExportMethod", "DLExportValue", "DLUploadTracking", "DLTracking", "ShipWarehouse", "ReturnWarehouse", "ShippingStatus" });
                     }
                     else
                     {
-                        package.ExportCurrency = db.Currency.AsNoTracking().First(c => c.Code.ToLower().Equals(Enum.GetName(typeof(CurrencyCodeType2), package.ExportCurrency).ToLower())).ID;
-                        package.DLExportCurrency = db.Currency.AsNoTracking().First(c => c.Code.ToLower().Equals(Enum.GetName(typeof(CurrencyCodeType2), package.DLExportCurrency).ToLower())).ID;
+                        var ExportCurrency = Enum.GetName(typeof(CurrencyCodeType2), package.ExportCurrency);
+                        package.ExportCurrency = db.Currency.AsNoTracking().First(c => c.Code.ToLower().Equals(ExportCurrency.ToLower())).ID;
+                        var DLExportCurrency = Enum.GetName(typeof(CurrencyCodeType2), package.DLExportCurrency);
+                        package.DLExportCurrency = db.Currency.AsNoTracking().First(c => c.Code.ToLower().Equals(DLExportCurrency.ToLower())).ID;
                         package.CreateBy = AdminName;
+                        package.CreateAt = UtcNow;
                         orderData.Packages.Add(package);
                     }
                 }
@@ -82,15 +85,21 @@ namespace PurchaseOrderSys.Models
 
                 foreach (var item in order.Items)
                 {
-                    if (orderData.Items.Any(i => i.SCID.Equals(item.SCID)))
+                    if (orderData.Items.Any(i => i.SCID.Value.Equals(item.SCID.Value)))
                     {
-                        var itemData = orderData.Items.First(i => i.SCID.Equals(item.SCID));
-                        SetUpdateData(itemData, item, new string[] { "IsEnable", "Sku", "ExportValue", "DLExportValue", "Qty", "eBayItemID", "eBayTransationID", "SalesRecordNumber", "RMAID" });
+                        var itemData = orderData.Items.First(i => i.SCID.Value.Equals(item.SCID.Value));
+                        SetUpdateData(itemData, item, new string[] { "IsEnable", "ExportValue", "DLExportValue", "Qty", "eBayItemID", "eBayTransationID", "SalesRecordNumber", "RMAID" });
                     }
                     else
                     {
-                        item.PackageID = db.Packages.AsNoTracking().First(p => p.SCID.Equals(item.PackageID)).ID;
+                        item.PackageID = db.Packages.AsNoTracking().First(p => p.SCID.Value.Equals(item.PackageID)).ID;
+                        if (item.Sku.Any(s => new char[] { '-', '_' }.Contains(s)))
+                        {
+                            item.OriginSku = item.Sku;
+                            item.Sku = item.Sku.Split('_')[0].Split('-')[0];
+                        }
                         item.CreateBy = AdminName;
+                        item.CreateAt = UtcNow;
                         orderData.Items.Add(item);
                     }
                 }
@@ -101,17 +110,19 @@ namespace PurchaseOrderSys.Models
                 {
                     if (!orderData.Serials.Any(s => s.SerialNumber.Equals(serial.SerialNumber)))
                     {
-                        serial.ItemID = db.Items.AsNoTracking().First(i => i.SCID.Equals(serial.ItemID)).ID;
+                        serial.ItemID = db.Items.AsNoTracking().First(i => i.SCID.Value.Equals(serial.ItemID)).ID;
                         serial.CreateBy = AdminName;
+                        serial.CreateAt = UtcNow;
                         orderData.Serials.Add(serial);
                     }
                 }
 
                 foreach (var payment in order.Payments)
                 {
-                    if (!orderData.Payments.Any(p => p.SCID.Equals(payment.SCID)))
+                    if (!orderData.Payments.Any(p => p.SCID.Value.Equals(payment.SCID.Value)))
                     {
                         payment.CreateBy = AdminName;
+                        payment.CreateAt = UtcNow;
                         orderData.Payments.Add(payment);
                     }
                 }
@@ -120,23 +131,27 @@ namespace PurchaseOrderSys.Models
                 {
                     var soldTo = order.Addresses.First();
                     soldTo.CreateBy = AdminName;
+                    soldTo.CreateAt = UtcNow;
                     orderData.Addresses.Add(soldTo);
 
                     var shipTo = new OrderAddresses() { Type = (byte)EnumData.OrderAddressType.Shipped };
-                    SetUpdateData(shipTo, soldTo, new string[] { "FirstName", "LastName", "AddressLine1", "AddressLine2", "City", "State", "Postcode", "CountryCode", "CountryName", "CreateBy" });
+                    SetUpdateData(shipTo, soldTo, new string[] { "FirstName", "LastName", "AddressLine1", "AddressLine2", "City", "State", "Postcode", "CountryCode", "CountryName", "CreateBy", "CreateAt" });
                     orderData.Addresses.Add(shipTo);
                 }
 
-                order.OrderType = (byte)CheckOrderType(order);
-                order.FulfillmentStatus = (byte)CheckFulfillmentStatus(order);
-
                 db.SaveChanges();
+
+                var tempOrder = db.Orders.Find(orderData.ID);
+                orderData.OrderType = (byte)CheckOrderType(tempOrder);
+                orderData.FulfillmentStatus = (byte)CheckFulfillmentStatus(tempOrder);
+                tempOrder = null;
             }
             catch (Exception e)
             {
                 throw new Exception(e.InnerException?.Message ?? e.Message);
             }
 
+            return orderData;
         }
 
         private EnumData.OrderType CheckOrderType(Orders order)
@@ -174,8 +189,8 @@ namespace PurchaseOrderSys.Models
         private Response<T> Request<T>(string url, string method = "post", object data = null) where T : new()
         {
             Response<T> response = new Response<T>();
-            //HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://internal.qd.com.tw/" + url);
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:49920/" + url);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://internal.qd.com.tw/" + url);
+            //HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:49920/" + url);
             request.ContentType = "application/json";
             request.Method = method;
             request.ProtocolVersion = HttpVersion.Version10;

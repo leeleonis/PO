@@ -2250,6 +2250,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
+        public static string Items_OriginSku {
+            get {
+                return ResourceManager.GetString("Items_OriginSku", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
         public static string Items_PackageID {
             get {
                 return ResourceManager.GetString("Items_PackageID", resourceCulture);

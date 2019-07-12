@@ -1,11 +1,12 @@
-using System;
+using System; 
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// Payments class
     /// </summary>
@@ -70,7 +71,8 @@ namespace PurchaseOrderSys.Models
     		/// Gateway
     		/// </summary>        
     	    [Display(Name = "Payments_Gateway", ResourceType = typeof(App_GlobalResources.Resource))]
-    		public Nullable<int>  Gateway { get; set; }
+            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public int  Gateway { get; set; }
     
     		    
     		/// <summary>

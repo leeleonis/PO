@@ -41,7 +41,7 @@ namespace PurchaseOrderSys.Models
         public string DLTracking { get; set; }
         public int ShipWarehouse { get; set; }
         public int ReturnWarehouse { get; set; }
-        public bool ShippingStatus { get; set; }
+        public byte ShippingStatus { get; set; }
         public string UpdateBy { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }
         public string CreateBy { get; set; }

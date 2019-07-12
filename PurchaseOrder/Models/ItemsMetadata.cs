@@ -1,11 +1,12 @@
-using System;
+using System; 
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// Items class
     /// </summary>
@@ -69,6 +70,14 @@ namespace PurchaseOrderSys.Models
     
     		    
     		/// <summary>
+    		/// Origin Sku
+    		/// </summary>        
+    	    [Display(Name = "Items_OriginSku", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  OriginSku { get; set; }
+    
+    		    
+    		/// <summary>
     		/// Unit Price
     		/// </summary>        
     	    [Display(Name = "Items_UnitPrice", ResourceType = typeof(App_GlobalResources.Resource))]
@@ -106,6 +115,14 @@ namespace PurchaseOrderSys.Models
     	    [Display(Name = "Items_eBayItemID", ResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  eBayItemID { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// e Bay Transation ID
+    		/// </summary>        
+    	    [Display(Name = "Items_eBayTransationID", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  eBayTransationID { get; set; }
     
     		    
     		/// <summary>
