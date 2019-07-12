@@ -189,8 +189,8 @@ namespace PurchaseOrderSys.Models
         private Response<T> Request<T>(string url, string method = "post", object data = null) where T : new()
         {
             Response<T> response = new Response<T>();
-            //HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://internal.qd.com.tw/" + url);
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:49920/" + url);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://internal.qd.com.tw/" + url);
+            //HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:49920/" + url);
             request.ContentType = "application/json";
             request.Method = method;
             request.ProtocolVersion = HttpVersion.Version10;
