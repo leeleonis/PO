@@ -41,8 +41,10 @@
                                                                     <tr>
                                                                         <th>SKU</th>
                                                                         <th>Name</th>
-                                                                        <th>QTY (Prep)</th>
+                                                                        <th>QTY (Receive)</th>
                                                                         <th>Serial</th>
+                                                                        <th>Label</th>
+                                                                        <th>Download</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody></tbody>
@@ -58,8 +60,8 @@
                                     </div>
                                 </div>
                                 <div class="widget-footer">
-                                    @*<button type="submit" class="btn btn-primary" id="save">儲存</button>
-                                        <button type="button" class="btn btn-primary" id="saveexit">儲存並返回</button>*@
+                                    <button type="submit" class="btn btn-primary" id="save">儲存</button>                    
+                                    <button type="button" class="btn btn-primary" id="saveexit">儲存並返回</button>
                                     <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Edit", new {Model.ID })'">返回</button>
                                 </div>
                             </form>
@@ -85,18 +87,31 @@
                     {
                         data: "QTY"
                         , render: function (data, type, row, meta) {
-                            return data;
+                            if (row.Full || row.SerialTracking) {
+                                return '<input type="hidden" name="Prep[' + meta.row + '].ID" value=' + row.ID + ' />' + data;
+                            }
+                            else {
+                                return '<input class="form-control" type="number"  max=' + row.MaxQTY + '   id="Prep[' + meta.row + ']" name="Prep[' + meta.row + '].val"  ><input type="hidden" name="Prep[' + meta.row + '].ID" value = ' + row.ID + ' />' + data;
+                            }
                         }
                     },
                     {
-                        data: "Serial"
-                    }
+                        data: "Serial",
+                        render: function (data, type, row, meta) {
+                            if (data == null) {
+                                data = "";
+                            }
+                            return data + '<input class="form-control SerialCount" type = "hidden"  val=' + row.count+' >';
+                        }
+                    },
+                    { data: "Label" },
+                    { data: "Download" }
                 ],
-                rowsGroup: [0, 1, 2],
+                rowsGroup:[0,1,2],
                 ajax: {
                     traditional: true,
                     method: "get",//或post，自由決定，影響到Server端用FormCollection取值或Request.QueryString取得DataTables傳遞的資訊
-                    url: "@Url.Action("PrepVMList")",
+                    url: "@Url.Action("ReceiveVMList")",
                     data: function (d) {
                         d.SID =@Model.ID
                     }
@@ -117,56 +132,16 @@
                     e.preventDefault();
                     $.ajax({
                         type: "post",
-                        url: "@Url.Action("PrepSaveserials")",
+                        url: "@Url.Action("ReceiveSaveserials")",
                         data: {
+                            id:@Html.Display("id"),
                             serials: serials,
-                            SID:@Html.Display("ID"),
-                            boxitemset: $("#boxitemset").val()
                         },
                         success: function (data) {
                             if (data.status) {
                                 DataGrid.draw();
-                                boxchange();
                                 $("#Serial").val("");
                                 $("#Serial").focus();
-                            }
-                            else {
-                                alert(data.Errmsg);
-                            }
-                        }
-                    });
-                }
-            });
-            $("#addbox").click(function () {
-                $.ajax({
-                    traditional: true,
-                    type: "post",
-                    url: "@Url.Action("AddBox")",
-                    data: {
-                        ID:"@Html.Display("ID")"
-                    },
-                    success: function (data) {
-                        if (data.status) {
-                            boxchange();
-                        }
-                        else {
-                            alert(data.Errmsg);
-                        }
-                    }
-                });
-            });
-            $("body").on("click", ".delserials", function () {
-                var serial = $(this).attr("value");
-                if (confirm("是否確定刪除：" + serial)) {
-                    $.ajax({
-                        type: "post",
-                        url: "@Url.Action("DelSerialsNo")",
-                        data: {
-                            ID: "@Html.Display("ID")",
-                            serial: serial
-                        },
-                        success: function (data) {
-                            if (data.status) {
                                 boxchange();
                             }
                             else {
@@ -175,9 +150,41 @@
                         }
                     });
                 }
-                return false;
             });
 
+
         });
+        function isValid() {
+            var SerialCount = 0;
+            $(".SerialCount").each(function () {
+                SerialCount += parseInt($(this).attr("val"));
+            })
+            if (SerialCount != 0) {
+                return confirm("序號不齊全,是否確定入庫");
+            }
+            else {
+                return true;
+            }
+        }
+        function boxchange() {
+            $.ajax({
+                traditional: true,
+                type: "post",
+                url: "@Url.Action("BoxChange")",
+                data: {
+                    ID: "@Html.Display("ID")"
+                },
+                success: function (data) {
+                    if (data.status) {
+                        $("#boxitem").html(data.html);
+                        $("#boxitemset").val(data.set);
+                        DataGrid.draw();
+                    }
+                    else {
+                        alert(data.Errmsg);
+                    }
+                }
+            });
+        }
     </script>
 }

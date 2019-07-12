@@ -364,19 +364,25 @@
 
                 }
             });
-            //$("#Request").click(function () {
-            //    var Msg = "";
-            //    $("table").find("input[type='text']").each(function () {
-            //        if ($(this).val() < 1) {
-            //            $(this).closest("td").addClass("error");
-            //            Msg = "Err"
-            //        }
-            //    })
-            //    if (Msg == "") {
-            //        ajaxpost(this)
-            //    }
-            //    return false;
-            //});
+            @*$("#Ship").click(function () {
+                $.ajax({
+                    traditional: true,
+                    type: "post",
+                    url: "@Url.Action("Ship")",
+                    data: {
+                        ID:@Html.Display("ID"),
+                    },
+                    success: function (data) {
+                        if (data.status) {
+                            window.location.reload();
+                        }
+                        else {
+                            alert(data.Errmsg);
+                        }
+                    }
+                })
+                return false;
+            });*@
             $("#DeleteSKU").click(function () {
                 var dataList = [];
                 $(DataGrid.$('input[type="checkbox"]:checked').each(function () {
@@ -508,6 +514,10 @@
             if (data.reload == true) {
                 window.location.reload();
             }
+        }
+        @if (TempData["ErrMsg"]!=null)
+        {
+            @:alert(TempData["ErrMsg"]);
         }
     </script>
 }

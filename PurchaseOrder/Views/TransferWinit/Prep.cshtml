@@ -74,10 +74,10 @@
                                                     </div>
                                                     @Html.Label("Total Value:", htmlAttributes: new { @class = "control-label col-sm-1" })
                                                     <div class="col-sm-4 col-lg-2">
-                                                        @Html.Label("TotalValue", htmlAttributes: new { @class = "control-label" })
+                                                        @Html.Label("0", htmlAttributes: new { @class = "control-label" })
                                                     </div>
                                                     <div class="col-sm-4 col-lg-2">
-                                                        <button type="button" class="btn btn-default">取消/上一步</button>
+                                                        @*<button type="button" class="btn btn-default">取消/上一步</button>*@
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -87,12 +87,12 @@
                                                     </div>
                                                     @Html.Label("Complete Boxes", htmlAttributes: new { @class = "control-label col-sm-1" })
                                                     <div class="col-sm-4 col-lg-2">
-                                                        @Html.Label("CompleteBoxes", htmlAttributes: new { @class = "control-label" })
+                                                        @Html.Label("", htmlAttributes: new { @class = "control-label" })
                                                     </div>
                                                     <div class="col-sm-4 col-lg-3">
-                                                        <button type="button" class="btn btn-default">補印Lable</button>
+                                                        @*<button type="button" class="btn btn-default">補印Lable</button>
                                                         <button type="button" class="btn btn-default">補印AWB</button>
-                                                        <button type="button" class="btn btn-default">保留Box</button>
+                                                        <button type="button" class="btn btn-default">保留Box</button>*@
                                                     </div>
                                                     <div class="col-sm-5 col-lg-2">
                                                         <button type="button" class="btn btn-default" id="printAll">打印Box</button>
@@ -216,7 +216,7 @@
                     },
                     success: function (data) {
                         if (data.status) {
-                            boxchange();
+                            javascript: jsWebClientPrint.print(encodeURIComponent(data.print));
                         }
                         else {
                             alert(data.Errmsg);

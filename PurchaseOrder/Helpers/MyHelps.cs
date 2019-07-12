@@ -134,7 +134,7 @@ namespace PurchaseOrderSys.Helpers
         /// <param name="edititem">是否顯修改按鈕</param>
         /// <param name="delitem">是否顯示刪除按鈕</param>
         /// <returns></returns>
-        public static MvcHtmlString DataGridFor<TModel, TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression,string DataGridName,  bool checkbox, string title, string idField ,bool additem, bool edititem, bool delitem,bool saveitem, bool showchilds)
+        public static MvcHtmlString DataGridFor<TModel, TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression, string DataGridName, bool checkbox, string title, string idField, bool additem, bool edititem, bool delitem, bool saveitem, bool showchilds)
         {
             ModelMetadata metadata = ModelMetadata.FromLambdaExpression(expression, html.ViewData);
             var DataGridModels = new DataGridModels();
@@ -194,7 +194,7 @@ namespace PurchaseOrderSys.Helpers
                     if (DataGridAttributelist.Any(a => ((DataGridAttribute)a) != null))
                     {
                         var DataGridVal = (DataGridAttribute)DataGridAttributelist.FirstOrDefault();
-                        nlist.Add(new DataGridItemsModels { title = itemtitle, align = DataGridVal.Align, field = item.Name, formatter = DataGridVal.Formatter, frozen = DataGridVal.Frozen, sortable = DataGridVal.Sortable ? "true" : "false", width = DataGridVal.Widths,columnsType= DataGridVal.ColumnsType });
+                        nlist.Add(new DataGridItemsModels { title = itemtitle, align = DataGridVal.Align, field = item.Name, formatter = DataGridVal.Formatter, frozen = DataGridVal.Frozen, sortable = DataGridVal.Sortable ? "true" : "false", width = DataGridVal.Widths, columnsType = DataGridVal.ColumnsType });
                     }
                 }
             }
@@ -270,9 +270,9 @@ namespace PurchaseOrderSys.Helpers
 
         public static MvcHtmlString BCheckBox(this HtmlHelper htmlHelper, string name, object htmlAttributes)
         {
-            return BCheckBox(htmlHelper,name, false, htmlAttributes);
+            return BCheckBox(htmlHelper, name, false, htmlAttributes);
         }
-        public static MvcHtmlString BCheckBox(this HtmlHelper htmlHelper, string name,bool isChecked, object htmlAttributes)
+        public static MvcHtmlString BCheckBox(this HtmlHelper htmlHelper, string name, bool isChecked, object htmlAttributes)
         {
             string DisplayName = htmlHelper.DisplayName(name).ToHtmlString().Trim();
             string checkBoxWithHidden = htmlHelper.CheckBox(name, isChecked, htmlAttributes).ToHtmlString().Trim();
@@ -281,7 +281,7 @@ namespace PurchaseOrderSys.Helpers
             labelHtml.AddCssClass("checkbox-inline");
             TagBuilder spanHtml = new TagBuilder("span");
             spanHtml.InnerHtml = DisplayName;
-            labelHtml.InnerHtml = pureCheckBox+ spanHtml;
+            labelHtml.InnerHtml = pureCheckBox + spanHtml;
             return MvcHtmlString.Create(labelHtml.ToString());
         }
 
@@ -441,7 +441,7 @@ namespace PurchaseOrderSys.Helpers
         {
             var attrs = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes);
             var readonlyVal = attrs.Where(x => x.Key == "readonly").FirstOrDefault().Value;
-            if (readonlyVal.ToString()!= "readonly"&& readonlyVal.ToString() != "true")
+            if (readonlyVal.ToString() != "readonly" && readonlyVal.ToString() != "true")
             {
                 attrs.Add("readonly", "readonly");
             }
@@ -449,6 +449,28 @@ namespace PurchaseOrderSys.Helpers
             var Text = selectList.Where(x => x.Value == Value).FirstOrDefault()?.Text;
             var labelHtml = htmlHelper.Label(name, Text, attrs);
             return MvcHtmlString.Create(labelHtml.ToHtmlString());
+        }
+        /// <summary>
+        /// 取工作日
+        /// </summary>
+        /// <param name="AddDay">幾天後</param>
+        /// <returns></returns>
+        public static DateTime WorkingDay(int AddDay, DateTime? dt = null)
+        {
+            if (!dt.HasValue)
+            {
+                dt = DateTime.Today.AddDays(AddDay);
+            }
+            dt = dt.Value.AddDays(AddDay);
+            if (dt.Value.DayOfWeek == DayOfWeek.Saturday)
+            {
+                dt = dt.Value.AddDays(2);
+            }
+            else if (dt.Value.DayOfWeek == DayOfWeek.Sunday)
+            {
+                dt = dt.Value.AddDays(1);
+            }
+            return dt.Value;
         }
     }
 }
