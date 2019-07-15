@@ -1101,6 +1101,7 @@ namespace PurchaseOrderSys.Controllers
                                     nTransferSKU.UpdateAt = dt;
                                 }
                                 var SerialTracking = SKU.GetSku.SerialTracking;
+                                var NoTrackingSerial = new List<string>();
                                 foreach (var item in Gserialitem.item)
                                 {
                                     var SerialsLlist = db.SerialsLlist.Where(x => !x.SerialsLlistC.Any() && x.SerialsQTY > 0);
@@ -1110,7 +1111,7 @@ namespace PurchaseOrderSys.Controllers
                                     }
                                     else
                                     {
-                                        SerialsLlist = SerialsLlist.Where(x => x.PurchaseSKU.SkuNo == SKU.GetSku.SkuID);//找到序號
+                                        SerialsLlist = SerialsLlist.Where(x => x.PurchaseSKU.SkuNo == SKU.GetSku.SkuID && !NoTrackingSerial.Contains(x.SerialsNo));//找到序號
                                     }
                                     SerialsLlist = SerialsLlist.Where(x => (x.TransferSKUID.HasValue && x.TransferSKU.Transfer.ToWID == FromWID) || (x.PurchaseSKUID.HasValue && x.PurchaseSKU.PurchaseOrder.WarehouseID == FromWID)).Take(1);
                                     var RMASerialsLlist = db.RMASerialsLlist.Where(x => x.SerialsNo == item.serials && !x.RMASerialsLlistC.Any() && x.SerialsQTY > 0 && x.WarehouseID == FromWID);//找到RMA序號
@@ -1138,6 +1139,7 @@ namespace PurchaseOrderSys.Controllers
                                                     ReceivedAt = dt,
                                                 };
                                                 nTransferSKU.SerialsLlist.Add(nSerialsLlist);
+                                                NoTrackingSerial.Add(Serial.SerialsNo);
                                             }
 
                                         }

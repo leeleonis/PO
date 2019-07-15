@@ -29,7 +29,7 @@ namespace PurchaseOrderSys.Controllers
         public static string ApiPassword = "prU$U9R7CHl3O#uXU6AcH6ch";
         protected PurchaseOrderEntities db = new PurchaseOrderEntities();
         public static SellerCloud_WebService.SC_WebService SCWS;
-      
+
         protected string RenderPartialViewToString()
         {
             return RenderPartialViewToString(null, null);
@@ -476,7 +476,7 @@ namespace PurchaseOrderSys.Controllers
         {
             try
             {
-                var chkSerialsLlist = db.SerialsLlist.Where(x => ExcelSerialslist.Contains(x.SerialsNo) && x.PurchaseSKU.IsEnable && x.PurchaseSKU.SkuNo == PurchaseSKU.SkuNo).OrderByDescending(x=>x.CreateAt).ToList();//.Select(x => x.SerialsNo)
+                var chkSerialsLlist = db.SerialsLlist.Where(x => ExcelSerialslist.Contains(x.SerialsNo) && x.PurchaseSKU.IsEnable && x.PurchaseSKU.SkuNo == PurchaseSKU.SkuNo).OrderByDescending(x => x.CreateAt).ToList();//.Select(x => x.SerialsNo)
                 if (chkSerialsLlist.Any())//同SKU不可以重複序號
                 {
                     if (chkSerialsLlist.FirstOrDefault().SerialsType != "CM")//最後一筆資料不是CM才顯示
@@ -569,10 +569,10 @@ namespace PurchaseOrderSys.Controllers
         public void CreatSCPObyExcel(PurchaseOrder PurchaseOrder)
         {
             CreatAndEditPOSKUbySC(PurchaseOrder);
-            foreach (var SKUitem in PurchaseOrder.PurchaseSKU.Where(x=>x.IsEnable))
+            foreach (var SKUitem in PurchaseOrder.PurchaseSKU.Where(x => x.IsEnable))
             {
                 CreatAndEditPOSKUbySC(PurchaseOrder);
-                foreach (var Serialitem in SKUitem.SerialsLlist.Where(x=>x.SerialsType=="PO"||x.SerialsType== "DropshpOrderIn"))
+                foreach (var Serialitem in SKUitem.SerialsLlist.Where(x => x.SerialsType == "PO" || x.SerialsType == "DropshpOrderIn"))
                 {
                     AddSerialToSC(SKUitem, Serialitem.SerialsNo);
                 }
@@ -720,8 +720,8 @@ namespace PurchaseOrderSys.Controllers
                 var RMASerialsLlist = db.RMASerialsLlist.Where(x => x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable).ToList();//RMA單
                 if (Warehouse.ID != 0)
                 {
-                    PurchaseSKU= PurchaseSKU.Where(x=> x.PurchaseOrder.WarehousePO.ID == Warehouse.ID).ToList();
-                    TransferToSKU= TransferToSKU.Where(x => x.Transfer.ToWID == Warehouse.ID).ToList();
+                    PurchaseSKU = PurchaseSKU.Where(x => x.PurchaseOrder.WarehousePO.ID == Warehouse.ID).ToList();
+                    TransferToSKU = TransferToSKU.Where(x => x.Transfer.ToWID == Warehouse.ID).ToList();
                     TransferFromSKU = TransferFromSKU.Where(x => x.Transfer.FromWID == Warehouse.ID).ToList();
                     RMASerialsLlist = RMASerialsLlist.Where(x => x.WarehouseID == Warehouse.ID).ToList();
                 }
@@ -1259,7 +1259,7 @@ namespace PurchaseOrderSys.Controllers
             if (nPurchaseOrder.SCPurchaseID.HasValue)
             {
                 var SCPurchase = SCWS.Get_PurchaseOrder(nPurchaseOrder.SCPurchaseID.Value);
-                foreach (var skuitem in nPurchaseOrder.PurchaseSKU.Where(x=>x.IsEnable))
+                foreach (var skuitem in nPurchaseOrder.PurchaseSKU.Where(x => x.IsEnable))
                 {
                     var Products = SCPurchase.Products.Where(x => x.ProductID == skuitem.SkuNo);
                     if (!Products.Any())
@@ -1355,7 +1355,7 @@ namespace PurchaseOrderSys.Controllers
             purchaseOrder.VendorID = VendorID ?? 0;
             purchaseOrder.VendorInvoiceNumber = nPurchaseOrder.VendorLIst.VendorNo;
             purchaseOrder.DefaultWarehouseID = WarehouseID;
-            return  SCWS.UpdatePurchaseOrder(purchaseOrder);
+            return SCWS.UpdatePurchaseOrder(purchaseOrder);
         }
         /// <summary>
         /// 序號入庫SC
@@ -1556,6 +1556,89 @@ namespace PurchaseOrderSys.Controllers
                 name += "Shipping Dimension:" + Size + "mm/" + iSize + "inch";
             }
             return name;
+        }
+
+        public ActionResult ReceiveSaveserials(int id, string serials)
+        {
+            var SID = id;
+            var ReceiveVMList = (List<TransferItemVM>)Session["ReceiveVMList" + SID];
+            var SerialsLlist = db.SerialsLlist.Where(x => x.TransferSKU.TransferID == id && x.SerialsNo == serials && !x.SerialsLlistC.Any());
+            var RMASerialsLlist = db.RMASerialsLlist.Where(x => x.TransferSKU.TransferID == id && x.SerialsNo == serials && !x.RMASerialsLlistC.Any());
+            if (SerialsLlist.Sum(x => x.SerialsQTY) > 0)//檔序號數量>0
+            {
+                var SkuNolist = ReceiveVMList.Select(x => x.SKU).Where(s => !string.IsNullOrWhiteSpace(s)).Distinct().ToList();
+                if (SerialsLlist.Where(x => SkuNolist.Contains(x.TransferSKU.SkuNo)).Any())//檢查是否存在相同的sku而且序號相同
+                {
+                    return Json(new { status = false, Errmsg = "序號已存在，不能重複入庫" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+
+            var SerialsLlistGET = SerialsLlist.Where(x => x.SerialsType == "TransferOut");//找到序號
+            var RMASerialsLlistGET = RMASerialsLlist.Where(x => x.SerialsType == "TransferOut");//找到序號
+            if (SerialsLlistGET.Any())
+            {
+                var Serial = SerialsLlistGET.FirstOrDefault();
+                var ReceiveVM = ReceiveVMList.Where(x => x.SKU == Serial.TransferSKU.SkuNo).FirstOrDefault();
+                if (ReceiveVM != null)
+                {
+                    if (ReceiveVM.QTY > ReceiveVM.SerialsLlist.Count())
+                    {
+                        if (!ReceiveVMList.Where(x => x.SerialsLlist.Where(y => y.SerialsNo == serials).Any()).Any())
+                        {
+                            ReceiveVM.SerialsLlist.Add(Serial);
+                            Session["ReceiveVMList" + SID] = ReceiveVMList;
+                            return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            return Json(new { status = false, Errmsg = "序號已在清單" }, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else
+                    {
+                        return Json(new { status = false, Errmsg = "移倉數量超過" }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    return Json(new { status = false, Errmsg = "序號無對應的SKU" }, JsonRequestBehavior.AllowGet);
+                }
+
+            }
+            else if (RMASerialsLlistGET.Any())
+            {
+                var RMASerial = RMASerialsLlistGET.FirstOrDefault();
+                var ReceiveVM = ReceiveVMList.Where(x => x.SKU == RMASerial.TransferSKU.SkuNo).FirstOrDefault();
+                if (ReceiveVM != null)
+                {
+                    if (ReceiveVM.QTY > ReceiveVM.SerialsLlist.Count())
+                    {
+                        if (!ReceiveVMList.Where(x => x.SerialsLlist.Where(y => y.SerialsNo == serials).Any()).Any())
+                        {
+                            ReceiveVM.RMASerialsLlist.Add(RMASerial);
+                            Session["ReceiveVMList" + SID] = ReceiveVMList;
+                            return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                        {
+                            return Json(new { status = false, Errmsg = "序號已在清單" }, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                    else
+                    {
+                        return Json(new { status = false, Errmsg = "移倉數量超過" }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    return Json(new { status = false, Errmsg = "序號無對應的SKU" }, JsonRequestBehavior.AllowGet);
+                }
+
+            }
+            else
+            {
+                return Json(new { status = false, Errmsg = "序號不存在，此序號不能移倉" }, JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }

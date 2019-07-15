@@ -661,12 +661,6 @@
     <Compile Include="Models\WinitTransferBoxMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\WinitTransferBoxOrder.cs">
-      <DependentUpon>PurchaseMdel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\WinitTransferBoxOrderMetadata.cs">
-      <DependentUpon>ModelTemplate.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\WinitTransferMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>

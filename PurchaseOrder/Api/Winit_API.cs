@@ -97,7 +97,7 @@ namespace PurchaseOrderSys.Api
             if (result.code.Equals("0"))
             {
                 List<warehouseData> warehouseDataList =result.data.ToObject<List<warehouseData>>();
-                Warehouse3PList= warehouseDataList.Select(x => new SelectListItem { Text = x.warehouseName, Value = x.warehouseID }).ToList();
+                Warehouse3PList= warehouseDataList.Select(x => new SelectListItem { Text = x.warehouseName, Value = x.warehouseCode }).ToList();
             }
             return Warehouse3PList;
         }

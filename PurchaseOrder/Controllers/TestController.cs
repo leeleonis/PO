@@ -59,9 +59,37 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult Index()
         {
             ViewBag.WCPScript = Neodynamic.SDK.Web.WebClientPrint.CreateScript(Url.Action("ProcessRequest", "WebClientPrintAPI", null, HttpContext.Request.Url.Scheme), Url.Action("PrintMyFiles", "Test", null, HttpContext.Request.Url.Scheme), HttpContext.Session.SessionID);
+            var Winit_API = new NewApi.Winit_API();
+            var WinitProducts = Winit_API.getWinitProducts("OW0103");
+            var winitProductCode = WinitProducts.FirstOrDefault().productCode;
+            var WarehouseList = Winit_API.getWarehouseList(winitProductCode, "INSJ", "DW", null);
+            var warehouseCode = WarehouseList.warehouseList[13].warehouseCode;
+            var list = new List<NewApi.AvailableMerchandise>();
+            foreach (var item in WinitProducts)
+            {
+                foreach (var Warehouse in WarehouseList.warehouseList)
+                {
 
+                    list.AddRange( Winit_API.getAvailableMerchandise("NS", item.productCode, Warehouse.warehouseCode));
+                }
+            }
 
+            var Dlist = list.Distinct().ToList();
 
+            //var WinitProducts = Winit_API.getWinitProducts("OW0103");
+            //var LogisticsPlanList = new List<NewApi.LogisticsPlan>();
+            //foreach (var WinitProductsitem in WinitProducts)
+            //{
+            //    var WarehouseList = Winit_API.getWarehouseList(WinitProductsitem.productCode, "INSJ", "DW", null);
+            //    foreach (var warehouseitem in WarehouseList.warehouseList)
+            //    {
+            //      var Plan=  Winit_API.getLogisticsPlan(WinitProductsitem.productCode, warehouseitem.warehouseCode, warehouseitem.warehouseCode);
+            //        if (Plan.planList.Any())
+            //        {
+            //            LogisticsPlanList.Add(Plan);
+            //        }
+            //    }
+            //}
 
             //var  Warehouse3PList = new NewApi.Winit_APIToken().Warehouse3P();
             //var SKUList = new NewApi.Winit_API().SKUList();

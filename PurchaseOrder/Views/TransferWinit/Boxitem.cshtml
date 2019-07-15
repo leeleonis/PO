@@ -3,6 +3,16 @@
     Layout = null;
     var i = 0;
     var count = Model.Count() - 1;
+    var Mod = ViewData["Mod"]?.ToString();
+    var SID = ViewData["SID"]?.ToString();
+    var Del = true;
+    if (!string.IsNullOrWhiteSpace(Model.FirstOrDefault()?.WinitTransfer?.WinitOrderNo))
+    {
+        Del = false;
+
+    }
+
+    var ReceiveVMList = (List<TransferItemVM>)Session["ReceiveVMList" + SID];
 }
 @foreach (var BoxItem in Model)
 {
@@ -49,15 +59,34 @@
                         <tbody>
                             @if (BoxItem.WinitTransferBoxItem != null)
                             {
-                                foreach (var item in BoxItem.WinitTransferBoxItem)
+                                foreach (var item in BoxItem.WinitTransferBoxItem.OrderBy(x=>x.SkuNo))
                                 {
                                     <tr>
-                                        <td><button type='button' class='glyphicon glyphicon-remove btn-danger delserials' value="@item.SerialsLlistID"></button>@item.SkuNo</td>
+                                        <td>
+                                            @if (Del)
+                                            {
+                                                <button type='button' class='glyphicon glyphicon-remove btn-danger delserials' value="@item.SerialsLlistID"></button>
+                                            }
+                                            @item.SkuNo
+                                        </td>
                                         <td>@item.Name</td>
-                                        <td>@item.SerialsNo</td>
+                                        <td>
+                                            @item.SerialsNo
+                                            @if (ReceiveVMList != null && ReceiveVMList.Where(x => x.SerialsLlist.Where(y => y.SerialsNo == item.SerialsNo).Any()).Any())
+                                            {
+                                                <span class="glyphicon glyphicon-ok" style="color:red"></span>
+                                            }
+                                        </td>
                                         <td>
                                             @item.BarCode
-                                            <input type="button" onclick="javascript:jsWebClientPrint.print('id=@item.WinitTransferSKUID + &Page=@item.FilePage');" value="補印" />
+                                            @if (Mod == "Receive")
+                                            {
+                                               
+                                            }
+                                            else
+                                            {
+                                                <input type="button" onclick="javascript:jsWebClientPrint.print('key=serial&id=@item.WinitTransferSKUID + &Page=@item.FilePage');" value="補印" />
+                                            }
                                         </td>
                                     </tr>
                                 }

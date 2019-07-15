@@ -31,6 +31,8 @@ namespace PurchaseOrderSys.Models
         public Nullable<System.DateTime> UpdateAt { get; set; }
         public string SBarcodeLabelType { get; set; }
         public string BoxLabelSize { get; set; }
+        public string WinitOrderNo { get; set; }
+        public string PrintPackageLabe { get; set; }
     
         public virtual Transfer Transfer { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -170,47 +170,150 @@ namespace PurchaseOrderSys.NewApi
     }
     #endregion
     #region 建立訂單
+    /// <summary>
+    /// 包裹中的商品信息
+    /// </summary>
     public class MerchandiseList
     {
+        /// <summary>
+        /// 商品編碼
+        /// </summary>
         public string merchandiseCode { get; set; }
+        /// <summary>
+        /// 數量
+        /// </summary>
         public string quantity { get; set; }
+        /// <summary>
+        /// 商品規格 
+        /// </summary>
         public string specification { get; set; }
     }
-
+    /// <summary>
+    /// 箱單信息
+    /// </summary>
     public class PackageList
     {
         public List<MerchandiseList> merchandiseList { get; set; }
+        /// <summary>
+        /// 賣家箱號
+        /// </summary>
         public string sellerCaseNo { get; set; }
-        public string thirdPartyCaseNo { get; set; }
-        public string sellerHeight { get; set; }
-        public string sellerLength { get; set; }
+        /// <summary>
+        /// 包裹重量(KG) 
+        /// </summary>
         public string sellerWeight { get; set; }
+        /// <summary>
+        /// 第三方箱號
+        /// </summary>
+        public string thirdPartyCaseNo { get; set; }
+        /// <summary>
+        /// 包裹高(CM) 
+        /// </summary>
+        public string sellerHeight { get; set; }
+        /// <summary>
+        /// 包裹長(CM) 
+        /// </summary>
+        public string sellerLength { get; set; }
+        /// <summary>
+        /// 包裹寬(CM) 
+        /// </summary>
         public string sellerWidth { get; set; }
     }
-
+    /// <summary>
+    /// 送港信息
+    /// </summary>
     public class SendPortInfo
     {
+        /// <summary>
+        /// 送港類型 WINIT - winit送港；SELF -自送港賣家直發/自驗情況適用
+        /// </summary>
         public string sendPortType { get; set; }
+        /// <summary>
+        /// 提櫃地址編碼
+        /// </summary>
         public string pickupCartonAddressCode { get; set; }
+        /// <summary>
+        /// 送港時間 格式yyyy-MM-dd
+        /// </summary>
         public string sendPortDate { get; set; }
+        /// <summary>
+        /// 櫃號
+        /// </summary>
         public string containerNo { get; set; }
+        /// <summary>
+        /// 鉛封號
+        /// </summary>
         public string sealNo { get; set; }
+    }
+    /// <summary>
+    /// 直發預報信息
+    /// </summary>
+    public class directForecastInfo
+    {
+        /// <summary>
+        /// 預計離港時間 格式yyyy-MM-dd
+        /// </summary>
+        public string preparedOffPortDate { get; set; }
+        /// <summary>
+        /// 預計到港時間 格式yyyy-MM-dd
+        /// </summary>
+        public string preparedArrivePortDate { get; set; }
     }
     public class WinitCreateOrder
     {
-
+        /// <summary>
+        /// 訂單類型編碼 SD-標準海外倉入庫（Winit國內驗貨且走Winit頭程） DW-直發海外驗入庫(Winit海外驗貨，頭程僅限賣家直發） DI-直發國內驗入庫（Winit國內驗貨或者賣家自驗，頭程僅限賣家直發） 
+        /// </summary>
         public string orderType { get; set; }
+        /// <summary>
+        /// Winit產品編碼
+        /// </summary>
         public string winitProductCode { get; set; }
+        /// <summary>
+        /// 目的倉編碼
+        /// </summary>
         public string destinationWarehouseCode { get; set; }
+        /// <summary>
+        /// 客戶訂單號
+        /// </summary>
         public string sellerOrderNo { get; set; }
+        /// <summary>
+        /// 驗貨倉編碼
+        /// </summary>
         public string inspectionWarehouseCode { get; set; }
+        /// <summary>
+        /// 進口報關規則編碼 
+        /// </summary>
         public string importDeclarationRuleCode { get; set; }
-        public List<PackageList> packageList { get; set; }
+        /// <summary>
+        /// 進口商編碼 
+        /// </summary>
         public string importerCode { get; set; }
+        /// <summary>
+        /// 箱單信息
+        /// </summary>
+        public List<PackageList> packageList { get; set; }
+        /// <summary>
+        /// 出口報關類型編碼
+        /// </summary>
         public string exportDeclarationType { get; set; }
+        /// <summary>
+        /// 出口商編碼
+        /// </summary>
         public string exporterCode { get; set; }
-        public string logisticsPlanNo { get; set; }
-        public SendPortInfo sendPortInfo { get; set; }
+        /// <summary>
+        /// 物流計劃編碼
+        /// </summary>
+        //public string logisticsPlanNo { get; set; }
+        /// <summary>
+        /// 送港信息
+        /// </summary>
+        //public SendPortInfo sendPortInfo { get; set; }
+        public directForecastInfo directForecastInfo { get; set; }
+    }
+    public class RefWinitOrderNo
+    {
+        public string orderNo { get; set; }
     }
     #endregion
 
@@ -354,7 +457,113 @@ namespace PurchaseOrderSys.NewApi
         /// </summary>
         public string merchandiseCode { get; set; }
     }
+    public class VendorInfo
+    {
+        /// <summary>
+        /// 是否Winit供應商：Y-是,N-否
+        /// </summary>
+        public string isWinit { get; set; }
+        /// <summary>
+        /// 進口商名稱
+        /// </summary>
+        public string vendorName { get; set; }
+        /// <summary>
+        /// 進口商編碼
+        /// </summary>
+        public string vendorCode { get; set; }
+    }
+    #region 打印包裹標籤
+    public class packageNoList
+    {
+        public string packageNo { get; set; }
+        public string sellerCaseNo { get; set; }
+    }
+    public class PackageLabe
+    {
+        public string Label { get; set; }
+    }
+    #endregion
+    #region 查詢入庫單（詳情）
+    public class OrderDetailMerchandiseList
+    {
+        public int? quantity { get; set; }
+        public int? actualQuantity { get; set; }
+        public string specification { get; set; }
+        public string sku { get; set; }
+        public string merchandiseCode { get; set; }
+    }
 
+    public class OrderDetailPackageList
+    {
+        public string sellerCaseNo { get; set; }
+        public List<OrderDetailMerchandiseList> merchandiseList { get; set; }
+        public string thirdPartyCaseNo { get; set; }
+        public int? sellerWeight { get; set; }
+        public int? sellerLength { get; set; }
+        public int? length { get; set; }
+        public int? width { get; set; }
+        public int? weight { get; set; }
+        public int? sellerHeight { get; set; }
+        public int? sellerWidth { get; set; }
+        public string packageNo { get; set; }
+        public int? height { get; set; }
+    }
+
+    public class OrderDetailMerchandiseList2
+    {
+        public int? inspectionQty { get; set; }
+        public int? quantity { get; set; }
+        public string productBarcode { get; set; }
+        public int? actualQuantity { get; set; }
+        public string specification { get; set; }
+        public string merchandiseCode { get; set; }
+        public List<string> skuCode3rdList { get; set; }
+    }
+
+    public class OrderDetail
+    {
+        public string orderType { get; set; }
+        public string sellerOrderNo { get; set; }
+        public string destinationWarehouseCode { get; set; }
+        public string customsDeclarationName { get; set; }
+        public string expressNo { get; set; }
+        public string winitProductName { get; set; }
+        public int? totalItemQty { get; set; }
+        public string importDeclarationRuleName { get; set; }
+        public int? totalMerchandiseQty { get; set; }
+        public string needReservationSendWh { get; set; }
+        public string expressVendorName { get; set; }
+        public string inspectionWarehouseCode { get; set; }
+        public string importerName { get; set; }
+        public string importDeclarationType { get; set; }
+        public object exporterCode { get; set; }
+        public string orderNo { get; set; }
+        public string importDeclareValueType { get; set; }
+        public int? totalPackageQty { get; set; }
+        public string inspectionWarehouseName { get; set; }
+        public string inspectionType { get; set; }
+        public string planShelfCompletedDate { get; set; }
+        public string logisticsPlanName { get; set; }
+        public string destinationWarehouseName { get; set; }
+        public string expressVendorCode { get; set; }
+        public string importDeclarationRuleCode { get; set; }
+        public string importDeclareWay { get; set; }
+        public string pickupType { get; set; }
+        public List<OrderDetailPackageList> packageList { get; set; }
+        public List<OrderDetailMerchandiseList2> merchandiseList { get; set; }
+        public string importDeclarationName { get; set; }
+        public string pickupAddressCode { get; set; }
+        public string createdDate { get; set; }
+        public int? logisticsPlanNo { get; set; }
+        public string pickupAddress { get; set; }
+        public string exporterName { get; set; }
+        public string winitProductCode { get; set; }
+        public string shelveCompletedDate { get; set; }
+        public string customsDeclarationType { get; set; }
+        public string importerCode { get; set; }
+        public string status { get; set; }
+    }
+    #endregion
     public class Winit_API : IDisposable
     {
         private bool disposed = false;
@@ -370,6 +579,7 @@ namespace PurchaseOrderSys.NewApi
         private string client_id = "NTU5YTUYZWITYZA3ZI00YWVKLTLKNWUTZJZLZDLIMMEXYTU2";
         private string client_secret = "NTJIZWUZNZITNGVINI00NZNHLWFIYZITNWQ4YZEWZWFHM2U5MZG4NDG2ODC5NZAXMZC3NG==";
         private string platformval = "testapi";
+        public Received ResultError;
         //public Winit_APIToken()
         //{
         //    var token = new getToken();
@@ -500,7 +710,6 @@ namespace PurchaseOrderSys.NewApi
                 timestamp = timestamp,
                 version = api_version
             };
-
             return request;
         }
         /// <summary>
@@ -556,19 +765,28 @@ namespace PurchaseOrderSys.NewApi
         }
         internal T GetAPI<T>(string action, object data)
         {
-            Queryclient request = _RequestInitNew<Queryclient>(action, data);
-            request.data = data;
-
-            var result = req<Received>(api_url, request);
-            if (result.code.Equals("0"))
+            try
             {
-                return result.data.ToObject<T>();
-
+                Queryclient request = _RequestInitNew<Queryclient>(action, data);
+                request.data = data;
+                var json = JsonConvert.SerializeObject(request);
+                var result = req<Received>(api_url, request);
+                if (result.code.Equals("0"))
+                {
+                    return result.data.ToObject<T>();
+                }
+                else
+                {
+                    ResultError = result;
+                    return default(T);
+                }
             }
-            else
+            catch (Exception ex)
             {
+
                 return default(T);
             }
+
         }
         /// <summary>
         /// 查询商品
@@ -644,7 +862,30 @@ namespace PurchaseOrderSys.NewApi
         /// <returns></returns>
         internal List<AvailableMerchandise> getAvailableMerchandise( string firstLegType, string winitProductCode, string destinationWarehouseCode)
         {
-            return GetAPI<List<AvailableMerchandise>>("winit.wh.mms.getAvailableMerchandise", new { WinitAccountID, firstLegType, winitProductCode , destinationWarehouseCode });
+            return GetAPI<List<AvailableMerchandise>>("winit.wh.mms.getAvailableMerchandise", new { customerCode = WinitAccountID, firstLegType, winitProductCode, destinationWarehouseCode });
+        }
+        /// <summary>
+        /// 創建入庫單V2
+        /// </summary>
+        /// <param name="WinitCreateOrder"></param>
+        /// <returns></returns>
+        internal RefWinitOrderNo WinitOrderCreate(WinitCreateOrder WinitCreateOrder)
+        {
+            return GetAPI<RefWinitOrderNo>("winit.wh.inbound.order.create", WinitCreateOrder);
+        }
+
+        internal List<VendorInfo> getVendorInfo(string countryCode, string vendorType)
+        {
+            return GetAPI<List<VendorInfo>>("winit.ums.getVendorInfo", new { countryCode, vendorType });
+        }
+
+        internal PackageLabe printPackageLabe(string orderNo,string labelSize,List<packageNoList> packageNoList)
+        {
+            return GetAPI<PackageLabe>("winit.wh.inbound.printPackageLabel", new { orderNo, labelSize, packageNoList });
+        }
+        internal OrderDetail getOrderDetail(string orderNo)
+        {
+            return GetAPI<OrderDetail>("winit.wh.inbound.getOrderDetail", new { orderNo, isIncludePackage = "Y" });
         }
     }
 }

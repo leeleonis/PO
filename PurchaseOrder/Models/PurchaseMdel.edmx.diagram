@@ -168,9 +168,6 @@
         <EntityTypeShape EntityType="PurchaseOrderModel.WinitTransferBoxItem" Width="2.125" PointX="32.5" PointY="46.875" />
         <EntityTypeShape EntityType="PurchaseOrderModel.WinitTransferBox" Width="3.25" PointX="6.375" PointY="1" />
         <EntityTypeShape EntityType="PurchaseOrderModel.WinitTransferSKU" Width="1.5" PointX="0.75" PointY="5.75" />
-        <EntityTypeShape EntityType="PurchaseOrderModel.WinitTransferBoxOrder" Width="2" PointX="11.625" PointY="1.125" />
-        <AssociationConnector Association="PurchaseOrderModel.FK_WinitTransferBoxOrder_WinitTransferBox" />
-        <AssociationConnector Association="PurchaseOrderModel.FK_WinitTransferBoxItem_WinitTransferBoxOrder" />
         <EntityTypeShape EntityType="PurchaseOrderModel.WinitTransfer" Width="1.5" PointX="18" PointY="62.125" />
         <AssociationConnector Association="PurchaseOrderModel.FK_WinitTransferSKU_WinitTransfer" />
         </Diagram>
