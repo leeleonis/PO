@@ -141,10 +141,9 @@ namespace PurchaseOrderSys.Models
 
                 db.SaveChanges();
 
-                var tempOrder = db.Orders.AsNoTracking().First(o => o.ID.Equals(orderData.ID));
-                orderData.OrderType = (byte)CheckOrderType(tempOrder);
-                orderData.FulfillmentStatus = (byte)CheckFulfillmentStatus(tempOrder);
-                tempOrder = null;
+                orderData = db.Orders.AsNoTracking().First(o => o.ID.Equals(orderData.ID));
+                orderData.OrderType = (byte)CheckOrderType(orderData);
+                orderData.FulfillmentStatus = (byte)CheckFulfillmentStatus(orderData);
             }
             catch (Exception e)
             {

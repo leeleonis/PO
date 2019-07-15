@@ -43,6 +43,8 @@ namespace PurchaseOrderSys.Controllers
                             CreateBy = Session["AdminName"].ToString(),
                             CreateAt = DateTime.UtcNow
                         });
+
+                        db.SaveChanges();
                     }
                 }
                 catch (Exception e)
