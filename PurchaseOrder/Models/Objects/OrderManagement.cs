@@ -141,7 +141,7 @@ namespace PurchaseOrderSys.Models
 
                 db.SaveChanges();
 
-                var tempOrder = db.Orders.Find(orderData.ID);
+                var tempOrder = db.Orders.AsNoTracking().First(o => o.ID.Equals(orderData.ID));
                 orderData.OrderType = (byte)CheckOrderType(tempOrder);
                 orderData.FulfillmentStatus = (byte)CheckFulfillmentStatus(tempOrder);
                 tempOrder = null;
