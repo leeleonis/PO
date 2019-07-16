@@ -13,7 +13,7 @@ namespace PurchaseOrderSys.Controllers
         // GET: Transfer
         public ActionResult Index(TransferSearchVM TransferSearchVM)
         {
-            var Transferlist = db.Transfer.Where(x => x.IsEnable);
+            var Transferlist = db.Transfer.Where(x => x.IsEnable && x.TransferType != "Winit");
             if (!string.IsNullOrWhiteSpace(TransferSearchVM.Status))
             {
                 Transferlist = Transferlist.Where(x => x.Status == TransferSearchVM.Status);

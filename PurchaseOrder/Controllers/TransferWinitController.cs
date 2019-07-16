@@ -134,6 +134,7 @@ namespace PurchaseOrderSys.Controllers
         [HttpPost]
         public ActionResult Edit(Transfer Transfer, string SID, string BoxLabelSize, string SBarcodeLabelType, bool? saveexit, bool? Requestedval)
         {
+            var Winit_API = new Winit_API();
             var dt = DateTime.UtcNow;
             var oTransfer = db.Transfer.Find(Transfer.ID);
             if (!string.IsNullOrWhiteSpace(Transfer.ExternalTra)) oTransfer.ExternalTra = Transfer.ExternalTra;
@@ -195,24 +196,43 @@ namespace PurchaseOrderSys.Controllers
             {
                 if (oTransfer.Status == "Pending")
                 {
+                    var NoWSKUList = new List<string>();
+                    foreach (var SKUitem in oTransfer.TransferSKU)
+                    {
+
+                        var WSKUList = Winit_API.SKUList(SKUitem.SkuNo + "-" + oTransfer.WarehouseTo.WinitWarehouse);
+                        if (!WSKUList.list.Any())//如果沒有資料就新增
+                        {
+                            NoWSKUList.Add(SKUitem.SkuNo);
+                        }
+                    }
+                    if (NoWSKUList.Any())
+                    {
+                        var Errmsh = WinitRegisterProduct(NoWSKUList, oTransfer.WarehouseTo.WinitWarehouse);
+                        if (!string.IsNullOrWhiteSpace(Errmsh))
+                        {
+                            TempData["ErrMsg"] = Errmsh;
+                            return RedirectToAction("Edit", new { Transfer.ID });
+                        }
+                    }
                     oTransfer.Status = "Requested";
                     var WinitWarehouse = oTransfer.WarehouseTo.WinitWarehouse;
                     foreach (var item in oTransfer.TransferSKU.Where(x => x.IsEnable))
                     {
                         var productCode = item.SkuNo + "-" + WinitWarehouse;
                         //Winit API 取S BARCODE
-                        var PostPrintV2Data = new NewApi.PostPrintV2Data
+                        var PostPrintV2Data = new PostPrintV2Data
                         {
                             labelType = oTransfer.WinitTransfer.SBarcodeLabelType,
                             madeIn = "China",
-                            singleItems = new List<NewApi.SingleItem>()
+                            singleItems = new List<SingleItem>()
                         };
-                        PostPrintV2Data.singleItems.Add(new NewApi.SingleItem
+                        PostPrintV2Data.singleItems.Add(new SingleItem
                         {
                             productCode = productCode,
                             printQty = item.QTY,
                         });
-                        var PrintV2 = new NewApi.Winit_API().GetPrintV2(PostPrintV2Data);
+                        var PrintV2 =Winit_API.GetPrintV2(PostPrintV2Data);
                         oTransfer.WinitTransfer.WinitTransferSKU.Add(new WinitTransferSKU
                         {
                             IsEnable = true,
@@ -238,6 +258,78 @@ namespace PurchaseOrderSys.Controllers
                 return RedirectToAction("Edit", new { Transfer.ID });
             }
         }
+        /// <summary>
+        /// Winit註冊商品
+        /// </summary>
+        /// <param name="SkuList"></param>
+        /// <param name="winitWarehouse">倉庫代碼</param>
+        /// <returns></returns>
+        private string WinitRegisterProduct(List<string> SkuList, string winitWarehouse)
+        {
+            var errmsg = "";
+            var nRegisterProduct = new RegisterProduct { productList = new List<ProductList>() };
+            foreach (var item in SkuList)
+            {
+                var POSKU = db.SKU.Find(item);
+                var chineseName = POSKU.SkuLang.Where(x => x.LangID == "zh-TW").FirstOrDefault()?.Name;
+                string englishName = POSKU.SkuLang.Where(x => x.LangID == "en-US").FirstOrDefault()?.Name;
+                string SKUmodel = POSKU.SkuLang.Where(x => x.LangID == "en-US").FirstOrDefault()?.Model;
+                if (string.IsNullOrWhiteSpace(chineseName))
+                {
+                    chineseName = englishName;
+                }
+
+
+                string battery = POSKU.Battery ? "Y" : "N";
+                string brandedName = POSKU.GetBrand.Name;
+                string displayPageUrl = "internal.qd.com.tw:8080";
+                var ShippingWeight = POSKU.Logistic.ShippingWeight;
+                var ShippingLength = POSKU.Logistic.ShippingLength;
+                var ShippingWidth = POSKU.Logistic.ShippingWidth;
+                var ShippingHeight = POSKU.Logistic.ShippingHeight;
+                decimal inportDeclaredvalue = 0;
+                decimal exportDeclaredvalue = 0;
+
+                if (ShippingWeight == 0) errmsg += item + ":ShippingWeight不可為0;" + Environment.NewLine;
+                if (ShippingLength == 0) errmsg += item + ":ShippingLength不可為0;" + Environment.NewLine;
+                if (ShippingWidth == 0) errmsg += item + ":ShippingWidth不可為0;" + Environment.NewLine;
+                if (ShippingHeight == 0) errmsg += item + ":ShippingHeight不可為0;" + Environment.NewLine;
+                if (inportDeclaredvalue == 0) errmsg += item + ":inportDeclaredvalue不可為0;" + Environment.NewLine;
+                if (exportDeclaredvalue == 0) errmsg += item + ":exportDeclaredvalue不可為0;" + Environment.NewLine;
+
+                nRegisterProduct.productList.Add(new ProductList
+                {
+                    productCode = item + "-" + winitWarehouse,
+                    chineseName = chineseName,
+                    englishName = englishName,
+                    registeredWeight = ShippingWeight,
+                    fixedVolumeWeight = "Y",
+                    registeredLength = ShippingLength,
+                    registeredWidth = ShippingWidth,
+                    registeredHeight = ShippingHeight,
+                    branded = "Y",
+                    brandedName = brandedName,
+                    model = SKUmodel,
+                    displayPageUrl = displayPageUrl,
+                    exportCountry = "TW",
+                    inporCountry = winitWarehouse,
+                    inportDeclaredvalue = inportDeclaredvalue,
+                    exportDeclaredvalue = exportDeclaredvalue,
+                    battery = battery
+                });
+            }
+            if (string.IsNullOrWhiteSpace(errmsg))
+            {
+                var Winit_API = new Winit_API();
+                var rProduct = Winit_API.registerProduct(nRegisterProduct);
+                if (Winit_API.ResultError != null)
+                {
+                    errmsg = Winit_API.ResultError.msg;
+                }
+            }
+            return errmsg;
+        }
+
         public ActionResult Requested(int ID)
         {
             var Transfer = db.Transfer.Find(ID);
@@ -808,7 +900,7 @@ namespace PurchaseOrderSys.Controllers
                     var merchandiseList = new List<MerchandiseList>();
                     var NpackageList = new PackageList
                     {
-                        sellerCaseNo = "TransferWinitBox:" + Box.ID,
+                        sellerCaseNo = "TransferWinitBox:" + ID + "-" + Box.ID,
                         sellerHeight = Box.Heigth.ToString(),
                         sellerLength = Box.Length.ToString(),
                         sellerWidth = Box.Width.ToString(),

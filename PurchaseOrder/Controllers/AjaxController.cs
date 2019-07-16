@@ -303,23 +303,23 @@ namespace PurchaseOrderSys.Controllers
                     odataList.AddRange(dataList);
                 }
                 var index =0;
-                if (ToWID.HasValue)//檢查Winit SKU
-                {
-                    var Warehouse = db.Warehouse.Find(ToWID);
-                    if (Warehouse.Type== "Winit")
-                    {
-                        foreach (var item in odataList.ToList())
-                        {
-                            var WSKUList = new NewApi.Winit_API().SKUList(item.SKU + "-" + Warehouse.WinitWarehouse);
-                            if (!WSKUList.list.Any())
-                            {
-                                odataList.Remove(item);
-                                ErrMsg += "Winit無此SKU：" + item.SKU + "-" + Warehouse.WinitWarehouse + Environment.NewLine;
-                            }
+                //if (ToWID.HasValue)//檢查Winit SKU
+                //{
+                //    var Warehouse = db.Warehouse.Find(ToWID);
+                //    if (Warehouse.Type== "Winit")
+                //    {
+                //        foreach (var item in odataList.ToList())
+                //        {
+                //            var WSKUList = new NewApi.Winit_API().SKUList(item.SKU + "-" + Warehouse.WinitWarehouse);
+                //            if (!WSKUList.list.Any())
+                //            {
+                //                odataList.Remove(item);
+                //                ErrMsg += "Winit無此SKU：" + item.SKU + "-" + Warehouse.WinitWarehouse + Environment.NewLine;
+                //            }
                            
-                        }
-                    }
-                }
+                //        }
+                //    }
+                //}
                 foreach (var item in odataList)
                 {
                     item.ck= index++;

@@ -162,6 +162,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Api\FedEx_API.cs" />
     <Compile Include="Api\NewWinit_API.cs" />
     <Compile Include="Api\SC_API.cs" />
     <Compile Include="Api\SC_WebService.cs" />
@@ -194,6 +195,16 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Connected Services\FedExShipService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Connected Services\FedExTrackService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Connected Services\OrderCreationService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -678,9 +689,65 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Connected Services\FedExShipService\PurchaseOrderSys.FedExShipService.deleteTagResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\FedExShipService\PurchaseOrderSys.FedExShipService.ProcessShipmentReply.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\FedExShipService\PurchaseOrderSys.FedExShipService.processShipmentResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\FedExShipService\PurchaseOrderSys.FedExShipService.ProcessTagReply.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\FedExShipService\PurchaseOrderSys.FedExShipService.processTagResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\FedExShipService\PurchaseOrderSys.FedExShipService.ShipmentReply.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Connected Services\FedExShipService\ShipServiceDefinitions.wsdl" />
+    <Content Include="Connected Services\FedExTrackService\PurchaseOrderSys.FedExTrackService.retrieveSignatureProofOfDeliveryLetterResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\FedExTrackService\PurchaseOrderSys.FedExTrackService.SendNotificationsReply.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\FedExTrackService\PurchaseOrderSys.FedExTrackService.sendNotificationsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\FedExTrackService\PurchaseOrderSys.FedExTrackService.sendSignatureProofOfDeliveryFaxResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\FedExTrackService\PurchaseOrderSys.FedExTrackService.SignatureProofOfDeliveryFaxReply.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\FedExTrackService\PurchaseOrderSys.FedExTrackService.SignatureProofOfDeliveryLetterReply.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\FedExTrackService\PurchaseOrderSys.FedExTrackService.TrackReply.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\FedExTrackService\PurchaseOrderSys.FedExTrackService.trackResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Connected Services\FedExTrackService\TrackServiceDefinitions.wsdl" />
     <None Include="Connected Services\OrderCreationService\OrderCreationService.disco" />
     <None Include="Connected Services\OrderCreationService\configuration91.svcinfo" />
     <None Include="Connected Services\OrderCreationService\configuration.svcinfo" />
+    <None Include="Connected Services\FedExShipService\configuration91.svcinfo" />
+    <None Include="Connected Services\FedExShipService\configuration.svcinfo" />
+    <None Include="Connected Services\FedExShipService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Connected Services\FedExTrackService\configuration91.svcinfo" />
+    <None Include="Connected Services\FedExTrackService\configuration.svcinfo" />
+    <None Include="Connected Services\FedExTrackService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="Connected Services\OrderCreationService\PurchaseOrderSys.OrderCreationService.AmazonMerchant.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
@@ -7717,6 +7784,8 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\FedExShipService\" />
+    <WCFMetadataStorage Include="Connected Services\FedExTrackService\" />
     <WCFMetadataStorage Include="Connected Services\OrderCreationService\" />
     <WCFMetadataStorage Include="Connected Services\PurchaseOrderService\" />
     <WCFMetadataStorage Include="Connected Services\SCInventoryService\" />
