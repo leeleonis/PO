@@ -2511,6 +2511,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
+        public static string Logistic_Price {
+            get {
+                return ResourceManager.GetString("Logistic_Price", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
         public static string Logistic_ShippingHeight {
             get {
                 return ResourceManager.GetString("Logistic_ShippingHeight", resourceCulture);

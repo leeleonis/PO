@@ -223,7 +223,7 @@
 
                                                         <div class="col-sm-4 col-lg-offset-1">
                                                             <div class="input-group">
-                                                                <span class="input-group-addon font-bg">Shipping Actions</span>
+                                                                <span class="input-group-addon font-bg">Actions</span>
                                                                 <select class="form-control">
                                                                     <optgroup label="Normal">
                                                                         <option value="1">Split package</option>
@@ -233,7 +233,7 @@
                                                                     <option value="4">Cancel Dispatch</option>
                                                                     <optgroup label="Shipped">
                                                                         <option value="5">Create RMA</option>
-                                                                        <option value="6">Create Replacement</option>
+                                                                        @*<option value="6">Create Replacement</option>*@
                                                                     </optgroup>
                                                                 </select>
                                                             </div>
@@ -345,7 +345,7 @@
                                                         </thead>
                                                         <tr>
                                                             <td width="134">Status：</td>
-                                                            <td>@EnumData.OrderPaymentStatusList()[payment?.Status ?? Model.PaymentStatus]</td>
+                                                            <td>@Enum.GetName(typeof(EnumData.PaymentStatus), payment?.Status ?? 2)</td>
                                                         </tr>
                                                         <tr>
                                                             <td>Date：</td>

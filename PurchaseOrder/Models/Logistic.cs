@@ -16,6 +16,7 @@ namespace PurchaseOrderSys.Models
     {
         public string Sku { get; set; }
         public int BoxID { get; set; }
+        public decimal Price { get; set; }
         public double CaseWidth { get; set; }
         public double CaseLength { get; set; }
         public double CaseHeight { get; set; }
