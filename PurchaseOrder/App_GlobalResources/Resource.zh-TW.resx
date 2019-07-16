@@ -2751,4 +2751,7 @@
   <data name="Items_OriginSku" xml:space="preserve">
     <value>原品號</value>
   </data>
+  <data name="Logistic_Price" xml:space="preserve">
+    <value>台幣 (含稅) 價</value>
+  </data>
 </root>

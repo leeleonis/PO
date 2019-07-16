@@ -349,6 +349,7 @@
           </Key>
           <Property Name="Sku" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="BoxID" Type="int" Nullable="false" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="CaseWidth" Type="float" Nullable="false" />
           <Property Name="CaseLength" Type="float" Nullable="false" />
           <Property Name="CaseHeight" Type="float" Nullable="false" />
@@ -487,9 +488,9 @@
           <Property Name="CustomerEmail" Type="nvarchar" MaxLength="100" />
           <Property Name="OrderType" Type="tinyint" Nullable="false" />
           <Property Name="OrderStatus" Type="tinyint" Nullable="false" />
-          <Property Name="OrderDate" Type="datetime" Nullable="false" />
+          <Property Name="OrderDate" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="PaymentStatus" Type="tinyint" Nullable="false" />
-          <Property Name="PaymentDate" Type="datetime" />
+          <Property Name="PaymentDate" Type="datetime2" Precision="7" />
           <Property Name="FulfillmentStatus" Type="tinyint" Nullable="false" />
           <Property Name="FulfilledDate" Type="datetime" />
           <Property Name="BuyerNote" Type="nvarchar(max)" />
@@ -4807,6 +4808,7 @@
           </Key>
           <Property Name="Sku" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="BoxID" Type="Int32" Nullable="false" />
+          <Property Name="Price" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="CaseWidth" Type="Double" Nullable="false" />
           <Property Name="CaseLength" Type="Double" Nullable="false" />
           <Property Name="CaseHeight" Type="Double" Nullable="false" />
@@ -5213,9 +5215,9 @@
           <Property Name="CustomerEmail" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="OrderType" Type="Byte" Nullable="false" />
           <Property Name="OrderStatus" Type="Byte" Nullable="false" />
-          <Property Name="OrderDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="OrderDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="PaymentStatus" Type="Byte" Nullable="false" />
-          <Property Name="PaymentDate" Type="DateTime" Precision="3" />
+          <Property Name="PaymentDate" Type="DateTime" Precision="7" />
           <Property Name="FulfillmentStatus" Type="Byte" Nullable="false" />
           <Property Name="FulfilledDate" Type="DateTime" Precision="3" />
           <Property Name="BuyerNote" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -6614,6 +6616,7 @@
           <EntitySetMapping Name="Logistic">
             <EntityTypeMapping TypeName="PurchaseOrderModel.Logistic">
               <MappingFragment StoreEntitySet="Logistic">
+                <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
                 <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
                 <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />

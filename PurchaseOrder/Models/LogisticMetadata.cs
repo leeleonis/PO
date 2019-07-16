@@ -1,11 +1,12 @@
-using System;
+using System; 
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// Logistic class
     /// </summary>
@@ -34,6 +35,14 @@ namespace PurchaseOrderSys.Models
     	    [Display(Name = "Logistic_BoxID", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public int  BoxID { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Price
+    		/// </summary>        
+    	    [Display(Name = "Logistic_Price", ResourceType = typeof(App_GlobalResources.Resource))]
+            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public decimal  Price { get; set; }
     
     		    
     		/// <summary>

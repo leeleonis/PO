@@ -2978,4 +2978,7 @@
   <data name="Items_OriginSku" xml:space="preserve">
     <value></value>
   </data>
+  <data name="Logistic_Price" xml:space="preserve">
+    <value></value>
+  </data>
 </root>

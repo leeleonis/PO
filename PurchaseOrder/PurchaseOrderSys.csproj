@@ -360,6 +360,9 @@
     <Compile Include="Models\ItemsMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\LogisticMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Objects\EnumData.cs" />
     <Compile Include="Models\ImgFile.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
@@ -378,9 +381,6 @@
     </Compile>
     <Compile Include="Models\Logistic.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\LogisticMetadata.cs">
-      <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Marketplace.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
