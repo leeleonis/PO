@@ -20,6 +20,9 @@ namespace PurchaseOrderSys.Models
 
         public SC_WebService SC_Api;
 
+        private readonly string AdminName = HttpContext.Current.Session["AdminName"]?.ToString() ?? "System";
+        private readonly DateTime UtcNow = DateTime.UtcNow;
+
         #region IDisposable Support
         private bool disposedValue = false; // 偵測多餘的呼叫
 
@@ -83,15 +86,15 @@ namespace PurchaseOrderSys.Models
 
             newSku.SkuID = newSku.SkuID.Trim();
             newLang.Sku = newSku.SkuID;
-            newLang.CreateAt = newSku.CreateAt;
-            newLang.CreateBy = newSku.CreateBy;
+            newLang.CreateAt = UtcNow;
+            newLang.CreateBy = AdminName;
 
             newSku.Logistic = new Logistic()
             {
                 Sku = newSku.SkuID,
                 BoxID = db.BoxType.First().ID,
-                CreateAt = newSku.CreateAt,
-                CreateBy = newSku.CreateBy
+                CreateAt = UtcNow,
+                CreateBy = AdminName
             };
 
             newSku.SkuLang.Add(newLang);
@@ -123,8 +126,8 @@ namespace PurchaseOrderSys.Models
                                 Type = (byte)EnumData.SkuType.Single,
                                 Condition = condition.ID,
                                 ParentShadow = skuData.SkuID,
-                                CreateAt = skuData.UpdateAt ?? skuData.CreateAt,
-                                CreateBy = skuData.UpdateBy ?? skuData.CreateBy
+                                CreateAt = UtcNow,
+                                CreateBy = AdminName
                             };
 
                             db.SKU.Add(sku_suffix);
@@ -139,8 +142,8 @@ namespace PurchaseOrderSys.Models
                                 sku_suffix.Logistic = new Logistic()
                                 {
                                     Sku = sku_suffix.SkuID,
-                                    CreateAt = skuData.UpdateAt ?? skuData.CreateAt,
-                                    CreateBy = skuData.UpdateBy ?? skuData.CreateBy
+                                    CreateAt = UtcNow,
+                                    CreateBy = AdminName
                                 };
                             }
 
@@ -171,8 +174,8 @@ namespace PurchaseOrderSys.Models
                 Condition = parentSku.Condition,
                 Type = (byte)EnumData.SkuType.Shadow,
                 ParentShadow = parentSku.SkuID,
-                CreateAt = parentSku.UpdateAt.Value,
-                CreateBy = parentSku.UpdateBy
+                CreateAt = UtcNow,
+                CreateBy = AdminName
             };
 
             SkuInherit(shadow, parentSku);
@@ -185,8 +188,8 @@ namespace PurchaseOrderSys.Models
                     LangID = lang.LangID,
                     Name = lang.Name,
                     Model = lang.Model,
-                    CreateAt = shadow.CreateAt,
-                    CreateBy = shadow.CreateBy
+                    CreateAt = UtcNow,
+                    CreateBy = AdminName
                 });
             }
 
@@ -277,8 +280,8 @@ namespace PurchaseOrderSys.Models
             childSku.Status = parentSku.Status;
             childSku.SerialTracking = parentSku.SerialTracking;
             childSku.Battery = parentSku.Battery;
-            childSku.UpdateAt = parentSku.UpdateAt ?? parentSku.CreateAt;
-            childSku.UpdateBy = parentSku.UpdateBy ?? parentSku.CreateBy;
+            childSku.UpdateAt = UtcNow;
+            childSku.UpdateBy = AdminName;
 
             if (langData != null)
             {
@@ -294,8 +297,8 @@ namespace PurchaseOrderSys.Models
                     {
                         Sku = childSku.SkuID,
                         LangID = langData.LangID,
-                        CreateAt = langData.UpdateAt ?? langData.CreateAt,
-                        CreateBy = langData.UpdateBy ?? langData.CreateBy
+                        CreateAt = UtcNow,
+                        CreateBy = AdminName
                     };
                 }
 
@@ -306,8 +309,8 @@ namespace PurchaseOrderSys.Models
                 lang.SpecContent = lang.SpecContent;
                 lang.FeatureContent = lang.FeatureContent;
                 lang.KeyFeature = lang.KeyFeature;
-                lang.UpdateAt = langData.UpdateAt ?? langData.CreateAt;
-                lang.UpdateBy = langData.UpdateBy ?? langData.CreateBy;
+                lang.UpdateAt = UtcNow;
+                lang.UpdateBy = AdminName;
 
                 if (!isExist) childSku.SkuLang.Add(lang);
             }
@@ -325,8 +328,8 @@ namespace PurchaseOrderSys.Models
             origin.ShippingLength = logistic.ShippingLength;
             origin.ShippingWeight = logistic.ShippingWeight;
             origin.ShippingWidth = logistic.ShippingWidth;
-            origin.UpdateAt = logistic.UpdateAt ?? logistic.CreateAt;
-            origin.UpdateBy = logistic.UpdateBy ?? logistic.CreateBy;
+            origin.UpdateAt = UtcNow;
+            origin.UpdateBy = AdminName;
         }
 
         public UpdateItemResponseItem UpdateSkuToNeto()
