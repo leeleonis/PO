@@ -353,7 +353,7 @@
                                                         </tr>
                                                     </table>
                                                     @{
-                                                        var payment = Model.Payments.FirstOrDefault(p => p.IsEnable);
+                                                        var payment = Model.Payments.OrderByDescending(p => p.Date).FirstOrDefault(p => p.IsEnable);
                                                     }
                                                     <table class="table table-bordered">
                                                         <thead>
@@ -387,7 +387,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td>Grand Total：</td>
-                                                            <td>@(payment?.GrandTotal)</td>
+                                                            <td>$@(payment?.GrandTotal) @Model.Packages.First(p => p.IsEnable).GetCurrency.Code</td>
                                                         </tr>
                                                         <tr>
                                                             <td>Payment Total：</td>
