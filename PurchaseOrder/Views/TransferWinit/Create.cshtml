@@ -250,7 +250,7 @@
                             return "";
                         }
                         else if (ToWID == "") {
-                            alert("請選擇Winit倉");
+                            alert("請選擇入庫的Winit倉");
                             return "";
                         }
                         else {
@@ -273,8 +273,14 @@
             });
             $("#addsku").click(function () {
                 var FromWID = $("#FromWID").val();
+                var ToWID = $("#ToWID").val();
                 if (FromWID == "") {
                     alert("請選擇移出倉");
+                    return "";
+                }
+                else if (ToWID == "") {
+                    alert("請選擇入庫的Winit倉");
+                    return "";
                 }
                 else {
                     DataGrid.draw();

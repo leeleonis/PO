@@ -1,5 +1,12 @@
 ﻿@*@using StackExchange.Profiling*@
 @{
+    var ErrMsg = "";
+    if (TempData["ErrMsg"] != null && TempData["ErrMsg"].ToString() != "")
+    {
+        ErrMsg = TempData["ErrMsg"].ToString().Replace("\n\r","\\r").Replace("\r\n", "\\r");
+
+    }
+
     var Create = "";
     if (ViewBag.Create != null && ViewBag.Create)
     {
@@ -85,7 +92,7 @@
                 } else {
                     return number;
                 }
-               
+
             }
             else {
                 return "";
@@ -93,7 +100,7 @@
         }
         var oTable;
         $(document).ready(function () {
-            $("form").validate(); 
+            $("form").validate();
             $("form").makeValidationInline();
             $("button[type='submit']").click(function () {
                 $(this).prop("disabled", "disabled");
@@ -162,11 +169,13 @@
                     });
                 }
             });
-            @if(TempData["ErrMsg"] != null && TempData["ErrMsg"].ToString() != "")
-            {
-                @:alert("@TempData["ErrMsg"]");
-            }
         });
     </script>
+    @if (!string.IsNullOrWhiteSpace(ErrMsg))
+    {
+        <script>
+            alert("@ErrMsg");
+        </script>
+    }
 </body>
 </html>

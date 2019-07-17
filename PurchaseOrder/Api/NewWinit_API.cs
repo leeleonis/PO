@@ -564,6 +564,100 @@ namespace PurchaseOrderSys.NewApi
         public string status { get; set; }
     }
     #endregion
+    #region WINIT建立商品
+    public class ItemThirdVo
+    {
+        public string skuCodeThird { get; set; }
+        public string description { get; set; }
+    }
+
+    public class ProductList
+    {
+        /// <summary>
+        /// 客户注册商品时命名的商品编码，提交后不可修改
+        /// </summary>
+        public string productCode { get; set; }
+        /// <summary>
+        /// 中文名称
+        /// </summary>
+        public string chineseName { get; set; }
+        /// <summary>
+        /// 英文名称
+        /// </summary>
+        public string englishName { get; set; }
+        /// <summary>
+        /// 注册重量(克/g)
+        /// </summary>
+        public decimal registeredWeight { get; set; }
+        /// <summary>
+        /// 重量体积是否固定，Y|N（目前不可更改，默认为Y）
+        /// </summary>
+        public string fixedVolumeWeight { get; set; }
+        /// <summary>
+        /// 注册长度(cm)
+        /// </summary>
+        public double registeredLength { get; set; }
+        /// <summary>
+        /// 注册宽度(cm)
+        /// </summary>
+        public double registeredWidth { get; set; }
+        /// <summary>
+        /// 注册高度(cm)
+        /// </summary>
+        public double registeredHeight { get; set; }
+        /// <summary>
+        /// 是否有品牌，Y|N
+        /// </summary>
+        public string branded { get; set; }
+        /// <summary>
+        /// 品牌名称（当branded为Y时必填且可修改）
+        /// </summary>
+        public string brandedName { get; set; }
+        /// <summary>
+        /// 当brandedname为Y时为必填
+        /// </summary>
+        public string model { get; set; }
+        /// <summary>
+        /// 商品刊登链接
+        /// </summary>
+        public string displayPageUrl { get; set; }
+        /// <summary>
+        /// 备注
+        /// </summary>
+        public string remark { get; set; }
+        /// <summary>
+        /// 出口国家，国家2字码
+        /// </summary>
+        public string exportCountry { get; set; }
+        /// <summary>
+        /// 进口国家，国家2字码
+        /// </summary>
+        public string inporCountry { get; set; }
+        /// <summary>
+        /// 进口申报价（USD）
+        /// </summary>
+        public decimal inportDeclaredvalue { get; set; }
+        /// <summary>
+        /// 出口申报价（USD）
+        /// </summary>
+        public decimal exportDeclaredvalue { get; set; }
+        /// <summary>
+        /// 是否有电池，Y|N必选其一，默认为N
+        /// </summary>
+        public string battery { get; set; }
+    }
+    /// <summary>
+    /// 產品列表
+    /// </summary>
+    public class RegisterProduct
+    {
+        public List<ProductList> productList { get; set; }
+    }
+    public class ReturnProduct
+    {
+        public string productCode { get; set; }
+    }
+    #endregion
     public class Winit_API : IDisposable
     {
         private bool disposed = false;
@@ -767,6 +861,7 @@ namespace PurchaseOrderSys.NewApi
         {
             try
             {
+                ResultError = null;
                 Queryclient request = _RequestInitNew<Queryclient>(action, data);
                 request.data = data;
                 var json = JsonConvert.SerializeObject(request);
@@ -783,7 +878,7 @@ namespace PurchaseOrderSys.NewApi
             }
             catch (Exception ex)
             {
-
+                ResultError = new Received { msg = ex.ToString() };
                 return default(T);
             }
 
@@ -802,8 +897,6 @@ namespace PurchaseOrderSys.NewApi
         {
             return GetAPI<ReturnPrintV2>("winit.singleitem.label.print.v2", postPrintV2Data);
         }
-
-
 
         internal List<WinitProducts> getWinitProducts(string productType)
         {
@@ -886,6 +979,15 @@ namespace PurchaseOrderSys.NewApi
         internal OrderDetail getOrderDetail(string orderNo)
         {
             return GetAPI<OrderDetail>("winit.wh.inbound.getOrderDetail", new { orderNo, isIncludePackage = "Y" });
+        }
+        /// <summary>
+        /// 注册/编辑商品
+        /// </summary>
+        /// <param name="RegisterProduct"></param>
+        /// <returns></returns>
+        internal List<ReturnProduct> registerProduct(RegisterProduct RegisterProduct)
+        {
+            return GetAPI<List<ReturnProduct>>("registerProduct", RegisterProduct);
         }
     }
 }
