@@ -58,6 +58,8 @@ namespace PurchaseOrderSys.Controllers
         // GET: Test
         public ActionResult Index()
         {
+            var ApiSetting = db.ApiSetting.Find(16);
+            var CreateBox = new FedExApi.FedEx_API(ApiSetting).Tracking("788504512725");
             ViewBag.WCPScript = Neodynamic.SDK.Web.WebClientPrint.CreateScript(Url.Action("ProcessRequest", "WebClientPrintAPI", null, HttpContext.Request.Url.Scheme), Url.Action("PrintMyFiles", "Test", null, HttpContext.Request.Url.Scheme), HttpContext.Session.SessionID);
             var Winit_API = new NewApi.Winit_API();
             var WinitProducts = Winit_API.getWinitProducts("OW0103");

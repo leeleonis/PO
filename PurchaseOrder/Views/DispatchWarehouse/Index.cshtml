@@ -4,7 +4,7 @@
     var SCIDList = (PurchaseOrderSys.SCService.Warehouse[])ViewBag.SCList;
     var Warehouse3PList = (List<SelectListItem>)ViewBag.Warehouse3PList;
     //var SCList = SCIDList.Select(x => new SelectListItem { Text = x.Name, Value = x.ID.ToString() }).ToList();
-    var ShippingList = new PurchaseOrderSys.Api.Shipping_API().ShippingList();
+    var ShippingList = new PurchaseOrderSys.FedExApi.Shipping_API().ShippingList();
     var SummaryList = new List<string> { "Shippingmethods", "3PWarehouse", "Marketplace", "SCID" };
 }
 

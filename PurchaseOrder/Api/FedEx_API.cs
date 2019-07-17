@@ -42,12 +42,16 @@ namespace PurchaseOrderSys.FedExApi
 
         public string endpoint;
 
-        public FedEx_API()
+        public FedEx_API(ApiSetting Api)
         {
-            api_key = "WrgHTsKUAieD5eVD";
-            api_password = "FbppS0UhJEUDL0JQ13BgTwZ0i";
-            api_accountNumber = "c46d626c-2f45-4b17-a888-f379392b5e4b";
-            api_meterNumber = "110786452";
+            api_key = Api.ApiKey;
+            api_password = Api.ApiPassword;
+            api_accountNumber = Api.ApiAccount;
+            api_meterNumber = Api.ApiMeter;
+            //api_key = "WrgHTsKUAieD5eVD";
+            //api_password = "FbppS0UhJEUDL0JQ13BgTwZ0i";
+            //api_accountNumber = "504470423";
+            //api_meterNumber = "110786452";
         }
 
         public ProcessShipmentReply CreateBox(FedExData FedExData)
@@ -215,19 +219,20 @@ namespace PurchaseOrderSys.FedExApi
                 }
                 catch (Exception e)
                 {
-                    PurchaseOrderSys.FedExShipService.Notification notification = new PurchaseOrderSys.FedExShipService.Notification();
+                    throw new Exception(e.ToString());
+                    //PurchaseOrderSys.FedExShipService.Notification notification = new PurchaseOrderSys.FedExShipService.Notification();
 
-                    if (!string.IsNullOrEmpty(consoleOutputBehavior.ConsoleOutputInspector.ResponseXML))
-                    {
-                        XElement element = XElement.Parse(consoleOutputBehavior.ConsoleOutputInspector.ResponseXML);
-                        notification.Message = element.Attributes("Message").Any() ? element.Attributes("Message").First().Value : element.Attributes("Desc").First().Value;
-                    }
-                    else
-                    {
-                        notification.Message = e.Message;
-                    }
+                    //if (!string.IsNullOrEmpty(consoleOutputBehavior.ConsoleOutputInspector.ResponseXML))
+                    //{
+                    //    XElement element = XElement.Parse(consoleOutputBehavior.ConsoleOutputInspector.ResponseXML);
+                    //    notification.Message = element.Attributes("Message").Any() ? element.Attributes("Message").First().Value : element.Attributes("Desc").First().Value;
+                    //}
+                    //else
+                    //{
+                    //    notification.Message = e.Message;
+                    //}
 
-                    reply = new ProcessShipmentReply() { Notifications = new PurchaseOrderSys.FedExShipService.Notification[] { notification } };
+                    //reply = new ProcessShipmentReply() { Notifications = new PurchaseOrderSys.FedExShipService.Notification[] { notification } };
                 }
             }
 

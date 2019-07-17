@@ -6,7 +6,7 @@
     var InterimList = EnumData.InterimDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var TransferStatusDDL = EnumData.TransferStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var DefaultSelect = PurchaseOrderSys.App_GlobalResources.Resource.DefaultSelect;
-    var Shipping_API = new PurchaseOrderSys.Api.Shipping_API().ShippingList();
+    var Shipping_API = new PurchaseOrderSys.FedExApi.Shipping_API().ShippingList();
     if (Shipping_API.status)
     {
         ShippingList = Shipping_API.data.shippingMethod.Select(x => new SelectListItem { Text = x.text, Value = x.value.ToString() }).ToList();

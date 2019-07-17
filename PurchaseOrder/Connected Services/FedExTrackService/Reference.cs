@@ -306,7 +306,7 @@ namespace PurchaseOrderSys.FedExTrackService {
         
         private Address destinationField;
         
-        private EMailNotificationEventType[][] recipientDetailsField;
+        private EMailNotificationEventType[] recipientDetailsField;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
@@ -395,7 +395,7 @@ namespace PurchaseOrderSys.FedExTrackService {
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Order=5)]
         [System.Xml.Serialization.XmlArrayItemAttribute("NotificationEventsAvailable", typeof(EMailNotificationEventType), IsNullable=false)]
-        public EMailNotificationEventType[][] RecipientDetails {
+        public EMailNotificationEventType[] RecipientDetails {
             get {
                 return this.recipientDetailsField;
             }
