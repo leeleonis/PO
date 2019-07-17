@@ -631,6 +631,7 @@ namespace PurchaseOrderSys.Models
         public string Winit { get; set; }
         public string Model { get; set; }
         public int? Prep { get; set; }
+        public decimal? Price { get; set; }
     }
     public class CMSKUVM
     {

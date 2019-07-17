@@ -397,9 +397,9 @@ namespace PurchaseOrderSys.Models
         {
             return new Dictionary<string, string>()
             {
-               { "LZ7050", "LZ7050" },
-               { "LZ10060", "LZ10060" },
-               { "LZ6040", "LZ6040" }
+               { "LZ7050", "LZ7050:70x50mm" },
+               { "LZ10060", "LZ10060:100x60mm" },
+               { "LZ6040", "LZ6040:60x40mm" }
             };
         }
         /// <summary>
@@ -410,9 +410,9 @@ namespace PurchaseOrderSys.Models
         {
             return new Dictionary<string, string>()
             {
-               { "10x10", "10x10" },
-               { "10x6", "10x6" },
-               { "15x10", "15x10" }
+               { "10x10", "10x10cm" },
+               { "10x6", "10x6cm" },
+               { "15x10", "15x10cm" }
             };
         }
         /// <summary>

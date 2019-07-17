@@ -6,7 +6,7 @@
     var InterimList = EnumData.InterimDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var TransferStatusDDL = EnumData.TransferStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var DefaultSelect = PurchaseOrderSys.App_GlobalResources.Resource.DefaultSelect;
-    var ShippingList = new PurchaseOrderSys.Api.Shipping_API().ShippingList().data.shippingMethod.Select(x => new SelectListItem { Text = x.text, Value = x.value.ToString() }).ToList();
+    var ShippingList = new PurchaseOrderSys.FedExApi.Shipping_API().ShippingList().data.shippingMethod.Select(x => new SelectListItem { Text = x.text, Value = x.value.ToString() }).OrderBy(x=>x.Text).ToList();
     var disabled = "disabled";
     var TStatus = Model.Status;
     var NoPrepSerials = (List<string>)ViewBag.NoPrepSerials;
@@ -14,6 +14,7 @@
     var SBarcodeLabelType = EnumData.SBarcodeLabelType().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     ViewBag.BoxLabelSize = Model.WinitTransfer.BoxLabelSize;
     ViewBag.SBarcodeLabelType = Model.WinitTransfer.SBarcodeLabelType;
+    ShippingList.Where(q => q.Value == "35").First().Selected = true;
 }
 <style>
     .error {
@@ -161,6 +162,7 @@
                                                                 <th>Serial</th>
                                                                 <th>Label</th>
                                                                 <th>Total Received</th>
+                                                                <th>Price</th>
                                                                 @*<th>TWN (Available)</th>*@
                                                                 @*<th>Winit US WC (Available)</th>*@
                                                             </tr>
@@ -250,6 +252,7 @@
                     { data: "Serial", render: function (data, type, row) { return data; } },
                     { data: "Label", render: function (data, type, row) { return thousandComma(data); }  },
                     { data: "TotalReceive", render: function (data, type, row) { return data; } },
+                    { data: "Price", render: function (data, type, row) { return '<input class="form-control" type="text" onchange="TSkuNumberListPrice(this,' + row.ck + ',' + data + ')"  value = ' + data + ' > '; } },
                     //{ data: "TWN", render: function (data, type, row) { return thousandComma(data); }  },
                     //{ data: "Winit", render: function (data, type, row) { return thousandComma(data); } }
                 ],
@@ -491,6 +494,25 @@
             $.ajax({
                 type: "post",
                 url: "@Url.Action("TSkuNumberListQTY", "Ajax")",
+                data: {
+                    SID:@Html.Display("ID"),
+                    ID: id,
+                    val: $(x).val(),
+                },
+                success: function (data) {
+                    if (data.status) {
+                        DataGrid.draw();
+                    }
+                    else {
+                        alert(data.Errmsg);
+                    }
+                }
+            });
+        }
+        function TSkuNumberListPrice(x, id) {
+            $.ajax({
+                type: "post",
+                url: "@Url.Action("TSkuNumberListPrice", "Ajax")",
                 data: {
                     SID:@Html.Display("ID"),
                     ID: id,

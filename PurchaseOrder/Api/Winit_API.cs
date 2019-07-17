@@ -9,7 +9,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
-namespace PurchaseOrderSys.Api
+namespace PurchaseOrderSys.FedExApi
 {
     #region 回傳資料
 

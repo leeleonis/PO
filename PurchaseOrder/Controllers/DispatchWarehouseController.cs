@@ -1,6 +1,6 @@
 ﻿
 using Newtonsoft.Json;
-using PurchaseOrderSys.Api;
+using PurchaseOrderSys.FedExApi;
 using PurchaseOrderSys.Models;
 using System;
 using System.Collections.Generic;
@@ -24,7 +24,7 @@ namespace PurchaseOrderSys.Controllers
         // GET: DispatchWarehouse
         public ActionResult Index(string Name,string Type,string Serial)
         {      
-            ViewBag.Warehouse3PList = new Api.Winit_API().Warehouse3P();
+            ViewBag.Warehouse3PList = new FedExApi.Winit_API().Warehouse3P();
             //var SCList = new Api.SC_API().SCList();
             //ViewBag.SCList = SCList;
             var Warehouse = db.Warehouse.Where(x => x.IsEnable);
@@ -83,8 +83,8 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult Create()
         {
           
-            ViewBag.Warehouse3PList = new Api.Winit_API().Warehouse3P();
-            ViewBag.SCList = new Api.SC_API().SCList();
+            ViewBag.Warehouse3PList = new FedExApi.Winit_API().Warehouse3P();
+            ViewBag.SCList = new FedExApi.SC_API().SCList();
             return View();
         }
         [HttpPost]
@@ -120,8 +120,8 @@ namespace PurchaseOrderSys.Controllers
         }
         public ActionResult Edit(int id)
         {
-            ViewBag.Warehouse3PList = new Api.Winit_API().Warehouse3P();
-            var SCList = new Api.SC_API().SCList();
+            ViewBag.Warehouse3PList = new FedExApi.Winit_API().Warehouse3P();
+            var SCList = new FedExApi.SC_API().SCList();
             ViewBag.SCList = SCList;
             var Warehouse = db.Warehouse.Find(id);
             if (Warehouse.WarehouseSummary.Any())
@@ -299,7 +299,7 @@ namespace PurchaseOrderSys.Controllers
             }
             var ShippingArray = Shippingmethods.Split(',');
             int total = 0;
-            var ShippingList = new Api.Shipping_API().ShippingList();
+            var ShippingList = new FedExApi.Shipping_API().ShippingList();
 
 
 
@@ -396,7 +396,7 @@ namespace PurchaseOrderSys.Controllers
                     //val = shippingList.data.methodType.DHL.Where(x => x.value == boxType)?.FirstOrDefault().text;
                     break;
                 case "FedEx":
-                    val = shippingList.data.boxType.FedEx.Where(x => x.value == boxType)?.FirstOrDefault().text;
+                    val = shippingList.data.boxType.FedEx.Where(x => x.value == boxType)?.FirstOrDefault()?.text;
                     break;
                 case "UPS":
                     //val = shippingList.data.methodType.UPS.Where(x => x.value == boxType)?.FirstOrDefault().text;
@@ -426,16 +426,16 @@ namespace PurchaseOrderSys.Controllers
                     //val = shippingList.data.methodType.DHL.Where(x => x.value == boxType)?.FirstOrDefault().text;
                     break;
                 case "FedEx":
-                    val = shippingList.data.methodType.FedEx.Where(x => x.value == methodType)?.FirstOrDefault().text;
+                    val = shippingList.data.methodType.FedEx.Where(x => x.value == methodType)?.FirstOrDefault()?.text;
                     break;
                 case "UPS":
                     //val = shippingList.data.methodType.UPS.Where(x => x.value == boxType)?.FirstOrDefault().text;
                     break;
                 case "Winit":
-                    val = shippingList.data.methodType.Winit.Where(x => x.value == methodType)?.FirstOrDefault().text;
+                    val = shippingList.data.methodType.Winit.Where(x => x.value == methodType)?.FirstOrDefault()?.text;
                     break;
                 case "IDS":
-                    val = shippingList.data.methodType.IDS.Where(x => x.value == methodType)?.FirstOrDefault().text;
+                    val = shippingList.data.methodType.IDS.Where(x => x.value == methodType)?.FirstOrDefault()?.text;
                     break;
                 case "Sendle":
                     //val = shippingList.data.methodType.Sendle.Where(x => x.value == boxType)?.FirstOrDefault().text;

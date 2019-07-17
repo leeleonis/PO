@@ -12,7 +12,7 @@ using System.Reflection;
 using System.Web.Mvc;
 using PurchaseOrderSys.SCService;
 using PurchaseOrderSys.SCInventoryService;
-namespace PurchaseOrderSys.Api
+namespace PurchaseOrderSys.FedExApi
 {
     public class SC_API
     {

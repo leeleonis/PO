@@ -7,7 +7,7 @@ using System.Net;
 using System.Text;
 using System.Web;
 
-namespace PurchaseOrderSys.Api
+namespace PurchaseOrderSys.FedExApi
 {
     public class ShippingMethod
     {

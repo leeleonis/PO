@@ -92,6 +92,15 @@ namespace PurchaseOrderSys.Controllers
                 foreach (var item in odataList.Where(x => x.Model == "E"))
                 {
                     Transfer.TransferSKU.Add(new TransferSKU { IsEnable = true, SkuNo = item.SKU, Name = item.ProductName, QTY = item.QTY, CreateBy = CreateBy, CreateAt = CreateAt });
+                    var Logistic = db.Logistic.Find(item.SKU);
+                    if (Logistic != null)
+                    {
+                        Logistic.Price = item.Price ?? 0;
+                    }
+                    else
+                    {
+                        db.Logistic.Add(new Logistic { Sku = item.SKU, Price = item.Price ?? 0, CreateBy = CreateBy, CreateAt = CreateAt });
+                    }
                 }
             }
             db.Transfer.Add(Transfer);
@@ -120,7 +129,8 @@ namespace PurchaseOrderSys.Controllers
                     TWN = item.Transfer.WarehouseFrom?.Name,
                     Winit = item.Transfer.WarehouseTo?.Name,
                     Model = "L",
-                    Prep = PrepSerialChk(item)
+                    Prep = PrepSerialChk(item),
+                    Price = item.SKU.Logistic?.Price ?? 0
                 });
             }
             foreach (var item in TranSKUVMList.Where(x => x.Prep != 0))
@@ -176,6 +186,15 @@ namespace PurchaseOrderSys.Controllers
                 else
                 {
                     oTransfer.TransferSKU.Add(new TransferSKU { IsEnable = true, SkuNo = item.SKU, Name = item.ProductName, QTY = item.QTY, CreateBy = UserBy, CreateAt = dt });
+                }
+                var Logistic = db.Logistic.Find(item.SKU);
+                if (Logistic != null)
+                {
+                    Logistic.Price = item.Price ?? 0;
+                }
+                else
+                {
+                    db.Logistic.Add(new Logistic {Sku= item.SKU,Price = item.Price ?? 0 , CreateBy = UserBy, CreateAt = dt });
                 }
 
             }
@@ -233,6 +252,13 @@ namespace PurchaseOrderSys.Controllers
                             printQty = item.QTY,
                         });
                         var PrintV2 =Winit_API.GetPrintV2(PostPrintV2Data);
+
+                        if (PrintV2 == null)
+                        {
+                            TempData["ErrMsg"] = Winit_API.ResultError.msg;
+                            return RedirectToAction("Edit", new { Transfer.ID });
+
+                        }
                         oTransfer.WinitTransfer.WinitTransferSKU.Add(new WinitTransferSKU
                         {
                             IsEnable = true,
@@ -266,6 +292,8 @@ namespace PurchaseOrderSys.Controllers
         /// <returns></returns>
         private string WinitRegisterProduct(List<string> SkuList, string winitWarehouse)
         {
+            var Code = CurrencyCode(winitWarehouse);
+            var EXRate = db.Currency.Where(x => x.Code == Code).FirstOrDefault()?.EXRate ?? 1;
             var errmsg = "";
             var nRegisterProduct = new RegisterProduct { productList = new List<ProductList>() };
             foreach (var item in SkuList)
@@ -279,7 +307,7 @@ namespace PurchaseOrderSys.Controllers
                     chineseName = englishName;
                 }
 
-
+                var Declaredvalue = Math.Round(POSKU.Logistic.Price / 1.05m / EXRate, 2);
                 string battery = POSKU.Battery ? "Y" : "N";
                 string brandedName = POSKU.GetBrand.Name;
                 string displayPageUrl = "internal.qd.com.tw:8080";
@@ -287,8 +315,8 @@ namespace PurchaseOrderSys.Controllers
                 var ShippingLength = POSKU.Logistic.ShippingLength;
                 var ShippingWidth = POSKU.Logistic.ShippingWidth;
                 var ShippingHeight = POSKU.Logistic.ShippingHeight;
-                decimal inportDeclaredvalue = 0;
-                decimal exportDeclaredvalue = 0;
+                decimal inportDeclaredvalue = Declaredvalue;
+                decimal exportDeclaredvalue = Declaredvalue;
 
                 if (ShippingWeight == 0) errmsg += item + ":ShippingWeight不可為0;" + Environment.NewLine;
                 if (ShippingLength == 0) errmsg += item + ":ShippingLength不可為0;" + Environment.NewLine;
@@ -328,6 +356,36 @@ namespace PurchaseOrderSys.Controllers
                 }
             }
             return errmsg;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Country">國家代碼(2碼)</param>
+        /// <returns></returns>
+        private string CurrencyCode(string Country)
+        {
+            var Code = "";
+            switch (Country)
+            {
+                case "AU":
+                    Code = "AUD";
+                    break;
+                case "US":
+                    Code = "USD";
+                    break;
+                case "HK":
+                    Code = "HKD";
+                    break;
+                case "JP":
+                    Code = "JPY";
+                    break;
+                case "TW":
+                    Code = "TWD";
+                    break;
+                default:
+                    break;
+            }
+            return Code;
         }
 
         public ActionResult Requested(int ID)
@@ -496,6 +554,8 @@ namespace PurchaseOrderSys.Controllers
                         {
                             var Serial = db.SerialsLlist.Where(x => x.IsEnable && x.SerialsNo == item.SerialsNo && x.SerialsType == "TransferOut" && x.TransferSKU.TransferID == ID && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).FirstOrDefault();
                             item.SerialsLlistID = Serial.ID;
+                            item.MerchandiseCode = item.SkuNo + "-" + oTransfer.WarehouseTo.WinitWarehouse;
+                            item.Value = Serial.TransferSKU.SKU.Logistic?.Price;
                             item.CreateBy = CreateBy;
                             item.CreateAt = CreateAt;
                         }
@@ -515,6 +575,8 @@ namespace PurchaseOrderSys.Controllers
                             {
                                 var Serial = db.SerialsLlist.Where(x => x.IsEnable && x.SerialsNo == item.SerialsNo && x.SerialsType == "TransferOut" && x.TransferSKU.TransferID == ID && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).FirstOrDefault();
                                 item.SerialsLlistID = Serial.ID;
+                                item.MerchandiseCode = item.SkuNo + "-" + oTransfer.WarehouseTo.WinitWarehouse;
+                                item.Value = Serial.TransferSKU.SKU.Logistic?.Price;
                                 item.CreateBy = CreateBy;
                                 item.CreateAt = CreateAt;
                                 WinitTransferBox.WinitTransferBoxItem.Add(item);
@@ -529,6 +591,20 @@ namespace PurchaseOrderSys.Controllers
 
                 var s = ex.ToString();
             }
+        }
+
+        private decimal? GetSkuPrice(SerialsLlist serial)
+        {
+            var Price = 0m;
+            if (serial.PurchaseSKUID.HasValue)
+            {
+                Price = serial.PurchaseSKU.SKU.Logistic?.Price ?? 0;
+            }
+            else if (serial.TransferSKUID.HasValue)
+            {
+                Price = serial.TransferSKU.SKU.Logistic?.Price ?? 0;
+            }
+            return Price;
         }
 
         public ActionResult Receive(int ID)
@@ -900,7 +976,7 @@ namespace PurchaseOrderSys.Controllers
                     var merchandiseList = new List<MerchandiseList>();
                     var NpackageList = new PackageList
                     {
-                        sellerCaseNo = "TransferWinitBox:" + ID + "-" + Box.ID,
+                        sellerCaseNo = ID + "-" + Box.ID,
                         sellerHeight = Box.Heigth.ToString(),
                         sellerLength = Box.Length.ToString(),
                         sellerWidth = Box.Width.ToString(),
@@ -915,7 +991,7 @@ namespace PurchaseOrderSys.Controllers
                             var NmerchandiseList = new MerchandiseList
                             {
                                 merchandiseCode = item.Key,
-                                quantity = item.Count().ToString(),
+                                quantity = item.Count(),
                                 specification = ""
                             };
                             merchandiseList.Add(NmerchandiseList);
@@ -926,7 +1002,8 @@ namespace PurchaseOrderSys.Controllers
                 var WinitOrderCreate = Winit_API.WinitOrderCreate(nWinitCreateOrder);
                 if (WinitOrderCreate == null)
                 {
-                    return Json(new { status = false, Msg = Winit_API.ResultError }, JsonRequestBehavior.AllowGet);
+                    var Errmsg = Winit_API.ResultError.msg;
+                    return Json(new { status = false, Errmsg }, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
@@ -964,6 +1041,22 @@ namespace PurchaseOrderSys.Controllers
                 WinitTransfer.PrintPackageLabe = printPackageLabe.Label;
                 db.SaveChanges();
             }
+            //產生Fedex單
+            var ShippingMethods = db.ShippingMethods.Find(int.Parse(WinitTransfer.Transfer.Carrier));
+            var winitWarehouse = WinitTransfer.Transfer.WarehouseTo.WinitWarehouse;
+            var Currency = CurrencyCode(winitWarehouse);
+            var EXRate = db.Currency.Where(x => x.Code == Currency).FirstOrDefault()?.EXRate ?? 1;
+            var nFedExData = new FedExApi.FedExData
+            {
+                TransferID = WinitTransfer.TransferID,
+                Currency = Currency,
+                BoxType = ShippingMethods.LastMile.BoxType,
+                MethodType = ShippingMethods.LastMile.MethodType,
+                WinitTransferBoxList = WinitTransfer.WinitTransferBox.ToList(),
+                WinitWarehouse = WinitTransfer.Transfer.WarehouseTo,
+                EXRate = EXRate,
+            };
+            var CreateBox = new FedExApi.FedEx_API().CreateBox(nFedExData);
             var print = "key=box&id=" + WinitTransfer.TransferID;
             return Json(new { status = true, print }, JsonRequestBehavior.AllowGet);
         }
@@ -1002,7 +1095,7 @@ namespace PurchaseOrderSys.Controllers
         }
         public ActionResult BoxChange(int ID)
         {
-            ViewData["Mod"] = "Receive";
+            ViewData["Mod"] = "";
             ViewData["SID"] = ID;
             var WinitTransferBoxList = (List<WinitTransferBox>)Session["WinitTransferBox" + ID];
             var html = RenderPartialViewToString("Boxitem", WinitTransferBoxList);

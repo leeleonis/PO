@@ -182,7 +182,7 @@ namespace PurchaseOrderSys.NewApi
         /// <summary>
         /// 數量
         /// </summary>
-        public string quantity { get; set; }
+        public int quantity { get; set; }
         /// <summary>
         /// 商品規格 
         /// </summary>

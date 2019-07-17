@@ -14,7 +14,7 @@ using System.Web.Hosting;
 using System.Xml.Linq;
 
 
-namespace PurchaseOrderSys.Api
+namespace PurchaseOrderSys.FedExApi
 {
     public class FedExData
     {
@@ -22,7 +22,14 @@ namespace PurchaseOrderSys.Api
         public string Name { get; set; }
         public int MethodType { get; set; }
         public int BoxType { get; set; }
+        /// <summary>
+        /// 幣別
+        /// </summary>
         public string Currency { get; set; }
+        /// <summary>
+        /// 匯率
+        /// </summary>
+        public decimal EXRate { get; set; }
         public Warehouse WinitWarehouse { get; set; }
         public List<WinitTransferBox> WinitTransferBoxList { get; set; }
     }
@@ -35,145 +42,17 @@ namespace PurchaseOrderSys.Api
 
         public string endpoint;
 
-        public FedEx_API(ApiSetting Api)
+        public FedEx_API()
         {
-            api_key = Api.ApiKey;
-            api_password = Api.ApiPassword;
-            api_accountNumber = Api.ApiAccount;
-            api_meterNumber = Api.ApiMeter;
+            api_key = "WrgHTsKUAieD5eVD";
+            api_password = "FbppS0UhJEUDL0JQ13BgTwZ0i";
+            api_accountNumber = "c46d626c-2f45-4b17-a888-f379392b5e4b";
+            api_meterNumber = "110786452";
         }
-
-        //public ProcessShipmentReply Create(FedExData FedExData)
-        //{
-        //    ProcessShipmentRequest request = _shipmentInit();
-
-        //    request.TransactionDetail = new PurchaseOrderSys.FedExShipService.TransactionDetail();
-        //    request.TransactionDetail.CustomerTransactionId = "*** Process Shipment Request ***";
-
-        //    request.RequestedShipment = new RequestedShipment()
-        //    {
-        //        ShipTimestamp = DateTime.Today,
-        //        DropoffType = DropoffType.REGULAR_PICKUP,
-        //        ServiceType = (FedExShipService.ServiceType)FedExData.MethodType,
-        //        PackagingType = (FedExShipService.PackagingType)FedExData.BoxType,
-        //        Shipper = _shipperInit(),
-        //        ShippingChargesPayment = new Payment() { PaymentType = PaymentType.SENDER, Payor = new Payor() { ResponsibleParty = _shipperInit() } },
-        //        PackageCount = "1"
-        //    };
-        //    request.RequestedShipment.Recipient = new Party()
-        //    {
-        //        Contact = new FedExShipService.Contact()
-        //        {
-        //            PersonName = string.Join(" ", new string[] { FedExData.WinitWarehouse.Company }),//收件者
-        //            CompanyName = FedExData.WinitWarehouse.Company,
-        //            PhoneNumber = FedExData.WinitWarehouse.Phone
-        //        },
-        //        Address = new FedExShipService.Address()
-        //        {
-        //            StreetLines = new string[] { FedExData.WinitWarehouse.Address1, FedExData.WinitWarehouse.Address2 },
-        //            City = FedExData.WinitWarehouse.City,
-        //            StateOrProvinceCode = FedExData.WinitWarehouse.State,
-        //            PostalCode = FedExData.WinitWarehouse.Postcode,
-        //            CountryName = FedExData.WinitWarehouse.Country,
-        //            CountryCode = FedExData.WinitWarehouse.WinitWarehouse
-        //        }
-        //    };
-
-
-
-        //    FedExShipService.Money customsValue = new FedExShipService.Money() { Currency = FedExData.Currency, Amount = package.DeclaredTotal };//
-        //    FedExShipService.Commodity commodity = new FedExShipService.Commodity
-        //    {
-        //        NumberOfPieces = "1",
-        //        Description = string.Join(", ", package.Items.Select(i => i.Skus.ProductType.ProductTypeName).Distinct().ToArray()),
-        //        CountryOfManufacture = "CN",
-        //        Weight = new PurchaseOrderSys.FedExShipService.Weight()
-        //        {
-        //            Units = address.CountryCode.Equals("US") ? PurchaseOrderSys.FedExShipService.WeightUnits.LB : PurchaseOrderSys.FedExShipService.WeightUnits.KG,
-        //            Value = package.Items.Where(i => i.IsEnable.Equals(true)).Sum(i => i.Qty.Value * ((decimal)(SkuData.Any(s => s.Sku.Equals(i.ProductID)) ? SkuData.First(s => s.Sku.Equals(i.ProductID)).Weight : i.Skus.ShippingWeight) / (request.RequestedShipment.Shipper.Address.CountryCode.Equals("US") ? 453 : 1000)))
-        //        },
-        //        Quantity = 1,
-        //        QuantityUnits = "EA",
-        //        UnitPrice = customsValue,
-        //        CustomsValue = customsValue,
-        //        QuantitySpecified = true
-        //    };
-
-        //    request.RequestedShipment.CustomsClearanceDetail = new CustomsClearanceDetail()
-        //    {
-        //        DutiesPayment = new Payment()
-        //        {
-        //            PaymentType = address.CountryCode.Equals("US") && package.ShippingMethod.Equals(35) ? PaymentType.SENDER : PaymentType.RECIPIENT,
-        //            Payor = address.CountryCode.Equals("US") && package.ShippingMethod.Equals(35) ? new Payor() { ResponsibleParty = _shipperInit() } : null
-        //        },
-        //        DocumentContent = InternationalDocumentContentType.DOCUMENTS_ONLY,
-        //        CustomsValue = customsValue,
-        //        Commodities = new PurchaseOrderSys.FedExShipService.Commodity[] { commodity },
-        //        DocumentContentSpecified = true
-        //    };
-
-        //    request.RequestedShipment.RequestedPackageLineItems = new RequestedPackageLineItem[] {
-        //        new RequestedPackageLineItem()
-        //        {
-        //            SequenceNumber = "1",
-        //            InsuredValue = new PurchaseOrderSys.FedExShipService.Money() { Amount = package.NeedInsurance ? package.DeclaredTotal : 0, Currency = currency },
-        //            Weight = commodity.Weight,
-        //            CustomerReferences = new CustomerReference[]
-        //            {
-        //                new CustomerReference()
-        //                {
-        //                    CustomerReferenceType = CustomerReferenceType.CUSTOMER_REFERENCE,
-        //                    Value = package.OrderID.ToString()
-        //                }
-        //            }
-        //        }
-        //    };
-
-        //    request.RequestedShipment.LabelSpecification = new LabelSpecification()
-        //    {
-        //        LabelFormatType = LabelFormatType.COMMON2D,
-        //        ImageType = ShippingDocumentImageType.ZPLII,
-        //        LabelStockType = LabelStockType.STOCK_4X6,
-        //        LabelPrintingOrientation = LabelPrintingOrientationType.BOTTOM_EDGE_OF_TEXT_FIRST,
-        //        ImageTypeSpecified = true,
-        //        LabelStockTypeSpecified = true,
-        //        LabelPrintingOrientationSpecified = true
-        //    };
-
-        //    ProcessShipmentReply reply;
-        //    using (ShipPortTypeClient client = new ShipPortTypeClient())
-        //    {
-        //        var endpoint = client.Endpoint;
-        //        ConsoleOutputBehavior consoleOutputBehavior = new ConsoleOutputBehavior();
-        //        client.Endpoint.Behaviors.Add(consoleOutputBehavior);
-
-        //        try
-        //        {
-        //            reply = client.processShipment(request);
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            PurchaseOrderSys.FedExShipService.Notification notification = new PurchaseOrderSys.FedExShipService.Notification();
-
-        //            if (!string.IsNullOrEmpty(consoleOutputBehavior.ConsoleOutputInspector.ResponseXML))
-        //            {
-        //                XElement element = XElement.Parse(consoleOutputBehavior.ConsoleOutputInspector.ResponseXML);
-        //                notification.Message = element.Attributes("Message").Any() ? element.Attributes("Message").First().Value : element.Attributes("Desc").First().Value;
-        //            }
-        //            else
-        //            {
-        //                notification.Message = e.Message;
-        //            }
-
-        //            reply = new ProcessShipmentReply() { Notifications = new PurchaseOrderSys.FedExShipService.Notification[] { notification } };
-        //        }
-        //    }
-
-        //    return reply;
-        //}
 
         public ProcessShipmentReply CreateBox(FedExData FedExData)
         {
+            
             ProcessShipmentRequest request = _shipmentInit();
 
             request.TransactionDetail = new PurchaseOrderSys.FedExShipService.TransactionDetail();
@@ -215,7 +94,7 @@ namespace PurchaseOrderSys.Api
             //string currency = Enum.GetName(typeof(PurchaseOrderSys.OrderService.CurrencyCodeType2), box.Packages.First(p => p.IsEnable.Value).Orders.OrderCurrencyCode.Value);
             var commodityList = new List<FedExShipService.Commodity>();
             var itemLineList = new List<RequestedPackageLineItem>();
-            FedExShipService.Money customsValue = new FedExShipService.Money() { Currency = FedExData.Currency, Amount = FedExData.WinitTransferBoxList.Sum(x => x.WinitTransferBoxItem.Sum(y => y.Value)).Value };//海關價值(總價)
+            FedExShipService.Money customsValue = new FedExShipService.Money() { Currency = FedExData.Currency, Amount = Math.Round(FedExData.WinitTransferBoxList.Sum(x => x.WinitTransferBoxItem.Sum(y => y.Value)).Value / 1.05m / FedExData.EXRate, 2) };//海關價值(總價)
 
             foreach (var WinitTransferBox in FedExData.WinitTransferBoxList)
             {
@@ -233,7 +112,7 @@ namespace PurchaseOrderSys.Api
                     },
                     Quantity = 1,
                     QuantityUnits = "EA",
-                    UnitPrice = new FedExShipService.Money() { Currency = FedExData.Currency, Amount = itemList.Sum(y => y.Value).Value },//整箱的價值
+                    UnitPrice = new FedExShipService.Money() { Currency = FedExData.Currency, Amount = Math.Round(itemList.Sum(y => y.Value).Value / 1.05m / FedExData.EXRate, 2)  },//整箱的價值
                     CustomsValue = customsValue,//海關價值(總價)
                     QuantitySpecified = true
                 };

@@ -99,6 +99,7 @@
             }
         }
         var oTable;
+        var isChange = false;
         $(document).ready(function () {
             $("form").validate();
             $("form").makeValidationInline();
@@ -168,6 +169,10 @@
                         oTable.fnOpen(nTr, MenuList, 'Tabledetails');
                     });
                 }
+            });
+            $("input,textarea,select").change(function () {
+                isChange = true;
+                $(this).addClass("editing");
             });
         });
     </script>

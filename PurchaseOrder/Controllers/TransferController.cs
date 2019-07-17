@@ -110,7 +110,8 @@ namespace PurchaseOrderSys.Controllers
                     TWN = item.Transfer.WarehouseFrom?.Name,
                     Winit = item.Transfer.WarehouseTo?.Name,
                     Model = "L",
-                    Prep = PrepSerialChk(item)
+                    Prep = PrepSerialChk(item),
+                    Price =item.SKU.Logistic?.Price ?? 0
                 });
             }
             foreach (var item in TranSKUVMList.Where(x => x.Prep != 0))
