@@ -528,12 +528,12 @@ namespace PurchaseOrderSys.Helpers
             return TimeZoneList[currency];
         }
 
-        public string DateTimeToString(DateTime? dateTime, EnumData.TimeZone orginTimeZone = EnumData.TimeZone.UTC, EnumData.TimeZone timeZone = EnumData.TimeZone.UTC)
+        public string DateTimeToString(DateTime? dateTime, EnumData.TimeZone orginTimeZone = EnumData.TimeZone.UTC, EnumData.TimeZone timeZone = EnumData.TimeZone.UTC, string Format = "dd/MM/yyyy HH:mm:ss")
         {
             string dateTimeString = "";
             if (dateTime.HasValue && !dateTime.Equals(DateTime.MinValue))
             {
-                return InitDateTime(dateTime.Value, orginTimeZone).ConvertDateTime(timeZone).ToString("dd/MM/yyyy<br />hh:mm tt");
+                return InitDateTime(dateTime.Value, orginTimeZone).ConvertDateTime(timeZone).ToString(Format);
 
             }
             return dateTimeString;
