@@ -533,7 +533,7 @@ namespace PurchaseOrderSys.Helpers
             string dateTimeString = "";
             if (dateTime.HasValue && !dateTime.Equals(DateTime.MinValue))
             {
-                return InitDateTime(dateTime.Value, orginTimeZone).ConvertDateTime(timeZone).ToString("MM/dd/yyyy<br />hh:mm tt");
+                return InitDateTime(dateTime.Value, orginTimeZone).ConvertDateTime(timeZone).ToString("dd/MM/yyyy<br />hh:mm tt");
 
             }
             return dateTimeString;

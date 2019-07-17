@@ -1548,4 +1548,7 @@
   <data name="VendorLIst_SCID" xml:space="preserve">
     <value>SCID</value>
   </data>
+  <data name="SKU_DisplayPageUrl" xml:space="preserve">
+    <value>Official Website</value>
+  </data>
 </root>

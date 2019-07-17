@@ -2760,4 +2760,7 @@
   <data name="OrderAddresses_EmailAddress" xml:space="preserve">
     <value>NULL</value>
   </data>
+  <data name="SKU_DisplayPageUrl" xml:space="preserve">
+    <value>Official Website</value>
+  </data>
 </root>
