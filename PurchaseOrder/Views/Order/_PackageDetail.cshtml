@@ -76,7 +76,16 @@
                         @Html.TextBox(string.Format("Items[{0}][Qty]", index++), item.Qty, htmlAttributes: new { @class = "form-control" })
                     </td>
                     <td>@(item.UnitPrice * item.Qty)</td>
-                    <td>@item.RMAID</td>
+                    <td class="@(!item.RMAID.HasValue ? "no-padding" : "")">
+                        @if (item.RMAID.HasValue)
+                        {
+                            <a href="http://internal.qd.com.tw:8080/RMA/Edit/@item.RMAID" target="_blank">@item.RMAID</a>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-default btn-sm">Create</button>
+                        }
+                    </td>
                 </tr>
             }
         </tbody>
@@ -130,7 +139,7 @@
                         </td>
                         <td width="135">Export Currency：</td>
                         <td>
-                            @Model.GetCurrency.Name
+                            @Model.GetCurrency.Code
                             @*@Html.DropDownListFor(Model => Model.ExportCurrency, (List<SelectListItem>)ViewData["CurrencyList"], htmlAttributes: new { @class = "form-control" })*@
                         </td>
                     </tr>
@@ -177,7 +186,7 @@
                         </td>
                         <td width="135">Export Currency：</td>
                         <td>
-                            @(Model.GetDLCurrency.Name)
+                            @(Model.GetDLCurrency.Code)
                             @*@Html.DropDownListFor(Model => Model.DLExportCurrency, (List<SelectListItem>)ViewData["CurrencyList"], htmlAttributes: new { @class = "form-control" })*@
                         </td>
                     </tr>

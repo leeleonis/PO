@@ -47,6 +47,7 @@ namespace PurchaseOrderSys.Models
         public bool Battery { get; set; }
         public byte Status { get; set; }
         public string eBayTitle { get; set; }
+        public string DisplayPageUrl { get; set; }
         public string CreateBy { get; set; }
         public System.DateTime CreateAt { get; set; }
         public string UpdateBy { get; set; }

@@ -726,4 +726,7 @@
   <data name="WinitTransferSKU_ItemBarcodeFile" xml:space="preserve">
     <value>ItemBarcodeFile</value>
   </data>
+  <data name="SKU_DisplayPageUrl" xml:space="preserve">
+    <value>Official Website</value>
+  </data>
 </root>

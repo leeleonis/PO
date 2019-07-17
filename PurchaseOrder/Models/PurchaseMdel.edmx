@@ -454,6 +454,8 @@
           <Property Name="Postcode" Type="nvarchar" MaxLength="50" />
           <Property Name="CountryCode" Type="nvarchar" MaxLength="50" />
           <Property Name="CountryName" Type="nvarchar" MaxLength="50" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmailAddress" Type="nvarchar" MaxLength="100" />
           <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
           <Property Name="UpdateAt" Type="datetime" />
           <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
@@ -851,6 +853,7 @@
           <Property Name="Battery" Type="bit" Nullable="false" />
           <Property Name="Status" Type="tinyint" Nullable="false" />
           <Property Name="eBayTitle" Type="text" />
+          <Property Name="DisplayPageUrl" Type="nvarchar" MaxLength="100" />
           <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="CreateAt" Type="datetime" Nullable="false" />
           <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
@@ -3676,6 +3679,7 @@
           <Property Name="Battery" Type="Boolean" Nullable="false" />
           <Property Name="Status" Type="Byte" Nullable="false" />
           <Property Name="eBayTitle" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="DisplayPageUrl" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -5434,6 +5438,8 @@
           <Property Name="Postcode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CountryCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CountryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmailAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
           <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -6163,6 +6169,7 @@
           <EntitySetMapping Name="SKU">
             <EntityTypeMapping TypeName="PurchaseOrderModel.SKU">
               <MappingFragment StoreEntitySet="SKU">
+                <ScalarProperty Name="DisplayPageUrl" ColumnName="DisplayPageUrl" />
                 <ScalarProperty Name="Battery" ColumnName="Battery" />
                 <ScalarProperty Name="SerialTracking" ColumnName="SerialTracking" />
                 <ScalarProperty Name="Company" ColumnName="Company" />
@@ -6901,6 +6908,8 @@
           <EntitySetMapping Name="OrderAddresses">
             <EntityTypeMapping TypeName="PurchaseOrderModel.OrderAddresses">
               <MappingFragment StoreEntitySet="OrderAddresses">
+                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
                 <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
                 <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
                 <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />

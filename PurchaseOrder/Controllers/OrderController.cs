@@ -116,10 +116,10 @@ namespace PurchaseOrderSys.Controllers
                 if (address == null) throw new Exception("Not found address!");
 
                 if (address.CountryCode != updateAddress.CountryCode) address.CountryName = EnumData.CountryList()[updateAddress.CountryCode];
-                SetUpdateData(address, updateAddress, new string[] { "FirstName", "LastName", "AddressLine1", "AddressLine2", "City", "State", "Postcode", "CountryCode" });
+                SetUpdateData(address, updateAddress, new string[] { "FirstName", "LastName", "AddressLine1", "AddressLine2", "City", "State", "Postcode", "CountryCode", "PhoneNumber" });
                 db.SaveChanges();
 
-                var ShipsArray = new string[] { address.AddressLine1, address.AddressLine2, address.City, address.State, address.Postcode, address.CountryName };
+                var ShipsArray = new string[] { address.AddressLine1, address.AddressLine2, address.City, address.State, address.Postcode, address.CountryName, address.PhoneNumber };
                 result.data = string.Join("\r\n", new string[] { string.Format("{0}, {1}", address.FirstName, address.LastName), string.Join("\r\n", ShipsArray.Except(new string[] { "", null })) });
             }
             catch (Exception e)

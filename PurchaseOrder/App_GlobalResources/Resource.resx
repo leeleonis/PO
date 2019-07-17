@@ -2981,4 +2981,13 @@
   <data name="Logistic_Price" xml:space="preserve">
     <value></value>
   </data>
+  <data name="OrderAddresses_PhoneNumber" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OrderAddresses_EmailAddress" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SKU_DisplayPageUrl" xml:space="preserve">
+    <value>Official Website</value>
+  </data>
 </root>

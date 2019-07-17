@@ -64,6 +64,11 @@ namespace PurchaseOrderSys.Models
                     package.ShipWarehouse = db.WarehouseSummary.AsNoTracking().First(w => w.IsEnable && w.Type.Equals("SCID") && w.Val.Equals(package.ShipWarehouse.ToString())).WarehouseID;
                     package.ReturnWarehouse = db.WarehouseSummary.AsNoTracking().First(w => w.IsEnable && w.Type.Equals("SCID") && w.Val.Equals(package.ReturnWarehouse.ToString())).WarehouseID;
 
+                    if (package.ShippingMethod.Equals(0))
+                    {
+                        package.ShippingMethod = db.ShippingMethods.First(m => m.IsEnable).ID;
+                    }
+
                     if (orderData.Packages.Any(p => p.SCID.Value.Equals(package.SCID.Value)))
                     {
                         var packageData = orderData.Packages.First(p => p.SCID.Value.Equals(package.SCID.Value));
@@ -135,7 +140,7 @@ namespace PurchaseOrderSys.Models
                     orderData.Addresses.Add(soldTo);
 
                     var shipTo = new OrderAddresses() { Type = (byte)EnumData.OrderAddressType.Shipped };
-                    SetUpdateData(shipTo, soldTo, new string[] { "FirstName", "LastName", "AddressLine1", "AddressLine2", "City", "State", "Postcode", "CountryCode", "CountryName", "CreateBy", "CreateAt" });
+                    SetUpdateData(shipTo, soldTo, new string[] { "FirstName", "LastName", "AddressLine1", "AddressLine2", "City", "State", "Postcode", "CountryCode", "CountryName", "PhoneNumber", "EmailAddress", "CreateBy", "CreateAt" });
                     orderData.Addresses.Add(shipTo);
                 }
 

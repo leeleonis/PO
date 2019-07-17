@@ -473,4 +473,70 @@ namespace PurchaseOrderSys.Helpers
             return dt.Value;
         }
     }
+
+    public class TimeZoneConvert
+    {
+        private TimeZoneInfo TimeZoneInfo;
+
+        public DateTime Utc { get; private set; }
+        public double TimeStamp { get { return (Utc.Subtract(new DateTime(1970, 1, 1, 0, 0, 0))).TotalSeconds; } }
+
+        private Dictionary<string, EnumData.TimeZone> TimeZoneList = new Dictionary<string, EnumData.TimeZone>()
+    { { "USD", EnumData.TimeZone.PST }, { "GBP", EnumData.TimeZone.GMT }, { "AUD", EnumData.TimeZone.AEST }, { "JPY", EnumData.TimeZone.JST } };
+
+        private Dictionary<EnumData.TimeZone, string> TimeZoneId = new Dictionary<EnumData.TimeZone, string>()
+    {
+        { EnumData.TimeZone.EST, "Eastern Standard Time" }, { EnumData.TimeZone.TST, "Taipei Standard Time" }, { EnumData.TimeZone.PST, "Pacific Standard Time" },
+        { EnumData.TimeZone.GMT, "Greenwich Mean Time" }, { EnumData.TimeZone.AEST, "AUS Eastern Standard Time" }, { EnumData.TimeZone.JST, "Tokyo Standard Time" },
+        { EnumData.TimeZone.UTC, "UTC" }
+    };
+
+        public TimeZoneConvert()
+        {
+            InitDateTime(DateTime.UtcNow);
+        }
+
+        public TimeZoneConvert(DateTime originDateTime, EnumData.TimeZone originTimeZone)
+        {
+            InitDateTime(originDateTime, originTimeZone);
+        }
+
+        public TimeZoneConvert InitDateTime(DateTime originDateTime, EnumData.TimeZone originTimeZone = EnumData.TimeZone.UTC)
+        {
+            originDateTime = DateTime.SpecifyKind(originDateTime, DateTimeKind.Unspecified);
+            string timeZoneId = GetTimeZoneId(originTimeZone);
+            TimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+            Utc = TimeZoneInfo.ConvertTimeToUtc(originDateTime, TimeZoneInfo);
+
+            return this;
+        }
+
+        public DateTime ConvertDateTime(EnumData.TimeZone targetTimeZone)
+        {
+            string timeZoneId = GetTimeZoneId(targetTimeZone);
+            TimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+            return TimeZoneInfo.ConvertTime(Utc, TimeZoneInfo);
+        }
+
+        private string GetTimeZoneId(EnumData.TimeZone timeZone)
+        {
+            return TimeZoneId[timeZone];
+        }
+
+        private EnumData.TimeZone ConvertCurrencyToTimeZone(string currency)
+        {
+            return TimeZoneList[currency];
+        }
+
+        public string DateTimeToString(DateTime? dateTime, EnumData.TimeZone orginTimeZone = EnumData.TimeZone.UTC, EnumData.TimeZone timeZone = EnumData.TimeZone.UTC, string Format = "dd/MM/yyyy HH:mm:ss")
+        {
+            string dateTimeString = "";
+            if (dateTime.HasValue && !dateTime.Equals(DateTime.MinValue))
+            {
+                return InitDateTime(dateTime.Value, orginTimeZone).ConvertDateTime(timeZone).ToString(Format);
+
+            }
+            return dateTimeString;
+        }
+    }
 }

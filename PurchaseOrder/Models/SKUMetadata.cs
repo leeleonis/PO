@@ -1,11 +1,12 @@
-using System;
+using System; 
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// SKU class
     /// </summary>
@@ -145,6 +146,14 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "SKU_eBayTitle", ResourceType = typeof(App_GlobalResources.Resource))]
     		public string  eBayTitle { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Display Page Url
+    		/// </summary>        
+    	    [Display(Name = "SKU_DisplayPageUrl", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(100, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  DisplayPageUrl { get; set; }
     
     		    
     		/// <summary>

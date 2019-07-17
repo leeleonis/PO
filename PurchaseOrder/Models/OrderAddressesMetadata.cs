@@ -130,6 +130,22 @@ namespace PurchaseOrderSys.Models
     
     		    
     		/// <summary>
+    		/// Phone Number
+    		/// </summary>        
+    	    [Display(Name = "OrderAddresses_PhoneNumber", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  PhoneNumber { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Email Address
+    		/// </summary>        
+    	    [Display(Name = "OrderAddresses_EmailAddress", ResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(100, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public string  EmailAddress { get; set; }
+    
+    		    
+    		/// <summary>
     		/// Update By
     		/// </summary>        
     	    [Display(Name = "OrderAddresses_UpdateBy", ResourceType = typeof(App_GlobalResources.Resource))]

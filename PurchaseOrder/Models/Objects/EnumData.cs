@@ -456,11 +456,11 @@ namespace PurchaseOrderSys.Models
         }
 
         public enum PaymentStatus { Cleared, NotCleared, Unknown };
-        public enum OrderPaymentStatus { None, Partial, Full, OverPaid, Refunded };
+        public enum OrderPaymentStatus { None, Pending, Partial, Full, OverPaid, Refunded };
         public static Dictionary<byte, string> OrderPaymentStatusList(bool bySC = false)
         {
-            byte[] SC_Status = new byte[] { 0, 4, 2, 9, 5 };
-            string[] Status = new string[] { "None", "Partial", "Full", "Over Paid", "Refunded" };
+            byte[] SC_Status = new byte[] { 0, 1, 4, 2, 9, 5 };
+            string[] Status = new string[] { "None", "Pending", "Partial", "Full", "Over Paid", "Refunded" };
 
             return Enum.GetValues(typeof(OrderPaymentStatus)).Cast<OrderPaymentStatus>().ToDictionary(s => bySC ? SC_Status[(byte)s] : (byte)s, s => Status[(byte)s]);
         }
