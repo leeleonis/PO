@@ -2754,4 +2754,10 @@
   <data name="Logistic_Price" xml:space="preserve">
     <value>台幣 (含稅) 價</value>
   </data>
+  <data name="OrderAddresses_PhoneNumber" xml:space="preserve">
+    <value>NULL</value>
+  </data>
+  <data name="OrderAddresses_EmailAddress" xml:space="preserve">
+    <value>NULL</value>
+  </data>
 </root>

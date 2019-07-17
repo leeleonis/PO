@@ -111,10 +111,10 @@
                                                                 </thead>
                                                                 <tbody>
                                                                     <tr>
-                                                                        <td colspan="2" rowspan="8" class="no-padding">
+                                                                        <td colspan="2" rowspan="9" class="no-padding">
                                                                             @{
                                                                                 var SoldAddress = Model.Addresses.FirstOrDefault(a => a.Type.Equals((byte)EnumData.OrderAddressType.Sold));
-                                                                                var SoldArray = new string[] { SoldAddress?.AddressLine1, SoldAddress?.AddressLine2, SoldAddress?.City, SoldAddress?.State, SoldAddress?.Postcode, SoldAddress?.CountryName };
+                                                                                var SoldArray = new string[] { SoldAddress?.AddressLine1, SoldAddress?.AddressLine2, SoldAddress?.City, SoldAddress?.State, SoldAddress?.Postcode, SoldAddress?.CountryName, SoldAddress?.PhoneNumber };
                                                                                 var SoldTo = new string[] { string.Format("{0}, {1}", SoldAddress?.FirstName, SoldAddress?.LastName), string.Join("\r\n", SoldArray.Except(new string[] { "", null })) };
                                                                             }
                                                                             <textarea class="form-control" style="resize:none;font-size:16px;" rows="8" readonly>@string.Join("\r\n", SoldTo)</textarea>
@@ -142,10 +142,10 @@
                                                                 </thead>
                                                                 <tbody>
                                                                     <tr>
-                                                                        <td colspan="2" rowspan="8" class="no-padding">
+                                                                        <td colspan="2" rowspan="9" class="no-padding">
                                                                             @{
                                                                                 var ShipAddress = Model.Addresses.FirstOrDefault(a => a.Type.Equals((byte)EnumData.OrderAddressType.Shipped));
-                                                                                var ShipsArray = new string[] { ShipAddress?.AddressLine1, ShipAddress?.AddressLine2, ShipAddress?.City, ShipAddress?.State, ShipAddress?.Postcode, ShipAddress?.CountryName };
+                                                                                var ShipsArray = new string[] { ShipAddress?.AddressLine1, ShipAddress?.AddressLine2, ShipAddress?.City, ShipAddress?.State, ShipAddress?.Postcode, ShipAddress?.CountryName, ShipAddress?.PhoneNumber };
                                                                                 var ShipTo = new string[] { string.Format("{0}, {1}", ShipAddress?.FirstName, ShipAddress?.LastName), string.Join("\r\n", ShipsArray.Except(new string[] { "", null })) };
                                                                             }
                                                                             <textarea class="form-control" style="resize:none;font-size:16px;" rows="8" readonly>@string.Join("\r\n", ShipTo)</textarea>
@@ -200,6 +200,12 @@
                                                                         <td>Country：</td>
                                                                         <td class="no-padding">
                                                                             @Html.DropDownList("CountryCode", EnumData.CountryList().Select(c => new SelectListItem() { Text = c.Value, Value = c.Key, Selected = c.Key.Equals(ShipAddress?.CountryCode.ToUpper()) }).ToList(), htmlAttributes: new { @class = "form-control" })
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>PhoneNumber：</td>
+                                                                        <td class="no-padding">
+                                                                            <input type="text" class="form-control" name="PhoneNumber" value="@(ShipAddress?.PhoneNumber)" data-reset="@(ShipAddress?.PhoneNumber)" />
                                                                         </td>
                                                                     </tr>
                                                                 </tbody>
@@ -298,20 +304,22 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
+                                                @{ 
+                                                    TimeZoneConvert TimeZoneConvert = new TimeZoneConvert();
+                                                }
                                                 <div class="col-sm-2">
                                                     <table class="table table-bordered">
                                                         <tr>
                                                             <td width="120">Order Date：</td>
-                                                            <td>@Model.OrderDate.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                                                            <td>@TimeZoneConvert.DateTimeToString(Model.OrderDate, EnumData.TimeZone.UTC, EnumData.TimeZone.TST)</td>
                                                         </tr>
                                                         <tr>
                                                             <td>Payment Date：</td>
-                                                            <td>@(Model.PaymentDate?.ToString("dd/MM/yyyy HH:mm:ss") ?? "")</td>
+                                                            <td>@TimeZoneConvert.DateTimeToString(Model.PaymentDate, EnumData.TimeZone.UTC, EnumData.TimeZone.TST)</td>
                                                         </tr>
                                                         <tr>
                                                             <td>Fulfilled Date：</td>
-                                                            <td>@(Model.FulfilledDate?.ToString("dd/MM/yyyy HH:mm:ss") ?? "")</td>
+                                                            <td>@TimeZoneConvert.DateTimeToString(Model.FulfilledDate, EnumData.TimeZone.UTC, EnumData.TimeZone.TST)</td>
                                                         </tr>
                                                     </table>
 
@@ -349,7 +357,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td>Date：</td>
-                                                            <td>@(payment?.Date?.ToString("dd/MM/yyyy HH:mm:ss") ?? "")</td>
+                                                            <td>@TimeZoneConvert.DateTimeToString(payment?.Date, EnumData.TimeZone.UTC, EnumData.TimeZone.TST)</td>
                                                         </tr>
                                                         <tr>
                                                             <td>Gateway：</td>

@@ -34,6 +34,8 @@ namespace PurchaseOrderSys.Models
         public string Postcode { get; set; }
         public string CountryCode { get; set; }
         public string CountryName { get; set; }
+        public string PhoneNumber { get; set; }
+        public string EmailAddress { get; set; }
         public string UpdateBy { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }
         public string CreateBy { get; set; }

@@ -130,7 +130,7 @@
                         </td>
                         <td width="135">Export Currency：</td>
                         <td>
-                            @Model.GetCurrency.Name
+                            @Model.GetCurrency.Code
                             @*@Html.DropDownListFor(Model => Model.ExportCurrency, (List<SelectListItem>)ViewData["CurrencyList"], htmlAttributes: new { @class = "form-control" })*@
                         </td>
                     </tr>
@@ -177,7 +177,7 @@
                         </td>
                         <td width="135">Export Currency：</td>
                         <td>
-                            @(Model.GetDLCurrency.Name)
+                            @(Model.GetDLCurrency.Code)
                             @*@Html.DropDownListFor(Model => Model.DLExportCurrency, (List<SelectListItem>)ViewData["CurrencyList"], htmlAttributes: new { @class = "form-control" })*@
                         </td>
                     </tr>

@@ -3069,6 +3069,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
+        public static string OrderAddresses_EmailAddress {
+            get {
+                return ResourceManager.GetString("OrderAddresses_EmailAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
         public static string OrderAddresses_FirstName {
             get {
                 return ResourceManager.GetString("OrderAddresses_FirstName", resourceCulture);
@@ -3108,6 +3117,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         public static string OrderAddresses_OrderID {
             get {
                 return ResourceManager.GetString("OrderAddresses_OrderID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string OrderAddresses_PhoneNumber {
+            get {
+                return ResourceManager.GetString("OrderAddresses_PhoneNumber", resourceCulture);
             }
         }
         
