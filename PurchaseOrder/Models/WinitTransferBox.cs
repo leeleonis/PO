@@ -32,6 +32,8 @@ namespace PurchaseOrderSys.Models
         public string UpdateBy { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }
         public string PackageNo { get; set; }
+        public string FedExPdf { get; set; }
+        public string Tracking { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<WinitTransferBoxItem> WinitTransferBoxItem { get; set; }

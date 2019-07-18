@@ -624,7 +624,12 @@ namespace PurchaseOrderSys.Controllers
                                     {
                                         try
                                         {
-                                            SCWS.Receive_RMA_Item(SCOrderID, oRMASKU.RMAItemID.Value, item.ProductID, item.Qty, ReturnWarehouseID, RMASerialitem.SerialsNo);//RMA入庫
+                                            var SerialsNo = "";
+                                            if (RMASerialitem.RMASKU.SKU.SerialTracking)//有序號管理就加入序號
+                                            {
+                                                SerialsNo = RMASerialitem.SerialsNo;
+                                            }
+                                            SCWS.Receive_RMA_Item(SCOrderID, oRMASKU.RMAItemID.Value, item.ProductID, item.Qty, ReturnWarehouseID, SerialsNo);//RMA入庫
                                         }
                                         catch (Exception ex)
                                         {

@@ -33,6 +33,12 @@ namespace PurchaseOrderSys.FedExApi
         public Warehouse WinitWarehouse { get; set; }
         public List<WinitTransferBox> WinitTransferBoxList { get; set; }
     }
+    public class FedExTrackingData
+    {
+        public int index { get; set; }
+        public string Tracking { get; set; }
+        public byte[] FedExZpl { get; set; }
+    }
     public class FedEx_API
     {
         private string api_key;
@@ -54,9 +60,9 @@ namespace PurchaseOrderSys.FedExApi
             //api_meterNumber = "110786452";
         }
 
-        public ProcessShipmentReply CreateBox(FedExData FedExData)
+        public List<FedExTrackingData> CreateBox(FedExData FedExData)
         {
-            
+            var FedExTrackingDataList = new List<FedExTrackingData>();
             ProcessShipmentRequest request = _shipmentInit();
 
             request.TransactionDetail = new PurchaseOrderSys.FedExShipService.TransactionDetail();
@@ -79,7 +85,7 @@ namespace PurchaseOrderSys.FedExApi
                 {
                     PersonName = FedExData.WinitWarehouse.Company,
                     CompanyName = FedExData.WinitWarehouse.Company,
-                    PhoneNumber = FedExData.WinitWarehouse.Phone
+                    PhoneNumber = FedExData.WinitWarehouse.Phone,
                 },
                 Address = new PurchaseOrderSys.FedExShipService.Address()
                 {
@@ -178,10 +184,10 @@ namespace PurchaseOrderSys.FedExApi
                 {
                     for (int i = 0; i < itemLineList.Count(); i++)
                     {
-                        if (!i.Equals(0))
+                        if (i != 0)//第二筆之後
                         {
                             request.RequestedShipment.TotalWeight = null;
-                            request.RequestedShipment.MasterTrackingId = reply.CompletedShipmentDetail.MasterTrackingId;
+                            request.RequestedShipment.MasterTrackingId = reply.CompletedShipmentDetail.MasterTrackingId;//帶入第一筆的TrackingId
                         }
                         request.RequestedShipment.CustomsClearanceDetail.CustomsValue = commodityList[i].CustomsValue;
                         request.RequestedShipment.CustomsClearanceDetail.Commodities[0] = commodityList[i];
@@ -194,27 +200,13 @@ namespace PurchaseOrderSys.FedExApi
                         }
 
                         var TrackingNumber = reply.CompletedShipmentDetail.CompletedPackageDetails.First().TrackingIds.Select(t => t.TrackingNumber).First();//TrackingIds要回存
-
-                        var content = reply.CompletedShipmentDetail.CompletedPackageDetails.First().Label.Parts.First().Image;//要轉BASE64
-                        //System.Net.HttpWebRequest webRequest = (System.Net.HttpWebRequest)System.Net.WebRequest.Create("http://api.labelary.com/v1/printers/8dpmm/labels/4x6/");
-                        //webRequest.Method = "POST";
-                        //webRequest.Accept = "application/pdf";
-                        //webRequest.ContentType = "application/x-www-form-urlencoded";
-                        //webRequest.ContentLength = content.Length;
-
-                        //using (Stream requestStream = webRequest.GetRequestStream())
-                        //{
-                        //    requestStream.Write(content, 0, content.Length);
-
-                        //    System.Net.HttpWebResponse response = (System.Net.HttpWebResponse)webRequest.GetResponse();
-                        //    using (Stream responseStream = response.GetResponseStream())
-                        //    {
-                        //        using (FileStream fileStream = File.Create(Path.Combine(filePath, boxList[i].BoxID + ".pdf")))
-                        //        {
-                        //            responseStream.CopyTo(fileStream);
-                        //        }
-                        //    }
-                        //}
+                        var FedExZpl = reply.CompletedShipmentDetail.CompletedPackageDetails.First().Label.Parts.First().Image;
+                        FedExTrackingDataList.Add(new FedExTrackingData
+                        {
+                            index = i,
+                            Tracking = TrackingNumber,
+                            FedExZpl = FedExZpl
+                        });
                     }
                 }
                 catch (Exception e)
@@ -236,7 +228,7 @@ namespace PurchaseOrderSys.FedExApi
                 }
             }
 
-            return reply;
+            return FedExTrackingDataList;
         }
 
         private ProcessShipmentRequest _shipmentInit()
@@ -297,7 +289,6 @@ namespace PurchaseOrderSys.FedExApi
 
             TrackPortTypeClient client = new TrackPortTypeClient();
             TrackReply reply = client.track(request);
-
             return reply;
         }
 

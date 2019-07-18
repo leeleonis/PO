@@ -95,8 +95,8 @@
                                                         <button type="button" class="btn btn-default">保留Box</button>*@
                                                     </div>
                                                     <div class="col-sm-5 col-lg-2">
-                                                        <button type="button" class="btn btn-default" id="printAll">打印Box</button>
-                                                        <button type="button" class="btn btn-default">打印AWB</button>
+                                                        <button type="button" class="btn btn-default" id="printBox">打印Box</button>
+                                                        <button type="button" class="btn btn-default" id="printAWB">打印AWB</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -207,7 +207,7 @@
                     }
                 });
             });
-            $("#printAll").click(function () {
+            $("#printBox").click(function () {
                 if (isChange) {
                     alert("資料尚未存檔,無法列印");
                 }
@@ -216,6 +216,29 @@
                         traditional: true,
                         type: "post",
                         url: "@Url.Action("PrintBox")",
+                        data: {
+                            ID: "@Html.Display("ID")"
+                        },
+                        success: function (data) {
+                            if (data.status) {
+                                javascript: jsWebClientPrint.print(encodeURIComponent(data.print));
+                            }
+                            else {
+                                alert(data.Errmsg);
+                            }
+                        }
+                    });
+                }
+            });
+            $("#printAWB").click(function () {
+                if (isChange) {
+                    alert("資料尚未存檔,無法列印");
+                }
+                else {
+                    $.ajax({
+                        traditional: true,
+                        type: "post",
+                        url: "@Url.Action("PrintAWB")",
                         data: {
                             ID: "@Html.Display("ID")"
                         },
@@ -244,7 +267,7 @@
                     },
                     success: function (data) {
                         if (data.status) {
-                            boxchange();
+                            //boxchange();
                         }
                         else {
                             alert(data.Errmsg);

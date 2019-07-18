@@ -59,24 +59,26 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult Index()
         {
             var ApiSetting = db.ApiSetting.Find(16);
-            var CreateBox = new FedExApi.FedEx_API(ApiSetting).Tracking("788504512725");
+            var FedEx_API = new FedExApi.FedEx_API(ApiSetting);
+            var Tracking = FedEx_API.Tracking("788504512725");
+         var jj=   JsonConvert.SerializeObject(Tracking);
             ViewBag.WCPScript = Neodynamic.SDK.Web.WebClientPrint.CreateScript(Url.Action("ProcessRequest", "WebClientPrintAPI", null, HttpContext.Request.Url.Scheme), Url.Action("PrintMyFiles", "Test", null, HttpContext.Request.Url.Scheme), HttpContext.Session.SessionID);
-            var Winit_API = new NewApi.Winit_API();
-            var WinitProducts = Winit_API.getWinitProducts("OW0103");
-            var winitProductCode = WinitProducts.FirstOrDefault().productCode;
-            var WarehouseList = Winit_API.getWarehouseList(winitProductCode, "INSJ", "DW", null);
-            var warehouseCode = WarehouseList.warehouseList[13].warehouseCode;
-            var list = new List<NewApi.AvailableMerchandise>();
-            foreach (var item in WinitProducts)
-            {
-                foreach (var Warehouse in WarehouseList.warehouseList)
-                {
+            //var Winit_API = new NewApi.Winit_API();
+            //var WinitProducts = Winit_API.getWinitProducts("OW0103");
+            //var winitProductCode = WinitProducts.FirstOrDefault().productCode;
+            //var WarehouseList = Winit_API.getWarehouseList(winitProductCode, "INSJ", "DW", null);
+            //var warehouseCode = WarehouseList.warehouseList[13].warehouseCode;
+            //var list = new List<NewApi.AvailableMerchandise>();
+            //foreach (var item in WinitProducts)
+            //{
+            //    foreach (var Warehouse in WarehouseList.warehouseList)
+            //    {
 
-                    list.AddRange( Winit_API.getAvailableMerchandise("NS", item.productCode, Warehouse.warehouseCode));
-                }
-            }
+            //        list.AddRange( Winit_API.getAvailableMerchandise("NS", item.productCode, Warehouse.warehouseCode));
+            //    }
+            //}
 
-            var Dlist = list.Distinct().ToList();
+            //var Dlist = list.Distinct().ToList();
 
             //var WinitProducts = Winit_API.getWinitProducts("OW0103");
             //var LogisticsPlanList = new List<NewApi.LogisticsPlan>();

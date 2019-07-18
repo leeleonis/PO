@@ -6,7 +6,7 @@
     var InterimList = EnumData.InterimDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var TransferStatusDDL = EnumData.TransferStatusDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var DefaultSelect = PurchaseOrderSys.App_GlobalResources.Resource.DefaultSelect;
-    var ShippingList = new PurchaseOrderSys.FedExApi.Shipping_API().ShippingList().data.shippingMethod.Select(x => new SelectListItem { Text = x.text, Value = x.value.ToString() }).OrderBy(x=>x.Text).ToList();
+    var ShippingList = new PurchaseOrderSys.FedExApi.Shipping_API().ShippingList().data.shippingMethod.Select(x => new SelectListItem { Text = x.text, Value = x.value.ToString() }).OrderBy(x => x.Text).ToList();
     var disabled = "disabled";
     var TStatus = Model.Status;
     var NoPrepSerials = (List<string>)ViewBag.NoPrepSerials;
@@ -32,7 +32,9 @@
 
                         <h2>@ViewBag.ptitle</h2>
                         <ul class="nav nav-tabs pull-right">
-                            <li><a data-toggle="tab" href="#hb1">@ViewBag.ptitle</a></li>
+                            <li>
+                                <a data-toggle="tab" href="#hb1">@ViewBag.ptitle</a>
+                            </li>
                         </ul>
                     </header>
                     <div>
@@ -100,7 +102,7 @@
                                         <fieldset>
                                             <legend></legend>
                                             <div class="form-group">
-                                                <div class="col-sm-9  col-lg-12">
+                                                <div class="col-sm-9  col-lg-10">
                                                     @if (Model.Status == "Pending")
                                                     {
                                                         <div class="col-lg-offset-10">
@@ -148,13 +150,32 @@
                                                         <a type="button" href="@Url.Action("Save",new { Model.ID})" class='btn btn-default btn-sm' id='btn-Add'>Save</a>
                                                         <a type="button" href="@Url.Action("Delete",new { Model.ID})" class='btn btn-default btn-sm' id='btn-Add'>Delete</a>*@
                                                 </div>
+                                                <div class="col-sm-9  col-lg-offset-10">
+                                                    @if (Model.TransferSKU.Where(x => x.IsEnable).Where(x => x.SerialsLlist.Where(y => y.SerialsType == "TransferOut").Any() || x.RMASerialsLlist.Where(y => y.SerialsType == "TransferOut").Any()).Any())
+                                                    {
+                                                        if (NoPrepSerials.Any())
+                                                        {
+                                                            var Msg = "以下物品尚未安排, 請問是否繼續?\\n\\r";
+                                                            Msg += string.Join("\\n\\r", NoPrepSerials);
+                                                            <button type="button" class="btn btn-default" id="printBox" onclick="return confirm('@(Msg)')">打印Box</button>
+                                                            <button type="button" class="btn btn-default" id="printAWB" onclick="return confirm('@(Msg)')">打印AWB</button>
+                                                        }
+                                                        else
+                                                        {
+                                                            <button type="button" class="btn btn-default" id="printBox">打印Box</button>
+                                                            <button type="button" class="btn btn-default" id="printAWB">打印AWB</button>
+                                                        }
+                                                    }
+                                                </div>
                                             </div>
                                             <div class="row">
                                                 <article class="col-xs-12">
                                                     <table id="DataGrid" class="table table-striped table-bordered">
                                                         <thead>
                                                             <tr>
-                                                                <th><input type="checkbox" /></th>
+                                                                <th>
+                                                                    <input type="checkbox" />
+                                                                </th>
                                                                 <th></th>
                                                                 <th>SKU</th>
                                                                 <th>Product Name</th>
@@ -167,8 +188,7 @@
                                                                 @*<th>Winit US WC (Available)</th>*@
                                                             </tr>
                                                         </thead>
-                                                        <tbody>
-                                                        </tbody>
+                                                        <tbody></tbody>
                                                         @if (Model.Status == "Pending")
                                                         {
                                                             <tfoot>
@@ -456,6 +476,42 @@
                 $(this).prop("disabled", "disabled");
                 $("form").submit();
             });
+            $("#printBox").click(function () {
+                $.ajax({
+                    traditional: true,
+                    type: "post",
+                    url: "@Url.Action("PrintBox")",
+                    data: {
+                        ID: "@Html.Display("ID")"
+                    },
+                    success: function (data) {
+                        if (data.status) {
+                            javascript: jsWebClientPrint.print(encodeURIComponent(data.print));
+                        }
+                        else {
+                            alert(data.Errmsg);
+                        }
+                    }
+                });
+            });
+            $("#printAWB").click(function () {
+                $.ajax({
+                    traditional: true,
+                    type: "post",
+                    url: "@Url.Action("PrintAWB")",
+                    data: {
+                        ID: "@Html.Display("ID")"
+                    },
+                    success: function (data) {
+                        if (data.status) {
+                            javascript: jsWebClientPrint.print(encodeURIComponent(data.print));
+                        }
+                        else {
+                            alert(data.Errmsg);
+                        }
+                    }
+                }); 
+            });
         });
         function ajaxpost(e) {
             $.ajax({
@@ -537,7 +593,8 @@
                 window.location.reload();
             }
         }
-    </script>
+    </script>   
+    @Html.Raw(ViewBag.WCPScript);
 }
 
 

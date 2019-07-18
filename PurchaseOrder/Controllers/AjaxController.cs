@@ -283,7 +283,7 @@ namespace PurchaseOrderSys.Controllers
                             ProductName = x.RMASKU.SKU.SkuLang.Where(y => y.LangID == LangID).FirstOrDefault().Name,
                             QTY = 1,
                             Model = "E",
-                            Price = x.SKU.Logistic?.Price ?? 0
+                            Price = x.RMASKU.SKU.Logistic?.Price ?? 0
                         }).ToList());
                     }
                     if (!dataList.Any())
@@ -296,7 +296,7 @@ namespace PurchaseOrderSys.Controllers
                              ProductName = x.RMASKU.SKU.SkuLang.Where(y => y.LangID == LangID).FirstOrDefault().Name,
                              QTY = 1,
                              Model = "E",
-                             Price = x.SKU.Logistic?.Price ?? 0
+                             Price = x.RMASKU.SKU.Logistic?.Price ?? 0
                          }).ToList());
                     }
                     odataList.AddRange(dataList.Distinct(x => x.SKU));
@@ -1091,103 +1091,110 @@ namespace PurchaseOrderSys.Controllers
                             if (SKUList.Any())
                             {
                                 var SKU = db.SKU.Find(Gserialitem.Key)?.SkuLang.Where(x => x.LangID == LangID).FirstOrDefault();
-                                var nTransferSKU = Transfer.TransferSKU.Where(x=>x.SkuNo== Gserialitem.Key).FirstOrDefault();
-                                if (nTransferSKU == null)//沒有資料就新增
+                                if (SKU!=null)
                                 {
-                                    nTransferSKU = new TransferSKU
+                                    var nTransferSKU = Transfer.TransferSKU.Where(x => x.SkuNo == Gserialitem.Key).FirstOrDefault();
+                                    if (nTransferSKU == null)//沒有資料就新增
                                     {
-                                        IsEnable = true,
-                                        QTY = Gserialitem.item.Count(),
-                                        SkuNo = Gserialitem.Key,
-                                        Name = SKU.Name,
-                                        CreateBy = UserBy,
-                                        CreateAt = dt
-                                    };
-                                    Transfer.TransferSKU.Add(nTransferSKU);
-                                }
-                                else
-                                {
-                                    nTransferSKU.QTY = Gserialitem.item.Count();
-                                    nTransferSKU.UpdateBy = UserBy;
-                                    nTransferSKU.UpdateAt = dt;
-                                }
-                                var SerialTracking = SKU.GetSku.SerialTracking;
-                                var NoTrackingSerial = new List<string>();
-                                foreach (var item in Gserialitem.item)
-                                {
-                                    var SerialsLlist = db.SerialsLlist.Where(x => !x.SerialsLlistC.Any() && x.SerialsQTY > 0);
-                                    if (SerialTracking)
-                                    {
-                                        SerialsLlist= SerialsLlist.Where(x => x.SerialsNo == item.serials);//找到序號
+                                        nTransferSKU = new TransferSKU
+                                        {
+                                            IsEnable = true,
+                                            QTY = Gserialitem.item.Count(),
+                                            SkuNo = Gserialitem.Key,
+                                            Name = SKU.Name,
+                                            CreateBy = UserBy,
+                                            CreateAt = dt
+                                        };
+                                        Transfer.TransferSKU.Add(nTransferSKU);
                                     }
                                     else
                                     {
-                                        SerialsLlist = SerialsLlist.Where(x => x.PurchaseSKU.SkuNo == SKU.GetSku.SkuID && !NoTrackingSerial.Contains(x.SerialsNo));//找到序號
+                                        nTransferSKU.QTY = Gserialitem.item.Count();
+                                        nTransferSKU.UpdateBy = UserBy;
+                                        nTransferSKU.UpdateAt = dt;
                                     }
-                                    SerialsLlist = SerialsLlist.Where(x => (x.TransferSKUID.HasValue && x.TransferSKU.Transfer.ToWID == FromWID) || (x.PurchaseSKUID.HasValue && x.PurchaseSKU.PurchaseOrder.WarehouseID == FromWID)).Take(1);
-                                    var RMASerialsLlist = db.RMASerialsLlist.Where(x => x.SerialsNo == item.serials && !x.RMASerialsLlistC.Any() && x.SerialsQTY > 0 && x.WarehouseID == FromWID);//找到RMA序號
-                                    if (SerialsLlist.Any() || RMASerialsLlist.Any())
+                                    var SerialTracking = SKU.GetSku.SerialTracking;
+                                    var NoTrackingSerial = new List<string>();
+                                    foreach (var item in Gserialitem.item)
                                     {
-                                        foreach (var Serial in SerialsLlist)
-                                        {
-                                            if (nTransferSKU.SerialsLlist != null && nTransferSKU.SerialsLlist.Where(x => x.SerialsNo == Serial.SerialsNo).Any())
-                                            {
-                                                Repserial.Add(Serial.SerialsNo);
-                                            }
-                                            else
-                                            {
-                                                var nSerialsLlist = new SerialsLlist
-                                                {
-                                                    IsEnable = true,
-                                                    PurchaseSKUID = Serial.PurchaseSKUID,
-                                                    PID = Serial.ID,
-                                                    SerialsNo = Serial.SerialsNo,
-                                                    SerialsQTY = -1,
-                                                    SerialsType = "TransferOut",
-                                                    CreateBy = UserBy,
-                                                    CreateAt = dt,
-                                                    ReceivedBy = UserBy,
-                                                    ReceivedAt = dt,
-                                                };
-                                                nTransferSKU.SerialsLlist.Add(nSerialsLlist);
-                                                NoTrackingSerial.Add(Serial.SerialsNo);
-                                            }
-
-                                        }
-                                        foreach (var Serial in RMASerialsLlist)
-                                        {
-                                            if (nTransferSKU.SerialsLlist != null && nTransferSKU.SerialsLlist.Where(x => x.SerialsNo == Serial.SerialsNo).Any())
-                                            {
-                                                Repserial.Add(Serial.SerialsNo);
-                                            }
-                                            else
-                                            {
-                                                var nSerialsLlist = new SerialsLlist
-                                                {
-                                                    IsEnable = true,
-                                                    SerialsNo = Serial.SerialsNo,
-                                                    SerialsQTY = 1,
-                                                    SerialsType = "TransferOut",
-                                                    CreateBy = UserBy,
-                                                    CreateAt = dt,
-                                                    ReceivedBy = UserBy,
-                                                    ReceivedAt = dt,
-                                                };
-                                                nTransferSKU.SerialsLlist.Add(nSerialsLlist);
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
+                                        var SerialsLlist = db.SerialsLlist.Where(x => !x.SerialsLlistC.Any() && x.SerialsQTY > 0);
                                         if (SerialTracking)
                                         {
-                                            Errserial.Add(item.serials);
+                                            SerialsLlist = SerialsLlist.Where(x => x.SerialsNo == item.serials);//找到序號
                                         }
                                         else
                                         {
-                                            Noserial.Add(item.SKU);
+                                            SerialsLlist = SerialsLlist.Where(x => x.PurchaseSKU.SkuNo == SKU.GetSku.SkuID && !NoTrackingSerial.Contains(x.SerialsNo));//找到序號
+                                        }
+                                        SerialsLlist = SerialsLlist.Where(x => (x.TransferSKUID.HasValue && x.TransferSKU.Transfer.ToWID == FromWID) || (x.PurchaseSKUID.HasValue && x.PurchaseSKU.PurchaseOrder.WarehouseID == FromWID)).Take(1);
+                                        var RMASerialsLlist = db.RMASerialsLlist.Where(x => x.SerialsNo == item.serials && !x.RMASerialsLlistC.Any() && x.SerialsQTY > 0 && x.WarehouseID == FromWID);//找到RMA序號
+                                        if (SerialsLlist.Any() || RMASerialsLlist.Any())
+                                        {
+                                            foreach (var Serial in SerialsLlist)
+                                            {
+                                                if (nTransferSKU.SerialsLlist != null && nTransferSKU.SerialsLlist.Where(x => x.SerialsNo == Serial.SerialsNo).Any())
+                                                {
+                                                    Repserial.Add(Serial.SerialsNo);
+                                                }
+                                                else
+                                                {
+                                                    var nSerialsLlist = new SerialsLlist
+                                                    {
+                                                        IsEnable = true,
+                                                        PurchaseSKUID = Serial.PurchaseSKUID,
+                                                        PID = Serial.ID,
+                                                        SerialsNo = Serial.SerialsNo,
+                                                        SerialsQTY = -1,
+                                                        SerialsType = "TransferOut",
+                                                        CreateBy = UserBy,
+                                                        CreateAt = dt,
+                                                        ReceivedBy = UserBy,
+                                                        ReceivedAt = dt,
+                                                    };
+                                                    nTransferSKU.SerialsLlist.Add(nSerialsLlist);
+                                                    NoTrackingSerial.Add(Serial.SerialsNo);
+                                                }
+
+                                            }
+                                            foreach (var Serial in RMASerialsLlist)
+                                            {
+                                                if (nTransferSKU.SerialsLlist != null && nTransferSKU.SerialsLlist.Where(x => x.SerialsNo == Serial.SerialsNo).Any())
+                                                {
+                                                    Repserial.Add(Serial.SerialsNo);
+                                                }
+                                                else
+                                                {
+                                                    var nSerialsLlist = new SerialsLlist
+                                                    {
+                                                        IsEnable = true,
+                                                        SerialsNo = Serial.SerialsNo,
+                                                        SerialsQTY = 1,
+                                                        SerialsType = "TransferOut",
+                                                        CreateBy = UserBy,
+                                                        CreateAt = dt,
+                                                        ReceivedBy = UserBy,
+                                                        ReceivedAt = dt,
+                                                    };
+                                                    nTransferSKU.SerialsLlist.Add(nSerialsLlist);
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (SerialTracking)
+                                            {
+                                                Errserial.Add(item.serials);
+                                            }
+                                            else
+                                            {
+                                                Noserial.Add(item.SKU);
+                                            }
                                         }
                                     }
+                                }
+                                else
+                                {
+                                    ErrSKU.Add(Gserialitem.Key);
                                 }
                             }
                             else
