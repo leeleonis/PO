@@ -585,7 +585,7 @@ namespace PurchaseOrderSys.Models
                 {
                     foreach (var company in db.Company.Where(c => c.ParentID.Value.Equals(skuData.Company)))
                     {
-                        SC_Api.Create_ProductShadow(newSku.ID, newSku.ID + company.ShadowSuffix, company.ID);
+                        SC_Api.Create_ProductShadow(newSku.ID, newSku.ID + company.ShadowSuffix, company.CompanySCID.Value);
                     }
                 }
             }
