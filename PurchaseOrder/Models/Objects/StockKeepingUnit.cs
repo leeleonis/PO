@@ -319,6 +319,7 @@ namespace PurchaseOrderSys.Models
         public void LogisticInherit(Logistic origin, Logistic logistic)
         {
             origin.BoxID = logistic.BoxID;
+            origin.Price = logistic.Price;
             origin.OriginCountry = logistic.OriginCountry;
             origin.CaseHeight = logistic.CaseHeight;
             origin.CaseLength = logistic.CaseLength;
