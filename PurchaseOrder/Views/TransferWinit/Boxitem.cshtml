@@ -16,17 +16,15 @@
 }
 @foreach (var BoxItem in Model)
 {
+    var boxselect = "";
     BoxItem.Weight = BoxItem.WinitTransferBoxItem.Sum(x => x.Weight);
     if (i == count)
     {
-        <legend class="boxselect">Box @(i + 1)</legend>
-    }
-    else
-    {
-        <legend>Box @(i + 1)</legend>
-    }
-    <div class="row ">
-        <div class="form-group">
+        boxselect = "boxselect";
+    } 
+    <legend class="@boxselect">Box @(i + 1)</legend>
+    <div class="row boxitemset @boxselect"  val="@i">
+        <div class="form-group" style="margin-top:30px">
             @Html.Label("Length:", htmlAttributes: new { @class = "control-label col-sm-1" })
             <div class="col-sm-4 col-lg-1">
                 @Html.EditorFor(model => BoxItem.Length, new { htmlAttributes = new { @class = "form-control postval", index = i, @id = "Length_" + i } })
@@ -44,7 +42,7 @@
                 @Html.EditorFor(model => BoxItem.Weight, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
             </div>
         </div>
-        <article class="col-xs-12 boxitemset" val="@i">
+        <article class="col-xs-12 " val="@i">
             <div class="form-group">
                 <div class="col-sm-9 col-lg-8">
                     <table id="DataGrid[@i]" class="table table-striped table-bordered">
@@ -69,7 +67,7 @@
                                             }
                                             @item.SkuNo
                                         </td>
-                                        <td>@item.Name</td>
+                                        <td>@Html.Raw(item.Name)</td>
                                         <td>
                                             @item.SerialsNo
                                             @if (ReceiveVMList != null && ReceiveVMList.Where(x => x.SerialsLlist.Where(y => y.SerialsNo == item.SerialsNo).Any()).Any())

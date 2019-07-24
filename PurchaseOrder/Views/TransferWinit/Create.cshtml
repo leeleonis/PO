@@ -197,7 +197,12 @@
                         "data": null,
                         "defaultContent": '' },
                     { data: "SKU" },
-                    { data: "ProductName" },
+                    {
+                        data: "ProductName",
+                        render: function (data, type, row) {
+                            return data + "<br>" + row.ProductMsg;
+                        }
+                    },
                     { data: "QTY", render: function (data, type, row) { return '<input class="form-control" type="text" onchange="TSkuNumberListQTY(this,' + row.ck + ',' + data + ')"  value = ' +data + ' > '; } },
                     { data: "Serial", render: function (data, type, row) { return thousandComma(data); } },
                     { data: "Label", render: function (data, type, row) { return thousandComma(data); }  },

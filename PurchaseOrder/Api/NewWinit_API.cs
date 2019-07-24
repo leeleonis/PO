@@ -658,6 +658,20 @@ namespace PurchaseOrderSys.NewApi
         public string productCode { get; set; }
     }
     #endregion
+
+    public class TrackingList
+    {
+        public string date { get; set; }
+        public string trackingDesc { get; set; }
+        public string location { get; set; }
+        public string trackingCode { get; set; }
+    }
+
+    public class QueryOrderTrackingList
+    {
+        public List<TrackingList> trackingList { get; set; }
+    }
+
     public class Winit_API : IDisposable
     {
         private bool disposed = false;
@@ -988,6 +1002,15 @@ namespace PurchaseOrderSys.NewApi
         internal List<ReturnProduct> registerProduct(RegisterProduct RegisterProduct)
         {
             return GetAPI<List<ReturnProduct>>("registerProduct", RegisterProduct);
+        }
+        /// <summary>
+        /// 查詢入庫軌跡
+        /// </summary>
+        /// <param name="orderNo">訂單號</param>
+        /// <returns></returns>
+        internal QueryOrderTrackingList QueryOrderTracking(string orderNo)
+        {
+            return GetAPI<QueryOrderTrackingList>("wh.tracking.queryOrderTracking",new { orderNo });
         }
     }
 }

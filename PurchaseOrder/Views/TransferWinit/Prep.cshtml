@@ -6,8 +6,13 @@
     var Carrier = ShippingList.Where(x => x.Value == Model.Carrier).FirstOrDefault()?.Text;
 }
 <style>
-    .boxselect{
-        color:red;
+    legend.boxselect {
+        color: red;
+    }
+    div.boxselect {
+        border-style: solid;
+        border-color: red;
+        margin-top:10px;
     }
 </style>
 <div id="content">
@@ -41,7 +46,14 @@
                                                     <div class="form-group">
                                                         @Html.Label("Serial:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                         <div class="col-sm-9 col-lg-2">
-                                                            @Html.Editor("Serial", new { htmlAttributes = new { @class = "form-control" } })
+                                                            @if (string.IsNullOrWhiteSpace(Model.Tracking))
+                                                            {                                                  
+                                                                @Html.Editor("Serial", new { htmlAttributes = new { @class = "form-control" } })
+                                                            }
+                                                            else
+                                                            {
+                                                                @:已印AWB，無法再出貨
+                                                            }
                                                         </div>
                                                         <div class="col-sm-9 col-lg-8">
                                                             <table id="DataGrid" class="table table-striped table-bordered">
@@ -97,6 +109,7 @@
                                                     <div class="col-sm-5 col-lg-2">
                                                         <button type="button" class="btn btn-default" id="printBox">打印Box</button>
                                                         <button type="button" class="btn btn-default" id="printAWB">打印AWB</button>
+                                                        <button type="button" class="btn btn-default" id="printInvoice">打印發票</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -108,8 +121,11 @@
                                     </div>
                                 </div>
                                 <div class="widget-footer">
-                                    <button type="submit" class="btn btn-primary" id="save">儲存</button>
-                                    <button type="button" class="btn btn-primary" id="saveexit">儲存並返回</button>
+                                    @if (string.IsNullOrWhiteSpace(Model.Tracking))
+                                    {
+                                        <button type="submit" class="btn btn-primary" id="save">儲存</button>
+                                        <button type="button" class="btn btn-primary" id="saveexit">儲存並返回</button>
+                                    }
                                     <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Edit", new {Model.ID })'">返回</button>
                                 </div>
                             </form>
@@ -244,7 +260,11 @@
                         },
                         success: function (data) {
                             if (data.status) {
+                                $("#Serial").hide();
+                                $("#save").hide();
+                                $("#saveexit").hide();
                                 javascript: jsWebClientPrint.print(encodeURIComponent(data.print));
+                                javascript: jsWebClientPrint.print("key=Invoice&id=@Html.Display("ID")");
                             }
                             else {
                                 alert(data.Errmsg);
@@ -252,6 +272,9 @@
                         }
                     });
                 }
+            });
+            $("#printInvoice").click(function () {
+                javascript: jsWebClientPrint.print("key=Invoice&id=@Html.Display("ID")");
             });
             $("body").on("change", ".postval", function () {
                 var val = $(this).val();
@@ -278,7 +301,9 @@
             $("body").on("click", ".boxitemset", function () {
                 $("#boxitemset").val($(this).attr("val"));
                 $("legend").removeClass("boxselect");
-                $(this).parent().prev("legend").addClass("boxselect");
+                $(".boxitemset").removeClass("boxselect");
+                $(this).prev("legend").addClass("boxselect");
+                $(this).addClass("boxselect");
             });
             $("body").on("click", ".delserials", function () {
                 var serial = $(this).attr("value");

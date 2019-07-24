@@ -58,12 +58,19 @@ namespace PurchaseOrderSys.Controllers
         // GET: Test
         public ActionResult Index()
         {
+            var Winit_API = new NewApi.Winit_API();
             var ApiSetting = db.ApiSetting.Find(16);
             var FedEx_API = new FedExApi.FedEx_API(ApiSetting);
-            var Tracking = FedEx_API.Tracking("788504512725");
-         var jj=   JsonConvert.SerializeObject(Tracking);
+            var Transfer = db.Transfer.Find(3264);
+            var Tracking = FedEx_API.Tracking(Transfer.Tracking);
+            var QueryOrderTracking = Winit_API.QueryOrderTracking(Transfer.WinitTransfer.WinitOrderNo);
+            //var fileStream = new System.IO.MemoryStream(InvoiceExcel(db.Transfer.Find(3264)));
+
+            var fileStream = new System.IO.MemoryStream(CheckListExcel(db.Transfer.Find(3264)));
+
+            //   var Tracking = FedEx_API.Tracking("788504512725");
+            //var jj=   JsonConvert.SerializeObject(Tracking);
             ViewBag.WCPScript = Neodynamic.SDK.Web.WebClientPrint.CreateScript(Url.Action("ProcessRequest", "WebClientPrintAPI", null, HttpContext.Request.Url.Scheme), Url.Action("PrintMyFiles", "Test", null, HttpContext.Request.Url.Scheme), HttpContext.Session.SessionID);
-            //var Winit_API = new NewApi.Winit_API();
             //var WinitProducts = Winit_API.getWinitProducts("OW0103");
             //var winitProductCode = WinitProducts.FirstOrDefault().productCode;
             //var WarehouseList = Winit_API.getWarehouseList(winitProductCode, "INSJ", "DW", null);
@@ -128,8 +135,48 @@ namespace PurchaseOrderSys.Controllers
             //if (DSerialsLlist.Any())
             //{
             //}
-
+            return File(fileStream, "application/zip", "ExportRanger.zip");
             return View();
+        }
+
+   
+
+        [AllowAnonymous]
+        public void PrintMyFiles()
+        {
+            HttpApplicationStateBase app = HttpContext.Application;
+            //Create a ClientPrintJob 
+            //set client printer, for multiple files use DefaultPrinter...
+
+            var cpj = new Neodynamic.SDK.Web.ClientPrintJob();
+            var pdfbyte = System.IO.File.ReadAllBytes(Server.MapPath(@"~/File/S36BW-419072313360.pdf"));
+            var file = new Neodynamic.SDK.Web.PrintFilePDF(pdfbyte, "US.pdf");
+
+
+            //var file = new Neodynamic.SDK.Web.PrintFile(EXCELSET(), "Invoice.xlsx");
+            //cpj.PrintFileGroup.Add(file);
+            //cpj.ClientPrinter = new Neodynamic.SDK.Web.DefaultPrinter();//預設印表機
+            ////printerName = "";
+            //if (string.IsNullOrWhiteSpace(printerName))
+            //{
+            cpj.ClientPrinter = new Neodynamic.SDK.Web.UserSelectedPrinter();//自己選印表機
+            //    //cpj.ClientPrinter = new Neodynamic.SDK.Web.DefaultPrinter();//預設印表機
+            //}
+            //else
+            //{
+            //    if (key == "USPDF")
+            //    {
+            //    }
+            //    else
+            //    {
+            //        cpj.ClientPrinter = new Neodynamic.SDK.Web.InstalledPrinter(printerName);
+            //    }
+            //}
+            //cpj.ClientPrinter = new UserSelectedPrinter();//自己選印表機
+            System.Web.HttpContext.Current.Response.ContentType = "application/octet-stream";
+            System.Web.HttpContext.Current.Response.BinaryWrite(cpj.GetContent());
+            System.Web.HttpContext.Current.Response.End();
+
         }
         public ActionResult TestShipmentByOrder()
         {

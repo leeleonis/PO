@@ -653,7 +653,11 @@
                         "defaultContent": '' },
                     { data: "SKU" },
                     { data: "VendorSKU" },
-                    { data: "Name" },
+                    {
+                        data: "Name",
+                        render: function (data, type, row) {
+                            return data + "<br>" + row.ProductMsg;
+                        } },
                     { data: "QTYOrdered", render: function (data, type, row) { return '<input class="form-control" type="text" onchange="Calculation(this,\'QTYOrdered\',\'' + row.SKU + '\',' + data + ',' + row.ID + ')"  value = ' + data + ' > '; } },
                     @if (Model.POType == "PurchaseOrder")
                     {

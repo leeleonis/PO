@@ -621,6 +621,10 @@ namespace PurchaseOrderSys.Models
         /// </summary>
         public string ProductName { get; set; }
         /// <summary>
+        /// 產品規格資訊
+        /// </summary>
+        public string ProductMsg { get; set; }
+        /// <summary>
         /// 移倉數量
         /// </summary>
         public int? QTY { get; set; }
@@ -705,6 +709,11 @@ namespace PurchaseOrderSys.Models
         /// 品名
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// 產品規格
+        /// </summary>
+        public string ProductMsg { get; set; }
         /// <summary>
         /// 訂購數量
         /// </summary>

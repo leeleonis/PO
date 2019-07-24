@@ -47,6 +47,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DotNetZip, Version=1.13.3.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetZip.1.13.3\lib\net40\DotNetZip.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -7062,6 +7065,11 @@
     <Content Include="Properties\DataSources\System.Data.DataTable.datasource" />
     <Content Include="Content\css\imgbox.scss" />
     <Content Include="File\TransferExample.xlsx" />
+    <Content Include="File\Invoice.xlsx" />
+    <Content Include="File\S36BW-419072313360.pdf" />
+    <Content Include="File\Fedex_Recognizances.pdf" />
+    <Content Include="File\Fedex_CheckList.xlsx" />
+    <Content Include="File\Box_PackingList.xlsx" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

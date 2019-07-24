@@ -1535,27 +1535,89 @@ namespace PurchaseOrderSys.Controllers
         {
             return db.SKU.Find(SKU).SerialTracking;
         }
-        public string GetNameSize(SkuLang x)
+        public string GetNameSize(SKU x)
         {
             string name = "";
-            name = x.Name + "<br/>";
             var Size = "";
             var iSize = "";
             var inch = 0.0393700787;
             var lbs = 0.00220462262;
+            var Zero = false;
+            if (x.Logistic != null)
+            {
+                if (x.Logistic.ShippingWeight==0)
+                {
+                    Zero = true;
+                }
+                if (x.Logistic.ShippingLength == 0)
+                {
+                    Zero = true;
+                }
+                if (x.Logistic.ShippingWidth == 0)
+                {
+                    Zero = true;
+                }
+                if (x.Logistic.ShippingHeight == 0)
+                {
+                    Zero = true;
+                }
+                name += "Shipping Weight: " + x.Logistic.ShippingWeight + " g / " + (x.Logistic.ShippingWeight * lbs).ToString("f2") + " lbs<br/>"; ;
+                Size += x.Logistic.ShippingLength + " x ";
+                iSize += (x.Logistic.ShippingLength * inch).ToString("f2") + " x "; ;
+                Size += x.Logistic.ShippingWidth + " x ";
+                iSize += (x.Logistic.ShippingWidth * inch).ToString("f2") + " x "; ;
+                Size += x.Logistic.ShippingHeight;
+                iSize += (x.Logistic.ShippingHeight * inch).ToString("f2");
+                name += "Shipping Dimension: " + Size + " mm / " + iSize + " inch";
+            }
+            if (Zero)
+            {
+                return "<label style='font-size:80%; color:red' >" + name + "</label>";
+            }
+            return "<label style='font-size:80%' >" + name + "</label>";
+        }
+        public string GetNameSize(SkuLang x)
+        {
+            string name = "";
+            //name = x.Name + "<br/>";
+            var Size = "";
+            var iSize = "";
+            var inch = 0.0393700787;
+            var lbs = 0.00220462262;
+            var Zero = false;
             if (x.GetSku.Logistic != null)
             {
 
-                name += "Shipping Weight:" + x.GetSku.Logistic.ShippingWeight + "g/" + (x.GetSku.Logistic.ShippingWeight * lbs).ToString("f2") + "lbs<br/>"; ;
-                Size += x.GetSku.Logistic.ShippingLength + "x";
-                iSize += (x.GetSku.Logistic.ShippingLength * inch).ToString("f2");
-                Size += x.GetSku.Logistic.ShippingWidth + "x";
-                iSize += (x.GetSku.Logistic.ShippingWidth * inch).ToString("f2");
+                if (x.GetSku.Logistic.ShippingWeight == 0)
+                {
+                    Zero = true;
+                }
+                if (x.GetSku.Logistic.ShippingLength == 0)
+                {
+                    Zero = true;
+                }
+                if (x.GetSku.Logistic.ShippingWidth == 0)
+                {
+                    Zero = true;
+                }
+                if (x.GetSku.Logistic.ShippingHeight == 0)
+                {
+                    Zero = true;
+                }
+                name += "Shipping Weight: " + x.GetSku.Logistic.ShippingWeight + " g / " + (x.GetSku.Logistic.ShippingWeight * lbs).ToString("f2") + " lbs<br/>"; ;
+                Size += x.GetSku.Logistic.ShippingLength + " x ";
+                iSize += (x.GetSku.Logistic.ShippingLength * inch).ToString("f2") + " x "; ;
+                Size += x.GetSku.Logistic.ShippingWidth + " x ";
+                iSize += (x.GetSku.Logistic.ShippingWidth * inch).ToString("f2") + " x "; ;
                 Size += x.GetSku.Logistic.ShippingHeight;
                 iSize += (x.GetSku.Logistic.ShippingHeight * inch).ToString("f2");
-                name += "Shipping Dimension:" + Size + "mm/" + iSize + "inch";
+                name += "Shipping Dimension: " + Size + "mm / " + iSize + " inch";
             }
-            return name;
+            if (Zero)
+            {
+                return "<label style='font-size:80%; color:red' >" + name + "</label>";
+            }
+            return "<label style='font-size:80%' >" + name + "</label>";
         }
 
         public ActionResult ReceiveSaveserials(int id, string serials)
@@ -1639,6 +1701,141 @@ namespace PurchaseOrderSys.Controllers
             {
                 return Json(new { status = false, Errmsg = "序號不存在，此序號不能移倉" }, JsonRequestBehavior.AllowGet);
             }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Country">國家代碼(2碼)</param>
+        /// <returns></returns>
+        public string CurrencyCode(string Country)
+        {
+            var Code = "";
+            switch (Country)
+            {
+                case "AU":
+                    Code = "AUD";
+                    break;
+                case "US":
+                    Code = "USD";
+                    break;
+                case "HK":
+                    Code = "HKD";
+                    break;
+                case "JP":
+                    Code = "JPY";
+                    break;
+                case "TW":
+                    Code = "TWD";
+                    break;
+                default:
+                    break;
+            }
+            return Code;
+        }
+        public byte[] CheckListExcel(Transfer Transfer)
+        {       
+           var Code = CurrencyCode(Transfer.WarehouseTo.WinitWarehouse);
+            var EXRate = db.Currency.Where(x => x.Code == Code).FirstOrDefault()?.EXRate ?? 1;
+            var Excelbyte = System.IO.File.ReadAllBytes(Server.MapPath(@"~/File/Fedex_CheckList.xlsx"));
+            var stream = new System.IO.MemoryStream(Excelbyte);
+            using (var file = new Ionic.Zip.ZipFile())
+            {
+                foreach (var item in Transfer.TransferSKU.Where(x => x.IsEnable && x.SerialsLlist.Any()))
+                {
+                    OfficeOpenXml.ExcelPackage ep = new OfficeOpenXml.ExcelPackage(stream);
+                    OfficeOpenXml.ExcelWorksheet sheet1 = ep.Workbook.Worksheets[1];//取得Sheet1 
+                    sheet1.Cells[6, 4].Value = Transfer.Tracking;
+                    sheet1.Cells[10, 12].Value = "✔";
+                    sheet1.Cells[20, 14].Value = "✔";
+                    sheet1.Cells[27, 7].Value = item.SKU.SkuType.SkuTypeLang.FirstOrDefault(x => x.LangID == "en-US").Name;
+                    sheet1.Cells[29, !item.SKU.Brand.Equals(0) ? 9 : 5].Value = "✔";
+                    sheet1.Cells[29, 12].Value = item.SKU.GetBrand.Name;
+                    sheet1.Cells[33, 10].Value = Code;
+
+                    file.AddEntry("CheckList-" + item.SkuNo + ".xlsx", ep.GetAsByteArray().ToArray());
+                }
+                var OutputStream = new MemoryStream();
+                file.Save(OutputStream);
+                return OutputStream.ToArray();
+            }
+        }
+        public byte[] InvoiceExcel(Transfer Transfer)
+        {
+            var Code = CurrencyCode(Transfer.WarehouseTo.WinitWarehouse);
+            var EXRate = db.Currency.Where(x => x.Code == Code).FirstOrDefault()?.EXRate ?? 1;
+            decimal? AllWeight = 0m;
+            decimal? AllPrice = 0m;
+            int addrow = 0;
+            int comprow = 48;
+            int rowIndex = 25;
+            var Excelbyte = System.IO.File.ReadAllBytes(Server.MapPath(@"~/File/Invoice.xlsx"));
+            var stream = new System.IO.MemoryStream(Excelbyte);
+            OfficeOpenXml.ExcelPackage ep = new OfficeOpenXml.ExcelPackage(stream);
+            OfficeOpenXml.ExcelWorksheet sheet1 = ep.Workbook.Worksheets[1];//取得Sheet1 
+            sheet1.Cells.Style.WrapText = true;
+            sheet1.Cells[5, 4].Value = Transfer.Tracking;
+            sheet1.Cells[8, 2].Value = DateTime.Now.ToString("MMM dd, yyyy", System.Globalization.CultureInfo.CreateSpecificCulture("en-US"));
+            sheet1.Cells[11, 2].Value = "Zhi You Wan LTD (53362065)";
+            sheet1.Cells[12, 2].Value = "51 Section 3 Jianguo North Road";
+            sheet1.Cells[13, 2].Value = "Taichung City West District";
+            sheet1.Cells[14, 2].Value = "Taiwan (R.O.C) 40243";
+            sheet1.Cells[18, 2].Value = "Taiwan";
+
+            sheet1.Cells[11, 6].Value = Transfer.WarehouseTo.Company;
+            sheet1.Cells[12, 6].Value = Transfer.WarehouseTo.Phone;
+            sheet1.Cells[13, 6].Value = Transfer.WarehouseTo.Address1;
+            sheet1.Cells[14, 6].Value = Transfer.WarehouseTo.Address2;
+            sheet1.Cells[15, 6].Value = Transfer.WarehouseTo.City + " " + Transfer.WarehouseTo.State + " " + Transfer.WarehouseTo.Postcode;
+            sheet1.Cells[16, 6].Value = Transfer.WarehouseTo.Country;
+            sheet1.Cells[22, 2].Value = Transfer.WarehouseTo.Country;
+
+            //sheet1.Cells.Style.ShrinkToFit = true;
+            foreach (var TransferSKU in Transfer.TransferSKU.Where(x => x.IsEnable && x.SerialsLlist.Any()))
+            {
+
+                var Price = Math.Round(TransferSKU.SerialsLlist.Sum(x => x.WinitTransferBoxItem.Value).Value / 1.05m / EXRate, 2);
+                var Weight = TransferSKU.SerialsLlist.Sum(x => x.WinitTransferBoxItem.Weight).Value;
+                AllWeight += Weight;
+                AllPrice += Price;
+                sheet1.Cells[rowIndex, 2].Value = "CN";
+                sheet1.Cells[rowIndex, 5].Value = TransferSKU.Name;
+                sheet1.Cells[rowIndex, 7].Value = "";//HS Code 
+                sheet1.Cells[rowIndex, 9].Value = Math.Abs(TransferSKU.SerialsLlist.Sum(x => x.SerialsQTY).Value);
+                sheet1.Cells[rowIndex, 10].Value = "pieces";
+                sheet1.Cells[rowIndex, 11].Value = (Weight / 1000).ToString("f2");
+                sheet1.Cells[rowIndex, 12].Value = Price.ToString("f2");
+                sheet1.Cells[rowIndex, 17].Value = Price.ToString("f2");
+                sheet1.Row(rowIndex).Height = 40;
+                sheet1.Row(rowIndex).CustomHeight = true;//自动调整行高
+                rowIndex++;
+                if (rowIndex >= comprow - 1)
+                {
+                    sheet1.InsertRow(rowIndex, 1, 26);
+                    sheet1.Cells[rowIndex, 5, rowIndex, 6].Merge = true;
+                    sheet1.Cells[rowIndex, 7, rowIndex, 8].Merge = true;
+                    sheet1.Cells[rowIndex, 12, rowIndex, 16].Merge = true;
+                    sheet1.Cells[rowIndex, 17, rowIndex, 21].Merge = true;
+                    addrow++;
+                }
+
+            }
+            for (int i = 25; i < rowIndex; i++)
+            {
+                sheet1.Row(i).CustomHeight = true;
+            }
+            sheet1.Cells[comprow + addrow, 4].Value = Transfer.WinitTransfer.WinitTransferBox.Count();
+            sheet1.Cells[comprow + addrow, 11].Value = (AllWeight.Value / 1000).ToString("f2") + " KG";
+            sheet1.Cells[comprow + addrow, 12].Value = Code;
+            sheet1.Cells[comprow + addrow, 17].Value = AllPrice;
+            sheet1.Cells[58 + addrow, 10].Value = DateTime.Now.ToString("yyyy-MM-dd");
+            foreach (OfficeOpenXml.Drawing.ExcelPicture item in sheet1.Drawings)
+            {
+                item.SetPosition(comprow + addrow - 1, 10, 5, 10);//印章位置
+                item.SetSize(275, 158);
+                item.EditAs = OfficeOpenXml.Drawing.eEditAs.TwoCell;
+            }
+            var OutputStream = new System.IO.MemoryStream(ep.GetAsByteArray());
+            return OutputStream.ToArray();
         }
     }
 }

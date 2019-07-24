@@ -151,19 +151,24 @@
                                                         <a type="button" href="@Url.Action("Delete",new { Model.ID})" class='btn btn-default btn-sm' id='btn-Add'>Delete</a>*@
                                                 </div>
                                                 <div class="col-sm-9  col-lg-offset-10">
-                                                    @if (Model.TransferSKU.Where(x => x.IsEnable).Where(x => x.SerialsLlist.Where(y => y.SerialsType == "TransferOut").Any() || x.RMASerialsLlist.Where(y => y.SerialsType == "TransferOut").Any()).Any())
+                                                    @if (Model.Status == "Requested")
                                                     {
-                                                        if (NoPrepSerials.Any())
+                                                        if (Model.TransferSKU.Where(x => x.IsEnable).Where(x => x.SerialsLlist.Where(y => y.SerialsType == "TransferOut").Any() || x.RMASerialsLlist.Where(y => y.SerialsType == "TransferOut").Any()).Any())
                                                         {
-                                                            var Msg = "以下物品尚未安排, 請問是否繼續?\\n\\r";
-                                                            Msg += string.Join("\\n\\r", NoPrepSerials);
-                                                            <button type="button" class="btn btn-default" id="printBox" onclick="return confirm('@(Msg)')">打印Box</button>
-                                                            <button type="button" class="btn btn-default" id="printAWB" onclick="return confirm('@(Msg)')">打印AWB</button>
-                                                        }
-                                                        else
-                                                        {
-                                                            <button type="button" class="btn btn-default" id="printBox">打印Box</button>
-                                                            <button type="button" class="btn btn-default" id="printAWB">打印AWB</button>
+                                                            if (NoPrepSerials.Any())
+                                                            {
+                                                                var Msg = "以下物品尚未安排, 請問是否繼續?\\n\\r";
+                                                                Msg += string.Join("\\n\\r", NoPrepSerials);
+                                                                <button type="button" class="btn btn-default" id="printBox" onclick="return confirm('@(Msg)')">打印Box</button>
+                                                                <button type="button" class="btn btn-default" id="printAWB" onclick="return confirm('@(Msg)')">打印AWB</button>
+                                                                <button type="button" class="btn btn-default" id="printInvoice" onclick="return confirm('@(Msg)')">打印發票</button>
+                                                            }
+                                                            else
+                                                            {
+                                                                <button type="button" class="btn btn-default" id="printBox">打印Box</button>
+                                                                <button type="button" class="btn btn-default" id="printAWB">打印AWB</button>
+                                                                <button type="button" class="btn btn-default" id="printInvoice">打印發票</button>
+                                                            }
                                                         }
                                                     }
                                                 </div>
@@ -223,170 +228,176 @@
 
 </div>
 @section pagespecific {
-    <script type="text/javascript">
+<script type="text/javascript">
         var hash = window.location.hash;
         $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
         $('.tab-pane').eq(hash.substr(1)).addClass('active');
         var DataGrid;
         var tableID = "#DataGrid";
-        $(document).ready(function () {
-            $(".Pending").prop("disabled", false);
-             DataGrid = $(tableID).DataTable({
-                fixedHeader: {
-                    header: true,
-                    footer: true
+    $(document).ready(function () {
+        $(".Pending").prop("disabled", false);
+        DataGrid = $(tableID).DataTable({
+            fixedHeader: {
+                header: true,
+                footer: true
+            },
+            select: {
+                style: 'os',
+                selector: 'td:first-child'
+            },
+            columns: [
+                {
+                    data: "ck",
+                    className: 'select-checkbox',
+                    orderable: false,
+                    render: function (data, type, obj, meta) {
+                        return '<input type="checkbox" value="' + data + '">';
+                    }
                 },
-                select: {
-                    style: 'os',
-                    selector: 'td:first-child'
+                {
+                    "className": 'details-control',
+                    "orderable": false,
+                    "data": null,
+                    "defaultContent": ''
                 },
-                columns: [
-                    {
-                        data: "ck",
-                        className: 'select-checkbox',
-                        orderable: false,
-                        render: function (data, type, obj, meta) {
-                            return '<input type="checkbox" value="' + data + '">';
-                        }
-                    },
-                    {
-                        "className": 'details-control',
-                        "orderable": false,
-                        "data": null,
-                        "defaultContent": '' },
-                    {
-                        data: "SKU",
-                        render: function (data, type, row) {
-                            return "<a  target='_blank' href='" + "@Url.Action("edit", "Sku")" + "?id=" + row.SKU + "#6'>" + row.SKU + "</a>";
-                        }
-                    },
-                    { data: "ProductName" },
+                {
+                    data: "SKU",
+                    render: function (data, type, row) {
+                        return "<a  target='_blank' href='" + "@Url.Action("edit", "Sku")" + "?id=" + row.SKU + "#6'>" + row.SKU + "</a>";
+                    }
+                },
+                {
+                    data: "ProductName",
+                    render: function (data, type, row) {
+                        return data + "<br>" + row.ProductMsg;
+                    }
+                },
                     @if (Model.Status== "Pending")
                     {
                         @:{ data: "QTY", render: function (data, type, row) { return '<input class="form-control" type="text" onchange="TSkuNumberListQTY(this,' + row.ck + ',' + data + ')"  value = ' + data + ' > '; } },
                     }
                     else
                     {
-                        @: { data: "QTY", render: function(data, type, row) { return data; } },
+                        @: { data: "QTY", render: function (data, type, row) { return data; } },
                     }
-                    { data: "Serial", render: function (data, type, row) { return data; } },
-                    { data: "Label", render: function (data, type, row) { return thousandComma(data); }  },
-                    { data: "TotalReceive", render: function (data, type, row) { return data; } },
-                    { data: "Price", render: function (data, type, row) { return '<input class="form-control" type="text" onchange="TSkuNumberListPrice(this,' + row.ck + ',' + data + ')"  value = ' + data + ' > '; } },
-                    //{ data: "TWN", render: function (data, type, row) { return thousandComma(data); }  },
-                    //{ data: "Winit", render: function (data, type, row) { return thousandComma(data); } }
-                ],
-                ajax: {
-                    traditional: true,
-                    method: "get",//或post，自由決定，影響到Server端用FormCollection取值或Request.QueryString取得DataTables傳遞的資訊
-                    url: "@Url.Action("TSkuNumberList", "Ajax")",
-                    data: function (d) {
-                        var Skulist = $("#gebruikerId").val();
-                        var FromWID = $("#FromWID").val();
-                        var ToWID = $("#ToWID").val();
-                        d.SID = @Html.Display("ID");
-                        d.Skulist = Skulist;
-                        d.FromWID = FromWID;
-                        d.ToWID = ToWID;
-                        $("#gebruikerId").val(null).trigger('change');
-                    },
-                    "dataSrc": function (json) {
-                        if (json.ErrMsg != "") {
-                            alert(json.ErrMsg);
+                { data: "Serial", render: function (data, type, row) { return data; } },
+                { data: "Label", render: function (data, type, row) { return thousandComma(data); } },
+                { data: "TotalReceive", render: function (data, type, row) { return data; } },
+                { data: "Price", render: function (data, type, row) { return '<input class="form-control" type="text" onchange="TSkuNumberListPrice(this,' + row.ck + ',' + data + ')"  value = ' + data + ' > '; } },
+                //{ data: "TWN", render: function (data, type, row) { return thousandComma(data); }  },
+                //{ data: "Winit", render: function (data, type, row) { return thousandComma(data); } }
+            ],
+            ajax: {
+                traditional: true,
+                method: "get",//或post，自由決定，影響到Server端用FormCollection取值或Request.QueryString取得DataTables傳遞的資訊
+                url: "@Url.Action("TSkuNumberList", "Ajax")",
+                data: function (d) {
+                    var Skulist = $("#gebruikerId").val();
+                    var FromWID = $("#FromWID").val();
+                    var ToWID = $("#ToWID").val();
+                    d.SID = @Html.Display("ID");
+                    d.Skulist = Skulist;
+                    d.FromWID = FromWID;
+                    d.ToWID = ToWID;
+                    $("#gebruikerId").val(null).trigger('change');
+                },
+                "dataSrc": function (json) {
+                    if (json.ErrMsg != "") {
+                        alert(json.ErrMsg);
+                    }
+                    return json.data;
+                }
+            },
+            serverSide: true,//啟用ServerSide模式
+            //deferLoading: 0, //初始化DataTable時，不發出ajax
+            orderMulti: false,
+            "paging": false,
+            "ordering": false,
+            "info": true,
+            "searching": false,
+            "footerCallback": function (row, data, start, end, display) {
+            },
+            "rowCallback": function (row, data, index) {
+                if (data.Prep != 0) {
+                    $('td', row).css('background-color', 'yellow');
+                }
+            }
+        });
+        $(tableID + ' tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = DataGrid.row(tr);
+
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+            }
+            else {
+                // Open this row
+                row.child(GetSerialList(row.data())).show();
+                tr.addClass('shown');
+            }
+        });
+        $("#gebruikerId").select2({
+            minimumInputLength: 1,
+            placeholder: "Search",
+            allowClear: true,
+            multiple: true,
+            ajax: {
+                url: "@Url.Action("TSkuNumberGet", "Ajax")",
+                dataType: 'json',
+                delay: 0,
+                data: function (term) {
+                    var FromWID = $("#FromWID").val();
+                    var ToWID = $("#ToWID").val();
+                    if (FromWID == "") {
+                        alert("請選擇移出倉");
+                        return "";
+                    }
+                    else if (ToWID == "") {
+                        alert("請選擇Winit倉");
+                        return "";
+                    }
+                    else {
+                        var query = {
+                            search: term.term,
+                            FromWID: FromWID,
                         }
-                        return json.data;
+                        return query;
                     }
                 },
-                serverSide: true,//啟用ServerSide模式
-                //deferLoading: 0, //初始化DataTable時，不發出ajax
-                orderMulti: false,
-                "paging": false,
-                "ordering": false,
-                "info": true,
-                 "searching": false,
-                 "footerCallback": function (row, data, start, end, display) {
-                 },
-                 "rowCallback": function (row, data, index) {
-                     if (data.Prep != 0) {
-                         $('td', row).css('background-color', 'yellow');
-                     }
-                 }
-            });
-            $(tableID + ' tbody').on('click', 'td.details-control', function () {
-                var tr = $(this).closest('tr');
-                var row = DataGrid.row(tr);
+                processResults: function (data) {
+                    return {
+                        results: data.items,
+                        pagination: {
+                            more: true
+                        }
+                    };
+                }
+            }
+        });
+        $("#addsku").click(function () {
+            var FromWID = $("#FromWID").val();
+            if (FromWID == "") {
+                alert("請選擇移出倉");
+            }
+            else {
+                DataGrid.draw();
+            }
+        });
+        $("select").change(function () {
+            var FromWID = $("#FromWID").val();
+            var ToWID = $("#ToWID").val();
+            if (FromWID == ToWID) {
+                if (FromWID != "") {
+                    alert("From 和 To 不可重複");
+                    $(this).val("");
+                }
+            }
+            if ($(this).attr("id") == "FromWID") {
 
-                if (row.child.isShown()) {
-                    // This row is already open - close it
-                    row.child.hide();
-                    tr.removeClass('shown');
-                }
-                else {
-                    // Open this row
-                    row.child(GetSerialList(row.data())).show();
-                    tr.addClass('shown');
-                }
-            });
-            $("#gebruikerId").select2({
-                minimumInputLength: 1,
-                placeholder: "Search",
-                allowClear: true,
-                multiple: true,
-                ajax: {
-                    url: "@Url.Action("TSkuNumberGet", "Ajax")",
-                    dataType: 'json',
-                    delay: 0,
-                    data: function (term) {
-                        var FromWID = $("#FromWID").val();
-                        var ToWID = $("#ToWID").val();
-                        if (FromWID == "") {
-                            alert("請選擇移出倉");
-                            return "";
-                        }
-                        else if (ToWID == "") {
-                            alert("請選擇Winit倉");
-                            return "";
-                        }
-                        else {
-                            var query = {
-                                search: term.term,
-                                FromWID: FromWID,
-                            }
-                            return query;
-                        }
-                    },
-                    processResults: function (data) {
-                        return {
-                            results: data.items,
-                            pagination: {
-                                more: true
-                            }
-                        };
-                    }
-                }
-            });
-            $("#addsku").click(function () {
-                var FromWID = $("#FromWID").val();
-                if (FromWID == "") {
-                    alert("請選擇移出倉");
-                }
-                else {
-                    DataGrid.draw();
-                }
-            });
-            $("select").change(function () {
-                var FromWID = $("#FromWID").val();
-                var ToWID = $("#ToWID").val();
-                if (FromWID == ToWID) {
-                    if (FromWID != "") {
-                        alert("From 和 To 不可重複");
-                        $(this).val("");
-                    }
-                }
-                if ($(this).attr("id") =="FromWID") {
-
-                }
-            });
+            }
+        });
             @*$("#Ship").click(function () {
                 $.ajax({
                     traditional: true,
@@ -406,113 +417,117 @@
                 })
                 return false;
             });*@
-            $("#DeleteSKU").click(function () {
-                var dataList = [];
-                $(DataGrid.$('input[type="checkbox"]:checked').each(function () {
-                    dataList.push($(this).val());
-                }));
-                //for (var i in rows) {
-                //    dataList.push(i);
-                //}
-                $.ajax({
-                    traditional: true,
-                    type: "post",
-                    url: "@Url.Action("RemoveData")",
-                    data: {
-                        SID:@Html.Display("ID"),
-                        IDList: dataList,
-                    },
-                    success: function (data) {
-                        if (data.status) {
-                            $(tableID + ' thead input[type="checkbox"]').prop("checked", false);
-                            DataGrid.draw();
-                        }
-                        else {
-                            alert(data.Errmsg);
-                        }
+        $("#DeleteSKU").click(function () {
+            var dataList = [];
+            $(DataGrid.$('input[type="checkbox"]:checked').each(function () {
+                dataList.push($(this).val());
+            }));
+            //for (var i in rows) {
+            //    dataList.push(i);
+            //}
+            $.ajax({
+                traditional: true,
+                type: "post",
+                url: "@Url.Action("RemoveData")",
+                data: {
+                    SID:@Html.Display("ID"),
+                    IDList: dataList,
+                },
+                success: function (data) {
+                    if (data.status) {
+                        $(tableID + ' thead input[type="checkbox"]').prop("checked", false);
+                        DataGrid.draw();
                     }
-                });
-            });
-            $("#dialog").dialog({
-                autoOpen: false,
-                width: 800
-            });
-            $("body").on("click", "#UnRequest", function () {
-                var url ="@Url.Action("Requested")";
-                $.ajax({
-                    url: url,
-                    data: {
-                        id: @Html.Display("ID"),
-                    },
-                    success: function (data) {
-                        if (data.status) {
-                            window.location.reload();
-                        }
-                        else {
-                            alert(data.Errmsg)
-                        }
+                    else {
+                        alert(data.Errmsg);
                     }
-                });
-                return false;
-            });
-            $("body").on("click", ".Excel", function () {
-                var url = '@Url.Action("SerialsExcel", "Ajax")'
-                $.ajax({
-                    url: url,
-                    data: { id: $(this).attr("valID"), key: "TransferExcel"},
-                    success: function (data) {
-                        $("#dialog").dialog({
-                            title: "Excel"
-                        });
-                        $("#dialog").html(data);
-                        $("#dialog").dialog("open");
-                        //$("#dialog").load(data).dialog({ modal: true }).dialog('open');
-                    }
-                });
-                return false;
-            });
-            $("body").on("click", "#Request", function () {
-                $("form").prepend('<input type="hidden" name="Requestedval" value="true" />');
-                $(this).prop("disabled", "disabled");
-                $("form").submit();
-            });
-            $("#printBox").click(function () {
-                $.ajax({
-                    traditional: true,
-                    type: "post",
-                    url: "@Url.Action("PrintBox")",
-                    data: {
-                        ID: "@Html.Display("ID")"
-                    },
-                    success: function (data) {
-                        if (data.status) {
-                            javascript: jsWebClientPrint.print(encodeURIComponent(data.print));
-                        }
-                        else {
-                            alert(data.Errmsg);
-                        }
-                    }
-                });
-            });
-            $("#printAWB").click(function () {
-                $.ajax({
-                    traditional: true,
-                    type: "post",
-                    url: "@Url.Action("PrintAWB")",
-                    data: {
-                        ID: "@Html.Display("ID")"
-                    },
-                    success: function (data) {
-                        if (data.status) {
-                            javascript: jsWebClientPrint.print(encodeURIComponent(data.print));
-                        }
-                        else {
-                            alert(data.Errmsg);
-                        }
-                    }
-                }); 
+                }
             });
         });
+        $("#dialog").dialog({
+            autoOpen: false,
+            width: 800
+        });
+        $("body").on("click", "#UnRequest", function () {
+            var url = "@Url.Action("Requested")";
+            $.ajax({
+                url: url,
+                data: {
+                    id: @Html.Display("ID"),
+                },
+                success: function (data) {
+                    if (data.status) {
+                        window.location.reload();
+                    }
+                    else {
+                        alert(data.Errmsg)
+                    }
+                }
+            });
+            return false;
+        });
+        $("body").on("click", ".Excel", function () {
+            var url = '@Url.Action("SerialsExcel", "Ajax")'
+            $.ajax({
+                url: url,
+                data: { id: $(this).attr("valID"), key: "TransferExcel" },
+                success: function (data) {
+                    $("#dialog").dialog({
+                        title: "Excel"
+                    });
+                    $("#dialog").html(data);
+                    $("#dialog").dialog("open");
+                    //$("#dialog").load(data).dialog({ modal: true }).dialog('open');
+                }
+            });
+            return false;
+        });
+        $("body").on("click", "#Request", function () {
+            $("form").prepend('<input type="hidden" name="Requestedval" value="true" />');
+            $(this).prop("disabled", "disabled");
+            $("form").submit();
+        });
+        $("#printBox").click(function () {
+            $.ajax({
+                traditional: true,
+                type: "post",
+                url: "@Url.Action("PrintBox")",
+                data: {
+                    ID: "@Html.Display("ID")"
+                },
+                success: function (data) {
+                    if (data.status) {
+                        javascript: jsWebClientPrint.print(encodeURIComponent(data.print));
+                    }
+                    else {
+                        alert(data.Errmsg);
+                    }
+                }
+            });
+        });
+        $("#printAWB").click(function () {
+            $.ajax({
+                traditional: true,
+                type: "post",
+                url: "@Url.Action("PrintAWB")",
+                data: {
+                    ID: "@Html.Display("ID")"
+                },
+                success: function (data) {
+                    if (data.status) {
+                        javascript: jsWebClientPrint.print(encodeURIComponent(data.print));
+                        javascript: jsWebClientPrint.print("key=Invoice&id=@Html.Display("ID")");
+                    }
+                    else {
+                        alert(data.Errmsg);
+                    }
+                }
+            });
+        });
+        $("#printInvoice").click(function () {
+            javascript: jsWebClientPrint.print("key=Invoice&id=@Html.Display("ID")");
+        });
+    });
         function ajaxpost(e) {
             $.ajax({
                 url: $(e).attr("href"),
@@ -593,7 +608,7 @@
                 window.location.reload();
             }
         }
-    </script>   
+</script>   
     @Html.Raw(ViewBag.WCPScript);
 }
 
