@@ -43,15 +43,16 @@ namespace PurchaseOrderSys.Models
                 var order = result.Data;
                 order.OrderStatus = EnumData.OrderStatusList().First(s => s.Value.Equals(EnumData.OrderStatusList(true)[order.OrderStatus])).Key;
                 order.PaymentStatus = EnumData.OrderPaymentStatusList().First(p => p.Value.Equals(EnumData.OrderPaymentStatusList(true)[order.PaymentStatus])).Key;
+                order.FulfilledDate = order.FulfilledDate.HasValue && !order.FulfilledDate.Equals(DateTime.MinValue) ? order.FulfilledDate : null;
 
                 if (orderData != null)
                 {
-                    SetUpdateData(orderData, order, new string[] { "IsRush", "OrderStatus", "PaymentStatus", "PaymentDate", "Comment" });
+                    SetUpdateData(orderData, order, new string[] { "IsRush", "OrderStatus", "PaymentStatus", "PaymentDate", "FulfillmentStatus", "FulfilledDate", "Comment" });
                 }
                 else
                 {
                     orderData = new Orders() { CreateBy = AdminName, CreateAt = UtcNow };
-                    SetUpdateData(orderData, order, new string[] { "IsRush", "OrderParent", "OrderSourceID", "SCID", "CustomerID", "CustomerEmail", "OrderStatus", "OrderDate", "PaymentStatus", "PaymentDate",  "FulfilledDate", "BuyerNote", "Comment" });
+                    SetUpdateData(orderData, order, new string[] { "IsRush", "OrderParent", "OrderSourceID", "SCID", "CustomerID", "CustomerEmail", "OrderStatus", "OrderDate", "PaymentStatus", "PaymentDate", "FulfillmentStatus",  "FulfilledDate", "BuyerNote", "Comment" });
                     orderData.Company = db.Company.AsNoTracking().First(c => c.CompanySCID.Value.Equals(order.Company)).ID;
                     orderData.Channel = EnumData.OrderChannelList().First(c => c.Value.Equals(EnumData.OrderChannelList(true)[order.Channel])).Key;
                     db.Orders.Add(orderData);
