@@ -2763,4 +2763,7 @@
   <data name="SKU_DisplayPageUrl" xml:space="preserve">
     <value>Official Website</value>
   </data>
+  <data name="SkuType_HSCode" xml:space="preserve">
+    <value>HSCode</value>
+  </data>
 </root>

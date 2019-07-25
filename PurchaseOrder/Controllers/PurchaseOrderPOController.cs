@@ -298,7 +298,10 @@ namespace PurchaseOrderSys.Controllers
                 {
                     listPurchaseOrder = listPurchaseOrder.Where(x => x.POStatus == filter.POStatus);
                 }
-
+                if (!string.IsNullOrWhiteSpace(filter.Description))
+                {
+                    listPurchaseOrder = listPurchaseOrder.Where(x => x.Description.Contains( filter.Description));
+                }
                 var dataList = listPurchaseOrder.ToList().Select(x => new
                 {
                     x.ID,

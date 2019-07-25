@@ -33,6 +33,10 @@ namespace PurchaseOrderSys.Models
         public string BoxLabelSize { get; set; }
         public string WinitOrderNo { get; set; }
         public string PrintPackageLabe { get; set; }
+        public string PackingList { get; set; }
+        public string CheckList { get; set; }
+        public string InvoiceExcel { get; set; }
+        public string WinitStatus { get; set; }
     
         public virtual Transfer Transfer { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

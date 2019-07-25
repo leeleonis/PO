@@ -115,7 +115,6 @@
                                                     {
                                                         <a type="button" href="@Url.Action("Prep", new { Model.ID })" class='btn btn-default btn-sm' id='Prep'>Prep</a>
                                                         <a type="button" class='btn btn-default btn-sm' id='UnRequest'>UnRequest</a>
-                                                        <a type="button" href="@Url.Action("PrintAWB", new { Model.ID })" class='btn btn-default btn-sm' id='PrintAWB'>Print AWB</a>
                                                         if (Model.TransferSKU.Where(x => x.IsEnable).Where(x => x.SerialsLlist.Where(y => y.SerialsType == "TransferOut").Any() || x.RMASerialsLlist.Where(y => y.SerialsType == "TransferOut").Any()).Any())
                                                         {
                                                             if (NoPrepSerials.Any())
@@ -161,15 +160,19 @@
                                                                 Msg += string.Join("\\n\\r", NoPrepSerials);
                                                                 <button type="button" class="btn btn-default" id="printBox" onclick="return confirm('@(Msg)')">打印Box</button>
                                                                 <button type="button" class="btn btn-default" id="printAWB" onclick="return confirm('@(Msg)')">打印AWB</button>
-                                                                <button type="button" class="btn btn-default" id="printInvoice" onclick="return confirm('@(Msg)')">打印發票</button>
                                                             }
                                                             else
                                                             {
                                                                 <button type="button" class="btn btn-default" id="printBox">打印Box</button>
                                                                 <button type="button" class="btn btn-default" id="printAWB">打印AWB</button>
-                                                                <button type="button" class="btn btn-default" id="printInvoice">打印發票</button>
                                                             }
                                                         }
+                                                    }
+                                                    else if (Model.Status == "Shipped")
+                                                    {
+                                                        <button type="button" class="btn btn-default" id="printBox">打印Box</button>
+                                                        <button type="button" class="btn btn-default" id="printAWB">打印AWB</button>
+                                                        <button type="button" class="btn btn-default" id="printInvoice">打印發票</button>
                                                     }
                                                 </div>
                                             </div>

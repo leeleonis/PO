@@ -6667,6 +6667,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查詢類似 HSCode 的當地語系化字串。
+        /// </summary>
+        public static string SkuType_HSCode {
+            get {
+                return ResourceManager.GetString("SkuType_HSCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
         public static string SkuType_ID {

@@ -511,7 +511,13 @@ namespace PurchaseOrderSys.NewApi
 
     public class OrderDetailMerchandiseList2
     {
+        /// <summary>
+        /// 驗貨數量
+        /// </summary>
         public int? inspectionQty { get; set; }
+        /// <summary>
+        /// 數量(下單數量)
+        /// </summary>
         public int? quantity { get; set; }
         public string productBarcode { get; set; }
         public int? actualQuantity { get; set; }
@@ -788,7 +794,7 @@ namespace PurchaseOrderSys.NewApi
                 action = action,
                 app_key = api_key,
                 format = "json",
-                language = "zh_CN",
+                language = "zh_TW",
                 platform = platformval,
                 sign = _Get_UserSign(action, data, timestamp),
                 sign_method = "md5",

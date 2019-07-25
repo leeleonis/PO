@@ -108,6 +108,7 @@
                                                             <th>Created Date</th>
                                                             <th>Created By</th>
                                                             <th>Status</th>
+                                                            <th>WinitStatus</th>
                                                             <th>Download</th>
                                                         </tr>
                                                     </thead>
@@ -116,24 +117,25 @@
                                                         {
                                                             foreach (var item in Model.Transferlist.OrderByDescending(x => x.ID))
                                                             {
-                                                                <tr>
-                                                                    <td><input type="checkbox" /></td>
-                                                                    <td>
-                                                                        <a href='@Url.Action("Edit", new { item.ID })'>@item.ID</a>
-                                                                    </td>
-                                                                    <td>@item.ExternalTra</td>
-                                                                    <td>@item.Title</td>
-                                                                    <td>@(item.WarehouseFrom?.Name)</td>
-                                                                    <td>@(item.WarehouseTo?.Name)</td>
-                                                                    <td>@item.TransferSKU.Where(x => x.IsEnable).Sum(x => x.QTY)</td>
-                                                                    <td>
-                                                                        @(item.TransferSKU.Where(x => x.IsEnable).Sum(x => x.SerialsLlist.Where(y => y.SerialsType == "TransferIn").Sum(y => y.SerialsQTY)))
-                                                                    </td>
-                                                                    <td>@item.CreateAt.ToLocalTime()</td>
-                                                                    <td>@item.CreateBy</td>
-                                                                    <td>@item.Status</td>
-                                                                    <td></td>
-                                                                </tr>
+                                                        <tr>
+                                                            <td><input type="checkbox" /></td>
+                                                            <td>
+                                                                <a href='@Url.Action("Edit", new { item.ID })'>@item.ID</a>
+                                                            </td>
+                                                            <td>@item.ExternalTra</td>
+                                                            <td>@item.Title</td>
+                                                            <td>@(item.WarehouseFrom?.Name)</td>
+                                                            <td>@(item.WarehouseTo?.Name)</td>
+                                                            <td>@item.TransferSKU.Where(x => x.IsEnable).Sum(x => x.QTY)</td>
+                                                            <td>
+                                                                @(item.TransferSKU.Where(x => x.IsEnable).Sum(x => x.SerialsLlist.Where(y => y.SerialsType == "TransferIn").Sum(y => y.SerialsQTY)))
+                                                            </td>
+                                                            <td>@item.CreateAt.ToLocalTime()</td>
+                                                            <td>@item.CreateBy</td>
+                                                            <td>@item.Status</td>
+                                                            <td>@item.WinitTransfer.WinitStatus</td>
+                                                            <td></td>
+                                                        </tr>
                                                             }
                                                         }
                                                     </tbody>

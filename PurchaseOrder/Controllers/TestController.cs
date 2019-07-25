@@ -66,7 +66,7 @@ namespace PurchaseOrderSys.Controllers
             var QueryOrderTracking = Winit_API.QueryOrderTracking(Transfer.WinitTransfer.WinitOrderNo);
             //var fileStream = new System.IO.MemoryStream(InvoiceExcel(db.Transfer.Find(3264)));
 
-            var fileStream = new System.IO.MemoryStream(CheckListExcel(db.Transfer.Find(3264)));
+            var fileStream = Box_PackingListExcel(db.Transfer.Find(3264));
 
             //   var Tracking = FedEx_API.Tracking("788504512725");
             //var jj=   JsonConvert.SerializeObject(Tracking);
@@ -135,7 +135,8 @@ namespace PurchaseOrderSys.Controllers
             //if (DSerialsLlist.Any())
             //{
             //}
-            return File(fileStream, "application/zip", "ExportRanger.zip");
+            //return File(fileStream, "application/zip", "ExportRanger.zip");
+            return File(fileStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ExportRanger.xlsx");
             return View();
         }
 

@@ -721,7 +721,7 @@ namespace PurchaseOrderSys.Controllers
                         if (odataListitem.ID.HasValue)
                         {
                             var TransferSKU = db.TransferSKU.Find(odataListitem.ID);
-                            if (TransferSKU.SerialsLlist.Any())
+                            if (TransferSKU.SerialsLlist.Any() || TransferSKU.RMASerialsLlist.Any())
                             {
                                 Errmsg += "【" + TransferSKU.SkuNo + "】已有序號不能刪除；";
                             }

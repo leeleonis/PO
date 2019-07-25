@@ -350,6 +350,11 @@ namespace PurchaseOrderSys.Controllers
             return linq;
         }
 
+        public MemoryStream Base64ToMemoryStream(string base64)
+        {
+            byte[] bytes = Convert.FromBase64String(base64);
+            return new MemoryStream(bytes);
+        }
 
         /// <summary>
         /// 存圖檔
@@ -1732,7 +1737,47 @@ namespace PurchaseOrderSys.Controllers
             }
             return Code;
         }
-        public byte[] CheckListExcel(Transfer Transfer)
+        public MemoryStream Box_PackingListExcel(Transfer Transfer)
+        {
+            var Allcount = 0;
+            var box = 1;
+            var index = 20;
+            var MergeS = 0;
+            var Excelbyte = System.IO.File.ReadAllBytes(Server.MapPath(@"~/File/Box_PackingList.xlsx"));
+            var stream = new System.IO.MemoryStream(Excelbyte);
+            OfficeOpenXml.ExcelPackage ep = new OfficeOpenXml.ExcelPackage(stream);
+            OfficeOpenXml.ExcelWorksheet sheet1 = ep.Workbook.Worksheets[1];//取得Sheet1 
+            sheet1.Cells[8, 2].Value = Transfer.WarehouseTo.Company;
+            sheet1.Cells[9, 2].Value = Transfer.WarehouseTo.Phone;
+            sheet1.Cells[10, 2].Value = Transfer.WarehouseTo.Address1;
+            sheet1.Cells[11, 2].Value = Transfer.WarehouseTo.Address2;
+            sheet1.Cells[12, 2].Value = Transfer.WarehouseTo.City + " " + Transfer.WarehouseTo.State + " " + Transfer.WarehouseTo.Postcode;
+            sheet1.Cells[13, 2].Value = Transfer.WarehouseTo.Country;
+            sheet1.Cells[15, 2].Value = Transfer.Tracking;
+            sheet1.Cells[17, 2].Value = DateTime.Now.ToString("yyyy-MM-dd");
+            MergeS = index;
+            foreach (var Boxitem in Transfer.WinitTransfer.WinitTransferBox)
+            {
+                foreach (var item in Boxitem.WinitTransferBoxItem.GroupBy(x => x.SkuNo))
+                {
+                    var Count = item.Count();
+                    Allcount += Count;
+                    sheet1.Cells[index, 1].Value = box;
+                    sheet1.Cells[index, 2].Value = item.FirstOrDefault().Name;
+                    sheet1.Cells[index, 3].Value = Count;
+                    index++;
+                    sheet1.InsertRow(index, 1, 20);
+                }
+                sheet1.Cells[MergeS, 1, index - 1, 1].Merge = true;//合併
+                MergeS = index;
+                box++;
+            }
+            sheet1.DeleteRow(index);
+            sheet1.Cells[index, 3].Value = Allcount;
+            var OutputStream = new System.IO.MemoryStream(ep.GetAsByteArray());
+            return OutputStream;
+        }
+        public MemoryStream CheckListExcel(Transfer Transfer)
         {       
            var Code = CurrencyCode(Transfer.WarehouseTo.WinitWarehouse);
             var EXRate = db.Currency.Where(x => x.Code == Code).FirstOrDefault()?.EXRate ?? 1;
@@ -1756,10 +1801,10 @@ namespace PurchaseOrderSys.Controllers
                 }
                 var OutputStream = new MemoryStream();
                 file.Save(OutputStream);
-                return OutputStream.ToArray();
+                return OutputStream;
             }
         }
-        public byte[] InvoiceExcel(Transfer Transfer)
+        public MemoryStream InvoiceExcel(Transfer Transfer)
         {
             var Code = CurrencyCode(Transfer.WarehouseTo.WinitWarehouse);
             var EXRate = db.Currency.Where(x => x.Code == Code).FirstOrDefault()?.EXRate ?? 1;
@@ -1835,7 +1880,7 @@ namespace PurchaseOrderSys.Controllers
                 item.EditAs = OfficeOpenXml.Drawing.eEditAs.TwoCell;
             }
             var OutputStream = new System.IO.MemoryStream(ep.GetAsByteArray());
-            return OutputStream.ToArray();
+            return OutputStream;
         }
     }
 }

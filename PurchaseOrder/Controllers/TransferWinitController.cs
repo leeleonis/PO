@@ -1183,12 +1183,18 @@ namespace PurchaseOrderSys.Controllers
                 {
                     var status = true;
                     status = SendMailToFedEx(Transfer);
-                    status = SendMailToWinit(Transfer);
-       
-                    Transfer.Status = "Shipped";
-                    Transfer.UpdateBy = UserBy;
-                    Transfer.UpdateAt = DateTime.UtcNow;
-                    db.SaveChanges();
+                    //status = SendMailToWinit(Transfer);
+                    if (status)
+                    {
+                        Transfer.Status = "Shipped";
+                        Transfer.UpdateBy = UserBy;
+                        Transfer.UpdateAt = DateTime.UtcNow;
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        TempData["ErrMsg"] = "Mail寄送失敗";
+                    }
                 }
                 else
                 {
@@ -1211,32 +1217,52 @@ namespace PurchaseOrderSys.Controllers
         private bool SendMailToFedEx(Transfer transfer)
         {
             string MailFrom = "dispatch-qd@hotmail.com";
-            string MailSub = string.Format("至優網 正式出口報關資料");
+            string MailSub = string.Format("至優網 (Zhi You Wan LTD) 正式出口報關資料 (Tracking #" + transfer.Tracking + ")");
             string MailBody = "";
             string[] MailTos = new string[] { "edd@fedex.com" };
+            //string[] MailTos = new string[] { "leoli.qd@hotmail.com" };
+
             List<string> FedExFile1 = new List<string>();
             List<Tuple<Stream, string>> FedExFile2 = new List<Tuple<Stream, string>>();
             string[] Ccs = new string[] { "peter@qd.com.tw", "kelly@qd.com.tw", "demi@qd.com.tw" };
-            var memoryStream = new MemoryStream();
-            using (var file = new ZipFile())
+            //string[] Ccs = new string[] { "peter@qd.com.tw" };//
+            if (string.IsNullOrWhiteSpace(transfer.WinitTransfer.InvoiceExcel))
             {
-                file.AddEntry( "Invoice.xlsx", InvoiceExcel(transfer));//發票檔
-                file.AddEntry("Fedex_Recognizances.pdf", System.IO.File.ReadAllBytes(Server.MapPath(@"~/File/Fedex_Recognizances.pdf")));
-
-                foreach (var TransferSKU in transfer.TransferSKU.Where(x=>x.IsEnable))
-                {
-                    file.AddEntry("CheckList.xlsx", CheckListExcel(transfer));
-                }
-                file.Save(memoryStream);
+                var Stream = InvoiceExcel(transfer);
+                FedExFile2.Add(new Tuple<Stream, string>(Stream, "Invoice.xlsx"));//發票檔
+                transfer.WinitTransfer.InvoiceExcel= Convert.ToBase64String(Stream.ToArray());
             }
-            memoryStream.Seek(0, SeekOrigin.Begin);
-            FedExFile2.Add(new Tuple<Stream, string>(memoryStream, transfer.Tracking + ".zip"));
+            else
+            {
+                FedExFile2.Add(new Tuple<Stream, string>(Base64ToMemoryStream(transfer.WinitTransfer.InvoiceExcel), "Invoice.xlsx"));//發票檔       
+            }
+            if (string.IsNullOrWhiteSpace(transfer.WinitTransfer.CheckList))
+            {
+                var Stream =CheckListExcel(transfer);
+                FedExFile2.Add(new Tuple<Stream, string>(Stream, "CheckList.zip"));
+                transfer.WinitTransfer.CheckList= Convert.ToBase64String(Stream.ToArray());
+            }
+            else
+            {
+                FedExFile2.Add(new Tuple<Stream, string>(Base64ToMemoryStream(transfer.WinitTransfer.CheckList), "CheckList.zip"));
+            }
+            if (string.IsNullOrWhiteSpace(transfer.WinitTransfer.PackingList))
+            {
+                var Stream = Box_PackingListExcel(transfer);
+                FedExFile2.Add(new Tuple<Stream, string>(Stream, "Box_PackingList.xlsx"));
+                transfer.WinitTransfer.PackingList= Convert.ToBase64String(Stream.ToArray());
+            }
+            else
+            {
+                FedExFile2.Add(new Tuple<Stream, string>(Base64ToMemoryStream(transfer.WinitTransfer.PackingList), "Box_PackingList.xlsx"));
+            }
+            FedExFile2.Add(new Tuple<Stream, string>(new MemoryStream(System.IO.File.ReadAllBytes(Server.MapPath(@"~/File/Fedex_Recognizances.pdf"))), "Fedex_Recognizances.pdf"));
             //FedExFile1.Add(Path.Combine(filePath, "PackageList.xlsx"));
-
+            db.SaveChanges();
             return  Helpers.MyHelps.Mail_Send(MailFrom, MailTos, Ccs, MailSub, MailBody, true, FedExFile1.ToArray(), FedExFile2, false);
         }
 
-   
+
 
         public ActionResult RemoveData(string[] IDList, string SID)
         {

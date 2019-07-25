@@ -90,7 +90,7 @@ namespace PurchaseOrderSys.Controllers
         { 
             var SKUList = new List<string>();
             SKUList = SearchSkuByWarehouse(Search, FromWID);
-            var dataList = db.SkuLang.Where(x => x.LangID == LangID && SKUList.Contains(x.Sku) && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
+            var dataList = db.SkuLang.Where(x => x.LangID == LangID && SKUList.Contains(x.Sku) && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name }).ToList();
             //var dataList = db.SkuLang.Where(x => x.LangID == "zh-tw" && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });  
             return Json(new { items = dataList }, JsonRequestBehavior.AllowGet);
         }
@@ -284,7 +284,7 @@ namespace PurchaseOrderSys.Controllers
                             sk = x.RMASKU.SkuNo,
                             SKU = x.RMASKU.SkuNo,
                             ProductName = x.RMASKU.SKU.SkuLang.Where(y => y.LangID == LangID).FirstOrDefault().Name,
-                            ProductMsg = GetNameSize(x.SKU),
+                            ProductMsg = GetNameSize(x.RMASKU.SKU),
                             QTY = 1,
                             Model = "E",
                             Price = x.RMASKU.SKU.Logistic?.Price ?? 0
@@ -298,7 +298,7 @@ namespace PurchaseOrderSys.Controllers
                              sk = x.NewSkuNo,
                              SKU = x.NewSkuNo,
                              ProductName = x.RMASKU.SKU.SkuLang.Where(y => y.LangID == LangID).FirstOrDefault().Name,
-                             ProductMsg = GetNameSize(x.SKU),
+                             ProductMsg = GetNameSize(x.RMASKU.SKU),
                              QTY = 1,
                              Model = "E",
                              Price = x.RMASKU.SKU.Logistic?.Price ?? 0
@@ -695,6 +695,7 @@ namespace PurchaseOrderSys.Controllers
                         try
                         {
                             var SkuNo = "";
+                            var SerialsNo = "";
                             if (SerialsLlist.FirstOrDefault().PurchaseSKUID.HasValue)
                             {
                                 SkuNo = SerialsLlist.FirstOrDefault().PurchaseSKU.SkuNo;
@@ -703,8 +704,9 @@ namespace PurchaseOrderSys.Controllers
                             {
                                 SkuNo = SerialsLlist.FirstOrDefault().TransferSKU.SkuNo;
                             }
+                            SerialsNo = SerialsLlist.FirstOrDefault().SerialsNo;
                             db.SaveChanges();
-                            Dictionarylist.Add(new Tuple<string, string>(SerialsLlist.FirstOrDefault().PurchaseSKU.SkuNo, SerialsLlist.FirstOrDefault().SerialsNo));
+                            Dictionarylist.Add(new Tuple<string, string>(SkuNo, SerialsNo));
                         }
                         catch (Exception ex)
                         {
@@ -1742,33 +1744,81 @@ namespace PurchaseOrderSys.Controllers
         }
         public ActionResult CheckTracking()
         {
+            var CreateBy = UserBy;
+            var CreateAt = DateTime.UtcNow;
             var Winit_API = new  Winit_API();
             var ApiSetting = db.ApiSetting.Find(16);
             AjaxResult result = new AjaxResult();
-            var Transfer = db.Transfer.Where(x => x.IsEnable && x.TransferType == "Winit" && x.Status == "Shipped");
-            foreach (var item in Transfer)
+            var TransferList = db.Transfer.Where(x => x.IsEnable && x.TransferType == "Winit" && x.Status == "Shipped");
+            foreach (var Transfer in TransferList)
             {
-                if (!string.IsNullOrWhiteSpace(item.WinitTransfer.WinitOrderNo))
+               
+                foreach (var WinitTransferSKU in Transfer.WinitTransfer.WinitTransferSKU)
                 {
-                    //var QueryOrderTrackingList = Winit_API.QueryOrderTracking(item.WinitTransfer.WinitOrderNo);
-                    var OrderDetail = Winit_API.getOrderDetail(item.WinitTransfer.WinitOrderNo);
-                    foreach (var package in OrderDetail.packageList)
+                    if (string.IsNullOrWhiteSpace(WinitTransferSKU.winitProductCode))//沒有M碼補上M碼
                     {
-                        foreach (var merchandise in package.merchandiseList)
+                        var WSKUList = Winit_API.SKUList(WinitTransferSKU.SkuNo);
+                        if (WSKUList!=null && WSKUList.list != null&& WSKUList.list.Any())
                         {
-                     // package.sellerCaseNo = ID + "-" + Box.ID
-
-                            if (merchandise.actualQuantity.HasValue)
-                            {
-                                var WinitTransferBoxList = item.WinitTransfer.WinitTransferBox;
-
-
-                            }
+                            WinitTransferSKU.winitProductCode = WSKUList.list.FirstOrDefault().code;
                         }
                     }
                 }
-            }
-          
+                var QueryOrderTracking = Winit_API.QueryOrderTracking(Transfer.WinitTransfer.WinitOrderNo);
+                if (QueryOrderTracking.trackingList.Any())
+                {
+                    Transfer.WinitTransfer.WinitStatus = QueryOrderTracking.trackingList.LastOrDefault().trackingDesc;
+                    if (QueryOrderTracking.trackingList.LastOrDefault().trackingCode == "OWS" && !string.IsNullOrWhiteSpace(Transfer.WinitTransfer.WinitOrderNo))//有上架資料才比對
+                    {
+                        var Allin = true;
+                        //var QueryOrderTrackingList = Winit_API.QueryOrderTracking(item.WinitTransfer.WinitOrderNo);
+                        var OrderDetail = Winit_API.getOrderDetail(Transfer.WinitTransfer.WinitOrderNo);
+                        var TransferSKUList = Transfer.TransferSKU.Where(x => x.IsEnable && x.SerialsLlist.Where(y => y.IsEnable).Any());
+                        foreach (var TransferSKU in TransferSKUList)
+                        {
+                            var actualQuantity = OrderDetail.merchandiseList.Where(x => x.merchandiseCode.Contains(TransferSKU.SkuNo)).FirstOrDefault().actualQuantity;//實際上架數量
+                            var SerialsLlist = TransferSKU.SerialsLlist.Where(x => x.IsEnable);
+                            if (Math.Abs(SerialsLlist.Sum(x => x.SerialsQTY).Value) == actualQuantity)//和實際上架數一樣，直接入庫
+                            {
+                                foreach (var Serials in SerialsLlist)
+                                {
+                                    Serials.SerialsLlistC.Add(new SerialsLlist
+                                    {
+                                        IsEnable = true,
+                                        TransferSKUID = Serials.TransferSKUID,
+                                        PID = Serials.ID,
+                                        CreateAt = CreateAt,
+                                        CreateBy = CreateBy,
+                                        ReceivedAt = CreateAt,
+                                        ReceivedBy = CreateBy,
+                                        //OrderID = x.OrderID,
+                                        PurchaseSKUID = Serials.PurchaseSKUID,
+                                        //RMAID = x.RMAID,
+                                        SerialsNo = Serials.SerialsNo,
+                                        SerialsQTY = 1,
+                                        SerialsType = "TransferIn"
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                Allin = false;
+                            }
+                        }
+                        if (Allin)//訂單全部入庫
+                        {
+                            Transfer.Status = "Completed";
+                        }
+                        else
+                        {
+                            Transfer.Status = "Received";
+                        }
+                        Transfer.UpdateBy = CreateBy;
+                        Transfer.UpdateAt = CreateAt;
+                    }
+                }
+            } 
+            db.SaveChanges();
             return Json(result, JsonRequestBehavior.AllowGet);
         }
         [AllowAnonymous]
@@ -1817,7 +1867,17 @@ namespace PurchaseOrderSys.Controllers
             {
                 printerName = "EPSON L310 Series (附件1)";
                 var Transfer = db.Transfer.Find(id);
-                var fileExcel = new Neodynamic.SDK.Web.PrintFile(InvoiceExcel(Transfer), "Invoice.xlsx");
+                var bInvoiceExcel = new byte[0];
+                if (string.IsNullOrWhiteSpace( Transfer.WinitTransfer.InvoiceExcel))
+                {
+                    bInvoiceExcel = InvoiceExcel(Transfer).ToArray();
+                    Transfer.WinitTransfer.InvoiceExcel= Convert.ToBase64String(bInvoiceExcel);
+                }
+                else
+                {
+                    bInvoiceExcel= Base64ToMemoryStream(Transfer.WinitTransfer.InvoiceExcel).ToArray();
+                }
+                var fileExcel = new Neodynamic.SDK.Web.PrintFile(bInvoiceExcel, "Invoice.xlsx");
                 cpj.PrintFileGroup.Add(fileExcel);
                 if (Transfer.WarehouseTo.WinitWarehouse == "US")
                 {

@@ -1140,6 +1140,10 @@
           <Property Name="BoxLabelSize" Type="nvarchar" MaxLength="50" />
           <Property Name="WinitOrderNo" Type="nvarchar" MaxLength="64" />
           <Property Name="PrintPackageLabe" Type="text" />
+          <Property Name="PackingList" Type="text" />
+          <Property Name="CheckList" Type="text" />
+          <Property Name="InvoiceExcel" Type="text" />
+          <Property Name="WinitStatus" Type="nvarchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="WinitTransferBox">
           <Key>
@@ -5684,6 +5688,10 @@
           <NavigationProperty Name="WinitTransferSKU" Relationship="PurchaseOrderModel.FK_WinitTransferSKU_WinitTransfer" FromRole="WinitTransfer" ToRole="WinitTransferSKU" />
           <Property Name="WinitOrderNo" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
           <Property Name="PrintPackageLabe" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="PackingList" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CheckList" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="InvoiceExcel" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="WinitStatus" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_WinitTransfer_Transfer1">
           <End Type="PurchaseOrderModel.Transfer" Role="Transfer" Multiplicity="1" />
@@ -6994,6 +7002,10 @@
           <EntitySetMapping Name="WinitTransfer">
             <EntityTypeMapping TypeName="PurchaseOrderModel.WinitTransfer">
               <MappingFragment StoreEntitySet="WinitTransfer">
+                <ScalarProperty Name="WinitStatus" ColumnName="WinitStatus" />
+                <ScalarProperty Name="InvoiceExcel" ColumnName="InvoiceExcel" />
+                <ScalarProperty Name="CheckList" ColumnName="CheckList" />
+                <ScalarProperty Name="PackingList" ColumnName="PackingList" />
                 <ScalarProperty Name="PrintPackageLabe" ColumnName="PrintPackageLabe" />
                 <ScalarProperty Name="WinitOrderNo" ColumnName="WinitOrderNo" />
                 <ScalarProperty Name="BoxLabelSize" ColumnName="BoxLabelSize" />
