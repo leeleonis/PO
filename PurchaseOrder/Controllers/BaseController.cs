@@ -1629,7 +1629,7 @@ namespace PurchaseOrderSys.Controllers
         {
             var SID = id;
             var ReceiveVMList = (List<TransferItemVM>)Session["ReceiveVMList" + SID];
-            var SerialsLlist = db.SerialsLlist.Where(x => x.TransferSKU.TransferID == id && x.SerialsNo == serials && !x.SerialsLlistC.Any());
+            var SerialsLlist = db.SerialsLlist.Where(x => x.TransferSKU.TransferID == id && (x.SerialsNo == serials || x.WinitTransferBoxItem.BarCode == serials) && !x.SerialsLlistC.Any());
             var RMASerialsLlist = db.RMASerialsLlist.Where(x => x.TransferSKU.TransferID == id && x.SerialsNo == serials && !x.RMASerialsLlistC.Any());
             if (SerialsLlist.Sum(x => x.SerialsQTY) > 0)//檔序號數量>0
             {
@@ -1756,7 +1756,7 @@ namespace PurchaseOrderSys.Controllers
             sheet1.Cells[15, 2].Value = Transfer.Tracking;
             sheet1.Cells[17, 2].Value = DateTime.Now.ToString("yyyy-MM-dd");
             MergeS = index;
-            foreach (var Boxitem in Transfer.WinitTransfer.WinitTransferBox)
+            foreach (var Boxitem in Transfer.WinitTransfer.WinitTransferBox.Where(x=>x.IsEnable&&x.WinitTransferBoxItem.Any()))
             {
                 foreach (var item in Boxitem.WinitTransferBoxItem.GroupBy(x => x.SkuNo))
                 {

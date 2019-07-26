@@ -1378,6 +1378,8 @@ namespace PurchaseOrderSys.Models
         public string TrWarehouse { get; set; }
         public string Model { get; set; }
         public decimal UnitPrice { get; set; }
+        public string Carrier { get; set; }
+        public string tracking { get; set; }
     }
 
     public class SerialsLlistVM

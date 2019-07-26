@@ -48,10 +48,10 @@
                                                     <a href='https://dm.cwa.sellercloud.com/Orders/Orders_details.aspx?id=@(Model.OrderID)' target="_blank" class="control-label col-sm-1">@Model.OrderID</a>
                                                 </div>
 
-                                                <label class="control-label col-sm-2">Generate Prepaid Return Label</label>
+                                                @*<label class="control-label col-sm-2">Generate Prepaid Return Label</label>
                                                 <div class="col-sm-9 col-lg-2">
                                                   
-                                                </div>
+                                                </div>*@
 
                                                 @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
@@ -65,10 +65,10 @@
                                                     @Html.Editor("SourceID", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                                                 </div>
 
-                                                @Html.LabelFor(model => model.ReturnTracking, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @*@Html.LabelFor(model => model.ReturnTracking, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("ReturnTracking", new { htmlAttributes = new { @class = "form-control"} })
-                                                </div>
+                                                </div>*@
 
                                                 @Html.LabelFor(model => model.Action, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
@@ -80,10 +80,10 @@
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("SourceCaseID", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
-                                                @Html.LabelFor(model => model.Carrier, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @*@Html.LabelFor(model => model.Carrier, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("Carrier", new { htmlAttributes = new { @class = "form-control" } })
-                                                </div>
+                                                </div>*@
                                                 @Html.Label("Warranty / Repair #", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("Warranty", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
@@ -94,10 +94,10 @@
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.DropDownListLabel("CompanyID", CompanyDDL, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
                                                 </div>
-                                                <label class="control-label col-sm-2">Tracking Status (Date)</label>
+                                                @*<label class="control-label col-sm-2">Tracking Status (Date)</label>
                                                 <div class="col-sm-9 col-lg-2">
                                                     Tracking Status (Event)
-                                                </div>
+                                                </div>*@
                                                 @Html.Label("Credit Memo #", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("CreditMemo", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
@@ -108,10 +108,10 @@
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.DropDownListLabel("Channel", ChannelList, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
                                                 </div>
-                                                <label class="control-label col-sm-2"></label>
+                                                @*<label class="control-label col-sm-2"></label>
                                                 <div class="col-sm-9 col-lg-2">
 
-                                                </div>
+                                                </div>*@
                                                 @Html.Label("Create Date", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     <input class="form-control" type="text" value="@Model.CreateAt.ToLocalTime()" readonly>
@@ -122,10 +122,10 @@
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("Country", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                                                 </div>
-                                                <label class="control-label col-sm-2"></label>
+                                                @*<label class="control-label col-sm-2"></label>
                                                 <div class="col-sm-9 col-lg-2">
 
-                                                </div>
+                                                </div>*@
                                                 @Html.Label("Create By", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("CreateBy", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
@@ -137,10 +137,10 @@
                                                     @*@Html.Editor("SCRMA", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })*@
                                                     <a href='https://dm.cwa.sellercloud.com/Orders/Orders_Return.aspx?id=@(Model.OrderID)' target="_blank" class="control-label col-sm-2">@Model.SCRMA</a>
                                                 </div>
-                                                <label class="control-label col-sm-2"></label>
+                                                @*<label class="control-label col-sm-2"></label>
                                                 <div class="col-sm-9 col-lg-2">
 
-                                                </div>
+                                                </div>*@
                                                 @Html.Label("Received Date", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @{
@@ -154,10 +154,10 @@
                                                 <div class="col-sm-9 col-lg-2">
 
                                                 </div>
-                                                <label class="control-label col-sm-2"></label>
+                                                @*<label class="control-label col-sm-2"></label>
                                                 <div class="col-sm-9 col-lg-2">
 
-                                                </div>
+                                                </div>*@
                                                 @Html.Label("Received By", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @{
@@ -186,25 +186,27 @@
                                                                 <th><input type="checkbox" /></th>
                                                                 <th>SKU</th>
                                                                 <th>Product Name</th>
-                                                                <th>UPC / EAN</th>
+                                                                @*<th>UPC / EAN</th>*@
                                                                 <th>訂單數</th>
                                                                 <th>原因</th>
+                                                                @*<th>Carrier</th>
+                                                                <th>Tracking</th>*@
                                                                 <th>Return Warehouse</th>
                                                                 <th>Order Serial</th>
                                                                 <th>Returned  Serial</th>
-                                                                <th>實際收貨倉</th>
+                                                                @*<th>實際收貨倉</th>*@
                                                                 <th></th>
                                                             </tr>
                                                         </thead>
                                                         <tbody></tbody>
                                                         <tfoot>
                                                             <tr>
-                                                                <td colspan="11"></td>
+                                                                <td colspan="9"></td>
                                                             </tr>
                                                             <tr>
-                                                                <td colspan="9" rowspan="8">
+                                                                <td colspan="7" rowspan="8">
                                                                     <div class="col-sm-10 col-lg-8">
-                                                                        <textarea rows="20" style="width:100%" id="textnote"></textarea>
+                                                                        <textarea rows="2" style="width:100%" id="textnote"></textarea>
                                                                         <button type="button" id="addnote" style="float:right" class="btn btn-default btn-sm">Add Note</button>
                                                                         <span style="float:right">　</span>
                                                                         <button type="button" id="UploadImage" style="float:right" class="btn btn-default btn-sm">Upload Image</button>
@@ -342,7 +344,7 @@
                         }
                     },
                     { data: "ProductName" },
-                    { data: "UPCEAN" },
+                    //{ data: "UPCEAN" },
                     { data: "QTYOrdered" },
                     {
                         data: "Reason",
@@ -378,6 +380,8 @@
                             }
                         }
                     },
+                    //{ data: "Carrier" },
+                    //{ data: "tracking" },
                     {
                         data: "Warehouse",
                         render: function (data, type, row, meta) {
@@ -414,15 +418,16 @@
                     },
                     { data: "OrderSerialsNo" },
                     { data: "ReturnedSerialsNo" },
-                    {data: "TrWarehouse"},
+                    //{data: "TrWarehouse"},
                     {
                         data: "ID",
                         render: function (data, type, row, meta) {
-                            var html = "";
-                             @if (Model.Status != "Closed")
+                            var html = "<a  class='btn btn-default btn-sm ChangeSKU'>Prepaid Return Label</a>";
+                             @*@if (Model.Status != "Closed")
                              {
                                  @:html += " <a href='@Url.Action("Returnedserials")?ID=" + data + "' class='btn btn-default btn-sm'>Receive returns</a>";
-                             }
+                             }*@
+
                             if (row.ReturnedSerialsNo == "" || row.ReturnedSerialsNo == null) {
                                 html += " <a val='" + data + "'  oSKU='" + row.SKU + "' class='btn btn-default btn-sm ChangeSKU'>Renew item</a>";
                             }

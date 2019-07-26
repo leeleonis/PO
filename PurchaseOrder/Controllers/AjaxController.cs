@@ -672,7 +672,7 @@ namespace PurchaseOrderSys.Controllers
                     QTY = -1 * Serialsitem.QTY;
                 }
                 var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == Serialsitem.SerialsNo||x.WinitTransferBoxItem.BarCode == Serialsitem.SerialsNo);//檢查是否有序號或是SBarCode
-                var PurchaseSKUs = db.PurchaseSKU.Where(x => x.SkuNo == Serialsitem.SkuNo && x.PurchaseOrder.IsEnable && x.IsEnable && x.SKU.SerialTracking);//無開序號管理才能任意取
+                var PurchaseSKUs = db.PurchaseSKU.Where(x => x.SkuNo == Serialsitem.SkuNo && x.PurchaseOrder.IsEnable && x.IsEnable && !x.SKU.SerialTracking);//無開序號管理才能任意取
                 PurchaseSKUs = PurchaseSKUs.Where(x => x.SerialsLlist.Where(y => y.SerialsQTY > 0 && (y.SerialsType == "PO" || y.SerialsType == "TransferIn"|| y.SerialsType == "DropshpOrderIn") && !y.SerialsLlistC.Any()).Any());
                 if (SerialsLlist.Any())
                 {
@@ -1540,7 +1540,7 @@ namespace PurchaseOrderSys.Controllers
                                     RMASKUID= RMASKUitem.ID,
                                     PID= Serialitem.ID,
                                     SerialsNo = Serialitem.SerialsNo,
-                                    SerialsQTY = 1,
+                                    SerialsQTY = -1,
                                     SerialsType = "TransferOut",
                                     CreateBy = "RMAAPI",
                                     CreateAt = dt,
@@ -1752,7 +1752,6 @@ namespace PurchaseOrderSys.Controllers
             var TransferList = db.Transfer.Where(x => x.IsEnable && x.TransferType == "Winit" && x.Status == "Shipped");
             foreach (var Transfer in TransferList)
             {
-               
                 foreach (var WinitTransferSKU in Transfer.WinitTransfer.WinitTransferSKU)
                 {
                     if (string.IsNullOrWhiteSpace(WinitTransferSKU.winitProductCode))//沒有M碼補上M碼
@@ -1777,7 +1776,7 @@ namespace PurchaseOrderSys.Controllers
                         foreach (var TransferSKU in TransferSKUList)
                         {
                             var actualQuantity = OrderDetail.merchandiseList.Where(x => x.merchandiseCode.Contains(TransferSKU.SkuNo)).FirstOrDefault().actualQuantity;//實際上架數量
-                            var SerialsLlist = TransferSKU.SerialsLlist.Where(x => x.IsEnable);
+                            var SerialsLlist = TransferSKU.SerialsLlist.Where(x => x.IsEnable && x.SerialsType == "TransferOut" && !x.SerialsLlistC.Any());
                             if (Math.Abs(SerialsLlist.Sum(x => x.SerialsQTY).Value) == actualQuantity)//和實際上架數一樣，直接入庫
                             {
                                 foreach (var Serials in SerialsLlist)
@@ -1877,14 +1876,14 @@ namespace PurchaseOrderSys.Controllers
                 {
                     bInvoiceExcel= Base64ToMemoryStream(Transfer.WinitTransfer.InvoiceExcel).ToArray();
                 }
-                var fileExcel = new Neodynamic.SDK.Web.PrintFile(bInvoiceExcel, "Invoice.xlsx");
+                var fileExcel = new Neodynamic.SDK.Web.PrintFile(bInvoiceExcel, "Invoice.xlsx", 4);
                 cpj.PrintFileGroup.Add(fileExcel);
-                if (Transfer.WarehouseTo.WinitWarehouse == "US")
-                {
-                    var pdfbyte = System.IO.File.ReadAllBytes(Server.MapPath(@"~/File/S36BW-419072313360.pdf"));
-                    var filepdf = new Neodynamic.SDK.Web.PrintFilePDF(pdfbyte, "US.pdf");
-                    cpj.PrintFileGroup.Add(filepdf);
-                }
+                //if (Transfer.WarehouseTo.WinitWarehouse == "US")
+                //{
+                //    var pdfbyte = System.IO.File.ReadAllBytes(Server.MapPath(@"~/File/S36BW-419072313360.pdf"));
+                //    var filepdf = new Neodynamic.SDK.Web.PrintFilePDF(pdfbyte, "US.pdf");
+                //    cpj.PrintFileGroup.Add(filepdf);
+                //}
             }
             //printerName = "";
             if (string.IsNullOrWhiteSpace(printerName))

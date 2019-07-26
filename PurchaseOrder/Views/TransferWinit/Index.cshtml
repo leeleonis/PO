@@ -100,6 +100,7 @@
                                                             <th><input type="checkbox" /></th>
                                                             <th>Transfer</th>
                                                             <th>External Transfer</th>
+                                                            <th>Tracking</th>
                                                             <th>Title</th>
                                                             <th>From</th>
                                                             <th>To</th>
@@ -122,7 +123,12 @@
                                                             <td>
                                                                 <a href='@Url.Action("Edit", new { item.ID })'>@item.ID</a>
                                                             </td>
-                                                            <td>@item.ExternalTra</td>
+                                                            <td>
+                                                                <a href='https://seller.winit.com.cn/WHInbound/orderDetailDelivery/orderNo/@item.WinitTransfer.WinitOrderNo' target="_blank">@item.WinitTransfer.WinitOrderNo</a>
+                                                            </td>
+                                                            <td>
+                                                                <a href='https://www.fedex.com/apps/fedextrack/?action=track&trackingnumber=@item.Tracking' target="_blank">@item.Tracking</a>
+                                                            </td>
                                                             <td>@item.Title</td>
                                                             <td>@(item.WarehouseFrom?.Name)</td>
                                                             <td>@(item.WarehouseTo?.Name)</td>

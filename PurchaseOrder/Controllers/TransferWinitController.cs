@@ -14,6 +14,7 @@ namespace PurchaseOrderSys.Controllers
     [CheckSession]
     public class TransferWinitController : BaseController
     {
+        public string[] skuList = new string[] { "106005549-US", "106005547-US", "106005548-US", "106006218-US", "106018122-US", "106018123-US", "106003214-US", "106003274-US", "106018155-US", "106018124-AU" };//winit要加上規格才能出貨
         // GET: TransferWinit
         public ActionResult Index(TransferSearchVM TransferSearchVM)
         {
@@ -922,10 +923,10 @@ namespace PurchaseOrderSys.Controllers
                 var winitProductCode = "OW01030329";  //var winitProductCode = WinitProducts[0].productCode;
                 //var WarehouseList = Winit_API.getWarehouseList(winitProductCode, "INSJ", "DW", null);
                 //var warehouseCode = WarehouseList.warehouseList[0].warehouseCode;
-                var IORList = Winit_API.IORList(warehouseCode, winitProductCode);
-                var EorList = Winit_API.EorList();
-                var LogisticsPlan = Winit_API.getLogisticsPlan(winitProductCode, warehouseCode, warehouseCode);
-                var AvailableMerchandise = Winit_API.getAvailableMerchandise("WC", winitProductCode, warehouseCode);
+                //var IORList = Winit_API.IORList(warehouseCode, winitProductCode);
+                //var EorList = Winit_API.EorList();
+                //var LogisticsPlan = Winit_API.getLogisticsPlan(winitProductCode, warehouseCode, warehouseCode);
+                //var AvailableMerchandise = Winit_API.getAvailableMerchandise("WC", winitProductCode, warehouseCode);
                 var VendorInfoIOR = Winit_API.getVendorInfo("AU", "IOR");//進口
                 var VendorInfoEOR = Winit_API.getVendorInfo("AU", "EOR");//出口
                 var packageList = new List<PackageList>();
@@ -972,13 +973,18 @@ namespace PurchaseOrderSys.Controllers
                     };
                     foreach (var item in Box.WinitTransferBoxItem.GroupBy(x => x.MerchandiseCode))
                     {
+                        var specification = "";
+                        if (skuList.Contains(item.Key))
+                        {
+                            specification = db.SKU.Where(x => item.Key.Contains(x.SkuID)).FirstOrDefault().SkuLang.FirstOrDefault(x => x.LangID == "en-US").Name;
+                        }
                         //if (AvailableMerchandise.Where(x => x.merchandiseCode == item.Key).Any())
                         {
                             var NmerchandiseList = new MerchandiseList
                             {
                                 merchandiseCode = item.Key,
                                 quantity = item.Count(),
-                                specification = ""
+                                specification= specification
                             };
                             merchandiseList.Add(NmerchandiseList);
                         }
@@ -1052,7 +1058,7 @@ namespace PurchaseOrderSys.Controllers
                         Currency = Currency,
                         BoxType = ShippingMethods.LastMile.BoxType,
                         MethodType = ShippingMethods.LastMile.MethodType,
-                        WinitTransferBoxList = WinitTransfer.WinitTransferBox.ToList(),
+                        WinitTransferBoxList = WinitTransfer.WinitTransferBox.Where(x => x.IsEnable && x.WinitTransferBoxItem.Any()).ToList(),
                         WinitWarehouse = WinitTransfer.Transfer.WarehouseTo,
                         EXRate = EXRate,
                     };

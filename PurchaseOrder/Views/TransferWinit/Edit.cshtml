@@ -52,11 +52,11 @@
                                             <div class="form-group">
                                                 @Html.Label("Transfer #:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("ID", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                    <a href='https://www.fedex.com/apps/fedextrack/?action=track&trackingnumber=@Model.Tracking' target="_blank">@Model.Tracking</a>
                                                 </div>
                                                 @Html.Label("External Transfer #:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("ExternalTra", new { htmlAttributes = new { @class = "form-control " + TStatus, disabled } })
+                                                    <a href='https://seller.winit.com.cn/WHInbound/orderDetailDelivery/orderNo/@Model.WinitTransfer.WinitOrderNo' target="_blank">@Model.WinitTransfer.WinitOrderNo</a>
                                                 </div>
                                                 @Html.Label("Status:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
