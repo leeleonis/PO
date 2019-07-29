@@ -104,8 +104,9 @@
                                                             <th>Title</th>
                                                             <th>From</th>
                                                             <th>To</th>
-                                                            <th>Total QTY</th>
-                                                            <th>Total Received</th>
+                                                            <th>Planed QTY</th>
+                                                            <th>Sent QTY</th>
+                                                            <th>Received QTY</th>
                                                             <th>Created Date</th>
                                                             <th>Created By</th>
                                                             <th>Status</th>
@@ -133,6 +134,9 @@
                                                             <td>@(item.WarehouseFrom?.Name)</td>
                                                             <td>@(item.WarehouseTo?.Name)</td>
                                                             <td>@item.TransferSKU.Where(x => x.IsEnable).Sum(x => x.QTY)</td>
+                                                            <td>
+                                                                @(Math.Abs(item.TransferSKU.Where(x => x.IsEnable).Sum(x => x.SerialsLlist.Where(y => y.SerialsType == "TransferOut").Sum(y => y.SerialsQTY)).Value))
+                                                            </td>
                                                             <td>
                                                                 @(item.TransferSKU.Where(x => x.IsEnable).Sum(x => x.SerialsLlist.Where(y => y.SerialsType == "TransferIn").Sum(y => y.SerialsQTY)))
                                                             </td>

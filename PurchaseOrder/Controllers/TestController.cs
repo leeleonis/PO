@@ -58,39 +58,43 @@ namespace PurchaseOrderSys.Controllers
         // GET: Test
         public ActionResult Index()
         {
-            var PostPrintV2Data = new NewApi.PostPrintV2Data
-            {
-                labelType = "LZ7050",
-                madeIn = "China",
-                singleItems = new List<NewApi.SingleItem>
-                {
-                     new NewApi.SingleItem
-                     {
-                          specification="Samsung Galaxy S10 Plus (SM-G975F/DS) 128GB (Prism Black)",
-                          productCode="106005547-US",
-                          printQty=5,
-                     },
-                }
-            };
-            NewApi.ReturnPrintV2 PrintV2 = new NewApi.Winit_API().GetPrintV2(PostPrintV2Data);
+            var transfer = db.Transfer.Find(3279);
+            var fileStream = Base64ToMemoryStream(transfer.WinitTransfer.PackingList);
+
+
+            //var PostPrintV2Data = new NewApi.PostPrintV2Data
+            //{
+            //    labelType = "LZ7050",
+            //    madeIn = "China",
+            //    singleItems = new List<NewApi.SingleItem>
+            //    {
+            //         new NewApi.SingleItem
+            //         {
+            //              specification="Samsung Galaxy S10 Plus (SM-G975F/DS) 128GB (Prism Black)",
+            //              productCode="106005547-US",
+            //              printQty=5,
+            //         },
+            //    }
+            //};
+            //NewApi.ReturnPrintV2 PrintV2 = new NewApi.Winit_API().GetPrintV2(PostPrintV2Data);
 
             //var WinitTransferSKU = db.WinitTransferSKU.Find(20);
             //WinitTransferSKU.ItemBarcodeFile = PrintV2.itemBarcodeFile;
             //WinitTransferSKU.itemBarcodeList = string.Join(";", PrintV2.itemBarcodeList);
             //db.SaveChanges();
-            var Winit_API = new NewApi.Winit_API();
-            var getWinitProducts = Winit_API.getWinitProducts("106005547-US");
-            var ApiSetting = db.ApiSetting.Find(16);
-            var FedEx_API = new FedExApi.FedEx_API(ApiSetting);
-            var Transfer = db.Transfer.Find(3264);
-            var Tracking = FedEx_API.Tracking(Transfer.Tracking);
-            var QueryOrderTracking = Winit_API.QueryOrderTracking(Transfer.WinitTransfer.WinitOrderNo);
+            //var Winit_API = new NewApi.Winit_API();
+            //var getWinitProducts = Winit_API.getWinitProducts("106005547-US");
+            //var ApiSetting = db.ApiSetting.Find(16);
+            //var FedEx_API = new FedExApi.FedEx_API(ApiSetting);
+            //var Transfer = db.Transfer.Find(3264);
+            //var Tracking = FedEx_API.Tracking(Transfer.Tracking);
+            //var QueryOrderTracking = Winit_API.QueryOrderTracking(Transfer.WinitTransfer.WinitOrderNo);
             //var fileStream = new System.IO.MemoryStream(InvoiceExcel(db.Transfer.Find(3264)));
-            var fileStream = Box_PackingListExcel(db.Transfer.Find(3264));
+            //var fileStream = Box_PackingListExcel(db.Transfer.Find(3264));
 
             //   var Tracking = FedEx_API.Tracking("788504512725");
             //var jj=   JsonConvert.SerializeObject(Tracking);
-            ViewBag.WCPScript = Neodynamic.SDK.Web.WebClientPrint.CreateScript(Url.Action("ProcessRequest", "WebClientPrintAPI", null, HttpContext.Request.Url.Scheme), Url.Action("PrintMyFiles", "Test", null, HttpContext.Request.Url.Scheme), HttpContext.Session.SessionID);
+            //ViewBag.WCPScript = Neodynamic.SDK.Web.WebClientPrint.CreateScript(Url.Action("ProcessRequest", "WebClientPrintAPI", null, HttpContext.Request.Url.Scheme), Url.Action("PrintMyFiles", "Test", null, HttpContext.Request.Url.Scheme), HttpContext.Session.SessionID);
             //var WinitProducts = Winit_API.getWinitProducts("OW0103");
             //var winitProductCode = WinitProducts.FirstOrDefault().productCode;
             //var WarehouseList = Winit_API.getWarehouseList(winitProductCode, "INSJ", "DW", null);
@@ -142,8 +146,8 @@ namespace PurchaseOrderSys.Controllers
             //if (DSerialsLlist.Any())
             //{
             //}
-            //return File(fileStream, "application/zip", "ExportRanger.zip");
-            //return File(fileStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ExportRanger.xlsx");
+            return File(fileStream, "application/zip", "Box_PackingList.xlsx");
+           // return File(fileStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ExportRanger.xlsx");
             return View();
         }
 

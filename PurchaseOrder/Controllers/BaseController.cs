@@ -1837,18 +1837,18 @@ namespace PurchaseOrderSys.Controllers
             //sheet1.Cells.Style.ShrinkToFit = true;
             foreach (var TransferSKU in Transfer.TransferSKU.Where(x => x.IsEnable && x.SerialsLlist.Any()))
             {
-
+                var UPrice = Math.Round(TransferSKU.SerialsLlist.FirstOrDefault().WinitTransferBoxItem.Value.Value / 1.05m / EXRate, 2);
                 var Price = Math.Round(TransferSKU.SerialsLlist.Sum(x => x.WinitTransferBoxItem.Value).Value / 1.05m / EXRate, 2);
                 var Weight = TransferSKU.SerialsLlist.Sum(x => x.WinitTransferBoxItem.Weight).Value;
                 AllWeight += Weight;
                 AllPrice += Price;
-                sheet1.Cells[rowIndex, 2].Value = "CN";
+                sheet1.Cells[rowIndex, 2].Value = TransferSKU.SKU.Logistic.OriginCountry;
                 sheet1.Cells[rowIndex, 5].Value = TransferSKU.Name;
                 sheet1.Cells[rowIndex, 7].Value = "";//HS Code 
                 sheet1.Cells[rowIndex, 9].Value = Math.Abs(TransferSKU.SerialsLlist.Sum(x => x.SerialsQTY).Value);
                 sheet1.Cells[rowIndex, 10].Value = "pieces";
                 sheet1.Cells[rowIndex, 11].Value = (Weight / 1000).ToString("f2");
-                sheet1.Cells[rowIndex, 12].Value = Price.ToString("f2");
+                sheet1.Cells[rowIndex, 12].Value = UPrice.ToString("f2");
                 sheet1.Cells[rowIndex, 17].Value = Price.ToString("f2");
                 sheet1.Row(rowIndex).Height = 40;
                 sheet1.Row(rowIndex).CustomHeight = true;//自动调整行高

@@ -58,7 +58,7 @@ namespace PurchaseOrderSys.Controllers
             {
                 Transferlist = Transferlist.Where(x => x.Tracking == TransferSearchVM.Tracking);
             }
-            TransferSearchVM.Transferlist = Transferlist;
+            TransferSearchVM.Transferlist = Transferlist.Take(2000);
 
             return View(TransferSearchVM);
         }

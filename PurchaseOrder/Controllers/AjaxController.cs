@@ -1855,8 +1855,8 @@ namespace PurchaseOrderSys.Controllers
                 foreach (var item in WinitTransfer.WinitTransferBox)
                 {
                     var pdfbyte = Convert.FromBase64String(item.FedExPdf);
-                    var file = new Neodynamic.SDK.Web.PrintFilePDF(pdfbyte, "Fedex.pdf");
-                    var fileAdd = new Neodynamic.SDK.Web.PrintFilePDF(pdfbyte, "FedexAdd.pdf");
+                    var file = new Neodynamic.SDK.Web.PrintFilePDF(pdfbyte, item.ID + "Fedex.pdf");
+                    var fileAdd = new Neodynamic.SDK.Web.PrintFilePDF(pdfbyte, item.ID + "FedexAdd.pdf");
                     file.PagesRange = "2";//要印的頁數
                     cpj.PrintFileGroup.Add(file);
                     cpj.PrintFileGroup.Add(fileAdd);

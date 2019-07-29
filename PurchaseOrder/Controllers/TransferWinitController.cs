@@ -63,7 +63,7 @@ namespace PurchaseOrderSys.Controllers
             {
                 Transferlist = Transferlist.Where(x => x.Tracking == TransferSearchVM.Tracking);
             }
-            TransferSearchVM.Transferlist = Transferlist;
+            TransferSearchVM.Transferlist = Transferlist.Take(2000);
 
             return View(TransferSearchVM);
         }
@@ -228,7 +228,7 @@ namespace PurchaseOrderSys.Controllers
                     {
 
                         var WSKUList = Winit_API.SKUList(SKUitem.SkuNo + "-" + oTransfer.WarehouseTo.WinitWarehouse);
-                        if (!WSKUList.list.Any())//如果沒有資料就新增
+                        if (!WSKUList.list.Any()&& skuList.Contains(SKUitem.SkuNo + "-" + oTransfer.WarehouseTo.WinitWarehouse))//如果沒有資料就新增
                         {
                             NoWSKUList.Add(SKUitem.SkuNo);
                         }
@@ -348,7 +348,7 @@ namespace PurchaseOrderSys.Controllers
                     brandedName = brandedName,
                     model = SKUmodel,
                     displayPageUrl = displayPageUrl,
-                    exportCountry = "TW",
+                    exportCountry = "CN",
                     inporCountry = winitWarehouse,
                     inportDeclaredvalue = inportDeclaredvalue,
                     exportDeclaredvalue = exportDeclaredvalue,
@@ -1072,6 +1072,7 @@ namespace PurchaseOrderSys.Controllers
                         {
                             Boxitem.Tracking = FedExTrackingDataList[index].Tracking;
                             Boxitem.FedExPdf = ZplToPdf( FedExTrackingDataList[index].FedExZpl);
+                            index++;
                         }
                         db.SaveChanges();
                     }
