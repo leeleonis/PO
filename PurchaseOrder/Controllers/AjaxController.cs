@@ -671,7 +671,12 @@ namespace PurchaseOrderSys.Controllers
                 {
                     QTY = -1 * Serialsitem.QTY;
                 }
-                var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == Serialsitem.SerialsNo||x.WinitTransferBoxItem.BarCode == Serialsitem.SerialsNo);//檢查是否有序號或是SBarCode
+                var sBarCode = db.WinitTransferBoxItem.Where(x => x.BarCode == Serialsitem.SerialsNo).AsEnumerable().LastOrDefault()?.SerialsNo;
+                if (!string.IsNullOrWhiteSpace(sBarCode))
+                {
+                    Serialsitem.SerialsNo = sBarCode;
+                }
+                var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == Serialsitem.SerialsNo);//檢查是否有序號或是SBarCode
                 var PurchaseSKUs = db.PurchaseSKU.Where(x => x.SkuNo == Serialsitem.SkuNo && x.PurchaseOrder.IsEnable && x.IsEnable && !x.SKU.SerialTracking);//無開序號管理才能任意取
                 PurchaseSKUs = PurchaseSKUs.Where(x => x.SerialsLlist.Where(y => y.SerialsQTY > 0 && (y.SerialsType == "PO" || y.SerialsType == "TransferIn"|| y.SerialsType == "DropshpOrderIn") && !y.SerialsLlistC.Any()).Any());
                 if (SerialsLlist.Any())
@@ -684,6 +689,7 @@ namespace PurchaseOrderSys.Controllers
                             IsEnable = true,
                             OrderID = Serialsitem.OrderID,
                             PurchaseSKUID = SerialsLlist.FirstOrDefault().PurchaseSKUID,
+                            TransferSKUID = SerialsLlist.FirstOrDefault().TransferSKUID,
                             PID = SerialsLlist.FirstOrDefault().ID,
                             SerialsNo = Serialsitem.SerialsNo,
                             SerialsType = "Order",
@@ -733,7 +739,8 @@ namespace PurchaseOrderSys.Controllers
                                 {
                                     IsEnable = true,
                                     OrderID = Serialsitem.OrderID,
-                                    PurchaseSKUID = PurchaseSKUs.FirstOrDefault().ID,
+                                    PurchaseSKUID = item.PurchaseSKUID,
+                                    TransferSKUID = item.TransferSKUID,
                                     PID = item.ID,
                                     SerialsNo = item.SerialsNo,
                                     SerialsType = "Order",
@@ -1413,7 +1420,7 @@ namespace PurchaseOrderSys.Controllers
                                 result.SetError(item.ProductID + "：無此SKU資料");
                                 return Json(result, JsonRequestBehavior.AllowGet);
                             }
-                            var SKUSerialsLlist = SerialsLlist.Where(x => x.PurchaseSKU.SkuNo == item.ProductID).Select(x => x.SerialsNo);
+                            var SKUSerialsLlist = SerialsLlist.Where(x => (x.PurchaseSKUID.HasValue&& x.PurchaseSKU.SkuNo == item.ProductID)|| (x.TransferSKUID.HasValue && x.TransferSKU.SkuNo == item.ProductID)).Select(x => x.SerialsNo);
                             string serialsList = string.Join(",", SKUSerialsLlist);
 
                             int RMAItemID = 0;

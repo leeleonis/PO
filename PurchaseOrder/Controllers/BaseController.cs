@@ -1843,8 +1843,8 @@ namespace PurchaseOrderSys.Controllers
                 AllWeight += Weight;
                 AllPrice += Price;
                 sheet1.Cells[rowIndex, 2].Value = TransferSKU.SKU.Logistic.OriginCountry;
-                sheet1.Cells[rowIndex, 5].Value = TransferSKU.Name;
-                sheet1.Cells[rowIndex, 7].Value = "";//HS Code 
+                sheet1.Cells[rowIndex, 5].Value = TransferSKU.SKU.SkuType.SkuTypeLang.Where(x => x.LangID == "en-US").FirstOrDefault()?.Name + "-" + TransferSKU.Name;
+                sheet1.Cells[rowIndex, 7].Value = TransferSKU.SKU.SkuType.HSCode;//HS Code 
                 sheet1.Cells[rowIndex, 9].Value = Math.Abs(TransferSKU.SerialsLlist.Sum(x => x.SerialsQTY).Value);
                 sheet1.Cells[rowIndex, 10].Value = "pieces";
                 sheet1.Cells[rowIndex, 11].Value = (Weight / 1000).ToString("f2");

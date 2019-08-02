@@ -325,7 +325,7 @@ namespace PurchaseOrderSys.Controllers
                 var ShippingHeight = POSKU.Logistic.ShippingHeight;
                 decimal inportDeclaredvalue = Declaredvalue;
                 decimal exportDeclaredvalue = Declaredvalue;
-
+                var OriginCountry = POSKU.Logistic.OriginCountry;
                 if (ShippingWeight == 0) errmsg += item + ": ShippingWeight不可為0;" + Environment.NewLine;
                 if (ShippingLength == 0) errmsg += item + ": ShippingLength不可為0;" + Environment.NewLine;
                 if (ShippingWidth == 0) errmsg += item + ": ShippingWidth不可為0;" + Environment.NewLine;
@@ -333,6 +333,7 @@ namespace PurchaseOrderSys.Controllers
                 if (inportDeclaredvalue == 0) errmsg += item + ": inportDeclaredvalue不可為0;" + Environment.NewLine;
                 if (exportDeclaredvalue == 0) errmsg += item + ": exportDeclaredvalue不可為0;" + Environment.NewLine;
                 if(string.IsNullOrWhiteSpace(displayPageUrl)) errmsg += item + ": 產品官方網址必填;" + Environment.NewLine;
+                if (string.IsNullOrWhiteSpace(OriginCountry)) errmsg += item + ": 產品產地必填;" + Environment.NewLine;
 
                 nRegisterProduct.productList.Add(new ProductList
                 {

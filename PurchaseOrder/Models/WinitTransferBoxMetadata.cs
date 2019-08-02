@@ -10,6 +10,7 @@ namespace PurchaseOrderSys.Models
     /// WinitTransferBox class
     /// </summary>
     [MetadataType(typeof(WinitTransferBoxMetadata))]
+    [Serializable]
     public  partial class WinitTransferBox
     {
     

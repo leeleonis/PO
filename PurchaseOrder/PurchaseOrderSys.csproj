@@ -7070,6 +7070,7 @@
     <Content Include="File\Fedex_Recognizances.pdf" />
     <Content Include="File\Fedex_CheckList.xlsx" />
     <Content Include="File\Box_PackingList.xlsx" />
+    <Content Include="File\winitS.xlsx" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

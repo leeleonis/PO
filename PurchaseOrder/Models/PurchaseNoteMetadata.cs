@@ -10,6 +10,7 @@ namespace PurchaseOrderSys.Models
     /// PurchaseNote class
     /// </summary>
     [MetadataType(typeof(PurchaseNoteMetadata))]
+    [Serializable]
     public  partial class PurchaseNote
     {
     
