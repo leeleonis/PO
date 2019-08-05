@@ -7731,6 +7731,7 @@
     <Content Include="Views\Order\Edit.cshtml" />
     <Content Include="Views\Order\_PackageDetail.cshtml" />
     <Content Include="Views\TransferWinit\Receive.cshtml" />
+    <Content Include="Views\Order\_SkuQtyTable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

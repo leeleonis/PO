@@ -14,6 +14,8 @@ namespace PurchaseOrderSys.Controllers
     [CheckSession]
     public class OrderController : BaseController
     {
+        private readonly string[] packageEditList = new string[] { "ShippingMethod", "Export", "ExportMethod", "ExportValue", "UploadTracking", "Tracking", "DLExport", "DLExportMethod", "DLExportValue", "DLUploadTracking", "DLTracking", "ShipWarehouse" };
+
         // GET: Order
         public ActionResult Index()
         {
@@ -25,31 +27,14 @@ namespace PurchaseOrderSys.Controllers
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            //Orders order = db.Orders.FirstOrDefault(o => o.ID.Equals(id.Value) || o.SCID.Value.Equals(id.Value));
-            Orders order;
+            Orders order = db.Orders.FirstOrDefault(o => o.ID.Equals(id.Value) || o.SCID.Value.Equals(id.Value));
 
-            using (var OM = new OrderManagement(id))
+            if (order == null)
             {
-                try
+                using (var OM = new OrderManagement(id))
                 {
                     order = OM.OrderSync(id);
-                    if (order.CreateAt.CompareTo(order.UpdateAt.Value) == 0)
-                    {
-                        order.ActionLogs.Add(new OrderActionLogs()
-                        {
-                            OrderID = order.ID,
-                            Item = "Order",
-                            Description = "Sync Data",
-                            CreateBy = Session["AdminName"].ToString(),
-                            CreateAt = DateTime.UtcNow
-                        });
-
-                        db.SaveChanges();
-                    }
-                }
-                catch (Exception e)
-                {
-                    throw new Exception(e.InnerException?.Message ?? e.Message);
+                    OM.ActionLog("Order", "Sync Data");
                 }
             }
 
@@ -141,7 +126,7 @@ namespace PurchaseOrderSys.Controllers
             {
                 if (package == null) throw new Exception("Not found package!");
 
-                SetUpdateData(package, updatePackage, new string[] { "ShippingMethod", "Export", "ExportMethod", "ExportValue", "UploadTracking", "Tracking", "DLExport", "DLExportMethod", "DLExportValue", "DLUploadTracking", "DLTracking", "ShipWarehouse" });
+                SetUpdateData(package, updatePackage, packageEditList);
                 foreach (var item in package.Items.Where(i => i.IsEnable))
                 {
                     var updateItem = updatePackage.Items.First(i => i.ID.Equals(item.ID));
@@ -183,9 +168,129 @@ namespace PurchaseOrderSys.Controllers
 
                 result.data = RenderViewToString(ControllerContext, "_PackageDetail", package, ViewData);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                result.SetError(e.InnerException?.Message ?? e.Message);
+                result.SetError(ex.InnerException?.Message ?? ex.Message);
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public string SplitTable(int PackageID, int Qty)
+        {
+            var html = "";
+            var package = db.Packages.Find(PackageID);
+
+            try
+            {
+                if (package == null) throw new Exception("Not found package!");
+
+                var itemList = package.Items.Where(i => i.IsEnable).ToList();
+                if (itemList.Sum(i => i.Qty) < Qty || Qty < 2) throw new Exception("Split amount error!");
+
+                int index = 0;
+                bool isEdit = itemList.Sum(i => i.Qty) != Qty;
+                if (!isEdit)
+                {
+                    foreach (var item in itemList)
+                    {
+                        for (int i = 0; i < item.Qty; i++)
+                        {
+                            html += RenderViewToString(ControllerContext, "_SkuQtyTable", package, new ViewDataDictionary()
+                            {
+                                { "isEdit", isEdit },
+                                { "ID", index == 0 ? PackageID : 0 },
+                                { "title", index == 0 ?string.Format("#{0}", PackageID): (index+1).ToString() },
+                                { "items", itemList.Select(x => Tuple.Create(x.Sku, item.Sku.Equals(x.Sku) ? 1 : 0, x.Qty)).ToList() },
+                                { "index", index++ }
+                            });
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < Qty; i++)
+                    {
+                        html += RenderViewToString(ControllerContext, "_SkuQtyTable", package, new ViewDataDictionary()
+                        {
+                            { "isEdit", isEdit },
+                            { "ID", index == 0 ? PackageID : 0 },
+                            { "title", index == 0 ?string.Format("#{0}", PackageID): (index+1).ToString() },
+                            { "items", itemList.Select(x => Tuple.Create(x.Sku, index == 0 ? x.Qty : 0, x.Qty)).ToList() },
+                            { "index", index++ }
+                        });
+                    }
+                }
+
+                html += "<hr />" + RenderViewToString(ControllerContext, "_SkuQtyTable", package);
+            }
+            catch (Exception ex)
+            {
+                html = ex.InnerException?.Message ?? ex.Message;
+            }
+
+            return html;
+        }
+
+        [HttpPost]
+        public ActionResult SplitPackage(int packageID, Packages[] packageData)
+        {
+            AjaxResult result = new AjaxResult();
+
+            try
+            {
+                var package = db.Packages.Find(packageID);
+
+                if (package == null) throw new Exception("Not found package!");
+
+                if (!packageData.Any()) throw new Exception("Not found data!");
+
+                var itemList = package.Items.Where(i => i.IsEnable).ToList();
+                foreach (var update in packageData)
+                {
+                    if (update.ID != 0)
+                    {
+                        foreach (var item in itemList)
+                        {
+                            item.Qty = update.Items.First(i => i.Sku.Equals(item.Sku)).Qty;
+                        }
+                    }
+                    else
+                    {
+                        SetUpdateData(update, package, packageEditList);
+                        update.OrderID = package.OrderID;
+                        update.ExportCurrency = package.ExportCurrency;
+                        update.DLExportCurrency = package.DLExportCurrency;
+                        update.ReturnWarehouse = package.ReturnWarehouse;
+                        update.CreateBy = Session["AdminName"].ToString();
+                        update.CreateAt = DateTime.UtcNow;
+
+                        foreach (var newItem in update.Items)
+                        {
+                            SetUpdateData(newItem, itemList.First(i => i.Sku.Equals(newItem.Sku)), new string[] { "OrderID", "Sku", "OriginSku", "UnitPrice", "ExportValue", "DLExportValue" });
+                            newItem.CreateBy = Session["AdminName"].ToString();
+                            newItem.CreateAt = DateTime.UtcNow;
+                        }
+
+                        db.Packages.Add(update);
+                    }
+                    db.SaveChanges();
+
+                    try
+                    {
+                        using (var OM = new OrderManagement(package.OrderID))
+                        {
+                            OM.SplitPackage(packageData.Select(p => p.ID).ToArray());
+                        }
+                    }catch(Exception ex)
+                    {
+                        TempData["ErrorMsg"] = ex.InnerException?.Message ?? ex.Message;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                result.SetError(ex.InnerException?.Message ?? ex.Message);
             }
 
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -197,6 +302,7 @@ namespace PurchaseOrderSys.Controllers
             {
                 db.Dispose();
             }
+
             base.Dispose(disposing);
         }
     }

@@ -240,7 +240,8 @@
                                                         <div class="col-sm-4 col-lg-offset-1">
                                                             <div class="input-group">
                                                                 <span class="input-group-addon font-bg">Shipping Actions</span>
-                                                                <select class="form-control">
+                                                                <select class="form-control" id="select-action">
+                                                                    <option value="">Select Action</option>
                                                                     <optgroup label="Normal">
                                                                         <option value="1">Split package</option>
                                                                         <option value="2">Split carrier box</option>
@@ -466,16 +467,48 @@
         </div>
     </section>
 </div>
+<div class="hidden">
+    <div id="dialog-splitQty" class="easyui-dialog" title="Split Package" data-options="iconCls:'icon-edit',closed:true,draggable:false,resizable:false" style="width:400px;">
+        <div data-options="region:'center'">
+            <table class="table table-bordered text-right">
+                <tr>
+                    <td width="200">Packages to split</td>
+                    <td class="no-padding">
+                        <input type="number" class="form-control" id="input-qty" value="2" min="2" />
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:3px;" colspan="2">
+                        <button class="btn btn-default btn-sm" onclick="$splitQtyDialog.dialog('close');">Close</button>
+                        <button class="btn btn-default btn-sm" id="btn-next">Next</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div data-options="region:'bottom'">
+            <div style="position: relative;">
+                <span class="text-danger" style=" position: absolute;top:-17px;right:5px;">WARNING: More then TWO trackings will be created!</span>
+            </div>
+        </div>
+    </div>
+    <div id="dialog-package" class="easyui-dialog" title="" data-options="iconCls:'icon-edit',closed:true,draggable:false,resizable:false" style="width:600px;top:400px;padding:5px;"></div>
+</div>
 @section pagespecific {
+    <script src="~/scripts/jquery.easyui-1.4.3.min.js"></script>
     <script type="text/javascript">
         var hash = window.location.hash;
         $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
         $('.tab-pane').eq(hash.substr(1)).addClass('active');
 
-        var $packageList = $('#list-package');
+        var $actionSelect = $('#select-action'), $packageList = $('#list-package');
+        var $splitQtyDialog = $('#dialog-splitQty'), $packageDialog = $('#dialog-package');
 
         $(document).ready(function () {
             $('[rel="popover"]').popover();
+
+            $actionSelect.change(function () {
+                OrderAction.SelectAction($(this).val());
+            });
         });
 
         var AddressEdit = function (btn) {
@@ -536,5 +569,148 @@
                 $(input).val('');
             }
         };
+
+        var OrderAction = function () {
+            var CheckSelectedPackage = function (amount) {
+                var checked = $packageList.children('div').filter(function (i, package) {
+                    return $(package).find('input#chk-package').prop('checked');
+                });
+
+                if (checked.length == 0) return ErrorMsg('尚未選擇Package!');
+
+                if (checked.length != amount) return ErrorMsg('需要選擇' + amount + '個Package!');
+
+                return checked;
+            };
+
+            var SelectAction = function (type) {
+                switch (type) {
+                    case '1':
+                        var result = CheckSelectedPackage(1);
+                        if (result) {
+                            var $package = $(result[0]);
+
+                            if ($package.data('qty') == '1') ErrorMsg('產品總數不足!');
+
+                            SplitPackage.Init($package.data('package'), parseInt($package.data('qty')));
+                        }
+                        break;
+                    case '2':
+                        break;
+                    case '3':
+                        break;
+                    case '4':
+                        break;
+                    default:
+                        return false;
+                }
+
+                $actionSelect.val('');
+            };
+
+            function ErrorMsg(msg) {
+                alert(msg);
+                return false;
+            }
+
+            return {
+                SelectAction
+            };
+        }();
+        
+        var splitTableUrl = "@Url.Action("SplitTable", "Order")";
+        var splitPackageUrl = "@Url.Action("SplitPackage", "Order")";
+        var SplitPackage = function () {
+            var packageID, splitMax;
+
+            var SplitInit = function (ID, max) {
+                packageID = ID;
+                splitMax = max;
+
+                $splitQtyDialog.dialog("open").find('input').val(2).attr('max', splitMax);
+            }
+
+            $splitQtyDialog.delegate('input', 'change', function () {
+                var value = parseInt($(this).val());
+
+                if (value == NaN || value < 2) $(this).val(2);
+
+                if (value > splitMax) $(this).val(splitMax);
+            });
+
+            $splitQtyDialog.delegate('#btn-next', 'click', function () {
+                var qty = $splitQtyDialog.find('input').val();
+
+                $splitQtyDialog.dialog('close');
+                $packageDialog.dialog({ title: $splitQtyDialog.dialog("options").title });
+                $packageDialog.dialog("refresh", splitTableUrl + "?PackageID=" + packageID + "&Qty=" + qty).dialog("open");
+            });
+
+            $packageDialog.delegate('#table-summary #btn-next', 'click', function () {
+                var error = CheckTotalQty();
+
+                $('#table-summary').find('tbody tr').each(function () {
+                    if (!CheckSkuQty($(this).attr('rel'))) {
+                        error.push('品號' + $(this).attr('rel') + ' - 總數不對!');
+                    }
+                });
+
+                if (error.length != 0) return alert(error.join('\r\n'));
+
+                var data = $packageDialog.find('input, select').serializeArray();
+                website.AjaxUrl(splitPackageUrl + "?packageID=" + packageID, 'post', data).done(function (response) {
+                    if (response.status) {
+                        alert('Split success!');
+                        location.reload() 
+                    } else {
+                        alert(response.message);
+                    }
+                });
+            });
+
+            var CheckSkuQty = function (sku) {
+                var $summary = $('#table-summary').find('tr[rel=' + sku + ']');
+                var total = $summary.data('total');
+                var subTotal = 0;
+
+                $packageDialog.find('tr[rel=' + sku + ']').each(function () {
+                    $(this).removeClass('bg-warning');
+                    var qty = $(this).find('select').val();
+                    if (qty != undefined) subTotal += parseInt(qty);
+                });
+
+                $summary.find('#subTotal').text(subTotal);
+
+                if (parseInt(total) != subTotal) {
+                    $packageDialog.find('tr[rel=' + sku + ']').each(function () {
+                        $(this).addClass('bg-warning');
+                    });
+
+                    return false;
+                }
+                return true;
+            };
+
+            var CheckTotalQty = function () {
+                var error = [];
+
+                $packageDialog.find('table:not(#table-summary)').each(function () {
+                    var $table = $(this);
+
+                    if ($table.has('.bg-danger')) $table.removeClass('bg-danger');
+
+                    if ($table.find('select').filter(function () { return $(this).val() != 0; }).length == 0) {
+                        $table.addClass('bg-danger');
+                        error.push($table.find('th').text().trim() + ' - 未選擇品號!');
+                    }
+                });
+
+                return error;
+            };
+
+            return {
+                Init: SplitInit
+            };
+        }();
     </script>
-}   
+}
