@@ -10,6 +10,7 @@ namespace PurchaseOrderSys.Models
     /// RMASKU class
     /// </summary>
     [MetadataType(typeof(RMASKUMetadata))]
+    [Serializable]
     public  partial class RMASKU
     {
     

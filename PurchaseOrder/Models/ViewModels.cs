@@ -11,6 +11,7 @@ namespace PurchaseOrderSys.Models
     /// <summary>
     /// 登入用
     /// </summary>
+    [Serializable]
     public class LoginViewModels
     {
         /// <summary>
@@ -28,11 +29,13 @@ namespace PurchaseOrderSys.Models
         [DataType(DataType.Password)]
         public string Password { get; set; }
     }
+    [Serializable]
     public class MenuAuth
     {
         public int MenuID { get; set; }
         public List<string> AuthList { get; set; }
     }
+    [Serializable]
     public class CMVM
     {   /// <summary>
         /// ID
@@ -190,7 +193,7 @@ namespace PurchaseOrderSys.Models
         public IEnumerable<PurchaseSKU> PurchaseSKU { get; set; }
         public IEnumerable<PurchaseNote> PurchaseNote { get; set; }
     }
-
+    [Serializable]
     public class CreditMemoVM
     {
         /// <summary>
@@ -304,7 +307,7 @@ namespace PurchaseOrderSys.Models
         [DataGrid(Align = "center", Widths = 150, ColumnsType = "input")]
         public string POID { get; set; }
     }
-
+    [Serializable]
     public class CreditMemoVMQ : CreditMemoVM
     {
         [UIHint("FDate")]
@@ -324,7 +327,7 @@ namespace PurchaseOrderSys.Models
         [UIHint("FDate")]
         public Nullable<System.DateTime> ReturnDateE { get; set; }
     }
-
+    [Serializable]
     public class PurchaseOrderPOVM
     {
         /// <summary>
@@ -503,7 +506,7 @@ namespace PurchaseOrderSys.Models
         [DataGrid(Align = "left", ColumnsType = "input")]
         public string CMID { get; set; }
     }
-
+    [Serializable]
     public class PurchaseOrderPOVMQ : PurchaseOrderPOVM
     {
         [UIHint("FDate")]
@@ -523,7 +526,7 @@ namespace PurchaseOrderSys.Models
         [UIHint("FDate")]
         public Nullable<System.DateTime> ReceivedDateE { get; set; }
     }
-
+    [Serializable]
     public class PurchaseSKUVM
     {
         /// <summary>
@@ -601,12 +604,13 @@ namespace PurchaseOrderSys.Models
         [DataGrid(Align = "center", Widths = 150, ColumnsType = "input")]
         public Nullable<decimal> DiscountedPrice { get; set; }
     }
-
+    [Serializable]
     public class PostList
     {
         public int ID { get; set; }
         public string val { get; set; }
     }
+    [Serializable]
     public class TranSKUVM
     {
         public int? ID { get; set; }
@@ -637,6 +641,7 @@ namespace PurchaseOrderSys.Models
         public int? Prep { get; set; }
         public decimal? Price { get; set; }
     }
+    [Serializable]
     public class CMSKUVM
     {
         public int? ID { get; set; }
@@ -692,6 +697,7 @@ namespace PurchaseOrderSys.Models
         /// </summary>
         public string Size { get; set; }
     }
+    [Serializable]
     public class PoSKUVM
     {
         public int? ID { get; set; }
@@ -764,6 +770,7 @@ namespace PurchaseOrderSys.Models
         /// </summary>
         public string Size { get; set; }
     }
+    [Serializable]
     public class WarehouseInventoryVM
     {
         public string Company { get; set; }
@@ -774,6 +781,7 @@ namespace PurchaseOrderSys.Models
         public string Marketplace { get; set; }
         public IEnumerable<WarehouseVM> WarehouseVM { get; set; }
     }
+    [Serializable]
     public class SkuPurchasingVM
     {
 
@@ -898,7 +906,7 @@ namespace PurchaseOrderSys.Models
         /// </summary>
         public int Awaiting { get; set; }
     }
-
+    [Serializable]
     public class SkuInventoryVM
     {
         /// <summary>
@@ -979,7 +987,7 @@ namespace PurchaseOrderSys.Models
         /// </summary>
         public int RMAQTY { get; set; }
     }
-
+    [Serializable]
     public class WarehouseAllVM
     {
         public int ID { get; set; }
@@ -1002,7 +1010,7 @@ namespace PurchaseOrderSys.Models
         /// </summary>
         public int? TransferOutQTY { get; set; }
     }
-
+    [Serializable]
     public class WarehouseVM
     {
         public int ID { get; set; }
@@ -1069,6 +1077,7 @@ namespace PurchaseOrderSys.Models
         /// </summary>
         public int UnfulfillableRMA { get; set; }
     }
+    [Serializable]
     public class CompanyVM
     {
         /// <summary>
@@ -1176,7 +1185,7 @@ namespace PurchaseOrderSys.Models
         [MaxLength(20, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
         public string CompanyNo { get; set; }
     }
-
+    [Serializable]
     public class DispatchWarehouseVM
     {
 
@@ -1225,6 +1234,7 @@ namespace PurchaseOrderSys.Models
         [Display(Name = "Warehouse_DefaultRMA", ResourceType = typeof(App_GlobalResources.Resource))]
         public bool DefaultRMA { get; set; }
     }
+    [Serializable]
     public class AddSKUserialsVM
     {
         public string SKU { get; set; }
@@ -1233,6 +1243,7 @@ namespace PurchaseOrderSys.Models
         public decimal? Price { get; set; }
         public decimal? Discount { get; set; }
     }
+    [Serializable]
     public class TransferItemVM
     {
         public int ID { get; set; }
@@ -1244,6 +1255,7 @@ namespace PurchaseOrderSys.Models
         public List<RMASerialsLlist> RMASerialsLlist { get; set; }
 
     }
+    [Serializable]
     public class PrepTable
     {
         public int ID { get; set; }
@@ -1261,6 +1273,7 @@ namespace PurchaseOrderSys.Models
         public bool Full { get; set; }
         public int? MaxQTY { get; set; }
     }
+    [Serializable]
     public class GetImgVM
     {
         public int id { get; set; }
@@ -1269,18 +1282,20 @@ namespace PurchaseOrderSys.Models
         public int MaxCount { get; set; }
         public List<string> imglist { get; set; }
     }
+    [Serializable]
     public class AwaitingDispatchVM
     {
         public string SCID { get; set; }
         public string SKU { get; set; }
         public int QTY { get; set; }
     }
-
+    [Serializable]
     public class GetSkuInventoryQTYVM
     {
         public string[] WarehouseIDs { get; set; }
         public string[] Skus { get; set; }
     }
+    [Serializable]
     public class TransferSearchVM
     {
         public string Status { get; set; }
@@ -1296,13 +1311,14 @@ namespace PurchaseOrderSys.Models
         public string Tracking { get; set; }
         public IEnumerable<Transfer> Transferlist { get; set; }
     }
+    [Serializable]
     public class RMAVM : RMA
     {
         public int? QID { get; set; }
         public string Serial { get; set; }
         public IEnumerable<RMA> RMAList { get; set; }
     }
-
+    [Serializable]
     public class SKUIData
     {
         public string SKU { get; set; }
@@ -1313,7 +1329,7 @@ namespace PurchaseOrderSys.Models
         public int QTY { get; set; }
         public List<string> Serials { get; set; }
     }
-
+    [Serializable]
     public class OrderItemData
     {
         public int OrderID { get; set; }
@@ -1335,6 +1351,7 @@ namespace PurchaseOrderSys.Models
         public decimal? FinalShippingFee { get; set; }
         public string eBayUserID { get; set; }
     }
+    [Serializable]
     public class RMAModelVM
     {
         public int ck { get; set; }
@@ -1349,6 +1366,7 @@ namespace PurchaseOrderSys.Models
         public int? Warehouse { get; set; }
         public string Reason { get; set; }
     }
+    [Serializable]
     public class RMAModelPost
     {
         public int ID { get; set; }
@@ -1358,12 +1376,14 @@ namespace PurchaseOrderSys.Models
         public string Reason { get; set; }
         public int? Warehouse { get; set; }
     }
+    [Serializable]
     public class RMASerial
     {
         public string Serial { get; set; }
         public string Warehouse { get; set; }
         public string Reason { get; set; }
     }
+    [Serializable]
     public class RMAEdit
     {
         public int ID { get; set; }
@@ -1381,7 +1401,7 @@ namespace PurchaseOrderSys.Models
         public string Carrier { get; set; }
         public string tracking { get; set; }
     }
-
+    [Serializable]
     public class SerialsLlistVM
     {
         public DateTime Date { get; set; }
@@ -1392,6 +1412,7 @@ namespace PurchaseOrderSys.Models
         public string UpdatedBy { get; set; }
 
     }
+    [Serializable]
     public class StatementVM
     {
         public string SKU { get; set; }
@@ -1409,7 +1430,7 @@ namespace PurchaseOrderSys.Models
         public decimal? price { get; set; }
         public int? OrderID { get; set; }
     }
-
+    [Serializable]
     public class ExcelQTY
     {
         public int? WarehouseID { get; set; }
@@ -1418,6 +1439,7 @@ namespace PurchaseOrderSys.Models
         public string SKUName { get; set; }
         public int? QTY { get; set; }
     }
+    [Serializable]
     public class ExcelSerial
     {
         public int? WarehouseID { get; set; }
@@ -1426,6 +1448,7 @@ namespace PurchaseOrderSys.Models
         public string SKUName { get; set; }
         public string Serial { get; set; }
     }
+    [Serializable]
     public class InventorySerials
     {
         public string CompanyName { get; set; }
@@ -1433,6 +1456,7 @@ namespace PurchaseOrderSys.Models
         public string SKUName { get; set; }
         public List<InventorySerialsItem> InventorySerialsItem { get; set; }
     }
+    [Serializable]
     public class InventorySerialsItem
     {
         public string Serial { get; set; }

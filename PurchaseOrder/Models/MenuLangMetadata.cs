@@ -9,6 +9,7 @@ namespace PurchaseOrderSys.Models
     /// <summary>
     /// MenuLang class
     /// </summary>
+    [Serializable]
     [MetadataType(typeof(MenuLangMetadata))]
     public  partial class MenuLang
     {

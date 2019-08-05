@@ -67,6 +67,8 @@ namespace PurchaseOrderSys.Controllers
         {
             if (ValidateUser(username, password))
             {
+                HttpCookie cookie = new HttpCookie("PurchaseOrder");
+                cookie.Value = Server.UrlEncode("Hello!!世界");
                 return RedirectToAction("Index");
             }
             return RedirectToAction("Login");
@@ -120,7 +122,7 @@ namespace PurchaseOrderSys.Controllers
         /// <returns></returns>
         private bool SetSessionData(bool IsManger, string AdminName, string ApiUserName, string ApiPassword, int AdminId = 0, int GroupId = 0, int WarehouseId = 0, int TimeZone = -1, string Auth = null, string GAuth = null)
         {
-            var Menu = db.Menu.Where(x => x.IsEnable == true).Include(m => m.MenuParent);//選單
+            var Menu = db.Menu.Where(x => x.IsEnable == true).Include(m => m.MenuParent).Include(m=>m.MenuLang);//選單
             var Authlist =new Dictionary<string, List<string>>();//使用者權限
             var TAuthlist = new Dictionary<string, List<string>>();//實際使用者權限
             var AuthItem = new List<int>();

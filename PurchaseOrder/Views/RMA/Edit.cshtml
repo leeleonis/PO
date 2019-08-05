@@ -173,8 +173,8 @@
                                                 <div class="col-sm-9 col-lg-2">
                                                     @if (Model.Status != "Closed")
                                                     {
-                                                        <button type="button" id="Edititems">Edit items</button>
-                                                        <button type="button" id="Removeitems">Remove items</button>
+                                                        @*<button type="button" id="Edititems">Edit items</button>
+                                                        <button type="button" id="Removeitems">Remove items</button>*@
                                                     }
                                                 </div>
                                             </div>
@@ -190,12 +190,14 @@
                                                                 <th>訂單數</th>
                                                                 <th>原因</th>
                                                                 @*<th>Carrier</th>
-                                                                <th>Tracking</th>*@
+        <th>Tracking</th>*@
                                                                 <th>Return Warehouse</th>
                                                                 <th>Order Serial</th>
                                                                 <th>Returned  Serial</th>
                                                                 @*<th>實際收貨倉</th>*@
                                                                 <th></th>
+                                                                <th>Carrier</th>
+                                                                <th>Tracking</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody></tbody>
@@ -380,8 +382,6 @@
                             }
                         }
                     },
-                    //{ data: "Carrier" },
-                    //{ data: "tracking" },
                     {
                         data: "Warehouse",
                         render: function (data, type, row, meta) {
@@ -422,12 +422,12 @@
                     {
                         data: "ID",
                         render: function (data, type, row, meta) {
-                            var html = "<a  class='btn btn-default btn-sm ChangeSKU'>Prepaid Return Label</a>";
+                            //var html = "<a  class='btn btn-default btn-sm ChangeSKU'>Prepaid Return Label</a>";
                              @*@if (Model.Status != "Closed")
                              {
                                  @:html += " <a href='@Url.Action("Returnedserials")?ID=" + data + "' class='btn btn-default btn-sm'>Receive returns</a>";
                              }*@
-
+                            var html = "";
                             if (row.ReturnedSerialsNo == "" || row.ReturnedSerialsNo == null) {
                                 html += " <a val='" + data + "'  oSKU='" + row.SKU + "' class='btn btn-default btn-sm ChangeSKU'>Renew item</a>";
                             }
@@ -436,7 +436,9 @@
                             }
                             return html;
                         }
-                    }
+                    },
+                    { data: "Carrier" },
+                    { data: "tracking" }
                 ],
                 ajax: {
                     traditional: true,
@@ -461,6 +463,25 @@
                 "ordering": false,
                 "info": true,
                 "searching": false,
+                "columnDefs": [
+                    { "visible": false, "targets": 9 },
+                    { "visible": false, "targets": 10 }
+                ],
+                "drawCallback": function (settings) {
+                    var api = this.api();
+                    var rows = api.rows({ page: 'current' }).nodes();
+                    var last = null;
+
+                    api.column(9, { page: 'current' }).data().each(function (group, i, $currTable) {
+                        if (last !== group) {
+                            $(rows).eq(i).after(
+                                '<tr class="group"><td colspan="7"></td><td colspan="2">' + group + $currTable.rows(rows[i]._DT_RowIndex).data()[0]["tracking"] +  '</td></tr>'
+                            );
+
+                            last = group;
+                        }
+                    });
+                },
                 "footerCallback": function (row, data, start, end, display) {
                     var api = this.api(), data;
                     // Remove the formatting to get integer data for summation

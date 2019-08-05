@@ -58,8 +58,8 @@ namespace PurchaseOrderSys.Controllers
         // GET: Test
         public ActionResult Index()
         {
-            var transfer = db.Transfer.Find(3279);
-            var fileStream = Base64ToMemoryStream(transfer.WinitTransfer.PackingList);
+            //var transfer = db.Transfer.Find(3279);
+            //var fileStream = Base64ToMemoryStream(transfer.WinitTransfer.PackingList);
 
 
             //var PostPrintV2Data = new NewApi.PostPrintV2Data
@@ -146,12 +146,164 @@ namespace PurchaseOrderSys.Controllers
             //if (DSerialsLlist.Any())
             //{
             //}
-            return File(fileStream, "application/zip", "Box_PackingList.xlsx");
+            //return File(fileStream, "application/zip", "Box_PackingList.xlsx");
            // return File(fileStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ExportRanger.xlsx");
             return View();
         }
+        public ActionResult WinitByexcel(HttpPostedFileBase ExcelFile)
+        {
+            using (var package = new OfficeOpenXml.ExcelPackage(ExcelFile.InputStream))
+            {
 
-   
+                OfficeOpenXml.ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
+                for (int row = 1; worksheet.Cells[row, 2].Value != null; row++)
+                {
+                    var serial = worksheet.Cells[row, 2].Value?.ToString().Trim();
+                    var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serial && x.SerialsType == "Order");
+                    db.SerialsLlist.RemoveRange(SerialsLlist);
+                }
+                db.SaveChanges();
+
+                var SerialsType = new List<string> { "PO", "TransferIn" };
+                var dt = DateTime.Now;
+                var CreateBy = "WinitExcel";
+                //開PO
+                var nPurchaseOrder = new Models.PurchaseOrder
+                {
+                    IsEnable = true,
+                    WarehouseID = 1,
+                    CompanyID = 163,
+                    VendorID = 29,
+                    POStatus = "Completed",
+                    POType = "PurchaseOrder",
+                    PODate = dt,
+                    ReceiveStatus = "Completed",
+                    PaymentStatus = "Completed",
+                    Currency = "TWD",
+                    Tax = 5,
+                    CreateBy = CreateBy,
+                    CreateAt = dt,
+                    Memo = "匯入S碼專用"
+                };          
+                db.PurchaseOrder.Add(nPurchaseOrder);
+                //開移倉
+                var nTransfer = new Transfer
+                {
+                    IsEnable = true,
+                    Title = "匯入S碼",
+                    FromWID = 1,
+                    ToWID=27,
+                    Status= "Completed",
+                    CreateBy = CreateBy,
+                    CreateAt = dt,
+
+                };
+                db.Transfer.Add(nTransfer);
+                var nWinitTransfer = new WinitTransfer
+                {
+                    IsEnable = true,
+                    SBarcodeLabelType= "LZ7050",
+                    BoxLabelSize= "10x10",
+                    CreateBy = CreateBy,
+                    CreateAt = dt,
+                };
+                var nWinitTransferBox = new WinitTransferBox
+                {
+                    IsEnable = true,
+                    CreateBy = CreateBy,
+                    CreateAt = dt,
+                };
+                nWinitTransfer.WinitTransferBox.Add(nWinitTransferBox);
+                nTransfer.WinitTransfer = nWinitTransfer;
+               
+
+                for (int row = 1; worksheet.Cells[row, 2].Value != null; row++)
+                {
+                    var Sbarcode = worksheet.Cells[row, 1].Value?.ToString().Trim();
+                    var serial = worksheet.Cells[row, 2].Value?.ToString().Trim();
+                    var skuno = worksheet.Cells[row, 3].Value?.ToString().Trim();
+                    var PurchaseSKU = nPurchaseOrder.PurchaseSKU.Where(x => x.SkuNo == skuno).FirstOrDefault();
+                    var SKU = db.SKU.Find(skuno);
+                    var SKUNAME = SKU.SkuLang.Where(x => x.LangID == "en-US").FirstOrDefault().Name;
+                    //PO SKU
+                    if (PurchaseSKU == null)
+                    {
+                        PurchaseSKU = new PurchaseSKU
+                        {
+                            IsEnable = true,
+                            Name = SKUNAME,
+                            SkuNo = SKU.SkuID,
+                            QTYOrdered = 1,
+                            Price = SKU.Logistic.Price,
+                            Discount = 0,
+                            VendorSKU = SKU.SkuID,
+                            CreateBy = CreateBy,
+                            CreateAt = dt
+                        };
+                        nPurchaseOrder.PurchaseSKU.Add(PurchaseSKU);
+                    }
+                    //加入序號
+                    var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serial && !x.SerialsLlistC.Any() && SerialsType.Contains(x.SerialsType)).FirstOrDefault();
+                    if (SerialsLlist == null)
+                    {
+                        SerialsLlist = new SerialsLlist
+                        {
+                            IsEnable=true,
+                            SerialsNo = serial,
+                            SerialsQTY=1,
+                            SerialsType= "PO",
+                            CreateBy = CreateBy,
+                            CreateAt = dt
+                        };
+                        PurchaseSKU.SerialsLlist.Add(SerialsLlist);
+                    }
+                    //加入S碼
+                    var nWinitTransferBoxItem = new WinitTransferBoxItem
+                    {
+                        BarCode = Sbarcode,
+                        Name = SKUNAME,
+                        SkuNo = SKU.SkuID,
+                        SerialsNo = serial,
+                        CreateBy = CreateBy,
+                        CreateAt = dt
+                    };
+                    nWinitTransferBox.WinitTransferBoxItem.Add(nWinitTransferBoxItem);
+                    SerialsLlist.WinitTransferBoxItem = nWinitTransferBoxItem;
+                }
+                foreach (var item in nPurchaseOrder.PurchaseSKU.ToList())
+                {
+                    var Qty = item.SerialsLlist.Count();
+                    if (Qty > 0)
+                    {
+                        item.QTYOrdered = Qty;
+                    }
+                    else
+                    {
+                        nPurchaseOrder.PurchaseSKU.Remove(item);
+                    }
+                }
+                db.SaveChanges();
+            }
+            return Json(new { status = true, reload = true }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult InvoiceExcelD(int id)
+        {
+            var transfer = db.Transfer.Find(id);
+            var fileStream = Base64ToMemoryStream(transfer.WinitTransfer.InvoiceExcel);
+            return File(fileStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "InvoiceExcel.xlsx");
+        }
+        public ActionResult CheckListlD(int id)
+        {
+            var transfer = db.Transfer.Find(id);
+            var fileStream = Base64ToMemoryStream(transfer.WinitTransfer.CheckList);
+            return File(fileStream, "application/zip", "CheckList.zip");
+        }
+        public ActionResult PackingListD(int id)
+        {
+            var transfer = db.Transfer.Find(id);
+            var fileStream = Base64ToMemoryStream(transfer.WinitTransfer.PackingList);
+            return File(fileStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "PackingList.xlsx");
+        }
 
         [AllowAnonymous]
         public void PrintMyFiles()
@@ -188,6 +340,36 @@ namespace PurchaseOrderSys.Controllers
             System.Web.HttpContext.Current.Response.ContentType = "application/octet-stream";
             System.Web.HttpContext.Current.Response.BinaryWrite(cpj.GetContent());
             System.Web.HttpContext.Current.Response.End();
+
+        }
+        public void SkuOriginCountry()
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://internal.qd.com.tw/Test/GetSkuOriginCountry");
+            //using (var streamWriter = new System.IO.StreamWriter(request.GetRequestStream()))
+            //{
+            //    var json = JsonConvert.SerializeObject(data);
+            //    streamWriter.Write(json);
+            //    streamWriter.Flush();
+            //}
+            HttpWebResponse httpResponse = (HttpWebResponse)request.GetResponse();
+            using (var streamReader = new System.IO.StreamReader(httpResponse.GetResponseStream()))
+            {
+               var response = JsonConvert.DeserializeObject<dynamic>(streamReader.ReadToEnd());
+                foreach (var item in response)
+                {
+                    var Name = ((Newtonsoft.Json.Linq.JProperty)item).Name;
+                    var Value = ((Newtonsoft.Json.Linq.JProperty)item).Value ;
+                    foreach (var itemValue in Value.ToObject<List<string>>())
+                    {
+                        var LogisticList = db.Logistic.Where(x => x.Sku == itemValue);
+                        foreach (var Logistic in LogisticList)
+                        {
+                            Logistic.OriginCountry = Name;
+                        }
+                        db.SaveChanges();
+                    }
+                }
+            }
 
         }
         public ActionResult TestShipmentByOrder()

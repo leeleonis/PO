@@ -8,6 +8,7 @@ namespace PurchaseOrderSys.Models
     /// <summary>
     /// Menu class
     /// </summary>
+    [Serializable]
     [MetadataType(typeof(MenuMetadata))]
     public  partial class Menu
     {
