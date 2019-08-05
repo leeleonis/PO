@@ -1427,30 +1427,38 @@ namespace PurchaseOrderSys.Controllers
                             var OrderItemID = order.Items.Where(x => x.ProductID == item.ProductID).FirstOrDefault().ID;
                             if (UpdateSC)
                             {
-                                if (SCRMA == null)
+                                try
                                 {
-                                    RMAItemID = SCWS.Create_RMA_Item(item.OrderID, item.ID, RMAId, item.Qty, Reason, "");//建立每個SKU要退貨的數量原因，並取回ID
-                                    SCWS.Receive_RMA_Item(RMAId, RMAItemID, item.ProductID, item.Qty, ReturnWarehouseID, serialsList);//RMA入庫
-                                }
-                                else
-                                {
-                                    var SCRMA_Item = SCWS.Get_RMA_Item(OrderID)?.Where(x => x.OriginalOrderItemID == OrderItemID).FirstOrDefault();
-                                    if (SCRMA_Item == null)//沒資料就新增
+                                    if (SCRMA == null)
                                     {
                                         RMAItemID = SCWS.Create_RMA_Item(item.OrderID, item.ID, RMAId, item.Qty, Reason, "");//建立每個SKU要退貨的數量原因，並取回ID
                                         SCWS.Receive_RMA_Item(RMAId, RMAItemID, item.ProductID, item.Qty, ReturnWarehouseID, serialsList);//RMA入庫
                                     }
                                     else
                                     {
-                                        //有資料直接取值
-                                        RMAItemID = SCRMA_Item.ID;
-                                        if (SCRMA_Item.QtyReturned > SCRMA_Item.QtyReceived)//比對數量
+                                        var SCRMA_Item = SCWS.Get_RMA_Item(OrderID)?.Where(x => x.OriginalOrderItemID == OrderItemID).FirstOrDefault();
+                                        if (SCRMA_Item == null)//沒資料就新增
                                         {
+                                            RMAItemID = SCWS.Create_RMA_Item(item.OrderID, item.ID, RMAId, item.Qty, Reason, "");//建立每個SKU要退貨的數量原因，並取回ID
                                             SCWS.Receive_RMA_Item(RMAId, RMAItemID, item.ProductID, item.Qty, ReturnWarehouseID, serialsList);//RMA入庫
                                         }
+                                        else
+                                        {
+                                            //有資料直接取值
+                                            RMAItemID = SCRMA_Item.ID;
+                                            if (SCRMA_Item.QtyReturned > SCRMA_Item.QtyReceived)//比對數量
+                                            {
+                                                SCWS.Receive_RMA_Item(RMAId, RMAItemID, item.ProductID, item.Qty, ReturnWarehouseID, serialsList);//RMA入庫
+                                            }
+                                        }
                                     }
+                                    //SCWS.Delete_ItemSerials(item.OrderID, item.ID);//SC上的序號移除
                                 }
-                                //SCWS.Delete_ItemSerials(item.OrderID, item.ID);//SC上的序號移除
+                                catch (Exception ex)
+                                {
+                                    result.message = ex.ToString();
+                                }
+                              
                             }
                             //建立RMASKU資料
                             var UnitPrice = 0m;

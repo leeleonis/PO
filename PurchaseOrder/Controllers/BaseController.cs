@@ -1850,7 +1850,7 @@ namespace PurchaseOrderSys.Controllers
                 sheet1.Cells[rowIndex, 11].Value = (Weight / 1000).ToString("f2");
                 sheet1.Cells[rowIndex, 12].Value = UPrice.ToString("f2");
                 sheet1.Cells[rowIndex, 17].Value = Price.ToString("f2");
-                sheet1.Row(rowIndex).Height = 40;
+                sheet1.Row(rowIndex).Height = 45;
                 sheet1.Row(rowIndex).CustomHeight = true;//自动调整行高
                 rowIndex++;
                 if (rowIndex >= comprow - 1)
