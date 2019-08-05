@@ -179,6 +179,26 @@ namespace PurchaseOrderSys.Models
             return EnumData.OrderFulfilledStatus.Unfulfilled;
         }
 
+        public void SplitPackage(int[] PackageIDs)
+        {
+            var packageList = orderData.Packages.Where(p => PackageIDs.Contains(p.ID));
+
+        }
+
+        public void ActionLog(string Item, string Description)
+        {
+            orderData.ActionLogs.Add(new OrderActionLogs()
+            {
+                OrderID = orderData.ID,
+                Item = Item,
+                Description = Description,
+                CreateBy = AdminName,
+                CreateAt = UtcNow
+            });
+
+            db.SaveChanges();
+        }
+
         private void SetUpdateData<T>(T originData, T updateData, string[] updateColumn)
         {
             var TypeInfoList = originData.GetType().GetProperties();

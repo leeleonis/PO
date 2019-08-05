@@ -1,0 +1,79 @@
+﻿@model Packages
+@{
+    var LangID = EnumData.DataLangList().First().Key;
+}
+@if (ViewData.Any())
+{
+    Dictionary<string, dynamic> packageData = new Dictionary<string, dynamic>()
+{
+{ "isEdit", (bool)ViewData["isEdit"] },
+{ "ID", (int)ViewData["ID"] },
+{ "title", ViewData["title"].ToString() },
+{ "items", (List<Tuple<string, int, int>>)ViewData["items"]  },
+{ "index", (int)ViewData["index"] }
+};
+
+    var name = string.Format("packageData[{0}]", packageData["index"]) + "[{0}]";
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th class="text-center" colspan="3">
+                    <input type="hidden" name="@string.Format(name, "ID")" value="@packageData["ID"]" />
+                    Package @packageData["title"]
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ int index = 0; }
+            @foreach (Tuple<string, int, int> item in packageData["items"]) //Tuple<Sku, Qty, Max>
+            {
+                var itemName = string.Format("{0}[{1}]", string.Format(name, "Items"), index++) + "[{0}]";
+                <tr rel="@item.Item1">
+                    <td width="120">
+                        <input type="hidden" name="@string.Format(itemName, "Sku")" value="@item.Item1" />
+                        @item.Item1
+                    </td>
+                    <td>@Model.Items.First(i => i.IsEnable && i.Sku.Equals(item.Item1)).GetSku.SkuLang.First(l => l.LangID.Equals(LangID)).Name</td>
+                    <td width="80" class="no-padding">
+                        <select class="form-control" name="@string.Format(itemName, "Qty")" data-sku="@item.Item1" @(packageData["isEdit"] ? "" : "readonly")>
+                            @for(int qty = 0; qty <= item.Item3; qty++)
+                            {
+                                <option value="@qty" @(qty == item.Item2 ? "selected" : "")>@qty</option>
+                            }
+                        </select>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <table class="table table-bordered" id="table-summary" style="margin-bottom:0px;">
+        <thead>
+            <tr>
+                <th class="text-center" colspan="3">Report Summary</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items.Where(i => i.IsEnable))
+            {
+                <tr rel="@item.Sku" data-total="@item.Qty">
+                    <td width="120">@item.Sku</td>
+                    <td>@item.GetSku.SkuLang.First(l => l.LangID.Equals(LangID)).Name</td>
+                    <td width="80" class="text-center">
+                        <span id="subTotal">@item.Qty</span> / <span>@item.Qty</span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td class="text-right" colspan="3">
+                    <button class="btn btn-default btn-sm" onclick="$packageDialog.dialog('close');  OrderAction.SelectAction($actionSelect.val());">Back</button>
+                    <button class="btn btn-default btn-sm" id="btn-next">Next</button>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+}
