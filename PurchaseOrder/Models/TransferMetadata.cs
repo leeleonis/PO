@@ -10,6 +10,7 @@ namespace PurchaseOrderSys.Models
     /// Transfer class
     /// </summary>
     [MetadataType(typeof(TransferMetadata))]
+    [Serializable]
     public  partial class Transfer
     {
     

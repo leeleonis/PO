@@ -10,6 +10,7 @@ namespace PurchaseOrderSys.Models
     /// VendorLIst class
     /// </summary>
     [MetadataType(typeof(VendorLIstMetadata))]
+    [Serializable]
     public  partial class VendorLIst
     {
     

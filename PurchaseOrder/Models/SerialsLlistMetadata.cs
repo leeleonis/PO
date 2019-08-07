@@ -10,6 +10,7 @@ namespace PurchaseOrderSys.Models
     /// SerialsLlist class
     /// </summary>
     [MetadataType(typeof(SerialsLlistMetadata))]
+    [Serializable]
     public  partial class SerialsLlist
     {
     

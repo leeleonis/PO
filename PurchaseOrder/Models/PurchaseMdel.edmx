@@ -730,6 +730,7 @@
           <Property Name="OtherCosts" Type="decimal" Precision="18" Scale="2" />
           <Property Name="ReturnShippingCos" Type="decimal" Precision="18" Scale="2" />
           <Property Name="SCUserID" Type="nvarchar" MaxLength="50" />
+          <Property Name="Memo" Type="ntext" />
         </EntityType>
         <EntityType Name="RMAOrderSerialsLlist">
           <Key>
@@ -742,6 +743,8 @@
           <Property Name="SerialsQTY" Type="int" />
           <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="CreateAt" Type="datetime" Nullable="false" />
+          <Property Name="ReturnTracking" Type="nvarchar" MaxLength="50" />
+          <Property Name="Carrier" Type="nvarchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="RMASerialsLlist">
           <Key>
@@ -4975,6 +4978,7 @@
           <NavigationProperty Name="PurchaseNote" Relationship="PurchaseOrderModel.FK_PurchaseNote_RMA" FromRole="RMA" ToRole="PurchaseNote" />
           <NavigationProperty Name="CreditMemo" Relationship="PurchaseOrderModel.FK_CreditMemo_RMA" FromRole="RMA" ToRole="CreditMemo" />
           <Property Name="SCUserID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Memo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_RMA_Warehouse">
           <End Type="PurchaseOrderModel.Warehouse" Role="Warehouse" Multiplicity="0..1" />
@@ -5139,6 +5143,8 @@
           <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="RMASKU" Relationship="PurchaseOrderModel.FK_RMAOrderSerialsLlist_RMASKU1" FromRole="RMAOrderSerialsLlist" ToRole="RMASKU" />
+          <Property Name="ReturnTracking" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Carrier" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_RMAOrderSerialsLlist_RMASKU1">
           <End Type="PurchaseOrderModel.RMASKU" Role="RMASKU" Multiplicity="0..1" />
@@ -6699,6 +6705,7 @@
           <EntitySetMapping Name="RMA">
             <EntityTypeMapping TypeName="PurchaseOrderModel.RMA">
               <MappingFragment StoreEntitySet="RMA">
+                <ScalarProperty Name="Memo" ColumnName="Memo" />
                 <ScalarProperty Name="SCUserID" ColumnName="SCUserID" />
                 <ScalarProperty Name="ReturnShippingCos" ColumnName="ReturnShippingCos" />
                 <ScalarProperty Name="OtherCosts" ColumnName="OtherCosts" />
@@ -6755,6 +6762,8 @@
           <EntitySetMapping Name="RMAOrderSerialsLlist">
             <EntityTypeMapping TypeName="PurchaseOrderModel.RMAOrderSerialsLlist">
               <MappingFragment StoreEntitySet="RMAOrderSerialsLlist">
+                <ScalarProperty Name="Carrier" ColumnName="Carrier" />
+                <ScalarProperty Name="ReturnTracking" ColumnName="ReturnTracking" />
                 <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
                 <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
                 <ScalarProperty Name="SerialsQTY" ColumnName="SerialsQTY" />

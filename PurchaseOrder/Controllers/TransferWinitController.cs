@@ -202,7 +202,7 @@ namespace PurchaseOrderSys.Controllers
                 }
                 else
                 {
-                    db.Logistic.Add(new Logistic { Sku = item.SKU, Price = item.Price ?? 0, CreateBy = UserBy, CreateAt = dt });
+                    db.Logistic.Add(new Logistic { Sku = item.SKU, Price = item.Price ?? 0, BoxID = 1, CreateBy = UserBy, CreateAt = dt });
                 }
 
             }
@@ -481,39 +481,42 @@ namespace PurchaseOrderSys.Controllers
                 if (!item.SKU.SerialTracking)//不用序號
                 {
                     var TransferOutCount = item.SerialsLlist.Where(x => x.SerialsType == "TransferOut").Count();
-                    foreach (var Prepitem in Prep.Where(x => x.ID == item.ID))
+                    if (Prep != null)
                     {
-                        var PrepCount = 0;
-                        if (int.TryParse(Prepitem.val, out PrepCount))
+                        foreach (var Prepitem in Prep.Where(x => x.ID == item.ID))
                         {
-                            if (PrepCount > item.QTY)
+                            var PrepCount = 0;
+                            if (int.TryParse(Prepitem.val, out PrepCount))
                             {
-                                PrepCount = item.QTY.Value;
-                            }
-                            if (PrepCount > TransferOutCount)
-                            {
-                                var SerialsType = new List<string> { "PO", "TransferIn" };
-                                var TransferOutlist = db.SerialsLlist.Where(x => !x.SerialsLlistC.Any() && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable && x.PurchaseSKU.PurchaseOrder.WarehouseID == oTransfer.FromWID && x.PurchaseSKU.SkuNo == item.SkuNo && SerialsType.Contains(x.SerialsType)).Take(PrepCount - TransferOutCount).ToList();
-                                var nSerialsLlist = TransferOutlist.Select(x => new SerialsLlist
+                                if (PrepCount > item.QTY)
                                 {
-                                    IsEnable = true,
-                                    TransferSKUID = item.ID,
-                                    PID = x.ID,
-                                    CreateAt = CreateAt,
-                                    CreateBy = CreateBy,
-                                    UpdateAt = CreateAt,
-                                    UpdateBy = CreateBy,
-                                    OrderID = x.OrderID,
-                                    PurchaseSKUID = x.PurchaseSKUID,
-                                    SerialsNo = x.SerialsNo,
-                                    SerialsQTY = -1,
-                                    SerialsType = "TransferOut"//等待移倉
-                                }).ToList();
-                                foreach (var Serial in nSerialsLlist)
+                                    PrepCount = item.QTY.Value;
+                                }
+                                if (PrepCount > TransferOutCount)
                                 {
-                                    if (!item.SerialsLlist.Where(x => x.SerialsNo == Serial.SerialsNo).Any())
+                                    var SerialsType = new List<string> { "PO", "TransferIn" };
+                                    var TransferOutlist = db.SerialsLlist.Where(x => !x.SerialsLlistC.Any() && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable && x.PurchaseSKU.PurchaseOrder.WarehouseID == oTransfer.FromWID && x.PurchaseSKU.SkuNo == item.SkuNo && SerialsType.Contains(x.SerialsType)).Take(PrepCount - TransferOutCount).ToList();
+                                    var nSerialsLlist = TransferOutlist.Select(x => new SerialsLlist
                                     {
-                                        item.SerialsLlist.Add(Serial);
+                                        IsEnable = true,
+                                        TransferSKUID = item.ID,
+                                        PID = x.ID,
+                                        CreateAt = CreateAt,
+                                        CreateBy = CreateBy,
+                                        UpdateAt = CreateAt,
+                                        UpdateBy = CreateBy,
+                                        OrderID = x.OrderID,
+                                        PurchaseSKUID = x.PurchaseSKUID,
+                                        SerialsNo = x.SerialsNo,
+                                        SerialsQTY = -1,
+                                        SerialsType = "TransferOut"//等待移倉
+                                    }).ToList();
+                                    foreach (var Serial in nSerialsLlist)
+                                    {
+                                        if (!item.SerialsLlist.Where(x => x.SerialsNo == Serial.SerialsNo).Any())
+                                        {
+                                            item.SerialsLlist.Add(Serial);
+                                        }
                                     }
                                 }
                             }
@@ -744,6 +747,11 @@ namespace PurchaseOrderSys.Controllers
         }
         public ActionResult PrepSaveserials(string serials, string SID, int boxitemset)
         {
+            var SKU = db.SKU.Find(serials);
+            if (SKU != null && !SKU.SerialTracking)
+            {
+                serials = db.SerialsLlist.Where(y => y.IsEnable && y.SerialsQTY > 0 && (y.SerialsType == "PO" || y.SerialsType == "TransferIn" || y.SerialsType == "DropshpOrderIn") && !y.SerialsLlistC.Any() && ((y.PurchaseSKUID.HasValue && y.PurchaseSKU.SkuNo == serials && !y.PurchaseSKU.SKU.SerialTracking) || (y.TransferSKUID.HasValue && y.TransferSKU.SkuNo == serials && !y.TransferSKU.SKU.SerialTracking))).FirstOrDefault()?.SerialsNo;
+            }
             var PrepVMList = (List<TransferItemVM>)Session["WinitPrepVMList" + SID];
             var WinitTransferBoxList = (List<WinitTransferBox>)Session["WinitTransferBox" + SID];
             var WarehouseID = PrepVMList.FirstOrDefault().WarehouseID;

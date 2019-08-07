@@ -10,6 +10,7 @@ namespace PurchaseOrderSys.Models
     /// TransferSKU class
     /// </summary>
     [MetadataType(typeof(TransferSKUMetadata))]
+    [Serializable]
     public  partial class TransferSKU
     {
     

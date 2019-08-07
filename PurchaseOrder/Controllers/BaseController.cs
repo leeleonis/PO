@@ -1882,5 +1882,10 @@ namespace PurchaseOrderSys.Controllers
             var OutputStream = new System.IO.MemoryStream(ep.GetAsByteArray());
             return OutputStream;
         }
+        internal void AlertErrMsg(string ErrMsg)
+        {
+            TempData["ErrMsg"] = ErrMsg;
+        }
+
     }
 }
