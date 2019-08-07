@@ -10,6 +10,7 @@ namespace PurchaseOrderSys.Models
     /// Warehouse class
     /// </summary>
     [MetadataType(typeof(WarehouseMetadata))]
+    [Serializable]
     public  partial class Warehouse
     {
     

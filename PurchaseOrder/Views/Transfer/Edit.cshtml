@@ -425,6 +425,7 @@
                 $("form").prepend('<input type="hidden" name="Requestedval" value="true" />');
                 $(this).prop("disabled", "disabled");
                 $("form").submit();
+                return false;
             });
         });
         function ajaxpost(e) {

@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 
 
@@ -8,6 +9,7 @@ namespace PurchaseOrderSys.Models
     /// WarehouseSummary class
     /// </summary>
     [MetadataType(typeof(WarehouseSummaryMetadata))]
+    [Serializable]
     public  partial class WarehouseSummary
     {
     

@@ -694,6 +694,7 @@ namespace PurchaseOrderSys.Controllers
                             SerialsNo = Serialsitem.SerialsNo,
                             SerialsType = "Order",
                             SerialsQTY = -1,
+                            Memo = JsonConvert.SerializeObject(ShipmentOrder),
                             CreateAt = DateTime.UtcNow,
                             CreateBy = "APIUser",
                         };

@@ -10,6 +10,7 @@ namespace PurchaseOrderSys.Models
     /// RMASerialsLlist class
     /// </summary>
     [MetadataType(typeof(RMASerialsLlistMetadata))]
+    [Serializable]
     public  partial class RMASerialsLlist
     {
     

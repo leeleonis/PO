@@ -146,6 +146,18 @@ namespace PurchaseOrderSys.Controllers
                 {
                     oTransfer.Status = "Requested";
                 }
+                else if (oTransfer.Status == "Requested")
+                {
+                    if (Transfer.TransferSKU.Where(x => x.SerialsLlist.Any()).Any())
+                    {
+                        AlertErrMsg("已輸入序號，無法修改");
+                        return RedirectToAction("Edit", new { Transfer.ID });
+                    }
+                    else
+                    {
+                        oTransfer.Status = "Pending";
+                    }
+                }
             }
 
             oTransfer.UpdateBy = UserBy;
@@ -197,6 +209,8 @@ namespace PurchaseOrderSys.Controllers
                 return RedirectToAction("Edit", new { Transfer.ID });
             }
         }
+
+  
         public ActionResult GetSerialList(int ID)
         {
             var TransferSKU = db.TransferSKU.Find(ID);

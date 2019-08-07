@@ -11,6 +11,7 @@ namespace PurchaseOrderSys.Models
     /// WinitTransfer class
     /// </summary>
     [MetadataType(typeof(WinitTransferMetadata))]
+    [Serializable]
     public  partial class WinitTransfer
     {
     

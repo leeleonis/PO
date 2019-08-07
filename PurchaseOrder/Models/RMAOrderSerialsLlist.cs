@@ -21,6 +21,8 @@ namespace PurchaseOrderSys.Models
         public Nullable<int> SerialsQTY { get; set; }
         public string CreateBy { get; set; }
         public System.DateTime CreateAt { get; set; }
+        public string ReturnTracking { get; set; }
+        public string Carrier { get; set; }
     
         public virtual RMASKU RMASKU { get; set; }
     }
