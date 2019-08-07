@@ -1551,4 +1551,100 @@
   <data name="SkuType_HSCode" xml:space="preserve">
     <value>HSCode</value>
   </data>
+  <data name="RMAOrderTracking_IsEnable" xml:space="preserve">
+    <value>IsEnable</value>
+  </data>
+  <data name="RMAOrderTracking_ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="RMAOrderTracking_ReturnTracking" xml:space="preserve">
+    <value>ReturnTracking</value>
+  </data>
+  <data name="RMAOrderTracking_Carrier" xml:space="preserve">
+    <value>Carrier</value>
+  </data>
+  <data name="RMAOrderTracking_ToName" xml:space="preserve">
+    <value>ToName</value>
+  </data>
+  <data name="RMAOrderTracking_ToAddress1" xml:space="preserve">
+    <value>ToAddress1</value>
+  </data>
+  <data name="RMAOrderTracking_ToAddress2" xml:space="preserve">
+    <value>ToAddress2</value>
+  </data>
+  <data name="RMAOrderTracking_ToCity" xml:space="preserve">
+    <value>ToCity</value>
+  </data>
+  <data name="RMAOrderTracking_ToState" xml:space="preserve">
+    <value>ToState</value>
+  </data>
+  <data name="RMAOrderTracking_ToPostcode" xml:space="preserve">
+    <value>ToPostcode</value>
+  </data>
+  <data name="RMAOrderTracking_ToCountry" xml:space="preserve">
+    <value>ToCountry</value>
+  </data>
+  <data name="RMAOrderTracking_FromName" xml:space="preserve">
+    <value>FromName</value>
+  </data>
+  <data name="RMAOrderTracking_FromAddress1" xml:space="preserve">
+    <value>FromAddress1</value>
+  </data>
+  <data name="RMAOrderTracking_FromAddress2" xml:space="preserve">
+    <value>FromAddress2</value>
+  </data>
+  <data name="RMAOrderTracking_FromCity" xml:space="preserve">
+    <value>FromCity</value>
+  </data>
+  <data name="RMAOrderTracking_FromState" xml:space="preserve">
+    <value>FromState</value>
+  </data>
+  <data name="RMAOrderTracking_FromPostcode" xml:space="preserve">
+    <value>FromPostcode</value>
+  </data>
+  <data name="RMAOrderTracking_FromCountry" xml:space="preserve">
+    <value>FromCountry</value>
+  </data>
+  <data name="RMAOrderTracking_Weight" xml:space="preserve">
+    <value>Weight</value>
+  </data>
+  <data name="RMAOrderTracking_Length" xml:space="preserve">
+    <value>Length</value>
+  </data>
+  <data name="RMAOrderTracking_Width" xml:space="preserve">
+    <value>Width</value>
+  </data>
+  <data name="RMAOrderTracking_Heigth" xml:space="preserve">
+    <value>Heigth</value>
+  </data>
+  <data name="RMAOrderTracking_Insurance" xml:space="preserve">
+    <value>Insurance</value>
+  </data>
+  <data name="RMAOrderTracking_ETA" xml:space="preserve">
+    <value>ETA</value>
+  </data>
+  <data name="RMAOrderTracking_DeclareValue" xml:space="preserve">
+    <value>DeclareValue</value>
+  </data>
+  <data name="RMAOrderTracking_EstimatedCost" xml:space="preserve">
+    <value>EstimatedCost</value>
+  </data>
+  <data name="RMAOrderTracking_ShippingMethod" xml:space="preserve">
+    <value>ShippingMethod</value>
+  </data>
+  <data name="RMAOrderTracking_CreateBy" xml:space="preserve">
+    <value>CreateBy</value>
+  </data>
+  <data name="RMAOrderTracking_CreateAt" xml:space="preserve">
+    <value>CreateAt</value>
+  </data>
+  <data name="RMAOrderTracking_UpdateBy" xml:space="preserve">
+    <value>UpdateBy</value>
+  </data>
+  <data name="RMAOrderTracking_UpdateAt" xml:space="preserve">
+    <value>UpdateAt</value>
+  </data>
+  <data name="RMAOrderTracking_Memo" xml:space="preserve">
+    <value>Memo</value>
+  </data>
 </root>

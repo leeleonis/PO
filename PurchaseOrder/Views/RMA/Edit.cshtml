@@ -170,7 +170,8 @@
                                         <fieldset>
                                             <legend></legend>
                                             <div class="form-group">
-                                                <div class="col-sm-9 col-lg-2">
+                                                <div class="col-sm-9 col-lg-offset-10">
+                                                    <button type="button" id="ReturnBtn">Prepaid Return Label</button>
                                                     @if (Model.Status != "Closed")
                                                     {
                                                         @*<button type="button" id="Edititems">Edit items</button>
@@ -310,10 +311,13 @@
     <button type="button" id="ChangeSKU">Renew item</button>
 
 </div>
-@section pagespecific {
-    <link href="~/Content/css/lightbox.css" rel="stylesheet" />
-    <script src="~/Scripts/lightbox.js"></script>
-    <script type="text/javascript">
+<div id="Returndialog">
+
+</div>
+    @section pagespecific {
+        <link href="~/Content/css/lightbox.css" rel="stylesheet" />
+        <script src="~/Scripts/lightbox.js"></script>
+        <script type="text/javascript">
         var hash = window.location.hash;
         $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
         $('.tab-pane').eq(hash.substr(1)).addClass('active');
@@ -592,6 +596,10 @@
             });
             $("#dialog").dialog({
                 autoOpen: false,
+                width: 800,
+            });
+            $("#Returndialog").dialog({
+                autoOpen: false,
                 width: 800
             });
             $("body").on("click", ".ChangeSKU", function () {
@@ -603,6 +611,27 @@
                     title: "Change SKU"
                 });
                 $("#dialog").dialog("open");
+                return false;
+            });
+            $("body").on("click", "#ReturnBtn", function () {
+                $("#Returndialog").html("SC資料讀取中.........");
+                $.ajax({
+                    traditional: true,
+                    type: "post",
+                    url: "@Url.Action("ReturnLabel")",
+                    data: {
+                        id: @Html.DisplayFor(x=>x.ID),
+                    },
+                    success: function (data) {
+                        if (data.status) {
+                            $("#Returndialog").html(data.html);
+                        }
+                        else {
+                            alert(data.Errmsg);
+                        }
+                    }
+                });
+                $("#Returndialog").dialog("open");
                 return false;
             });
             $("#ChangeSKU").click(function () {
@@ -777,5 +806,5 @@
         }
         // 執行
         Preview.change_file();
-    </script>
-}
+        </script>
+    }

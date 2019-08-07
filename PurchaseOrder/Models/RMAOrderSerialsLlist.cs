@@ -23,7 +23,9 @@ namespace PurchaseOrderSys.Models
         public System.DateTime CreateAt { get; set; }
         public string ReturnTracking { get; set; }
         public string Carrier { get; set; }
+        public Nullable<int> RMAOrderTrackingID { get; set; }
     
         public virtual RMASKU RMASKU { get; set; }
+        public virtual RMAOrderTracking RMAOrderTracking { get; set; }
     }
 }

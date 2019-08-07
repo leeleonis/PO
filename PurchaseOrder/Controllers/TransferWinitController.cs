@@ -1240,7 +1240,7 @@ namespace PurchaseOrderSys.Controllers
 
             List<string> FedExFile1 = new List<string>();
             List<Tuple<Stream, string>> FedExFile2 = new List<Tuple<Stream, string>>();
-            string[] Ccs = new string[] { "peter@qd.com.tw", "kelly@qd.com.tw", "demi@qd.com.tw" };
+            string[] Ccs = new string[] { "peter@qd.com.tw", "kelly@qd.com.tw", "demi@qd.com.tw", "leoli.qd@hotmail.com" };
             //string[] Ccs = new string[] { "peter@qd.com.tw" };//
             if (string.IsNullOrWhiteSpace(transfer.WinitTransfer.InvoiceExcel))
             {

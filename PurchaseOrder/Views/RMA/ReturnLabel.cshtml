@@ -1,0 +1,118 @@
+﻿@model RMAOrderTracking
+@{
+    Layout = null;
+}
+<div class="col-sm-9 col-lg-6">
+    @Html.Label("Ship to (from return warehouse)", htmlAttributes: new { @class = "control-label col-sm-12" })
+    <div class="form-group">
+        @Html.LabelFor(x => x.ToName, htmlAttributes: new { @class = "control-label col-sm-6" })
+        <div class="col-sm-9 col-lg-12">
+            @Html.Editor("ToName", new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        @Html.LabelFor(x => x.ToAddress1, htmlAttributes: new { @class = "control-label col-sm-6" })
+        <div class="col-sm-9 col-lg-12">
+            @Html.Editor("ToAddress1", new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        @Html.LabelFor(x => x.ToAddress2, htmlAttributes: new { @class = "control-label col-sm-6" })
+        <div class="col-sm-9 col-lg-12">
+            @Html.Editor("ToAddress2", new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        @Html.LabelFor(x => x.ToCity, htmlAttributes: new { @class = "control-label col-sm-6" })
+        <div class="col-sm-9 col-lg-12">
+            @Html.Editor("ToCity", new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        @Html.LabelFor(x => x.ToState, htmlAttributes: new { @class = "control-label col-sm-6" })
+        <div class="col-sm-9 col-lg-12">
+            @Html.Editor("ToState", new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        @Html.LabelFor(x => x.ToPostcode, htmlAttributes: new { @class = "control-label col-sm-6" })
+        <div class="col-sm-9 col-lg-12">
+            @Html.Editor("ToPostcode", new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        @Html.LabelFor(x => x.ToCountry, htmlAttributes: new { @class = "control-label col-sm-6" })
+        <div class="col-sm-9 col-lg-12">
+            @Html.Editor("ToCountry", new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+</div>
+<div class="col-sm-9 col-lg-6">
+    @Html.Label("Ship from (from order)", htmlAttributes: new { @class = "control-label col-sm-12" })
+    <div class="form-group">
+        @Html.LabelFor(x => x.FromName, htmlAttributes: new { @class = "control-label col-sm-6" })
+        <div class="col-sm-9 col-lg-12">
+            @Html.Editor("FromName", new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        @Html.LabelFor(x => x.FromAddress1, htmlAttributes: new { @class = "control-label col-sm-6" })
+        <div class="col-sm-9 col-lg-12">
+            @Html.Editor("FromAddress1", new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        @Html.LabelFor(x => x.FromAddress2, htmlAttributes: new { @class = "control-label col-sm-6" })
+        <div class="col-sm-9 col-lg-12">
+            @Html.Editor("FromAddress2", new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        @Html.LabelFor(x => x.FromCity, htmlAttributes: new { @class = "control-label col-sm-6" })
+        <div class="col-sm-9 col-lg-12">
+            @Html.Editor("FromCity", new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        @Html.LabelFor(x => x.FromState, htmlAttributes: new { @class = "control-label col-sm-6" })
+        <div class="col-sm-9 col-lg-12">
+            @Html.Editor("FromState", new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        @Html.LabelFor(x => x.FromPostcode, htmlAttributes: new { @class = "control-label col-sm-6" })
+        <div class="col-sm-9 col-lg-12">
+            @Html.Editor("FromPostcode", new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        @Html.LabelFor(x => x.FromCountry, htmlAttributes: new { @class = "control-label col-sm-6" })
+        <div class="col-sm-9 col-lg-12">
+            @Html.Editor("FromCountry", new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+</div>
+<div class="col-sm-9 col-lg-12">
+    @Html.Label("Shipping Dimensions", htmlAttributes: new { @class = "control-label col-sm-12" })
+    <div class="form-group">
+        @Html.LabelFor(x => x.Weight, htmlAttributes: new { @class = "control-label col-sm-1" })
+        <div class="col-sm-9 col-lg-2">
+            @Html.Editor("Weight", new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        @Html.LabelFor(x => x.Length, htmlAttributes: new { @class = "control-label col-sm-1" })
+        <div class="col-sm-9 col-lg-2">
+            @Html.Editor("Length", new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        @Html.LabelFor(x => x.Width, htmlAttributes: new { @class = "control-label col-sm-1" })
+        <div class="col-sm-9 col-lg-2">
+            @Html.Editor("Width", new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        @Html.LabelFor(x => x.Heigth, htmlAttributes: new { @class = "control-label col-sm-1" })
+        <div class="col-sm-9 col-lg-2">
+            @Html.Editor("Heigth", new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+</div>
+<div class="col-sm-9 col-lg-12">
+    @Html.Label(" ", htmlAttributes: new { @class = "control-label col-sm-12" })
+    <div class="form-group">
+        @Html.LabelFor(x => x.DeclareValue, htmlAttributes: new { @class = "control-label col-sm-1" })
+        <div class="col-sm-9 col-lg-2">
+            @Html.Editor("DeclareValue", new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        @Html.LabelFor(x => x.Insurance, htmlAttributes: new { @class = "control-label col-sm-1" })
+        <div class="col-sm-9 col-lg-2">
+            @Html.Editor("Insurance", new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        @Html.LabelFor(x => x.ETA, htmlAttributes: new { @class = "control-label col-sm-1" })
+        <div class="col-sm-9 col-lg-2">
+            @Html.Editor("ETA", new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        @Html.LabelFor(x => x.EstimatedCost, htmlAttributes: new { @class = "control-label col-sm-1" })
+        <div class="col-sm-9 col-lg-2">
+            @Html.Editor("EstimatedCost", new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+</div>
+<div class="col-sm-9 col-lg-12">
+    <div class="widget-footer">
+        <button type="submit" class="btn btn-primary" id="save" align="right">儲存</button>
+
+    </div>
+</div>

@@ -887,5 +887,33 @@ namespace PurchaseOrderSys.Controllers
             Session["RMASKU" + RMASKUID] = sRMASKU;
             return Json(new { status = true }, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult ReturnLabel(int ID)
+        {
+          var RMA= db.RMA.Find(ID);
+            var RMAOrderTracking = new RMAOrderTracking();
+            if (RMA.RMASKU.Any(x => x.IsEnable))
+            {
+                var Warehouse = RMA.RMASKU.FirstOrDefault().Warehouse;
+                RMAOrderTracking.ToName = Warehouse.Name;
+                RMAOrderTracking.ToAddress1 = Warehouse.Address1;
+                RMAOrderTracking.ToAddress2 = Warehouse.Address2;
+                RMAOrderTracking.ToCity = Warehouse.City;
+                RMAOrderTracking.ToState = Warehouse.State;
+                RMAOrderTracking.ToPostcode = Warehouse.Postcode;
+                RMAOrderTracking.ToCountry = Warehouse.Country;
+
+                var SCOrderID = RMA.OrderID.Value;
+                var order = SCWS.Get_OrderData(SCOrderID).Order;//去SC抓訂單資料
+                RMAOrderTracking.FromName = order.ShippingAddress.FirstName+" "+ order.ShippingAddress.LastName;
+                RMAOrderTracking.FromAddress1 = order.ShippingAddress.StreetLine1;
+                RMAOrderTracking.FromAddress2 = order.ShippingAddress.StreetLine2;
+                RMAOrderTracking.FromCity = order.ShippingAddress.City;
+                RMAOrderTracking.FromState = order.ShippingAddress.StateName;
+                RMAOrderTracking.FromPostcode = order.ShippingAddress.PostalCode;
+                RMAOrderTracking.FromCountry = order.ShippingAddress.CountryName;
+            }
+            var html = RenderPartialViewToString("ReturnLabel", RMAOrderTracking);
+            return Json(new { status = true, html }, JsonRequestBehavior.AllowGet);
+        }
     }
 }
