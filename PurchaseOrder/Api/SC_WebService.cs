@@ -260,7 +260,7 @@ namespace SellerCloud_WebService
             return OS_SellerCloud.Orders_UpdateItem(OS_AuthHeader, OS_Options, item);
         }
 
-        public bool Update_OrderItem(PurchaseOrderSys.SCService.OrderItem[] itemList)
+        public bool Update_OrderItems(PurchaseOrderSys.SCService.OrderItem[] itemList)
         {
             return OS_SellerCloud.Orders_UpdateOrderItems(OS_AuthHeader, OS_Options, itemList);
         }
@@ -303,6 +303,13 @@ namespace SellerCloud_WebService
             return OS_SellerCloud.Orders_AddPackagesToOrder(OS_AuthHeader, OS_Options, NewPckage.OrderID, new PurchaseOrderSys.SCService.Package[] { NewPckage }).First();
         }
 
+        public PurchaseOrderSys.SCService.Package[] Add_OrderNewPackages(PurchaseOrderSys.SCService.Package[] NewPckages)
+        {
+            foreach (var p in NewPckages) { p.ID = -1; };
+
+            return OS_SellerCloud.Orders_AddPackagesToOrder(OS_AuthHeader, OS_Options, NewPckages[0].OrderID, NewPckages);
+        }
+
         public PurchaseOrderSys.SCService.OrderItem Add_OrderNewItem(PurchaseOrderSys.SCService.OrderItem NewItem)
         {
             NewItem.ID = -1;
@@ -326,13 +333,20 @@ namespace SellerCloud_WebService
             return OS_SellerCloud.Orders_DeletePackage(OS_AuthHeader, OS_Options, PackageID);
         }
 
-        public bool Delete_Item(int OrderID, int ItemID)
+        public bool Delete_Item1(int OrderID, int ItemID)
+        {
+            var request = new OrderCancellationRequest() { OrderSourceOrderID = OrderID.ToString(), OrderSourceItemIDs = new string[] { ItemID.ToString() } };
+
+            return OS_SellerCloud.Orders_CancelOrderItem(OS_AuthHeader, OS_Options, request).Success;
+        }
+
+        public bool Delete_Item2(int OrderID, int ItemID)
         {
             return OCS_SellerCloud.OrderItem_Delete(OCS_AuthHeader, OrderID, ItemID);
         }
 
         public bool Delete_ItemAllSerials(int OrderID, int ItemID)
-        {            
+        {
             return OCS_SellerCloud.OrderItem_DeleteAllSerialsByOrderItemID(OCS_AuthHeader, OrderID, ItemID);
         }
         /// <summary>
@@ -474,7 +488,7 @@ namespace SellerCloud_WebService
             PurchaseOrderSys.SCService.ServiceOptions ServiceOptions = new PurchaseOrderSys.SCService.ServiceOptions();
             return OS_SellerCloud.PurchaseItemReceiveSerial_All_New(OS_AuthHeader, ServiceOptions, ProductID, PONumber);
         }
-        
+
         public void Dispose()
         {
             Dispose(true);

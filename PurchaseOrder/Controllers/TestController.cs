@@ -659,17 +659,9 @@ namespace PurchaseOrderSys.Controllers
         {
             using (var OM = new OrderManagement(OrderID))
             {
-                OM.OrderSync(OrderID);
-            }
-        }
-
-        public void GetProductBrand()
-        {
-            var SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
-            var Brand = SC_Api.Get_Manufacturers();
-            foreach (var brand in Brand.OrderBy(b => b.ID))
-            {
-                Response.Write(string.Format("{0} - {1}<br />", brand.ID, brand.ManufacturerName));
+                OM.SC_Api = new SC_WebService(ApiUserName, ApiPassword);
+                OM.SplitPackage(db.Packages.Where(p => p.IsEnable && p.OrderID.Equals(OrderID)).Select(p => p.ID).ToArray());
+                OM.OrderSyncPush();
             }
         }
 

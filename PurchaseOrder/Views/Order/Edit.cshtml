@@ -36,6 +36,19 @@
 }
 
 <div id="content">
+    @if (TempData["ErrorMsg"] != null)
+    {
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="alert alert-danger fade in">
+                    <button class="close" data-dismiss="alert">×</button>
+                    <i class="fa-fw fa fa-times"></i>
+                    @TempData["ErrorMsg"].ToString()
+                </div>
+            </div>
+        </div>
+    }
+
     <section id="widget-grid" class="">
         <div class="row">
             <article class="col-xs-12">
@@ -52,7 +65,7 @@
 
                     <div>
                         <div class="widget-body no-padding">
-                            <form id="data-form" class="form-horizontal" method="post" enctype="multipart/form-data">
+                            <form id="data-form" class="form-horizontal" action="@Url.Action("Edit", "Order", new { id = Model.ID })" method="post" enctype="multipart/form-data">
                                 @Html.AntiForgeryToken()
 
                                 <div id="content" class="tab-content">
@@ -73,7 +86,10 @@
                                                                 </thead>
                                                                 <tr class="font-title">
                                                                     <td width="130">Order #：</td>
-                                                                    <td>@Model.ID</td>
+                                                                    <td>
+                                                                        @Model.ID
+                                                                        <input type="hidden" name="ID" value="@Model.ID" />
+                                                                    </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td>Order Type：</td>
@@ -242,11 +258,14 @@
                                                                 <span class="input-group-addon font-bg">Shipping Actions</span>
                                                                 <select class="form-control" id="select-action">
                                                                     <option value="">Select Action</option>
-                                                                    <optgroup label="Normal">
-                                                                        <option value="1">Split package</option>
-                                                                        <option value="2">Split carrier box</option>
-                                                                        <option value="3">Combine</option>
-                                                                    </optgroup>
+                                                                    @if (Model.OrderStatus.Equals((byte)EnumData.OrderStatus.InProcess))
+                                                                    {
+                                                                        <optgroup label="Normal">
+                                                                            <option value="1">Split package</option>
+                                                                            <option value="2">Split carrier box</option>
+                                                                            <option value="3">Combine</option>
+                                                                        </optgroup>
+                                                                    }
                                                                     <option value="4">Cancel Dispatch</option>
                                                                     @*<optgroup label="Shipped">
                                                                             <option value="5">Create RMA</option>
@@ -590,7 +609,7 @@
                         if (result) {
                             var $package = $(result[0]);
 
-                            if ($package.data('qty') == '1') ErrorMsg('產品總數不足!');
+                            if ($package.data('qty') == '1') return ErrorMsg('產品總數不足!');
 
                             SplitPackage.Init($package.data('package'), parseInt($package.data('qty')));
                         }
@@ -617,7 +636,7 @@
                 SelectAction
             };
         }();
-        
+
         var splitTableUrl = "@Url.Action("SplitTable", "Order")";
         var splitPackageUrl = "@Url.Action("SplitPackage", "Order")";
         var SplitPackage = function () {
@@ -661,7 +680,7 @@
                 website.AjaxUrl(splitPackageUrl + "?packageID=" + packageID, 'post', data).done(function (response) {
                     if (response.status) {
                         alert('Split success!');
-                        location.reload() 
+                        location.reload()
                     } else {
                         alert(response.message);
                     }

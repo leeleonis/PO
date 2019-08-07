@@ -27,14 +27,17 @@ namespace PurchaseOrderSys.Controllers
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            Orders order = db.Orders.FirstOrDefault(o => o.ID.Equals(id.Value) || o.SCID.Value.Equals(id.Value));
+            Orders order = db.Orders.Find(id);
 
             if (order == null)
             {
                 using (var OM = new OrderManagement(id))
                 {
                     order = OM.OrderSync(id);
-                    OM.ActionLog("Order", "Sync Data");
+                    if (order.CreateAt.CompareTo(order.UpdateAt.Value) == 0)
+                    {
+                        OM.ActionLog("Order", "Sync Data");
+                    }
                 }
             }
 
@@ -52,15 +55,15 @@ namespace PurchaseOrderSys.Controllers
         // 詳細資訊，請參閱 https://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "IsRush,ID,OrderStatus,Comment")]Orders order)
+        public ActionResult Edit([Bind(Include = "IsRush,ID,OrderStatus,Comment")]Orders updateData)
         {
-            if (ModelState.IsValid)
-            {
-                db.Entry(order).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(order);
+            Orders order = db.Orders.Find(updateData.ID);
+            if (order == null) return HttpNotFound();
+
+            SetUpdateData(order, updateData, new string[] { "IsRush", "OrderStatus", "Comment" });
+            db.SaveChanges();
+
+            return RedirectToAction("Edit", new { order.ID });
         }
 
         // GET: Order/Delete/5
@@ -253,6 +256,7 @@ namespace PurchaseOrderSys.Controllers
                         foreach (var item in itemList)
                         {
                             item.Qty = update.Items.First(i => i.Sku.Equals(item.Sku)).Qty;
+                            item.IsEnable = item.Qty != 0;
                         }
                     }
                     else
@@ -267,9 +271,12 @@ namespace PurchaseOrderSys.Controllers
 
                         foreach (var newItem in update.Items)
                         {
-                            SetUpdateData(newItem, itemList.First(i => i.Sku.Equals(newItem.Sku)), new string[] { "OrderID", "Sku", "OriginSku", "UnitPrice", "ExportValue", "DLExportValue" });
-                            newItem.CreateBy = Session["AdminName"].ToString();
-                            newItem.CreateAt = DateTime.UtcNow;
+                            if (newItem.Qty != 0)
+                            {
+                                SetUpdateData(newItem, itemList.First(i => i.Sku.Equals(newItem.Sku)), new string[] { "OrderID", "Sku", "OriginSku", "UnitPrice", "ExportValue", "DLExportValue" });
+                                newItem.CreateBy = Session["AdminName"].ToString();
+                                newItem.CreateAt = DateTime.UtcNow;
+                            }
                         }
 
                         db.Packages.Add(update);
@@ -280,9 +287,12 @@ namespace PurchaseOrderSys.Controllers
                     {
                         using (var OM = new OrderManagement(package.OrderID))
                         {
+                            OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
                             OM.SplitPackage(packageData.Select(p => p.ID).ToArray());
+                            OM.OrderSyncPush();
                         }
-                    }catch(Exception ex)
+                    }
+                    catch (Exception ex)
                     {
                         TempData["ErrorMsg"] = ex.InnerException?.Message ?? ex.Message;
                     }

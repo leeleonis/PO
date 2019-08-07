@@ -26,10 +26,13 @@
                 <td class="font-bg" width="100">Value</td>
                 <td class="font-bg" width="80">
                     RMA #
-                    <div style="position: absolute; top: -35px; right: 15px;">
-                        <button type="button" class="btn btn-default btn-sm edit" onclick="PackageEdit(@Model.ID)">Edit</button>
-                        <button type="button" class="btn btn-default btn-sm save" onclick="PackageSave(@Model.ID)">Save</button>
-                    </div>
+                    @if (Model.ShippingStatus.Equals((byte)EnumData.OrderShippingStatus.訂單管理))
+                    {
+                        <div style="position: absolute; top: -35px; right: 15px;">
+                            <button type="button" class="btn btn-default btn-sm edit" onclick="PackageEdit(@Model.ID)">Edit</button>
+                            <button type="button" class="btn btn-default btn-sm save" onclick="PackageSave(@Model.ID)">Save</button>
+                        </div>
+                    }
                 </td>
             </tr>
         </thead>

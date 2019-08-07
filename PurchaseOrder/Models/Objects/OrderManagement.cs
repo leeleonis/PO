@@ -6,14 +6,19 @@ using System.Net;
 using System.Web;
 using Newtonsoft.Json;
 using PurchaseOrderSys.SCService;
+using SellerCloud_WebService;
 
 namespace PurchaseOrderSys.Models
 {
     public class OrderManagement : IDisposable
     {
+        public static string ApiUserName = "test@qd.com.tw";
+        public static string ApiPassword = "prU$U9R7CHl3O#uXU6AcH6ch";
         protected PurchaseOrderEntities db = new PurchaseOrderEntities();
 
         protected Orders orderData;
+
+        public SC_WebService SC_Api;
 
         private readonly string AdminName = HttpContext.Current.Session["AdminName"]?.ToString() ?? "System";
         private readonly DateTime UtcNow = DateTime.UtcNow;
@@ -52,7 +57,7 @@ namespace PurchaseOrderSys.Models
                 else
                 {
                     orderData = new Orders() { CreateBy = AdminName, CreateAt = UtcNow };
-                    SetUpdateData(orderData, order, new string[] { "IsRush", "OrderParent", "OrderSourceID", "SCID", "CustomerID", "CustomerEmail", "OrderStatus", "OrderDate", "PaymentStatus", "PaymentDate", "FulfillmentStatus",  "FulfilledDate", "BuyerNote", "Comment" });
+                    SetUpdateData(orderData, order, new string[] { "IsRush", "OrderParent", "OrderSourceID", "SCID", "CustomerID", "CustomerEmail", "OrderStatus", "OrderDate", "PaymentStatus", "PaymentDate", "FulfillmentStatus", "FulfilledDate", "BuyerNote", "Comment" });
                     orderData.Company = db.Company.AsNoTracking().First(c => c.CompanySCID.Value.Equals(order.Company)).ID;
                     orderData.Channel = EnumData.OrderChannelList().First(c => c.Value.Equals(EnumData.OrderChannelList(true)[order.Channel])).Key;
                     db.Orders.Add(orderData);
@@ -65,7 +70,7 @@ namespace PurchaseOrderSys.Models
                     package.ShipWarehouse = db.WarehouseSummary.AsNoTracking().First(w => w.IsEnable && w.Type.Equals("SCID") && w.Val.Equals(package.ShipWarehouse.ToString())).WarehouseID;
                     package.ReturnWarehouse = db.WarehouseSummary.AsNoTracking().First(w => w.IsEnable && w.Type.Equals("SCID") && w.Val.Equals(package.ReturnWarehouse.ToString())).WarehouseID;
 
-                    if (package.ShippingMethod.Equals(0))
+                    if (package.ShippingMethod == 0)
                     {
                         package.ShippingMethod = db.ShippingMethods.First(m => m.IsEnable).ID;
                     }
@@ -181,8 +186,60 @@ namespace PurchaseOrderSys.Models
 
         public void SplitPackage(int[] PackageIDs)
         {
-            var packageList = orderData.Packages.Where(p => PackageIDs.Contains(p.ID));
+            if (SC_Api == null) SC_Api = new SC_WebService(ApiUserName, ApiPassword);
 
+            try
+            {
+                if (!orderData.SCID.HasValue) throw new Exception("Not found order's SCID!");
+
+                var packageList = orderData.Packages.Where(p => PackageIDs.Contains(p.ID)).OrderBy(p => p.ID).ToList(); ;
+
+                Packages packageData = packageList.First(pp => pp.SCID.HasValue);
+                Order SC_order = SC_Api.Get_OrderData(orderData.SCID.Value).Order;
+                Package SC_package = SC_order.Packages.First(p => p.ID.Equals(packageData.SCID));
+
+                SC_package.Qty = packageData.Items.Where(i => i.IsEnable).Sum(i => i.Qty);
+                SC_Api.Update_PackageData(SC_package);
+
+                Items itemData;
+                foreach (var SC_item in SC_order.Items.Where(i => i.PackageID.Equals(SC_package.ID)))
+                {
+                    itemData = packageData.Items.First(i => i.SCID.Value.Equals(SC_item.ID));
+                    if (itemData.IsEnable)
+                    {
+                        if (SC_item.Qty != itemData.Qty)
+                        {
+                            SC_item.Qty = itemData.Qty;
+                            SC_Api.Update_OrderItem(SC_item);
+                        }
+                    }
+                    else
+                    {
+                        SC_Api.Delete_Item1(SC_item.OrderID, SC_item.ID);
+                    }
+                }
+
+                foreach (var newPackage in packageList.Where(p => !p.SCID.HasValue))
+                {
+                    SC_package.Qty = newPackage.Items.Where(i => i.IsEnable).Sum(i => i.Qty);
+                    SC_package = SC_Api.Add_OrderNewPackage(SC_package);
+                    newPackage.SCID = SC_package.ID;
+
+                    foreach(var newItem in newPackage.Items.Where(i => i.IsEnable))
+                    {
+                        var SC_item = SC_order.Items.First(i => i.ProductID.Equals(newItem.Sku));
+                        SC_item.PackageID = SC_package.ID;
+                        SC_item = SC_Api.Add_OrderNewItem(SC_item);
+                        newItem.SCID = SC_item.ID;
+                    }
+                }
+
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(string.Format("SC Error：{0}", ex.InnerException?.Message ?? ex.Message));
+            }
         }
 
         public void ActionLog(string Item, string Description)
@@ -197,6 +254,11 @@ namespace PurchaseOrderSys.Models
             });
 
             db.SaveChanges();
+        }
+
+        public void OrderSyncPush()
+        {
+            Request<object>("OrderSync/GetOrder", "post", new { orderIDs = new string[] { orderData.SCID.ToString() } });
         }
 
         private void SetUpdateData<T>(T originData, T updateData, string[] updateColumn)
