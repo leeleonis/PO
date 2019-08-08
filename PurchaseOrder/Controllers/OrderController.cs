@@ -236,13 +236,13 @@ namespace PurchaseOrderSys.Controllers
         }
 
         [HttpPost]
-        public ActionResult SplitPackage(int packageID, Packages[] packageData)
+        public ActionResult SplitPackage(int PackageID, Packages[] packageData)
         {
             AjaxResult result = new AjaxResult();
 
             try
             {
-                var package = db.Packages.Find(packageID);
+                var package = db.Packages.Find(PackageID);
 
                 if (package == null) throw new Exception("Not found package!");
 
@@ -282,7 +282,10 @@ namespace PurchaseOrderSys.Controllers
                         db.Packages.Add(update);
                     }
                     db.SaveChanges();
+                }
 
+                if (package.GetOrder.SCID.HasValue)
+                {
                     try
                     {
                         using (var OM = new OrderManagement(package.OrderID))
@@ -295,6 +298,43 @@ namespace PurchaseOrderSys.Controllers
                     catch (Exception ex)
                     {
                         TempData["ErrorMsg"] = ex.InnerException?.Message ?? ex.Message;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                result.SetError(ex.InnerException?.Message ?? ex.Message);
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult PackageMarkShip(int PackageID)
+        {
+            AjaxResult result = new AjaxResult();
+
+            try
+            {
+                var package = db.Packages.Find(PackageID);
+
+                if (package == null) throw new Exception("Not found package!");
+
+                package.ShippingStatus = (byte)EnumData.OrderShippingStatus.已出貨;
+
+                using (var OM = new OrderManagement(package.OrderID))
+                {
+                    var order = db.Orders.Find(package.OrderID);
+                    order.FulfillmentStatus = (byte)OM.CheckFulfillmentStatus(order);
+                    if (order.FulfillmentStatus.Equals((byte)EnumData.OrderFulfilledStatus.Fulfilled))
+                    {
+                        order.OrderStatus = (byte)EnumData.OrderStatus.Completed;
+                    }
+
+                    if (order.SCID.HasValue)
+                    {
+                        OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
+                        OM.MarkShipPackage(package.ID);
+                        OM.OrderSyncPush();
                     }
                 }
             }

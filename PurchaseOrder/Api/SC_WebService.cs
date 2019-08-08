@@ -242,6 +242,8 @@ namespace SellerCloud_WebService
 
         public bool Update_OrderShippingStatus(PurchaseOrderSys.SCService.Order order, string Carrier = "", string Service = "")
         {
+            Carrier = string.IsNullOrEmpty(Carrier) ? order.ShippingCarrier : Carrier;
+            Service = string.IsNullOrEmpty(Service) ? order.ShippingServiceSelected : Service;
             return OS_SellerCloud.Orders_UpdateShippingStatusOrder(OS_AuthHeader, OS_Options, order.ID, Carrier, Service, order.StationID, order.ShippingLocationID, false);
         }
 

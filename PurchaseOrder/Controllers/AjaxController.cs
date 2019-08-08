@@ -1938,12 +1938,14 @@ namespace PurchaseOrderSys.Controllers
         public string Memo { get; set; }
         public DropshpOrderBySCItem[] Items { get; set; }
     }
+
     public class DropshpOrderBySCItem
     {
         public string Sku { get; set; }
         public int Qty { get; set; }
         public string[] SerialNumber { get; set; }
     }
+
     public class ShipmentOrder
     {
         public int OrderID { get; set; }

@@ -175,7 +175,7 @@ namespace PurchaseOrderSys.Models
             return EnumData.OrderType.Normal;
         }
 
-        private EnumData.OrderFulfilledStatus CheckFulfillmentStatus(Orders order)
+        public EnumData.OrderFulfilledStatus CheckFulfillmentStatus(Orders order)
         {
             if (order.Packages.Where(p => p.IsEnable).All(p => p.ShippingStatus.Equals((byte)EnumData.OrderShippingStatus.已出貨))) return EnumData.OrderFulfilledStatus.Fulfilled;
 
@@ -192,11 +192,15 @@ namespace PurchaseOrderSys.Models
             {
                 if (!orderData.SCID.HasValue) throw new Exception("Not found order's SCID!");
 
+                if (!SC_Api.Is_login) throw new Exception("SC is not logged in!");
+
                 var packageList = orderData.Packages.Where(p => PackageIDs.Contains(p.ID)).OrderBy(p => p.ID).ToList(); ;
 
                 Packages packageData = packageList.First(pp => pp.SCID.HasValue);
                 Order SC_order = SC_Api.Get_OrderData(orderData.SCID.Value).Order;
-                Package SC_package = SC_order.Packages.First(p => p.ID.Equals(packageData.SCID));
+                Package SC_package = SC_order.Packages.FirstOrDefault(p => p.ID.Equals(packageData.SCID));
+
+                if (SC_package == null) throw new Exception(string.Format("Not found SC package-{0}!", packageData.SCID));
 
                 SC_package.Qty = packageData.Items.Where(i => i.IsEnable).Sum(i => i.Qty);
                 SC_Api.Update_PackageData(SC_package);
@@ -225,7 +229,7 @@ namespace PurchaseOrderSys.Models
                     SC_package = SC_Api.Add_OrderNewPackage(SC_package);
                     newPackage.SCID = SC_package.ID;
 
-                    foreach(var newItem in newPackage.Items.Where(i => i.IsEnable))
+                    foreach (var newItem in newPackage.Items.Where(i => i.IsEnable))
                     {
                         var SC_item = SC_order.Items.First(i => i.ProductID.Equals(newItem.Sku));
                         SC_item.PackageID = SC_package.ID;
@@ -235,6 +239,40 @@ namespace PurchaseOrderSys.Models
                 }
 
                 db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(string.Format("SC Error：{0}", ex.InnerException?.Message ?? ex.Message));
+            }
+        }
+
+        public void MarkShipPackage(int PackageID)
+        {
+            if (SC_Api == null) SC_Api = new SC_WebService(ApiUserName, ApiPassword);
+
+            try
+            {
+                if (!orderData.SCID.HasValue) throw new Exception("Not found order's SCID!");
+
+                if (!SC_Api.Is_login) throw new Exception("SC is not logged in!");
+
+                Packages packageData = orderData.Packages.First(p => p.ID.Equals(PackageID));
+                Order SC_order = SC_Api.Get_OrderData(orderData.SCID.Value).Order;
+                Package SC_package = SC_order.Packages.FirstOrDefault(p => p.ID.Equals(packageData.SCID));
+
+                if (SC_package == null) throw new Exception(string.Format("Not found SC package-{0}!", packageData.SCID));
+
+                SC_Api.Update_PackageShippingStatus(SC_package, (packageData.UploadTracking ? packageData.Tracking : ""), packageData.GetMethod.LastMile.Name);
+
+                foreach (Items item in packageData.Items.Where(i => i.IsEnable).ToList())
+                {
+                    if (item.Serials.Any()) SC_Api.Update_ItemSerialNumber(item.ID, item.Serials.Select(s => s.SerialNumber).ToArray());
+                }
+
+                if (orderData.Packages.Where(p => p.IsEnable).All(p => p.ShippingStatus.Equals((byte)EnumData.OrderShippingStatus.已出貨)))
+                {
+                    SC_Api.Update_OrderShippingStatus(SC_order);
+                }
             }
             catch (Exception ex)
             {

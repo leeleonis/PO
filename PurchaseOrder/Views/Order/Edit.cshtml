@@ -475,7 +475,7 @@
                                 </div>
 
                                 <div class="widget-footer">
-                                    <button type="submit" class="btn btn-primary" id="save">儲存</button>
+                                    <button type="submit" class="btn btn-primary" id="btn-save">儲存</button>
                                     @*<button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index", "SkuType")'">返回</button>*@
                                 </div>
                             </form>
@@ -677,13 +677,13 @@
                 if (error.length != 0) return alert(error.join('\r\n'));
 
                 var data = $packageDialog.find('input, select').serializeArray();
-                website.AjaxUrl(splitPackageUrl + "?packageID=" + packageID, 'post', data).done(function (response) {
+                website.AjaxUrl(splitPackageUrl + "?PackageID=" + packageID, 'post', data).done(function (response) {
                     if (response.status) {
                         alert('Split success!');
-                        location.reload()
                     } else {
                         alert(response.message);
                     }
+                    location.href = $('#data-form').attr('action');
                 });
             });
 
