@@ -2766,4 +2766,100 @@
   <data name="SkuType_HSCode" xml:space="preserve">
     <value>HSCode</value>
   </data>
+  <data name="RMAOrderTracking_IsEnable" xml:space="preserve">
+    <value>啟用</value>
+  </data>
+  <data name="RMAOrderTracking_ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="RMAOrderTracking_ReturnTracking" xml:space="preserve">
+    <value>逆物流的運單號</value>
+  </data>
+  <data name="RMAOrderTracking_Carrier" xml:space="preserve">
+    <value>運輸商</value>
+  </data>
+  <data name="RMAOrderTracking_ToName" xml:space="preserve">
+    <value>收件名稱</value>
+  </data>
+  <data name="RMAOrderTracking_ToAddress1" xml:space="preserve">
+    <value>收件地址1</value>
+  </data>
+  <data name="RMAOrderTracking_ToAddress2" xml:space="preserve">
+    <value>收件地址2</value>
+  </data>
+  <data name="RMAOrderTracking_ToCity" xml:space="preserve">
+    <value>收件市</value>
+  </data>
+  <data name="RMAOrderTracking_ToState" xml:space="preserve">
+    <value>收件州</value>
+  </data>
+  <data name="RMAOrderTracking_ToPostcode" xml:space="preserve">
+    <value>收件郵編</value>
+  </data>
+  <data name="RMAOrderTracking_ToCountry" xml:space="preserve">
+    <value>收件國家</value>
+  </data>
+  <data name="RMAOrderTracking_FromName" xml:space="preserve">
+    <value>寄件名稱</value>
+  </data>
+  <data name="RMAOrderTracking_FromAddress1" xml:space="preserve">
+    <value>寄件地址1</value>
+  </data>
+  <data name="RMAOrderTracking_FromAddress2" xml:space="preserve">
+    <value>寄件地址2</value>
+  </data>
+  <data name="RMAOrderTracking_FromCity" xml:space="preserve">
+    <value>寄件市</value>
+  </data>
+  <data name="RMAOrderTracking_FromState" xml:space="preserve">
+    <value>寄件州</value>
+  </data>
+  <data name="RMAOrderTracking_FromPostcode" xml:space="preserve">
+    <value>寄件郵編</value>
+  </data>
+  <data name="RMAOrderTracking_FromCountry" xml:space="preserve">
+    <value>寄件國家</value>
+  </data>
+  <data name="RMAOrderTracking_Weight" xml:space="preserve">
+    <value>重量</value>
+  </data>
+  <data name="RMAOrderTracking_Length" xml:space="preserve">
+    <value>長度</value>
+  </data>
+  <data name="RMAOrderTracking_Width" xml:space="preserve">
+    <value>寬度</value>
+  </data>
+  <data name="RMAOrderTracking_Heigth" xml:space="preserve">
+    <value>高度</value>
+  </data>
+  <data name="RMAOrderTracking_Insurance" xml:space="preserve">
+    <value>是否保險</value>
+  </data>
+  <data name="RMAOrderTracking_ETA" xml:space="preserve">
+    <value>預估運輸時間</value>
+  </data>
+  <data name="RMAOrderTracking_DeclareValue" xml:space="preserve">
+    <value>價值</value>
+  </data>
+  <data name="RMAOrderTracking_EstimatedCost" xml:space="preserve">
+    <value>預估的運費</value>
+  </data>
+  <data name="RMAOrderTracking_ShippingMethod" xml:space="preserve">
+    <value>運輸方式</value>
+  </data>
+  <data name="RMAOrderTracking_CreateBy" xml:space="preserve">
+    <value>建立者</value>
+  </data>
+  <data name="RMAOrderTracking_CreateAt" xml:space="preserve">
+    <value>建立時間</value>
+  </data>
+  <data name="RMAOrderTracking_UpdateBy" xml:space="preserve">
+    <value>修改者</value>
+  </data>
+  <data name="RMAOrderTracking_UpdateAt" xml:space="preserve">
+    <value>修改時間</value>
+  </data>
+  <data name="RMAOrderTracking_Memo" xml:space="preserve">
+    <value>註記</value>
+  </data>
 </root>

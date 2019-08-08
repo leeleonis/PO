@@ -170,6 +170,8 @@
         <EntityTypeShape EntityType="PurchaseOrderModel.WinitTransferSKU" Width="1.5" PointX="0.75" PointY="5.75" />
         <EntityTypeShape EntityType="PurchaseOrderModel.WinitTransfer" Width="1.5" PointX="18" PointY="62.125" />
         <AssociationConnector Association="PurchaseOrderModel.FK_WinitTransferSKU_WinitTransfer" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.RMAOrderTracking" Width="1.5" PointX="6.375" PointY="6.125" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_RMAOrderSerialsLlist_RMAOrderTracking" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

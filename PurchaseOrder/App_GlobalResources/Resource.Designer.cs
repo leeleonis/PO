@@ -5254,6 +5254,294 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查詢類似 Carrier 的當地語系化字串。
+        /// </summary>
+        public static string RMAOrderTracking_Carrier {
+            get {
+                return ResourceManager.GetString("RMAOrderTracking_Carrier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CreateAt 的當地語系化字串。
+        /// </summary>
+        public static string RMAOrderTracking_CreateAt {
+            get {
+                return ResourceManager.GetString("RMAOrderTracking_CreateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CreateBy 的當地語系化字串。
+        /// </summary>
+        public static string RMAOrderTracking_CreateBy {
+            get {
+                return ResourceManager.GetString("RMAOrderTracking_CreateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 DeclareValue 的當地語系化字串。
+        /// </summary>
+        public static string RMAOrderTracking_DeclareValue {
+            get {
+                return ResourceManager.GetString("RMAOrderTracking_DeclareValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 EstimatedCost 的當地語系化字串。
+        /// </summary>
+        public static string RMAOrderTracking_EstimatedCost {
+            get {
+                return ResourceManager.GetString("RMAOrderTracking_EstimatedCost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ETA 的當地語系化字串。
+        /// </summary>
+        public static string RMAOrderTracking_ETA {
+            get {
+                return ResourceManager.GetString("RMAOrderTracking_ETA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 FromAddress1 的當地語系化字串。
+        /// </summary>
+        public static string RMAOrderTracking_FromAddress1 {
+            get {
+                return ResourceManager.GetString("RMAOrderTracking_FromAddress1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 FromAddress2 的當地語系化字串。
+        /// </summary>
+        public static string RMAOrderTracking_FromAddress2 {
+            get {
+                return ResourceManager.GetString("RMAOrderTracking_FromAddress2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 FromCity 的當地語系化字串。
+        /// </summary>
+        public static string RMAOrderTracking_FromCity {
+            get {
+                return ResourceManager.GetString("RMAOrderTracking_FromCity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 FromCountry 的當地語系化字串。
+        /// </summary>
+        public static string RMAOrderTracking_FromCountry {
+            get {
+                return ResourceManager.GetString("RMAOrderTracking_FromCountry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 FromName 的當地語系化字串。
+        /// </summary>
+        public static string RMAOrderTracking_FromName {
+            get {
+                return ResourceManager.GetString("RMAOrderTracking_FromName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 FromPostcode 的當地語系化字串。
+        /// </summary>
+        public static string RMAOrderTracking_FromPostcode {
+            get {
+                return ResourceManager.GetString("RMAOrderTracking_FromPostcode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 FromState 的當地語系化字串。
+        /// </summary>
+        public static string RMAOrderTracking_FromState {
+            get {
+                return ResourceManager.GetString("RMAOrderTracking_FromState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Heigth 的當地語系化字串。
+        /// </summary>
+        public static string RMAOrderTracking_Heigth {
+            get {
+                return ResourceManager.GetString("RMAOrderTracking_Heigth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ID 的當地語系化字串。
+        /// </summary>
+        public static string RMAOrderTracking_ID {
+            get {
+                return ResourceManager.GetString("RMAOrderTracking_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Insurance 的當地語系化字串。
+        /// </summary>
+        public static string RMAOrderTracking_Insurance {
+            get {
+                return ResourceManager.GetString("RMAOrderTracking_Insurance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 IsEnable 的當地語系化字串。
+        /// </summary>
+        public static string RMAOrderTracking_IsEnable {
+            get {
+                return ResourceManager.GetString("RMAOrderTracking_IsEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Length 的當地語系化字串。
+        /// </summary>
+        public static string RMAOrderTracking_Length {
+            get {
+                return ResourceManager.GetString("RMAOrderTracking_Length", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Memo 的當地語系化字串。
+        /// </summary>
+        public static string RMAOrderTracking_Memo {
+            get {
+                return ResourceManager.GetString("RMAOrderTracking_Memo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ReturnTracking 的當地語系化字串。
+        /// </summary>
+        public static string RMAOrderTracking_ReturnTracking {
+            get {
+                return ResourceManager.GetString("RMAOrderTracking_ReturnTracking", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ShippingMethod 的當地語系化字串。
+        /// </summary>
+        public static string RMAOrderTracking_ShippingMethod {
+            get {
+                return ResourceManager.GetString("RMAOrderTracking_ShippingMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ToAddress1 的當地語系化字串。
+        /// </summary>
+        public static string RMAOrderTracking_ToAddress1 {
+            get {
+                return ResourceManager.GetString("RMAOrderTracking_ToAddress1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ToAddress2 的當地語系化字串。
+        /// </summary>
+        public static string RMAOrderTracking_ToAddress2 {
+            get {
+                return ResourceManager.GetString("RMAOrderTracking_ToAddress2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ToCity 的當地語系化字串。
+        /// </summary>
+        public static string RMAOrderTracking_ToCity {
+            get {
+                return ResourceManager.GetString("RMAOrderTracking_ToCity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ToCountry 的當地語系化字串。
+        /// </summary>
+        public static string RMAOrderTracking_ToCountry {
+            get {
+                return ResourceManager.GetString("RMAOrderTracking_ToCountry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ToName 的當地語系化字串。
+        /// </summary>
+        public static string RMAOrderTracking_ToName {
+            get {
+                return ResourceManager.GetString("RMAOrderTracking_ToName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ToPostcode 的當地語系化字串。
+        /// </summary>
+        public static string RMAOrderTracking_ToPostcode {
+            get {
+                return ResourceManager.GetString("RMAOrderTracking_ToPostcode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ToState 的當地語系化字串。
+        /// </summary>
+        public static string RMAOrderTracking_ToState {
+            get {
+                return ResourceManager.GetString("RMAOrderTracking_ToState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UpdateAt 的當地語系化字串。
+        /// </summary>
+        public static string RMAOrderTracking_UpdateAt {
+            get {
+                return ResourceManager.GetString("RMAOrderTracking_UpdateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UpdateBy 的當地語系化字串。
+        /// </summary>
+        public static string RMAOrderTracking_UpdateBy {
+            get {
+                return ResourceManager.GetString("RMAOrderTracking_UpdateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Weight 的當地語系化字串。
+        /// </summary>
+        public static string RMAOrderTracking_Weight {
+            get {
+                return ResourceManager.GetString("RMAOrderTracking_Weight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Width 的當地語系化字串。
+        /// </summary>
+        public static string RMAOrderTracking_Width {
+            get {
+                return ResourceManager.GetString("RMAOrderTracking_Width", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 CreateAt 的當地語系化字串。
         /// </summary>
         public static string RMASerialsLlist_CreateAt {

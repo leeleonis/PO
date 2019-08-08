@@ -745,6 +745,44 @@
           <Property Name="CreateAt" Type="datetime" Nullable="false" />
           <Property Name="ReturnTracking" Type="nvarchar" MaxLength="50" />
           <Property Name="Carrier" Type="nvarchar" MaxLength="20" />
+          <Property Name="RMAOrderTrackingID" Type="int" />
+        </EntityType>
+        <EntityType Name="RMAOrderTracking">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="bit" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ReturnTracking" Type="nvarchar" MaxLength="50" />
+          <Property Name="Carrier" Type="nvarchar" MaxLength="20" />
+          <Property Name="ToName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ToAddress1" Type="nvarchar" MaxLength="50" />
+          <Property Name="ToAddress2" Type="nvarchar" MaxLength="50" />
+          <Property Name="ToCity" Type="nvarchar" MaxLength="50" />
+          <Property Name="ToState" Type="nvarchar" MaxLength="50" />
+          <Property Name="ToPostcode" Type="nvarchar" MaxLength="50" />
+          <Property Name="ToCountry" Type="nvarchar" MaxLength="50" />
+          <Property Name="FromName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="FromAddress1" Type="nvarchar" MaxLength="50" />
+          <Property Name="FromAddress2" Type="nvarchar" MaxLength="50" />
+          <Property Name="FromCity" Type="nvarchar" MaxLength="50" />
+          <Property Name="FromState" Type="nvarchar" MaxLength="50" />
+          <Property Name="FromPostcode" Type="nvarchar" MaxLength="50" />
+          <Property Name="FromCountry" Type="nvarchar" MaxLength="50" />
+          <Property Name="Weight" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Length" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Width" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Heigth" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Insurance" Type="bit" />
+          <Property Name="ETA" Type="int" />
+          <Property Name="DeclareValue" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="EstimatedCost" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ShippingMethod" Type="nvarchar" MaxLength="20" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreateAt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="UpdateAt" Type="datetime" />
+          <Property Name="Memo" Type="ntext" />
         </EntityType>
         <EntityType Name="RMASerialsLlist">
           <Key>
@@ -1840,6 +1878,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_RMAOrderSerialsLlist_RMAOrderTracking">
+          <End Role="RMAOrderTracking" Type="Self.RMAOrderTracking" Multiplicity="0..1" />
+          <End Role="RMAOrderSerialsLlist" Type="Self.RMAOrderSerialsLlist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RMAOrderTracking">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="RMAOrderSerialsLlist">
+              <PropertyRef Name="RMAOrderTrackingID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_RMAOrderSerialsLlist_RMASKU1">
           <End Role="RMASKU" Type="Self.RMASKU" Multiplicity="0..1" />
           <End Role="RMAOrderSerialsLlist" Type="Self.RMAOrderSerialsLlist" Multiplicity="*" />
@@ -2407,6 +2457,7 @@
           <EntitySet Name="PurchaseSKU" EntityType="Self.PurchaseSKU" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RMA" EntityType="Self.RMA" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RMAOrderSerialsLlist" EntityType="Self.RMAOrderSerialsLlist" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RMAOrderTracking" EntityType="Self.RMAOrderTracking" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RMASerialsLlist" EntityType="Self.RMASerialsLlist" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RMASKU" EntityType="Self.RMASKU" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SerialsLlist" EntityType="Self.SerialsLlist" Schema="dbo" store:Type="Tables" />
@@ -2643,6 +2694,10 @@
           <AssociationSet Name="FK_RMA_Warehouse" Association="Self.FK_RMA_Warehouse">
             <End Role="Warehouse" EntitySet="Warehouse" />
             <End Role="RMA" EntitySet="RMA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RMAOrderSerialsLlist_RMAOrderTracking" Association="Self.FK_RMAOrderSerialsLlist_RMAOrderTracking">
+            <End Role="RMAOrderTracking" EntitySet="RMAOrderTracking" />
+            <End Role="RMAOrderSerialsLlist" EntitySet="RMAOrderSerialsLlist" />
           </AssociationSet>
           <AssociationSet Name="FK_RMAOrderSerialsLlist_RMASKU1" Association="Self.FK_RMAOrderSerialsLlist_RMASKU1">
             <End Role="RMASKU" EntitySet="RMASKU" />
@@ -3271,6 +3326,11 @@
           <AssociationSet Name="FK_WinitTransferSKU_WinitTransfer" Association="PurchaseOrderModel.FK_WinitTransferSKU_WinitTransfer">
             <End Role="WinitTransfer" EntitySet="WinitTransfer" />
             <End Role="WinitTransferSKU" EntitySet="WinitTransferSKU" />
+          </AssociationSet>
+          <EntitySet Name="RMAOrderTracking" EntityType="PurchaseOrderModel.RMAOrderTracking" />
+          <AssociationSet Name="FK_RMAOrderSerialsLlist_RMAOrderTracking" Association="PurchaseOrderModel.FK_RMAOrderSerialsLlist_RMAOrderTracking">
+            <End Role="RMAOrderTracking" EntitySet="RMAOrderTracking" />
+            <End Role="RMAOrderSerialsLlist" EntitySet="RMAOrderSerialsLlist" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="AdminGroup">
@@ -5145,6 +5205,8 @@
           <NavigationProperty Name="RMASKU" Relationship="PurchaseOrderModel.FK_RMAOrderSerialsLlist_RMASKU1" FromRole="RMAOrderSerialsLlist" ToRole="RMASKU" />
           <Property Name="ReturnTracking" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Carrier" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="RMAOrderTrackingID" Type="Int32" />
+          <NavigationProperty Name="RMAOrderTracking" Relationship="PurchaseOrderModel.FK_RMAOrderSerialsLlist_RMAOrderTracking" FromRole="RMAOrderSerialsLlist" ToRole="RMAOrderTracking" />
         </EntityType>
         <Association Name="FK_RMAOrderSerialsLlist_RMASKU1">
           <End Type="PurchaseOrderModel.RMASKU" Role="RMASKU" Multiplicity="0..1" />
@@ -5796,6 +5858,56 @@
             </Principal>
             <Dependent Role="WinitTransferSKU">
               <PropertyRef Name="WinitTransferID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="RMAOrderTracking">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ReturnTracking" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Carrier" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ToName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ToAddress1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ToAddress2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ToCity" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ToState" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ToPostcode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ToCountry" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FromName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FromAddress1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FromAddress2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FromCity" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FromState" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FromPostcode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FromCountry" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Weight" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Length" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Width" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Heigth" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Insurance" Type="Boolean" />
+          <Property Name="ETA" Type="Int32" />
+          <Property Name="DeclareValue" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="EstimatedCost" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ShippingMethod" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <Property Name="Memo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="RMAOrderSerialsLlist" Relationship="PurchaseOrderModel.FK_RMAOrderSerialsLlist_RMAOrderTracking" FromRole="RMAOrderTracking" ToRole="RMAOrderSerialsLlist" />
+        </EntityType>
+        <Association Name="FK_RMAOrderSerialsLlist_RMAOrderTracking">
+          <End Type="PurchaseOrderModel.RMAOrderTracking" Role="RMAOrderTracking" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.RMAOrderSerialsLlist" Role="RMAOrderSerialsLlist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RMAOrderTracking">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="RMAOrderSerialsLlist">
+              <PropertyRef Name="RMAOrderTrackingID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -6762,6 +6874,7 @@
           <EntitySetMapping Name="RMAOrderSerialsLlist">
             <EntityTypeMapping TypeName="PurchaseOrderModel.RMAOrderSerialsLlist">
               <MappingFragment StoreEntitySet="RMAOrderSerialsLlist">
+                <ScalarProperty Name="RMAOrderTrackingID" ColumnName="RMAOrderTrackingID" />
                 <ScalarProperty Name="Carrier" ColumnName="Carrier" />
                 <ScalarProperty Name="ReturnTracking" ColumnName="ReturnTracking" />
                 <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
@@ -7064,6 +7177,44 @@
                 <ScalarProperty Name="itemBarcodeList" ColumnName="itemBarcodeList" />
                 <ScalarProperty Name="SkuNo" ColumnName="SkuNo" />
                 <ScalarProperty Name="WinitTransferID" ColumnName="WinitTransferID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RMAOrderTracking">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.RMAOrderTracking">
+              <MappingFragment StoreEntitySet="RMAOrderTracking">
+                <ScalarProperty Name="Memo" ColumnName="Memo" />
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="ShippingMethod" ColumnName="ShippingMethod" />
+                <ScalarProperty Name="EstimatedCost" ColumnName="EstimatedCost" />
+                <ScalarProperty Name="DeclareValue" ColumnName="DeclareValue" />
+                <ScalarProperty Name="ETA" ColumnName="ETA" />
+                <ScalarProperty Name="Insurance" ColumnName="Insurance" />
+                <ScalarProperty Name="Heigth" ColumnName="Heigth" />
+                <ScalarProperty Name="Width" ColumnName="Width" />
+                <ScalarProperty Name="Length" ColumnName="Length" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="FromCountry" ColumnName="FromCountry" />
+                <ScalarProperty Name="FromPostcode" ColumnName="FromPostcode" />
+                <ScalarProperty Name="FromState" ColumnName="FromState" />
+                <ScalarProperty Name="FromCity" ColumnName="FromCity" />
+                <ScalarProperty Name="FromAddress2" ColumnName="FromAddress2" />
+                <ScalarProperty Name="FromAddress1" ColumnName="FromAddress1" />
+                <ScalarProperty Name="FromName" ColumnName="FromName" />
+                <ScalarProperty Name="ToCountry" ColumnName="ToCountry" />
+                <ScalarProperty Name="ToPostcode" ColumnName="ToPostcode" />
+                <ScalarProperty Name="ToState" ColumnName="ToState" />
+                <ScalarProperty Name="ToCity" ColumnName="ToCity" />
+                <ScalarProperty Name="ToAddress2" ColumnName="ToAddress2" />
+                <ScalarProperty Name="ToAddress1" ColumnName="ToAddress1" />
+                <ScalarProperty Name="ToName" ColumnName="ToName" />
+                <ScalarProperty Name="Carrier" ColumnName="Carrier" />
+                <ScalarProperty Name="ReturnTracking" ColumnName="ReturnTracking" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
               </MappingFragment>
