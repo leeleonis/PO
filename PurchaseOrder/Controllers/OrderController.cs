@@ -284,21 +284,23 @@ namespace PurchaseOrderSys.Controllers
                     db.SaveChanges();
                 }
 
-                if (package.GetOrder.SCID.HasValue)
+                using (var OM = new OrderManagement(package.OrderID))
                 {
-                    try
+                    if (package.GetOrder.SCID.HasValue)
                     {
-                        using (var OM = new OrderManagement(package.OrderID))
+                        try
                         {
                             OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
                             OM.SplitPackage(packageData.Select(p => p.ID).ToArray());
                             OM.OrderSyncPush();
                         }
+                        catch (Exception ex)
+                        {
+                            TempData["ErrorMsg"] = ex.InnerException?.Message ?? ex.Message;
+                        }
                     }
-                    catch (Exception ex)
-                    {
-                        TempData["ErrorMsg"] = ex.InnerException?.Message ?? ex.Message;
-                    }
+
+                    OM.ActionLog("Package", "Split Package");
                 }
             }
             catch (Exception ex)
@@ -309,6 +311,7 @@ namespace PurchaseOrderSys.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
         public ActionResult PackageMarkShip(int PackageID)
         {
             AjaxResult result = new AjaxResult();
@@ -323,12 +326,23 @@ namespace PurchaseOrderSys.Controllers
 
                 using (var OM = new OrderManagement(package.OrderID))
                 {
+                    OM.ActionLog("Package", "Mark Ship");
+
                     var order = db.Orders.Find(package.OrderID);
-                    order.FulfillmentStatus = (byte)OM.CheckFulfillmentStatus(order);
-                    if (order.FulfillmentStatus.Equals((byte)EnumData.OrderFulfilledStatus.Fulfilled))
+                    var fulfillmentStatus = OM.CheckFulfillmentStatus(order);
+
+                    if (!order.FulfillmentStatus.Equals((byte)fulfillmentStatus))
                     {
-                        order.OrderStatus = (byte)EnumData.OrderStatus.Completed;
+                        order.FulfillmentStatus = (byte)fulfillmentStatus;
+                        OM.ActionLog("Fulfillment", fulfillmentStatus.ToString());
+
+                        if (order.FulfillmentStatus.Equals((byte)EnumData.OrderFulfilledStatus.Fulfilled))
+                        {
+                            order.OrderStatus = (byte)EnumData.OrderStatus.Completed;
+                            OM.ActionLog("Order", "Complete");
+                        }
                     }
+
 
                     if (order.SCID.HasValue)
                     {
@@ -337,6 +351,8 @@ namespace PurchaseOrderSys.Controllers
                         OM.OrderSyncPush();
                     }
                 }
+
+                db.SaveChanges();
             }
             catch (Exception ex)
             {

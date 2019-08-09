@@ -220,9 +220,11 @@
                 </tbody>
             </table>
         </div>
-
-        <div class="col-sm-12 text-center">
-            <button type="button" class="btn btn-default btn-lg">Mark Ship</button>
-        </div>
+        @if (Model.ShippingStatus.Equals((byte)EnumData.OrderShippingStatus.訂單管理))
+        {
+            <div class="col-sm-12 text-center">
+                <button type="button" class="btn btn-default btn-lg" onclick="if (confirm('確定要Mark Ship?')) { PackageMarkShip(@Model.ID); }">Mark Ship</button>
+            </div>
+        }
     </div>
 </div>
