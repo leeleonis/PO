@@ -519,6 +519,7 @@
         $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
         $('.tab-pane').eq(hash.substr(1)).addClass('active');
 
+        var pageUrl = $('#data-form').attr('action');
         var $actionSelect = $('#select-action'), $packageList = $('#list-package');
         var $splitQtyDialog = $('#dialog-splitQty'), $packageDialog = $('#dialog-package');
 
@@ -576,6 +577,17 @@
 
                 } else {
                     alert("Not found!");
+                }
+            });
+        };
+
+        var PackageMarkShip = function (PackageID) {
+            website.AjaxUrl('../PackageMarkShip', 'post', { PackageID }).done(function (response) {
+                if (response.status) {
+                    alert('Mark ship success!');
+                    location.href = pageUrl;
+                } else {
+                    return alert(response.message);
                 }
             });
         };
@@ -683,7 +695,7 @@
                     } else {
                         alert(response.message);
                     }
-                    location.href = $('#data-form').attr('action');
+                    location.href = pageUrl;
                 });
             });
 
