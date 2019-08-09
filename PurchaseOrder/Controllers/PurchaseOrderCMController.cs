@@ -465,8 +465,26 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult GetSerialList(int ID)
         {
             var PurchaseSKU = db.PurchaseSKU.Find(ID);
-            var SerialsLlist = PurchaseSKU.SerialsLlist.Where(x => x.SerialsType == "CM").Select(x => x.SerialsNo).ToList();
-            var partial = ControlToString("~/Views/Shared/GetSerialList.cshtml", SerialsLlist);
+            var SerialsLlist = PurchaseSKU.SerialsLlist.Where(x => x.SerialsType == "CM").ToList();
+            var Serials = new List<string>();
+            foreach (var item in SerialsLlist)
+            {
+                var Warehouse = "";
+                if (item.PID.HasValue)
+                {
+                    if ( item.SerialsLlistP.TransferSKUID.HasValue)
+                    {
+                        Warehouse= item.SerialsLlistP.TransferSKU.Transfer.WarehouseTo.Name;
+                    }
+                    else
+                    {
+                        Warehouse = item.SerialsLlistP.PurchaseSKU.PurchaseOrder.WarehousePO.Name;
+                    }
+                   
+                }
+                Serials.Add(item.SerialsNo + "　　" + Warehouse);
+            }
+            var partial = ControlToString("~/Views/Shared/GetSerialList.cshtml", Serials);
             //var partial = Engine.Razor.RunCompile(template, "templateKey", null, new { Name = "World" });
             return Json(new { status = true, partial }, JsonRequestBehavior.AllowGet);
         }

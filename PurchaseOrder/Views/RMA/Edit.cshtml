@@ -427,11 +427,11 @@
                         data: "ID",
                         render: function (data, type, row, meta) {
                             //var html = "<a  class='btn btn-default btn-sm ChangeSKU'>Prepaid Return Label</a>";
-                             @*@if (Model.Status != "Closed")
+                            var html = "";
+                             @if (Model.Status != "Closed")
                              {
                                  @:html += " <a href='@Url.Action("Returnedserials")?ID=" + data + "' class='btn btn-default btn-sm'>Receive returns</a>";
-                             }*@
-                            var html = "";
+                             }
                             if (row.ReturnedSerialsNo == "" || row.ReturnedSerialsNo == null) {
                                 html += " <a val='" + data + "'  oSKU='" + row.SKU + "' class='btn btn-default btn-sm ChangeSKU'>Renew item</a>";
                             }
@@ -600,7 +600,9 @@
             });
             $("#Returndialog").dialog({
                 autoOpen: false,
-                width: 800
+                width: 800,
+                position: { my: "center", at: "top" },
+                modal :true
             });
             $("body").on("click", ".ChangeSKU", function () {
                 var val = $(this).attr("val");
@@ -614,24 +616,34 @@
                 return false;
             });
             $("body").on("click", "#ReturnBtn", function () {
-                $("#Returndialog").html("SC資料讀取中.........");
-                $.ajax({
-                    traditional: true,
-                    type: "post",
-                    url: "@Url.Action("ReturnLabel")",
-                    data: {
-                        id: @Html.DisplayFor(x=>x.ID),
-                    },
-                    success: function (data) {
-                        if (data.status) {
-                            $("#Returndialog").html(data.html);
+                var dataList = [];
+                $(DataGrid.$('input[type="checkbox"]:checked').each(function () {
+                    dataList.push($(this).val());
+                }));
+                if (dataList.length > 0) {
+                    $("#Returndialog").html("SC資料讀取中.........");
+                    $.ajax({
+                        traditional: true,
+                        type: "get",
+                        url: "@Url.Action("ReturnLabel")",
+                        data: {
+                            id: @Html.DisplayFor(x=>x.ID),
+                            IDList: dataList
+                        },
+                        success: function (data) {
+                            if (data.status) {
+                                $("#Returndialog").html(data.html);
+                            }
+                            else {
+                                alert(data.Errmsg);
+                            }
                         }
-                        else {
-                            alert(data.Errmsg);
-                        }
-                    }
-                });
-                $("#Returndialog").dialog("open");
+                    });
+                    $("#Returndialog").dialog("open");
+                }
+                else {
+                    alert("必須勾選項目");
+                }
                 return false;
             });
             $("#ChangeSKU").click(function () {

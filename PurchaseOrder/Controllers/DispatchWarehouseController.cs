@@ -323,7 +323,7 @@ namespace PurchaseOrderSys.Controllers
                     m.LastMileCarrier,
                     MethodTypeID = m.LastMile.MethodType,
                     BoxTypeID = m.LastMile.BoxType,
-                    Carrier = ShippingList.data.carrier.Where(x => x.value == m.LastMileCarrier)?.FirstOrDefault().text,
+                    Carrier = ShippingList.data.carrier.Where(x => x.value == m.LastMileCarrier).FirstOrDefault()?.text,
                     MethodType = "",
                     BoxType = "",
                     m.IsExport,

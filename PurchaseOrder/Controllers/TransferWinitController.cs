@@ -809,17 +809,28 @@ namespace PurchaseOrderSys.Controllers
                                 //    //}
                                 //    //if (broke) break;
                                 //}
-
+                                var Name = "";
+                                var Weight = 0m;
+                                if (Serial.PurchaseSKUID.HasValue)
+                                {
+                                    Name = Serial.PurchaseSKU.Name;
+                                    Weight = Serial.PurchaseSKU.SKU.Logistic?.ShippingWeight ?? 0;
+                                }
+                                else if (Serial.TransferSKUID.HasValue)
+                                {
+                                    Name = Serial.TransferSKU.Name;
+                                    Weight = Serial.TransferSKU.SKU.Logistic?.ShippingWeight ?? 0;
+                                }
                                 WinitTransferBox.WinitTransferBoxItem.Add(new WinitTransferBoxItem
                                 {
                                     SkuNo = SkuNo,
                                     SerialsLlistID = Serial.ID,
                                     SerialsNo = Serial.SerialsNo,
-                                    Name = Serial.PurchaseSKU.Name,
+                                    Name = Name,
                                     BarCode = itemBarcodeList[FilePage - 1],
                                     FilePage = FilePage.ToString(),
                                     WinitTransferSKUID = WinitTransferSKU.ID,
-                                    Weight = Serial.PurchaseSKU.SKU.Logistic?.ShippingWeight ?? 0
+                                    Weight = Weight
                                 });
                                 print = "key=serial&id=" + WinitTransferSKU.ID + "&Page=" + FilePage;
                                 Session["WinitPrepVMList" + SID] = PrepVMList;
@@ -1254,7 +1265,7 @@ namespace PurchaseOrderSys.Controllers
             }
             if (string.IsNullOrWhiteSpace(transfer.WinitTransfer.CheckList))
             {
-                var Stream =CheckListExcel(transfer);
+                var Stream = CheckListExcel(transfer);
                 FedExFile2.Add(new Tuple<Stream, string>(Stream, "CheckList.zip"));
                 transfer.WinitTransfer.CheckList= Convert.ToBase64String(Stream.ToArray());
             }

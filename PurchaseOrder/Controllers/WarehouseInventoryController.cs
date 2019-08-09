@@ -923,7 +923,14 @@ namespace PurchaseOrderSys.Controllers
                 {
                     ISType = item.PurchaseSKU.CreditMemo.CMType;
                     SID = item.PurchaseSKU.CreditMemoID;
-                    Warehouse = item.PurchaseSKU.CreditMemo.PurchaseOrder.WarehousePO.Name;
+                    if (item.SerialsLlistP.TransferSKUID.HasValue)
+                    {
+                        Warehouse = item.SerialsLlistP.TransferSKU.Transfer.WarehouseTo.Name;
+                    }
+                    else
+                    {
+                        Warehouse = item.SerialsLlistP.PurchaseSKU.PurchaseOrder.WarehousePO.Name;
+                    }
                 }
                 else if (item.SerialsType == "Order")
                 {

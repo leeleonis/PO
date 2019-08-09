@@ -396,41 +396,44 @@ namespace PurchaseOrderSys.Controllers
             var RMA = db.RMA.Find(id);
 
             var RMASKUList = new List<RMAEdit>();
-            foreach (var item in RMA.RMASKU.Where(x => x.IsEnable))
+            foreach (var RMASKUitem in RMA.RMASKU.Where(x => x.IsEnable))
             {
-                var nRMAEdit = new RMAEdit();
+                foreach (var Serialitem in RMASKUitem.RMAOrderSerialsLlist)
+                {
+                    var nRMAEdit = new RMAEdit();
 
-                var RMASerial = item.RMASerialsLlist.FirstOrDefault();
+                    var RMASerial = RMASKUitem.RMASerialsLlist.Where(x => x.SerialsNo == Serialitem.SerialsNo).FirstOrDefault();
 
-                nRMAEdit.ID = item.ID;
-                if (RMASerial == null)
-                {
-                    nRMAEdit.Model = "E";
+                    nRMAEdit.ID = Serialitem.ID;
+                    if (RMASerial == null)
+                    {
+                        nRMAEdit.Model = "E";
+                    }
+                    else
+                    {
+                        nRMAEdit.Model = "L";
+                    }
+
+                    if (RMASerial != null && !string.IsNullOrWhiteSpace(RMASerial.NewSkuNo))
+                    {
+                        nRMAEdit.SKU = RMASerial.NewSkuNo;
+                    }
+                    else
+                    {
+                        nRMAEdit.SKU = RMASKUitem.SkuNo;
+                    }
+
+                    nRMAEdit.QTYOrdered = RMASKUitem.QTYOrdered;
+                    nRMAEdit.ProductName = RMASKUitem.SKU.SkuLang.Where(y => y.LangID == LangID).FirstOrDefault()?.Name;
+                    nRMAEdit.ReturnedSerialsNo = RMASerial?.SerialsNo;
+                    nRMAEdit.OrderSerialsNo = Serialitem.SerialsNo;
+                    nRMAEdit.UPCEAN = RMASKUitem.SKU.UPC + "/" + RMASKUitem.SKU.EAN;
+                    nRMAEdit.Reason = RMASKUitem.Reason;
+                    nRMAEdit.TrWarehouse = RMASerial?.Warehouse.Name;
+                    nRMAEdit.Warehouse = RMASKUitem.WarehouseID;
+                    nRMAEdit.UnitPrice = (RMASKUitem.UnitPrice * RMASKUitem.RMASerialsLlist.Sum(y => y.SerialsQTY)) ?? 0;
+                    RMASKUList.Add(nRMAEdit);
                 }
-                else
-                {
-                    nRMAEdit.Model = "L";
-                }
-         
-                if (RMASerial != null && !string.IsNullOrWhiteSpace( RMASerial.NewSkuNo))
-                {
-                    nRMAEdit.SKU = RMASerial.NewSkuNo;
-                }
-                else
-                {
-                    nRMAEdit.SKU = item.SkuNo;
-                }
-             
-                nRMAEdit.QTYOrdered = item.QTYOrdered;
-                nRMAEdit.ProductName = item.SKU.SkuLang.Where(y => y.LangID == LangID).FirstOrDefault()?.Name;
-                nRMAEdit.ReturnedSerialsNo = RMASerial?.SerialsNo;
-                nRMAEdit.OrderSerialsNo = item.RMAOrderSerialsLlist.FirstOrDefault()?.SerialsNo;
-                nRMAEdit.UPCEAN = item.SKU.UPC + "/" + item.SKU.EAN;
-                nRMAEdit.Reason = item.Reason;
-                nRMAEdit.TrWarehouse = RMASerial?.Warehouse.Name;
-                nRMAEdit.Warehouse = item.WarehouseID;
-                nRMAEdit.UnitPrice = (item.UnitPrice * item.RMASerialsLlist.Sum(y => y.SerialsQTY)) ?? 0;
-                RMASKUList.Add(nRMAEdit);
             }
             Session["RMAEdit" + id] = RMASKUList.ToList();
             return View(RMA);
@@ -691,10 +694,10 @@ namespace PurchaseOrderSys.Controllers
                 {
                     return Json(new { status = false, Errmsg = "序號不可大於回收數" }, JsonRequestBehavior.AllowGet);
                 }
-                var RMASerialsLlist = db.RMASerialsLlist.Where(x => x.SerialsNo == serials && x.RMASKU.SkuNo == RMASKU.SkuNo);//檢查序號是否重複，同SKU序號不能新增,2019/02/05 加入有已出貨或是CM的紀錄, 就能重新在入庫
+                var RMASerialsLlist = db.RMASerialsLlist.Where(x => x.SerialsNo == serials && x.RMASKU.SkuNo == RMASKU.SkuNo && x.SerialsType == "RMAIn" && !x.RMASerialsLlistC.Any());//檢查序號是否重複，同SKU序號不能新增,2019/02/05 加入有已出貨或是CM的紀錄, 就能重新在入庫
                 if (!RMASerialsLlist.Any())
                 {
-                    var HaveOrderData = db.SerialsLlist.Where(x => x.SerialsType == "Order" && x.SerialsNo == serials && x.PurchaseSKU.SkuNo == RMASKU.SkuNo && x.OrderID == RMASKU.RMA.OrderID).Any();
+                    var HaveOrderData = db.SerialsLlist.Where(x => x.SerialsType == "Order" && x.SerialsNo == serials &&( x.PurchaseSKU.SkuNo == RMASKU.SkuNo|| x.TransferSKU.SkuNo == RMASKU.SkuNo) && x.OrderID == RMASKU.RMA.OrderID).Any();
 
                     //if (!HaveOrderData)
                     //{
@@ -887,13 +890,16 @@ namespace PurchaseOrderSys.Controllers
             Session["RMASKU" + RMASKUID] = sRMASKU;
             return Json(new { status = true }, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult ReturnLabel(int ID)
+        public ActionResult ReturnLabel(int ID, int[] IDList)
         {
-          var RMA= db.RMA.Find(ID);
+            ViewBag.rmaid = ID;
+            TempData["IDList"+ ID] = IDList;
+            var RMA = db.RMA.Find(ID);
             var RMAOrderTracking = new RMAOrderTracking();
             if (RMA.RMASKU.Any(x => x.IsEnable))
             {
                 var Warehouse = RMA.RMASKU.FirstOrDefault().Warehouse;
+                ViewBag.Shippingmethods = Warehouse.WarehouseSummary.Where(x => x.IsEnable && x.Type == "Shippingmethods").FirstOrDefault()?.Val;
                 RMAOrderTracking.ToName = Warehouse.Name;
                 RMAOrderTracking.ToAddress1 = Warehouse.Address1;
                 RMAOrderTracking.ToAddress2 = Warehouse.Address2;
@@ -914,6 +920,25 @@ namespace PurchaseOrderSys.Controllers
             }
             var html = RenderPartialViewToString("ReturnLabel", RMAOrderTracking);
             return Json(new { status = true, html }, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public ActionResult ReturnLabel(RMAOrderTracking RMAOrderTracking,int rmaid )
+        {
+            var RMA = db.RMA.Find(rmaid);
+            int[] IDList = (int[])TempData["IDList" + rmaid];
+            var CreateBy = UserBy;
+            var CreateAt = DateTime.UtcNow;
+            RMAOrderTracking.CreateAt = CreateAt;
+            RMAOrderTracking.CreateBy = CreateBy;
+            foreach (var RMASKUitem in RMA.RMASKU.Where(x=>x.IsEnable))
+            {
+                foreach (var Serialitem in RMASKUitem.RMAOrderSerialsLlist.Where(x=>x.IsEnable&& IDList.Contains(x.ID)))
+                {
+                    Serialitem.RMAOrderTracking = RMAOrderTracking;
+                }
+            }
+            db.SaveChanges();
+            return RedirectToAction("Edit", new { id = rmaid });
         }
     }
 }
