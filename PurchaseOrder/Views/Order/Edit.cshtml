@@ -562,14 +562,14 @@
         var PackageSave = function (ID) {
             $packageList.children("div").each(function () {
                 if ($(this).data('package') == ID) {
-                    var package = $(this);
-                    var data = $(this).find('input, select').serializeArray();
+                    var $package = $(this);
+                    var data = $package.find('input, select').serializeArray();
 
                     website.AjaxUrl('../PackageSave', 'post', data).done(function (response) {
                         if (response.status) {
                             alert('Update success!');
 
-                            return package.after(response.data).remove();
+                            return $package.after(response.data).remove();
                         } else {
                             return alert(response.message);
                         }
@@ -582,14 +582,25 @@
         };
 
         var PackageMarkShip = function (PackageID) {
-            website.AjaxUrl('../PackageMarkShip', 'post', { PackageID }).done(function (response) {
+            var $package = $packageList.find('div[data-package=' + PackageID + ']');
+            var data = $package.find('input, select').serializeArray();
+
+            website.AjaxUrl('../PackageSave', 'post', data).done(function (response) {
                 if (response.status) {
-                    alert('Mark ship success!');
-                    location.href = pageUrl;
+                    website.AjaxUrl('../PackageMarkShip', 'post', { PackageID }).done(function (response) {
+                        if (response.status) {
+                            alert('Mark ship success!');
+
+                            location.href = pageUrl;
+                        } else {
+                            return alert(response.message);
+                        }
+                    });
                 } else {
                     return alert(response.message);
                 }
             });
+
         };
 
         var CommentAdd = function (input) {
