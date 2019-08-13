@@ -746,6 +746,10 @@
           <Property Name="ReturnTracking" Type="nvarchar" MaxLength="50" />
           <Property Name="Carrier" Type="nvarchar" MaxLength="20" />
           <Property Name="RMAOrderTrackingID" Type="int" />
+          <Property Name="WarehouseID" Type="int" />
+          <Property Name="Reason" Type="nvarchar" MaxLength="20" />
+          <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="UpdateAt" Type="datetime" />
         </EntityType>
         <EntityType Name="RMAOrderTracking">
           <Key>
@@ -5207,6 +5211,10 @@
           <Property Name="Carrier" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="RMAOrderTrackingID" Type="Int32" />
           <NavigationProperty Name="RMAOrderTracking" Relationship="PurchaseOrderModel.FK_RMAOrderSerialsLlist_RMAOrderTracking" FromRole="RMAOrderSerialsLlist" ToRole="RMAOrderTracking" />
+          <Property Name="WarehouseID" Type="Int32" />
+          <Property Name="Reason" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
         </EntityType>
         <Association Name="FK_RMAOrderSerialsLlist_RMASKU1">
           <End Type="PurchaseOrderModel.RMASKU" Role="RMASKU" Multiplicity="0..1" />
@@ -6874,6 +6882,10 @@
           <EntitySetMapping Name="RMAOrderSerialsLlist">
             <EntityTypeMapping TypeName="PurchaseOrderModel.RMAOrderSerialsLlist">
               <MappingFragment StoreEntitySet="RMAOrderSerialsLlist">
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+                <ScalarProperty Name="WarehouseID" ColumnName="WarehouseID" />
                 <ScalarProperty Name="RMAOrderTrackingID" ColumnName="RMAOrderTrackingID" />
                 <ScalarProperty Name="Carrier" ColumnName="Carrier" />
                 <ScalarProperty Name="ReturnTracking" ColumnName="ReturnTracking" />

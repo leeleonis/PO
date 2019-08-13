@@ -394,7 +394,7 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult Edit(int id)
         {
             var RMA = db.RMA.Find(id);
-
+            var ShippingList = new FedExApi.Shipping_API().ShippingList().data.shippingMethod;
             var RMASKUList = new List<RMAEdit>();
             foreach (var RMASKUitem in RMA.RMASKU.Where(x => x.IsEnable))
             {
@@ -405,6 +405,7 @@ namespace PurchaseOrderSys.Controllers
                     var RMASerial = RMASKUitem.RMASerialsLlist.Where(x => x.SerialsNo == Serialitem.SerialsNo).FirstOrDefault();
 
                     nRMAEdit.ID = Serialitem.ID;
+                    nRMAEdit.SKUID = RMASKUitem.ID;
                     if (RMASerial == null)
                     {
                         nRMAEdit.Model = "E";
@@ -428,10 +429,13 @@ namespace PurchaseOrderSys.Controllers
                     nRMAEdit.ReturnedSerialsNo = RMASerial?.SerialsNo;
                     nRMAEdit.OrderSerialsNo = Serialitem.SerialsNo;
                     nRMAEdit.UPCEAN = RMASKUitem.SKU.UPC + "/" + RMASKUitem.SKU.EAN;
-                    nRMAEdit.Reason = RMASKUitem.Reason;
+                    nRMAEdit.Reason = Serialitem.Reason?? RMASKUitem.Reason;
                     nRMAEdit.TrWarehouse = RMASerial?.Warehouse.Name;
-                    nRMAEdit.Warehouse = RMASKUitem.WarehouseID;
+                    nRMAEdit.Warehouse = Serialitem.WarehouseID ?? RMASKUitem.WarehouseID;
                     nRMAEdit.UnitPrice = (RMASKUitem.UnitPrice * RMASKUitem.RMASerialsLlist.Sum(y => y.SerialsQTY)) ?? 0;
+                    nRMAEdit.tracking = Serialitem.RMAOrderTracking?.ReturnTracking ?? "";
+                    nRMAEdit.Carrier = ShippingList.Where(x => x.value.ToString() == Serialitem.RMAOrderTracking?.Carrier).FirstOrDefault()?.text ?? "";
+                    nRMAEdit.RMASerialsLlistID = RMASKUitem.RMASerialsLlist.Where(x => x.IsEnable && x.SerialsNo == Serialitem.SerialsNo).FirstOrDefault()?.ID;
                     RMASKUList.Add(nRMAEdit);
                 }
             }
@@ -460,20 +464,52 @@ namespace PurchaseOrderSys.Controllers
                 {
                     foreach (var RMASKUitem in OldRMA.RMASKU.Where(x => x.IsEnable))
                     {
-                        if (RMAListitem.ID == RMASKUitem.ID)
+                        if (RMAListitem.SKUID == RMASKUitem.ID)
                         {
-                            if (!string.IsNullOrWhiteSpace(RMAListitem.Reason) && RMAListitem.Reason != RMASKUitem.Reason)
+                            foreach (var OrderSerialsLlistitem in RMASKUitem.RMAOrderSerialsLlist.Where(x => x.IsEnable))
                             {
-                                RMASKUitem.Reason = RMAListitem.Reason;
-                                RMASKUitem.UpdateBy = UserBy;
-                                RMASKUitem.UpdateAt = dt;
+                                if (string.IsNullOrWhiteSpace(OrderSerialsLlistitem.Reason) || RMAListitem.Reason != OrderSerialsLlistitem.Reason)
+                                {
+                                    OrderSerialsLlistitem.Reason = RMAListitem.Reason;
+                                    OrderSerialsLlistitem.UpdateBy = UserBy;
+                                    OrderSerialsLlistitem.UpdateAt = dt;
+                                }
+                                if (!RMAListitem.Warehouse.HasValue || RMAListitem.Warehouse != OrderSerialsLlistitem.WarehouseID)
+                                {
+                                    OrderSerialsLlistitem.WarehouseID = RMAListitem.Warehouse;
+                                    OrderSerialsLlistitem.UpdateBy = UserBy;
+                                    OrderSerialsLlistitem.UpdateAt = dt;
+                                }
+                                if (RMAListitem.ReceiveNo == OrderSerialsLlistitem.SerialsNo)
+                                {
+                                    //入庫
+                                    if (!string.IsNullOrWhiteSpace(RMAListitem.ReceiveNo) && !RMASKUitem.RMASerialsLlist.Where(x => x.IsEnable && x.SerialsNo == RMAListitem.ReceiveNo).Any())
+                                    {
+                                        var SaveserialMsg = FunSaveserials(RMAListitem.ReceiveNo, RMAListitem.Reason, RMAListitem.SKUID, RMAListitem.Warehouse.Value);
+                                        if (!string.IsNullOrWhiteSpace(SaveserialMsg))
+                                        {
+                                            AlertErrMsg(SaveserialMsg);
+                                        }
+
+                                    }
+                                }
+
                             }
-                            if (RMAListitem.Warehouse.HasValue && RMAListitem.Warehouse != RMASKUitem.WarehouseID)
-                            {
-                                RMASKUitem.WarehouseID = RMAListitem.Warehouse;
-                                RMASKUitem.UpdateBy = UserBy;
-                                RMASKUitem.UpdateAt = dt;
-                            }
+
+
+
+                            //if (!string.IsNullOrWhiteSpace(RMAListitem.Reason) && RMAListitem.Reason != RMASKUitem.Reason)
+                            //{
+                            //    RMASKUitem.Reason = RMAListitem.Reason;
+                            //    RMASKUitem.UpdateBy = UserBy;
+                            //    RMASKUitem.UpdateAt = dt;
+                            //}
+                            //if (RMAListitem.Warehouse.HasValue && RMAListitem.Warehouse != RMASKUitem.WarehouseID)
+                            //{
+                            //    RMASKUitem.WarehouseID = RMAListitem.Warehouse;
+                            //    RMASKUitem.UpdateBy = UserBy;
+                            //    RMASKUitem.UpdateAt = dt;
+                            //}
                         }
                     }
                 }
@@ -483,27 +519,21 @@ namespace PurchaseOrderSys.Controllers
             return RedirectToAction("Edit", new { id = RMA.ID });
         }
         [HttpPost]
-        public ActionResult ChangeSKU(int OldSKU, string NewSKU)
+        public ActionResult ChangeSKU(int oid, string NewSKU)
         {
-            var RMASKU = db.RMASKU.Find(OldSKU);
+            var RMASerialsLlist = db.RMASerialsLlist.Find(oid);
             var dt = DateTime.UtcNow;
-            var RMASerialsLlist = RMASKU.RMASerialsLlist;
-            if (RMASerialsLlist.Any())
-            {
-                foreach (var item in RMASerialsLlist)
-                {
-                    item.NewSkuNo = RMASKU.SkuNo + NewSKU;
-                    item.NewSKUCreateAt = dt;
-                    item.NewSKUCreateBy = UserBy;
-                }
-                db.SaveChanges();
-                return Json(new { status = true }, JsonRequestBehavior.AllowGet);
-            }
+            RMASerialsLlist.NewSkuNo = RMASerialsLlist.RMASKU.SkuNo + NewSKU;
+            RMASerialsLlist.NewSKUCreateAt = dt;
+            RMASerialsLlist.NewSKUCreateBy = UserBy;
+            db.SaveChanges();
+            return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+            //}
 
-            else
-            {
-                return Json(new { status = false , Errmsg ="沒有可轉換的序號"}, JsonRequestBehavior.AllowGet);
-            }
+            //else
+            //{
+            //    return Json(new { status = false , Errmsg ="沒有可轉換的序號"}, JsonRequestBehavior.AllowGet);
+            //}
         }
         [HttpPost]
         public ActionResult CreatNote(int? ID, string SID, string Note)
@@ -677,8 +707,9 @@ namespace PurchaseOrderSys.Controllers
             ViewBag.errormsg = string.Join("\\n\\r", errormsg);
             return View(oRMASKU);
         }
-        public ActionResult Saveserials(string serials, string Reason, int RMASKUID, int WarehouseID)
+        public string FunSaveserials(string serials, string Reason, int RMASKUID, int WarehouseID)
         {
+            var errormsg = new List<string>();
             var ReturnWarehouseID = 0;
             var dt = DateTime.UtcNow;
             if (int.TryParse(db.WarehouseSummary.Where(x => x.Type == "SCID" && x.WarehouseID == WarehouseID).FirstOrDefault()?.Val, out ReturnWarehouseID))
@@ -692,12 +723,12 @@ namespace PurchaseOrderSys.Controllers
                 var SerialsLlistCount = RMASKU.RMASerialsLlist.Where(x => x.SerialsType == "RMAIn").Sum(x => x.SerialsQTY);//計算RMAIn的序號數
                 if (SerialsLlistCount >= RMASKU.QTYOrdered)
                 {
-                    return Json(new { status = false, Errmsg = "序號不可大於回收數" }, JsonRequestBehavior.AllowGet);
+                    return "序號不可大於回收數";
                 }
                 var RMASerialsLlist = db.RMASerialsLlist.Where(x => x.SerialsNo == serials && x.RMASKU.SkuNo == RMASKU.SkuNo && x.SerialsType == "RMAIn" && !x.RMASerialsLlistC.Any());//檢查序號是否重複，同SKU序號不能新增,2019/02/05 加入有已出貨或是CM的紀錄, 就能重新在入庫
                 if (!RMASerialsLlist.Any())
                 {
-                    var HaveOrderData = db.SerialsLlist.Where(x => x.SerialsType == "Order" && x.SerialsNo == serials &&( x.PurchaseSKU.SkuNo == RMASKU.SkuNo|| x.TransferSKU.SkuNo == RMASKU.SkuNo) && x.OrderID == RMASKU.RMA.OrderID).Any();
+                    var HaveOrderData = db.SerialsLlist.Where(x => x.SerialsType == "Order" && x.SerialsNo == serials && (x.PurchaseSKU.SkuNo == RMASKU.SkuNo || x.TransferSKU.SkuNo == RMASKU.SkuNo) && x.OrderID == RMASKU.RMA.OrderID).Any();
 
                     //if (!HaveOrderData)
                     //{
@@ -727,7 +758,6 @@ namespace PurchaseOrderSys.Controllers
                     //}
                     if (HaveOrderData)
                     {
-
                         var nSerialsLlistIn = new RMASerialsLlist
                         {
                             IsEnable = true,
@@ -742,23 +772,103 @@ namespace PurchaseOrderSys.Controllers
                             CreateAt = dt
                         };
                         RMASKU.RMASerialsLlist.Add(nSerialsLlistIn);
+
+                        try
+                        {
+                            if (int.TryParse(db.WarehouseSummary.Where(x => x.Type == "SCID" && x.WarehouseID == WarehouseID).FirstOrDefault()?.Val, out ReturnWarehouseID))
+                            {
+                                //SC加入RMA序號
+                                //SC_WebService SCWS = new SC_WebService("tim@weypro.com", ApiPassword);
+                                var SCOrderID = RMASKU.RMA.OrderID.Value;
+                                var order = SCWS.Get_OrderData(SCOrderID).Order;//去SC抓訂單資料
+                                if (UpdateSC)
+                                {
+                                    order.OrderCreationSourceApplication = SCService.OrderCreationSourceApplicationType.PointOfSale;
+                                }
+                                if (!UpdateSC || SCWS.Update_Order(order))
+                                {
+                                    foreach (var item in order.Items.Where(x => x.ProductID == RMASKU.SkuNo))
+                                    {
+                                        var OrderItemID = order.Items.Where(x => x.ProductID == item.ProductID).FirstOrDefault().ID;
+                                        var SCRMA_Item = SCWS.Get_RMA_Item(SCOrderID)?.Where(x => x.OriginalOrderItemID == OrderItemID).FirstOrDefault();
+                                        if (SCRMA_Item != null)//沒資料就新增
+                                        {
+                                            if (SCRMA_Item.QtyReturned > SCRMA_Item.QtyReceived)//比對數量
+                                            {
+                                                if (UpdateSC)
+                                                {
+                                                    try
+                                                    {
+                                                        var SerialsNo = "";
+                                                        if (RMASKU.SKU.SerialTracking)//有序號管理就加入序號
+                                                        {
+                                                            SerialsNo = serials;
+                                                        }
+                                                        SCWS.Receive_RMA_Item(SCOrderID, RMASKU.RMAItemID.Value, item.ProductID, item.Qty, ReturnWarehouseID, SerialsNo);//RMA入庫
+                                                    }
+                                                    catch (Exception ex)
+                                                    {
+                                                        errormsg.Add("Receive_RMA_Item錯誤");
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        if (UpdateSC && !errormsg.Any())//沒有錯誤才移除
+                                        {
+                                            try
+                                            {
+                                                SCWS.Delete_ItemAllSerials(SCOrderID, item.ID);//SC上的序號移除
+                                            }
+                                            catch (Exception)
+                                            {
+                                                errormsg.Add("Delete_ItemSerials錯誤");
+                                            }
+                                        }
+                                    }
+                                    if (UpdateSC)
+                                    {
+                                        order.OrderCreationSourceApplication = SCService.OrderCreationSourceApplicationType.Default;
+                                        SCWS.Update_Order(order);
+                                    }
+                                }
+
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+
+                            errormsg.Add("Receive_RMA_Item錯誤");
+                        }
                         Session["RMASKU" + RMASKUID] = RMASKU;
-                        return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+                        return "";
                     }
                     else
                     {
-                        return Json(new { status = false, Errmsg = "序號沒有出貨資料" }, JsonRequestBehavior.AllowGet);
+                        return "序號沒有出貨資料";
                     }
                 }
                 else
                 {
-                    return Json(new { status = false, Errmsg = "序號已經存在" }, JsonRequestBehavior.AllowGet);
+                    return "序號已經存在";
                 }
             }
             else
             {
-                return Json(new { status = false, Errmsg = "SCID錯誤" }, JsonRequestBehavior.AllowGet);
+                return "SCID錯誤";
             }
+        }
+        public ActionResult Saveserials(string serials, string Reason, int RMASKUID, int WarehouseID)
+        {
+            var Errmsg = FunSaveserials(serials, Reason, RMASKUID, WarehouseID);
+            if (string.IsNullOrWhiteSpace(Errmsg))
+            {
+                return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { status = false, Errmsg }, JsonRequestBehavior.AllowGet);
+            }
+
         }
         public ActionResult RemoveData(int[] IDList, int ID)
         {
@@ -939,6 +1049,13 @@ namespace PurchaseOrderSys.Controllers
             }
             db.SaveChanges();
             return RedirectToAction("Edit", new { id = rmaid });
+        }
+        [HttpPost]
+        public ActionResult Receiveitem(int id,string Serial)
+        {
+            var RMA = db.RMA.Find(id);
+
+            return Json(new { status = true }, JsonRequestBehavior.AllowGet);
         }
     }
 }

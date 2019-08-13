@@ -110,6 +110,13 @@
             $("body").on("change", "input,select", function () {
                 $("button[type='submit']").prop("disabled", false);
             });
+            $("body").on("change", "input", function () {
+                var str = $(this).val();
+                var arr =   str.match(/[^\x00-\xff]/g)
+                if (arr) {
+                    alert(str + "有全形文字");
+                }
+            });
             $("body").on("click", "input[type='checkbox']", function () {
                 var thead = $(this).closest("thead");
                 if (thead.length > 0) {

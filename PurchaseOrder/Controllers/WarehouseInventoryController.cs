@@ -936,7 +936,14 @@ namespace PurchaseOrderSys.Controllers
                 {
                     ISType = "Order";
                     SID = item.OrderID;
-                    Warehouse = item.PurchaseSKU.PurchaseOrder.WarehousePO.Name;
+                    if (item.SerialsLlistP.TransferSKUID.HasValue)
+                    {
+                        Warehouse = item.TransferSKU.Transfer.WarehouseTo.Name;
+                    }
+                    else
+                    {
+                        Warehouse = item.PurchaseSKU.PurchaseOrder.WarehousePO.Name;
+                    }
                 }
                 SerialsLlistVMList.Add(new SerialsLlistVM { Date = CreateAt, ID = SID, ISType = ISType, QTY = QTY, UpdatedBy = UpdatedBy, Warehouse = Warehouse });
             }

@@ -156,15 +156,15 @@ namespace PurchaseOrderSys.Controllers
             {
 
                 OfficeOpenXml.ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
-                for (int row = 1; worksheet.Cells[row, 2].Value != null; row++)
-                {
-                    var serial = worksheet.Cells[row, 2].Value?.ToString().Trim();
-                    var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serial && x.SerialsType == "Order");
-                    db.SerialsLlist.RemoveRange(SerialsLlist);
-                }
-                db.SaveChanges();
+                //for (int row = 1; worksheet.Cells[row, 2].Value != null; row++)
+                //{
+                //    var serial = worksheet.Cells[row, 2].Value?.ToString().Trim();
+                //    var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serial && x.SerialsType == "Order");
+                //    db.SerialsLlist.RemoveRange(SerialsLlist);
+                //}
+                //db.SaveChanges();
 
-                var SerialsType = new List<string> { "PO", "TransferIn" };
+                //var SerialsType = new List<string> { "PO", "TransferIn" };
                 var dt = DateTime.Now;
                 var CreateBy = "WinitExcel";
                 //開PO
@@ -215,61 +215,69 @@ namespace PurchaseOrderSys.Controllers
                 };
                 nWinitTransfer.WinitTransferBox.Add(nWinitTransferBox);
                 nTransfer.WinitTransfer = nWinitTransfer;
-               
 
-                for (int row = 1; worksheet.Cells[row, 2].Value != null; row++)
+                var irow = 0;
+                for (int row = 1; worksheet.Cells[row, 1].Value != null; row++)
                 {
+                    irow = row;
                     var Sbarcode = worksheet.Cells[row, 1].Value?.ToString().Trim();
                     var serial = worksheet.Cells[row, 2].Value?.ToString().Trim();
-                    var skuno = worksheet.Cells[row, 3].Value?.ToString().Trim();
-                    var PurchaseSKU = nPurchaseOrder.PurchaseSKU.Where(x => x.SkuNo == skuno).FirstOrDefault();
-                    var SKU = db.SKU.Find(skuno);
-                    var SKUNAME = SKU.SkuLang.Where(x => x.LangID == "en-US").FirstOrDefault().Name;
-                    //PO SKU
-                    if (PurchaseSKU == null)
+                    if (!string.IsNullOrWhiteSpace(serial))
                     {
-                        PurchaseSKU = new PurchaseSKU
+                        var skuno = worksheet.Cells[row, 3].Value?.ToString().Trim();
+                        var PurchaseSKU = nPurchaseOrder.PurchaseSKU.Where(x => x.SkuNo == skuno).FirstOrDefault();
+                        var SKU = db.SKU.Find(skuno);
+                        var SKUNAME = SKU.SkuLang.Where(x => x.LangID == "en-US").FirstOrDefault().Name;
+                        //PO SKU
+                        if (PurchaseSKU == null)
                         {
-                            IsEnable = true,
-                            Name = SKUNAME,
-                            SkuNo = SKU.SkuID,
-                            QTYOrdered = 1,
-                            Price = SKU.Logistic.Price,
-                            Discount = 0,
-                            VendorSKU = SKU.SkuID,
-                            CreateBy = CreateBy,
-                            CreateAt = dt
-                        };
-                        nPurchaseOrder.PurchaseSKU.Add(PurchaseSKU);
-                    }
-                    //加入序號
-                    var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serial && !x.SerialsLlistC.Any() && SerialsType.Contains(x.SerialsType)).FirstOrDefault();
-                    if (SerialsLlist == null)
-                    {
-                        SerialsLlist = new SerialsLlist
+                            PurchaseSKU = new PurchaseSKU
+                            {
+                                IsEnable = true,
+                                Name = SKUNAME,
+                                SkuNo = SKU.SkuID,
+                                QTYOrdered = 1,
+                                Price = SKU.Logistic.Price,
+                                Discount = 0,
+                                VendorSKU = SKU.SkuID,
+                                CreateBy = CreateBy,
+                                CreateAt = dt
+                            };
+                            nPurchaseOrder.PurchaseSKU.Add(PurchaseSKU);
+                        }
+                        //加入序號
+                        var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serial && x.SerialsType== "PO").FirstOrDefault();// && !x.SerialsLlistC.Any()
+                        if (SerialsLlist == null)
                         {
-                            IsEnable=true,
-                            SerialsNo = serial,
-                            SerialsQTY=1,
-                            SerialsType= "PO",
-                            CreateBy = CreateBy,
-                            CreateAt = dt
-                        };
-                        PurchaseSKU.SerialsLlist.Add(SerialsLlist);
+                            SerialsLlist = new SerialsLlist
+                            {
+                                IsEnable = true,
+                                SerialsNo = serial,
+                                SerialsQTY = 1,
+                                SerialsType = "PO",
+                                CreateBy = CreateBy,
+                                CreateAt = dt
+                            };
+                            PurchaseSKU.SerialsLlist.Add(SerialsLlist);
+                        }
+                        if (!db.WinitTransferBoxItem.Where(x => x.BarCode == Sbarcode).Any())
+                        {
+                            //加入S碼
+                            var nWinitTransferBoxItem = new WinitTransferBoxItem
+                            {
+                                BarCode = Sbarcode,
+                                Name = SKUNAME,
+                                SkuNo = SKU.SkuID,
+                                SerialsNo = serial,
+                                CreateBy = CreateBy,
+                                CreateAt = dt
+                            };
+                            nWinitTransferBox.WinitTransferBoxItem.Add(nWinitTransferBoxItem);
+                            SerialsLlist.WinitTransferBoxItem = nWinitTransferBoxItem;
+                        }
                     }
-                    //加入S碼
-                    var nWinitTransferBoxItem = new WinitTransferBoxItem
-                    {
-                        BarCode = Sbarcode,
-                        Name = SKUNAME,
-                        SkuNo = SKU.SkuID,
-                        SerialsNo = serial,
-                        CreateBy = CreateBy,
-                        CreateAt = dt
-                    };
-                    nWinitTransferBox.WinitTransferBoxItem.Add(nWinitTransferBoxItem);
-                    SerialsLlist.WinitTransferBoxItem = nWinitTransferBoxItem;
                 }
+
                 foreach (var item in nPurchaseOrder.PurchaseSKU.ToList())
                 {
                     var Qty = item.SerialsLlist.Count();

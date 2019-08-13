@@ -15,6 +15,15 @@
         max-height: 20px;
         margin: 5px;
     }
+    /*tr.trackinggroup {
+        background-color: #808080 !important;
+        color: white !important;
+    }
+
+        tr.trackinggroup:hover {
+            background-color: #808080 !important;
+            color: white !important;
+        }*/
 </style>
 <div id="content">
     <section id="widget-grid" class="">
@@ -49,9 +58,9 @@
                                                 </div>
 
                                                 @*<label class="control-label col-sm-2">Generate Prepaid Return Label</label>
-                                                <div class="col-sm-9 col-lg-2">
-                                                  
-                                                </div>*@
+                                                    <div class="col-sm-9 col-lg-2">
+
+                                                    </div>*@
 
                                                 @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
@@ -66,9 +75,9 @@
                                                 </div>
 
                                                 @*@Html.LabelFor(model => model.ReturnTracking, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("ReturnTracking", new { htmlAttributes = new { @class = "form-control"} })
-                                                </div>*@
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("ReturnTracking", new { htmlAttributes = new { @class = "form-control"} })
+                                                    </div>*@
 
                                                 @Html.LabelFor(model => model.Action, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
@@ -81,9 +90,9 @@
                                                     @Html.Editor("SourceCaseID", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
                                                 @*@Html.LabelFor(model => model.Carrier, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Carrier", new { htmlAttributes = new { @class = "form-control" } })
-                                                </div>*@
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("Carrier", new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>*@
                                                 @Html.Label("Warranty / Repair #", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("Warranty", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
@@ -95,9 +104,9 @@
                                                     @Html.DropDownListLabel("CompanyID", CompanyDDL, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
                                                 </div>
                                                 @*<label class="control-label col-sm-2">Tracking Status (Date)</label>
-                                                <div class="col-sm-9 col-lg-2">
-                                                    Tracking Status (Event)
-                                                </div>*@
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        Tracking Status (Event)
+                                                    </div>*@
                                                 @Html.Label("Credit Memo #", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("CreditMemo", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
@@ -109,9 +118,9 @@
                                                     @Html.DropDownListLabel("Channel", ChannelList, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
                                                 </div>
                                                 @*<label class="control-label col-sm-2"></label>
-                                                <div class="col-sm-9 col-lg-2">
+                                                    <div class="col-sm-9 col-lg-2">
 
-                                                </div>*@
+                                                    </div>*@
                                                 @Html.Label("Create Date", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     <input class="form-control" type="text" value="@Model.CreateAt.ToLocalTime()" readonly>
@@ -123,9 +132,9 @@
                                                     @Html.Editor("Country", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                                                 </div>
                                                 @*<label class="control-label col-sm-2"></label>
-                                                <div class="col-sm-9 col-lg-2">
+                                                    <div class="col-sm-9 col-lg-2">
 
-                                                </div>*@
+                                                    </div>*@
                                                 @Html.Label("Create By", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("CreateBy", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
@@ -138,9 +147,9 @@
                                                     <a href='https://dm.cwa.sellercloud.com/Orders/Orders_Return.aspx?id=@(Model.OrderID)' target="_blank" class="control-label col-sm-2">@Model.SCRMA</a>
                                                 </div>
                                                 @*<label class="control-label col-sm-2"></label>
-                                                <div class="col-sm-9 col-lg-2">
+                                                    <div class="col-sm-9 col-lg-2">
 
-                                                </div>*@
+                                                    </div>*@
                                                 @Html.Label("Received Date", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @{
@@ -155,9 +164,9 @@
 
                                                 </div>
                                                 @*<label class="control-label col-sm-2"></label>
-                                                <div class="col-sm-9 col-lg-2">
+                                                    <div class="col-sm-9 col-lg-2">
 
-                                                </div>*@
+                                                    </div>*@
                                                 @Html.Label("Received By", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @{
@@ -174,8 +183,9 @@
                                                     <button type="button" id="ReturnBtn">Prepaid Return Label</button>
                                                     @if (Model.Status != "Closed")
                                                     {
+                                                        @*<button type="button" id="Receivereturns">Receive returns</button>*@
                                                         @*<button type="button" id="Edititems">Edit items</button>
-                                                        <button type="button" id="Removeitems">Remove items</button>*@
+                                                            <button type="button" id="Removeitems">Remove items</button>*@
                                                     }
                                                 </div>
                                             </div>
@@ -190,15 +200,15 @@
                                                                 @*<th>UPC / EAN</th>*@
                                                                 <th>訂單數</th>
                                                                 <th>原因</th>
-                                                                @*<th>Carrier</th>
-        <th>Tracking</th>*@
+                                                                @*<th>Carrier</th>*@
+                                                                @*<th>Tracking</th>*@
                                                                 <th>Return Warehouse</th>
                                                                 <th>Order Serial</th>
                                                                 <th>Returned  Serial</th>
                                                                 @*<th>實際收貨倉</th>*@
                                                                 <th></th>
-                                                                <th>Carrier</th>
                                                                 <th>Tracking</th>
+                                                                <th>Carrier</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody></tbody>
@@ -306,23 +316,32 @@
     <div class="col-sm-9 col-lg-6">
         @Html.DropDownList("Renewitem", Renewitem, htmlAttributes: new { @class = "form-control" })
     </div>
-    <input type="hidden" id="ChangeSKUID" />
-    <input type="hidden" id="oSKU" />
+    <input type="hidden" id="oid" />
+    <input type="hidden" id="osku" />
     <button type="button" id="ChangeSKU">Renew item</button>
 
 </div>
 <div id="Returndialog">
 
 </div>
-    @section pagespecific {
-        <link href="~/Content/css/lightbox.css" rel="stylesheet" />
-        <script src="~/Scripts/lightbox.js"></script>
-        <script type="text/javascript">
+<div id="Receivedialog">
+    <input type="text" id="ReceiveNo" />
+    <button type="button" id="Receivebtn">Receive item</button>
+</div>
+@section pagespecific {
+    <link href="~/Content/css/lightbox.css" rel="stylesheet" />
+    <script src="~/Scripts/lightbox.js"></script>
+    <script type="text/javascript">
         var hash = window.location.hash;
         $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
         $('.tab-pane').eq(hash.substr(1)).addClass('active');
         var DataGrid;
         var tableID = "#DataGridC";
+        var disabled = "";
+         @if (Model.Status == "Closed")
+         {
+             @:disabled = "disabled";
+         }
         $(document).ready(function () {
             DataGrid = $(tableID).DataTable({
                 fixedHeader: {
@@ -339,8 +358,12 @@
                         className: 'select-checkbox',
                         orderable: false,
                         render: function (data, type, row, meta) {
-                            var html = '<input type="checkbox" name="RMAList[' + meta.row + '].SKU" value="' + data + '">';
-                            html += '<input type="hidden" name="RMAList[' + meta.row + '].ID" value="' + data + '">';
+                            var html = '';
+                            html += '<input type="hidden" name="RMAList[' + meta.row + '].ID" value="' + data + '"/>';
+                            html += '<input type="hidden" name="RMAList[' + meta.row + '].SKUID" value="' + row.SKUID + '"/>';
+                            if (row.tracking == '') {
+                                html += '<input type="checkbox" name="RMAList[' + meta.row + '].SKU" value="' + data + '" ' + disabled+'/>';
+                            }
                             return html;
                         }
                     },
@@ -391,7 +414,7 @@
                         render: function (data, type, row, meta) {
                             var Warehouselist = @Html.Raw(Json.Encode(Warehouselist.Select(x => new { x.Text, x.Value }).ToList()));
                             if (row.Model == "E" && (row.SerialsNo == null || row.SerialsNo == "")) {
-                                var $select = $("<select></select>", {
+                                var $select = $("<select " + disabled+"></select>", {
                                     "id": "RMAList[" + meta.row + "].Warehouse",
                                     "name": "RMAList[" + meta.row + "].Warehouse",
                                     "class": "Warehouselist",
@@ -421,28 +444,40 @@
                         }
                     },
                     { data: "OrderSerialsNo" },
-                    { data: "ReturnedSerialsNo" },
+                    {
+                        data: "ReturnedSerialsNo",
+                        render: function (data, type, row, meta) {
+                            var html = '';
+                            if (row.ReturnedSerialsNo == null || row.ReturnedSerialsNo == "") {
+                                html = '<input type="text" id="RMAList[' + meta.row + '].ReceiveNo" name="RMAList[' + meta.row + '].ReceiveNo" ' + disabled +'/>';
+                            }
+                            else {
+                                html =  data;
+                            }
+                            return html;
+                        }
+                    },
                     //{data: "TrWarehouse"},
                     {
                         data: "ID",
                         render: function (data, type, row, meta) {
                             //var html = "<a  class='btn btn-default btn-sm ChangeSKU'>Prepaid Return Label</a>";
                             var html = "";
-                             @if (Model.Status != "Closed")
+                             @*@if (Model.Status != "Closed")
                              {
                                  @:html += " <a href='@Url.Action("Returnedserials")?ID=" + data + "' class='btn btn-default btn-sm'>Receive returns</a>";
-                             }
-                            if (row.ReturnedSerialsNo == "" || row.ReturnedSerialsNo == null) {
-                                html += " <a val='" + data + "'  oSKU='" + row.SKU + "' class='btn btn-default btn-sm ChangeSKU'>Renew item</a>";
+                             }*@
+                            if (row.ReturnedSerialsNo != "" && row.ReturnedSerialsNo != null) {
+                                html += " <a val='" + row.RMASerialsLlistID + "'  osku='" + row.SKU + "' class='btn btn-default btn-sm ChangeSKU'>Renew item</a>";
                             }
-                            else {
-                                html = " <a val='" + data + "'  oSKU='" + row.SKU + "' class='btn btn-default btn-sm ChangeSKU'>Renew item</a>";
-                            }
+                            //else {
+                            //    html = " <a val='" + data + "'  oSKU='" + row.SKU + "' class='btn btn-default btn-sm ChangeSKU'>Renew item</a>";
+                            //}
                             return html;
                         }
                     },
+                    { data: "tracking" },
                     { data: "Carrier" },
-                    { data: "tracking" }
                 ],
                 ajax: {
                     traditional: true,
@@ -471,21 +506,44 @@
                     { "visible": false, "targets": 9 },
                     { "visible": false, "targets": 10 }
                 ],
-                "drawCallback": function (settings) {
-                    var api = this.api();
-                    var rows = api.rows({ page: 'current' }).nodes();
-                    var last = null;
-
-                    api.column(9, { page: 'current' }).data().each(function (group, i, $currTable) {
-                        if (last !== group) {
-                            $(rows).eq(i).after(
-                                '<tr class="group"><td colspan="7"></td><td colspan="2">' + group + $currTable.rows(rows[i]._DT_RowIndex).data()[0]["tracking"] +  '</td></tr>'
-                            );
-
-                            last = group;
+                'rowGroup': {
+                    "startRender":null,
+                    "endRender": function (rows, group) {
+                        var html = '<tr class="group"><td colspan="9"></td></tr><tr class="group"><td></td><td>SKU</td><td>Product Name</td><td>訂單數</td><td>原因</td><td>Return Warehouse</td><td>Order Serial</td><td>Returned  Serial</td><td></td></tr>';
+                        if (rows[0] == DataGrid.rows()[0].length-1) {
+                            html = "";
                         }
-                    });
+                        return $('<tr class="trackinggroup"><td colspan="7"></td><td>Carrier : ' + rows.data()[0]["Carrier"] + '</td><td>tracking : ' + group + '</td></tr>' + html);
+                    },
+                    "dataSrc":'tracking'
                 },
+                //"drawCallback": function (settings) {
+                //    var api = this.api();
+                //    var rows = api.rows({ page: 'current' }).nodes();
+                //    var last = null;
+                //    var different = false;
+                //    api.column(9, { page: 'current' }).data().each(function (group, i, $currTable) {
+                //        if (last !== group) {
+                //            last = group;
+                //            different = true;
+                //        }
+                //        if (different || i== $currTable.length-1) {
+                //            different = false;
+                //            if (i !== 0) {
+                //            }
+
+                //                if (i != $currTable.length - 1) {
+                //                    $(rows).eq(i).after(
+                //                        '<tr class="group"><td></td><td>SKU</td><td>Product Name</td><td>訂單數</td><td>原因</td><td>Return Warehouse</td><td>Order Serial</td><td>Returned  Serial</td><td></td></tr>'
+                //                    );
+                //                }
+                //                $(rows).eq(i).after(
+                //                    '<tr class="group"><td colspan="7"></td><td>Carrier : ' + $currTable.rows(rows[i]._DT_RowIndex).data()[0]["Carrier"] + '</td><td>tracking : ' + group + '</td></tr>'
+                //                );
+
+                //        }
+                //    });
+                //},
                 "footerCallback": function (row, data, start, end, display) {
                     var api = this.api(), data;
                     // Remove the formatting to get integer data for summation
@@ -600,15 +658,21 @@
             });
             $("#Returndialog").dialog({
                 autoOpen: false,
-                width: 800,
+                width: 900,
                 position: { my: "center", at: "top" },
-                modal :true
+                title: 'Prepaid Return Label',
+                modal: true
+            });
+            $("#Receivedialog").dialog({
+                autoOpen: false,
+                title: 'Receive returns',
+                width: 400,
             });
             $("body").on("click", ".ChangeSKU", function () {
                 var val = $(this).attr("val");
-                var oSKU = $(this).attr("oSKU");
-                $("#ChangeSKUID").val(val);
-                $("#oSKU").val(oSKU);
+                var osku = $(this).attr("osku");
+                $("#oid").val(val);
+                $("#osku").val(osku);
                 $("#dialog").dialog({
                     title: "Change SKU"
                 });
@@ -646,17 +710,39 @@
                 }
                 return false;
             });
+            $("body").on("click", "#Receivereturns", function () {
+                $("#Receivedialog").dialog("open");
+            });
+            $("body").on("click", "#Receivebtn", function () {
+                $.ajax({
+                    traditional: true,
+                    type: "post",
+                    url: "@Url.Action("Receiveitem")",
+                    data: {
+                      id: @Html.DisplayFor(x=>x.ID),
+                        Serial: $("#ReceiveNo").val(),
+                    },
+                    success: function (data) {
+                        if (data.status) {
+                            window.location.reload();
+                        }
+                        else {
+                            alert(data.Errmsg);
+                        }
+                    }
+                });
+            });
             $("#ChangeSKU").click(function () {
-                var OldSKU = $("#ChangeSKUID").val();
+                var oid = $("#oid").val();
+                var osku =  $("#osku").val();
                 var NewSKU = $("#Renewitem").val();
-                var oSKU = $("#oSKU").val();
-                alert("新的SKU：" + oSKU + NewSKU);
+                alert("新的SKU：" + osku + NewSKU);
                 $.ajax({
                     traditional: true,
                     type: "post",
                     url: "@Url.Action("ChangeSKU")",
                     data: {
-                        OldSKU: OldSKU,
+                        oid: oid,
                         NewSKU: NewSKU
                     },
                     success: function (data) {
@@ -818,5 +904,13 @@
         }
         // 執行
         Preview.change_file();
+    </script>
+    @if (Model.Status == "Closed")
+    {
+        <script type="text/javascript">     
+            $(document).ready(function () {
+                $("body").find("input,select,textarea").prop("disabled", "disabled");
+            });
         </script>
     }
+}

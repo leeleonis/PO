@@ -1370,9 +1370,11 @@ namespace PurchaseOrderSys.Models
     public class RMAModelPost
     {
         public int ID { get; set; }
+        public int SKUID { get; set; }
         public int OrderID { get; set; }
         public string SKU { get; set; }
         public string Serial { get; set; }
+        public string ReceiveNo { get; set; }
         public string Reason { get; set; }
         public int? Warehouse { get; set; }
     }
@@ -1387,6 +1389,7 @@ namespace PurchaseOrderSys.Models
     public class RMAEdit
     {
         public int ID { get; set; }
+        public int SKUID { get; set; }
         public string SKU { get; set; }
         public string ProductName { get; set; }
         public string UPCEAN { get; set; }
@@ -1400,6 +1403,7 @@ namespace PurchaseOrderSys.Models
         public decimal UnitPrice { get; set; }
         public string Carrier { get; set; }
         public string tracking { get; set; }
+        public int? RMASerialsLlistID { get; internal set; }
     }
     [Serializable]
     public class SerialsLlistVM
