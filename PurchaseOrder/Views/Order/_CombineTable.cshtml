@@ -1,0 +1,77 @@
+﻿@{
+    string LangID = EnumData.DataLangList().First().Key;
+    List<Packages> packageList = (List<Packages>)ViewData["packageList"];
+}
+@foreach (var package in packageList)
+{
+    <table class="table table-bordered text-center">
+        <thead>
+            <tr>
+                <th class="text-center" colspan="6">
+                    <input type="hidden" name="oldPackageIDs[]" value="@package.ID" />
+                    Package #@package.ID
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in package.Items.Where(i => i.IsEnable))
+            {
+                <tr>
+                    <td>@item.Sku</td>
+                    <td>@item.GetSku.SkuLang.First(l => l.LangID.Equals(LangID)).Name</td>
+                    <td>@item.UnitPrice</td>
+                    <td>@item.Qty</td>
+                    <td>@(item.ExportValue * item.Qty)</td>
+                    <td>@package.GetCurrency.Code</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<hr />
+<table class="table table-bordered text-center" id="combine-summary" style="width:80%;margin:0 auto;">
+    <thead>
+        <tr>
+            <th class="text-center" colspan="5">Combine Result</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ int index = 0; }
+        @foreach (var itemGroup in packageList.SelectMany(p => p.Items.Where(i => i.IsEnable)).GroupBy(i => i.Sku))
+        {
+            foreach (var priceGroup in itemGroup.GroupBy(i => i.ExportValue))
+            {
+                var item = priceGroup.First();
+                <tr>
+                    <td>
+                        <input type="hidden" name="itemData[@index][OrderID]" value="@item.OrderID" />
+                        <input type="hidden" name="itemData[@index][Sku]" value="@item.Sku" />
+                        <input type="hidden" name="itemData[@index][OriginSku]" value="@item.OriginSku" />
+                        <input type="hidden" name="itemData[@index][UnitPrice]" value="@item.UnitPrice" />
+                        <input type="hidden" name="itemData[@index][ExportValue]" value="@item.ExportValue" />
+                        <input type="hidden" name="itemData[@index][DLExportValue]" value="@item.DLExportValue" />
+                        <input type="hidden" name="itemData[@index][eBayItemID]" value="@item.eBayItemID" />
+                        <input type="hidden" name="itemData[@index][eBayTransationID]" value="@item.eBayTransationID" />
+                        <input type="hidden" name="itemData[@index][SalesRecordNumber]" value="@item.SalesRecordNumber" />
+                        @item.Sku
+                    </td>
+                    <td>@item.GetSku.SkuLang.First(l => l.LangID.Equals(LangID)).Name</td>
+                    <td>@item.UnitPrice</td>
+                    <td>
+                        <input type="hidden" name="itemData[@(index++)][Qty]" value="@priceGroup.Sum(i => i.Qty)" />
+                        @priceGroup.Sum(i => i.Qty)
+                    </td>
+                    <td>@priceGroup.Sum(i => i.ExportValue * i.Qty)</td>
+                </tr>
+            }
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td class="text-right" colspan="5">
+                <button class="btn btn-default btn-sm" onclick="$packageDialog.dialog('close');">Close</button>
+                <button class="btn btn-default btn-sm" id="btn-next">Next</button>
+            </td>
+        </tr>
+    </tfoot>
+</table>

@@ -18,7 +18,7 @@
                 </td>
                 <td class="font-bg" width="120">SKU</td>
                 <td class="font-bg">Product Name</td>
-                <td class="font-bg" width="200">Serials</td>
+                <td class="font-bg" width="150">Serials</td>
                 <td class="font-bg" width="80">Unit Price</td>
                 <td class="font-bg" width="95">Export Value</td>
                 <td class="font-bg" width="115">DL Export Value</td>
@@ -141,7 +141,7 @@
                             @Html.DropDownListFor(Model => Model.Export, Enum.GetValues(typeof(EnumData.Export)).Cast<EnumData.Export>().Select(s => new SelectListItem() { Text = s.ToString(), Value = ((byte)s).ToString() }), htmlAttributes: new { @class = "form-control" })
                         </td>
                         <td width="135">Export Currency：</td>
-                        <td>
+                        <td id="text-currency">
                             @Model.GetCurrency.Code
                             @*@Html.DropDownListFor(Model => Model.ExportCurrency, (List<SelectListItem>)ViewData["CurrencyList"], htmlAttributes: new { @class = "form-control" })*@
                         </td>
