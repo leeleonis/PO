@@ -196,7 +196,7 @@ namespace PurchaseOrderSys.Models
 
                 var packageList = orderData.Packages.Where(p => PackageIDs.Contains(p.ID)).OrderBy(p => p.ID).ToList(); ;
 
-                Packages packageData = packageList.First(pp => pp.SCID.HasValue);
+                Packages packageData = packageList.First(p => p.SCID.HasValue);
                 Order SC_order = SC_Api.Get_OrderData(orderData.SCID.Value).Order;
                 Package SC_package = SC_order.Packages.FirstOrDefault(p => p.ID.Equals(packageData.SCID));
 
@@ -239,6 +239,55 @@ namespace PurchaseOrderSys.Models
                 }
 
                 db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(string.Format("SC Error：{0}", ex.InnerException?.Message ?? ex.Message));
+            }
+        }
+
+        public void CombinePackage(int[] OldPackageIDs)
+        {
+
+            if (SC_Api == null) SC_Api = new SC_WebService(ApiUserName, ApiPassword);
+
+            try
+            {
+                if (!orderData.SCID.HasValue) throw new Exception("Not found order's SCID!");
+
+                if (!SC_Api.Is_login) throw new Exception("SC is not logged in!");
+
+                var oldPackageList = orderData.Packages.Where(p => OldPackageIDs.Contains(p.ID)).OrderBy(p => p.ID).ToList(); ;
+
+                Packages packageData = orderData.Packages.First(p => p.IsEnable && !p.SCID.HasValue);
+                Order SC_order = SC_Api.Get_OrderData(orderData.SCID.Value).Order;
+
+                var newPackage = SC_order.Packages.First(p => p.ID.Equals(oldPackageList.First().SCID.Value));
+                newPackage.Qty = packageData.Items.Sum(i => i.Qty);
+                newPackage = SC_Api.Add_OrderNewPackage(newPackage);
+                packageData.SCID = newPackage.ID;
+
+                foreach(var item in packageData.Items.Where(i => i.IsEnable))
+                {
+                    var newItem = SC_order.Items.First(i => i.ProductID.Equals(item.Sku));
+                    newItem.PackageID = newPackage.ID;
+                    newItem.Qty = item.Qty;
+                    newItem = SC_Api.Add_OrderNewItem(newItem);
+                    item.SCID = newItem.ID;
+                }
+
+                db.SaveChanges();
+
+                foreach(var SC_package in SC_order.Packages.Where(p => oldPackageList.Select(pp => pp.SCID.Value).ToArray().Contains(p.ID)))
+                {
+                    if (SC_package == null) throw new Exception(string.Format("Not found SC package-{0}!", packageData.SCID));
+
+                    foreach(var SC_item in SC_order.Items.Where(i => i.PackageID.Equals(SC_package.ID)))
+                    {
+                        SC_Api.Delete_Item1(SC_item.OrderID, SC_item.ID);
+                    }
+                    SC_Api.Delete_Package(SC_package.ID);
+                }
             }
             catch (Exception ex)
             {

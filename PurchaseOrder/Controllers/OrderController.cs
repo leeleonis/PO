@@ -199,7 +199,7 @@ namespace PurchaseOrderSys.Controllers
                     {
                         for (int i = 0; i < item.Qty; i++)
                         {
-                            html += RenderViewToString(ControllerContext, "_SkuQtyTable", package, new ViewDataDictionary()
+                            html += RenderViewToString(ControllerContext, "_SplitQtyTable", package, new ViewDataDictionary()
                             {
                                 { "isEdit", isEdit },
                                 { "ID", index == 0 ? PackageID : 0 },
@@ -214,7 +214,7 @@ namespace PurchaseOrderSys.Controllers
                 {
                     for (int i = 0; i < Qty; i++)
                     {
-                        html += RenderViewToString(ControllerContext, "_SkuQtyTable", package, new ViewDataDictionary()
+                        html += RenderViewToString(ControllerContext, "_SplitQtyTable", package, new ViewDataDictionary()
                         {
                             { "isEdit", isEdit },
                             { "ID", index == 0 ? PackageID : 0 },
@@ -225,7 +225,7 @@ namespace PurchaseOrderSys.Controllers
                     }
                 }
 
-                html += "<hr />" + RenderViewToString(ControllerContext, "_SkuQtyTable", package);
+                html += "<hr />" + RenderViewToString(ControllerContext, "_SplitQtyTable", package);
             }
             catch (Exception ex)
             {
@@ -258,31 +258,37 @@ namespace PurchaseOrderSys.Controllers
                             item.Qty = update.Items.First(i => i.Sku.Equals(item.Sku)).Qty;
                             item.IsEnable = item.Qty != 0;
                         }
+
+                        package.ExportValue = itemList.Where(i => i.IsEnable).Sum(i => i.ExportValue * i.Qty);
+                        package.DLExportValue = itemList.Where(i => i.IsEnable).Sum(i => i.DLExportValue * i.Qty);
                     }
                     else
                     {
-                        SetUpdateData(update, package, packageEditList);
-                        update.OrderID = package.OrderID;
-                        update.ExportCurrency = package.ExportCurrency;
-                        update.DLExportCurrency = package.DLExportCurrency;
-                        update.ReturnWarehouse = package.ReturnWarehouse;
-                        update.CreateBy = Session["AdminName"].ToString();
-                        update.CreateAt = DateTime.UtcNow;
-
-                        foreach (var newItem in update.Items)
+                        var newPackage = new Packages()
                         {
-                            if (newItem.Qty != 0)
-                            {
-                                SetUpdateData(newItem, itemList.First(i => i.Sku.Equals(newItem.Sku)), new string[] { "OrderID", "Sku", "OriginSku", "UnitPrice", "ExportValue", "DLExportValue" });
-                                newItem.CreateBy = Session["AdminName"].ToString();
-                                newItem.CreateAt = DateTime.UtcNow;
-                            }
+                            OrderID = package.OrderID,
+                            ExportCurrency = package.ExportCurrency,
+                            DLExportCurrency = package.DLExportCurrency,
+                            ReturnWarehouse = package.ReturnWarehouse,
+                            CreateBy = Session["AdminName"].ToString(),
+                            CreateAt = DateTime.UtcNow
+                        };
+                        SetUpdateData(newPackage, package, packageEditList);
+
+                        foreach (var newItem in update.Items.Where(i => !i.Qty.Equals(0)))
+                        {
+                            SetUpdateData(newItem, itemList.First(i => i.Sku.Equals(newItem.Sku)), new string[] { "OrderID", "Sku", "OriginSku", "UnitPrice", "ExportValue", "DLExportValue", "eBayItemID", "eBayTransationID", "SalesRecordNumber" });
+                            newItem.CreateBy = Session["AdminName"].ToString();
+                            newItem.CreateAt = DateTime.UtcNow;
+                            newPackage.Items.Add(newItem);
                         }
 
-                        db.Packages.Add(update);
+                        newPackage.ExportValue = newPackage.Items.Sum(i => i.ExportValue * i.Qty);
+                        newPackage.DLExportValue = newPackage.Items.Sum(i => i.DLExportValue * i.Qty);
+                        db.Packages.Add(newPackage);
                     }
-                    db.SaveChanges();
                 }
+                db.SaveChanges();
 
                 using (var OM = new OrderManagement(package.OrderID))
                 {
@@ -301,6 +307,105 @@ namespace PurchaseOrderSys.Controllers
                     }
 
                     OM.ActionLog("Package", "Split Package");
+                }
+            }
+            catch (Exception ex)
+            {
+                result.SetError(ex.InnerException?.Message ?? ex.Message);
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult CombineTable(int[] PackageIDs)
+        {
+            AjaxResult result = new AjaxResult();
+
+            try
+            {
+                if (PackageIDs == null || !PackageIDs.Any()) throw new Exception("Not get any package ID");
+
+                var packageList = db.Packages.Where(p => PackageIDs.Contains(p.ID)).ToList();
+
+                if (!packageList.Any() || packageList.Count() != 2) throw new Exception("The number of package is not 2! ");
+
+                result.data = RenderViewToString(ControllerContext, "_CombineTable", null, new ViewDataDictionary() { { "packageList", packageList } });
+            }
+            catch (Exception ex)
+            {
+                result.SetError(ex.InnerException?.Message ?? ex.Message);
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult CombinePackage(int[] oldPackageIDs, Items[] itemData)
+        {
+            AjaxResult result = new AjaxResult();
+
+            try
+            {
+                if (oldPackageIDs == null || !oldPackageIDs.Any()) throw new Exception("Not get any odl package ID");
+
+                if (itemData == null || !itemData.Any()) throw new Exception("Not get any combine sku");
+
+                var oldPackageList = db.Packages.Where(p => oldPackageIDs.Contains(p.ID)).ToList();
+                foreach (var oldPackage in oldPackageList)
+                {
+                    oldPackage.IsEnable = false;
+                    oldPackage.UpdateBy = Session["AdminName"].ToString();
+                    oldPackage.UpdateAt = DateTime.UtcNow;
+
+                    foreach(var oldItem in oldPackage.Items.Where(i => i.IsEnable))
+                    {
+                        oldItem.IsEnable = false;
+                        oldItem.UpdateBy = Session["AdminName"].ToString();
+                        oldItem.UpdateAt = DateTime.UtcNow;
+                    }
+                }
+
+                var package = oldPackageList.First();
+                var newPackage = new Packages()
+                {
+                    OrderID = package.OrderID,
+                    ExportCurrency = package.ExportCurrency,
+                    DLExportCurrency = package.DLExportCurrency,
+                    ReturnWarehouse = package.ReturnWarehouse,
+                    CreateBy = Session["AdminName"].ToString(),
+                    CreateAt = DateTime.UtcNow
+                };
+                SetUpdateData(newPackage, package, packageEditList);
+
+                foreach (var newItem in itemData)
+                {
+                    newItem.CreateBy = Session["AdminName"].ToString();
+                    newItem.CreateAt = DateTime.UtcNow;
+                    newPackage.Items.Add(newItem);
+                }
+
+                newPackage.ExportValue = newPackage.Items.Sum(i => i.ExportValue * i.Qty);
+                newPackage.DLExportValue = newPackage.Items.Sum(i => i.DLExportValue * i.Qty);
+                db.Packages.Add(newPackage);
+                db.SaveChanges();
+
+                using (var OM = new OrderManagement(newPackage.OrderID))
+                {
+                    if (oldPackageList.All(p => p.SCID.HasValue))
+                    {
+                        try
+                        {
+                            OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
+                            OM.CombinePackage(oldPackageIDs);
+                            OM.OrderSyncPush();
+                        }
+                        catch (Exception ex)
+                        {
+                            TempData["ErrorMsg"] = ex.InnerException?.Message ?? ex.Message;
+                        }
+                    }
+
+                    OM.ActionLog("Package", "Combine Packages");
                 }
             }
             catch (Exception ex)

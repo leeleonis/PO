@@ -49,7 +49,7 @@
 }
 else
 {
-    <table class="table table-bordered" id="table-summary" style="margin-bottom:0px;">
+    <table class="table table-bordered" id="split-summary" style="margin-bottom:0px;">
         <thead>
             <tr>
                 <th class="text-center" colspan="3">Report Summary</th>
@@ -70,7 +70,7 @@ else
         <tfoot>
             <tr>
                 <td class="text-right" colspan="3">
-                    <button class="btn btn-default btn-sm" onclick="$packageDialog.dialog('close');  OrderAction.SelectAction($actionSelect.val());">Back</button>
+                    <button class="btn btn-default btn-sm" onclick="OrderAction.SelectAction('1'); $packageDialog.dialog('close');">Back</button>
                     <button class="btn btn-default btn-sm" id="btn-next">Next</button>
                 </td>
             </tr>

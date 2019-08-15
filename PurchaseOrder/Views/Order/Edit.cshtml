@@ -487,7 +487,7 @@
     </section>
 </div>
 <div class="hidden">
-    <div id="dialog-splitQty" class="easyui-dialog" title="Split Package" data-options="iconCls:'icon-edit',closed:true,draggable:false,resizable:false" style="width:400px;">
+    <div id="dialog-splitQty" class="easyui-dialog" title="Split Package" data-options="iconCls:'icon-edit',closed:true,draggable:false,resizable:false,onBeforeClose:function(){return SplitPackage.CloseCheck();}" style="width:400px;">
         <div data-options="region:'center'">
             <table class="table table-bordered text-right">
                 <tr>
@@ -510,7 +510,7 @@
             </div>
         </div>
     </div>
-    <div id="dialog-package" class="easyui-dialog" title="" data-options="iconCls:'icon-edit',closed:true,draggable:false,resizable:false" style="width:600px;top:400px;padding:5px;"></div>
+    <div id="dialog-package" class="easyui-dialog" title="" data-options="iconCls:'icon-edit',closed:true,draggable:false,resizable:false,onBeforeClose:function(){return SplitPackage.CloseCheck();}" style="width:1000px;top:300px;padding:5px;"></div>
 </div>
 @section pagespecific {
     <script src="~/scripts/jquery.easyui-1.4.3.min.js"></script>
@@ -627,7 +627,7 @@
 
             var SelectAction = function (type) {
                 switch (type) {
-                    case '1':
+                    case '1': //Split Package
                         var result = CheckSelectedPackage(1);
                         if (result) {
                             var $package = $(result[0]);
@@ -639,7 +639,17 @@
                         break;
                     case '2':
                         break;
-                    case '3':
+                    case '3': //Combine Package
+                        var result = CheckSelectedPackage(2);
+                        if (result) {
+                            if ($(result[0]).find('#text-currency').text() != $(result[1]).find('#text-currency').text()) {
+                                return ErrorMsg('Currency must be the same when combining packages.');
+                            }
+
+                            var IDs = [];
+                            result.each(function (i, p) { IDs.push($(p).data('package')); })
+                            CombinePackage.Init(IDs);
+                        }
                         break;
                     case '4':
                         break;
@@ -683,15 +693,17 @@
             $splitQtyDialog.delegate('#btn-next', 'click', function () {
                 var qty = $splitQtyDialog.find('input').val();
 
-                $splitQtyDialog.dialog('close');
                 $packageDialog.dialog({ title: $splitQtyDialog.dialog("options").title });
                 $packageDialog.dialog("refresh", splitTableUrl + "?PackageID=" + packageID + "&Qty=" + qty).dialog("open");
+                $splitQtyDialog.dialog('close');
             });
 
-            $packageDialog.delegate('#table-summary #btn-next', 'click', function () {
+            $packageDialog.delegate('#split-summary #btn-next', 'click', function () {
+                if (!confirm('This package will be split accordingly. Do you wish to continue?')) return false;
+
                 var error = CheckTotalQty();
 
-                $('#table-summary').find('tbody tr').each(function () {
+                $('#split-summary').find('tbody tr').each(function () {
                     if (!CheckSkuQty($(this).attr('rel'))) {
                         error.push('品號' + $(this).attr('rel') + ' - 總數不對!');
                     }
@@ -711,7 +723,7 @@
             });
 
             var CheckSkuQty = function (sku) {
-                var $summary = $('#table-summary').find('tr[rel=' + sku + ']');
+                var $summary = $('#split-summary').find('tr[rel=' + sku + ']');
                 var total = $summary.data('total');
                 var subTotal = 0;
 
@@ -736,7 +748,7 @@
             var CheckTotalQty = function () {
                 var error = [];
 
-                $packageDialog.find('table:not(#table-summary)').each(function () {
+                $packageDialog.find('table:not(#split-summary)').each(function () {
                     var $table = $(this);
 
                     if ($table.has('.bg-danger')) $table.removeClass('bg-danger');
@@ -750,8 +762,50 @@
                 return error;
             };
 
+            var DialogClose = function () {
+                if ($splitQtyDialog.parent('div').is(":hidden") || $packageDialog.parent('div').is(':hidden')) {
+                    return confirm('All changes will be discarded. Do you wish to continue?');
+                }
+                return true;
+            };
+
             return {
-                Init: SplitInit
+                Init: SplitInit,
+                CloseCheck: DialogClose
+            };
+        }();
+        
+        var combineTableUrl = "@Url.Action("CombineTable", "Order")";
+        var combinePackageUrl = "@Url.Action("CombinePackage", "Order")";
+        var CombinePackage = function () {
+            var CombineInit = function (IDs) {
+                console.log(IDs);
+                website.AjaxUrl(combineTableUrl, 'post', { PackageIDs: IDs }).done(function (response) {
+                    if (response.status) {
+                        $packageDialog.html(response.data).dialog({ title: 'Combine Package' });
+                        $packageDialog.dialog("open");
+                    } else {
+                        alert(response.message);
+                    }
+                });
+            };
+
+            $packageDialog.delegate('#combine-summary #btn-next', 'click', function () {
+                if (!confirm('This package will be split accordingly. Do you wish to continue?')) return false;
+                
+                var data = $packageDialog.find('input, select').serializeArray();
+                website.AjaxUrl(combinePackageUrl, 'post', data).done(function (response) {
+                    if (response.status) {
+                        alert('Combine success!');
+                    } else {
+                        alert(response.message);
+                    }
+                    location.href = pageUrl;
+                });
+            });
+
+            return {
+                Init: CombineInit
             };
         }();
     </script>
