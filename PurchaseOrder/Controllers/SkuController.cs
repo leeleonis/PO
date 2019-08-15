@@ -16,7 +16,7 @@ namespace PurchaseOrderSys.Controllers
     [CheckSession]
     public class SkuController : BaseController
     {
-        readonly string[] EditList = new string[] { "ParentSku", "Condition", "Category", "Brand", "EAN", "UPC", "Replenishable", "SerialTracking", "Battery", "Status" };
+        readonly string[] EditList = new string[] { "ParentSku", "Condition", "Category", "Brand", "EAN", "UPC", "Replenishable", "SerialTracking", "Battery", "Status", "DisplayPageUrl" };
         readonly string[] LangList = new string[] { "Name", "Model", "Description", "PackageContent", "SpecContent", "FeatureContent" };
         readonly string[] LogisticList = new string[] {"BoxID", "Price", "OriginCountry", "CaseWidth", "CaseLength", "CaseHeight", "CaseWeight", "ShippingWidth", "ShippingLength", "ShippingHeight", "ShippingWeight" };
 
