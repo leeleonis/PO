@@ -126,6 +126,7 @@ namespace PurchaseOrderSys.Controllers
                     ID = item.ID,
                     ck = item.ID,
                     sk = item.SkuNo,
+                    Mcode= Transfer.WinitTransfer.WinitTransferSKU.Where(x=>x.IsEnable&&x.SkuNo.Contains(item.SkuNo)).FirstOrDefault()?.winitProductCode,
                     SKU = item.SkuNo,
                     ProductName = item.SKU.SkuLang.Where(x => x.LangID == LangID).FirstOrDefault()?.Name,
                     ProductMsg= GetNameSize(item.SKU),
@@ -224,23 +225,55 @@ namespace PurchaseOrderSys.Controllers
                 if (oTransfer.Status == "Pending")
                 {
                     var NoWSKUList = new List<string>();
+                    var Errmsg = "";
                     foreach (var SKUitem in oTransfer.TransferSKU)
                     {
-
                         var WSKUList = Winit_API.SKUList(SKUitem.SkuNo + "-" + oTransfer.WarehouseTo.WinitWarehouse);
-                        if (!WSKUList.list.Any()&& skuList.Contains(SKUitem.SkuNo + "-" + oTransfer.WarehouseTo.WinitWarehouse))//如果沒有資料就新增
+                        if (!WSKUList.list.Any() && !skuList.Contains(SKUitem.SkuNo + "-" + oTransfer.WarehouseTo.WinitWarehouse))//如果沒有資料就新增
                         {
-                            NoWSKUList.Add(SKUitem.SkuNo);
+           
+                            //檢查審核狀態
+                            var ItemMt = Winit_API.queryItemMtEntitys(SKUitem.SkuNo + "-" + oTransfer.WarehouseTo.WinitWarehouse, oTransfer.WarehouseTo.WinitWarehouse);
+                            if (!ItemMt.list.Any())
+                            {
+                                NoWSKUList.Add(SKUitem.SkuNo);
+                            }
+                            else if (!ItemMt.list.Where(x => x.status == "PD").Any())
+                            {
+                                Errmsg += "Winit SKU狀態\\n\\r";
+                                foreach (var item in ItemMt.list.Where(x => x.status != "PD"))
+                                {
+                                    switch (item.status)
+                                    {
+                                        case "DR":
+                                            Errmsg += SKUitem.SkuNo + "-" + oTransfer.WarehouseTo.WinitWarehouse + "待維護\\n\\r";
+                                            break;
+                                        case "PD":
+                                            Errmsg += SKUitem.SkuNo + "-" + oTransfer.WarehouseTo.WinitWarehouse + "已發布\\n\\r";
+                                            break;
+                                        case "CO":
+                                            Errmsg += SKUitem.SkuNo + "-" + oTransfer.WarehouseTo.WinitWarehouse + "維護完成\\n\\r";
+                                            break;
+                                        case "BK":
+                                            Errmsg += SKUitem.SkuNo + "-" + oTransfer.WarehouseTo.WinitWarehouse + "退回\\n\\r";
+                                            break;
+                                        case "WSA":
+                                            Errmsg += SKUitem.SkuNo + "-" + oTransfer.WarehouseTo.WinitWarehouse + "驗證中\\n\\r";
+                                            break;
+                                    }
+                                }
+                            }
                         }
                     }
                     if (NoWSKUList.Any())
                     {
-                        var Errmsh = WinitRegisterProduct(NoWSKUList, oTransfer.WarehouseTo.WinitWarehouse);
-                        if (!string.IsNullOrWhiteSpace(Errmsh))
-                        {
-                            TempData["ErrMsg"] = Errmsh;
-                            return RedirectToAction("Edit", new { Transfer.ID });
-                        }
+                        Errmsg += "Winit SKU註冊中\\n\\r";
+                        Errmsg += WinitRegisterProduct(NoWSKUList, oTransfer.WarehouseTo.WinitWarehouse);
+                    }
+                    if (!string.IsNullOrWhiteSpace(Errmsg))
+                    {
+                        TempData["ErrMsg"] = Errmsg;
+                        return RedirectToAction("Edit", new { Transfer.ID });
                     }
                     oTransfer.Status = "Requested";
                     var WinitWarehouse = oTransfer.WarehouseTo.WinitWarehouse;
@@ -254,11 +287,25 @@ namespace PurchaseOrderSys.Controllers
                             madeIn = "China",
                             singleItems = new List<SingleItem>()
                         };
-                        PostPrintV2Data.singleItems.Add(new SingleItem
+                        if (skuList.Contains(productCode))
                         {
-                            productCode = productCode,
-                            printQty = item.QTY,
-                        });
+                            var specification = db.SKU.Where(x => productCode.Contains(x.SkuID)).FirstOrDefault().SkuLang.FirstOrDefault(x => x.LangID == "en-US").Name;
+                            PostPrintV2Data.singleItems.Add(new SingleItem
+                            {
+                                productCode = productCode,
+                                specification = specification,
+                                printQty = item.QTY,
+                            });
+                        }
+                        else
+                        {
+                            PostPrintV2Data.singleItems.Add(new SingleItem
+                            {
+                                productCode = productCode,
+                                printQty = item.QTY,
+                            });
+                        }
+                       
                         var PrintV2 = Winit_API.GetPrintV2(PostPrintV2Data);
 
                         if (PrintV2 == null)
@@ -280,8 +327,6 @@ namespace PurchaseOrderSys.Controllers
                 }
 
             }
-
-
             db.SaveChanges();
             if (saveexit.HasValue && saveexit.Value)
             {
@@ -334,7 +379,7 @@ namespace PurchaseOrderSys.Controllers
                 if (exportDeclaredvalue == 0) errmsg += item + ": exportDeclaredvalue不可為0;" + Environment.NewLine;
                 if(string.IsNullOrWhiteSpace(displayPageUrl)) errmsg += item + ": 產品官方網址必填;" + Environment.NewLine;
                 if (string.IsNullOrWhiteSpace(OriginCountry)) errmsg += item + ": 產品產地必填;" + Environment.NewLine;
-
+                if (string.IsNullOrWhiteSpace(SKUmodel)) errmsg += item + ": 產品型號必填;" + Environment.NewLine;
                 nRegisterProduct.productList.Add(new ProductList
                 {
                     productCode = item + "-" + winitWarehouse,
@@ -1251,8 +1296,8 @@ namespace PurchaseOrderSys.Controllers
 
             List<string> FedExFile1 = new List<string>();
             List<Tuple<Stream, string>> FedExFile2 = new List<Tuple<Stream, string>>();
-            string[] Ccs = new string[] { "peter@qd.com.tw", "kelly@qd.com.tw", "demi@qd.com.tw", "leoli.qd@hotmail.com" };
-            //string[] Ccs = new string[] { "peter@qd.com.tw" };//
+            string[] Ccs = new string[] { "peter@qd.com.tw", "kelly@qd.com.tw", "demi@qd.com.tw" };
+            //string[] Ccs = new string[] {  };//
             if (string.IsNullOrWhiteSpace(transfer.WinitTransfer.InvoiceExcel))
             {
                 var Stream = InvoiceExcel(transfer);
@@ -1266,8 +1311,9 @@ namespace PurchaseOrderSys.Controllers
             if (string.IsNullOrWhiteSpace(transfer.WinitTransfer.CheckList))
             {
                 var Stream = CheckListExcel(transfer);
-                FedExFile2.Add(new Tuple<Stream, string>(Stream, "CheckList.zip"));
-                transfer.WinitTransfer.CheckList= Convert.ToBase64String(Stream.ToArray());
+                transfer.WinitTransfer.CheckList = Convert.ToBase64String(Stream.ToArray());//不知道為什麼直接使用不行，必須轉成Base64才能正常
+                //FedExFile2.Add(new Tuple<Stream, string>(Stream, "CheckList.zip"));
+                FedExFile2.Add(new Tuple<Stream, string>(Base64ToMemoryStream(transfer.WinitTransfer.CheckList), "CheckList.zip"));
             }
             else
             {

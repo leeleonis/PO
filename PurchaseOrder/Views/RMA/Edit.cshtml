@@ -47,41 +47,76 @@
                                 <div id="content" class="tab-content">
                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                     <div class="tab-pane" id="hb1">
-                                        <h1><b>RMA# @Model.ID</b></h1>
+                                        <font size="5">
+                                            <b>
+                                                RMA# @Model.ID &nbsp;&nbsp;
+                                            </b>
+                                        </font>
+                                        <font size="4">
+                                            SC RMA#
+                                            <a href='https://dm.cwa.sellercloud.com/Orders/Orders_Return.aspx?id=@(Model.OrderID)' target="_blank">@Model.SCRMA</a>
+                                        </font>
+                                        <br />
+                                        <font size="3">
+                                            <b>
+                                                @ChannelList.Where(x => x.Value == Model.Channel.ToString()).FirstOrDefault().Text
+                                                {{{@Model.SourceID}}}
+                                            </b>
+
+                                        </font>
+                                        <br />
+                                        <font size="3">
+                                            <b>
+                                                @CompanyDDL.Where(x => x.Value == Model.CompanyID.ToString()).FirstOrDefault().Text
+                                            </b>
+                                        </font>
+
                                         <fieldset>
-                                            <legend>@ViewBag.title</legend>
+                                            <legend></legend>
                                             <div class="form-group">
-                                                @Html.LabelFor(model => model.OrderID, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @Html.LabelFor(model => model.OrderID, htmlAttributes: new { @class = "control-label col-lg-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @*@Html.Editor("OrderID", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })*@
                                                     <a href='https://dm.cwa.sellercloud.com/Orders/Orders_details.aspx?id=@(Model.OrderID)' target="_blank" class="control-label col-sm-1">@Model.OrderID</a>
                                                 </div>
 
                                                 @*<label class="control-label col-sm-2">Generate Prepaid Return Label</label>
-                                                    <div class="col-sm-9 col-lg-2">
+        <div class="col-sm-9 col-lg-2">
 
-                                                    </div>*@
+        </div>*@
 
                                                 @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.DropDownList("Status", RMAStatusList, htmlAttributes: new { @class = "form-control" })
                                                 </div>
 
+                                                @Html.Label("Create Date", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    <input class="form-control" type="text" value="@Model.CreateAt.ToLocalTime()" readonly>
+                                                </div>
                                             </div>
                                             <div class="form-group">
-                                                @Html.LabelFor(model => model.SourceID, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @Html.LabelFor(model => model.SCUserID, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("SourceID", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                    @Html.Editor("SCUserID", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                                                 </div>
+                                                @*@Html.LabelFor(model => model.SourceID, htmlAttributes: new { @class = "control-label col-sm-2" })
+        <div class="col-sm-9 col-lg-2">
+            @Html.Editor("SourceID", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+        </div>*@
 
                                                 @*@Html.LabelFor(model => model.ReturnTracking, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                    <div class="col-sm-9 col-lg-2">
-                                                        @Html.Editor("ReturnTracking", new { htmlAttributes = new { @class = "form-control"} })
-                                                    </div>*@
+        <div class="col-sm-9 col-lg-2">
+            @Html.Editor("ReturnTracking", new { htmlAttributes = new { @class = "form-control"} })
+        </div>*@
 
                                                 @Html.LabelFor(model => model.Action, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.DropDownList("Action", RMAActionList, htmlAttributes: new { @class = "form-control" })
+                                                </div>
+                                                @Html.Label("Create By", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("CreateBy", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -90,66 +125,14 @@
                                                     @Html.Editor("SourceCaseID", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
                                                 @*@Html.LabelFor(model => model.Carrier, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                    <div class="col-sm-9 col-lg-2">
-                                                        @Html.Editor("Carrier", new { htmlAttributes = new { @class = "form-control" } })
-                                                    </div>*@
+        <div class="col-sm-9 col-lg-2">
+            @Html.Editor("Carrier", new { htmlAttributes = new { @class = "form-control" } })
+        </div>*@
                                                 @Html.Label("Warranty / Repair #", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("Warranty", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @Html.LabelFor(model => model.CompanyID, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownListLabel("CompanyID", CompanyDDL, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
-                                                </div>
-                                                @*<label class="control-label col-sm-2">Tracking Status (Date)</label>
-                                                    <div class="col-sm-9 col-lg-2">
-                                                        Tracking Status (Event)
-                                                    </div>*@
-                                                @Html.Label("Credit Memo #", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("CreditMemo", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @Html.LabelFor(model => model.Channel, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownListLabel("Channel", ChannelList, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
-                                                </div>
-                                                @*<label class="control-label col-sm-2"></label>
-                                                    <div class="col-sm-9 col-lg-2">
 
-                                                    </div>*@
-                                                @Html.Label("Create Date", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    <input class="form-control" type="text" value="@Model.CreateAt.ToLocalTime()" readonly>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @Html.LabelFor(model => model.Country, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Country", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-                                                </div>
-                                                @*<label class="control-label col-sm-2"></label>
-                                                    <div class="col-sm-9 col-lg-2">
-
-                                                    </div>*@
-                                                @Html.Label("Create By", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("CreateBy", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @Html.LabelFor(model => model.SCRMA, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @*@Html.Editor("SCRMA", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })*@
-                                                    <a href='https://dm.cwa.sellercloud.com/Orders/Orders_Return.aspx?id=@(Model.OrderID)' target="_blank" class="control-label col-sm-2">@Model.SCRMA</a>
-                                                </div>
-                                                @*<label class="control-label col-sm-2"></label>
-                                                    <div class="col-sm-9 col-lg-2">
-
-                                                    </div>*@
                                                 @Html.Label("Received Date", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @{
@@ -159,14 +142,19 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label col-sm-2"></label>
+                                                @Html.LabelFor(model => model.CompanyID, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-
+                                                    @Html.DropDownListLabel("CompanyID", CompanyDDL, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
                                                 </div>
-                                                @*<label class="control-label col-sm-2"></label>
-                                                    <div class="col-sm-9 col-lg-2">
+                                                @*<label class="control-label col-sm-2">Tracking Status (Date)</label>
+        <div class="col-sm-9 col-lg-2">
+            Tracking Status (Event)
+        </div>*@
+                                                @Html.Label("Credit Memo #", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("CreditMemo", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                </div>
 
-                                                    </div>*@
                                                 @Html.Label("Received By", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @{
@@ -174,6 +162,45 @@
                                                         <input class="form-control" type="text" value="@ReceivedBy" readonly>
                                                     }
                                                 </div>
+                                            </div>
+                                        
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Country, htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("Country", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                </div>
+                                                @*<label class="control-label col-sm-2"></label>
+                <div class="col-sm-9 col-lg-2">
+
+                </div>*@
+                                              
+                                            </div>
+                                                <div class="form-group">
+                                                @*@Html.LabelFor(model => model.Channel, htmlAttributes: new { @class = "control-label col-sm-2" })
+                <div class="col-sm-9 col-lg-2">
+                    @Html.DropDownListLabel("Channel", ChannelList, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                </div>*@
+                                                @*<label class="control-label col-sm-2"></label>
+                <div class="col-sm-9 col-lg-2">
+
+                </div>*@
+                                            </div>
+                                            <div class="form-group">
+
+                                                @*<label class="control-label col-sm-2"></label>
+                <div class="col-sm-9 col-lg-2">
+
+                </div>*@
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-2"></label>
+                                                <div class="col-sm-9 col-lg-2">
+
+                                                </div>
+                                                @*<label class="control-label col-sm-2"></label>
+                <div class="col-sm-9 col-lg-2">
+
+                </div>*@
                                             </div>
                                         </fieldset>
                                         <fieldset>
@@ -185,7 +212,7 @@
                                                     {
                                                         @*<button type="button" id="Receivereturns">Receive returns</button>*@
                                                         @*<button type="button" id="Edititems">Edit items</button>
-                                                            <button type="button" id="Removeitems">Remove items</button>*@
+                        <button type="button" id="Removeitems">Remove items</button>*@
                                                     }
                                                 </div>
                                             </div>

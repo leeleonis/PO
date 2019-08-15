@@ -52,11 +52,11 @@
                                             <div class="form-group">
                                                 @Html.Label("Transfer #:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    <a href='https://www.fedex.com/apps/fedextrack/?action=track&trackingnumber=@Model.Tracking' target="_blank">@Model.Tracking</a>
+                                                    @Html.Editor("ID", new { htmlAttributes = new { @class = "form-control " + TStatus, disabled } })
                                                 </div>
                                                 @Html.Label("External Transfer #:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    <a href='https://seller.winit.com.cn/WHInbound/orderDetailDelivery/orderNo/@Model.WinitTransfer.WinitOrderNo' target="_blank">@Model.WinitTransfer.WinitOrderNo</a>
+                                                    <a href='https://seller.winit.com.cn/WHInbound/orderDetailDelivery/orderNo/@Model.WinitTransfer.WinitOrderNo' target="_blank" class="form-control">@Model.WinitTransfer.WinitOrderNo</a>
                                                 </div>
                                                 @Html.Label("Status:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
@@ -86,15 +86,23 @@
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.DropDownList("SBarcodeLabelType", SBarcodeLabelType, htmlAttributes: new { @class = "form-control" })
                                                 </div>
+                                                @Html.Label("Tracking:", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @if (string.IsNullOrWhiteSpace(Model.Tracking))
+                                                    {
+                                                        @Html.Editor("Tracking", new { htmlAttributes = new { @class = "form-control " + TStatus, disabled } })
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href='https://www.fedex.com/apps/fedextrack/?action=track&trackingnumber=@Model.Tracking' target="_blank" class="form-control">@Model.Tracking</a>
+                                                    }
+
+                                                </div>
                                             </div>
                                             <div class="form-group">
 
-                                                @Html.Label("Tracking:", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Tracking", new { htmlAttributes = new { @class = "form-control " + TStatus, disabled } })
-                                                </div>
                                                 @Html.Label("Title", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-6">
+                                                <div class="col-sm-9 col-lg-10">
                                                     @Html.Editor("Title", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
                                             </div>
@@ -102,13 +110,13 @@
                                         <fieldset>
                                             <legend></legend>
                                             <div class="form-group">
-                                                <div class="col-sm-9  col-lg-10">
+                                                <div class="col-sm-9  col-lg-6">
                                                     @if (Model.Status == "Pending")
                                                     {
-                                                        <div class="col-lg-offset-10">
+                                                        @*<div class="col-lg-offset-10">
                                                             <a class='btn btn-info btn-sm' href="~/File/TransferExample.xlsx">Transfer Example</a>
                                                             <a class='btn btn-danger btn-sm Excel' valID=" @Model.ID">Create by Excel</a>
-                                                        </div>
+                                                        </div>*@
                                                         <button type="button" class='btn btn-default btn-sm' id='Request'>Request</button>
                                                     }
                                                     else if (Model.Status == "Requested")
@@ -149,31 +157,40 @@
                                                         <a type="button" href="@Url.Action("Save",new { Model.ID})" class='btn btn-default btn-sm' id='btn-Add'>Save</a>
                                                         <a type="button" href="@Url.Action("Delete",new { Model.ID})" class='btn btn-default btn-sm' id='btn-Add'>Delete</a>*@
                                                 </div>
-                                                <div class="col-sm-9  col-lg-offset-10">
-                                                    @if (Model.Status == "Requested")
-                                                    {
-                                                        if (Model.TransferSKU.Where(x => x.IsEnable).Where(x => x.SerialsLlist.Where(y => y.SerialsType == "TransferOut").Any() || x.RMASerialsLlist.Where(y => y.SerialsType == "TransferOut").Any()).Any())
+                                                <div class="col-sm-9  col-lg-6">
+                                                    <div class="col-sm-9  col-lg-offset-2">
+
+                                                        @if (Model.Status == "Pending")
                                                         {
-                                                            if (NoPrepSerials.Any())
+                                                            <div class="col-sm-9  col-lg-offset-8">
+                                                                <a class='btn btn-info btn-sm' href="~/File/TransferExample.xlsx">Transfer Example</a>
+                                                                <a class='btn btn-danger btn-sm Excel' valID=" @Model.ID">Create by Excel</a>
+                                                            </div>
+                                                            @*<button type="button" class='btn btn-default btn-sm' id='Request'>Request</button>*@
+                                                        }
+                                                        else if (Model.Status == "Requested")
+                                                        {
+                                                            if (Model.TransferSKU.Where(x => x.IsEnable).Where(x => x.SerialsLlist.Where(y => y.SerialsType == "TransferOut").Any() || x.RMASerialsLlist.Where(y => y.SerialsType == "TransferOut").Any()).Any())
                                                             {
-                                                                var Msg = "以下物品尚未安排, 請問是否繼續?\\n\\r";
-                                                                Msg += string.Join("\\n\\r", NoPrepSerials);
-                                                                <button type="button" class="btn btn-default" id="printBox" onclick="return confirm('@(Msg)')">打印Box</button>
-                                                                <button type="button" class="btn btn-default" id="printAWB" onclick="return confirm('@(Msg)')">打印AWB</button>
-                                                            }
-                                                            else
-                                                            {
-                                                                <button type="button" class="btn btn-default" id="printBox">打印Box</button>
-                                                                <button type="button" class="btn btn-default" id="printAWB">打印AWB</button>
+                                                                if (NoPrepSerials.Any())
+                                                                {
+                                                                    var Msg = "以下物品尚未安排, 請問是否繼續?\\n\\r"; Msg += string.Join("\\n\\r", NoPrepSerials);<button type="button" class="btn btn-default" id="printBox" onclick="return confirm('@(Msg)')">打印Box</button>
+                                                                    <button type="button" class="btn btn-default" id="printAWB" onclick="return confirm('@(Msg)')">打印AWB</button>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <button type="button" class="btn btn-default" id="printBox">打印Box</button>
+                                                                    <button type="button" class="btn btn-default" id="printAWB">打印AWB</button>
+                                                                }
                                                             }
                                                         }
-                                                    }
-                                                    else if (Model.Status == "Shipped")
-                                                    {
-                                                        <button type="button" class="btn btn-default" id="printBox">打印Box</button>
-                                                        <button type="button" class="btn btn-default" id="printAWB">打印AWB</button>
-                                                        <button type="button" class="btn btn-default" id="printInvoice">打印發票</button>
-                                                    }
+                                                        else if (Model.Status == "Shipped")
+                                                        {
+                                                            <button type="button" class="btn btn-default" id="printBox">打印Box</button>
+                                                            <button type="button" class="btn btn-default" id="printAWB">打印AWB</button>
+                                                            <button type="button" class="btn btn-default" id="printInvoice">打印發票</button>
+                                                        }
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -185,11 +202,12 @@
                                                                     <input type="checkbox" />
                                                                 </th>
                                                                 <th></th>
+                                                                <th>Winit M碼</th>
                                                                 <th>SKU</th>
                                                                 <th>Product Name</th>
                                                                 <th>QTY</th>
                                                                 <th>Serial</th>
-                                                                <th>Label</th>
+                                                                @*<th>Label</th>*@
                                                                 <th>Total Received</th>
                                                                 <th>Price</th>
                                                                 @*<th>TWN (Available)</th>*@
@@ -264,6 +282,9 @@
                     "defaultContent": ''
                 },
                 {
+                    data: "Mcode"
+                },
+                {
                     data: "SKU",
                     render: function (data, type, row) {
                         return "<a  target='_blank' href='" + "@Url.Action("edit", "Sku")" + "?id=" + row.SKU + "#6'>" + row.SKU + "</a>";
@@ -284,7 +305,7 @@
                         @: { data: "QTY", render: function (data, type, row) { return data; } },
                     }
                 { data: "Serial", render: function (data, type, row) { return data; } },
-                { data: "Label", render: function (data, type, row) { return thousandComma(data); } },
+                //{ data: "Label", render: function (data, type, row) { return thousandComma(data); } },
                 { data: "TotalReceive", render: function (data, type, row) { return data; } },
                 { data: "Price", render: function (data, type, row) { return '<input class="form-control" type="text" onchange="TSkuNumberListPrice(this,' + row.ck + ',' + data + ')"  value = ' + data + ' > '; } },
                 //{ data: "TWN", render: function (data, type, row) { return thousandComma(data); }  },

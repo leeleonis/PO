@@ -5128,7 +5128,7 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
-        ///   查詢類似 SC User ID 的當地語系化字串。
+        ///   查詢類似 Customer User ID 的當地語系化字串。
         /// </summary>
         public static string RMA_SCUserID {
             get {

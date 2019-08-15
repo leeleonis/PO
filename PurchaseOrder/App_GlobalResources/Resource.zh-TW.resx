@@ -2647,7 +2647,7 @@
     <value>申報價值</value>
   </data>
   <data name="RMA_SCUserID" xml:space="preserve">
-    <value>SC User ID</value>
+    <value>Customer User ID</value>
   </data>
   <data name="RMA_RestockingFee" xml:space="preserve">
     <value>RestockingFee</value>

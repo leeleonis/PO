@@ -620,6 +620,7 @@ namespace PurchaseOrderSys.Models
         /// 品號
         /// </summary>
         public string SKU { get; set; }
+        public string Mcode { get; set; }
         /// <summary>
         /// 品名
         /// </summary>

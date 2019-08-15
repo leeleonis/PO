@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -9,10 +10,12 @@ using System.Web;
 using System.Web.Mvc;
 using inventorySKU.NetoDeveloper;
 using Newtonsoft.Json;
+using OfficeOpenXml;
 using PurchaseOrderSys.Models;
 using PurchaseOrderSys.PurchaseOrderService;
 using PurchaseOrderSys.SCService;
 using SellerCloud_WebService;
+using PurchaseOrderSys.NewApi;
 
 namespace PurchaseOrderSys.Controllers
 {
@@ -82,8 +85,9 @@ namespace PurchaseOrderSys.Controllers
             //WinitTransferSKU.ItemBarcodeFile = PrintV2.itemBarcodeFile;
             //WinitTransferSKU.itemBarcodeList = string.Join(";", PrintV2.itemBarcodeList);
             //db.SaveChanges();
-            //var Winit_API = new NewApi.Winit_API();
-            //var getWinitProducts = Winit_API.getWinitProducts("106005547-US");
+            var Winit_API = new NewApi.Winit_API();
+            var ItemMt = Winit_API.queryItemMtEntitys("106018123", "US");
+            var getWinitProducts = Winit_API.getWinitProducts("106018123-US");
             //var ApiSetting = db.ApiSetting.Find(16);
             //var FedEx_API = new FedExApi.FedEx_API(ApiSetting);
             //var Transfer = db.Transfer.Find(3264);
@@ -147,8 +151,58 @@ namespace PurchaseOrderSys.Controllers
             //{
             //}
             //return File(fileStream, "application/zip", "Box_PackingList.xlsx");
-           // return File(fileStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ExportRanger.xlsx");
+            // return File(fileStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ExportRanger.xlsx");
             return View();
+        }
+        public ActionResult NewWinitBarcode(int WinitTransferID)
+        {
+            var Winit_API = new Winit_API();
+            string[] skuList = new string[] { "106005549-US", "106005547-US", "106005548-US", "106006218-US", "106018122-US", "106018123-US", "106003214-US", "106003274-US", "106018155-US", "106018124-AU" };//winit要加上規格才能出貨
+            var WinitTransferSKU = db.WinitTransferSKU.AsEnumerable().Where(x => x.WinitTransferID == WinitTransferID && string.IsNullOrWhiteSpace(x.ItemBarcodeFile));
+            foreach (var WinitTransferSKUitem in WinitTransferSKU)
+            {
+                foreach (var TransferSKUitem in WinitTransferSKUitem.WinitTransfer.Transfer.TransferSKU.Where(x => x.IsEnable&& WinitTransferSKUitem.SkuNo.Contains(x.SkuNo)))
+                {
+                    var productCode = WinitTransferSKUitem.SkuNo;
+                    var WSKUList = Winit_API.SKUList(productCode);
+                    if (WSKUList != null && WSKUList.list != null && WSKUList.list.Any())
+                    {
+                        WinitTransferSKUitem.winitProductCode = WSKUList.list.FirstOrDefault().code;
+                    }
+                    //Winit API 取S BARCODE
+                    var PostPrintV2Data = new PostPrintV2Data
+                    {
+                        labelType = WinitTransferSKUitem.WinitTransfer.SBarcodeLabelType,
+                        madeIn = "China",
+                        singleItems = new List<SingleItem>()
+                    };
+                    if (skuList.Contains(productCode))
+                    {
+                        var specification = db.SKU.Where(x => productCode.Contains(x.SkuID)).FirstOrDefault().SkuLang.FirstOrDefault(x => x.LangID == "en-US").Name;
+                        PostPrintV2Data.singleItems.Add(new SingleItem
+                        {
+                            productCode = productCode,
+                            specification = specification,
+                            printQty = TransferSKUitem.QTY,
+                        });
+                    }
+                    else
+                    {
+                        PostPrintV2Data.singleItems.Add(new SingleItem
+                        {
+                            productCode = productCode,
+                            printQty = TransferSKUitem.QTY,
+                        });
+                    }
+
+                    var PrintV2 = Winit_API.GetPrintV2(PostPrintV2Data);
+                   
+                    WinitTransferSKUitem.ItemBarcodeFile = PrintV2.itemBarcodeFile;
+                    WinitTransferSKUitem.itemBarcodeList = string.Join(";", PrintV2.itemBarcodeList);
+                }
+            }
+            db.SaveChanges();
+            return Json(new { status = true, reload = true }, JsonRequestBehavior.AllowGet);
         }
         public ActionResult WinitByexcel(HttpPostedFileBase ExcelFile)
         {
@@ -293,6 +347,53 @@ namespace PurchaseOrderSys.Controllers
                 db.SaveChanges();
             }
             return Json(new { status = true, reload = true }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult winitProductPdf(int id)
+        {
+            var WinitTransferSKU = db.WinitTransferSKU.Find(id);
+            var BarcodeFile = Base64ToMemoryStream(WinitTransferSKU.ItemBarcodeFile);
+            return File(BarcodeFile, "application/pdf", WinitTransferSKU.winitProductCode + "_M碼.pdf");
+        }
+        public ActionResult WinitExcelD(string WinitOrderNo)
+        {
+            var WinitTransfer = db.WinitTransfer.Where(x => x.IsEnable && x.WinitOrderNo == WinitOrderNo);
+            //在記憶體中建立一個Excel物件
+            ExcelPackage ep = new ExcelPackage();
+            //加入一個Sheet
+            ep.Workbook.Worksheets.Add("MySheet");
+            //取得剛剛加入的Sheet(實體Sheet就叫MySheet)
+            ExcelWorksheet sheet1 = ep.Workbook.Worksheets["MySheet"];//取得Sheet1 
+            sheet1.Cells[1, 1].Value = "SKU";//
+            sheet1.Cells[1, 2].Value = "M碼";//
+            sheet1.Cells[1, 3].Value = "序號";//
+            sheet1.Cells[1, 4].Value = "S碼";//
+            //迴圈部份自由料理
+            int row = 2;
+            foreach (var WinitTransferitem in WinitTransfer)
+            {
+                foreach (var WinitTransferSKUitem in WinitTransferitem.WinitTransferSKU.Where(x => x.IsEnable))
+                {
+                    sheet1.Cells[row , 1].Value = WinitTransferSKUitem.SkuNo;
+                    sheet1.Cells[row , 2].Value = WinitTransferSKUitem.winitProductCode;
+                    foreach (var WinitTransferBoxitem in WinitTransferitem.WinitTransferBox.Where(x => x.IsEnable))
+                    {
+                        foreach (var item in WinitTransferBoxitem.WinitTransferBoxItem.Where(x => x.MerchandiseCode== WinitTransferSKUitem.SkuNo))
+                        {
+                            sheet1.Cells[row, 3].Value = item.SerialsNo;
+                            sheet1.Cells[row, 4].Value = item.BarCode;
+                            row++;
+                        }
+                    }
+                }
+            }
+            //建立檔案串流
+            //var OutputStream = new System.IO.MemoryStream();
+            //把剛剛的Excel物件真實存進檔案裡
+            //ep.SaveAs(OutputStream);
+            //關閉串流
+            //var fileStream = OutputStream.ToArray();
+            //OutputStream.Close();
+            return File(ep.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", WinitOrderNo+ "WinitExce.xlsx");
         }
         public ActionResult InvoiceExcelD(int id)
         {

@@ -678,6 +678,58 @@ namespace PurchaseOrderSys.NewApi
         public List<TrackingList> trackingList { get; set; }
     }
 
+
+    public class PageVo
+    {
+        public string pageNo { get; set; }
+        public string pageSize { get; set; }
+    }
+
+    public class ItemMtEntity
+    {
+        public string country { get; set; }
+        public string skuCode { get; set; }
+        public string importCountryCode { get; set; }
+        public string importEndTime { get; set; }
+        public string importStartTime { get; set; }
+        public string keyword { get; set; }
+        public string keywordValue { get; set; }
+        public string name { get; set; }
+        public PageVo pageVo { get; set; }
+        public string status { get; set; }
+    }
+
+
+    public class queryList
+    {
+        public int id { get; set; }
+        public string createdby { get; set; }
+        public string created { get; set; }
+        public string updatedby { get; set; }
+        public string updated { get; set; }
+        public object isActive { get; set; }
+        public object isDelete { get; set; }
+        public string skuCode { get; set; }
+        public string specification { get; set; }
+        public string cnName { get; set; }
+        public string name { get; set; }
+        public string description { get; set; }
+        public string exportCountryCode { get; set; }
+        public string mtTime { get; set; }
+        public string status { get; set; }
+        public string mtBackReason { get; set; }
+        public string mtBackResultName { get; set; }
+        public object pageVo { get; set; }
+        public string isManageSizeByCountry { get; set; }
+    }
+
+    public class queryItemMtEntitys
+    {
+        public PageParams pageParams { get; set; }
+        public List<queryList> list { get; set; }
+    }
+
+
     public class Winit_API : IDisposable
     {
         private bool disposed = false;
@@ -917,11 +969,21 @@ namespace PurchaseOrderSys.NewApi
         {
             return GetAPI<ReturnPrintV2>("winit.singleitem.label.print.v2", postPrintV2Data);
         }
-
         internal List<WinitProducts> getWinitProducts(string productType)
         {
             var data = new { productType };
             return GetAPI<List<WinitProducts>>("winit.wh.pms.getWinitProducts", data);
+        }
+        /// <summary>
+        /// 查詢商品審核狀態
+        /// </summary>
+        /// <param name="skuCode">SKU</param>
+        /// <param name="importCountryCode">進口國家 國家二字碼</param>
+        /// <returns></returns>
+        internal queryItemMtEntitys queryItemMtEntitys(string skuCode,string importCountryCode)
+        {
+            var data = new { skuCode, importCountryCode };
+            return GetAPI<queryItemMtEntitys>("mms.itemmttask.queryItemMtEntitys", data);
         }
         /// <summary>
         /// 
