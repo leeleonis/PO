@@ -756,22 +756,31 @@
                                     @{
                                         var SCList = WarehouseList.SelectMany(w => w.WarehouseSummary.Where(ws => ws.IsEnable && ws.Type.Equals("SCID"))).ToDictionary(s => s.Val, s => s.WarehouseID);
                                         var TypeList = new Dictionary<string, string>() { { "PO", "PO" }, { "CM", "Credit Memo" }, { "Order", "Order Dispatch" }, { "TransferOut", "Transfer (Out)" }, { "TransferIn", "Transfer (In)" }, { "RMAIn", "RMA (In)" }, { "Change", "" } };
-                                        var SerialList = PurchaseSku.SelectMany(sku => sku.SerialsLlist).Where(s => !(s.TransferSKUID.HasValue && (!s.TransferSKU.IsEnable || !s.TransferSKU.Transfer.IsEnable))).Select(s => new
+
+                                        var data = PurchaseSku.SelectMany(sku => sku.SerialsLlist.Where(s => s.IsEnable && (s.SerialsType.Equals("PO") || s.SerialsType.Equals("TransferIn")))).ToList();
+                                        var data2 = data.SelectMany(sku => sku.SerialsLlistC.Where(s => s.IsEnable)).ToList();
+                                        if (data2.Any(s => s.SerialsType.Equals("TransferIn")))
                                         {
-                                            SKU = s.PurchaseSKU.SkuNo,
+                                            data2.AddRange(data2.Where(s => s.SerialsType.Equals("TransferIn")).SelectMany(sku => sku.SerialsLlistC.Where(s => s.IsEnable)).ToList());
+                                        }
+                                        data.AddRange(data2);
+                                        var SerialList = data.Where(s => !(s.TransferSKUID.HasValue && (!s.TransferSKU.IsEnable || !s.TransferSKU.Transfer.IsEnable))).Select(s => new
+                                        {
+                                            SKU = s.PurchaseSKU?.SkuNo ?? s.TransferSKU?.SkuNo,
                                             Date = s.CreateAt.ToLocalTime(),
-                                            Supplier = s.PurchaseSKU.PurchaseOrder?.VendorLIst.Name ?? s.PurchaseSKU.CreditMemo?.PurchaseOrder.VendorLIst.Name,
+                                            Supplier = s.PurchaseSKUID.HasValue ? s.PurchaseSKU.PurchaseOrder?.VendorLIst.Name ?? s.PurchaseSKU.CreditMemo?.PurchaseOrder?.VendorLIst.Name : "",
                                             Type = s.SerialsType,
-                                            ExtendID = (s.TransferSKU?.TransferID ?? s.OrderID ?? s.PurchaseSKU.PurchaseOrderID ?? s.PurchaseSKU.CreditMemoID).Value,
-                                            WID = (s.TransferSKUID.HasValue ? (s.SerialsType.Equals("TransferIn") ? s.TransferSKU.Transfer.ToWID : s.TransferSKU.Transfer.FromWID) : s.PurchaseSKU.PurchaseOrder?.WarehouseID ?? s.PurchaseSKU.CreditMemo?.PurchaseOrder.WarehouseID).Value,
+                                            ExtendID = s.SerialsType.Equals("Order") ? s.OrderID.Value : (s.TransferSKU?.TransferID ?? s.PurchaseSKU?.PurchaseOrderID ?? s.PurchaseSKU?.CreditMemoID).Value,
+                                            WID = (s.TransferSKUID.HasValue ? (s.SerialsType.Equals("TransferIn") || s.SerialsType.Equals("Order") ? s.TransferSKU.Transfer.ToWID : s.TransferSKU.Transfer.FromWID) : (s.PurchaseSKUID.HasValue ? s.PurchaseSKU.PurchaseOrder?.WarehouseID ?? s.PurchaseSKU.CreditMemo?.PurchaseOrder.WarehouseID : s.SerialsLlistP.TransferSKU.Transfer.ToWID)).Value,
                                             Serial = s.SerialsNo,
                                             QTY = s.SerialsQTY.Value,
-                                            Price = s.PurchaseSKU.Price ?? 0,
+                                            Price = s.PurchaseSKU?.Price ?? 0,
                                             Awaiting = s.SerialsType.Equals("TransferOut") && s.TransferSKU.Transfer.Status.Equals("Requested"),
                                             Shipped = s.SerialsType.Equals("TransferOut") && s.TransferSKU.Transfer.Status.Equals("Shipped") && !s.SerialsLlistC.Any(sl => sl.SerialsType.Equals("TransferIn")),
                                             RMA = false
                                         }).ToList();
-                                        SerialList.AddRange(RMASku.SelectMany(sku => sku.RMASerialsLlist).Select(s => new
+
+                                        SerialList.AddRange(RMASku.SelectMany(sku => sku.RMASerialsLlist.Where(s => s.IsEnable)).Select(s => new
                                         {
                                             SKU = s.RMASKU.SkuNo,
                                             Date = s.CreateAt.ToLocalTime(),
@@ -786,7 +795,7 @@
                                             Shipped = s.SerialsType.Equals("TransferOut") && s.TransferSKU.Transfer.Status.Equals("Shipped") && !s.RMASerialsLlistC.Any(sl => sl.SerialsType.Equals("TransferIn")),
                                             RMA = true
                                         }).ToList());
-                                        SerialList = SerialList.OrderByDescending(s => s.Date).ToList();
+                                        SerialList = SerialList.Distinct().OrderByDescending(s => s.Date).ToList();
                                         var AwaitingConut = AwaitingList.Select(a => new { WID = SCList[a.SCID], QTY = a.QTY }).Concat(SerialList.Where(s => s.Awaiting).Select(s => new { WID = s.WID, QTY = Math.Abs(s.QTY) })).GroupBy(a => a.WID, a => a.QTY).ToDictionary(g => g.Key, g => g.Sum());
                                         var AggregateCount = SerialList.Where(s => !s.Awaiting).GroupBy(s => s.WID, s => !s.RMA ? s.QTY : 0).ToDictionary(g => g.Key, g => g.Sum() - (AwaitingConut.ContainsKey(g.Key) ? AwaitingConut[g.Key] : 0));
                                         var AvailableCount = SerialList.Where(s => !s.Awaiting).GroupBy(s => s.WID, s => s.QTY).ToDictionary(g => g.Key, g => g.Sum());

@@ -175,13 +175,13 @@ namespace PurchaseOrderSys.Models
             return EnumData.OrderType.Normal;
         }
 
-        public EnumData.OrderFulfilledStatus CheckFulfillmentStatus(Orders order)
+        public EnumData.OrderFulfillmentStatus CheckFulfillmentStatus(Orders order)
         {
-            if (order.Packages.Where(p => p.IsEnable).All(p => p.ShippingStatus.Equals((byte)EnumData.OrderShippingStatus.已出貨))) return EnumData.OrderFulfilledStatus.Fulfilled;
+            if (order.Packages.Where(p => p.IsEnable).All(p => p.ShippingStatus.Equals((byte)EnumData.OrderShippingStatus.已出貨))) return EnumData.OrderFulfillmentStatus.Full;
 
-            if (order.Packages.Where(p => p.IsEnable).Any(p => p.ShippingStatus.Equals((byte)EnumData.OrderShippingStatus.已出貨))) return EnumData.OrderFulfilledStatus.Partial;
+            if (order.Packages.Where(p => p.IsEnable).Any(p => p.ShippingStatus.Equals((byte)EnumData.OrderShippingStatus.已出貨))) return EnumData.OrderFulfillmentStatus.Partial;
 
-            return EnumData.OrderFulfilledStatus.Unfulfilled;
+            return EnumData.OrderFulfillmentStatus.None;
         }
 
         public void SplitPackage(int[] PackageIDs)
