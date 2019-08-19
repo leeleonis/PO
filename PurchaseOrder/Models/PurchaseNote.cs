@@ -14,6 +14,12 @@ namespace PurchaseOrderSys.Models
     
     public partial class PurchaseNote
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public PurchaseNote()
+        {
+            this.PurchaseNoteImg = new HashSet<PurchaseNoteImg>();
+        }
+    
         public bool IsEnable { get; set; }
         public int ID { get; set; }
         public Nullable<int> PurchaseOrderID { get; set; }
@@ -26,10 +32,14 @@ namespace PurchaseOrderSys.Models
         public Nullable<int> CreditMemoID { get; set; }
         public Nullable<int> TransferID { get; set; }
         public Nullable<int> RMAID { get; set; }
+        public Nullable<int> RMAOrderTrackingID { get; set; }
     
         public virtual PurchaseOrder PurchaseOrder { get; set; }
         public virtual CreditMemo CreditMemo { get; set; }
         public virtual Transfer Transfer { get; set; }
         public virtual RMA RMA { get; set; }
+        public virtual RMAOrderSerialsLlist RMAOrderSerialsLlist { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PurchaseNoteImg> PurchaseNoteImg { get; set; }
     }
 }

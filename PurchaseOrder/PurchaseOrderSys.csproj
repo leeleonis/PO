@@ -512,6 +512,12 @@
     <Compile Include="Models\PurchaseNote.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PurchaseNoteImg.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PurchaseNoteImgMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PurchaseNoteMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>

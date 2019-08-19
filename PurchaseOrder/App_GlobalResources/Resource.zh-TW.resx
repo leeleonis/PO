@@ -2862,4 +2862,31 @@
   <data name="RMAOrderTracking_Memo" xml:space="preserve">
     <value>註記</value>
   </data>
+  <data name="PurchaseNoteImg_IsEnable" xml:space="preserve">
+    <value>啟用</value>
+  </data>
+  <data name="PurchaseNoteImg_ID" xml:space="preserve">
+    <value>流水號</value>
+  </data>
+  <data name="PurchaseNoteImg_PurchaseNoteID" xml:space="preserve">
+    <value>Note流水號</value>
+  </data>
+  <data name="PurchaseNoteImg_Img" xml:space="preserve">
+    <value>圖檔</value>
+  </data>
+  <data name="PurchaseNoteImg_CreateBy" xml:space="preserve">
+    <value>建立者</value>
+  </data>
+  <data name="PurchaseNoteImg_CreateAt" xml:space="preserve">
+    <value>建立時間</value>
+  </data>
+  <data name="PurchaseNoteImg_UpdateBy" xml:space="preserve">
+    <value>修改者</value>
+  </data>
+  <data name="PurchaseNoteImg_UpdateAt" xml:space="preserve">
+    <value>修改時間</value>
+  </data>
+  <data name="PurchaseNoteImg_Memo" xml:space="preserve">
+    <value>註記</value>
+  </data>
 </root>

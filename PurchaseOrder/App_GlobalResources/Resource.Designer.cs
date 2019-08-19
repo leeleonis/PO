@@ -4408,6 +4408,87 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查詢類似 CreateAt 的當地語系化字串。
+        /// </summary>
+        public static string PurchaseNoteImg_CreateAt {
+            get {
+                return ResourceManager.GetString("PurchaseNoteImg_CreateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 CreateBy 的當地語系化字串。
+        /// </summary>
+        public static string PurchaseNoteImg_CreateBy {
+            get {
+                return ResourceManager.GetString("PurchaseNoteImg_CreateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 ID 的當地語系化字串。
+        /// </summary>
+        public static string PurchaseNoteImg_ID {
+            get {
+                return ResourceManager.GetString("PurchaseNoteImg_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Img 的當地語系化字串。
+        /// </summary>
+        public static string PurchaseNoteImg_Img {
+            get {
+                return ResourceManager.GetString("PurchaseNoteImg_Img", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 IsEnable 的當地語系化字串。
+        /// </summary>
+        public static string PurchaseNoteImg_IsEnable {
+            get {
+                return ResourceManager.GetString("PurchaseNoteImg_IsEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Memo 的當地語系化字串。
+        /// </summary>
+        public static string PurchaseNoteImg_Memo {
+            get {
+                return ResourceManager.GetString("PurchaseNoteImg_Memo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 PurchaseNoteID 的當地語系化字串。
+        /// </summary>
+        public static string PurchaseNoteImg_PurchaseNoteID {
+            get {
+                return ResourceManager.GetString("PurchaseNoteImg_PurchaseNoteID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UpdateAt 的當地語系化字串。
+        /// </summary>
+        public static string PurchaseNoteImg_UpdateAt {
+            get {
+                return ResourceManager.GetString("PurchaseNoteImg_UpdateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UpdateBy 的當地語系化字串。
+        /// </summary>
+        public static string PurchaseNoteImg_UpdateBy {
+            get {
+                return ResourceManager.GetString("PurchaseNoteImg_UpdateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 Carrier 的當地語系化字串。
         /// </summary>
         public static string PurchaseOrder_Carrier {

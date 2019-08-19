@@ -631,6 +631,27 @@
           <Property Name="CreditMemoID" Type="int" />
           <Property Name="TransferID" Type="int" />
           <Property Name="RMAID" Type="int" />
+          <Property Name="RMAOrderTrackingID" Type="int" />
+        </EntityType>
+        <!--產生期間發現錯誤:
+警告 6002: 資料表/檢視 'InventorySKU.dbo.PurchaseNoteImg' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
+        <EntityType Name="PurchaseNoteImg">
+          <Key>
+            <PropertyRef Name="IsEnable" />
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="PurchaseNoteID" />
+            <PropertyRef Name="CreateBy" />
+            <PropertyRef Name="CreateAt" />
+          </Key>
+          <Property Name="IsEnable" Type="bit" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PurchaseNoteID" Type="int" Nullable="false" />
+          <Property Name="Img" Type="ntext" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreateAt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="UpdateAt" Type="datetime" />
+          <Property Name="Memo" Type="ntext" />
         </EntityType>
         <EntityType Name="PurchaseOrder">
           <Key>
@@ -759,14 +780,14 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ReturnTracking" Type="nvarchar" MaxLength="50" />
           <Property Name="Carrier" Type="nvarchar" MaxLength="20" />
-          <Property Name="ToName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ToName" Type="nvarchar" MaxLength="50" />
           <Property Name="ToAddress1" Type="nvarchar" MaxLength="50" />
           <Property Name="ToAddress2" Type="nvarchar" MaxLength="50" />
           <Property Name="ToCity" Type="nvarchar" MaxLength="50" />
           <Property Name="ToState" Type="nvarchar" MaxLength="50" />
           <Property Name="ToPostcode" Type="nvarchar" MaxLength="50" />
           <Property Name="ToCountry" Type="nvarchar" MaxLength="50" />
-          <Property Name="FromName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="FromName" Type="nvarchar" MaxLength="50" />
           <Property Name="FromAddress1" Type="nvarchar" MaxLength="50" />
           <Property Name="FromAddress2" Type="nvarchar" MaxLength="50" />
           <Property Name="FromCity" Type="nvarchar" MaxLength="50" />
@@ -1786,6 +1807,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PurchaseNote_RMAOrderSerialsLlist">
+          <End Role="RMAOrderSerialsLlist" Type="Self.RMAOrderSerialsLlist" Multiplicity="0..1" />
+          <End Role="PurchaseNote" Type="Self.PurchaseNote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RMAOrderSerialsLlist">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PurchaseNote">
+              <PropertyRef Name="RMAOrderTrackingID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_PurchaseNote_Transfer">
           <End Role="Transfer" Type="Self.Transfer" Multiplicity="0..1" />
           <End Role="PurchaseNote" Type="Self.PurchaseNote" Multiplicity="*" />
@@ -1795,6 +1828,18 @@
             </Principal>
             <Dependent Role="PurchaseNote">
               <PropertyRef Name="TransferID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PurchaseNoteImg_PurchaseNote">
+          <End Role="PurchaseNote" Type="Self.PurchaseNote" Multiplicity="1" />
+          <End Role="PurchaseNoteImg" Type="Self.PurchaseNoteImg" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseNote">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PurchaseNoteImg">
+              <PropertyRef Name="PurchaseNoteID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2487,6 +2532,19 @@
           <EntitySet Name="WinitTransferBox" EntityType="Self.WinitTransferBox" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WinitTransferBoxItem" EntityType="Self.WinitTransferBoxItem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WinitTransferSKU" EntityType="Self.WinitTransferSKU" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PurchaseNoteImg" EntityType="Self.PurchaseNoteImg" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [PurchaseNoteImg].[IsEnable] AS [IsEnable], 
+    [PurchaseNoteImg].[ID] AS [ID], 
+    [PurchaseNoteImg].[PurchaseNoteID] AS [PurchaseNoteID], 
+    [PurchaseNoteImg].[Img] AS [Img], 
+    [PurchaseNoteImg].[CreateBy] AS [CreateBy], 
+    [PurchaseNoteImg].[CreateAt] AS [CreateAt], 
+    [PurchaseNoteImg].[UpdateBy] AS [UpdateBy], 
+    [PurchaseNoteImg].[UpdateAt] AS [UpdateAt], 
+    [PurchaseNoteImg].[Memo] AS [Memo]
+    FROM [dbo].[PurchaseNoteImg] AS [PurchaseNoteImg]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_AdminUser_AdminGroup" Association="Self.FK_AdminUser_AdminGroup">
             <End Role="AdminGroup" EntitySet="AdminGroup" />
             <End Role="AdminUser" EntitySet="AdminUser" />
@@ -2667,9 +2725,17 @@
             <End Role="RMA" EntitySet="RMA" />
             <End Role="PurchaseNote" EntitySet="PurchaseNote" />
           </AssociationSet>
+          <AssociationSet Name="FK_PurchaseNote_RMAOrderSerialsLlist" Association="Self.FK_PurchaseNote_RMAOrderSerialsLlist">
+            <End Role="RMAOrderSerialsLlist" EntitySet="RMAOrderSerialsLlist" />
+            <End Role="PurchaseNote" EntitySet="PurchaseNote" />
+          </AssociationSet>
           <AssociationSet Name="FK_PurchaseNote_Transfer" Association="Self.FK_PurchaseNote_Transfer">
             <End Role="Transfer" EntitySet="Transfer" />
             <End Role="PurchaseNote" EntitySet="PurchaseNote" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PurchaseNoteImg_PurchaseNote" Association="Self.FK_PurchaseNoteImg_PurchaseNote">
+            <End Role="PurchaseNote" EntitySet="PurchaseNote" />
+            <End Role="PurchaseNoteImg" EntitySet="PurchaseNoteImg" />
           </AssociationSet>
           <AssociationSet Name="FK_PurchaseOrder_Company" Association="Self.FK_PurchaseOrder_Company">
             <End Role="Company" EntitySet="Company" />
@@ -3336,6 +3402,15 @@
             <End Role="RMAOrderTracking" EntitySet="RMAOrderTracking" />
             <End Role="RMAOrderSerialsLlist" EntitySet="RMAOrderSerialsLlist" />
           </AssociationSet>
+          <EntitySet Name="PurchaseNoteImg" EntityType="PurchaseOrderModel.PurchaseNoteImg" />
+          <AssociationSet Name="FK_PurchaseNote_RMAOrderSerialsLlist" Association="PurchaseOrderModel.FK_PurchaseNote_RMAOrderSerialsLlist">
+            <End Role="RMAOrderSerialsLlist" EntitySet="RMAOrderSerialsLlist" />
+            <End Role="PurchaseNote" EntitySet="PurchaseNote" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PurchaseNoteImg_PurchaseNote" Association="PurchaseOrderModel.FK_PurchaseNoteImg_PurchaseNote">
+            <End Role="PurchaseNote" EntitySet="PurchaseNote" />
+            <End Role="PurchaseNoteImg" EntitySet="PurchaseNoteImg" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="AdminGroup">
           <Key>
@@ -3647,6 +3722,9 @@
           <NavigationProperty Name="Transfer" Relationship="PurchaseOrderModel.FK_PurchaseNote_Transfer" FromRole="PurchaseNote" ToRole="Transfer" />
           <Property Name="RMAID" Type="Int32" />
           <NavigationProperty Name="RMA" Relationship="PurchaseOrderModel.FK_PurchaseNote_RMA" FromRole="PurchaseNote" ToRole="RMA" />
+          <Property Name="RMAOrderTrackingID" Type="Int32" />
+          <NavigationProperty Name="RMAOrderSerialsLlist" Relationship="PurchaseOrderModel.FK_PurchaseNote_RMAOrderSerialsLlist" FromRole="PurchaseNote" ToRole="RMAOrderSerialsLlist" />
+          <NavigationProperty Name="PurchaseNoteImg" Relationship="PurchaseOrderModel.FK_PurchaseNoteImg_PurchaseNote" FromRole="PurchaseNote" ToRole="PurchaseNoteImg" />
         </EntityType>
         <EntityType Name="PurchaseOrder">
           <Key>
@@ -5215,6 +5293,7 @@
           <Property Name="Reason" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="PurchaseNote" Relationship="PurchaseOrderModel.FK_PurchaseNote_RMAOrderSerialsLlist" FromRole="RMAOrderSerialsLlist" ToRole="PurchaseNote" />
         </EntityType>
         <Association Name="FK_RMAOrderSerialsLlist_RMASKU1">
           <End Type="PurchaseOrderModel.RMASKU" Role="RMASKU" Multiplicity="0..1" />
@@ -5877,14 +5956,14 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ReturnTracking" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Carrier" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="ToName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ToName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ToAddress1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ToAddress2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ToCity" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ToState" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ToPostcode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ToCountry" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="FromName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FromName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="FromAddress1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="FromAddress2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="FromCity" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -5916,6 +5995,49 @@
             </Principal>
             <Dependent Role="RMAOrderSerialsLlist">
               <PropertyRef Name="RMAOrderTrackingID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="PurchaseNoteImg">
+          <Key>
+            <PropertyRef Name="IsEnable" />
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="PurchaseNoteID" />
+            <PropertyRef Name="CreateBy" />
+            <PropertyRef Name="CreateAt" />
+          </Key>
+          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PurchaseNoteID" Type="Int32" Nullable="false" />
+          <Property Name="Img" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <Property Name="Memo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PurchaseNote" Relationship="PurchaseOrderModel.FK_PurchaseNoteImg_PurchaseNote" FromRole="PurchaseNoteImg" ToRole="PurchaseNote" />
+        </EntityType>
+        <Association Name="FK_PurchaseNote_RMAOrderSerialsLlist">
+          <End Type="PurchaseOrderModel.RMAOrderSerialsLlist" Role="RMAOrderSerialsLlist" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.PurchaseNote" Role="PurchaseNote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RMAOrderSerialsLlist">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PurchaseNote">
+              <PropertyRef Name="RMAOrderTrackingID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PurchaseNoteImg_PurchaseNote">
+          <End Type="PurchaseOrderModel.PurchaseNote" Role="PurchaseNote" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.PurchaseNoteImg" Role="PurchaseNoteImg" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseNote">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PurchaseNoteImg">
+              <PropertyRef Name="PurchaseNoteID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -6217,6 +6339,7 @@
           <EntitySetMapping Name="PurchaseNote">
             <EntityTypeMapping TypeName="PurchaseOrderModel.PurchaseNote">
               <MappingFragment StoreEntitySet="PurchaseNote">
+                <ScalarProperty Name="RMAOrderTrackingID" ColumnName="RMAOrderTrackingID" />
                 <ScalarProperty Name="RMAID" ColumnName="RMAID" />
                 <ScalarProperty Name="TransferID" ColumnName="TransferID" />
                 <ScalarProperty Name="CreditMemoID" ColumnName="CreditMemoID" />
@@ -7227,6 +7350,21 @@
                 <ScalarProperty Name="ToName" ColumnName="ToName" />
                 <ScalarProperty Name="Carrier" ColumnName="Carrier" />
                 <ScalarProperty Name="ReturnTracking" ColumnName="ReturnTracking" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PurchaseNoteImg">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.PurchaseNoteImg">
+              <MappingFragment StoreEntitySet="PurchaseNoteImg">
+                <ScalarProperty Name="Memo" ColumnName="Memo" />
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="Img" ColumnName="Img" />
+                <ScalarProperty Name="PurchaseNoteID" ColumnName="PurchaseNoteID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
               </MappingFragment>

@@ -825,4 +825,31 @@
   <data name="RMAOrderTracking_Memo" xml:space="preserve">
     <value>Memo</value>
   </data>
+  <data name="PurchaseNoteImg_IsEnable" xml:space="preserve">
+    <value>IsEnable</value>
+  </data>
+  <data name="PurchaseNoteImg_ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="PurchaseNoteImg_PurchaseNoteID" xml:space="preserve">
+    <value>PurchaseNoteID</value>
+  </data>
+  <data name="PurchaseNoteImg_Img" xml:space="preserve">
+    <value>Img</value>
+  </data>
+  <data name="PurchaseNoteImg_CreateBy" xml:space="preserve">
+    <value>CreateBy</value>
+  </data>
+  <data name="PurchaseNoteImg_CreateAt" xml:space="preserve">
+    <value>CreateAt</value>
+  </data>
+  <data name="PurchaseNoteImg_UpdateBy" xml:space="preserve">
+    <value>UpdateBy</value>
+  </data>
+  <data name="PurchaseNoteImg_UpdateAt" xml:space="preserve">
+    <value>UpdateAt</value>
+  </data>
+  <data name="PurchaseNoteImg_Memo" xml:space="preserve">
+    <value>Memo</value>
+  </data>
 </root>
