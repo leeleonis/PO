@@ -23,6 +23,7 @@ namespace PurchaseOrderSys.Models
         public string UpdateBy { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }
         public string Memo { get; set; }
+        public string ImgType { get; set; }
     
         public virtual PurchaseNote PurchaseNote { get; set; }
     }

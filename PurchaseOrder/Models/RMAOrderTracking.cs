@@ -18,6 +18,7 @@ namespace PurchaseOrderSys.Models
         public RMAOrderTracking()
         {
             this.RMAOrderSerialsLlist = new HashSet<RMAOrderSerialsLlist>();
+            this.PurchaseNote = new HashSet<PurchaseNote>();
         }
     
         public bool IsEnable { get; set; }
@@ -55,5 +56,7 @@ namespace PurchaseOrderSys.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RMAOrderSerialsLlist> RMAOrderSerialsLlist { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PurchaseNote> PurchaseNote { get; set; }
     }
 }

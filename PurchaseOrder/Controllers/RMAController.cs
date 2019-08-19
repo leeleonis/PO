@@ -537,7 +537,7 @@ namespace PurchaseOrderSys.Controllers
             //}
         }
         [HttpPost]
-        public ActionResult CreatNote(int? ID, string SID, string Note)
+        public ActionResult CreatNote(int? ID, string SID, string Note, List<HttpPostedFileBase> Img)
         {
             try
             {
@@ -545,7 +545,18 @@ namespace PurchaseOrderSys.Controllers
                 if (ID.HasValue && ID != 0)
                 {
                     var RMA = db.RMA.Find(ID);
-                    RMA.PurchaseNote.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = "txt", CreateAt = DateTime.UtcNow, CreateBy = UserBy });
+                    var nPurchaseNote = new PurchaseNote { IsEnable = true, Note = Note, NoteType = "txt", CreateAt = DateTime.UtcNow, CreateBy = UserBy };
+                    if (Img != null)
+                    {
+                        foreach (var Imgitem in Img)
+                        {
+                            var ImgName = SaveImg(Imgitem);
+                            nPurchaseNote.PurchaseNoteImg.Add(new PurchaseNoteImg { IsEnable = true, Img = ImgName, ImgType = "Url", CreateAt = DateTime.UtcNow, CreateBy = UserBy });
+                            db.SaveChanges();
+                            PurchaseNoteList = RMA.PurchaseNote.ToList();
+                        }
+                    }
+                    RMA.PurchaseNote.Add(nPurchaseNote);
                     db.SaveChanges();
                     PurchaseNoteList = RMA.PurchaseNote.ToList();
                 }
@@ -556,8 +567,19 @@ namespace PurchaseOrderSys.Controllers
                     {
                         PurchaseNoteList = new List<PurchaseNote>();
                     }
-
-                    PurchaseNoteList.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = "txt", CreateAt = DateTime.UtcNow, CreateBy = UserBy });
+                    var nPurchaseNote = new PurchaseNote { IsEnable = true, Note = Note, NoteType = "txt", CreateAt = DateTime.UtcNow, CreateBy = UserBy };
+                    PurchaseNoteList.Add(nPurchaseNote);
+                    if (Img != null)
+                    {
+                        foreach (var Imgitem in Img)
+                        {
+                            MemoryStream target = new MemoryStream();
+                            Imgitem.InputStream.CopyTo(target);
+                            byte[] data = target.ToArray();
+                            string ImgName = Convert.ToBase64String(data, 0, data.Length);
+                            nPurchaseNote.PurchaseNoteImg.Add(new PurchaseNoteImg { IsEnable = true, Img = ImgName, ImgType = "Url", CreateAt = DateTime.UtcNow, CreateBy = UserBy });
+                        }
+                    }
                     Session["RMAPurchaseNote" + SID] = PurchaseNoteList;
                 }
                 return Json(new { status = true, datalist = PurchaseNoteList.OrderByDescending(x => x.CreateAt).Select(x => new { CreateAt = x.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss"), x.CreateBy, x.Note, x.NoteType }).ToList() }, JsonRequestBehavior.AllowGet);
@@ -568,7 +590,7 @@ namespace PurchaseOrderSys.Controllers
             }
         }
         [HttpPost]
-        public ActionResult CreatNoteImg(int? ID, string SID, HttpPostedFileBase Img)
+        public ActionResult CreatNoteImg(int? ID, string SID,List< HttpPostedFileBase> Img)
         {
             try
             {
@@ -576,31 +598,37 @@ namespace PurchaseOrderSys.Controllers
                 {
                     return Json(new { status = false, Errmsg = "沒有圖檔" }, JsonRequestBehavior.AllowGet);
                 }
-                var NoteType = Img.ContentType;
                 var PurchaseNoteList = new List<PurchaseNote>();
-                if (ID.HasValue && ID != 0)
+                var RMA = db.RMA.Find(ID);
+                foreach (var Imgitem in Img)
                 {
-                    var Note = SaveImg(Img);
-                    var RMA = db.RMA.Find(ID);
-                    RMA.PurchaseNote.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = "Url", CreateAt = DateTime.UtcNow, CreateBy = UserBy });
-                    db.SaveChanges();
-                    PurchaseNoteList = RMA.PurchaseNote.ToList();
-                }
-                else
-                {
-                    MemoryStream target = new MemoryStream();
 
-                    Img.InputStream.CopyTo(target);
-                    byte[] data = target.ToArray();
-                    string Note = Convert.ToBase64String(data, 0, data.Length);
-                    PurchaseNoteList = (List<PurchaseNote>)Session["RMAPurchaseNote" + SID];
-                    if (PurchaseNoteList == null)
+
+                    var NoteType = Imgitem.ContentType;
+
+                    if (ID.HasValue && ID != 0)
                     {
-                        PurchaseNoteList = new List<PurchaseNote>();
+                        var Note = SaveImg(Imgitem);
+                        RMA.PurchaseNote.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = "Url", CreateAt = DateTime.UtcNow, CreateBy = UserBy });
+                        db.SaveChanges();
+                        PurchaseNoteList = RMA.PurchaseNote.ToList();
                     }
+                    else
+                    {
+                        MemoryStream target = new MemoryStream();
 
-                    PurchaseNoteList.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = NoteType, CreateAt = DateTime.UtcNow, CreateBy = UserBy });
-                    Session["RMAPurchaseNote" + SID] = PurchaseNoteList;
+                        Imgitem.InputStream.CopyTo(target);
+                        byte[] data = target.ToArray();
+                        string Note = Convert.ToBase64String(data, 0, data.Length);
+                        PurchaseNoteList = (List<PurchaseNote>)Session["RMAPurchaseNote" + SID];
+                        if (PurchaseNoteList == null)
+                        {
+                            PurchaseNoteList = new List<PurchaseNote>();
+                        }
+
+                        PurchaseNoteList.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = NoteType, CreateAt = DateTime.UtcNow, CreateBy = UserBy });
+                        Session["RMAPurchaseNote" + SID] = PurchaseNoteList;
+                    }
                 }
                 return Json(new { status = true, datalist = PurchaseNoteList.OrderByDescending(x => x.CreateAt).Select(x => new { CreateAt = x.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss"), x.CreateBy, x.Note, x.NoteType }).ToList() }, JsonRequestBehavior.AllowGet);
             }
