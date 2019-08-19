@@ -441,7 +441,7 @@ namespace PurchaseOrderSys.Controllers
                         order.FulfillmentStatus = (byte)fulfillmentStatus;
                         OM.ActionLog("Fulfillment", fulfillmentStatus.ToString());
 
-                        if (order.FulfillmentStatus.Equals((byte)EnumData.OrderFulfilledStatus.Fulfilled))
+                        if (order.FulfillmentStatus.Equals((byte)EnumData.OrderFulfillmentStatus.Full))
                         {
                             order.OrderStatus = (byte)EnumData.OrderStatus.Completed;
                             OM.ActionLog("Order", "Complete");
