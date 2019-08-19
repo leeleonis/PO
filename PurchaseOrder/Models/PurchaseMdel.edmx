@@ -562,11 +562,11 @@
           <Property Name="DLExportMethod" Type="tinyint" Nullable="false" />
           <Property Name="DLExportValue" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="DLExportCurrency" Type="int" Nullable="false" />
-          <Property Name="DLUploadTracking" Type="bit" Nullable="false" />
           <Property Name="DLTracking" Type="nvarchar" MaxLength="50" />
           <Property Name="ShipWarehouse" Type="int" Nullable="false" />
           <Property Name="ReturnWarehouse" Type="int" Nullable="false" />
           <Property Name="ShippingStatus" Type="tinyint" Nullable="false" />
+          <Property Name="FulfillmentDate" Type="datetime" />
           <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
           <Property Name="UpdateAt" Type="datetime" />
           <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
@@ -5420,11 +5420,11 @@
           <Property Name="DLExportMethod" Type="Byte" Nullable="false" />
           <Property Name="DLExportValue" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="DLExportCurrency" Type="Int32" Nullable="false" />
-          <Property Name="DLUploadTracking" Type="Boolean" Nullable="false" />
           <Property Name="DLTracking" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ShipWarehouse" Type="Int32" Nullable="false" />
           <Property Name="ReturnWarehouse" Type="Int32" Nullable="false" />
           <Property Name="ShippingStatus" Type="Byte" Nullable="false" />
+          <Property Name="FulfillmentDate" Type="DateTime" Precision="3" />
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
           <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -7103,6 +7103,7 @@
           <EntitySetMapping Name="Packages">
             <EntityTypeMapping TypeName="PurchaseOrderModel.Packages">
               <MappingFragment StoreEntitySet="Packages">
+                <ScalarProperty Name="FulfillmentDate" ColumnName="FulfillmentDate" />
                 <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
                 <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
                 <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
@@ -7111,7 +7112,6 @@
                 <ScalarProperty Name="ReturnWarehouse" ColumnName="ReturnWarehouse" />
                 <ScalarProperty Name="ShipWarehouse" ColumnName="ShipWarehouse" />
                 <ScalarProperty Name="DLTracking" ColumnName="DLTracking" />
-                <ScalarProperty Name="DLUploadTracking" ColumnName="DLUploadTracking" />
                 <ScalarProperty Name="DLExportCurrency" ColumnName="DLExportCurrency" />
                 <ScalarProperty Name="DLExportValue" ColumnName="DLExportValue" />
                 <ScalarProperty Name="DLExportMethod" ColumnName="DLExportMethod" />

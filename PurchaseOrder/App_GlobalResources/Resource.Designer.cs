@@ -3744,15 +3744,6 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
-        public static string Packages_DLUploadTracking {
-            get {
-                return ResourceManager.GetString("Packages_DLUploadTracking", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查詢類似  的當地語系化字串。
-        /// </summary>
         public static string Packages_Export {
             get {
                 return ResourceManager.GetString("Packages_Export", resourceCulture);
@@ -3783,6 +3774,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         public static string Packages_ExportValue {
             get {
                 return ResourceManager.GetString("Packages_ExportValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Packages_FulfillmentDate {
+            get {
+                return ResourceManager.GetString("Packages_FulfillmentDate", resourceCulture);
             }
         }
         
