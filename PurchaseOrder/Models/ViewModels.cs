@@ -1405,6 +1405,7 @@ namespace PurchaseOrderSys.Models
         public string Carrier { get; set; }
         public string tracking { get; set; }
         public int? RMASerialsLlistID { get; internal set; }
+        public int? trackingID { get; set; }
     }
     [Serializable]
     public class SerialsLlistVM

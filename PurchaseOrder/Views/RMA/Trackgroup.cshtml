@@ -1,0 +1,48 @@
+﻿@model RMAOrderTracking
+@{
+    Layout = null;
+    var DefaultSelect = PurchaseOrderSys.App_GlobalResources.Resource.DefaultSelect;
+    var ShippingList = new List<SelectListItem>();
+    var Shipping_API = new PurchaseOrderSys.FedExApi.Shipping_API().ShippingList();
+    if (Shipping_API.status)
+    {
+        ShippingList = Shipping_API.data.shippingMethod.Select(x => new SelectListItem { Text = x.text, Value = x.value.ToString() }).ToList();
+    }
+}
+<tr class="trackinggroup">
+    <td colspan="7">
+        <div class="col-sm-10 col-lg-6">
+            <textarea rows="6" style="width:100%" id="textnote"></textarea>
+            <button type="button" id="addnote" style="float:right" class="btn btn-default btn-sm">Save Tracking  Note</button>
+            <span style="float:right">　</span>
+            <button type="button" id="UploadImage" style="float:right" class="btn btn-default btn-sm">Upload Tracking  Image</button>
+            <input type="file" id="addimg" style="float:right" />
+        </div>
+        <div class="col-sm-2 col-lg-6">
+            <ul style="list-style-type:none;list-style-position: inside;padding-left: 0px;padding-left: 0px;" id="textnotelog">
+                @*@foreach (var item in Model.PurchaseNote.OrderByDescending(x => x.ID))
+                    {
+                        <li>
+                            <fieldset>
+                                <legend>
+                                    @if (item.NoteType == "Url")
+                                    {
+                                        <a class="aimg" href="@item.Note" data-lightbox="roadtrip"><img class="img" src="@item.Note" width="100px" height="100px" /></a>
+                                    }
+                                    else
+                                    {
+                                        @item.Note
+                                    }
+
+                                    <br />
+                                    @( item.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss") + "  By  " + item.CreateBy)
+                                </legend>
+                            </fieldset>
+                        </li>
+                    }*@
+            </ul>
+        </div>
+    </td>
+    <td>Carrier : @Html.DropDownList("Carrier", ShippingList, DefaultSelect, htmlAttributes: new { @class = "" })</td>
+    <td>Tracking : <input type="text" /></td>
+</tr>

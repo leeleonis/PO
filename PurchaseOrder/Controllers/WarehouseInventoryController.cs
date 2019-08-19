@@ -133,6 +133,7 @@ namespace PurchaseOrderSys.Controllers
         {
             ViewBag.WarehouseID = WarehouseID;
             var PurchaseSKU = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.IsEnable && x.SkuNo == SKU);
+            var TransferSKU = db.TransferSKU.Where(x => x.IsEnable && x.Transfer.IsEnable && x.SkuNo == SKU);
             var NoNewRmaSKU = db.RMASKU.AsEnumerable().Where(x => x.IsEnable && x.RMA.IsEnable && x.SkuNo == SKU && x.RMASerialsLlist.Where(y => string.IsNullOrWhiteSpace(y.NewSkuNo)).Any());
             var NewRmaSKU = db.RMASKU.AsEnumerable().Where(x => x.IsEnable && x.RMA.IsEnable && x.RMASerialsLlist.Where(y => !string.IsNullOrWhiteSpace(y.NewSkuNo) && y.NewSkuNo == SKU).Any());
             var Awaitinglist = GetAwaitingCount(SKU, "");
@@ -257,6 +258,119 @@ namespace PurchaseOrderSys.Controllers
 
 
             }
+            foreach (var item in TransferSKU)
+            {
+                var SerialsLlist = item.SerialsLlist.Where(y => !(y.SerialsType == "TransferOut" || y.SerialsType == "TransferIn") || ((y.SerialsType == "TransferOut" || y.SerialsType == "TransferIn") && y.TransferSKU.IsEnable && y.TransferSKU.Transfer.IsEnable));
+                var Available = SerialsLlist.Where(x => !(x.SerialsType == "TransferOut" && x.TransferSKU.Transfer.Status == "Requested")).Sum(y => y.SerialsQTY);//實際
+                var Aggregate = SerialsLlist.Sum(y => y.SerialsQTY);//可出貨
+                foreach (var SerialsLlistitem in SerialsLlist.OrderByDescending(x => x.ID))
+                {
+
+                    var itemSKU = SerialsLlistitem.TransferSKU.SkuNo;
+                    var Date = SerialsLlistitem.CreateAt.ToLocalTime();
+                    var Supplier = "";
+                    var Channel = "";
+                    var ISType = "";
+                    int? ID = null;
+                    var Warehouse = "";
+                    var Serial = "";
+                    int? QTY;
+                    int? BalanceAggregate;
+                    int? BalanceAvailable;
+                    decimal? ValueAvailable;
+                    var OrderID = SerialsLlistitem.OrderID;
+                    if (OrderID.HasValue)
+                    {
+
+                    }
+                    else
+                    {
+                        OrderID = SerialsLlistitem.SerialsLlistC.Where(x => x.OrderID.HasValue).FirstOrDefault()?.OrderID;
+                    }
+                    var price = SerialsLlistitem.PurchaseSKU?.Price;
+                    if (SerialsLlistitem.SerialsType == "PO")
+                    {
+                        Supplier = SerialsLlistitem.PurchaseSKU.PurchaseOrder.VendorLIst.Name;
+                        ISType = "PO";
+                        ID = SerialsLlistitem.PurchaseSKU.PurchaseOrder.ID;
+                        Warehouse = SerialsLlistitem.PurchaseSKU.PurchaseOrder.WarehousePO.Name;
+                    }
+                    else if (SerialsLlistitem.SerialsType == "CM")
+                    {
+                        Supplier = SerialsLlistitem.PurchaseSKU.CreditMemo.PurchaseOrder.VendorLIst.Name;
+                        ISType = "Credit Memo";
+                        ID = SerialsLlistitem.PurchaseSKU.CreditMemo?.ID;
+                        Warehouse = SerialsLlistitem.PurchaseSKU.CreditMemo.PurchaseOrder.WarehousePO.Name;
+                    }
+                    else if (SerialsLlistitem.SerialsType == "Order")
+                    {
+                        Supplier = SerialsLlistitem.PurchaseSKU.PurchaseOrder.VendorLIst.Name;
+                        ISType = "Order Dispatch";
+                        ID = SerialsLlistitem.OrderID;
+                        Warehouse = GetOrderWarehouseName(SerialsLlistitem);
+                    }
+                    else if (SerialsLlistitem.SerialsType == "TransferOut")
+                    {
+                        Supplier = SerialsLlistitem.PurchaseSKU.PurchaseOrder.VendorLIst.Name;
+                        if (SerialsLlistitem.TransferSKU.Transfer.Status == "Requested")
+                        {
+                            ISType = "Transfer(Wait)";
+                        }
+                        else
+                        {
+                            ISType = "Transfer(Out)";
+                        }
+                        ID = (SerialsLlistitem.TransferSKU.TransferID);
+                        Warehouse = SerialsLlistitem.TransferSKU.Transfer.WarehouseFrom.Name;
+                    }
+                    else if (SerialsLlistitem.SerialsType == "TransferIn")
+                    {
+                        Supplier = SerialsLlistitem.PurchaseSKU?.PurchaseOrder.VendorLIst.Name;
+                        ISType = "Transfer(In)";
+                        ID = SerialsLlistitem.TransferSKU.TransferID;
+                        Warehouse = SerialsLlistitem.TransferSKU.Transfer.WarehouseTo.Name;
+                    }
+                    else if (SerialsLlistitem.SerialsType == "RMA")
+                    {
+
+                    }
+                    else if (SerialsLlistitem.SerialsType == "Change")
+                    {
+
+                    }
+                    Serial = SerialsLlistitem.SerialsNo;
+                    QTY = SerialsLlistitem.SerialsQTY;
+                    BalanceAggregate = Aggregate - AwaitingConut;
+                    BalanceAvailable = Available;
+                    ValueAvailable = Available * price;
+                    if (SerialsLlistitem.SerialsType == "TransferOut" && SerialsLlistitem.TransferSKU.Transfer.Status == "Requested")
+                    {
+                        Aggregate -= SerialsLlistitem.SerialsQTY.Value;
+                    }
+                    else
+                    {
+                        Aggregate -= SerialsLlistitem.SerialsQTY.Value;
+                        Available -= SerialsLlistitem.SerialsQTY.Value;
+                    }
+                    StatementVM.Add(new StatementVM
+                    {
+                        SKU = itemSKU,
+                        OrderID = OrderID,
+                        Date = Date,
+                        Supplier = Supplier,
+                        ID = ID,
+                        Channel = Channel,
+                        ISType = ISType,
+                        Warehouse = Warehouse,
+                        Serial = Serial,
+                        QTY = QTY,
+                        price = price,
+                        BalanceAggregate = BalanceAggregate,
+                        BalanceAvailable = BalanceAvailable,
+                        ValueAvailable = ValueAvailable
+                    });
+                }
+            }
             var ChannelList = EnumData.ChannelList();
             foreach (var item in NoNewRmaSKU)
             {
@@ -285,6 +399,12 @@ namespace PurchaseOrderSys.Controllers
                         ISType = "RMAIn";
                         ID = SerialsLlistitem.RMASKU.RMAID;
                         Warehouse = SerialsLlistitem.Warehouse.Name;
+                    }
+                    else if (SerialsLlistitem.SerialsType == "TransferOut")
+                    {
+                        ISType = "Transfer(Out)";
+                        ID = SerialsLlistitem.TransferSKU.TransferID;
+                        Warehouse = SerialsLlistitem.TransferSKU.Transfer.WarehouseFrom.Name;
                     }
                     Serial = SerialsLlistitem.SerialsNo;
                     QTY = SerialsLlistitem.SerialsQTY;
@@ -890,8 +1010,8 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult GetHistory(string ID)
         {
             var SerialsLlistVMList = new List<SerialsLlistVM>();
-            var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == ID).OrderByDescending(x => x.CreateAt);
-            var RMASerialsLlist = db.RMASerialsLlist.Where(x => x.SerialsNo == ID).OrderByDescending(x => x.CreateAt);
+            var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == ID).OrderByDescending(x => x.CreateAt).ThenByDescending(x=>x.ID);
+            var RMASerialsLlist = db.RMASerialsLlist.Where(x => x.SerialsNo == ID).OrderByDescending(x => x.CreateAt).ThenByDescending(x => x.ID);
             foreach (var item in SerialsLlist)
             {
 

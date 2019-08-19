@@ -1153,10 +1153,11 @@ namespace PurchaseOrderSys.Controllers
                     var FromWID = Transfer.FromWID;
                     if (FromWID.HasValue)
                     {
-                        var ErrSKU = new List<string>();
-                        var Errserial = new List<string>();
+                        var ErrSKU = new List<string>();//錯誤的SKU
+                        var Errserial = new List<string>();//錯誤的
                         var Repserial = new List<string>();
                         var Noserial = new List<string>();
+                        var SKUserialNotMap = new List<string>();
                         foreach (var Gserialitem in groupserials)
                         {
                             var SKUList = new List<string>();
@@ -1186,8 +1187,8 @@ namespace PurchaseOrderSys.Controllers
                                         nTransferSKU.UpdateBy = UserBy;
                                         nTransferSKU.UpdateAt = dt;
                                     }
-                                    var SerialTracking = SKU.GetSku.SerialTracking;
-                                    var NoTrackingSerial = new List<string>();
+                                    var SerialTracking = SKU.GetSku.SerialTracking;//有序號管理
+                                    var NoTrackingSerial = new List<string>();//無序號管理,已取的序號
                                     foreach (var item in Gserialitem.item)
                                     {
                                         var SerialsLlist = db.SerialsLlist.Where(x => !x.SerialsLlistC.Any() && x.SerialsQTY > 0);
@@ -1211,21 +1212,28 @@ namespace PurchaseOrderSys.Controllers
                                                 }
                                                 else
                                                 {
-                                                    var nSerialsLlist = new SerialsLlist
+                                                    if (Serial.PurchaseSKU.SkuNo== nTransferSKU.SkuNo)
                                                     {
-                                                        IsEnable = true,
-                                                        PurchaseSKUID = Serial.PurchaseSKUID,
-                                                        PID = Serial.ID,
-                                                        SerialsNo = Serial.SerialsNo,
-                                                        SerialsQTY = -1,
-                                                        SerialsType = "TransferOut",
-                                                        CreateBy = UserBy,
-                                                        CreateAt = dt,
-                                                        ReceivedBy = UserBy,
-                                                        ReceivedAt = dt,
-                                                    };
-                                                    nTransferSKU.SerialsLlist.Add(nSerialsLlist);
-                                                    NoTrackingSerial.Add(Serial.SerialsNo);
+                                                        var nSerialsLlist = new SerialsLlist
+                                                        {
+                                                            IsEnable = true,
+                                                            PurchaseSKUID = Serial.PurchaseSKUID,
+                                                            PID = Serial.ID,
+                                                            SerialsNo = Serial.SerialsNo,
+                                                            SerialsQTY = -1,
+                                                            SerialsType = "TransferOut",
+                                                            CreateBy = UserBy,
+                                                            CreateAt = dt,
+                                                            ReceivedBy = UserBy,
+                                                            ReceivedAt = dt,
+                                                        };
+                                                        nTransferSKU.SerialsLlist.Add(nSerialsLlist);
+                                                        NoTrackingSerial.Add(Serial.SerialsNo);
+                                                    }
+                                                    else
+                                                    {
+                                                        SKUserialNotMap.Add(Serial.SerialsNo);
+                                                    }
                                                 }
 
                                             }
@@ -1237,18 +1245,25 @@ namespace PurchaseOrderSys.Controllers
                                                 }
                                                 else
                                                 {
-                                                    var nSerialsLlist = new SerialsLlist
+                                                    if (Serial.RMASKU.SkuNo == nTransferSKU.SkuNo)
                                                     {
-                                                        IsEnable = true,
-                                                        SerialsNo = Serial.SerialsNo,
-                                                        SerialsQTY = 1,
-                                                        SerialsType = "TransferOut",
-                                                        CreateBy = UserBy,
-                                                        CreateAt = dt,
-                                                        ReceivedBy = UserBy,
-                                                        ReceivedAt = dt,
-                                                    };
-                                                    nTransferSKU.SerialsLlist.Add(nSerialsLlist);
+                                                        var nSerialsLlist = new SerialsLlist
+                                                        {
+                                                            IsEnable = true,
+                                                            SerialsNo = Serial.SerialsNo,
+                                                            SerialsQTY = 1,
+                                                            SerialsType = "TransferOut",
+                                                            CreateBy = UserBy,
+                                                            CreateAt = dt,
+                                                            ReceivedBy = UserBy,
+                                                            ReceivedAt = dt,
+                                                        };
+                                                        nTransferSKU.SerialsLlist.Add(nSerialsLlist);
+                                                    }
+                                                    else
+                                                    {
+                                                        SKUserialNotMap.Add(Serial.SerialsNo);
+                                                    }
                                                 }
                                             }
                                         }
@@ -1274,6 +1289,10 @@ namespace PurchaseOrderSys.Controllers
                             {
                                 ErrSKU.Add(Gserialitem.Key);
                             }
+                        }
+                        if (SKUserialNotMap.Any())
+                        {
+                            return Json(new { status = false, Msg = string.Join(Environment.NewLine, SKUserialNotMap.Distinct()) + Environment.NewLine + "序號對應的SKU異常" }, JsonRequestBehavior.AllowGet);
                         }
                         if (Repserial.Any())
                         {
