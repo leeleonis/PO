@@ -148,14 +148,6 @@ namespace PurchaseOrderSys.Models
     
     		    
     		/// <summary>
-    		/// DLUpload Tracking
-    		/// </summary>        
-    	    [Display(Name = "Packages_DLUploadTracking", ResourceType = typeof(App_GlobalResources.Resource))]
-            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public bool  DLUploadTracking { get; set; }
-    
-    		    
-    		/// <summary>
     		/// DLTracking
     		/// </summary>        
     	    [Display(Name = "Packages_DLTracking", ResourceType = typeof(App_GlobalResources.Resource))]
@@ -185,6 +177,14 @@ namespace PurchaseOrderSys.Models
     	    [Display(Name = "Packages_ShippingStatus", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public byte  ShippingStatus { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Fulfillment Date
+    		/// </summary>        
+    	    [Display(Name = "Packages_FulfillmentDate", ResourceType = typeof(App_GlobalResources.Resource))]
+            [UIHint("DateTime")]
+    		public Nullable<System.DateTime>  FulfillmentDate { get; set; }
     
     		    
     		/// <summary>

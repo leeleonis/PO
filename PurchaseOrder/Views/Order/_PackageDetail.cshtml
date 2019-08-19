@@ -12,11 +12,10 @@
                     <div>
                         <label class="checkbox" style="padding: 0px; min-height: 17px;">
                             <input type="checkbox" id="chk-package" value="@Model.ID" />
-                            <i></i>Carrier Box #
+                            <i></i>SKU
                         </label>
                     </div>
                 </td>
-                <td class="font-bg" width="120">SKU</td>
                 <td class="font-bg">Product Name</td>
                 <td class="font-bg" width="150">Serials</td>
                 <td class="font-bg" width="80">Unit Price</td>
@@ -41,7 +40,6 @@
             {
                 @Html.Hidden(string.Format("Items[{0}][ID]", index), item.ID);
                 <tr data-item="@item.ID">
-                    <td>@Model.CarrierBox</td>
                     <td class="text">
                         <span>@item.Sku</span>
                         @Html.TextBox(string.Format("Items[{0}][Sku]", index), item.Sku, htmlAttributes: new { @class = "form-control" })
@@ -94,56 +92,67 @@
         </tbody>
     </table>
     <div class="form-group">
-        <div class="col-sm-3 col-lg-offset-1">
-            <table class="table table-bordered text-center">
-                <tr>
-                    <td class="font-bg" width="33%">Shipping Status</td>
-                    <td>@Enum.GetName(typeof(EnumData.OrderShippingStatus), Model.ShippingStatus)</td>
-                </tr>
-            </table>
-        </div>
         <div class="col-sm-4">
             <table class="table table-bordered text-center">
                 <tr>
-                    <td class="font-bg" width="33%">Shipping Method</td>
-                    <td class="text">
-                        <span>@Model.GetMethod.Name</span>
-                        @Html.DropDownListFor(Model => Model.ShippingMethod, (List<SelectListItem>)ViewData["MethodList"], htmlAttributes: new { @class = "form-control" })
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <div class="col-sm-3">
-            <table class="table table-bordered text-center">
-                <tr>
-                    <td class="font-bg" width="33%">Warehouse</td>
+                    <td class="font-bg" width="128">Warehouse</td>
                     <td class="text">
                         <span>@Model.GetWarehouse.Name</span>
                         @Html.DropDownListFor(Model => Model.ShipWarehouse, (List<SelectListItem>)ViewData["WarehouseList"], htmlAttributes: new { @class = "form-control" })
                     </td>
                 </tr>
+                <tr>
+                    <td class="font-bg">Shipping Status</td>
+                    <td>@Enum.GetName(typeof(EnumData.OrderShippingStatus), Model.ShippingStatus)</td>
+                </tr>
+                <tr>
+                    <td class="font-bg">Shipping Method</td>
+                    <td class="text">
+                        <span>@Model.GetMethod.Name</span>
+                        @Html.DropDownListFor(Model => Model.ShippingMethod, (List<SelectListItem>)ViewData["MethodList"], htmlAttributes: new { @class = "form-control" })
+                    </td>
+                </tr>
+                <tr>
+                    <td class="font-bg">Carrier</td>
+                    <td class="text">
+                        <span>@Model.GetMethod.LastMile.Name</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="font-bg">Tracking</td>
+                    <td class="text">
+                        <span>@(Model.Tracking ?? "")</span>
+                        @Html.TextBoxFor(Model => Model.Tracking, htmlAttributes: new { @class = "form-control" })
+                    </td>
+                </tr>
+                <tr>
+                    <td class="font-bg">Upload Tracking</td>
+                    <td class="text">
+                        <span>@Enum.GetName(typeof(EnumData.YesNo), Model.UploadTracking)</span>
+                        @Html.DropDownListFor(Model => Model.UploadTracking, Enum.GetValues(typeof(EnumData.YesNo)).Cast<EnumData.YesNo>().Select(s => new SelectListItem() { Text = s.ToString(), Value = (byte)s == 1 ? bool.TrueString : bool.FalseString }), htmlAttributes: new { @class = "form-control" })
+                    </td>
+                </tr>
+                <tr>
+                    <td class="font-bg">Fulfillment Date</td>
+                    <td class="text">
+                        <span>@(new TimeZoneConvert().DateTimeToString(Model.FulfillmentDate, EnumData.TimeZone.UTC, EnumData.TimeZone.TST))</span>
+                    </td>
+                </tr>
             </table>
         </div>
-    </div>
-    <div class="form-group">
-        <div class="col-sm-6 col-lg-5 col-lg-offset-1">
+        <div class="col-sm-4 col-lg-3 col-lg-offset-1">
             <table class="table table-bordered">
                 <thead>
                     <tr class="font-title">
-                        <th class="text-center" colspan="4">Shipping Setting</th>
+                        <th class="text-center" style="font-size:13px!important;" colspan="2">Shipping Setting</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td width="126">Export：</td>
+                        <td width="132">Export：</td>
                         <td class="text">
                             <span>@Enum.GetName(typeof(EnumData.Export), Model.Export)</span>
                             @Html.DropDownListFor(Model => Model.Export, Enum.GetValues(typeof(EnumData.Export)).Cast<EnumData.Export>().Select(s => new SelectListItem() { Text = s.ToString(), Value = ((byte)s).ToString() }), htmlAttributes: new { @class = "form-control" })
-                        </td>
-                        <td width="135">Export Currency：</td>
-                        <td id="text-currency">
-                            @Model.GetCurrency.Code
-                            @*@Html.DropDownListFor(Model => Model.ExportCurrency, (List<SelectListItem>)ViewData["CurrencyList"], htmlAttributes: new { @class = "form-control" })*@
                         </td>
                     </tr>
                     <tr>
@@ -152,11 +161,6 @@
                             <span>@EnumData.ExportMethodList()[Model.ExportMethod]</span>
                             @Html.DropDownListFor(Model => Model.ExportMethod, EnumData.ExportMethodList().Select(s => new SelectListItem() { Text = s.Value, Value = s.Key.ToString() }), htmlAttributes: new { @class = "form-control" })
                         </td>
-                        <td>Upload Tracking：</td>
-                        <td class="text">
-                            <span>@Enum.GetName(typeof(EnumData.YesNo), Model.UploadTracking)</span>
-                            @Html.DropDownListFor(Model => Model.UploadTracking, Enum.GetValues(typeof(EnumData.YesNo)).Cast<EnumData.YesNo>().Select(s => new SelectListItem() { Text = s.ToString(), Value = (byte)s == 1 ? bool.TrueString : bool.FalseString }), htmlAttributes: new { @class = "form-control" })
-                        </td>
                     </tr>
                     <tr>
                         <td>Export Value：</td>
@@ -164,33 +168,49 @@
                             <span>@Model.ExportValue</span>
                             @Html.TextBoxFor(Model => Model.ExportValue, htmlAttributes: new { @class = "form-control" })
                         </td>
-                        <td>Tracking：</td>
-                        <td class="text">
-                            <span>@(Model.Tracking ?? "")</span>
-                            @Html.TextBoxFor(Model => Model.Tracking, htmlAttributes: new { @class = "form-control" })
+                    </tr>
+                    <tr>
+                        <td>Export Currency：</td>
+                        <td id="text-currency">
+                            @Model.GetCurrency.Code
+                            @*@Html.DropDownListFor(Model => Model.ExportCurrency, (List<SelectListItem>)ViewData["CurrencyList"], htmlAttributes: new { @class = "form-control" })*@
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <div class="col-sm-6 col-lg-5">
+        <div class="col-sm-4 col-lg-3">
             <table class="table table-bordered">
                 <thead>
                     <tr class="font-title">
-                        <th class="text-center" colspan="4">DL Shipping Settings</th>
+                        <th class="text-center" style="font-size:13px!important;" colspan="2">DL Shipping Settings</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td width="126">Export：</td>
+                        <td width="132">Box ID：</td>
+                        <td class="text">
+                            <span>@Model.CarrierBox</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>DL Carrier：</td>
+                        <td class="text">
+                            <span>@(Model.GetMethod?.FirstMile?.Name ?? "")</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>DL Tracking：</td>
+                        <td class="text">
+                            <span>@(Model.DLTracking ?? "")</span>
+                            @Html.TextBoxFor(Model => Model.DLTracking, htmlAttributes: new { @class = "form-control" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Export：</td>
                         <td class="text">
                             <span>@Enum.GetName(typeof(EnumData.Export), Model.DLExport)</span>
                             @Html.DropDownListFor(Model => Model.DLExport, Enum.GetValues(typeof(EnumData.Export)).Cast<EnumData.Export>().Select(s => new SelectListItem() { Text = s.ToString(), Value = ((byte)s).ToString() }), htmlAttributes: new { @class = "form-control" })
-                        </td>
-                        <td width="135">Export Currency：</td>
-                        <td>
-                            @(Model.GetDLCurrency.Code)
-                            @*@Html.DropDownListFor(Model => Model.DLExportCurrency, (List<SelectListItem>)ViewData["CurrencyList"], htmlAttributes: new { @class = "form-control" })*@
                         </td>
                     </tr>
                     <tr>
@@ -199,11 +219,6 @@
                             <span>@EnumData.ExportMethodList()[Model.DLExportMethod]</span>
                             @Html.DropDownListFor(Model => Model.DLExportMethod, EnumData.ExportMethodList().Select(s => new SelectListItem() { Text = s.Value, Value = s.Key.ToString() }), htmlAttributes: new { @class = "form-control" })
                         </td>
-                        <td>Upload Tracking：</td>
-                        <td class="text">
-                            <span>@Enum.GetName(typeof(EnumData.YesNo), Model.DLUploadTracking)</span>
-                            @Html.DropDownListFor(Model => Model.DLUploadTracking, Enum.GetValues(typeof(EnumData.YesNo)).Cast<EnumData.YesNo>().Select(s => new SelectListItem() { Text = s.ToString(), Value = (byte)s == 1 ? bool.TrueString : bool.FalseString }), htmlAttributes: new { @class = "form-control" })
-                        </td>
                     </tr>
                     <tr>
                         <td>Export Value：</td>
@@ -211,10 +226,12 @@
                             <span>@Model.DLExportValue</span>
                             @Html.TextBoxFor(Model => Model.DLExportValue, htmlAttributes: new { @class = "form-control" })
                         </td>
-                        <td>Tracking：</td>
-                        <td class="text">
-                            <span>@(Model.DLTracking ?? "")</span>
-                            @Html.TextBoxFor(Model => Model.DLTracking, htmlAttributes: new { @class = "form-control" })
+                    </tr>
+                    <tr>
+                        <td>Export Currency：</td>
+                        <td>
+                            @(Model.GetDLCurrency.Code)
+                            @*@Html.DropDownListFor(Model => Model.DLExportCurrency, (List<SelectListItem>)ViewData["CurrencyList"], htmlAttributes: new { @class = "form-control" })*@
                         </td>
                     </tr>
                 </tbody>

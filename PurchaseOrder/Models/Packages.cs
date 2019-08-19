@@ -37,11 +37,11 @@ namespace PurchaseOrderSys.Models
         public byte DLExportMethod { get; set; }
         public decimal DLExportValue { get; set; }
         public int DLExportCurrency { get; set; }
-        public bool DLUploadTracking { get; set; }
         public string DLTracking { get; set; }
         public int ShipWarehouse { get; set; }
         public int ReturnWarehouse { get; set; }
         public byte ShippingStatus { get; set; }
+        public Nullable<System.DateTime> FulfillmentDate { get; set; }
         public string UpdateBy { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }
         public string CreateBy { get; set; }

@@ -14,6 +14,7 @@
     string DefaultLangID = EnumData.DataLangList().First().Key;
     var WarehouseList = (List<Warehouse>)ViewBag.WarehouseList;
     var PurchaseSku = (List<PurchaseSKU>)ViewBag.PurchaseSku;
+    var TransferSku = (List<TransferSKU>)ViewBag.TransferSku;
     var RMASku = (List<RMASKU>)ViewBag.RMASku;
     var AwaitingList = (List<AwaitingDispatchVM>)ViewBag.AwaitingList;
     var SkuStatus = Enum.GetValues(typeof(EnumData.SkuStatus)).Cast<EnumData.SkuStatus>().Select(t => new SelectListItem() { Text = t.ToString(), Value = ((byte)t).ToString() }).ToList();
@@ -758,6 +759,7 @@
                                         var TypeList = new Dictionary<string, string>() { { "PO", "PO" }, { "CM", "Credit Memo" }, { "Order", "Order Dispatch" }, { "TransferOut", "Transfer (Out)" }, { "TransferIn", "Transfer (In)" }, { "RMAIn", "RMA (In)" }, { "Change", "" } };
 
                                         var data = PurchaseSku.SelectMany(sku => sku.SerialsLlist.Where(s => s.IsEnable && (s.SerialsType.Equals("PO") || s.SerialsType.Equals("TransferIn")))).ToList();
+                                        data.AddRange(TransferSku.SelectMany(sku => sku.SerialsLlist.Where(s => s.IsEnable && s.SerialsType.Equals("TransferIn"))).ToList());
                                         var data2 = data.SelectMany(sku => sku.SerialsLlistC.Where(s => s.IsEnable)).ToList();
                                         if (data2.Any(s => s.SerialsType.Equals("TransferIn")))
                                         {
@@ -766,6 +768,7 @@
                                         data.AddRange(data2);
                                         var SerialList = data.Where(s => !(s.TransferSKUID.HasValue && (!s.TransferSKU.IsEnable || !s.TransferSKU.Transfer.IsEnable))).Select(s => new
                                         {
+                                            ID = s.ID,
                                             SKU = s.PurchaseSKU?.SkuNo ?? s.TransferSKU?.SkuNo,
                                             Date = s.CreateAt.ToLocalTime(),
                                             Supplier = s.PurchaseSKUID.HasValue ? s.PurchaseSKU.PurchaseOrder?.VendorLIst.Name ?? s.PurchaseSKU.CreditMemo?.PurchaseOrder?.VendorLIst.Name : "",
@@ -782,11 +785,12 @@
 
                                         SerialList.AddRange(RMASku.SelectMany(sku => sku.RMASerialsLlist.Where(s => s.IsEnable)).Select(s => new
                                         {
+                                            ID = s.ID,
                                             SKU = s.RMASKU.SkuNo,
                                             Date = s.CreateAt.ToLocalTime(),
                                             Supplier = SerialList.FirstOrDefault(ss => ss.ExtendID.Equals(s.RMASKU.RMA.OrderID.Value) && ss.SKU.Equals(s.RMASKU.SkuNo))?.Supplier ?? "",
                                             Type = s.SerialsType,
-                                            ExtendID = s.RMASKU.RMA.ID,
+                                            ExtendID = s.TransferSKU?.TransferID ?? s.RMASKU.RMA.ID,
                                             WID = s.RMASKU.WarehouseID.Value,
                                             Serial = s.SerialsNo,
                                             QTY = s.SerialsQTY.Value,
@@ -795,13 +799,14 @@
                                             Shipped = s.SerialsType.Equals("TransferOut") && s.TransferSKU.Transfer.Status.Equals("Shipped") && !s.RMASerialsLlistC.Any(sl => sl.SerialsType.Equals("TransferIn")),
                                             RMA = true
                                         }).ToList());
-                                        SerialList = SerialList.Distinct().OrderByDescending(s => s.Date).ToList();
                                         var AwaitingConut = AwaitingList.Select(a => new { WID = SCList[a.SCID], QTY = a.QTY }).Concat(SerialList.Where(s => s.Awaiting).Select(s => new { WID = s.WID, QTY = Math.Abs(s.QTY) })).GroupBy(a => a.WID, a => a.QTY).ToDictionary(g => g.Key, g => g.Sum());
                                         var AggregateCount = SerialList.Where(s => !s.Awaiting).GroupBy(s => s.WID, s => !s.RMA ? s.QTY : 0).ToDictionary(g => g.Key, g => g.Sum() - (AwaitingConut.ContainsKey(g.Key) ? AwaitingConut[g.Key] : 0));
                                         var AvailableCount = SerialList.Where(s => !s.Awaiting).GroupBy(s => s.WID, s => s.QTY).ToDictionary(g => g.Key, g => g.Sum());
                                         var TransferCount = SerialList.Where(s => s.Shipped).GroupBy(s => s.WID, s => Math.Abs(s.QTY)).ToDictionary(g => g.Key, g => g.Sum());
                                         var TotalCount = SerialList.Where(s => !s.Awaiting || !s.Shipped).GroupBy(s => s.WID, s => s.QTY).ToDictionary(g => g.Key, g => g.Sum());
                                         var TotalValue = SerialList.Where(s => !s.Awaiting || !s.Shipped).GroupBy(s => s.WID, s => s.QTY * s.Price).ToDictionary(g => g.Key, g => g.Sum());
+                                        SerialList = SerialList.Distinct().OrderByDescending(s => s.ID).OrderByDescending(s => s.Date).ToList();
+                                        //SerialList = SerialList.OrderByDescending(s => s.ID).OrderByDescending(s => s.Date).GroupBy(s => s.Date + "," + s.Serial + "," + s.WID).Select(g => g.Last()).ToList();
                                     }
 
                                     <div class="tab-pane" id="hb7">
@@ -910,6 +915,7 @@
                                                                 @{
                                                                     foreach (var serial in SerialList)
                                                                     {
+                                                                        var warehouse = WarehouseList.FirstOrDefault(w => w.ID.Equals(serial.WID));
                                                                         <tr>
                                                                             <td>@serial.SKU</td>
                                                                             <td>@serial.Date</td>
@@ -917,7 +923,7 @@
                                                                             <td></td>
                                                                             <td>@(TypeList.ContainsKey(serial.Type) ? TypeList[serial.Type] : "")</td>
                                                                             <td>@Html.SetExtraLink(serial.Type + " Page", serial.ExtendID)</td>
-                                                                            <td>@(WarehouseList.FirstOrDefault(w => w.ID.Equals(serial.WID))?.Name ?? serial.WID.ToString())</td>
+                                                                            <td>@(warehouse?.Name ?? serial.WID.ToString())</td>
                                                                             <td>@serial.Serial</td>
                                                                             <td>@serial.QTY</td>
                                                                             <td>@(AggregateCount[serial.WID] - (AwaitingConut.ContainsKey(serial.WID) ? AwaitingConut[serial.WID] : 0))</td>

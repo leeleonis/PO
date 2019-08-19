@@ -78,7 +78,7 @@ namespace PurchaseOrderSys.Models
                     if (orderData.Packages.Any(p => p.SCID.Value.Equals(package.SCID.Value)))
                     {
                         var packageData = orderData.Packages.First(p => p.SCID.Value.Equals(package.SCID.Value));
-                        SetUpdateData(packageData, package, new string[] { "IsEnable", "CarrierBox", "ShippingMethod", "Export", "ExportMethod", "ExportValue", "UploadTracking", "Tracking", "DLExport", "DLExportMethod", "DLExportValue", "DLUploadTracking", "DLTracking", "ShipWarehouse", "ReturnWarehouse", "ShippingStatus" });
+                        SetUpdateData(packageData, package, new string[] { "IsEnable", "CarrierBox", "ShippingMethod", "Export", "ExportMethod", "ExportValue", "UploadTracking", "Tracking", "DLExport", "DLExportMethod", "DLExportValue", "DLTracking", "ShipWarehouse", "ReturnWarehouse", "ShippingStatus", "FulfillmentDate" });
                     }
                     else
                     {

@@ -256,8 +256,8 @@ namespace PurchaseOrderSys.Helpers
                 case "SKU Page":
                     aHtml.Attributes.Add("href", "http://internal.qd.com.tw:8080/Sku/Edit/" + data.ToString());
                     break;
-                case "TransferIn":
-                case "TransferOut":
+                case "TransferIn Page":
+                case "TransferOut Page":
                     aHtml.Attributes.Add("href", "http://internal.qd.com.tw:8080/Transfer/Edit/" + data.ToString());
                     break;
                 default:
