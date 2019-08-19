@@ -264,7 +264,7 @@ namespace PurchaseOrderSys.Controllers
                         {
                             foreach (var SKUitem in item.Items)
                             {
-                                var SKUNo = SKUitem.SKU;
+                                var SKUNo = SKUitem.SKU.Split('-')[0];
                                 var SKU = db.SKU.Find(SKUNo);
                                 if (SKU == null)
                                 {
@@ -436,6 +436,7 @@ namespace PurchaseOrderSys.Controllers
                     nRMAEdit.tracking = Serialitem.RMAOrderTracking?.ReturnTracking ?? "";
                     nRMAEdit.Carrier = ShippingList.Where(x => x.value.ToString() == Serialitem.RMAOrderTracking?.Carrier).FirstOrDefault()?.text ?? "";
                     nRMAEdit.RMASerialsLlistID = RMASKUitem.RMASerialsLlist.Where(x => x.IsEnable && x.SerialsNo == Serialitem.SerialsNo).FirstOrDefault()?.ID;
+                    nRMAEdit.trackingID = Serialitem.RMAOrderTrackingID ?? 0;
                     RMASKUList.Add(nRMAEdit);
                 }
             }
@@ -1056,6 +1057,13 @@ namespace PurchaseOrderSys.Controllers
             var RMA = db.RMA.Find(id);
 
             return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public ActionResult Trackgroup(int id)
+        {
+            var RMAOrderTracking = db.RMAOrderTracking.Find(id);
+            var html = RenderPartialViewToString("Trackgroup", RMAOrderTracking);
+            return Json(new { status = true, html }, JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -60,7 +60,7 @@
                                         <font size="3">
                                             <b>
                                                 @ChannelList.Where(x => x.Value == Model.Channel.ToString()).FirstOrDefault().Text
-                                                {{{@Model.SourceID}}}
+                                                @Model.SourceID
                                             </b>
 
                                         </font>
@@ -74,67 +74,67 @@
                                         <fieldset>
                                             <legend></legend>
                                             <div class="form-group">
-                                                @Html.LabelFor(model => model.OrderID, htmlAttributes: new { @class = "control-label col-lg-2" })
-                                                <div class="col-sm-9 col-lg-2">
+                                                @Html.LabelFor(model => model.OrderID, htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                <div class="col-sm-9 col-lg-3">
                                                     @*@Html.Editor("OrderID", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })*@
                                                     <a href='https://dm.cwa.sellercloud.com/Orders/Orders_details.aspx?id=@(Model.OrderID)' target="_blank" class="control-label col-sm-1">@Model.OrderID</a>
                                                 </div>
 
-                                                @*<label class="control-label col-sm-2">Generate Prepaid Return Label</label>
-        <div class="col-sm-9 col-lg-2">
+                                                @*<label class="control-label col-sm-1">Generate Prepaid Return Label</label>
+        <div class="col-sm-9 col-lg-3">
 
         </div>*@
 
-                                                @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
+                                                @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                <div class="col-sm-9 col-lg-3">
                                                     @Html.DropDownList("Status", RMAStatusList, htmlAttributes: new { @class = "form-control" })
                                                 </div>
 
-                                                @Html.Label("Create Date", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
+                                                @Html.Label("Create Date", htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                <div class="col-sm-9 col-lg-3">
                                                     <input class="form-control" type="text" value="@Model.CreateAt.ToLocalTime()" readonly>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                @Html.LabelFor(model => model.SCUserID, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
+                                                @Html.LabelFor(model => model.SCUserID, htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                <div class="col-sm-9 col-lg-3">
                                                     @Html.Editor("SCUserID", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                                                 </div>
-                                                @*@Html.LabelFor(model => model.SourceID, htmlAttributes: new { @class = "control-label col-sm-2" })
-        <div class="col-sm-9 col-lg-2">
+                                                @*@Html.LabelFor(model => model.SourceID, htmlAttributes: new { @class = "control-label col-sm-1" })
+        <div class="col-sm-9 col-lg-3">
             @Html.Editor("SourceID", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
         </div>*@
 
-                                                @*@Html.LabelFor(model => model.ReturnTracking, htmlAttributes: new { @class = "control-label col-sm-2" })
-        <div class="col-sm-9 col-lg-2">
+                                                @*@Html.LabelFor(model => model.ReturnTracking, htmlAttributes: new { @class = "control-label col-sm-1" })
+        <div class="col-sm-9 col-lg-3">
             @Html.Editor("ReturnTracking", new { htmlAttributes = new { @class = "form-control"} })
         </div>*@
 
-                                                @Html.LabelFor(model => model.Action, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
+                                                @Html.LabelFor(model => model.Action, htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                <div class="col-sm-9 col-lg-3">
                                                     @Html.DropDownList("Action", RMAActionList, htmlAttributes: new { @class = "form-control" })
                                                 </div>
-                                                @Html.Label("Create By", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
+                                                @Html.Label("Create By", htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                <div class="col-sm-9 col-lg-3">
                                                     @Html.Editor("CreateBy", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                @Html.LabelFor(model => model.SourceCaseID, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
+                                                @Html.LabelFor(model => model.SourceCaseID, htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                <div class="col-sm-9 col-lg-3">
                                                     @Html.Editor("SourceCaseID", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
-                                                @*@Html.LabelFor(model => model.Carrier, htmlAttributes: new { @class = "control-label col-sm-2" })
-        <div class="col-sm-9 col-lg-2">
+                                                @*@Html.LabelFor(model => model.Carrier, htmlAttributes: new { @class = "control-label col-sm-1" })
+        <div class="col-sm-9 col-lg-3">
             @Html.Editor("Carrier", new { htmlAttributes = new { @class = "form-control" } })
         </div>*@
-                                                @Html.Label("Warranty / Repair #", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
+                                                @Html.Label("Warranty / Repair #", htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                <div class="col-sm-9 col-lg-3">
                                                     @Html.Editor("Warranty", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                                                 </div>
 
-                                                @Html.Label("Received Date", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
+                                                @Html.Label("Received Date", htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                <div class="col-sm-9 col-lg-3">
                                                     @{
                                                         var ReceivedDate = Model.RMASKU.Where(x => x.IsEnable).OrderByDescending(x => x.ReceivedAt).FirstOrDefault()?.ReceivedAt?.ToLocalTime();
                                                         <input class="form-control" type="text" value="@ReceivedDate" readonly>
@@ -142,21 +142,21 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                @Html.LabelFor(model => model.CompanyID, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
+                                                @Html.LabelFor(model => model.CompanyID, htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                <div class="col-sm-9 col-lg-3">
                                                     @Html.DropDownListLabel("CompanyID", CompanyDDL, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
                                                 </div>
-                                                @*<label class="control-label col-sm-2">Tracking Status (Date)</label>
-        <div class="col-sm-9 col-lg-2">
+                                                @*<label class="control-label col-sm-1">Tracking Status (Date)</label>
+        <div class="col-sm-9 col-lg-3">
             Tracking Status (Event)
         </div>*@
-                                                @Html.Label("Credit Memo #", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
+                                                @Html.Label("Credit Memo #", htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                <div class="col-sm-9 col-lg-3">
                                                     @Html.Editor("CreditMemo", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                                                 </div>
 
-                                                @Html.Label("Received By", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
+                                                @Html.Label("Received By", htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                <div class="col-sm-9 col-lg-3">
                                                     @{
                                                         var ReceivedBy = Model.RMASKU.Where(x => x.IsEnable).OrderByDescending(x => x.ReceivedAt).FirstOrDefault()?.ReceivedBy;
                                                         <input class="form-control" type="text" value="@ReceivedBy" readonly>
@@ -165,43 +165,26 @@
                                             </div>
                                         
                                             <div class="form-group">
-                                                @Html.LabelFor(model => model.Country, htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
+                                                @Html.LabelFor(model => model.Country, htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                <div class="col-sm-9 col-lg-3">
                                                     @Html.Editor("Country", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                                                 </div>
-                                                @*<label class="control-label col-sm-2"></label>
-                <div class="col-sm-9 col-lg-2">
+                                                @*<label class="control-label col-sm-1"></label>
+                <div class="col-sm-9 col-lg-3">
 
                 </div>*@
                                               
                                             </div>
-                                                <div class="form-group">
-                                                @*@Html.LabelFor(model => model.Channel, htmlAttributes: new { @class = "control-label col-sm-2" })
-                <div class="col-sm-9 col-lg-2">
+                                                @*<div class="form-group">
+                                                @Html.LabelFor(model => model.Channel, htmlAttributes: new { @class = "control-label col-sm-1" })
+                <div class="col-sm-9 col-lg-3">
                     @Html.DropDownListLabel("Channel", ChannelList, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
-                </div>*@
-                                                @*<label class="control-label col-sm-2"></label>
-                <div class="col-sm-9 col-lg-2">
+                </div>
+                                                <label class="control-label col-sm-1"></label>
+                <div class="col-sm-9 col-lg-3">
 
-                </div>*@
-                                            </div>
-                                            <div class="form-group">
-
-                                                @*<label class="control-label col-sm-2"></label>
-                <div class="col-sm-9 col-lg-2">
-
-                </div>*@
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label col-sm-2"></label>
-                                                <div class="col-sm-9 col-lg-2">
-
-                                                </div>
-                                                @*<label class="control-label col-sm-2"></label>
-                <div class="col-sm-9 col-lg-2">
-
-                </div>*@
-                                            </div>
+                </div>
+                                            </div>*@
                                         </fieldset>
                                         <fieldset>
                                             <legend></legend>
@@ -240,19 +223,19 @@
                                                         </thead>
                                                         <tbody></tbody>
                                                         <tfoot>
-                                                            <tr>
+                                                            @*<tr>
                                                                 <td colspan="9"></td>
-                                                            </tr>
+                                                            </tr>*@
                                                             <tr>
-                                                                <td colspan="7" rowspan="8">
-                                                                    <div class="col-sm-10 col-lg-8">
-                                                                        <textarea rows="2" style="width:100%" id="textnote"></textarea>
-                                                                        <button type="button" id="addnote" style="float:right" class="btn btn-default btn-sm">Add Note</button>
+                                                                <td colspan="7" rowspan="7">
+                                                                    <div class="col-sm-10 col-lg-6">
+                                                                        <textarea rows="6" style="width:100%" id="textnote"></textarea>
+                                                                        <button type="button" id="addnote" style="float:right" class="btn btn-default btn-sm">Save Note</button>
                                                                         <span style="float:right">　</span>
                                                                         <button type="button" id="UploadImage" style="float:right" class="btn btn-default btn-sm">Upload Image</button>
                                                                         <input type="file" id="addimg" style="float:right" />
                                                                     </div>
-                                                                    <div class="col-sm-2 col-lg-4">
+                                                                    <div class="col-sm-2 col-lg-6">
                                                                         <ul style="list-style-type:none;list-style-position: inside;padding-left: 0px;padding-left: 0px;" id="textnotelog">
                                                                             @foreach (var item in Model.PurchaseNote.OrderByDescending(x => x.ID))
                                                                             {
@@ -261,7 +244,7 @@
                                                                                         <legend>
                                                                                             @if (item.NoteType == "Url")
                                                                                             {
-                                                                                                <a class="aimg" href="@item.Note" data-lightbox="roadtrip"><img class="img" src="@item.Note" /></a>
+                                                                                                <a class="aimg" href="@item.Note" data-lightbox="roadtrip"><img class="img" src="@item.Note"   width="100px" height="100px"/></a>
                                                                                             }
                                                                                             else
                                                                                             {
@@ -269,7 +252,7 @@
                                                                                             }
 
                                                                                             <br />
-                                                                                            @( item.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss") + "；" + item.CreateBy)
+                                                                                            @( item.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss") + "  By  " + item.CreateBy)
                                                                                         </legend>
                                                                                     </fieldset>
                                                                                 </li>
@@ -289,19 +272,19 @@
                                                             <tr>
                                                                 <td>Restocking fee:</td>
                                                                 <td>
-                                                                    @Html.EditorFor(x => x.RestockingFee, new { htmlAttributes = new { @class = "form-control changed" } })
+                                                                    @Html.EditorFor(x => x.RestockingFee, new { htmlAttributes = new { @class = " changed" } })
                                                                 </td>
                                                             </tr>
                                                             <tr>
                                                                 <td>Return shipping cost:</td>
                                                                 <td>
-                                                                    @Html.EditorFor(x => x.ReturnShippingCos, new { htmlAttributes = new { @class = "form-control changed" } })
+                                                                    @Html.EditorFor(x => x.ReturnShippingCos, new { htmlAttributes = new { @class = " changed" } })
                                                                 </td>
                                                             </tr>
                                                             <tr>
                                                                 <td>Other costs:</td>
                                                                 <td>
-                                                                    @Html.EditorFor(x => x.OtherCosts, new { htmlAttributes = new { @class = "form-control changed" } })
+                                                                    @Html.EditorFor(x => x.OtherCosts, new { htmlAttributes = new { @class = " changed" } })
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -312,10 +295,10 @@
                                                                 <td>Order balance:</td>
                                                                 <td></td>
                                                             </tr>
-                                                            <tr>
+                                                            @*<tr>
                                                                 <td></td>
                                                                 <td></td>
-                                                            </tr>
+                                                            </tr>*@
                                                         </tfoot>
                                                     </table>
                                                 </article>
@@ -503,7 +486,7 @@
                             return html;
                         }
                     },
-                    { data: "tracking" },
+                    { data: "trackingID" },
                     { data: "Carrier" },
                 ],
                 ajax: {
@@ -534,15 +517,36 @@
                     { "visible": false, "targets": 10 }
                 ],
                 'rowGroup': {
-                    "startRender":null,
+                    "startRender": null,
+                    "dataSrc": 'trackingID',
                     "endRender": function (rows, group) {
                         var html = '<tr class="group"><td colspan="9"></td></tr><tr class="group"><td></td><td>SKU</td><td>Product Name</td><td>訂單數</td><td>原因</td><td>Return Warehouse</td><td>Order Serial</td><td>Returned  Serial</td><td></td></tr>';
                         if (rows[0] == DataGrid.rows()[0].length-1) {
                             html = "";
                         }
-                        return $('<tr class="trackinggroup"><td colspan="7"></td><td>Carrier : ' + rows.data()[0]["Carrier"] + '</td><td>tracking : ' + group + '</td></tr>' + html);
+                        var ajaxhtml = "";
+                        $.ajax({
+                            async: false,
+                            traditional: true,
+                            type: "post",
+                            url: "@Url.Action("Trackgroup")",
+                            data: {
+                                ID:group
+                            },
+                            success: function (data) {
+                                if (data.status) {
+                                    ajaxhtml = data.html;
+                                }
+                                else {
+
+                                }
+                            }
+                        });
+
+
+                        return $(ajaxhtml + html);
                     },
-                    "dataSrc":'tracking'
+
                 },
                 //"drawCallback": function (settings) {
                 //    var api = this.api();

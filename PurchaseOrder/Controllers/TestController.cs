@@ -61,6 +61,15 @@ namespace PurchaseOrderSys.Controllers
         // GET: Test
         public ActionResult Index()
         {
+            //var SerialsLlist = db.SerialsLlist.Where(x => x.PurchaseSKUID.HasValue && x.TransferSKUID.HasValue && x.TransferSKU.SkuNo != x.PurchaseSKU.SkuNo).ToList();
+
+            //foreach (var item in SerialsLlist)
+            //{
+            //    item.TransferSKU.SkuNo = item.PurchaseSKU.SkuNo;
+            //    item.TransferSKU.Name = item.PurchaseSKU.Name;
+            //    db.Entry(item.TransferSKU).State = System.Data.Entity.EntityState.Modified;
+            //    db.SaveChanges();
+            //}
             //var transfer = db.Transfer.Find(3279);
             //var fileStream = Base64ToMemoryStream(transfer.WinitTransfer.PackingList);
 

@@ -56,7 +56,6 @@ namespace PurchaseOrderSys.Models
     		/// To Name
     		/// </summary>        
     	    [Display(Name = "RMAOrderTracking_ToName", ResourceType = typeof(App_GlobalResources.Resource))]
-            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  ToName { get; set; }
     
@@ -113,7 +112,6 @@ namespace PurchaseOrderSys.Models
     		/// From Name
     		/// </summary>        
     	    [Display(Name = "RMAOrderTracking_FromName", ResourceType = typeof(App_GlobalResources.Resource))]
-            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  FromName { get; set; }
     
