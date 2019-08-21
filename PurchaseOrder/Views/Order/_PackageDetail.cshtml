@@ -25,7 +25,7 @@
                 <td class="font-bg" width="100">Value</td>
                 <td class="font-bg" width="80">
                     RMA #
-                    @if (Model.ShippingStatus.Equals((byte)EnumData.OrderShippingStatus.訂單管理))
+                    @if (Model.ShippingStatus.Equals((byte)EnumData.OrderShippingStatus.未安排))
                     {
                         <div style="position: absolute; top: -35px; right: 15px;">
                             <button type="button" class="btn btn-default btn-sm edit" onclick="PackageEdit(@Model.ID)">Edit</button>
@@ -237,7 +237,7 @@
                 </tbody>
             </table>
         </div>
-        @if (Model.ShippingStatus.Equals((byte)EnumData.OrderShippingStatus.訂單管理))
+        @if (Model.ShippingStatus.Equals((byte)EnumData.OrderShippingStatus.未安排) && Model.GetOrder.OrderStatus.Equals((byte)EnumData.OrderStatus.InProcess) && (Model.GetOrder.PaymentStatus.Equals((byte)EnumData.OrderPaymentStatus.Full) || Model.GetOrder.PaymentStatus.Equals((byte)EnumData.OrderPaymentStatus.OverPaid)))
         {
             <div class="col-sm-12 text-center">
                 <button type="button" class="btn btn-default btn-lg" onclick="if (confirm('確定要Mark Ship?')) { PackageMarkShip(@Model.ID); }">Mark Ship</button>

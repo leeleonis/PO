@@ -33,10 +33,17 @@ namespace PurchaseOrderSys.Controllers
             {
                 using (var OM = new OrderManagement(id))
                 {
-                    order = OM.OrderSync(id);
-                    if (order.CreateAt.CompareTo(order.UpdateAt.Value) == 0)
+                    try
                     {
-                        OM.ActionLog("Order", "Sync Data");
+                        order = OM.OrderSync(id);
+                        if (order.CreateAt.CompareTo(order.UpdateAt.Value) == 0)
+                        {
+                            OM.ActionLog("Order", "Sync Data");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        TempData["ErrorMsg"] = ex.InnerException?.Message ?? ex.Message;
                     }
                 }
             }
@@ -60,10 +67,41 @@ namespace PurchaseOrderSys.Controllers
             Orders order = db.Orders.Find(updateData.ID);
             if (order == null) return HttpNotFound();
 
-            SetUpdateData(order, updateData, new string[] { "IsRush", "OrderStatus", "Comment" });
-            db.SaveChanges();
+            using (var OM = new OrderManagement(updateData.ID))
+            {
+                bool StatusChange = order.OrderStatus != updateData.OrderStatus;
 
-            return RedirectToAction("Edit", new { order.ID });
+                SetUpdateData(order, updateData, new string[] { "IsRush", "OrderStatus", "Comment" });
+                order.OrderStatus = (byte)OM.CheckOrderStatus(order);
+                db.SaveChanges();
+
+                if (StatusChange)
+                {
+                    OM.ActionLog("Order", Enum.GetName(typeof(EnumData.OrderStatus), order.OrderStatus));
+
+                    if (order.SCID.HasValue)
+                    {
+                        try
+                        {
+                            OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
+                            OM.ChangeOrderStatus(order.OrderStatus);
+                            OM.OrderSyncPush();
+                        }
+                        catch (Exception ex)
+                        {
+                            TempData["ErrorMsg"] = ex.InnerException?.Message ?? ex.Message;
+                        }
+                    }
+                }
+            }
+
+            ViewBag.CompanyList = db.Company.AsNoTracking().Where(c => c.IsEnable).OrderBy(c => c.Name).Select(c => new SelectListItem() { Text = c.Name, Value = c.ID.ToString() }).ToList();
+            ViewBag.MethodList = db.ShippingMethods.AsNoTracking().Where(m => m.IsEnable).OrderBy(m => m.Name).Select(m => new SelectListItem() { Text = m.Name, Value = m.ID.ToString() }).ToList();
+            ViewBag.WarehouseList = db.Warehouse.AsNoTracking().Where(w => w.IsEnable && w.IsSellable).OrderBy(w => w.Name)
+                .Select(w => new SelectListItem() { Text = w.Name, Value = w.ID.ToString() }).ToList();
+            ViewBag.CurrencyList = db.Currency.AsNoTracking().Select(c => new SelectListItem() { Text = c.Code + " - " + c.Name, Value = c.ID.ToString() }).OrderBy(c => c.Text).ToList();
+
+            return View(order);
         }
 
         // GET: Order/Delete/5
@@ -292,21 +330,14 @@ namespace PurchaseOrderSys.Controllers
 
                 using (var OM = new OrderManagement(package.OrderID))
                 {
+                    OM.ActionLog("Package", "Split Package");
+
                     if (package.GetOrder.SCID.HasValue)
                     {
-                        try
-                        {
-                            OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
-                            OM.SplitPackage(packageData.Select(p => p.ID).ToArray());
-                            OM.OrderSyncPush();
-                        }
-                        catch (Exception ex)
-                        {
-                            TempData["ErrorMsg"] = ex.InnerException?.Message ?? ex.Message;
-                        }
+                        OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
+                        OM.SplitPackage(packageData.Select(p => p.ID).ToArray());
+                        OM.OrderSyncPush();
                     }
-
-                    OM.ActionLog("Package", "Split Package");
                 }
             }
             catch (Exception ex)
@@ -357,7 +388,7 @@ namespace PurchaseOrderSys.Controllers
                     oldPackage.UpdateBy = Session["AdminName"].ToString();
                     oldPackage.UpdateAt = DateTime.UtcNow;
 
-                    foreach(var oldItem in oldPackage.Items.Where(i => i.IsEnable))
+                    foreach (var oldItem in oldPackage.Items.Where(i => i.IsEnable))
                     {
                         oldItem.IsEnable = false;
                         oldItem.UpdateBy = Session["AdminName"].ToString();
@@ -391,21 +422,14 @@ namespace PurchaseOrderSys.Controllers
 
                 using (var OM = new OrderManagement(newPackage.OrderID))
                 {
+                    OM.ActionLog("Package", "Combine Packages");
+
                     if (oldPackageList.All(p => p.SCID.HasValue))
                     {
-                        try
-                        {
-                            OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
-                            OM.CombinePackage(oldPackageIDs);
-                            OM.OrderSyncPush();
-                        }
-                        catch (Exception ex)
-                        {
-                            TempData["ErrorMsg"] = ex.InnerException?.Message ?? ex.Message;
-                        }
+                        OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
+                        OM.CombinePackage(oldPackageIDs);
+                        OM.OrderSyncPush();
                     }
-
-                    OM.ActionLog("Package", "Combine Packages");
                 }
             }
             catch (Exception ex)
@@ -447,7 +471,6 @@ namespace PurchaseOrderSys.Controllers
                             OM.ActionLog("Order", "Complete");
                         }
                     }
-
 
                     if (order.SCID.HasValue)
                     {

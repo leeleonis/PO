@@ -99,16 +99,28 @@ namespace PurchaseOrderSys.Models
                     if (orderData.Items.Any(i => i.SCID.Value.Equals(item.SCID.Value)))
                     {
                         var itemData = orderData.Items.First(i => i.SCID.Value.Equals(item.SCID.Value));
-                        SetUpdateData(itemData, item, new string[] { "IsEnable", "ExportValue", "DLExportValue", "Qty", "eBayItemID", "eBayTransationID", "SalesRecordNumber", "RMAID" });
+                        SetUpdateData(itemData, item, new string[] { "IsEnable", "ExportValue", "DLExportValue", "Qty", "eBayItemID", "eBayTransationID", "SalesRecordNumber" });
+
+                        if (item.RMAID.HasValue)
+                        {
+                            itemData.RMAID = db.RMA.FirstOrDefault(r => r.SCRMA.Equals(item.RMAID.ToString()))?.ID ?? item.RMAID;
+                        }
                     }
                     else
                     {
                         item.PackageID = db.Packages.AsNoTracking().First(p => p.SCID.Value.Equals(item.PackageID)).ID;
+
                         if (item.Sku.Any(s => new char[] { '-', '_' }.Contains(s)))
                         {
                             item.OriginSku = item.Sku;
                             item.Sku = item.Sku.Split('_')[0].Split('-')[0];
                         }
+
+                        if (item.RMAID.HasValue)
+                        {
+                            item.RMAID = db.RMA.FirstOrDefault(r => r.SCRMA.Equals(item.RMAID.ToString()))?.ID ?? item.RMAID;
+                        }
+
                         item.CreateBy = AdminName;
                         item.CreateAt = UtcNow;
                         orderData.Items.Add(item);
@@ -153,6 +165,7 @@ namespace PurchaseOrderSys.Models
                 db.SaveChanges();
 
                 orderData = db.Orders.AsNoTracking().First(o => o.ID.Equals(orderData.ID));
+                orderData.OrderStatus = (byte)CheckOrderStatus(orderData);
                 orderData.OrderType = (byte)CheckOrderType(orderData);
                 orderData.FulfillmentStatus = (byte)CheckFulfillmentStatus(orderData);
             }
@@ -173,6 +186,24 @@ namespace PurchaseOrderSys.Models
             if (order.Packages.Any(p => p.IsEnable && p.GetMethod.DirectLine.HasValue)) return EnumData.OrderType.DirectLine;
 
             return EnumData.OrderType.Normal;
+        }
+
+        public EnumData.OrderStatus CheckOrderStatus(Orders order)
+        {
+            if(order.PaymentStatus.Equals((byte)EnumData.OrderPaymentStatus.None) || order.PaymentStatus.Equals((byte)EnumData.OrderPaymentStatus.Partial))
+            {
+                return EnumData.OrderStatus.OnHold;
+            }
+
+            if(order.PaymentStatus.Equals((byte)EnumData.OrderPaymentStatus.Full) || order.PaymentStatus.Equals((byte)EnumData.OrderPaymentStatus.OverPaid))
+            {
+                if (order.FulfillmentStatus.Equals((byte)EnumData.OrderFulfillmentStatus.Full))
+                {
+                    return EnumData.OrderStatus.Completed;
+                }
+            }
+
+            return (EnumData.OrderStatus)order.OrderStatus;
         }
 
         public EnumData.OrderFulfillmentStatus CheckFulfillmentStatus(Orders order)
@@ -322,6 +353,25 @@ namespace PurchaseOrderSys.Models
                 {
                     SC_Api.Update_OrderShippingStatus(SC_order);
                 }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(string.Format("SC Error：{0}", ex.InnerException?.Message ?? ex.Message));
+            }
+        }
+
+        public void ChangeOrderStatus(byte Status)
+        {
+            if (SC_Api == null) SC_Api = new SC_WebService(ApiUserName, ApiPassword);
+
+            try
+            {
+                if (!orderData.SCID.HasValue) throw new Exception("Not found order's SCID!");
+
+                if (!SC_Api.Is_login) throw new Exception("SC is not logged in!");
+
+                var statusList = EnumData.OrderStatusList(true).Select(s => (int)s.Key).ToArray();
+                SC_Api.Update_OrderStatus(orderData.SCID.Value, statusList[orderData.OrderStatus]);
             }
             catch (Exception ex)
             {
