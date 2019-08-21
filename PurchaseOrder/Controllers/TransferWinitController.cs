@@ -881,6 +881,7 @@ namespace PurchaseOrderSys.Controllers
                                 Session["WinitPrepVMList" + SID] = PrepVMList;
                                 Session["WinitTransferBox" + SID] = WinitTransferBoxList;
 
+                                SavePrep(int.Parse(SID), null);
                                 return Json(new { status = true, print }, JsonRequestBehavior.AllowGet);
                             }
                             else

@@ -422,7 +422,18 @@ namespace PurchaseOrderSys.Controllers
             var fileStream = Base64ToMemoryStream(transfer.WinitTransfer.PackingList);
             return File(fileStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "PackingList.xlsx");
         }
-
+        public ActionResult FedexPDFID(int id)
+        {
+            var WinitTransfer = db.WinitTransfer.Find(id);
+            var file = new Ionic.Zip.ZipFile();
+            var OutputStream = new MemoryStream();
+            foreach (var item in WinitTransfer.WinitTransferBox)
+            {
+                file.AddEntry("FedexPDF-" + item.ID + ".pdf", Base64ToMemoryStream(item.FedExPdf));
+            }
+            file.Save(OutputStream);
+            return File(OutputStream.ToArray(), "application/zip", "FedexPDF.zip");
+        }
         [AllowAnonymous]
         public void PrintMyFiles()
         {

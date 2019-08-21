@@ -67,7 +67,7 @@
                                         <br />
                                         <font size="3">
                                             <b>
-                                                @CompanyDDL.Where(x => x.Value == Model.CompanyID.ToString()).FirstOrDefault().Text
+                                                @(CompanyDDL.Where(x => x.Value == Model.CompanyID.ToString()).FirstOrDefault()?.Text)
                                             </b>
                                         </font>
 
@@ -246,11 +246,11 @@
                                                                                             {
                                                                                                 foreach (var imgitem in item.PurchaseNoteImg)
                                                                                                 {
-                                                                                                   var href = "data:" + imgitem.ImgType + ";base64," + imgitem.Img;
+                                                                                                    var href = imgitem.Img;
                                                                                                     <a class="aimg" href="@href" data-lightbox="roadtrip"><img class="img" src="@href" width="100px" height="100px" /></a>
                                                                                                 }
                                                                                             }
-                                                                                            else if (item.NoteType == "Url")
+                                                                                            @if (item.NoteType == "Url")
                                                                                             {
                                                                                                 <a class="aimg" href="@item.Note" data-lightbox="roadtrip"><img class="img" src="@item.Note" width="100px" height="100px" /></a>
                                                                                             }
@@ -258,7 +258,6 @@
                                                                                             {
                                                                                                 @item.Note
                                                                                             }
-
                                                                                             <br />
                                                                                             @( item.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss") + "  By  " + item.CreateBy)
                                                                                         </legend>
@@ -823,17 +822,25 @@
                 });
             });
             $("#addnote").click(function () {
+                var data = new FormData();
+                data.append("ID", "@Html.DisplayFor(x=>x.ID)");
+                data.append("Note", $("#textnote").val());
+                var files = $("#addimg").get(0).files;
+                $.each(files, function (i, value) {
+                    data.append("Img", value);
+                }); 
                 $.ajax({
                     traditional: true,
                     type: "post",
+                    contentType: false,
+                    processData: false,
+                    dataType: "json",
                     url: "@Url.Action("CreatNote")",
-                    data: {
-                        ID: "@Html.DisplayFor(x=>x.ID)",
-                        Note: $("#textnote").val()
-                    },
+                    data: data,
                     success: function (data) {
                         if (data.status) {
                             $("#textnote").val("");
+                            $("#addimg").val("");
                             $("#textnotelog li").remove();
                             datalistSet(data);
                         }
@@ -875,16 +882,17 @@
         function datalistSet(data) {
             data.datalist.forEach(function (value) {
                 var href = "";
+                $.each(value.PurchaseNoteImg, function (index, val) {
+                    href = val.Img;
+                    $("#textnotelog").append("<li><fieldset><legend><a class='aimg' href='" + href + "' data-lightbox='roadtrip'><img class='img' src='" + href + "' width='100px' height='100px' /></a><br />" + value.CreateAt + "；" + value.CreateBy + "</legend></fieldset></li>");
+                });
+
                 if (value.NoteType == "Url") {
                     href = value.Note;
-                    $("#textnotelog").append("<li><fieldset><legend><a class='aimg' href='" + href + "' data-lightbox='roadtrip'><img class='img' src='" + href + "' /></a><br />" + value.CreateAt + "；" + value.CreateBy + "</legend></fieldset></li>");
+                    $("#textnotelog").append("<li><fieldset><legend><a class='aimg' href='" + href + "' data-lightbox='roadtrip'><img class='img' src='" + href + "'  width='100px' height='100px' /></a><br />" + value.CreateAt + "；" + value.CreateBy + "</legend></fieldset></li>");
                 }
                 else if (value.NoteType == "" || value.NoteType == "txt") {
                     $("#textnotelog").append("<li><fieldset><legend>" + value.Note + "<br />" + value.CreateAt + "；" + value.CreateBy + "</legend></fieldset></li>");
-                }
-                else {
-                    href = "data:" + value.NoteType + ";base64," + value.Note;
-                    $("#textnotelog").append("<li><fieldset><legend><a class='aimg' href='" + href + "' data-lightbox='roadtrip'><img class='img' src='" + href + "' /></a><br />" + value.CreateAt + "；" + value.CreateBy + "</legend></fieldset></li>");
                 }
             });
         }

@@ -12,11 +12,11 @@
 <tr class="trackinggroup">
     <td colspan="7">
         <div class="col-sm-10 col-lg-6">
-            <textarea rows="6" style="width:100%" id="textnote"></textarea>
+            <textarea rows="6" style="width:100%" id="textgnote"></textarea>
             <button type="button" id="addnote" style="float:right" class="btn btn-default btn-sm">Save Tracking  Note</button>
             <span style="float:right">　</span>
             @*<button type="button" id="UploadImage" style="float:right" class="btn btn-default btn-sm">Upload Tracking  Image</button>*@
-            <input type="file" id="addimg" style="float:right" multiple />
+            <input type="file" id="addgimg" style="float:right" multiple />
         </div>
         <div class="col-sm-2 col-lg-6">
             <ul style="list-style-type:none;list-style-position: inside;padding-left: 0px;padding-left: 0px;" id="textnotelog@Model.ID">
@@ -47,5 +47,5 @@
         </div>
     </td>
     <td>Carrier : @Html.DropDownList("Carrier", ShippingList, DefaultSelect)</td>
-    <td>Tracking : @Html.EditorFor(x=>x.ReturnTracking)</td>
+    <td>Tracking : @Html.Editor("ReturnTracking")</td>
 </tr>

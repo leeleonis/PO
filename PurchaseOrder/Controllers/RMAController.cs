@@ -147,8 +147,9 @@ namespace PurchaseOrderSys.Controllers
                     db.RMA.Add(newRMA);
                     foreach (var Skuitem in OrderItemDataitem.Items)
                     {
-                        var SKURMAList = RMAList.Where(x => x.OrderID == OrderItemDataitem.OrderID && x.SKU == Skuitem.SKU);
-                        var OrderItemID = order.Items.Where(x => x.ProductID == Skuitem.SKU).FirstOrDefault().ID;
+                        var tSKU = Skuitem.SKU.Split('-')[0];
+                        var SKURMAList = RMAList.Where(x => x.OrderID == OrderItemDataitem.OrderID && x.SKU == tSKU);
+                        var OrderItemID = order.Items.Where(x => x.ProductID.Contains(Skuitem.SKU)).FirstOrDefault().ID;
                         if (SKURMAList.Any())
                         {
                             var ReasonID = 1;
@@ -179,15 +180,15 @@ namespace PurchaseOrderSys.Controllers
                                     RMAItemID = SCRMA_Item.ID;
                                 }
                             }
-                            var UnitPrice = OrderItemDataitem.Items.Where(x => x.SKU == Skuitem.SKU).FirstOrDefault()?.UnitPrice;
-                            var ProductName = db.SkuLang.Where(x => x.LangID == LangID && x.Sku == Skuitem.SKU).FirstOrDefault()?.Name;
-                            foreach (var RMAListitem in RMAList.Where(x => x.SKU == Skuitem.SKU))
+                            var UnitPrice = OrderItemDataitem.Items.Where(x => x.SKU == tSKU).FirstOrDefault()?.UnitPrice;
+                            var ProductName = db.SkuLang.Where(x => x.LangID == LangID && x.Sku == tSKU).FirstOrDefault()?.Name;
+                            foreach (var RMAListitem in RMAList.Where(x => x.SKU == tSKU))
                             {
                                 var newRMASKU = new RMASKU
                                 {
                                     IsEnable = true,
                                     Name = ProductName,
-                                    SkuNo = Skuitem.SKU,
+                                    SkuNo = tSKU,
                                     QTYOrdered = 1,
                                     ReturnedQTY = 1,
                                     Reason = RMAListitem.Reason,
@@ -551,9 +552,9 @@ namespace PurchaseOrderSys.Controllers
                         foreach (var Imgitem in Img)
                         {
                             var ImgName = SaveImg(Imgitem);
-                            nPurchaseNote.PurchaseNoteImg.Add(new PurchaseNoteImg { IsEnable = true, Img = ImgName, ImgType = "Url", CreateAt = DateTime.UtcNow, CreateBy = UserBy });
-                            db.SaveChanges();
-                            PurchaseNoteList = RMA.PurchaseNote.ToList();
+                            nPurchaseNote.PurchaseNoteImg.Add(new PurchaseNoteImg { IsEnable = true, Img = ImgName, ImgType = Imgitem.ContentType, CreateAt = DateTime.UtcNow, CreateBy = UserBy });
+                            //db.SaveChanges();
+                            //PurchaseNoteList = RMA.PurchaseNote.ToList();
                         }
                     }
                     RMA.PurchaseNote.Add(nPurchaseNote);
@@ -582,7 +583,8 @@ namespace PurchaseOrderSys.Controllers
                     }
                     Session["RMAPurchaseNote" + SID] = PurchaseNoteList;
                 }
-                return Json(new { status = true, datalist = PurchaseNoteList.OrderByDescending(x => x.CreateAt).Select(x => new { CreateAt = x.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss"), x.CreateBy, x.Note, x.NoteType }).ToList() }, JsonRequestBehavior.AllowGet);
+                var datalist = PurchaseNoteList.OrderByDescending(x => x.CreateAt).Select(x => new { CreateAt = x.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss"), x.CreateBy, x.Note, x.NoteType, PurchaseNoteImg = x.PurchaseNoteImg.Select(y => new PurchaseNoteImg { Img = y.Img, ImgType = y.ImgType }).ToList() }).ToList();
+                return Json(new { status = true, datalist = datalist }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {

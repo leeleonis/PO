@@ -38,8 +38,8 @@ namespace PurchaseOrderSys.Models
         public virtual CreditMemo CreditMemo { get; set; }
         public virtual Transfer Transfer { get; set; }
         public virtual RMA RMA { get; set; }
+        public virtual RMAOrderTracking RMAOrderTracking { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PurchaseNoteImg> PurchaseNoteImg { get; set; }
-        public virtual RMAOrderTracking RMAOrderTracking { get; set; }
     }
 }

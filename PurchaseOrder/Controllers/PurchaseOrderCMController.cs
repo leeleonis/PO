@@ -209,6 +209,17 @@ namespace PurchaseOrderSys.Controllers
         {
 
             var CreditMemo = db.CreditMemo.Find(ID);
+            if (!CreditMemo.WarehouseID.HasValue)
+            {
+                if (CreditMemo.RMAID.HasValue)
+                {
+                    CreditMemo.WarehouseID = CreditMemo.RMA.WarehouseID;
+                }
+                else if (CreditMemo.PurchaseOrderID.HasValue)
+                {
+                    CreditMemo.WarehouseID = CreditMemo.PurchaseOrder.WarehouseID;
+                }
+            }
             //var cmvm = new CMVM
             //{
             //    PurchaseOrderID = CreditMemo.ID,
@@ -296,6 +307,7 @@ namespace PurchaseOrderSys.Controllers
             if (!string.IsNullOrWhiteSpace(filter.CreditStatus)) CreditMemo.CreditStatus = filter.CreditStatus;
             if (filter.CreditDate.HasValue) CreditMemo.CreditDate = filter.CreditDate;
             if (filter.CreditAmount.HasValue) CreditMemo.CreditAmount = filter.CreditAmount;
+            if (filter.WarehouseID.HasValue) CreditMemo.WarehouseID = filter.WarehouseID;
             CreditMemo.UpdateBy = UserBy;
             CreditMemo.UpdateAt = dt;
 
@@ -772,7 +784,7 @@ namespace PurchaseOrderSys.Controllers
             {
                 return Json(new { status = false, Errmsg = "序號數不可大於退貨數" }, JsonRequestBehavior.AllowGet);
             }
-            var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials);
+            var SerialsLlist = db.SerialsLlist.Where(x => x.IsEnable && x.SerialsNo == serials);
             
             if (!SerialsLlist.Where(x => x.PurchaseSKU.ID == PurchaseSKU.ID).Any())//檢查序號是否重複，同訂單同序號不能新增
             {
@@ -809,7 +821,39 @@ namespace PurchaseOrderSys.Controllers
                         }
                         else
                         {
-                            return Json(new { status = false, Errmsg = "此序號不在倉庫內" }, JsonRequestBehavior.AllowGet);
+                            var TSerialsLlist = SerialsLlist.Where(x => (x.SerialsType == "TransferIn") && x.SerialsQTY > 0 && !x.SerialsLlistC.Any()).OrderByDescending(x => x.ID).FirstOrDefault();
+                            if (TSerialsLlist != null)
+                            {
+                                var PID = TSerialsLlist.ID;
+                                var dt = DateTime.UtcNow;
+                                var nSerialsLlist = new SerialsLlist
+                                {
+                                    IsEnable = true,
+                                    PurchaseSKUID = PurchaseSKUID,
+                                    TransferSKUID= TSerialsLlist.TransferSKUID,
+                                    PID = PID,
+                                    SerialsType = "CM",
+                                    SerialsNo = serials,
+                                    SerialsQTY = -1,
+                                    CreateBy = UserBy,
+                                    CreateAt = dt
+                                };
+                                db.SerialsLlist.Add(nSerialsLlist);
+                                try
+                                {
+                                    db.SaveChanges();
+                                    return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+                                }
+                                catch (Exception ex)
+                                {
+                                    return Json(new { status = false, Errmsg = ex.ToString() }, JsonRequestBehavior.AllowGet);
+                                }
+                            }
+                            else
+                            {
+
+                                return Json(new { status = false, Errmsg = "此序號不在倉庫內" }, JsonRequestBehavior.AllowGet);
+                            }
                         }
                     }
                     else

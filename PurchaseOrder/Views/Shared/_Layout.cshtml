@@ -64,7 +64,7 @@
     @if (Session["IsLogin"] != null && (bool)Session["IsLogin"])
     {
         Html.RenderPartial("_Header", RenderSection("topright", false));
-        //Html.RenderPartialIf("_Ribbon", (bool)Session["IsLogin"]);
+        Html.RenderPartial("_Ribbon", (bool)Session["IsLogin"]);
 
     }
     <div id="main" role="main">

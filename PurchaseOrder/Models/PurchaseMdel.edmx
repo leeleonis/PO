@@ -249,6 +249,7 @@
           <Property Name="ReceivedBy" Type="nvarchar" MaxLength="50" />
           <Property Name="ReceivedAt" Type="datetime" />
           <Property Name="RMAID" Type="int" />
+          <Property Name="WarehouseID" Type="int" />
         </EntityType>
         <EntityType Name="Currency">
           <Key>
@@ -633,15 +634,9 @@
           <Property Name="RMAID" Type="int" />
           <Property Name="RMAOrderTrackingID" Type="int" />
         </EntityType>
-        <!--產生期間發現錯誤:
-警告 6002: 資料表/檢視 'InventorySKU.dbo.PurchaseNoteImg' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
         <EntityType Name="PurchaseNoteImg">
           <Key>
-            <PropertyRef Name="IsEnable" />
             <PropertyRef Name="ID" />
-            <PropertyRef Name="PurchaseNoteID" />
-            <PropertyRef Name="CreateBy" />
-            <PropertyRef Name="CreateAt" />
           </Key>
           <Property Name="IsEnable" Type="bit" Nullable="false" />
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
@@ -652,7 +647,7 @@
           <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
           <Property Name="UpdateAt" Type="datetime" />
           <Property Name="Memo" Type="ntext" />
-          <Property Name="ImgType" Type="nvarchar" MaxLength="10" />
+          <Property Name="ImgType" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="PurchaseOrder">
           <Key>
@@ -1361,6 +1356,18 @@
             </Principal>
             <Dependent Role="CreditMemo">
               <PropertyRef Name="RMAID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CreditMemo_Warehouse">
+          <End Role="Warehouse" Type="Self.Warehouse" Multiplicity="0..1" />
+          <End Role="CreditMemo" Type="Self.CreditMemo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Warehouse">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CreditMemo">
+              <PropertyRef Name="WarehouseID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2503,6 +2510,7 @@
           <EntitySet Name="Payments" EntityType="Self.Payments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PriceGroup" EntityType="Self.PriceGroup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PurchaseNote" EntityType="Self.PurchaseNote" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PurchaseNoteImg" EntityType="Self.PurchaseNoteImg" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PurchaseOrder" EntityType="Self.PurchaseOrder" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PurchaseSKU" EntityType="Self.PurchaseSKU" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RMA" EntityType="Self.RMA" Schema="dbo" store:Type="Tables" />
@@ -2533,20 +2541,6 @@
           <EntitySet Name="WinitTransferBox" EntityType="Self.WinitTransferBox" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WinitTransferBoxItem" EntityType="Self.WinitTransferBoxItem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WinitTransferSKU" EntityType="Self.WinitTransferSKU" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="PurchaseNoteImg" EntityType="Self.PurchaseNoteImg" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [PurchaseNoteImg].[IsEnable] AS [IsEnable], 
-    [PurchaseNoteImg].[ID] AS [ID], 
-    [PurchaseNoteImg].[PurchaseNoteID] AS [PurchaseNoteID], 
-    [PurchaseNoteImg].[Img] AS [Img], 
-    [PurchaseNoteImg].[CreateBy] AS [CreateBy], 
-    [PurchaseNoteImg].[CreateAt] AS [CreateAt], 
-    [PurchaseNoteImg].[UpdateBy] AS [UpdateBy], 
-    [PurchaseNoteImg].[UpdateAt] AS [UpdateAt], 
-    [PurchaseNoteImg].[Memo] AS [Memo], 
-    [PurchaseNoteImg].[ImgType] AS [ImgType]
-    FROM [dbo].[PurchaseNoteImg] AS [PurchaseNoteImg]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="FK_AdminUser_AdminGroup" Association="Self.FK_AdminUser_AdminGroup">
             <End Role="AdminGroup" EntitySet="AdminGroup" />
             <End Role="AdminUser" EntitySet="AdminUser" />
@@ -2577,6 +2571,10 @@
           </AssociationSet>
           <AssociationSet Name="FK_CreditMemo_RMA" Association="Self.FK_CreditMemo_RMA">
             <End Role="RMA" EntitySet="RMA" />
+            <End Role="CreditMemo" EntitySet="CreditMemo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CreditMemo_Warehouse" Association="Self.FK_CreditMemo_Warehouse">
+            <End Role="Warehouse" EntitySet="Warehouse" />
             <End Role="CreditMemo" EntitySet="CreditMemo" />
           </AssociationSet>
           <AssociationSet Name="FK_DirectLine_ApiSetting" Association="Self.FK_DirectLine_ApiSetting">
@@ -3404,14 +3402,18 @@
             <End Role="RMAOrderTracking" EntitySet="RMAOrderTracking" />
             <End Role="RMAOrderSerialsLlist" EntitySet="RMAOrderSerialsLlist" />
           </AssociationSet>
+          <AssociationSet Name="FK_PurchaseNote_RMAOrderTracking" Association="PurchaseOrderModel.FK_PurchaseNote_RMAOrderTracking">
+            <End Role="RMAOrderTracking" EntitySet="RMAOrderTracking" />
+            <End Role="PurchaseNote" EntitySet="PurchaseNote" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CreditMemo_Warehouse" Association="PurchaseOrderModel.FK_CreditMemo_Warehouse">
+            <End Role="Warehouse" EntitySet="Warehouse" />
+            <End Role="CreditMemo" EntitySet="CreditMemo" />
+          </AssociationSet>
           <EntitySet Name="PurchaseNoteImg" EntityType="PurchaseOrderModel.PurchaseNoteImg" />
           <AssociationSet Name="FK_PurchaseNoteImg_PurchaseNote" Association="PurchaseOrderModel.FK_PurchaseNoteImg_PurchaseNote">
             <End Role="PurchaseNote" EntitySet="PurchaseNote" />
             <End Role="PurchaseNoteImg" EntitySet="PurchaseNoteImg" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PurchaseNote_RMAOrderTracking" Association="PurchaseOrderModel.FK_PurchaseNote_RMAOrderTracking">
-            <End Role="RMAOrderTracking" EntitySet="RMAOrderTracking" />
-            <End Role="PurchaseNote" EntitySet="PurchaseNote" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="AdminGroup">
@@ -3601,6 +3603,8 @@
           <NavigationProperty Name="PurchaseNote" Relationship="PurchaseOrderModel.FK_PurchaseNote_CreditMemo" FromRole="CreditMemo" ToRole="PurchaseNote" />
           <Property Name="RMAID" Type="Int32" />
           <NavigationProperty Name="RMA" Relationship="PurchaseOrderModel.FK_CreditMemo_RMA" FromRole="CreditMemo" ToRole="RMA" />
+          <Property Name="WarehouseID" Type="Int32" />
+          <NavigationProperty Name="Warehouse" Relationship="PurchaseOrderModel.FK_CreditMemo_Warehouse" FromRole="CreditMemo" ToRole="Warehouse" />
         </EntityType>
         <EntityType Name="DirectLine">
           <Key>
@@ -3725,8 +3729,8 @@
           <Property Name="RMAID" Type="Int32" />
           <NavigationProperty Name="RMA" Relationship="PurchaseOrderModel.FK_PurchaseNote_RMA" FromRole="PurchaseNote" ToRole="RMA" />
           <Property Name="RMAOrderTrackingID" Type="Int32" />
-          <NavigationProperty Name="PurchaseNoteImg" Relationship="PurchaseOrderModel.FK_PurchaseNoteImg_PurchaseNote" FromRole="PurchaseNote" ToRole="PurchaseNoteImg" />
           <NavigationProperty Name="RMAOrderTracking" Relationship="PurchaseOrderModel.FK_PurchaseNote_RMAOrderTracking" FromRole="PurchaseNote" ToRole="RMAOrderTracking" />
+          <NavigationProperty Name="PurchaseNoteImg" Relationship="PurchaseOrderModel.FK_PurchaseNoteImg_PurchaseNote" FromRole="PurchaseNote" ToRole="PurchaseNoteImg" />
         </EntityType>
         <EntityType Name="PurchaseOrder">
           <Key>
@@ -4060,6 +4064,7 @@
           <NavigationProperty Name="RMASerialsLlist" Relationship="PurchaseOrderModel.FK_RMASerialsLlist_Warehouse" FromRole="Warehouse" ToRole="RMASerialsLlist" />
           <NavigationProperty Name="Packages" Relationship="PurchaseOrderModel.FK_Packages_Warehouse" FromRole="Warehouse" ToRole="Packages" />
           <NavigationProperty Name="ReturnPackages" Relationship="PurchaseOrderModel.FK_Packages_Warehouse1" FromRole="Warehouse" ToRole="Packages" />
+          <NavigationProperty Name="CreditMemo" Relationship="PurchaseOrderModel.FK_CreditMemo_Warehouse" FromRole="Warehouse" ToRole="CreditMemo" />
         </EntityType>
         <EntityType Name="WarehouseSummary">
           <Key>
@@ -6000,13 +6005,33 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PurchaseNote_RMAOrderTracking">
+          <End Type="PurchaseOrderModel.RMAOrderTracking" Role="RMAOrderTracking" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.PurchaseNote" Role="PurchaseNote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RMAOrderTracking">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PurchaseNote">
+              <PropertyRef Name="RMAOrderTrackingID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CreditMemo_Warehouse">
+          <End Type="PurchaseOrderModel.Warehouse" Role="Warehouse" Multiplicity="0..1" />
+          <End Type="PurchaseOrderModel.CreditMemo" Role="CreditMemo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Warehouse">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CreditMemo">
+              <PropertyRef Name="WarehouseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityType Name="PurchaseNoteImg">
           <Key>
-            <PropertyRef Name="IsEnable" />
             <PropertyRef Name="ID" />
-            <PropertyRef Name="PurchaseNoteID" />
-            <PropertyRef Name="CreateBy" />
-            <PropertyRef Name="CreateAt" />
           </Key>
           <Property Name="IsEnable" Type="Boolean" Nullable="false" />
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
@@ -6017,8 +6042,8 @@
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
           <Property Name="Memo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImgType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="PurchaseNote" Relationship="PurchaseOrderModel.FK_PurchaseNoteImg_PurchaseNote" FromRole="PurchaseNoteImg" ToRole="PurchaseNote" />
-          <Property Name="ImgType" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_PurchaseNoteImg_PurchaseNote">
           <End Type="PurchaseOrderModel.PurchaseNote" Role="PurchaseNote" Multiplicity="1" />
@@ -6029,18 +6054,6 @@
             </Principal>
             <Dependent Role="PurchaseNoteImg">
               <PropertyRef Name="PurchaseNoteID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PurchaseNote_RMAOrderTracking">
-          <End Type="PurchaseOrderModel.RMAOrderTracking" Role="RMAOrderTracking" Multiplicity="0..1" />
-          <End Type="PurchaseOrderModel.PurchaseNote" Role="PurchaseNote" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="RMAOrderTracking">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="PurchaseNote">
-              <PropertyRef Name="RMAOrderTrackingID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -6219,6 +6232,7 @@
           <EntitySetMapping Name="CreditMemo">
             <EntityTypeMapping TypeName="PurchaseOrderModel.CreditMemo">
               <MappingFragment StoreEntitySet="CreditMemo">
+                <ScalarProperty Name="WarehouseID" ColumnName="WarehouseID" />
                 <ScalarProperty Name="RMAID" ColumnName="RMAID" />
                 <ScalarProperty Name="ReceivedAt" ColumnName="ReceivedAt" />
                 <ScalarProperty Name="ReceivedBy" ColumnName="ReceivedBy" />
