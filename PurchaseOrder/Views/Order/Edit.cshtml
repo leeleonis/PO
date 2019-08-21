@@ -359,9 +359,27 @@
                                                                 <th class="text-center" colspan="2">Status</th>
                                                             </tr>
                                                         </thead>
-                                                        <tr>
+                                                        <tr class="@(Model.OrderStatus.Equals((byte)EnumData.OrderStatus.OnHold) ? "bg-danger" : "")">
                                                             <td width="120">Order：</td>
-                                                            <td class="no-padding">@Html.DropDownListFor(Model => Model.OrderStatus, EnumData.OrderStatusList().Select(s => new SelectListItem() { Text = s.Value, Value = s.Key.ToString() }), htmlAttributes: new { @class = "form-control" })</td>
+                                                            <td class="no-padding">
+                                                                @{
+                                                                    bool isReadOnly = !Model.OrderStatus.Equals((byte)EnumData.OrderStatus.InProcess) && !Model.OrderStatus.Equals((byte)EnumData.OrderStatus.OnHold);
+                                                                    bool isChooseComplete = (Model.PaymentStatus.Equals((byte)EnumData.OrderPaymentStatus.Full) || Model.PaymentStatus.Equals((byte)EnumData.OrderPaymentStatus.OverPaid))
+                                                                        && (Model.FulfillmentStatus.Equals((byte)EnumData.OrderFulfillmentStatus.Full) || Model.FulfillmentStatus.Equals((byte)EnumData.OrderFulfillmentStatus.Partial));
+                                                                }
+                                                                <select class="form-control" name="OrderStatus" id="select-status" @(isReadOnly ? "readonly disabled" : "")>
+                                                                    @foreach (var status in EnumData.OrderStatusList())
+                                                                    {
+                                                                        if (!(Model.OrderStatus.Equals((byte)EnumData.OrderStatus.OnHold) && status.Key.Equals((byte)EnumData.OrderStatus.Completed)))
+                                                                        {
+                                                                            if (!(status.Key.Equals((byte)EnumData.OrderStatus.Completed) && !isChooseComplete))
+                                                                            {
+                                                                                <option value="@status.Key" @(status.Key.Equals(Model.OrderStatus) ? "selected" : "")>@status.Value</option>
+                                                                            }
+                                                                        };
+                                                                    }
+                                                                </select>
+                                                            </td>
                                                         </tr>
                                                         <tr>
                                                             <td>Payment：</td>
@@ -369,7 +387,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td>Fulfillment：</td>
-                                                            <td>@EnumData.OrderFulfilledStatusList()[Model.FulfillmentStatus]</td>
+                                                            <td>@EnumData.OrderFulfillmentStatusList()[Model.FulfillmentStatus]</td>
                                                         </tr>
                                                     </table>
                                                     @{
@@ -476,7 +494,7 @@
 
                                 <div class="widget-footer">
                                     <button type="submit" class="btn btn-primary" id="btn-save">儲存</button>
-                                    @*<button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index", "SkuType")'">返回</button>*@
+                                    @*<button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index", "SkuType")'">返回</button>*@<button type="button" class="btn btn-default" onclick="location.href='@Url.Action(" Index", "SkuType" )'"></button>
                                 </div>
                             </form>
                         </div>
@@ -520,11 +538,25 @@
         $('.tab-pane').eq(hash.substr(1)).addClass('active');
 
         var pageUrl = $('#data-form').attr('action');
-        var $actionSelect = $('#select-action'), $packageList = $('#list-package');
+        var $statusSelect = $('#select-status'), $actionSelect = $('#select-action'), $packageList = $('#list-package');
         var $splitQtyDialog = $('#dialog-splitQty'), $packageDialog = $('#dialog-package');
 
         $(document).ready(function () {
             $('[rel="popover"]').popover();
+
+            $statusSelect.change(function () {
+                var option = $(this).find('option:selected').text();
+                var msg = 'The Order status is about to be changed to ' + option + '. Do you wish to continue?';
+                if ($(this).val() == '2' || $(this).val() == '3') {
+                    msg += '\n\r WARNING: This process cannot be undone!';
+                }
+
+                if (confirm(msg)) {
+                    $('#btn-save').trigger('click');
+                } else {
+                    $(this).val('@Model.OrderStatus');
+                }
+            });
 
             $actionSelect.change(function () {
                 OrderAction.SelectAction($(this).val());
@@ -774,7 +806,7 @@
                 CloseCheck: DialogClose
             };
         }();
-        
+
         var combineTableUrl = "@Url.Action("CombineTable", "Order")";
         var combinePackageUrl = "@Url.Action("CombinePackage", "Order")";
         var CombinePackage = function () {
@@ -792,7 +824,7 @@
 
             $packageDialog.delegate('#combine-summary #btn-next', 'click', function () {
                 if (!confirm('This package will be split accordingly. Do you wish to continue?')) return false;
-                
+
                 var data = $packageDialog.find('input, select').serializeArray();
                 website.AjaxUrl(combinePackageUrl, 'post', data).done(function (response) {
                     if (response.status) {

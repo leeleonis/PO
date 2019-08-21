@@ -466,14 +466,14 @@ namespace PurchaseOrderSys.Models
         }
 
         public enum OrderFulfillmentStatus { None, Partial, Full, OverFulfilled };
-        public static Dictionary<byte, string> OrderFulfilledStatusList()
+        public static Dictionary<byte, string> OrderFulfillmentStatusList()
         {
             string[] Status = new string[] { "None", "Partial", "Full", "Over-fulfilled" };
 
             return Enum.GetValues(typeof(OrderFulfillmentStatus)).Cast<OrderFulfillmentStatus>().ToDictionary(s => (byte)s, s => Status[(byte)s]);
         }
 
-        public enum OrderShippingStatus { 訂單管理, 待出貨, 保留中, 已出貨, 鎖定中 }
+        public enum OrderShippingStatus { 未安排, 待出貨, 保留中, 已出貨, 鎖定中 }
         public static Dictionary<byte, string> OrderShippingStatusList()
         {
             string[] Status = new string[] { "Unmanage", "Awaiting Dispatch", "DL Reserved", "Fulfilled", "Processing Data" };
