@@ -40,6 +40,7 @@ namespace PurchaseOrderSys.Models
         public string NewSKUCreateBy { get; set; }
         public Nullable<System.DateTime> NewSKUCreateAt { get; set; }
         public bool IsEnable { get; set; }
+        public Nullable<int> PurchaseSKUID { get; set; }
     
         public virtual RMASKU RMASKU { get; set; }
         public virtual Warehouse Warehouse { get; set; }
@@ -48,5 +49,6 @@ namespace PurchaseOrderSys.Models
         public virtual ICollection<RMASerialsLlist> RMASerialsLlistC { get; set; }
         public virtual RMASerialsLlist RMASerialsLlistP { get; set; }
         public virtual SKU SKU { get; set; }
+        public virtual PurchaseSKU PurchaseSKU { get; set; }
     }
 }

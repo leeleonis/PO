@@ -3116,4 +3116,7 @@
   <data name="PurchaseNoteImg_Memo" xml:space="preserve">
     <value>Memo</value>
   </data>
+  <data name="Orders_RMAID" xml:space="preserve">
+    <value></value>
+  </data>
 </root>

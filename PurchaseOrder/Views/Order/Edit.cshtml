@@ -92,6 +92,19 @@
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
+                                                                    <td>RMA #：</td>
+                                                                    <td class="@(!Model.RMAID.HasValue ? "no-padding" : "")">
+                                                                        @if (Model.RMAID.HasValue)
+                                                                        {
+                                                                            <a href="http://internal.qd.com.tw:8080/RMA/Edit/@Model.RMAID" target="_blank">@Model.RMAID</a>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <a class="btn btn-default btn-sm" href="@Url.Action("Create", "RMA", new { QDOrderID = Model.ID, OrderID = Model.SCID })" target="_blank">Create</a>
+                                                                        }
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
                                                                     <td>Order Type：</td>
                                                                     <td>@EnumData.OrderTypeList()[Model.OrderType]</td>
                                                                 </tr>
@@ -236,10 +249,10 @@
 
                                                     <div class="form-group">
                                                         <div class="col-sm-8 col-lg-5">
-                                                            <table class="table table-bordered">
+                                                            <table class="table">
                                                                 <tr>
-                                                                    <td width="164">Customer User ID：</td>
-                                                                    <td>
+                                                                    <td width="164" style="border:0px;">Customer User ID：</td>
+                                                                    <td style="border:0px;">
                                                                         @if (!string.IsNullOrEmpty(Model.CustomerID))
                                                                         {
                                                                             <a href='http://feedback.ebay.com/ws/eBayISAPI.dll?ViewFeedback2&UserID=@Model.CustomerID' target='_blank'>@Model.CustomerID</a>
@@ -247,8 +260,8 @@
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td>Customer User Email:：</td>
-                                                                    <td>@Model.CustomerEmail</td>
+                                                                    <td style="border:0px;">Customer User Email：</td>
+                                                                    <td style="border:0px;">@Model.CustomerEmail</td>
                                                                 </tr>
                                                             </table>
                                                         </div>

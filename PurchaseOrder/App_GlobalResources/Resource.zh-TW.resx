@@ -2889,4 +2889,7 @@
   <data name="PurchaseNoteImg_Memo" xml:space="preserve">
     <value>註記</value>
   </data>
+  <data name="Orders_RMAID" xml:space="preserve">
+    <value>RMA</value>
+  </data>
 </root>

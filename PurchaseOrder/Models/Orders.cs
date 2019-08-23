@@ -32,6 +32,7 @@ namespace PurchaseOrderSys.Models
         public Nullable<int> OrderParent { get; set; }
         public string OrderSourceID { get; set; }
         public Nullable<int> SCID { get; set; }
+        public Nullable<int> RMAID { get; set; }
         public int Company { get; set; }
         public byte Channel { get; set; }
         public string CustomerID { get; set; }
