@@ -68,7 +68,7 @@ namespace PurchaseOrderSys.Models
     		/// Invoice No
     		/// </summary>        
     	    [Display(Name = "CreditMemo_InvoiceNo", ResourceType = typeof(App_GlobalResources.Resource))]
-            [MaxLength(20, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(100, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  InvoiceNo { get; set; }
     
     		    

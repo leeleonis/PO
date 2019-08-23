@@ -845,7 +845,7 @@ namespace PurchaseOrderSys.Controllers
             var SerialsLlist = PurchaseSKU.SerialsLlist.Where(x => x.SerialsNo == serials && x.SerialsType == "PO");
             if (SerialsLlist.Any())
             {
-                SerialsLlist = SerialsLlist.Where(x => !x.SerialsLlistC.Any());
+                SerialsLlist = SerialsLlist.Where(x => !x.SerialsLlistC.Any(y => y.IsEnable));
                 if (SerialsLlist.Any())
                 {
                     foreach (var item in SerialsLlist.ToList())
@@ -882,7 +882,7 @@ namespace PurchaseOrderSys.Controllers
             }
             if (PurchaseSKU.PurchaseOrder.POType == "DropshpOrder")//直發一入一出
             {
-                var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials && x.PurchaseSKU.SkuNo == PurchaseSKU.SkuNo && !x.SerialsLlistC.Any() && (x.SerialsType == "PO" || x.SerialsType == "TransferIn"));//檢查序號是否重複，同SKU序號不能新增,2019/02/05 加入有已出貨或是CM的紀錄, 就能重新在入庫
+                var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials && x.PurchaseSKU.SkuNo == PurchaseSKU.SkuNo && !x.SerialsLlistC.Any(y => y.IsEnable) && (x.SerialsType == "PO" || x.SerialsType == "TransferIn"));//檢查序號是否重複，同SKU序號不能新增,2019/02/05 加入有已出貨或是CM的紀錄, 就能重新在入庫
                 if (!SerialsLlist.Any())
                 {
                     var dt = DateTime.UtcNow;
@@ -930,7 +930,7 @@ namespace PurchaseOrderSys.Controllers
             }
             else
             {
-                var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials && x.PurchaseSKU.SkuNo == PurchaseSKU.SkuNo && !x.SerialsLlistC.Any() && (x.SerialsType == "PO" || x.SerialsType == "TransferIn"));//檢查序號是否重複，同SKU序號不能新增,2019/02/05 加入有已出貨或是CM的紀錄, 就能重新在入庫
+                var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials && x.PurchaseSKU.SkuNo == PurchaseSKU.SkuNo && !x.SerialsLlistC.Any(y => y.IsEnable) && (x.SerialsType == "PO" || x.SerialsType == "TransferIn"));//檢查序號是否重複，同SKU序號不能新增,2019/02/05 加入有已出貨或是CM的紀錄, 就能重新在入庫
                 if (!SerialsLlist.Any())
                 {
                     var dt = DateTime.UtcNow;

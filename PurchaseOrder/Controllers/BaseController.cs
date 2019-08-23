@@ -503,7 +503,7 @@ namespace PurchaseOrderSys.Controllers
                         if (POType == "DropshpOrder")//直發一入一出
                         {
                             //var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials && x.PurchaseSKU.PurchaseOrderID == PurchaseSKU.PurchaseOrderID);//檢查序號是否重複，同訂單同序號不能新增
-                            var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials && x.PurchaseSKU.SkuNo == PurchaseSKU.SkuNo && !x.SerialsLlistC.Any() && (x.SerialsType == "PO" || x.SerialsType == "TransferIn"));//檢查序號是否重複，同SKU序號不能新增,2019/02/05 加入有已出貨或是CM的紀錄, 就能重新在入庫
+                            var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials && x.PurchaseSKU.SkuNo == PurchaseSKU.SkuNo && !x.SerialsLlistC.Any(y => y.IsEnable) && (x.SerialsType == "PO" || x.SerialsType == "TransferIn"));//檢查序號是否重複，同SKU序號不能新增,2019/02/05 加入有已出貨或是CM的紀錄, 就能重新在入庫
                             if (!SerialsLlist.Any())
                             {
                                 var dt = DateTime.UtcNow;
@@ -536,7 +536,7 @@ namespace PurchaseOrderSys.Controllers
                         else if (POType == "PurchaseOrder")
                         {
                             //var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials && x.PurchaseSKU.PurchaseOrderID == PurchaseSKU.PurchaseOrderID);//檢查序號是否重複，同訂單同序號不能新增
-                            var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials && x.PurchaseSKU.SkuNo == PurchaseSKU.SkuNo && !x.SerialsLlistC.Any() && (x.SerialsType == "PO" || x.SerialsType == "TransferIn"));//檢查序號是否重複，同SKU序號不能新增,2019/02/05 加入有已出貨或是CM的紀錄, 就能重新在入庫
+                            var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serials && x.PurchaseSKU.SkuNo == PurchaseSKU.SkuNo && !x.SerialsLlistC.Any(y => y.IsEnable) && (x.SerialsType == "PO" || x.SerialsType == "TransferIn"));//檢查序號是否重複，同SKU序號不能新增,2019/02/05 加入有已出貨或是CM的紀錄, 就能重新在入庫
                             if (!SerialsLlist.Any())
                             {
                                 var dt = DateTime.UtcNow;
@@ -688,7 +688,7 @@ namespace PurchaseOrderSys.Controllers
                     ID = x.ID,
                     Name = x.Name,
                     SKU = x.SkuNo,
-                    POQTY = x.SerialsLlist.Where(y => (y.SerialsType == "TransferOut" && !y.SerialsLlistC.Any())).Sum(y => y.SerialsQTY) * -1 ?? 0//借用
+                    POQTY = x.SerialsLlist.Where(y => (y.SerialsType == "TransferOut" && !y.SerialsLlistC.Any(z => z.IsEnable))).Sum(y => y.SerialsQTY) * -1 ?? 0//借用
                 }).ToList());
                 WarehouseVM.AddRange(RmaTransferSKU.Select(x => new WarehouseVM
                 {
@@ -907,14 +907,14 @@ namespace PurchaseOrderSys.Controllers
             if (SKU.GetType().BaseType.Name == typeof(PurchaseSKU).Name)
             {
                 var PurchaseSKU = (PurchaseSKU)SKU;
-                var SerialsLlist = PurchaseSKU.SerialsLlist.Where(y => !NoList.Contains(y.ID) && y.SerialsType == "RMA" && !y.SerialsLlistC.Any());
+                var SerialsLlist = PurchaseSKU.SerialsLlist.Where(y => !NoList.Contains(y.ID) && y.SerialsType == "RMA" && !y.SerialsLlistC.Any(z => z.IsEnable));
                 count = SerialsLlist.Sum(y => y.SerialsQTY).Value;
                 WNoList.AddRange(SerialsLlist.Select(x => x.ID));
             }
             else if (SKU.GetType().BaseType.Name == typeof(TransferSKU).Name)
             {
                 var TransferSKU = (TransferSKU)SKU;
-                var SerialsLlist = TransferSKU.SerialsLlist.Where(y => !NoList.Contains(y.ID) && y.SerialsType == "RMA" && !y.SerialsLlistC.Any());
+                var SerialsLlist = TransferSKU.SerialsLlist.Where(y => !NoList.Contains(y.ID) && y.SerialsType == "RMA" && !y.SerialsLlistC.Any(z => z.IsEnable));
                 count = SerialsLlist.Sum(y => y.SerialsQTY).Value;
                 WNoList.AddRange(SerialsLlist.Select(x => x.ID));
             }
@@ -959,14 +959,14 @@ namespace PurchaseOrderSys.Controllers
             if (SKU.GetType().BaseType.Name == typeof(PurchaseSKU).Name)
             {
                 var PurchaseSKU = (PurchaseSKU)SKU;
-                var SerialsLlist = PurchaseSKU.SerialsLlist.Where(y => !NoList.Contains(y.ID) && y.SerialsType == "TransferOut" && y.TransferSKU.IsEnable && y.TransferSKU.Transfer.IsEnable && y.TransferSKU.Transfer.FromWID == Warehouse.ID && y.TransferSKU.Transfer.Status == "Shipped" && !y.SerialsLlistC.Any());
+                var SerialsLlist = PurchaseSKU.SerialsLlist.Where(y => !NoList.Contains(y.ID) && y.SerialsType == "TransferOut" && y.TransferSKU.IsEnable && y.TransferSKU.Transfer.IsEnable && y.TransferSKU.Transfer.FromWID == Warehouse.ID && y.TransferSKU.Transfer.Status == "Shipped" && !y.SerialsLlistC.Any(z => z.IsEnable));
                 count = SerialsLlist.Sum(y => y.SerialsQTY).Value;
                 WNoList.AddRange(SerialsLlist.Select(x => x.ID));
             }
             else if (SKU.GetType().BaseType.Name == typeof(TransferSKU).Name)
             {
                 var TransferSKU = (TransferSKU)SKU;
-                var SerialsLlist = TransferSKU.SerialsLlist.Where(y => !NoList.Contains(y.ID) && y.SerialsType == "TransferOut" && y.TransferSKU.IsEnable && y.TransferSKU.Transfer.IsEnable && y.TransferSKU.Transfer.FromWID == Warehouse.ID && y.TransferSKU.Transfer.Status == "Shipped" && !y.SerialsLlistC.Any());
+                var SerialsLlist = TransferSKU.SerialsLlist.Where(y => !NoList.Contains(y.ID) && y.SerialsType == "TransferOut" && y.TransferSKU.IsEnable && y.TransferSKU.Transfer.IsEnable && y.TransferSKU.Transfer.FromWID == Warehouse.ID && y.TransferSKU.Transfer.Status == "Shipped" && !y.SerialsLlistC.Any(z => z.IsEnable));
                 count = SerialsLlist.Sum(y => y.SerialsQTY).Value;
                 WNoList.AddRange(SerialsLlist.Select(x => x.ID));
             }
@@ -999,7 +999,7 @@ namespace PurchaseOrderSys.Controllers
                     SerialsLlist = SerialsLlist.Where(y => y.TransferSKU.Transfer.FromWID == Warehouse.ID);
                 }
                 SerialsLlist = SerialsLlist.Where(y => y.TransferSKU.Transfer.Status == Status);
-                SerialsLlist = SerialsLlist.Where(y => !y.SerialsLlistC.Any());
+                SerialsLlist = SerialsLlist.Where(y => !y.SerialsLlistC.Any(z => z.IsEnable));
                 count = SerialsLlist.Sum(y => y.SerialsQTY).Value;
                 WNoList.AddRange(SerialsLlist.Select(x => x.ID));
             }
@@ -1021,7 +1021,7 @@ namespace PurchaseOrderSys.Controllers
                     SerialsLlist = SerialsLlist.Where(y => y.TransferSKU.Transfer.FromWID == Warehouse.ID);
                 }
                 SerialsLlist = SerialsLlist.Where(y => y.TransferSKU.Transfer.Status == Status).ToList();
-                SerialsLlist = SerialsLlist.Where(y => !y.SerialsLlistC.Any()).ToList();
+                SerialsLlist = SerialsLlist.Where(y => !y.SerialsLlistC.Any(z => z.IsEnable)).ToList();
                 count += SerialsLlist.Sum(y => y.SerialsQTY).Value;
 
 
@@ -1065,7 +1065,7 @@ namespace PurchaseOrderSys.Controllers
             {
                 var PurchaseSKU = (PurchaseSKU)SKU;
                 //var SerialsLlist = PurchaseSKU.SerialsLlist;
-                var SerialsLlist = PurchaseSKU.SerialsLlist.Where(y => !NoList.Contains(y.ID) && !y.SerialsLlistC.Any()); ;
+                var SerialsLlist = PurchaseSKU.SerialsLlist.Where(y => !NoList.Contains(y.ID) && !y.SerialsLlistC.Any(z => z.IsEnable)); ;
                 SerialsLlist = SerialsLlist.Where(y => y.SerialsType == "TransferIn");
                 SerialsLlist = SerialsLlist.Where(y => y.TransferSKU.IsEnable);
                 SerialsLlist = SerialsLlist.Where(y => y.TransferSKU.Transfer.IsEnable);
@@ -1086,7 +1086,7 @@ namespace PurchaseOrderSys.Controllers
                 if (TransferSKU.Transfer.Status != "Shipped")
                 {
                     var SerialsLlist = TransferSKU.SerialsLlist.Where(y => !NoList.Contains(y.ID));
-                    SerialsLlist = SerialsLlist.Where(y => !y.SerialsLlistC.Any());
+                    SerialsLlist = SerialsLlist.Where(y => !y.SerialsLlistC.Any(z => z.IsEnable));
                     SerialsLlist = SerialsLlist.Where(y => y.SerialsType == "TransferIn");
                     SerialsLlist = SerialsLlist.Where(y => y.TransferSKU.IsEnable);
                     SerialsLlist = SerialsLlist.Where(y => y.TransferSKU.Transfer.IsEnable);
@@ -1151,7 +1151,7 @@ namespace PurchaseOrderSys.Controllers
             if (SKU.GetType().BaseType.Name == typeof(PurchaseSKU).Name)
             {
                 var PurchaseSKU = (PurchaseSKU)SKU;
-                var SerialsLlist = PurchaseSKU.SerialsLlist.Where(y => !NoList.Contains(y.ID) && y.SerialsType == "PO" && !y.SerialsLlistC.Any());//有輸入直接讀輸入，沒輸入計算序號數
+                var SerialsLlist = PurchaseSKU.SerialsLlist.Where(y => !NoList.Contains(y.ID) && y.SerialsType == "PO" && !y.SerialsLlistC.Any(z => z.IsEnable));//有輸入直接讀輸入，沒輸入計算序號數
                 count = SerialsLlist.Sum(y => y.SerialsQTY) ?? 0;
                 //if (PurchaseSKU.QTYFulfilled.HasValue && PurchaseSKU.QTYFulfilled > 0)
                 //{
@@ -1164,7 +1164,7 @@ namespace PurchaseOrderSys.Controllers
             else if (SKU.GetType().BaseType.Name == typeof(TransferSKU).Name)
             {
                 var TransferSKU = (TransferSKU)SKU;
-                var SerialsLlist = TransferSKU.SerialsLlist.Where(y => !NoList.Contains(y.ID) && y.SerialsType == "TransferIn" && !y.SerialsLlistC.Any());//有輸入直接讀輸入，沒輸入計算序號數
+                var SerialsLlist = TransferSKU.SerialsLlist.Where(y => !NoList.Contains(y.ID) && y.SerialsType == "TransferIn" && !y.SerialsLlistC.Any(z => z.IsEnable));//有輸入直接讀輸入，沒輸入計算序號數
                 count = SerialsLlist.Sum(y => y.SerialsQTY) ?? 0;
                 //WNoList.AddRange(SerialsLlist.Select(x => x.ID));
                 //if (TransferSKU.QTYFulfilled.HasValue && TransferSKU.QTYFulfilled > 0)
@@ -1629,7 +1629,7 @@ namespace PurchaseOrderSys.Controllers
         {
             var SID = id;
             var ReceiveVMList = (List<TransferItemVM>)Session["ReceiveVMList" + SID];
-            var SerialsLlist = db.SerialsLlist.Where(x => x.TransferSKU.TransferID == id && (x.SerialsNo == serials || x.WinitTransferBoxItem.BarCode == serials) && !x.SerialsLlistC.Any());
+            var SerialsLlist = db.SerialsLlist.Where(x => x.TransferSKU.TransferID == id && (x.SerialsNo == serials || x.WinitTransferBoxItem.BarCode == serials) && !x.SerialsLlistC.Any(y => y.IsEnable));
             var RMASerialsLlist = db.RMASerialsLlist.Where(x => x.TransferSKU.TransferID == id && x.SerialsNo == serials && !x.RMASerialsLlistC.Any());
             if (SerialsLlist.Sum(x => x.SerialsQTY) > 0)//檔序號數量>0
             {

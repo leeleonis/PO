@@ -30,9 +30,9 @@ namespace PurchaseOrderSys.Controllers
         {
             var WarehouseAllVMList = new List<WarehouseAllVM>();
             var WarehouseList = db.Warehouse.Where(x => x.IsEnable);
-            var POSerialsLlist = db.SerialsLlist.Where(x => x.IsEnable && !x.SerialsLlistC.Any() && x.SerialsType == "PO" && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable);
-            var InSerialsLlist = db.SerialsLlist.Where(x => x.IsEnable && !x.SerialsLlistC.Any() && x.SerialsType == "TransferIn" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable);
-            var OutSerialsLlist = db.SerialsLlist.Where(x => x.IsEnable && !x.SerialsLlistC.Any() && x.SerialsType == "TransferOut" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable);
+            var POSerialsLlist = db.SerialsLlist.Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "PO" && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable);
+            var InSerialsLlist = db.SerialsLlist.Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferIn" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable);
+            var OutSerialsLlist = db.SerialsLlist.Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferOut" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable);
             var RMAINSerialsLlist = db.RMASerialsLlist.Where(x => x.IsEnable && !x.RMASerialsLlistC.Any() && x.SerialsType == "RMAIn" && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable);
             var RMAOUTSerialsLlist = db.RMASerialsLlist.Where(x => x.IsEnable && !x.RMASerialsLlistC.Any() && x.SerialsType == "TransferOut" && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable);
             foreach (var Warehouse in WarehouseList)

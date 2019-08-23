@@ -687,10 +687,10 @@ namespace PurchaseOrderSys.Controllers
                     }
                     var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == Serialsitem.SerialsNo);//檢查是否有序號或是SBarCode
                     var PurchaseSKUs = db.PurchaseSKU.Where(x => x.SkuNo == Serialsitem.SkuNo && x.PurchaseOrder.IsEnable && x.IsEnable && !x.SKU.SerialTracking);//無開序號管理才能任意取
-                    PurchaseSKUs = PurchaseSKUs.Where(x => x.SerialsLlist.Where(y => y.SerialsQTY > 0 && (y.SerialsType == "PO" || y.SerialsType == "TransferIn" || y.SerialsType == "DropshpOrderIn") && !y.SerialsLlistC.Any()).Any());
+                    PurchaseSKUs = PurchaseSKUs.Where(x => x.SerialsLlist.Where(y => y.SerialsQTY > 0 && (y.SerialsType == "PO" || y.SerialsType == "TransferIn" || y.SerialsType == "DropshpOrderIn") && !y.SerialsLlistC.Any(z => z.IsEnable)).Any());
                     if (SerialsLlist.Any())
                     {
-                        SerialsLlist = SerialsLlist.Where(x => x.SerialsQTY > 0 && (x.SerialsType == "PO" || x.SerialsType == "TransferIn" || x.SerialsType == "DropshpOrderIn") && !x.SerialsLlistC.Any());//PO和TransferIn才能出貨
+                        SerialsLlist = SerialsLlist.Where(x => x.SerialsQTY > 0 && (x.SerialsType == "PO" || x.SerialsType == "TransferIn" || x.SerialsType == "DropshpOrderIn") && !x.SerialsLlistC.Any(y => y.IsEnable));//PO和TransferIn才能出貨
                         if (SerialsLlist.Sum(x => x.SerialsQTY) > 0)
                         {
                             var nSerials = new SerialsLlist
@@ -737,7 +737,7 @@ namespace PurchaseOrderSys.Controllers
                     else if (PurchaseSKUs.Any())
                     {
                         var PurchaseSKU = PurchaseSKUs.FirstOrDefault();
-                        var PSerialsLlist = PurchaseSKU.SerialsLlist.Where(x => x.SerialsQTY > 0 && (x.SerialsType == "PO" || x.SerialsType == "TransferIn") && !x.SerialsLlistC.Any()).Take(QTY);//PO和TransferIn才能出貨
+                        var PSerialsLlist = PurchaseSKU.SerialsLlist.Where(x => x.SerialsQTY > 0 && (x.SerialsType == "PO" || x.SerialsType == "TransferIn") && !x.SerialsLlistC.Any(y => y.IsEnable)).Take(QTY);//PO和TransferIn才能出貨
                         if (PSerialsLlist != null)
                         {
                             try
@@ -1191,7 +1191,7 @@ namespace PurchaseOrderSys.Controllers
                                     var NoTrackingSerial = new List<string>();//無序號管理,已取的序號
                                     foreach (var item in Gserialitem.item)
                                     {
-                                        var SerialsLlist = db.SerialsLlist.Where(x => !x.SerialsLlistC.Any() && x.SerialsQTY > 0);
+                                        var SerialsLlist = db.SerialsLlist.Where(x => !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsQTY > 0);
                                         if (SerialTracking)
                                         {
                                             SerialsLlist = SerialsLlist.Where(x => x.SerialsNo == item.serials);//找到序號
@@ -1826,7 +1826,7 @@ namespace PurchaseOrderSys.Controllers
                         foreach (var TransferSKU in TransferSKUList)
                         {
                             var actualQuantity = OrderDetail.merchandiseList.Where(x => x.merchandiseCode.Contains(TransferSKU.SkuNo)).FirstOrDefault().actualQuantity;//實際上架數量
-                            var SerialsLlist = TransferSKU.SerialsLlist.Where(x => x.IsEnable && x.SerialsType == "TransferOut" && !x.SerialsLlistC.Any());
+                            var SerialsLlist = TransferSKU.SerialsLlist.Where(x => x.IsEnable && x.SerialsType == "TransferOut" && !x.SerialsLlistC.Any(y => y.IsEnable));
                             if (Math.Abs(SerialsLlist.Sum(x => x.SerialsQTY).Value) == actualQuantity)//和實際上架數一樣，直接入庫
                             {
                                 foreach (var Serials in SerialsLlist)

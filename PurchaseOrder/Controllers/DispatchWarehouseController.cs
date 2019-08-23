@@ -456,7 +456,7 @@ namespace PurchaseOrderSys.Controllers
             sheet1.Cells[1, 3].Value = "SKU";
             sheet1.Cells[1, 4].Value = "QTY";
             //sheet1.Cells[1, 5].Value = "最後狀態";
-            //var SerialsLlist = db.SerialsLlist.Where(x => !x.SerialsLlistC.Any());
+            //var SerialsLlist = db.SerialsLlist.Where(x => !x.SerialsLlistC.Any(y => y.IsEnable));
             var SerialsLlist = db.SerialsLlist.Where(x => x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable);
             SerialsLlist = SerialsLlist.Where(x => (x.TransferSKUID.HasValue && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable) || (!x.TransferSKUID.HasValue));
             var SerialsLlistGroup = SerialsLlist.GroupBy(x => x.PurchaseSKU).Select(x => x);
@@ -548,7 +548,7 @@ namespace PurchaseOrderSys.Controllers
                 if (SerialsQTY != 0)
                 {
                     var Serial = Serialitem.OrderByDescending(x => x.CreateAt).FirstOrDefault();
-                    foreach (var item in Serialitem.Where(x => !x.SerialsLlistC.Any()))
+                    foreach (var item in Serialitem.Where(x => !x.SerialsLlistC.Any(y => y.IsEnable)))
                     {
                         ExcelSerialList.Add(new ExcelSerial
                         {

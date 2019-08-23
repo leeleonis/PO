@@ -454,7 +454,7 @@ namespace PurchaseOrderSys.Controllers
             var CMSerialsLlistCount = PurchaseSKU.SerialsLlist.Where(x => x.SerialsType == "CM").Count();//CM數
             if (count > CMSerialsLlistCount)
             {
-                var NoUseSerialsLlistCount = db.SerialsLlist.Where(x => x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable && !x.SerialsLlistC.Any() && x.PurchaseSKU.SkuNo == PurchaseSKU.SkuNo).Take(count - CMSerialsLlistCount);         
+                var NoUseSerialsLlistCount = db.SerialsLlist.Where(x => x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.PurchaseSKU.SkuNo == PurchaseSKU.SkuNo).Take(count - CMSerialsLlistCount);         
                 foreach (var item in NoUseSerialsLlistCount)
                 {
                     var nSerialsLlist = new SerialsLlist
@@ -749,7 +749,7 @@ namespace PurchaseOrderSys.Controllers
             var SerialsLlist = PurchaseSKU.SerialsLlist.Where(x => x.SerialsNo == serials && x.SerialsType == "CM");
             if (SerialsLlist.Any())
             {
-                SerialsLlist = SerialsLlist.Where(x => !x.SerialsLlistC.Any());
+                SerialsLlist = SerialsLlist.Where(x => !x.SerialsLlistC.Any(y => y.IsEnable));
                 if (SerialsLlist.Any())
                 {
                     foreach (var item in SerialsLlist.ToList())
@@ -792,7 +792,7 @@ namespace PurchaseOrderSys.Controllers
                 {
                     if (SerialsLlist.Where(x => x.PurchaseSKU.SkuNo == PurchaseSKU.SkuNo).Any())
                     {
-                        var oSerialsLlist = SerialsLlist.Where(x => x.PurchaseSKU.SkuNo == PurchaseSKU.SkuNo && x.SerialsQTY > 0 && !x.SerialsLlistC.Any()).OrderByDescending(x => x.ID).FirstOrDefault();
+                        var oSerialsLlist = SerialsLlist.Where(x => x.PurchaseSKU.SkuNo == PurchaseSKU.SkuNo && x.SerialsQTY > 0 && !x.SerialsLlistC.Any(y => y.IsEnable)).OrderByDescending(x => x.ID).FirstOrDefault();
                         if (oSerialsLlist != null)
                         {
                             var PID = oSerialsLlist.ID;
@@ -821,7 +821,7 @@ namespace PurchaseOrderSys.Controllers
                         }
                         else
                         {
-                            var TSerialsLlist = SerialsLlist.Where(x => (x.SerialsType == "TransferIn") && x.SerialsQTY > 0 && !x.SerialsLlistC.Any()).OrderByDescending(x => x.ID).FirstOrDefault();
+                            var TSerialsLlist = SerialsLlist.Where(x => (x.SerialsType == "TransferIn") && x.SerialsQTY > 0 && !x.SerialsLlistC.Any(y => y.IsEnable)).OrderByDescending(x => x.ID).FirstOrDefault();
                             if (TSerialsLlist != null)
                             {
                                 var PID = TSerialsLlist.ID;
@@ -869,6 +869,102 @@ namespace PurchaseOrderSys.Controllers
             else
             {
                 return Json(new { status = false, Errmsg = "序號已經存在" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        public ActionResult CreateRMACM(int RMAID, string SerialsLlis)
+        {
+            SerialsLlis = SerialsLlis.Trim();
+            var SerialsLlistAll = db.SerialsLlist.Where(x => x.IsEnable && x.SerialsNo == SerialsLlis);//檢查可出貨序號
+            var RMASerialsLlistAll = db.RMASerialsLlist.Where(x => x.IsEnable && x.SerialsNo == SerialsLlis);//檢查RMA序號
+            var ckSerialsLlist= SerialsLlistAll.Where(x => x.SerialsType == "TransferIn" && !x.SerialsLlistC.Any(y => y.IsEnable));//
+            var ckRMASerialsLlist = RMASerialsLlistAll.Where(x => x.SerialsType == "RMAIn" && !x.RMASerialsLlistC.Any(y => y.IsEnable));
+            if (ckSerialsLlist.Any() || ckRMASerialsLlist.Any())
+            {
+                var PoSerialsLlist = db.SerialsLlist.Where(x => x.IsEnable && x.SerialsNo == SerialsLlis && (x.SerialsType == "PO" || x.SerialsType == "DropshpOrderIn")).FirstOrDefault();
+                if (PoSerialsLlist == null)
+                {
+                    AlertErrMsg(SerialsLlis + ":此序號無入庫資料");
+                    return RedirectToAction("Index");
+                }
+                var CreditMemo = new CreditMemo
+                {
+                    IsEnable = true,
+                    RMAID = RMAID,
+                    PurchaseOrderID = PoSerialsLlist.PurchaseSKU.PurchaseOrder.ID,
+                    CompanyID = PoSerialsLlist.PurchaseSKU.PurchaseOrder.CompanyID,
+                    VendorID = PoSerialsLlist.PurchaseSKU.PurchaseOrder.VendorID,
+                    InvoiceDate = PoSerialsLlist.PurchaseSKU.PurchaseOrder.InvoiceDate,
+                    InvoiceNo = PoSerialsLlist.PurchaseSKU.PurchaseOrder.InvoiceNo,
+                    CMDate = DateTime.Today,
+                    CMStatus = "Completed",
+                    CMType = "CreditNote",
+                    ShippingStatus = "Completed",
+                    Carrier = PoSerialsLlist.PurchaseSKU.PurchaseOrder.Carrier,
+                    Tracking = PoSerialsLlist.PurchaseSKU.PurchaseOrder.Tracking,
+                    CreditStatus = "Completed",
+                    CreateBy = UserBy,
+                    CreateAt = DateTime.UtcNow
+                };
+                db.CreditMemo.Add(CreditMemo);
+
+                var nPurchaseSKU = new PurchaseSKU
+                {
+                    IsEnable = true,
+                    Name = PoSerialsLlist.PurchaseSKU.Name,
+                    SkuNo = PoSerialsLlist.PurchaseSKU.SkuNo,
+                    VendorSKU = PoSerialsLlist.PurchaseSKU.VendorSKU,
+                    QTYOrdered = PoSerialsLlist.PurchaseSKU.QTYOrdered,
+                    QTYReturned = PoSerialsLlist.PurchaseSKU.QTYReturned,
+                    CreditQTY = PoSerialsLlist.PurchaseSKU.CreditQTY,
+                    Credit = PoSerialsLlist.PurchaseSKU.Credit,
+                    QTYReceived = PoSerialsLlist.PurchaseSKU.QTYReceived,
+                    CreateBy = UserBy,
+                    CreateAt = DateTime.UtcNow
+                };
+                if (ckSerialsLlist.Any())
+                {
+                    nPurchaseSKU.SerialsLlist.Add(new SerialsLlist
+                    {
+                        IsEnable = true,
+                        PID = ckSerialsLlist.FirstOrDefault().ID,
+                        SerialsType = "CM",
+                        SerialsNo = PoSerialsLlist.SerialsNo,
+                        SerialsQTY = -1,
+                        CreateBy = UserBy,
+                        CreateAt = DateTime.UtcNow
+                    });
+                  
+                }
+                else if (ckRMASerialsLlist.Any())
+                {
+                    nPurchaseSKU.RMASerialsLlist.Add(new RMASerialsLlist
+                    {
+                        IsEnable = true,
+                        PID = ckRMASerialsLlist.FirstOrDefault().ID,
+                        SerialsType = "CM",
+                        SerialsNo = PoSerialsLlist.SerialsNo,
+                        SerialsQTY = -1,
+                        CreateBy = UserBy,
+                        CreateAt = DateTime.UtcNow
+                    });
+                }
+                CreditMemo.PurchaseSKU.Add(nPurchaseSKU);
+                try
+                {
+
+                    db.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+
+                    throw;
+                }
+                return RedirectToAction("EditItem", new { CreditMemo.ID });
+            }
+            else
+            {
+                AlertErrMsg(SerialsLlis + ":此序號不能CM");
+                return RedirectToAction("Index");
             }
         }
     }

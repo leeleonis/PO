@@ -176,6 +176,7 @@
         <AssociationConnector Association="PurchaseOrderModel.FK_CreditMemo_Warehouse" />
         <EntityTypeShape EntityType="PurchaseOrderModel.PurchaseNoteImg" Width="1.5" PointX="23.25" PointY="49.75" />
         <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseNoteImg_PurchaseNote" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_RMASerialsLlist_PurchaseSKU" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

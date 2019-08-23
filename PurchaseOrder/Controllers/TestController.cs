@@ -309,7 +309,7 @@ namespace PurchaseOrderSys.Controllers
                             nPurchaseOrder.PurchaseSKU.Add(PurchaseSKU);
                         }
                         //加入序號
-                        var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serial && x.SerialsType== "PO").FirstOrDefault();// && !x.SerialsLlistC.Any()
+                        var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serial && x.SerialsType== "PO").FirstOrDefault();// && !x.SerialsLlistC.Any(y => y.IsEnable)
                         if (SerialsLlist == null)
                         {
                             SerialsLlist = new SerialsLlist

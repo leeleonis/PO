@@ -152,7 +152,14 @@
         </div>*@
                                                 @Html.Label("Credit Memo #", htmlAttributes: new { @class = "control-label col-sm-1" })
                                                 <div class="col-sm-9 col-lg-3">
-                                                    @Html.Editor("CreditMemo", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                                    @if (Model.CreditMemo.Any())
+                                                    {
+                                                        foreach (var RMAitem in Model.CreditMemo.Where(x => x.IsEnable))
+                                                        {
+                                                            <a href='@Url.Action("EditItem", "PurchaseOrderCM", new { id = RMAitem.ID })' target="_blank" class="control-label col-sm-1">@RMAitem.ID</a>
+                                                        }
+                                                    }
+                                                    @* @Html.Editor("CreditMemo", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })*@
                                                 </div>
 
                                                 @Html.Label("Received By", htmlAttributes: new { @class = "control-label col-sm-1" })
@@ -331,12 +338,11 @@
 </div>
 <div id="dialog">
     <div class="col-sm-9 col-lg-6">
-        @Html.DropDownList("Renewitem", Renewitem, htmlAttributes: new { @class = "form-control" })
+        @Html.DropDownList("Renewitem", Renewitem, htmlAttributes: new { @class = "form-control undisabled" })
     </div>
-    <input type="hidden" id="oid" />
-    <input type="hidden" id="osku" />
+    <input type="hidden" id="oid" class="undisabled" />
+    <input type="hidden" id="osku" class="undisabled" />
     <button type="button" id="ChangeSKU">Renew item</button>
-
 </div>
 <div id="Returndialog">
 
@@ -486,6 +492,12 @@
                              }*@
                             if (row.ReturnedSerialsNo != "" && row.ReturnedSerialsNo != null) {
                                 html += " <a val='" + row.RMASerialsLlistID + "'  osku='" + row.SKU + "' class='btn btn-default btn-sm ChangeSKU'>Renew item</a>";
+                                if (row.CMID == "" || row.CMID == null) {
+                                    html += "  <a val='" + row.ReturnedSerialsNo + "' osku='" + row.SKU + "' class='btn btn-default btn-sm CMSerialsLlis' target='_blank' href='@Url.Action("CreateRMACM","PurchaseOrderCM",new {RMAID=Model.ID })&SerialsLlis=" + row.ReturnedSerialsNo + "'>Dispose item</a>";
+                                }
+                                else {
+                                    html += "  <a val='" + row.RMASerialsLlistID + "' osku='" + row.SKU + "'  target='_blank' href='@Url.Action("EditItem", "PurchaseOrderCM")?id=" + row.CMID + "'>" + row.CMID+"</a>";
+                                }
                             }
                             //else {
                             //    html = " <a val='" + data + "'  oSKU='" + row.SKU + "' class='btn btn-default btn-sm ChangeSKU'>Renew item</a>";
@@ -850,6 +862,16 @@
                     }
                 });
             });
+            $("body").on("click", ".CMSerialsLlis", function () {
+                var val = $(this).attr("val");
+                if (confirm("是否確定Dispose item:" + val)) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            });
+            
         });
         function GetSerialList(ID) {
             var div = $('<div style="border:2px blue solid;" />').addClass('loading').text('Loading...');
@@ -957,6 +979,7 @@
         <script type="text/javascript">     
             $(document).ready(function () {
                 $("body").find("input,select,textarea").prop("disabled", "disabled");
+                $("body").find(".undisabled").prop("disabled", "");
             });
         </script>
     }

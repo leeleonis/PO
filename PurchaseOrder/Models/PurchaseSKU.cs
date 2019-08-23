@@ -19,6 +19,7 @@ namespace PurchaseOrderSys.Models
         {
             this.SerialsLlist = new HashSet<SerialsLlist>();
             this.ImgFile = new HashSet<ImgFile>();
+            this.RMASerialsLlist = new HashSet<RMASerialsLlist>();
         }
     
         public bool IsEnable { get; set; }
@@ -56,5 +57,7 @@ namespace PurchaseOrderSys.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ImgFile> ImgFile { get; set; }
         public virtual SKU SKU { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RMASerialsLlist> RMASerialsLlist { get; set; }
     }
 }

@@ -30,7 +30,7 @@ namespace PurchaseOrderSys.Controllers
 
 
 
-           // var s2 = db.SerialsLlist.Where(x => x.PurchaseSKU.SkuNo == "106005422"&&!x.SerialsLlistC.Any()).Sum(x => x.SerialsQTY);
+           // var s2 = db.SerialsLlist.Where(x => x.PurchaseSKU.SkuNo == "106005422"&&!x.SerialsLlistC.Any(y => y.IsEnable)).Sum(x => x.SerialsQTY);
 
 
            // var s13 = db.SerialsLlist.Where(x => x.PurchaseSKU.SkuNo == "106005422" && 

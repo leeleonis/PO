@@ -336,7 +336,7 @@ namespace PurchaseOrderSys.Controllers
                     {
                         foreach (var item in RMAModelVMList.ToList())
                         {
-                            if (db.SerialsLlist.Where(x => x.SerialsNo == item.Serial && x.SerialsQTY > 0 && !x.SerialsLlistC.Any()).Any())
+                            if (db.SerialsLlist.Where(x => x.SerialsNo == item.Serial && x.SerialsQTY > 0 && !x.SerialsLlistC.Any(y => y.IsEnable)).Any())
                             {
                                 RMAModelVMList.Remove(item);
                             }
@@ -438,12 +438,27 @@ namespace PurchaseOrderSys.Controllers
                     nRMAEdit.Carrier = ShippingList.Where(x => x.value.ToString() == Serialitem.RMAOrderTracking?.Carrier).FirstOrDefault()?.text ?? "";
                     nRMAEdit.RMASerialsLlistID = RMASKUitem.RMASerialsLlist.Where(x => x.IsEnable && x.SerialsNo == Serialitem.SerialsNo).FirstOrDefault()?.ID;
                     nRMAEdit.trackingID = Serialitem.RMAOrderTrackingID ?? 0;
+                    nRMAEdit.CMID = GetRMA_CMID(Serialitem.SerialsNo);
                     RMASKUList.Add(nRMAEdit);
                 }
             }
             Session["RMAEdit" + id] = RMASKUList.ToList();
             return View(RMA);
         }
+
+        private int? GetRMA_CMID(string SerialsNo)
+        {
+            int? CMID;
+            var RMASerialsLlistall = db.RMASerialsLlist.Where(x => x.IsEnable && x.SerialsNo == SerialsNo && x.SerialsType == "CM");
+            var SerialsLlistall = db.SerialsLlist.Where(x => x.IsEnable && x.SerialsNo == SerialsNo && x.SerialsType == "CM");
+            CMID = RMASerialsLlistall.FirstOrDefault()?.PurchaseSKU.CreditMemoID;
+            if (!CMID.HasValue)
+            {
+                CMID = SerialsLlistall.FirstOrDefault()?.PurchaseSKU.CreditMemoID;
+            }
+            return CMID;
+        }
+
         [HttpPost]
         public ActionResult Edit(RMA RMA, List<RMAModelPost> RMAList)
         {
