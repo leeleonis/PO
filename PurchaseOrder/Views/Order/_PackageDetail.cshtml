@@ -22,9 +22,8 @@
                 <td class="font-bg" width="95">Export Value</td>
                 <td class="font-bg" width="115">DL Export Value</td>
                 <td class="font-bg" width="50">QTY</td>
-                <td class="font-bg" width="100">Value</td>
-                <td class="font-bg" width="80">
-                    RMA #
+                <td class="font-bg" width="100">
+                    Value
                     @if (Model.ShippingStatus.Equals((byte)EnumData.OrderShippingStatus.未安排))
                     {
                         <div style="position: absolute; top: -35px; right: 15px;">
@@ -77,16 +76,6 @@
                         @Html.TextBox(string.Format("Items[{0}][Qty]", index++), item.Qty, htmlAttributes: new { @class = "form-control" })
                     </td>
                     <td>@(item.UnitPrice * item.Qty)</td>
-                    <td class="@(!item.RMAID.HasValue ? "no-padding" : "")">
-                        @if (item.RMAID.HasValue)
-                        {
-                            <a href="http://internal.qd.com.tw:8080/RMA/Edit/@item.RMAID" target="_blank">@item.RMAID</a>
-                        }
-                        else
-                        {
-                            <button type="button" class="btn btn-default">Create</button>
-                        }
-                    </td>
                 </tr>
             }
         </tbody>

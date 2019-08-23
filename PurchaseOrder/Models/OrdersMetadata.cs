@@ -1,11 +1,12 @@
-using System;
+using System; 
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// Orders class
     /// </summary>
@@ -64,6 +65,13 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "Orders_SCID", ResourceType = typeof(App_GlobalResources.Resource))]
     		public Nullable<int>  SCID { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// RMAID
+    		/// </summary>        
+    	    [Display(Name = "Orders_RMAID", ResourceType = typeof(App_GlobalResources.Resource))]
+    		public Nullable<int>  RMAID { get; set; }
     
     		    
     		/// <summary>

@@ -485,6 +485,7 @@
           <Property Name="OrderParent" Type="int" />
           <Property Name="OrderSourceID" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="SCID" Type="int" />
+          <Property Name="RMAID" Type="int" />
           <Property Name="Company" Type="int" Nullable="false" />
           <Property Name="Channel" Type="tinyint" Nullable="false" />
           <Property Name="CustomerID" Type="nvarchar" MaxLength="50" />
@@ -5404,6 +5405,7 @@
           <Property Name="OrderParent" Type="Int32" />
           <Property Name="OrderSourceID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="SCID" Type="Int32" />
+          <Property Name="RMAID" Type="Int32" />
           <Property Name="Company" Type="Int32" Nullable="false" />
           <Property Name="Channel" Type="Byte" Nullable="false" />
           <Property Name="CustomerID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -7125,6 +7127,7 @@
           <EntitySetMapping Name="Orders">
             <EntityTypeMapping TypeName="PurchaseOrderModel.Orders">
               <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="RMAID" ColumnName="RMAID" />
                 <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
                 <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
                 <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />

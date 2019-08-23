@@ -50,14 +50,19 @@ namespace PurchaseOrderSys.Models
                 order.PaymentStatus = EnumData.OrderPaymentStatusList().First(p => p.Value.Equals(EnumData.OrderPaymentStatusList(true)[order.PaymentStatus])).Key;
                 order.FulfilledDate = order.FulfilledDate.HasValue && !order.FulfilledDate.Equals(DateTime.MinValue) ? order.FulfilledDate : null;
 
+                if (order.RMAID.HasValue)
+                {
+                    order.RMAID = db.RMA.FirstOrDefault(r => r.SCRMA.Equals(order.RMAID.ToString()))?.ID ?? order.RMAID;
+                }
+
                 if (orderData != null)
                 {
-                    SetUpdateData(orderData, order, new string[] { "IsRush", "OrderStatus", "PaymentStatus", "PaymentDate", "FulfillmentStatus", "FulfilledDate", "Comment" });
+                    SetUpdateData(orderData, order, new string[] { "IsRush", "RMAID", "OrderStatus", "PaymentStatus", "PaymentDate", "FulfillmentStatus", "FulfilledDate", "Comment" });
                 }
                 else
                 {
                     orderData = new Orders() { CreateBy = AdminName, CreateAt = UtcNow };
-                    SetUpdateData(orderData, order, new string[] { "IsRush", "OrderParent", "OrderSourceID", "SCID", "CustomerID", "CustomerEmail", "OrderStatus", "OrderDate", "PaymentStatus", "PaymentDate", "FulfillmentStatus", "FulfilledDate", "BuyerNote", "Comment" });
+                    SetUpdateData(orderData, order, new string[] { "IsRush", "OrderParent", "OrderSourceID", "SCID", "RMAID", "CustomerID", "CustomerEmail", "OrderStatus", "OrderDate", "PaymentStatus", "PaymentDate", "FulfillmentStatus", "FulfilledDate", "BuyerNote", "Comment" });
                     orderData.Company = db.Company.AsNoTracking().First(c => c.CompanySCID.Value.Equals(order.Company)).ID;
                     orderData.Channel = EnumData.OrderChannelList().First(c => c.Value.Equals(EnumData.OrderChannelList(true)[order.Channel])).Key;
                     db.Orders.Add(orderData);
@@ -100,11 +105,6 @@ namespace PurchaseOrderSys.Models
                     {
                         var itemData = orderData.Items.First(i => i.SCID.Value.Equals(item.SCID.Value));
                         SetUpdateData(itemData, item, new string[] { "IsEnable", "ExportValue", "DLExportValue", "Qty", "eBayItemID", "eBayTransationID", "SalesRecordNumber" });
-
-                        if (item.RMAID.HasValue)
-                        {
-                            itemData.RMAID = db.RMA.FirstOrDefault(r => r.SCRMA.Equals(item.RMAID.ToString()))?.ID ?? item.RMAID;
-                        }
                     }
                     else
                     {
@@ -114,11 +114,6 @@ namespace PurchaseOrderSys.Models
                         {
                             item.OriginSku = item.Sku;
                             item.Sku = item.Sku.Split('_')[0].Split('-')[0];
-                        }
-
-                        if (item.RMAID.HasValue)
-                        {
-                            item.RMAID = db.RMA.FirstOrDefault(r => r.SCRMA.Equals(item.RMAID.ToString()))?.ID ?? item.RMAID;
                         }
 
                         item.CreateBy = AdminName;
@@ -371,7 +366,7 @@ namespace PurchaseOrderSys.Models
                 if (!SC_Api.Is_login) throw new Exception("SC is not logged in!");
 
                 var statusList = EnumData.OrderStatusList(true).Select(s => (int)s.Key).ToArray();
-                SC_Api.Update_OrderStatus(orderData.SCID.Value, statusList[orderData.OrderStatus]);
+                SC_Api.Update_OrderStatus(orderData.SCID.Value, statusList[Status]);
             }
             catch (Exception ex)
             {
