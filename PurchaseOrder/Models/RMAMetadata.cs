@@ -196,12 +196,12 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "RMA_ReturnShippingCos", ResourceType = typeof(App_GlobalResources.Resource))]
     		public Nullable<decimal>  ReturnShippingCos { get; set; }
-    
-    		    
-    		/// <summary>
-    		/// SCUser ID
-    		/// </summary>        
-    	    //[Display(Name = "RMA_SCUserID", ResourceType = typeof(App_GlobalResources.Resource))]
+
+
+            /// <summary>
+            /// SCUser ID
+            /// </summary>        
+            [Display(Name = "RMA_SCUserID", ResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  SCUserID { get; set; }
     

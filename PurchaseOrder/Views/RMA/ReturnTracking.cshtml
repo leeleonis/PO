@@ -1,0 +1,60 @@
+﻿@model RMA
+@{
+    Layout = null;
+    var FedEx = new string[] { "1" };
+    var DHL = new string[] { "2", "7", "13", "14" };
+    var USPS = new string[] { "4", "22", "23" };
+    var Royal = new string[] { "10" };
+    var UPS = new string[] { "5", "19" };
+    var ReturnTracking = "";
+    var Carrier = "";
+    foreach (var RMASKUitem in Model.RMASKU.Where(x => x.IsEnable))
+    {
+        foreach (var Serialsitem in RMASKUitem.RMAOrderSerialsLlist.Where(x => x.IsEnable))
+        {
+            if (string.IsNullOrWhiteSpace(ReturnTracking))
+            {
+                ReturnTracking = Serialsitem.RMAOrderTracking?.ReturnTracking;
+                Carrier = Serialsitem.RMAOrderTracking?.Carrier;
+            }
+            else
+            {
+                ReturnTracking = "multi";
+            }
+        }
+    }
+    if (string.IsNullOrWhiteSpace(ReturnTracking))
+    {
+        ReturnTracking = Model.ReturnTracking;
+        Carrier = Model.Carrier;
+    }
+}
+@if (!string.IsNullOrWhiteSpace(ReturnTracking) && ReturnTracking != "multi")
+{
+    if (FedEx.Contains(Carrier))
+    {
+        <a href='https://www.fedex.com/apps/fedextrack/?tracknumbers=@(ReturnTracking)' target="_blank">@ReturnTracking</a>
+    }
+    else if (DHL.Contains(Carrier))
+    {
+        <a href='https://www.dhl.com/content/g0/en/express/tracking.shtml?AWB=@(ReturnTracking)' target="_blank">@ReturnTracking</a>
+    }
+    else if (USPS.Contains(Carrier))
+    {
+        <a href='https://tools.usps.com/go/TrackConfirmAction?tRef=fullpage&tLc=2&text28777=&tLabels=@(ReturnTracking)' target="_blank">@ReturnTracking</a>
+    }
+    else if (Royal.Contains(Carrier))
+    {
+        <a href='https://www.royalmail.com/track-your-item#/tracking-results/@(ReturnTracking)' target="_blank">@ReturnTracking</a>
+    }
+    else if (UPS.Contains(Carrier))
+    {
+        <a href='https://www.ups.com/track?loc=en_TW&tracknum=@(ReturnTracking)' target="_blank">@ReturnTracking</a>
+    }
+    else
+    {
+        @ReturnTracking
+    }
+}
+
+

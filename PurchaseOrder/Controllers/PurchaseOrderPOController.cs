@@ -696,20 +696,30 @@ namespace PurchaseOrderSys.Controllers
                     }
                   
                     CreatAndEditPOSKUbySC(PurchaseOrder);
+                    var AddSerialToSCList = new List<string>();
+                    if (Session["AddSerialSC"] != null)
+                    {
+                        AddSerialToSCList = (List<string>)Session["AddSerialSC"];
+                    }
                     foreach (var PurchaseSKU in PurchaseOrder.PurchaseSKU.Where(x=>x.IsEnable))
                     {
-                        foreach (var item in PurchaseSKU.SerialsLlist)
+                        foreach (var item in PurchaseSKU.SerialsLlist.Where(x => !AddSerialToSCList.Contains(x.SerialsNo)))
                         {
-                            AddSerialToSC(PurchaseSKU, item.SerialsNo);
+                            if (!string.IsNullOrWhiteSpace(item.SerialsNo))
+                            {
+                                AddSerialToSC(PurchaseSKU, item.SerialsNo);
+                                AddSerialToSCList.Add(item.SerialsNo);
+                                Session["AddSerialSC"] = AddSerialToSCList;
+                            }
                         }
-
                     }
                 }
             }
             catch (Exception ex)
             {
                 
-                var s = ex.ToString();
+                var s = ex.Message;
+                AlertErrMsg(s);
             }
             if (saveexit.HasValue && saveexit.Value)
             {

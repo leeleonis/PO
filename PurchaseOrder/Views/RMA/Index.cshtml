@@ -118,11 +118,15 @@
                                                                 <td class="details-control" RMAID="@item.ID"></td>
                                                                 <td><a id='Edit' href='@Url.Action("Edit", new { item.ID })'>@item.ID</a></td>
                                                                 <td>
+                                                                    <a href='@Url.Action("Edit","order",new {id=item.QDID })' target="_blank">@item.QDID</a>
                                                                     <a href='https://dm.cwa.sellercloud.com/Orders/Orders_details.aspx?id=@(item.OrderID)' target="_blank">@item.OrderID</a>
                                                                     <br />
                                                                     @item.SourceID
                                                                 </td>
-                                                                <td>@item.ReturnTracking</td>
+                                                                <td>
+                                                                   @{Html.RenderPartial("ReturnTracking", item);}
+
+                                                                </td>
                                                                 <td>
                                                                     @if (item.RMASKU.Where(x => x.IsEnable).Any())
                                                                     {

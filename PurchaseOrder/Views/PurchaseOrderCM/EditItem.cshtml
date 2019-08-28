@@ -46,10 +46,18 @@
                                                 <h1><b>CM# @Model.ID</b></h1>
                                             </div>
                                             <div class="col-sm-9 col-lg-2">
-                                                <h1><b>
-                                                        <a target='_blank' href='@Url.Action("EditItem", "PurchaseOrderPO", new { id = Model.PurchaseOrderID })'> PO# @Model.PurchaseOrderID</a>
-   
-</b></h1>
+                                                <h1>
+                                                    <b>
+                                                        @if (Model.PurchaseOrderID.HasValue)
+                                                        {
+                                                            <a target='_blank' href='@Url.Action("EditItem", "PurchaseOrderPO", new { id = Model.PurchaseOrderID })'> PO# @Model.PurchaseOrderID</a>
+                                                        }
+                                                        @if (Model.RMAID.HasValue)
+                                                        {
+                                                            <a target='_blank' href='@Url.Action("Edit", "RMA", new { id = Model.RMAID })'> RMA# @Model.RMAID</a>
+                                                        }
+                                                    </b>
+                                                </h1>
                                             </div>
                                         </fieldset>
                                         <fieldset>
@@ -169,10 +177,10 @@
                                             <div class="form-group">
                                                 @Html.LabelFor(model => model.PurchaseOrder.WarehouseID, htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                   
-                                                        @Html.DropDownListFor(model => model.WarehouseID, Warehouselist, htmlAttributes: new { @class = "form-control" })
-                                                        @Html.ValidationMessageFor(model => model.WarehouseID, "", new { @class = "text-danger" })
-                                                     
+
+                                                    @Html.DropDownListFor(model => model.WarehouseID, Warehouselist, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(model => model.WarehouseID, "", new { @class = "text-danger" })
+
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -354,9 +362,9 @@
                                             </div>
                                         </fieldset>
                                     </div>
-                                    </div>
+                                </div>
                                 <div class="widget-footer">
-                                   <button type="submit" class="btn btn-primary" id="save">儲存</button>
+                                    <button type="submit" class="btn btn-primary" id="save">儲存</button>
                                     <button type="button" class="btn btn-primary" id="saveexit">儲存並返回</button>
                                     <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index")'">返回</button>
                                 </div>
@@ -784,4 +792,13 @@
         // 執行
         Preview.change_file();
     </script>
+    @if (Model.CMStatus == "Completed")
+    {
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("body").find("input,select,textarea").prop("disabled", "disabled");
+                $("body").find(".undisabled").prop("disabled", "");
+            });
+        </script>
+    }
 }

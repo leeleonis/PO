@@ -213,11 +213,18 @@ namespace PurchaseOrderSys.Controllers
             {
                 if (CreditMemo.RMAID.HasValue)
                 {
-                    CreditMemo.WarehouseID = CreditMemo.RMA.WarehouseID;
+                    CreditMemo.WarehouseID = CreditMemo.RMA.RMASKU.Where(x=>x.IsEnable).FirstOrDefault()?.RMASerialsLlist.Where(x => x.IsEnable).FirstOrDefault()?.WarehouseID ?? CreditMemo.RMA.WarehouseID;
                 }
                 else if (CreditMemo.PurchaseOrderID.HasValue)
                 {
-                    CreditMemo.WarehouseID = CreditMemo.PurchaseOrder.WarehouseID;
+                    CreditMemo.WarehouseID = CreditMemo.RMA.RMASKU.Where(x => x.IsEnable).FirstOrDefault()?.RMASerialsLlist.Where(x => x.IsEnable).FirstOrDefault()?.WarehouseID ?? CreditMemo.RMA.WarehouseID;
+                }
+            }
+            else
+            {
+                if (CreditMemo.RMAID.HasValue)
+                {
+                    CreditMemo.WarehouseID = CreditMemo.RMA.WarehouseID;
                 }
             }
             //var cmvm = new CMVM
@@ -245,7 +252,7 @@ namespace PurchaseOrderSys.Controllers
                 VendorSKU = x.VendorSKU,
                 QTYOrdered = x.QTYOrdered,
                 QTYReceived = x.QTYReceived ?? 0,
-                QTYReturned = x.QTYReturned.HasValue && x.QTYReturned > 0 ? x.QTYReturned.Value : x.SerialsLlist.Where(y => y.SerialsType == "CM").Sum(y => y.SerialsQTY) * -1,
+                QTYReturned = x.QTYReturned.HasValue && x.QTYReturned > 0 ? x.QTYReturned.Value : (x.SerialsLlist.Where(y =>y.IsEnable&& y.SerialsType == "CM").Sum(y => y.SerialsQTY) * -1) + (x.RMASerialsLlist.Where(y => y.IsEnable && y.SerialsType == "CM").Sum(y => y.SerialsQTY) * -1),
                 CreditQTY = x.CreditQTY ?? 0,
                 Credit = x.Credit ?? 0,
                 Subtotal = (x.CreditQTY * x.Credit) ?? 0,
@@ -478,6 +485,7 @@ namespace PurchaseOrderSys.Controllers
         {
             var PurchaseSKU = db.PurchaseSKU.Find(ID);
             var SerialsLlist = PurchaseSKU.SerialsLlist.Where(x => x.SerialsType == "CM").ToList();
+            var RMASerialsLlist = PurchaseSKU.RMASerialsLlist.Where(x => x.SerialsType == "CM").ToList();
             var Serials = new List<string>();
             foreach (var item in SerialsLlist)
             {
@@ -493,6 +501,23 @@ namespace PurchaseOrderSys.Controllers
                         Warehouse = item.SerialsLlistP.PurchaseSKU.PurchaseOrder.WarehousePO.Name;
                     }
                    
+                }
+                Serials.Add(item.SerialsNo + "　　" + Warehouse);
+            }
+            foreach (var item in RMASerialsLlist)
+            {
+                var Warehouse = "";
+                if (item.PID.HasValue)
+                {
+                    if (item.RMASerialsLlistP.TransferSKUID.HasValue)
+                    {
+                        Warehouse = item.RMASerialsLlistP.TransferSKU.Transfer.WarehouseTo.Name;
+                    }
+                    else
+                    {
+                        Warehouse = item.RMASerialsLlistP.Warehouse.Name;
+                    }
+
                 }
                 Serials.Add(item.SerialsNo + "　　" + Warehouse);
             }

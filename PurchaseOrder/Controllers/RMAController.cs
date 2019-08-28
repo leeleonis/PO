@@ -82,7 +82,16 @@ namespace PurchaseOrderSys.Controllers
                 }
                 RMAList = RMAList.Where(x => SerialsLlist.Contains(x.ID));
             }
-            RMAVM.RMAList = RMAList.OrderByDescending(x => x.ID).Take(1000);
+            var RMAListo = RMAList.OrderByDescending(x => x.ID).Take(1000);
+            foreach (var item in RMAListo)
+            {
+                if (!item.QDID.HasValue)
+                {
+                    item.QDID = db.Orders.Where(x => x.IsEnable && x.SCID == item.OrderID).FirstOrDefault()?.ID;
+                }        
+            }
+            db.SaveChanges();
+            RMAVM.RMAList = RMAListo;
             return View(RMAVM);
         }
         public ActionResult Create(int? OrderID)
@@ -382,11 +391,14 @@ namespace PurchaseOrderSys.Controllers
         {
             var RMAModelVMList = new List<RMAModelVM>();
             var RMA = db.RMA.Find(ID);
-            foreach (var item in RMA.RMASKU)
+            foreach (var item in RMA.RMASKU.Where(x => x.IsEnable))
             {
                 var SKUNo = item.SkuNo;
                 var ProductName = db.SkuLang.Where(x => x.LangID == LangID && x.Sku == SKUNo).FirstOrDefault()?.Name;
-                RMAModelVMList.Add(new RMAModelVM { QTY = item.ReturnedQTY, SKU = SKUNo, ProductName = ProductName, Warehouse = item.WarehouseID, Reason=item.Reason });
+                foreach (var SerialsLitem in item.RMASerialsLlist.Where(x => x.IsEnable && x.SerialsType == "RMAIn"))
+                {
+                    RMAModelVMList.Add(new RMAModelVM { QTY = item.ReturnedQTY, SKU = SKUNo, ProductName = ProductName, Warehouse = SerialsLitem.WarehouseID ?? RMA.WarehouseID, Reason = SerialsLitem.Reason, Serial = SerialsLitem.SerialsNo, Carrier = GetSerialListCarrier(SerialsLitem), ReturnTracking = GetSerialListTracking(SerialsLitem) });
+                }
             }
            
             var partial = ControlToString("~/Views/Shared/GetRMASKUList.cshtml", RMAModelVMList);
@@ -432,7 +444,7 @@ namespace PurchaseOrderSys.Controllers
                     nRMAEdit.UPCEAN = RMASKUitem.SKU.UPC + "/" + RMASKUitem.SKU.EAN;
                     nRMAEdit.Reason = Serialitem.Reason?? RMASKUitem.Reason;
                     nRMAEdit.TrWarehouse = RMASerial?.Warehouse.Name;
-                    nRMAEdit.Warehouse = Serialitem.WarehouseID ?? RMASKUitem.WarehouseID;
+                    nRMAEdit.Warehouse = RMASerial?.WarehouseID ?? Serialitem.WarehouseID ?? RMASKUitem.WarehouseID;
                     nRMAEdit.UnitPrice = (RMASKUitem.UnitPrice * RMASKUitem.RMASerialsLlist.Sum(y => y.SerialsQTY)) ?? 0;
                     nRMAEdit.tracking = Serialitem.RMAOrderTracking?.ReturnTracking ?? "";
                     nRMAEdit.Carrier = ShippingList.Where(x => x.value.ToString() == Serialitem.RMAOrderTracking?.Carrier).FirstOrDefault()?.text ?? "";
@@ -471,8 +483,8 @@ namespace PurchaseOrderSys.Controllers
             OldRMA.RestockingFee = RMA.RestockingFee;
             OldRMA.ReturnShippingCos = RMA.ReturnShippingCos;
             OldRMA.OtherCosts = RMA.OtherCosts;
-            OldRMA.ReturnTracking = RMA.ReturnTracking;
-            OldRMA.Carrier = RMA.Carrier;
+            //OldRMA.ReturnTracking = RMA.ReturnTracking;
+            //OldRMA.Carrier = RMA.Carrier;
             OldRMA.UpdateBy = UserBy;
             OldRMA.UpdateAt = dt;
             if (RMAList != null)
@@ -551,6 +563,69 @@ namespace PurchaseOrderSys.Controllers
             //{
             //    return Json(new { status = false , Errmsg ="沒有可轉換的序號"}, JsonRequestBehavior.AllowGet);
             //}
+        }
+        [HttpPost]
+        public ActionResult CreatGNote(int? ID, int[] IDList, string SID, string Note, List<HttpPostedFileBase> Img)
+        {
+            try
+            {
+                var PurchaseNoteList = new List<PurchaseNote>();
+                if (ID.HasValue && ID != 0)
+                {
+                    var RMAOrderTracking = db.RMAOrderTracking.Find(ID);
+                    var nPurchaseNote = new PurchaseNote { IsEnable = true, Note = Note, NoteType = "txt", CreateAt = DateTime.UtcNow, CreateBy = UserBy };
+                    if (Img != null)
+                    {
+                        foreach (var Imgitem in Img)
+                        {
+                            var ImgName = SaveImg(Imgitem);
+                            nPurchaseNote.PurchaseNoteImg.Add(new PurchaseNoteImg { IsEnable = true, Img = ImgName, ImgType = Imgitem.ContentType, CreateAt = DateTime.UtcNow, CreateBy = UserBy });
+                            //db.SaveChanges();
+                            //PurchaseNoteList = RMA.PurchaseNote.ToList();
+                        }
+                    }
+                    RMAOrderTracking.PurchaseNote.Add(nPurchaseNote);
+                    db.SaveChanges();
+                    PurchaseNoteList = RMAOrderTracking.PurchaseNote.ToList();
+                }
+                else
+                {
+                    var RMAOrderSerialsLlist = db.RMAOrderSerialsLlist.Where(x => IDList.Contains(x.ID) && x.IsEnable);
+                    var nRMAOrderTracking = new RMAOrderTracking { IsEnable = true, CreateAt = DateTime.UtcNow, CreateBy = UserBy };
+                    var nPurchaseNote = new PurchaseNote { IsEnable = true, Note = Note, NoteType = "txt", CreateAt = DateTime.UtcNow, CreateBy = UserBy };
+                    if (Img != null)
+                    {
+                        foreach (var Imgitem in Img)
+                        {
+                            var ImgName = SaveImg(Imgitem);
+                            nPurchaseNote.PurchaseNoteImg.Add(new PurchaseNoteImg { IsEnable = true, Img = ImgName, ImgType = Imgitem.ContentType, CreateAt = DateTime.UtcNow, CreateBy = UserBy });
+                            //db.SaveChanges();
+                            //PurchaseNoteList = RMA.PurchaseNote.ToList();
+                        }
+                    }
+                    nRMAOrderTracking.PurchaseNote.Add(nPurchaseNote);
+                    foreach (var item in RMAOrderSerialsLlist)
+                    {
+                        if (!item.RMAOrderTrackingID.HasValue)
+                        {
+                            item.RMAOrderTracking = nRMAOrderTracking;
+                            PurchaseNoteList = nRMAOrderTracking.PurchaseNote.ToList();
+                        }
+                        else
+                        {
+                            item.RMAOrderTracking.PurchaseNote.Add(nPurchaseNote);
+                            PurchaseNoteList = item.RMAOrderTracking.PurchaseNote.ToList();
+                        }
+                    }
+                    db.SaveChanges();
+                }
+                var datalist = PurchaseNoteList.OrderByDescending(x => x.CreateAt).Select(x => new { CreateAt = x.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss"), x.CreateBy, x.Note, x.NoteType, PurchaseNoteImg = x.PurchaseNoteImg.Select(y => new PurchaseNoteImg { Img = y.Img, ImgType = y.ImgType }).ToList() }).ToList();
+                return Json(new { status = true, datalist = datalist }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { status = false, Errmsg = ex.ToString() }, JsonRequestBehavior.AllowGet);
+            }
         }
         [HttpPost]
         public ActionResult CreatNote(int? ID, string SID, string Note, List<HttpPostedFileBase> Img)
@@ -658,10 +733,30 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult GetSerialList(int ID)
         {
             var RMASKU = db.RMASKU.Find(ID);
-            var SerialsLlist = RMASKU.RMASerialsLlist.Where(x => x.SerialsType == "RMAIn").Select(x => new RMASerial { Serial = x.SerialsNo, Warehouse = x.Warehouse.Name, Reason = x.Reason }).ToList();
+            var SerialsLlist = RMASKU.RMASerialsLlist.Where(x => x.IsEnable && x.SerialsType == "RMAIn").Select(x => new RMASerial { Serial = x.SerialsNo, Warehouse = x.Warehouse.Name, Reason = x.Reason, Carrier = GetSerialListCarrier(x), ReturnTracking = GetSerialListTracking(x) }).ToList();
             var partial = ControlToString("~/Views/Shared/GetRMASerialList.cshtml", SerialsLlist);
             //var partial = Engine.Razor.RunCompile(template, "templateKey", null, new { Name = "World" });
             return Json(new { status = true, partial }, JsonRequestBehavior.AllowGet);
+        }
+
+        private string GetSerialListTracking(RMASerialsLlist RMASerialsLlist)
+        {
+            var Tracking = "";
+            foreach (var item in RMASerialsLlist.RMASKU.RMAOrderSerialsLlist.Where(x => x.IsEnable && x.SerialsNo == RMASerialsLlist.SerialsNo))
+            {
+                Tracking = item.ReturnTracking;
+            }
+            return Tracking;
+        }
+
+        private string GetSerialListCarrier(RMASerialsLlist RMASerialsLlist)
+        {
+            var Carrier = "";
+            foreach (var item in RMASerialsLlist.RMASKU.RMAOrderSerialsLlist.Where(x => x.IsEnable && x.SerialsNo == RMASerialsLlist.SerialsNo))
+            {
+                Carrier = item.Carrier;
+            }
+            return Carrier;
         }
 
         public ActionResult Returnedserials(int ID)
@@ -1107,8 +1202,57 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult Trackgroup(int id)
         {
             var RMAOrderTracking = db.RMAOrderTracking.Find(id);
+            if (RMAOrderTracking == null)
+            {
+                RMAOrderTracking = new RMAOrderTracking();
+            }
             var html = RenderPartialViewToString("Trackgroup", RMAOrderTracking);
             return Json(new { status = true, html }, JsonRequestBehavior.AllowGet);
         }
+        [HttpPost]
+        public ActionResult CreatGTracking(int? ID, int[] IDList, string Carrier, string ReturnTracking)
+        {
+            try
+            {
+                var PurchaseNoteList = new List<PurchaseNote>();
+                if (ID.HasValue && ID != 0)
+                {
+                    var RMAOrderTracking = db.RMAOrderTracking.Find(ID);
+                    RMAOrderTracking.Carrier = Carrier;
+                    RMAOrderTracking.ReturnTracking = ReturnTracking;
+                    db.SaveChanges();
+                }
+                else
+                {
+                    var RMAOrderSerialsLlist = db.RMAOrderSerialsLlist.Where(x => IDList.Contains(x.ID) && x.IsEnable);
+                    var nRMAOrderTracking = new RMAOrderTracking { IsEnable = true, Carrier = Carrier, ReturnTracking = ReturnTracking, CreateAt = DateTime.UtcNow, CreateBy = UserBy };
+                    foreach (var item in RMAOrderSerialsLlist)
+                    {
+                        if (!item.RMAOrderTrackingID.HasValue)
+                        {
+                            item.RMAOrderTracking = nRMAOrderTracking;
+                        }
+                        else
+                        {
+                            item.RMAOrderTracking.Carrier = Carrier;
+                            item.RMAOrderTracking.ReturnTracking = ReturnTracking;
+                            item.RMAOrderTracking.UpdateAt = DateTime.UtcNow;
+                            item.RMAOrderTracking.UpdateBy = UserBy;
+                        }
+                    }
+                    db.SaveChanges();
+                }
+                return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { status = false, Errmsg = ex.ToString() }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        //[HttpPost]
+        //public ActionResult ReturnTracking( RMA RMA)
+        //{
+        //    return View(RMA);
+        //}
     }
 }

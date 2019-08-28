@@ -231,7 +231,7 @@
           <Property Name="CompanyID" Type="int" />
           <Property Name="VendorID" Type="int" />
           <Property Name="InvoiceDate" Type="datetime" />
-          <Property Name="InvoiceNo" Type="nvarchar" MaxLength="20" />
+          <Property Name="InvoiceNo" Type="nvarchar" MaxLength="100" />
           <Property Name="CMStatus" Type="nvarchar" MaxLength="20" />
           <Property Name="CMType" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="CMDate" Type="datetime" />
@@ -749,6 +749,7 @@
           <Property Name="ReturnShippingCos" Type="decimal" Precision="18" Scale="2" />
           <Property Name="SCUserID" Type="nvarchar" MaxLength="50" />
           <Property Name="Memo" Type="ntext" />
+          <Property Name="QDID" Type="int" />
         </EntityType>
         <EntityType Name="RMAOrderSerialsLlist">
           <Key>
@@ -3602,7 +3603,7 @@
           <Property Name="CompanyID" Type="Int32" />
           <Property Name="VendorID" Type="Int32" />
           <Property Name="InvoiceDate" Type="DateTime" Precision="3" />
-          <Property Name="InvoiceNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="InvoiceNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="CMStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="CMType" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="CMDate" Type="DateTime" Precision="3" />
@@ -5151,6 +5152,7 @@
           <NavigationProperty Name="CreditMemo" Relationship="PurchaseOrderModel.FK_CreditMemo_RMA" FromRole="RMA" ToRole="CreditMemo" />
           <Property Name="SCUserID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Memo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="QDID" Type="Int32" />
         </EntityType>
         <Association Name="FK_RMA_Warehouse">
           <End Type="PurchaseOrderModel.Warehouse" Role="Warehouse" Multiplicity="0..1" />
@@ -7003,6 +7005,7 @@
           <EntitySetMapping Name="RMA">
             <EntityTypeMapping TypeName="PurchaseOrderModel.RMA">
               <MappingFragment StoreEntitySet="RMA">
+                <ScalarProperty Name="QDID" ColumnName="QDID" />
                 <ScalarProperty Name="Memo" ColumnName="Memo" />
                 <ScalarProperty Name="SCUserID" ColumnName="SCUserID" />
                 <ScalarProperty Name="ReturnShippingCos" ColumnName="ReturnShippingCos" />

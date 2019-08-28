@@ -660,9 +660,9 @@ namespace PurchaseOrderSys.Controllers
             var TransferSKUList = db.TransferSKU.Where(x => x.IsEnable && x.Transfer.IsEnable && x.Transfer.ToWID == FromWID).Select(x => x.SkuNo).ToList();//只找移入的SKU
             SKUList.AddRange(TransferSKUList);
             //RMA入庫
-            var NoNewRMAferSKUList = db.RMASerialsLlist.AsEnumerable().Where(x => x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.WarehouseID == FromWID && string.IsNullOrWhiteSpace(x.NewSkuNo)).Select(x => x.RMASKU.SkuNo).ToList();//沒有新的SKU
+            var NoNewRMAferSKUList = db.RMASerialsLlist.AsEnumerable().Where(x => x.IsEnable && x.RMASKUID.HasValue && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.WarehouseID == FromWID && string.IsNullOrWhiteSpace(x.NewSkuNo)).Select(x => x.RMASKU.SkuNo).ToList();//沒有新的SKU
             SKUList.AddRange(NoNewRMAferSKUList);
-            var NewRMAferSKUList = db.RMASerialsLlist.AsEnumerable().Where(x => x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.WarehouseID == FromWID && !string.IsNullOrWhiteSpace(x.NewSkuNo)).Select(x => x.NewSkuNo).ToList();//沒有新的SKU
+            var NewRMAferSKUList = db.RMASerialsLlist.AsEnumerable().Where(x => x.IsEnable && x.RMASKUID.HasValue && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.WarehouseID == FromWID && !string.IsNullOrWhiteSpace(x.NewSkuNo)).Select(x => x.NewSkuNo).ToList();//沒有新的SKU
             SKUList.AddRange(NewRMAferSKUList);
             SKUList = SKUList.Where(x => x == search).Distinct().ToList();
             return SKUList;
@@ -858,9 +858,9 @@ namespace PurchaseOrderSys.Controllers
             foreach (var item in GroupWarehouseVM)
             {
                 item.Unfulfillable = Math.Abs(item.Unfulfillable);
-                item.Fulfillable = item.POQTY + item.TransferInQTY - item.TransferAwaiting + item.UnfulfillableRMA;
+                item.Fulfillable = item.POQTY + item.TransferInQTY - item.TransferAwaiting ;//+ item.UnfulfillableRMA
                 item.Awaiting = (Awaitinglist.Where(x => x.SKU == item.SKU && x.SCID == SCID).FirstOrDefault()?.QTY ?? 0) - item.TransferAwaiting;
-                item.Aggregate = item.Fulfillable - item.Awaiting - item.UnfulfillableRMA;//Aggregate = Fulfillable - Awaiting dispatch
+                item.Aggregate = item.Fulfillable - item.Awaiting ;//Aggregate = Fulfillable - Awaiting dispatch- item.UnfulfillableRMA
                 item.DaysOfSupply = item.Aggregate != 0 && item.Velocity != 0 ? item.Aggregate / item.Velocity / 30 : 0;  //Days of supply 算法: Aggregate / Velocity (30 days) / 30
                                                                                                                           //item.Fulfillable = item.Awaiting + item.Aggregate; //Fulfillable = Awaiting dispatch + Aggregate 2018/12/28 拿掉公式
             }
@@ -885,8 +885,8 @@ namespace PurchaseOrderSys.Controllers
             var edt = DateTime.UtcNow;
             var sdt = edt.AddDays(-30);
             var count = 0;
-            count = PurchaseSKU.SerialsLlist.Where(z => z.SerialsType == "Order" && z.CreateAt >= sdt && z.CreateAt <= sdt).Sum(z => z.SerialsQTY).Value;
-            return count;
+            count = PurchaseSKU.SerialsLlist.Where(z => z.SerialsType == "Order" && z.CreateAt >= sdt && z.CreateAt <= edt).Sum(z => z.SerialsQTY).Value;
+            return Math.Abs(count);
         }
 
         /// <summary>

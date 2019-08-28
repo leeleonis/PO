@@ -47,6 +47,7 @@ namespace PurchaseOrderSys.Models
         public Nullable<decimal> ReturnShippingCos { get; set; }
         public string SCUserID { get; set; }
         public string Memo { get; set; }
+        public Nullable<int> QDID { get; set; }
     
         public virtual Warehouse Warehouse { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

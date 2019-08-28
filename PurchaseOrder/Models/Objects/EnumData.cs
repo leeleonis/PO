@@ -123,7 +123,19 @@ namespace PurchaseOrderSys.Models
                 { "Completed", App_GlobalResources.Resource.TransferStatusCompletedDDL  }
             };
         }
-
+        /// <summary>
+        /// 可出貨倉庫列表
+        /// </summary>
+        /// <returns></returns>
+        public static List<string> IsSellableWarehouse()
+        {
+            var list = new List<string>();
+            using (var db = new PurchaseOrderEntities())
+            {
+                list = db.Warehouse.Where(x => x.IsSellable).Select(y => y.ID.ToString()).ToList();
+            }
+            return list;
+        }
         /// <summary>
         /// 倉庫列表
         /// </summary>

@@ -1,6 +1,6 @@
 ﻿@model WarehouseInventoryVM
 @{
-    ViewBag.title = "倉庫庫存";
+    ViewBag.title = Model.Name + " Warehouse";
 }
 <style>
     tfoot {
@@ -16,10 +16,11 @@
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
 
-                        <h2>新增</h2>
+                        <h2></h2>
                         <ul class="nav nav-tabs pull-right">
                             <li><a data-toggle="tab" href="#hb1">@ViewBag.title</a></li>
                         </ul>
+                      
                     </header>
 
                     <div>
@@ -33,52 +34,54 @@
                                     <div class="tab-pane" id="hb1">
                                         <fieldset>
                                             <legend>@ViewBag.title</legend>
-
+                                            @Html.Display("Company")
+                                            <br />
+                                            @Html.Display("WarehouseType")
                                             <div class="form-group">
-                                                @Html.Label("Company", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Company", new { htmlAttributes = new { @class = "form-control" } })
-                                                </div>
+                                                @*@Html.Label("Company", htmlAttributes: new { @class = "control-label col-sm-2" })
+            <div class="col-sm-9 col-lg-2">
+                @Html.Editor("Company", new { htmlAttributes = new { @class = "form-control" } })
+            </div>*@
                                                 @Html.Label("Fulfillable", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("Fulfillable", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                @Html.Label("Warehouse Type", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @*@Html.Label("Warehouse Type", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("WarehouseType", new { htmlAttributes = new { @class = "form-control" } })
-                                                </div>
+                                                </div>*@
                                                 @Html.Label("Awaiting Dispatch", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("Awaiting", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                @Html.Label("Fulfillable", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @*@Html.Label("Fulfillable", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("Fulfillable", new { htmlAttributes = new { @class = "form-control" } })
-                                                </div>
+                                                </div>*@
                                                 @Html.Label("Aggregate", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("Aggregate", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                @Html.Label("Location", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @*@Html.Label("Location", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("Location", new { htmlAttributes = new { @class = "form-control" } })
-                                                </div>
+                                                </div>*@
                                                 @Html.Label("Unfulfillable - Transit", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("UnfulfillableTransit", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                @Html.Label("Countries", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @*@Html.Label("Countries", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("Countries", new { htmlAttributes = new { @class = "form-control" } })
-                                                </div>
+                                                </div>*@
                                                 @Html.Label("Total Velocity (30 days)", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("TotalVelocity", new { htmlAttributes = new { @class = "form-control" } })

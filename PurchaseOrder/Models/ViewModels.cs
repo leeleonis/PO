@@ -776,11 +776,16 @@ namespace PurchaseOrderSys.Models
     {
         public string Company { get; set; }
         public string WarehouseType { get; set; }
-        public string Fulfillable { get; set; }
+        public int Fulfillable { get; set; }
         public string Location { get; set; }
         public string Countries { get; set; }
         public string Marketplace { get; set; }
         public IEnumerable<WarehouseVM> WarehouseVM { get; set; }
+        public string Name { get; internal set; }
+        public int Awaiting { get; internal set; }
+        public int UnfulfillableTransit { get; internal set; }
+        public int TotalVelocity { get; internal set; }
+        public int Aggregate { get; internal set; }
     }
     [Serializable]
     public class SkuPurchasingVM
@@ -1366,6 +1371,8 @@ namespace PurchaseOrderSys.Models
         public string Serial { get; set; }
         public int? Warehouse { get; set; }
         public string Reason { get; set; }
+        public string Carrier { get; internal set; }
+        public string ReturnTracking { get; internal set; }
     }
     [Serializable]
     public class RMAModelPost
@@ -1385,6 +1392,8 @@ namespace PurchaseOrderSys.Models
         public string Serial { get; set; }
         public string Warehouse { get; set; }
         public string Reason { get; set; }
+        public string ReturnTracking { get; set; }
+        public string Carrier { get; set; }
     }
     [Serializable]
     public class RMAEdit

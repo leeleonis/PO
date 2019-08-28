@@ -17,13 +17,18 @@ namespace PurchaseOrderSys.Controllers
             ViewBag.WarehouseID = ID;
             var Warehouse = db.Warehouse.Find(ID);
             var WarehouseInventoryVM = new WarehouseInventoryVM();
+            WarehouseInventoryVM.Name = Warehouse.Name;
             WarehouseInventoryVM.WarehouseType = Warehouse.Type;
-            WarehouseInventoryVM.Fulfillable = Warehouse.Fulfillable;
+            WarehouseInventoryVM.WarehouseVM = GetWarehouseVMList(Warehouse, Product, FulfillableMin, FulfillableMax);
+            WarehouseInventoryVM.Fulfillable = WarehouseInventoryVM.WarehouseVM.Sum(x=>x.Fulfillable);
+            WarehouseInventoryVM.Awaiting = WarehouseInventoryVM.WarehouseVM.Sum(x => x.Awaiting);
+            WarehouseInventoryVM.Aggregate = WarehouseInventoryVM.WarehouseVM.Sum(x => x.Aggregate);
+            WarehouseInventoryVM.UnfulfillableTransit = WarehouseInventoryVM.WarehouseVM.Sum(x => x.TransferAwaiting);
+            WarehouseInventoryVM.TotalVelocity = WarehouseInventoryVM.WarehouseVM.Sum(x => x.Velocity);
             WarehouseInventoryVM.Location = Warehouse.Location;
             WarehouseInventoryVM.Countries = Warehouse.Countries;
             WarehouseInventoryVM.Marketplace = Warehouse.Marketplace;
             WarehouseInventoryVM.Company = Warehouse.Company;
-            WarehouseInventoryVM.WarehouseVM = GetWarehouseVMList(Warehouse, Product, FulfillableMin, FulfillableMax);
             return View(WarehouseInventoryVM);
         }
         public ActionResult IndexAll()
@@ -81,7 +86,7 @@ namespace PurchaseOrderSys.Controllers
                 AllSKUList = AllSKUList.Where(x => x.SkuID == Product).ToList();
             }
             WarehouseInventoryVM.WarehouseType = Warehouse.Type;
-            WarehouseInventoryVM.Fulfillable = Warehouse.Fulfillable;
+            //WarehouseInventoryVM.Fulfillable = Warehouse.Fulfillable;
             WarehouseInventoryVM.Location = Warehouse.Location;
             WarehouseInventoryVM.Countries = Warehouse.Countries;
             WarehouseInventoryVM.Marketplace = Warehouse.Marketplace;
@@ -1010,8 +1015,8 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult GetHistory(string ID)
         {
             var SerialsLlistVMList = new List<SerialsLlistVM>();
-            var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == ID).OrderByDescending(x => x.CreateAt).ThenByDescending(x=>x.ID);
-            var RMASerialsLlist = db.RMASerialsLlist.Where(x => x.SerialsNo == ID).OrderByDescending(x => x.CreateAt).ThenByDescending(x => x.ID);
+            var SerialsLlist = db.SerialsLlist.Where(x => x.IsEnable && x.SerialsNo == ID).OrderByDescending(x => x.CreateAt).ThenByDescending(x => x.ID);
+            var RMASerialsLlist = db.RMASerialsLlist.Where(x => x.IsEnable && x.SerialsNo == ID).OrderByDescending(x => x.CreateAt).ThenByDescending(x => x.ID);
             foreach (var item in SerialsLlist)
             {
 
@@ -1087,6 +1092,19 @@ namespace PurchaseOrderSys.Controllers
                     ISType = "Transfer(Out)";
                     SID = item.TransferSKU.TransferID;
                     Warehouse = item.TransferSKU.Transfer.WarehouseFrom.Name;
+                }
+                else if (item.SerialsType == "CM")
+                {
+                    ISType = item.PurchaseSKU.CreditMemo.CMType;
+                    SID = item.PurchaseSKU.CreditMemoID;
+                    if (item.RMASerialsLlistP.TransferSKUID.HasValue)
+                    {
+                        Warehouse = item.RMASerialsLlistP.TransferSKU.Transfer.WarehouseTo.Name;
+                    }
+                    else
+                    {
+                        Warehouse = item.RMASerialsLlistP.Warehouse?.Name ?? item.RMASerialsLlistP.RMASKU.RMA.Warehouse.Name;
+                    }
                 }
                 SerialsLlistVMList.Add(new SerialsLlistVM { Date = CreateAt, ID = SID, ISType = ISType, QTY = QTY, UpdatedBy = UpdatedBy, Warehouse = Warehouse });
             }

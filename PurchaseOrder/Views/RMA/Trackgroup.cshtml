@@ -3,49 +3,51 @@
     Layout = null;
     var DefaultSelect = PurchaseOrderSys.App_GlobalResources.Resource.DefaultSelect;
     var ShippingList = new List<SelectListItem>();
-    var Shipping_API = new PurchaseOrderSys.FedExApi.Shipping_API().ShippingList();
-    if (Shipping_API.status)
-    {
-        ShippingList = Shipping_API.data.shippingMethod.Select(x => new SelectListItem { Text = x.text, Value = x.value.ToString() }).ToList();
-    }
+    var vdb = new PurchaseOrderEntities();
+    var Carrier = vdb.Carriers.Where(x => x.IsEnable).Select(x => new SelectListItem { Text = x.Name, Value = x.ID.ToString() }).ToList();
+
 }
 <tr class="trackinggroup">
     <td colspan="7">
         <div class="col-sm-10 col-lg-6">
-            <textarea rows="6" style="width:100%" id="textgnote"></textarea>
-            <button type="button" id="addnote" style="float:right" class="btn btn-default btn-sm">Save Tracking  Note</button>
+            @Html.HiddenFor(x => x.ID, new { @class = "RMAOrderTracking" })
+            <textarea rows="6" style="width:100%" class="textgnote"></textarea>
+            <button type="button" style="float:right" class="btn btn-default btn-sm addgnote">Save Tracking  Note</button>
             <span style="float:right">　</span>
             @*<button type="button" id="UploadImage" style="float:right" class="btn btn-default btn-sm">Upload Tracking  Image</button>*@
-            <input type="file" id="addgimg" style="float:right" multiple />
+            <input type="file" class="addgimg" style="float:right" multiple />
         </div>
         <div class="col-sm-2 col-lg-6">
-            <ul style="list-style-type:none;list-style-position: inside;padding-left: 0px;padding-left: 0px;" id="textnotelog@Model.ID">
+            <ul style="list-style-type:none;list-style-position: inside;padding-left: 0px;padding-left: 0px;" id="textgnotelog@(Model.ID)" class="textgnotelog">
                 @if (Model != null && Model.PurchaseNote != null)
                 {
                     foreach (var item in Model.PurchaseNote.OrderByDescending(x => x.ID))
                     {
-                    <li>
-                        <fieldset>
-                            <legend>
-                                @if (item.NoteType == "Url")
-                                {
-                                    <a class="aimg" href="@item.Note" data-lightbox="roadtrip"><img class="img" src="@item.Note" width="100px" height="100px" /></a>
-                                }
-                                else
-                                {
-                                    @item.Note
-                                }
-
-                                <br />
-                                @( item.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss") + "  By  " + item.CreateBy)
-                            </legend>
-                        </fieldset>
-                    </li>
+                        <li>
+                            <fieldset>
+                                <legend>
+                                    @foreach (var PurchaseNoteImgitem in item.PurchaseNoteImg)
+                                    {
+                                        <a class="aimg" href="@PurchaseNoteImgitem.Img" data-lightbox="roadtrip"><img class="img" src="@PurchaseNoteImgitem.Img" width="100px" height="100px" /></a>
+                                    }
+                                    @if (item.NoteType == "Url")
+                                    {
+                                        <a class="aimg" href="@item.Note" data-lightbox="roadtrip"><img class="img" src="@item.Note" width="100px" height="100px" /></a>
+                                    }
+                                    else
+                                    {
+                                        @item.Note
+                                    }
+                                    <br />
+                                    @( item.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss") + "  By  " + item.CreateBy)
+                                </legend>
+                            </fieldset>
+                        </li>
                     }
                 }
             </ul>
         </div>
     </td>
-    <td>Carrier : @Html.DropDownList("Carrier", ShippingList, DefaultSelect)</td>
-    <td>Tracking : @Html.Editor("ReturnTracking")</td>
+    <td>Carrier : @Html.DropDownList("Carrier", Carrier, DefaultSelect, new { @class = "Trackingchange Carrier" })</td>
+    <td>Tracking : @Html.Editor("ReturnTracking", new { htmlAttributes = new { @class = "Trackingchange ReturnTracking" } })</td>
 </tr>

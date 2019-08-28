@@ -7747,6 +7747,7 @@
     <Content Include="Views\RMA\ReturnLabel.cshtml" />
     <Content Include="Views\Order\_CombineTable.cshtml" />
     <Content Include="Views\RMA\Trackgroup.cshtml" />
+    <Content Include="Views\RMA\ReturnTracking.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -7795,6 +7796,7 @@
     <EmbeddedResource Include="App_GlobalResources\Resource.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.en-US.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
