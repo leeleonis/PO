@@ -492,7 +492,7 @@
                                                                 <td class="no-padding">
                                                                     @{
                                                                         var ActionLogs = Model.ActionLogs.OrderBy(l => l.CreateAt)
-                                                                            .Select(l => string.Format("{0}：{1}\r\n{2}\r\n{3}", l.Item, l.Description, l.CreateBy, l.CreateAt.ToString("dd/MM/yyyy HH:mm:ss"))).ToList();
+                                                                            .Select(l => string.Format("{0} > {1}\r\n{2}\r\n{3}", l.Item, l.Description, l.CreateBy, l.CreateAt.ToString("yyyy/MM/dd hh:mm tt"))).ToList();
                                                                     }
                                                                     <textarea class="form-control" rows="20" readonly>@(ActionLogs.Any() ? string.Join("\r\n┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄\r\n", ActionLogs) : "")</textarea>
                                                                 </td>
@@ -507,7 +507,7 @@
 
                                 <div class="widget-footer">
                                     <button type="submit" class="btn btn-primary" id="btn-save">儲存</button>
-                                    @*<button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index", "SkuType")'">返回</button>*@<button type="button" class="btn btn-default" onclick="location.href='@Url.Action(" Index", "SkuType" )'"></button>
+                                    @*<button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index", "SkuType")'">返回</button>*@
                                 </div>
                             </form>
                         </div>

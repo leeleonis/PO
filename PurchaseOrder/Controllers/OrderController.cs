@@ -77,7 +77,7 @@ namespace PurchaseOrderSys.Controllers
 
                 if (StatusChange)
                 {
-                    OM.ActionLog("Order", Enum.GetName(typeof(EnumData.OrderStatus), order.OrderStatus));
+                    OM.ActionLog("Change Status", string.Format("Order to {0}", Enum.GetName(typeof(EnumData.OrderStatus), order.OrderStatus)));
 
                     if (order.SCID.HasValue)
                     {
@@ -175,7 +175,11 @@ namespace PurchaseOrderSys.Controllers
 
                     if (item.Sku != updateItem.Sku)
                     {
-                        item.Sku = updateItem.Sku;
+                        using (var OM = new OrderManagement(item.OrderID))
+                        {
+                            OM.ActionLog("Change Sku", string.Format("{0} to {1}", item.Sku, updateItem.Sku));
+                            item.Sku = updateItem.Sku;
+                        }
                     }
 
                     var updateSerial = !string.IsNullOrEmpty(item.SerialEdit) ? item.SerialEdit.Split(',').Select(s => s.Trim()).ToArray() : new string[] { };
@@ -330,7 +334,7 @@ namespace PurchaseOrderSys.Controllers
 
                 using (var OM = new OrderManagement(package.OrderID))
                 {
-                    OM.ActionLog("Package", "Split Package");
+                    OM.ActionLog("Change Shipping Actions", "Split Package");
 
                     if (package.GetOrder.SCID.HasValue)
                     {
@@ -422,7 +426,7 @@ namespace PurchaseOrderSys.Controllers
 
                 using (var OM = new OrderManagement(newPackage.OrderID))
                 {
-                    OM.ActionLog("Package", "Combine Packages");
+                    OM.ActionLog("Change Shipping Actions", "Combine Packages");
 
                     if (oldPackageList.All(p => p.SCID.HasValue))
                     {
@@ -463,12 +467,12 @@ namespace PurchaseOrderSys.Controllers
                     if (!order.FulfillmentStatus.Equals((byte)fulfillmentStatus))
                     {
                         order.FulfillmentStatus = (byte)fulfillmentStatus;
-                        OM.ActionLog("Fulfillment", fulfillmentStatus.ToString());
+                        OM.ActionLog("Change Status", string.Format("Fulfillment to", fulfillmentStatus.ToString()));
 
                         if (order.FulfillmentStatus.Equals((byte)EnumData.OrderFulfillmentStatus.Full))
                         {
                             order.OrderStatus = (byte)EnumData.OrderStatus.Completed;
-                            OM.ActionLog("Order", "Complete");
+                            OM.ActionLog("Change Status", "Order to Complete");
                         }
                     }
 

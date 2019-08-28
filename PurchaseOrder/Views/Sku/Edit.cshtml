@@ -791,7 +791,7 @@
                                             Supplier = SerialList.FirstOrDefault(ss => ss.ExtendID.Equals(s.RMASKU.RMA.OrderID.Value) && ss.SKU.Equals(s.RMASKU.SkuNo))?.Supplier ?? "",
                                             Type = s.SerialsType,
                                             ExtendID = s.TransferSKU?.TransferID ?? s.RMASKU.RMA.ID,
-                                            WID = s.RMASKU.WarehouseID.Value,
+                                            WID = s.WarehouseID ?? s.RMASKU.WarehouseID.Value,
                                             Serial = s.SerialsNo,
                                             QTY = s.SerialsQTY.Value,
                                             Price = s.RMASKU.UnitPrice.Value,
