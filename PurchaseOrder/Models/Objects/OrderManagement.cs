@@ -185,16 +185,19 @@ namespace PurchaseOrderSys.Models
 
         public EnumData.OrderStatus CheckOrderStatus(Orders order)
         {
-            if(order.PaymentStatus.Equals((byte)EnumData.OrderPaymentStatus.None) || order.PaymentStatus.Equals((byte)EnumData.OrderPaymentStatus.Partial))
+            if (order.OrderStatus.Equals((byte)EnumData.OrderStatus.InProcess))
             {
-                return EnumData.OrderStatus.OnHold;
-            }
-
-            if(order.PaymentStatus.Equals((byte)EnumData.OrderPaymentStatus.Full) || order.PaymentStatus.Equals((byte)EnumData.OrderPaymentStatus.OverPaid))
-            {
-                if (order.FulfillmentStatus.Equals((byte)EnumData.OrderFulfillmentStatus.Full))
+                if (order.PaymentStatus.Equals((byte)EnumData.OrderPaymentStatus.None) || order.PaymentStatus.Equals((byte)EnumData.OrderPaymentStatus.Partial))
                 {
-                    return EnumData.OrderStatus.Completed;
+                    return EnumData.OrderStatus.OnHold;
+                }
+
+                if (order.PaymentStatus.Equals((byte)EnumData.OrderPaymentStatus.Full) || order.PaymentStatus.Equals((byte)EnumData.OrderPaymentStatus.OverPaid))
+                {
+                    if (order.FulfillmentStatus.Equals((byte)EnumData.OrderFulfillmentStatus.Full))
+                    {
+                        return EnumData.OrderStatus.Completed;
+                    }
                 }
             }
 
