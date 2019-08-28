@@ -380,7 +380,7 @@
                                                                     bool isChooseComplete = (Model.PaymentStatus.Equals((byte)EnumData.OrderPaymentStatus.Full) || Model.PaymentStatus.Equals((byte)EnumData.OrderPaymentStatus.OverPaid))
                                                                         && (Model.FulfillmentStatus.Equals((byte)EnumData.OrderFulfillmentStatus.Full) || Model.FulfillmentStatus.Equals((byte)EnumData.OrderFulfillmentStatus.Partial));
                                                                 }
-                                                                <select class="form-control" name="OrderStatus" id="select-status" @(isReadOnly ? "readonly disabled" : "")>
+                                                                <select class="form-control" name="OrderStatus" id="select-status" @(isReadOnly ? "disabled" : "")>
                                                                     @foreach (var status in EnumData.OrderStatusList())
                                                                     {
                                                                         if (!(Model.OrderStatus.Equals((byte)EnumData.OrderStatus.OnHold) && status.Key.Equals((byte)EnumData.OrderStatus.Completed)))
@@ -392,6 +392,7 @@
                                                                         };
                                                                     }
                                                                 </select>
+                                                                <input type="hidden" name="OrderStatus" value="@Model.OrderStatus" />
                                                             </td>
                                                         </tr>
                                                         <tr>

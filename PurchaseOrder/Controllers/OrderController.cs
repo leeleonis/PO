@@ -71,6 +71,12 @@ namespace PurchaseOrderSys.Controllers
             {
                 bool StatusChange = order.OrderStatus != updateData.OrderStatus;
 
+                if (!order.IsRush.Equals(updateData.IsRush))
+                    OM.ActionLog("Change Rush", Enum.GetName(typeof(EnumData.YesNo), updateData.IsRush));
+
+                if (!order.Comment.Equals(updateData.Comment))
+                    OM.ActionLog("Change Comment", "");
+
                 SetUpdateData(order, updateData, new string[] { "IsRush", "OrderStatus", "Comment" });
                 order.OrderStatus = (byte)OM.CheckOrderStatus(order);
                 db.SaveChanges();
@@ -141,8 +147,7 @@ namespace PurchaseOrderSys.Controllers
             {
                 if (address == null) throw new Exception("Not found address!");
 
-                if (address.CountryCode != updateAddress.CountryCode) address.CountryName = EnumData.CountryList()[updateAddress.CountryCode];
-                SetUpdateData(address, updateAddress, new string[] { "FirstName", "LastName", "AddressLine1", "AddressLine2", "City", "State", "Postcode", "CountryCode", "PhoneNumber" });
+                CheckAddressData(address, updateAddress);
                 db.SaveChanges();
 
                 var ShipsArray = new string[] { address.AddressLine1, address.AddressLine2, address.City, address.State, address.Postcode, address.CountryName, address.PhoneNumber };
@@ -156,6 +161,44 @@ namespace PurchaseOrderSys.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        private void CheckAddressData(OrderAddresses address, OrderAddresses updateAddress)
+        {
+            using (var OM = new OrderManagement(address.OrderID))
+            {
+                if (!address.FirstName.Equals(updateAddress.FirstName))
+                    OM.ActionLog("Change Address", "First Name to " + updateAddress.FirstName);
+
+                if (!address.LastName.Equals(updateAddress.LastName))
+                    OM.ActionLog("Change Address", "Last Name to " + updateAddress.LastName);
+
+                if (!address.AddressLine1.Equals(updateAddress.AddressLine1))
+                    OM.ActionLog("Change Address", "Address1 to " + updateAddress.AddressLine1);
+
+                if (!address.AddressLine2.Equals(updateAddress.AddressLine2))
+                    OM.ActionLog("Change Address", "Address2 to " + updateAddress.AddressLine2 ?? "Empty");
+
+                if (!address.City.Equals(updateAddress.City))
+                    OM.ActionLog("Change Address", "City to " + updateAddress.City);
+
+                if (!address.State.Equals(updateAddress.State))
+                    OM.ActionLog("Change Address", "State to " + updateAddress.State);
+
+                if (!address.Postcode.Equals(updateAddress.Postcode))
+                    OM.ActionLog("Change Address", "Postcode to " + updateAddress.Postcode);
+
+                if (!address.CountryCode.Equals(updateAddress.CountryCode))
+                {
+                    address.CountryName = EnumData.CountryList()[updateAddress.CountryCode];
+                    OM.ActionLog("Change Address", "Country to " + address.CountryName);
+                }
+
+                if (!address.PhoneNumber.Equals(updateAddress.PhoneNumber))
+                    OM.ActionLog("Change Address", "PhoneNumber to " + updateAddress.PhoneNumber);
+
+                SetUpdateData(address, updateAddress, new string[] { "FirstName", "LastName", "AddressLine1", "AddressLine2", "City", "State", "Postcode", "CountryCode", "PhoneNumber" });
+            }
+        }
+
         [HttpPost]
         public ActionResult PackageSave(Packages updatePackage)
         {
@@ -167,43 +210,59 @@ namespace PurchaseOrderSys.Controllers
             {
                 if (package == null) throw new Exception("Not found package!");
 
-                SetUpdateData(package, updatePackage, packageEditList);
-                foreach (var item in package.Items.Where(i => i.IsEnable))
+                using (var OM = new OrderManagement(package.OrderID))
                 {
-                    var updateItem = updatePackage.Items.First(i => i.ID.Equals(item.ID));
-                    SetUpdateData(item, updateItem, new string[] { "ExportValue", "DLExportValue", "Qty" });
+                    CheckPackageData(package, updatePackage);
 
-                    if (item.Sku != updateItem.Sku)
+                    foreach (var item in package.Items.Where(i => i.IsEnable))
                     {
-                        using (var OM = new OrderManagement(item.OrderID))
+                        var updateItem = updatePackage.Items.First(i => i.ID.Equals(item.ID));
+
+                        if (item.Sku != updateItem.Sku)
                         {
                             OM.ActionLog("Change Sku", string.Format("{0} to {1}", item.Sku, updateItem.Sku));
                             item.Sku = updateItem.Sku;
                         }
-                    }
 
-                    var updateSerial = !string.IsNullOrEmpty(item.SerialEdit) ? item.SerialEdit.Split(',').Select(s => s.Trim()).ToArray() : new string[] { };
-                    foreach (var serial in item.Serials)
-                    {
-                        serial.IsEnable = updateSerial.Contains(serial.SerialNumber);
-                        serial.UpdateAt = package.UpdateAt.Value;
-                        serial.UpdateBy = package.UpdateBy;
-                    }
+                        if (!item.ExportValue.Equals(updateItem.ExportValue))
+                            OM.ActionLog("Change Export Value", string.Format("{0} to {1}", updateItem.Sku, updateItem.ExportValue));
 
-                    foreach (var newSerial in updateSerial.Except(item.Serials.Select(s => s.SerialNumber).ToArray()))
-                    {
-                        item.Serials.Add(new OrderSerials()
+                        if (!item.DLExportValue.Equals(updateItem.DLExportValue))
+                            OM.ActionLog("Change DL Export Value", string.Format("{0} to {1}", updateItem.Sku, updateItem.DLExportValue));
+
+                        if (!item.DLExportValue.Equals(updateItem.DLExportValue))
+                            OM.ActionLog("Change QTY", string.Format("{0} to {1}", updateItem.Sku, updateItem.Qty));
+
+                        SetUpdateData(item, updateItem, new string[] { "ExportValue", "DLExportValue", "Qty" });
+
+                        var updateSerial = !string.IsNullOrEmpty(item.SerialEdit) ? item.SerialEdit.Split(',').Select(s => s.Trim()).ToArray() : new string[] { };
+                        foreach (var serial in item.Serials)
                         {
-                            OrderID = item.OrderID,
-                            ItemID = item.ID,
-                            Sku = item.Sku,
-                            SerialNumber = newSerial,
-                            CreateBy = package.UpdateBy
-                        });
-                    }
-                }
+                            serial.IsEnable = updateSerial.Contains(serial.SerialNumber);
+                            serial.UpdateAt = package.UpdateAt.Value;
+                            serial.UpdateBy = package.UpdateBy;
 
-                db.SaveChanges();
+                            if(!serial.IsEnable)
+                                OM.ActionLog("Remove Serial", serial.SerialNumber);
+                        }
+
+                        foreach (var newSerial in updateSerial.Except(item.Serials.Select(s => s.SerialNumber).ToArray()))
+                        {
+                            item.Serials.Add(new OrderSerials()
+                            {
+                                OrderID = item.OrderID,
+                                ItemID = item.ID,
+                                Sku = item.Sku,
+                                SerialNumber = newSerial,
+                                CreateBy = package.UpdateBy
+                            });
+
+                            OM.ActionLog("Add Serial", newSerial);
+                        }
+                    }
+
+                    db.SaveChanges();
+                }
 
                 var ViewData = new ViewDataDictionary() {
                     { "MethodList", db.ShippingMethods.AsNoTracking().Where(m => m.IsEnable).OrderBy(m => m.Name).Select(m => new SelectListItem() { Text = m.Name, Value = m.ID.ToString() }).ToList() },
@@ -219,6 +278,47 @@ namespace PurchaseOrderSys.Controllers
             }
 
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        private void CheckPackageData(Packages package, Packages updatePackage)
+        {
+            using (var OM = new OrderManagement(package.OrderID))
+            {
+                if (!package.ShipWarehouse.Equals(updatePackage.ShipWarehouse))
+                    OM.ActionLog("Change Warehouse", string.Format("Ship to {0}", db.Warehouse.Find(updatePackage.ShipWarehouse).Name));
+
+                if (!package.ShippingMethod.Equals(updatePackage.ShippingMethod))
+                    OM.ActionLog("Change Method", db.ShippingMethods.Find(updatePackage.ShippingMethod).Name);
+
+                if (!package.Tracking.Equals(updatePackage.Tracking))
+                    OM.ActionLog("Change Tracking", updatePackage.Tracking ?? "Empty");
+
+                if (!package.UploadTracking.Equals(updatePackage.UploadTracking))
+                    OM.ActionLog("Change Upload Tracking", Enum.GetName(typeof(EnumData.YesNo), updatePackage.UploadTracking));
+
+                if (!package.Export.Equals(updatePackage.Export))
+                    OM.ActionLog("Change Export", Enum.GetName(typeof(EnumData.Export), updatePackage.Export));
+
+                if (!package.ExportMethod.Equals(updatePackage.ExportMethod))
+                    OM.ActionLog("Change Export Method", Enum.GetName(typeof(EnumData.ExportMethod), updatePackage.ExportMethod));
+
+                if (!package.ExportValue.Equals(updatePackage.ExportValue))
+                    OM.ActionLog("Change Export Value", updatePackage.ExportValue.ToString());
+
+                if (!package.DLTracking.Equals(updatePackage.DLTracking))
+                    OM.ActionLog("Change DL Tracking", updatePackage.DLTracking ?? "Empty");
+
+                if (!package.DLExport.Equals(updatePackage.DLExport))
+                    OM.ActionLog("Change DL Export", Enum.GetName(typeof(EnumData.Export), updatePackage.DLExport));
+
+                if (!package.DLExportMethod.Equals(updatePackage.DLExportMethod))
+                    OM.ActionLog("Change DL Export Method", Enum.GetName(typeof(EnumData.ExportMethod), updatePackage.DLExportMethod));
+
+                if (!package.DLExportValue.Equals(updatePackage.DLExportValue))
+                    OM.ActionLog("Change DL Export Value", updatePackage.DLExportValue.ToString());
+
+                SetUpdateData(package, updatePackage, packageEditList);
+            }
         }
 
         public string SplitTable(int PackageID, int Qty)

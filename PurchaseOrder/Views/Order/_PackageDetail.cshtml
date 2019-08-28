@@ -183,13 +183,13 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>DL Carrier：</td>
+                        <td>Carrier：</td>
                         <td class="text">
                             <span>@(Model.GetMethod?.FirstMile?.Name ?? "")</span>
                         </td>
                     </tr>
                     <tr>
-                        <td>DL Tracking：</td>
+                        <td>Tracking：</td>
                         <td class="text">
                             <span>@(Model.DLTracking ?? "")</span>
                             @Html.TextBoxFor(Model => Model.DLTracking, htmlAttributes: new { @class = "form-control" })
