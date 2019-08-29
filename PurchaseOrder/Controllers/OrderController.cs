@@ -166,30 +166,30 @@ namespace PurchaseOrderSys.Controllers
             using (var OM = new OrderManagement(address.OrderID))
             {
                 if (!address.FirstName.Equals(updateAddress.FirstName))
-                    OM.ActionLog("Change Address", "First Name to " + updateAddress.FirstName);
+                    OM.ActionLog("Change Ship to", "First Name to " + updateAddress.FirstName);
 
                 if (!address.LastName.Equals(updateAddress.LastName))
-                    OM.ActionLog("Change Address", "Last Name to " + updateAddress.LastName);
+                    OM.ActionLog("Change Ship to", "Last Name to " + updateAddress.LastName);
 
                 if (!address.AddressLine1.Equals(updateAddress.AddressLine1))
-                    OM.ActionLog("Change Address", "Address1 to " + updateAddress.AddressLine1);
+                    OM.ActionLog("Change Ship to", "Address1 to " + updateAddress.AddressLine1);
 
                 if (!address.AddressLine2.Equals(updateAddress.AddressLine2))
-                    OM.ActionLog("Change Address", "Address2 to " + updateAddress.AddressLine2 ?? "Empty");
+                    OM.ActionLog("Change Ship to", "Address2 to " + updateAddress.AddressLine2 ?? "Empty");
 
                 if (!address.City.Equals(updateAddress.City))
-                    OM.ActionLog("Change Address", "City to " + updateAddress.City);
+                    OM.ActionLog("Change Ship to", "City to " + updateAddress.City);
 
                 if (!address.State.Equals(updateAddress.State))
-                    OM.ActionLog("Change Address", "State to " + updateAddress.State);
+                    OM.ActionLog("Change Ship to", "State to " + updateAddress.State);
 
                 if (!address.Postcode.Equals(updateAddress.Postcode))
-                    OM.ActionLog("Change Address", "Postcode to " + updateAddress.Postcode);
+                    OM.ActionLog("Change Ship to", "Postcode to " + updateAddress.Postcode);
 
                 if (!address.CountryCode.Equals(updateAddress.CountryCode))
                 {
                     address.CountryName = EnumData.CountryList()[updateAddress.CountryCode];
-                    OM.ActionLog("Change Address", "Country to " + address.CountryName);
+                    OM.ActionLog("Change Ship to", "Country to " + address.CountryName);
                 }
 
                 if (!address.PhoneNumber.Equals(updateAddress.PhoneNumber))
@@ -242,7 +242,7 @@ namespace PurchaseOrderSys.Controllers
                             serial.UpdateAt = package.UpdateAt.Value;
                             serial.UpdateBy = package.UpdateBy;
 
-                            if(!serial.IsEnable)
+                            if (!serial.IsEnable)
                                 OM.ActionLog("Remove Serial", serial.SerialNumber);
                         }
 
@@ -288,34 +288,34 @@ namespace PurchaseOrderSys.Controllers
                     OM.ActionLog("Change Warehouse", string.Format("Ship to {0}", db.Warehouse.Find(updatePackage.ShipWarehouse).Name));
 
                 if (!package.ShippingMethod.Equals(updatePackage.ShippingMethod))
-                    OM.ActionLog("Change Method", db.ShippingMethods.Find(updatePackage.ShippingMethod).Name);
+                    OM.ActionLog("Change Shipping Setting", string.Format("Method to {0}", db.ShippingMethods.Find(updatePackage.ShippingMethod).Name));
 
                 if (!package.Tracking.Equals(updatePackage.Tracking))
-                    OM.ActionLog("Change Tracking", updatePackage.Tracking ?? "Empty");
+                    OM.ActionLog("Change Shipping Setting", string.Format("Tracking to {0}", updatePackage.Tracking ?? "Empty"));
 
                 if (!package.UploadTracking.Equals(updatePackage.UploadTracking))
-                    OM.ActionLog("Change Upload Tracking", Enum.GetName(typeof(EnumData.YesNo), updatePackage.UploadTracking));
+                    OM.ActionLog("Change Shipping Setting", string.Format("Upload Tracking to {0}", Enum.GetName(typeof(EnumData.YesNo), updatePackage.UploadTracking)));
 
                 if (!package.Export.Equals(updatePackage.Export))
-                    OM.ActionLog("Change Export", Enum.GetName(typeof(EnumData.Export), updatePackage.Export));
+                    OM.ActionLog("Change Shipping Setting", string.Format("Export to {0}", Enum.GetName(typeof(EnumData.Export), updatePackage.Export)));
 
                 if (!package.ExportMethod.Equals(updatePackage.ExportMethod))
-                    OM.ActionLog("Change Export Method", Enum.GetName(typeof(EnumData.ExportMethod), updatePackage.ExportMethod));
+                    OM.ActionLog("Change Shipping Setting", string.Format("Export Method to {0}", Enum.GetName(typeof(EnumData.ExportMethod), updatePackage.ExportMethod)));
 
                 if (!package.ExportValue.Equals(updatePackage.ExportValue))
-                    OM.ActionLog("Change Export Value", updatePackage.ExportValue.ToString());
+                    OM.ActionLog("Change Shipping Setting", string.Format("Export Value to {0}", updatePackage.ExportValue.ToString()));
 
                 if (!package.DLTracking.Equals(updatePackage.DLTracking))
-                    OM.ActionLog("Change DL Tracking", updatePackage.DLTracking ?? "Empty");
+                    OM.ActionLog("Change DL Shipping Setting", string.Format("Tracking to {0}", updatePackage.DLTracking ?? "Empty"));
 
                 if (!package.DLExport.Equals(updatePackage.DLExport))
-                    OM.ActionLog("Change DL Export", Enum.GetName(typeof(EnumData.Export), updatePackage.DLExport));
+                    OM.ActionLog("Change DL Shipping Setting", string.Format("Export to {0}", Enum.GetName(typeof(EnumData.Export), updatePackage.DLExport)));
 
                 if (!package.DLExportMethod.Equals(updatePackage.DLExportMethod))
-                    OM.ActionLog("Change DL Export Method", Enum.GetName(typeof(EnumData.ExportMethod), updatePackage.DLExportMethod));
+                    OM.ActionLog("Change DL Shipping Setting", string.Format("Export Method to {0}", Enum.GetName(typeof(EnumData.ExportMethod), updatePackage.DLExportMethod)));
 
                 if (!package.DLExportValue.Equals(updatePackage.DLExportValue))
-                    OM.ActionLog("Change DL Export Value", updatePackage.DLExportValue.ToString());
+                    OM.ActionLog("Change DL Shipping Setting", string.Format("Export Value to {0}", updatePackage.DLExportValue.ToString()));
 
                 SetUpdateData(package, updatePackage, packageEditList);
             }
