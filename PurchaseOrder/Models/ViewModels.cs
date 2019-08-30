@@ -1015,6 +1015,10 @@ namespace PurchaseOrderSys.Models
         /// 移庫出庫數
         /// </summary>
         public int? TransferOutQTY { get; set; }
+        /// <summary>
+        /// Winit移庫出庫數
+        /// </summary>
+        public int WTransferOutQTY { get; internal set; }
     }
     [Serializable]
     public class WarehouseVM
@@ -1082,6 +1086,14 @@ namespace PurchaseOrderSys.Models
         ///  不可銷售的庫存總數,只限於 RMA 倉庫裡的庫存數量
         /// </summary>
         public int UnfulfillableRMA { get; set; }
+        /// <summary>
+        /// Winit移庫出庫數
+        /// </summary>
+        public int WTransferOutQTY { get; internal set; }
+        /// <summary>
+        /// Winit等待移倉的數量
+        /// </summary>
+        public int WTransferAwaiting { get; set; }
     }
     [Serializable]
     public class CompanyVM

@@ -693,6 +693,21 @@ namespace PurchaseOrderSys.Controllers
                         SerialsLlist = SerialsLlist.Where(x => x.SerialsQTY > 0 && (x.SerialsType == "PO" || x.SerialsType == "TransferIn" || x.SerialsType == "DropshpOrderIn") && !x.SerialsLlistC.Any(y => y.IsEnable));//PO和TransferIn才能出貨
                         if (SerialsLlist.Sum(x => x.SerialsQTY) > 0)
                         {
+                            using (var OM = new OrderManagement(Serialsitem.OrderID))
+                            {
+                                try
+                                {
+                                    var order = OM.OrderSync(Serialsitem.OrderID);
+                                    if (order.CreateAt.CompareTo(order.UpdateAt.Value) == 0)
+                                    {
+                                        OM.ActionLog("Order", "Sync Data");
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    TempData["ErrorMsg"] = ex.InnerException?.Message ?? ex.Message;
+                                }
+                            }
                             var nSerials = new SerialsLlist
                             {
                                 IsEnable = true,

@@ -44,8 +44,9 @@
                                                             <th>@Html.DisplayName("Type")</th>
                                                             <th>@Html.DisplayName("Fulfillable")</th>
                                                             <th>@Html.DisplayName("Awaiting Dispatch")</th>
+                                                            <th>@Html.DisplayName("Transit (Unfulfillable)")</th>
+                                                            <th>@Html.DisplayName("WinitTransit (Unfulfillable)")</th>
                                                             <th>@Html.DisplayName("Aggregate")</th>
-                                                            <th>@Html.DisplayName("Unfulfillable - Transit")</th>
                                                             <th>SKU ITEM</th>
                                                         </tr>
                                                     </thead>
@@ -54,18 +55,19 @@
                                                         {
                                                             foreach (var item in Model)
                                                             {
-                                                                <tr>
-                                                                    <td>@item.ID</td>
-                                                                    <td>@item.Name</td>
-                                                                    <td>@item.Type</td>
-                                                                    <td>@item.Fulfillable</td>
-                                                                    <td>@item.Awaiting</td>
-                                                                    <td>@item.Aggregate</td>
-                                                                    <td>@item.TransferOutQTY</td>
-                                                                    <td>
-                                                                        <a class='btn btn-default btn-sm' id='index' href='@Url.Action("index", "WarehouseInventory", new { item.ID })'>SKU</a>
-                                                                    </td>
-                                                                </tr>
+                                                        <tr>
+                                                            <td>@item.ID</td>
+                                                            <td>@item.Name</td>
+                                                            <td>@item.Type</td>
+                                                            <td>@item.Fulfillable</td>
+                                                            <td>@item.Awaiting</td>
+                                                            <td>@item.TransferOutQTY</td>
+                                                            <td>@item.WTransferOutQTY</td>
+                                                            <td>@item.Aggregate</td>
+                                                            <td>
+                                                                <a class='btn btn-default btn-sm' id='index' href='@Url.Action("index", "WarehouseInventory", new { item.ID })'>SKU</a>
+                                                            </td>
+                                                        </tr>
                                                             }
                                                         }
                                                     </tbody>

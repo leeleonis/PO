@@ -118,6 +118,30 @@ namespace PurchaseOrderSys.Controllers
             var NoPrepSerials = new List<string>();
             var SID = ID;
             var Transfer = db.Transfer.Find(ID);
+            if (Transfer.Status == "Requested")
+            {
+                var Winit_API = new Winit_API();
+                foreach (var WinitTransferSKU in Transfer.WinitTransfer.WinitTransferSKU)
+                {
+                    if (string.IsNullOrWhiteSpace(WinitTransferSKU.winitProductCode))//沒有M碼補上M碼
+                    {
+                        var WSKUList = Winit_API.SKUList(WinitTransferSKU.SkuNo);
+                        if (WSKUList != null && WSKUList.list != null && WSKUList.list.Any())
+                        {
+                            if (skuList.Contains(WinitTransferSKU.SkuNo))
+                            {
+                                WinitTransferSKU.winitProductCode = WSKUList.list.Where(x => string.IsNullOrWhiteSpace(x.specification)).FirstOrDefault().code;
+                            }
+                            else
+                            {
+                                WinitTransferSKU.winitProductCode = WSKUList.list.FirstOrDefault().code;
+                            }
+
+                        }
+                        db.SaveChanges();
+                    }
+                }
+            }
             var TranSKUVMList = new List<TranSKUVM>();
             foreach (var item in Transfer.TransferSKU.Where(x => x.IsEnable))
             {
@@ -231,7 +255,7 @@ namespace PurchaseOrderSys.Controllers
                         var WSKUList = Winit_API.SKUList(SKUitem.SkuNo + "-" + oTransfer.WarehouseTo.WinitWarehouse);
                         if (!WSKUList.list.Any() && !skuList.Contains(SKUitem.SkuNo + "-" + oTransfer.WarehouseTo.WinitWarehouse))//如果沒有資料就新增
                         {
-           
+
                             //檢查審核狀態
                             var ItemMt = Winit_API.queryItemMtEntitys(SKUitem.SkuNo + "-" + oTransfer.WarehouseTo.WinitWarehouse, oTransfer.WarehouseTo.WinitWarehouse);
                             if (!ItemMt.list.Any())
@@ -305,7 +329,7 @@ namespace PurchaseOrderSys.Controllers
                                 printQty = item.QTY,
                             });
                         }
-                       
+
                         var PrintV2 = Winit_API.GetPrintV2(PostPrintV2Data);
 
                         if (PrintV2 == null)
@@ -325,7 +349,6 @@ namespace PurchaseOrderSys.Controllers
                         });
                     }
                 }
-
             }
             db.SaveChanges();
             if (saveexit.HasValue && saveexit.Value)
