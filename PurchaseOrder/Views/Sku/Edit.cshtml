@@ -794,7 +794,7 @@
                                             WID = s.WarehouseID ?? s.RMASKU.WarehouseID.Value,
                                             Serial = s.SerialsNo,
                                             QTY = s.SerialsQTY.Value,
-                                            Price = s.RMASKU.UnitPrice.Value,
+                                            Price = s.RMASKU.UnitPrice ?? 0,
                                             Awaiting = false,
                                             Shipped = s.SerialsType.Equals("TransferOut") && s.TransferSKU.Transfer.Status.Equals("Shipped") && !s.RMASerialsLlistC.Any(sl => sl.SerialsType.Equals("TransferIn")),
                                             RMA = true
