@@ -89,5 +89,7 @@ namespace PurchaseOrderSys.Models
         public virtual DbSet<WinitTransferSKU> WinitTransferSKU { get; set; }
         public virtual DbSet<RMAOrderTracking> RMAOrderTracking { get; set; }
         public virtual DbSet<PurchaseNoteImg> PurchaseNoteImg { get; set; }
+        public virtual DbSet<TaskLog> TaskLog { get; set; }
+        public virtual DbSet<TaskScheduler> TaskScheduler { get; set; }
     }
 }

@@ -3119,4 +3119,43 @@
   <data name="Orders_RMAID" xml:space="preserve">
     <value></value>
   </data>
+  <data name="TaskLog_ID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="TaskLog_Scheduler" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="TaskLog_Description" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="TaskLog_CreateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="TaskLog_CreateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="TaskScheduler_ID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="TaskScheduler_Status" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="TaskScheduler_Name" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="TaskScheduler_Result" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="TaskScheduler_UpdateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="TaskScheduler_UpdateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="TaskScheduler_CreateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="TaskScheduler_CreateAt" xml:space="preserve">
+    <value></value>
+  </data>
 </root>

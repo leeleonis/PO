@@ -177,6 +177,9 @@
         <EntityTypeShape EntityType="PurchaseOrderModel.PurchaseNoteImg" Width="1.5" PointX="23.25" PointY="49.75" />
         <AssociationConnector Association="PurchaseOrderModel.FK_PurchaseNoteImg_PurchaseNote" />
         <AssociationConnector Association="PurchaseOrderModel.FK_RMASerialsLlist_PurchaseSKU" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.TaskLog" Width="1.5" PointX="8.625" PointY="1.25" />
+        <EntityTypeShape EntityType="PurchaseOrderModel.TaskScheduler" Width="1.5" PointX="6.375" PointY="1" />
+        <AssociationConnector Association="PurchaseOrderModel.FK_TaskLog_TaskScheduler" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

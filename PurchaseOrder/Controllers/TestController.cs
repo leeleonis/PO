@@ -170,7 +170,7 @@ namespace PurchaseOrderSys.Controllers
             var WinitTransferSKU = db.WinitTransferSKU.AsEnumerable().Where(x => x.WinitTransferID == WinitTransferID && string.IsNullOrWhiteSpace(x.ItemBarcodeFile));
             foreach (var WinitTransferSKUitem in WinitTransferSKU)
             {
-                foreach (var TransferSKUitem in WinitTransferSKUitem.WinitTransfer.Transfer.TransferSKU.Where(x => x.IsEnable&& WinitTransferSKUitem.SkuNo.Contains(x.SkuNo)))
+                foreach (var TransferSKUitem in WinitTransferSKUitem.WinitTransfer.Transfer.TransferSKU.Where(x => x.IsEnable && WinitTransferSKUitem.SkuNo.Contains(x.SkuNo)))
                 {
                     var productCode = WinitTransferSKUitem.SkuNo;
                     var WSKUList = Winit_API.SKUList(productCode);
@@ -205,7 +205,7 @@ namespace PurchaseOrderSys.Controllers
                     }
 
                     var PrintV2 = Winit_API.GetPrintV2(PostPrintV2Data);
-                   
+
                     WinitTransferSKUitem.ItemBarcodeFile = PrintV2.itemBarcodeFile;
                     WinitTransferSKUitem.itemBarcodeList = string.Join(";", PrintV2.itemBarcodeList);
                 }
@@ -247,7 +247,7 @@ namespace PurchaseOrderSys.Controllers
                     CreateBy = CreateBy,
                     CreateAt = dt,
                     Memo = "匯入S碼專用"
-                };          
+                };
                 db.PurchaseOrder.Add(nPurchaseOrder);
                 //開移倉
                 var nTransfer = new Transfer
@@ -255,8 +255,8 @@ namespace PurchaseOrderSys.Controllers
                     IsEnable = true,
                     Title = "匯入S碼",
                     FromWID = 1,
-                    ToWID=27,
-                    Status= "Completed",
+                    ToWID = 27,
+                    Status = "Completed",
                     CreateBy = CreateBy,
                     CreateAt = dt,
 
@@ -265,8 +265,8 @@ namespace PurchaseOrderSys.Controllers
                 var nWinitTransfer = new WinitTransfer
                 {
                     IsEnable = true,
-                    SBarcodeLabelType= "LZ7050",
-                    BoxLabelSize= "10x10",
+                    SBarcodeLabelType = "LZ7050",
+                    BoxLabelSize = "10x10",
                     CreateBy = CreateBy,
                     CreateAt = dt,
                 };
@@ -309,7 +309,7 @@ namespace PurchaseOrderSys.Controllers
                             nPurchaseOrder.PurchaseSKU.Add(PurchaseSKU);
                         }
                         //加入序號
-                        var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serial && x.SerialsType== "PO").FirstOrDefault();// && !x.SerialsLlistC.Any(y => y.IsEnable)
+                        var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == serial && x.SerialsType == "PO").FirstOrDefault();// && !x.SerialsLlistC.Any(y => y.IsEnable)
                         if (SerialsLlist == null)
                         {
                             SerialsLlist = new SerialsLlist
@@ -382,11 +382,11 @@ namespace PurchaseOrderSys.Controllers
             {
                 foreach (var WinitTransferSKUitem in WinitTransferitem.WinitTransferSKU.Where(x => x.IsEnable))
                 {
-                    sheet1.Cells[row , 1].Value = WinitTransferSKUitem.SkuNo;
-                    sheet1.Cells[row , 2].Value = WinitTransferSKUitem.winitProductCode;
+                    sheet1.Cells[row, 1].Value = WinitTransferSKUitem.SkuNo;
+                    sheet1.Cells[row, 2].Value = WinitTransferSKUitem.winitProductCode;
                     foreach (var WinitTransferBoxitem in WinitTransferitem.WinitTransferBox.Where(x => x.IsEnable))
                     {
-                        foreach (var item in WinitTransferBoxitem.WinitTransferBoxItem.Where(x => x.MerchandiseCode== WinitTransferSKUitem.SkuNo))
+                        foreach (var item in WinitTransferBoxitem.WinitTransferBoxItem.Where(x => x.MerchandiseCode == WinitTransferSKUitem.SkuNo))
                         {
                             sheet1.Cells[row, 3].Value = item.SerialsNo;
                             sheet1.Cells[row, 4].Value = item.BarCode;
@@ -402,7 +402,7 @@ namespace PurchaseOrderSys.Controllers
             //關閉串流
             //var fileStream = OutputStream.ToArray();
             //OutputStream.Close();
-            return File(ep.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", WinitOrderNo+ "WinitExce.xlsx");
+            return File(ep.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", WinitOrderNo + "WinitExce.xlsx");
         }
         public ActionResult InvoiceExcelD(int id)
         {
@@ -483,11 +483,11 @@ namespace PurchaseOrderSys.Controllers
             HttpWebResponse httpResponse = (HttpWebResponse)request.GetResponse();
             using (var streamReader = new System.IO.StreamReader(httpResponse.GetResponseStream()))
             {
-               var response = JsonConvert.DeserializeObject<dynamic>(streamReader.ReadToEnd());
+                var response = JsonConvert.DeserializeObject<dynamic>(streamReader.ReadToEnd());
                 foreach (var item in response)
                 {
                     var Name = ((Newtonsoft.Json.Linq.JProperty)item).Name;
-                    var Value = ((Newtonsoft.Json.Linq.JProperty)item).Value ;
+                    var Value = ((Newtonsoft.Json.Linq.JProperty)item).Value;
                     foreach (var itemValue in Value.ToObject<List<string>>())
                     {
                         var LogisticList = db.Logistic.Where(x => x.Sku == itemValue);
@@ -911,6 +911,24 @@ namespace PurchaseOrderSys.Controllers
             }
 
             return new ShipResult(true);
+        }
+
+        public void Task_Test()
+        {
+            JobProcess job = new JobProcess("Test");
+            job.AddWord(() =>
+            {
+                try
+                {
+                    job.AddLog("123");
+                }
+                catch (Exception ex)
+                {
+                    return ex.InnerException?.Message ?? ex.Message;
+                }
+
+                return "";
+            });
         }
     }
 }

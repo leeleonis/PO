@@ -2892,4 +2892,43 @@
   <data name="Orders_RMAID" xml:space="preserve">
     <value>RMA</value>
   </data>
+  <data name="TaskLog_ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="TaskLog_Scheduler" xml:space="preserve">
+    <value>Scheduler</value>
+  </data>
+  <data name="TaskLog_Description" xml:space="preserve">
+    <value>描述</value>
+  </data>
+  <data name="TaskLog_CreateBy" xml:space="preserve">
+    <value>建立者</value>
+  </data>
+  <data name="TaskLog_CreateAt" xml:space="preserve">
+    <value>建立日期</value>
+  </data>
+  <data name="TaskScheduler_ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="TaskScheduler_Status" xml:space="preserve">
+    <value>狀態</value>
+  </data>
+  <data name="TaskScheduler_Name" xml:space="preserve">
+    <value>名稱</value>
+  </data>
+  <data name="TaskScheduler_Result" xml:space="preserve">
+    <value>結果</value>
+  </data>
+  <data name="TaskScheduler_UpdateBy" xml:space="preserve">
+    <value>更新者</value>
+  </data>
+  <data name="TaskScheduler_UpdateAt" xml:space="preserve">
+    <value>更新日期</value>
+  </data>
+  <data name="TaskScheduler_CreateBy" xml:space="preserve">
+    <value>建立者</value>
+  </data>
+  <data name="TaskScheduler_CreateAt" xml:space="preserve">
+    <value>建立日期</value>
+  </data>
 </root>

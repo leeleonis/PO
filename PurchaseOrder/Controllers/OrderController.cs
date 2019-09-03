@@ -87,16 +87,24 @@ namespace PurchaseOrderSys.Controllers
 
                     if (order.SCID.HasValue)
                     {
-                        try
+                        JobProcess job = new JobProcess(string.Format("更改訂單【{0}】的狀態至SC", order.ID));
+                        job.AddWord(() =>
                         {
-                            OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
-                            OM.ChangeOrderStatus(order.OrderStatus);
-                            OM.OrderSyncPush();
-                        }
-                        catch (Exception ex)
-                        {
-                            TempData["ErrorMsg"] = ex.InnerException?.Message ?? ex.Message;
-                        }
+                            try
+                            {
+                                job.AddLog("開始在SC上更改訂單狀態");
+                                OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
+                                OM.ChangeOrderStatus(order.OrderStatus);
+                                OM.OrderSyncPush();
+                                job.AddLog("完成訂單狀態更改");
+                            }
+                            catch (Exception ex)
+                            {
+                                return ex.InnerException?.Message ?? ex.Message;
+                            }
+
+                            return "";
+                        });
                     }
                 }
             }
@@ -436,12 +444,24 @@ namespace PurchaseOrderSys.Controllers
                 {
                     OM.ActionLog("Change Shipping Actions", "Split Package");
 
-                    if (package.GetOrder.SCID.HasValue)
+                    JobProcess job = new JobProcess(string.Format("分批訂單【{0}】的包裹", package.OrderID));
+                    job.AddWord(() =>
                     {
-                        OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
-                        OM.SplitPackage(packageData.Select(p => p.ID).ToArray());
-                        OM.OrderSyncPush();
-                    }
+                        try
+                        {
+                            job.AddLog("開始在SC上進訂單分批");
+                            OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
+                            OM.SplitPackage(packageData.Select(p => p.ID).ToArray());
+                            OM.OrderSyncPush();
+                            job.AddLog("完成包裹分批");
+                        }
+                        catch (Exception ex)
+                        {
+                            return ex.InnerException?.Message ?? ex.Message;
+                        }
+
+                        return "";
+                    });
                 }
             }
             catch (Exception ex)
@@ -530,9 +550,24 @@ namespace PurchaseOrderSys.Controllers
 
                     if (oldPackageList.All(p => p.SCID.HasValue))
                     {
-                        OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
-                        OM.CombinePackage(oldPackageIDs);
-                        OM.OrderSyncPush();
+                        JobProcess job = new JobProcess("Test");
+                        job.AddWord(() =>
+                        {
+                            try
+                            {
+                                job.AddLog("開始在SC上進行包裹整合");
+                                OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
+                                OM.CombinePackage(oldPackageIDs);
+                                OM.OrderSyncPush();
+                                job.AddLog("完成包裹整合");
+                            }
+                            catch (Exception ex)
+                            {
+                                return ex.InnerException?.Message ?? ex.Message;
+                            }
+
+                            return "";
+                        });
                     }
                 }
             }
@@ -578,9 +613,24 @@ namespace PurchaseOrderSys.Controllers
 
                     if (order.SCID.HasValue)
                     {
-                        OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
-                        OM.MarkShipPackage(package.ID);
-                        OM.OrderSyncPush();
+                        JobProcess job = new JobProcess("Test");
+                        job.AddWord(() =>
+                        {
+                            try
+                            {
+                                job.AddLog("開始在SC上進行包裹Mrak Ship");
+                                OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
+                                OM.MarkShipPackage(package.ID);
+                                OM.OrderSyncPush();
+                                job.AddLog("完成包裹Mrak Ship");
+                            }
+                            catch (Exception ex)
+                            {
+                                return ex.InnerException?.Message ?? ex.Message;
+                            }
+
+                            return "";
+                        });
                     }
                 }
 

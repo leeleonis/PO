@@ -11,12 +11,12 @@ namespace PurchaseOrderSys.Models
 {
     public class StockKeepingUnit : IDisposable
     {
-        public static string ApiUserName = "test@qd.com.tw";
-        public static string ApiPassword = "prU$U9R7CHl3O#uXU6AcH6ch";
-        protected PurchaseOrderEntities db = new PurchaseOrderEntities();
+        private static string ApiUserName = "test@qd.com.tw";
+        private static string ApiPassword = "prU$U9R7CHl3O#uXU6AcH6ch";
+        private PurchaseOrderEntities db = new PurchaseOrderEntities();
 
-        protected SKU skuData;
-        protected NetoApi netoApi;
+        private SKU skuData;
+        private NetoApi netoApi;
 
         public SC_WebService SC_Api;
 

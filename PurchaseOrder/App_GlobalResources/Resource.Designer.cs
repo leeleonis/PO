@@ -7180,6 +7180,123 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string TaskLog_CreateAt {
+            get {
+                return ResourceManager.GetString("TaskLog_CreateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string TaskLog_CreateBy {
+            get {
+                return ResourceManager.GetString("TaskLog_CreateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string TaskLog_Description {
+            get {
+                return ResourceManager.GetString("TaskLog_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string TaskLog_ID {
+            get {
+                return ResourceManager.GetString("TaskLog_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string TaskLog_Scheduler {
+            get {
+                return ResourceManager.GetString("TaskLog_Scheduler", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string TaskScheduler_CreateAt {
+            get {
+                return ResourceManager.GetString("TaskScheduler_CreateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string TaskScheduler_CreateBy {
+            get {
+                return ResourceManager.GetString("TaskScheduler_CreateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string TaskScheduler_ID {
+            get {
+                return ResourceManager.GetString("TaskScheduler_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string TaskScheduler_Name {
+            get {
+                return ResourceManager.GetString("TaskScheduler_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string TaskScheduler_Result {
+            get {
+                return ResourceManager.GetString("TaskScheduler_Result", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string TaskScheduler_Status {
+            get {
+                return ResourceManager.GetString("TaskScheduler_Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string TaskScheduler_UpdateAt {
+            get {
+                return ResourceManager.GetString("TaskScheduler_UpdateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string TaskScheduler_UpdateBy {
+            get {
+                return ResourceManager.GetString("TaskScheduler_UpdateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 QD - SKU System 的當地語系化字串。
         /// </summary>
         public static string Title {

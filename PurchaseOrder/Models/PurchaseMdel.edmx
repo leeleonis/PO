@@ -878,6 +878,7 @@
           <Property Name="SerialsType" Type="nvarchar" MaxLength="20" />
           <Property Name="Memo" Type="ntext" />
           <Property Name="IsEnable" Type="bit" Nullable="false" />
+          <Property Name="QDID" Type="int" />
         </EntityType>
         <EntityType Name="ShippingMethods">
           <Key>
@@ -1059,6 +1060,29 @@
           <Property Name="CreateAt" Type="datetime" Nullable="false" />
           <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
           <Property Name="UpdateAt" Type="datetime" />
+        </EntityType>
+        <EntityType Name="TaskLog">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Scheduler" Type="int" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="100" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreateAt" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TaskScheduler">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Status" Type="tinyint" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Result" Type="ntext" />
+          <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="UpdateAt" Type="datetime" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreateAt" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="Transfer">
           <Key>
@@ -2310,6 +2334,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_TaskLog_TaskScheduler">
+          <End Role="TaskScheduler" Type="Self.TaskScheduler" Multiplicity="1" />
+          <End Role="TaskLog" Type="Self.TaskLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaskScheduler">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TaskLog">
+              <PropertyRef Name="Scheduler" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Transfer_Warehouse">
           <End Role="Warehouse" Type="Self.Warehouse" Multiplicity="0..1" />
           <End Role="Transfer" Type="Self.Transfer" Multiplicity="*" />
@@ -2545,6 +2581,8 @@
           <EntitySet Name="SkuPicture" EntityType="Self.SkuPicture" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SkuType" EntityType="Self.SkuType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SkuTypeLang" EntityType="Self.SkuTypeLang" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TaskLog" EntityType="Self.TaskLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TaskScheduler" EntityType="Self.TaskScheduler" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Transfer" EntityType="Self.Transfer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TransferSKU" EntityType="Self.TransferSKU" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VendorBrand" EntityType="Self.VendorBrand" Schema="dbo" store:Type="Tables" />
@@ -2903,6 +2941,10 @@
           <AssociationSet Name="FK_SkuTypeLang_SkuType" Association="Self.FK_SkuTypeLang_SkuType">
             <End Role="SkuType" EntitySet="SkuType" />
             <End Role="SkuTypeLang" EntitySet="SkuTypeLang" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TaskLog_TaskScheduler" Association="Self.FK_TaskLog_TaskScheduler">
+            <End Role="TaskScheduler" EntitySet="TaskScheduler" />
+            <End Role="TaskLog" EntitySet="TaskLog" />
           </AssociationSet>
           <AssociationSet Name="FK_Transfer_Warehouse" Association="Self.FK_Transfer_Warehouse">
             <End Role="Warehouse" EntitySet="Warehouse" />
@@ -3437,6 +3479,12 @@
           <AssociationSet Name="FK_RMASerialsLlist_PurchaseSKU" Association="PurchaseOrderModel.FK_RMASerialsLlist_PurchaseSKU">
             <End Role="PurchaseSKU" EntitySet="PurchaseSKU" />
             <End Role="RMASerialsLlist" EntitySet="RMASerialsLlist" />
+          </AssociationSet>
+          <EntitySet Name="TaskLog" EntityType="PurchaseOrderModel.TaskLog" />
+          <EntitySet Name="TaskScheduler" EntityType="PurchaseOrderModel.TaskScheduler" />
+          <AssociationSet Name="FK_TaskLog_TaskScheduler" Association="PurchaseOrderModel.FK_TaskLog_TaskScheduler">
+            <End Role="TaskScheduler" EntitySet="TaskScheduler" />
+            <End Role="TaskLog" EntitySet="TaskLog" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="AdminGroup">
@@ -4774,6 +4822,7 @@
           <Property Name="IsEnable" Type="Boolean" Nullable="false" />
           <Property Name="RMASKUID" Type="Int32" />
           <NavigationProperty Name="WinitTransferBoxItem" Relationship="PurchaseOrderModel.FK_WinitTransferBoxItem_SerialsLlist" FromRole="SerialsLlist" ToRole="WinitTransferBoxItem" />
+          <Property Name="QDID" Type="Int32" />
         </EntityType>
         <Association Name="FK_SerialsLlist_PurchaseSKU">
           <End Type="PurchaseOrderModel.PurchaseSKU" Role="PurchaseSKU" Multiplicity="0..1" />
@@ -6097,6 +6146,43 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="TaskLog">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Scheduler" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="TaskScheduler" Relationship="PurchaseOrderModel.FK_TaskLog_TaskScheduler" FromRole="TaskLog" ToRole="TaskScheduler" />
+        </EntityType>
+        <EntityType Name="TaskScheduler">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Status" Type="Byte" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Result" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="TaskLog" Relationship="PurchaseOrderModel.FK_TaskLog_TaskScheduler" FromRole="TaskScheduler" ToRole="TaskLog" />
+        </EntityType>
+        <Association Name="FK_TaskLog_TaskScheduler">
+          <End Type="PurchaseOrderModel.TaskScheduler" Role="TaskScheduler" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.TaskLog" Role="TaskLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaskScheduler">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TaskLog">
+              <PropertyRef Name="Scheduler" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <!--<EntityType Name="WinitTransfer">
           <Key>
             <PropertyRef Name="TransferID" />
@@ -6866,6 +6952,7 @@
           <EntitySetMapping Name="SerialsLlist">
             <EntityTypeMapping TypeName="PurchaseOrderModel.SerialsLlist">
               <MappingFragment StoreEntitySet="SerialsLlist">
+                <ScalarProperty Name="QDID" ColumnName="QDID" />
                 <ScalarProperty Name="RMASKUID" ColumnName="RMASKUID" />
                 <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
                 <ScalarProperty Name="Memo" ColumnName="Memo" />
@@ -7428,6 +7515,31 @@
                 <ScalarProperty Name="PurchaseNoteID" ColumnName="PurchaseNoteID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TaskLog">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.TaskLog">
+              <MappingFragment StoreEntitySet="TaskLog">
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Scheduler" ColumnName="Scheduler" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TaskScheduler">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.TaskScheduler">
+              <MappingFragment StoreEntitySet="TaskScheduler">
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="Result" ColumnName="Result" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

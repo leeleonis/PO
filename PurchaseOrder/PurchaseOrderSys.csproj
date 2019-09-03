@@ -366,6 +366,7 @@
     <Compile Include="Models\LogisticMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Objects\Common.cs" />
     <Compile Include="Models\Objects\EnumData.cs" />
     <Compile Include="Models\ImgFile.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
@@ -415,6 +416,7 @@
     <Compile Include="Models\NetoGroupMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Objects\JobProcess.cs" />
     <Compile Include="Models\Objects\Neto\NetoApi.cs" />
     <Compile Include="Models\Objects\Neto\NetoBase.cs" />
     <Compile Include="Models\Objects\Neto\Schema\AddItem.cs" />
@@ -633,6 +635,18 @@
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Sku_PackageContentMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TaskLog.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TaskLogMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TaskScheduler.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TaskSchedulerMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Transfer.cs">

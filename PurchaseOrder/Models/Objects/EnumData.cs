@@ -40,6 +40,8 @@ namespace PurchaseOrderSys.Models
         public enum SkuType { Single, Variation, Kit, Shadow }
         public enum SkuStatus { Inactive, Active }
 
+        public enum TaskStatus { 未執行, 執行中, 執行完, 執行失敗 };
+
         /// <summary>
         /// 幣別
         /// </summary>

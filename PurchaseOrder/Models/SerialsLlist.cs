@@ -37,6 +37,7 @@ namespace PurchaseOrderSys.Models
         public string Memo { get; set; }
         public bool IsEnable { get; set; }
         public Nullable<int> RMASKUID { get; set; }
+        public Nullable<int> QDID { get; set; }
     
         public virtual PurchaseSKU PurchaseSKU { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

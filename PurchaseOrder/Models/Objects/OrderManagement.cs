@@ -12,11 +12,11 @@ namespace PurchaseOrderSys.Models
 {
     public class OrderManagement : IDisposable
     {
-        public static string ApiUserName = "test@qd.com.tw";
-        public static string ApiPassword = "prU$U9R7CHl3O#uXU6AcH6ch";
-        protected PurchaseOrderEntities db = new PurchaseOrderEntities();
+        private static string ApiUserName = "test@qd.com.tw";
+        private static string ApiPassword = "prU$U9R7CHl3O#uXU6AcH6ch";
+        private PurchaseOrderEntities db = new PurchaseOrderEntities();
 
-        protected Orders orderData;
+        private Orders orderData;
 
         public SC_WebService SC_Api;
 
@@ -468,26 +468,6 @@ namespace PurchaseOrderSys.Models
             Dispose(true);
             // TODO: 如果上方的完成項已被覆寫，即取消下行的註解狀態。
             // GC.SuppressFinalize(this);
-        }
-    }
-
-
-    public class Response<T>
-    {
-        public bool Status { get; set; }
-        public string Message { get; set; }
-        public T Data { get; set; }
-
-        public Response()
-        {
-            Status = true;
-            Message = null;
-        }
-
-        public void SetError(string msg)
-        {
-            Status = false;
-            Message = msg;
         }
     }
 }
