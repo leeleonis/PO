@@ -42,7 +42,7 @@ namespace PurchaseOrderSys.Models
         }
     }
 
-    public class Response<T>
+    internal class Response<T>
     {
         public bool Status { get; set; }
         public string Message { get; set; }
