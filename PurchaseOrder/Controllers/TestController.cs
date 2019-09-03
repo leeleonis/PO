@@ -930,5 +930,78 @@ namespace PurchaseOrderSys.Controllers
                 return "";
             });
         }
+
+        public ActionResult Autoreturntoshipper()
+        {
+            var IsSellable = db.Warehouse.Where(x => x.IsEnable && x.IsSellable).Select(x => x.ID).ToList();
+            var RMASerialsLlist = db.RMASerialsLlist.Where(x => x.IsEnable && x.SerialsType == "RMAIn" && x.WarehouseID.HasValue && IsSellable.Contains(x.WarehouseID.Value) && !x.RMASerialsLlistC.Any(y => y.IsEnable)).ToList();
+            var SerialsLlist = new List<RMASerialsLlist>();
+            foreach (var Serialitem in RMASerialsLlist)
+            {
+                //if (Serialitem.Reason == "16")
+                if (true)
+                {
+                    var dt = DateTime.UtcNow;
+                    //開移倉單
+                    var nTransfer = new Transfer
+                    {
+                        IsEnable = true,
+                        Title = Serialitem.RMASKU.RMA.OrderID + "_return to shipper",
+                        FromWID = Serialitem.WarehouseID,
+                        ToWID = Serialitem.WarehouseID,
+                        Status = "Completed",
+                        Interim = 2,
+                        CreateBy = "RMAAPI",
+                        CreateAt = dt
+                    };
+                    var nTransferSKU = new TransferSKU
+                    {
+                        IsEnable = true,
+                        QTY = 1,
+                        SkuNo = Serialitem.RMASKU.SkuNo,
+                        Name = Serialitem.RMASKU.Name,
+                        CreateBy = "RMAAPI",
+                        CreateAt = dt
+                    };
+
+
+                    var nSerialsLlist = new SerialsLlist
+                    {
+                        IsEnable = true,
+                        SerialsNo = Serialitem.SerialsNo,
+                        SerialsQTY = 1,
+                        SerialsType = "TransferIn",
+                        CreateBy = "RMAAPI",
+                        CreateAt = dt,
+                        ReceivedBy = "RMAAPI",
+                        ReceivedAt = dt,
+                    };
+                    nTransferSKU.SerialsLlist.Add(nSerialsLlist);
+                    var nRMASerialsLlist = new RMASerialsLlist
+                    {
+                        IsEnable = true,
+                        RMASKUID = Serialitem.RMASKUID,
+                        RMASerialsLlistP = Serialitem,
+                        SerialsNo = Serialitem.SerialsNo,
+                        SerialsQTY = -1,
+                        SerialsType = "TransferOut",
+                        CreateBy = "RMAAPI",
+                        CreateAt = dt,
+                        ReceivedBy = "RMAAPI",
+                        ReceivedAt = dt,
+                    };
+                    nTransferSKU.RMASerialsLlist.Add(nRMASerialsLlist);
+
+                    nTransfer.TransferSKU.Add(nTransferSKU);
+                    db.Transfer.Add(nTransfer);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    SerialsLlist.Add(Serialitem);
+                }
+            }
+            return Json(SerialsLlist.Select(x => new { x.SerialsNo, x.Warehouse.Name, Reason = EnumData.RMAReasonList().Where(y => y.Key.ToString() == x.Reason).FirstOrDefault().Value }).ToList(), JsonRequestBehavior.AllowGet);
+        }
     }
 }

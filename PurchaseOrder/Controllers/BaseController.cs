@@ -451,17 +451,19 @@ namespace PurchaseOrderSys.Controllers
             var AwaitingDispatchList = new List<AwaitingDispatchVM>();
             using (WebClient wc = new WebClient())
             {
-
                 try
                 {
                     SKUs = SKUs.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
                     SCIDs = SCIDs.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
-                    wc.Encoding = Encoding.UTF8;
-                    var nDictionary = new GetSkuInventoryQTYVM { WarehouseIDs = SCIDs, Skus = SKUs };
-                    var dataString = JsonConvert.SerializeObject(nDictionary);
-                    wc.Headers.Add(HttpRequestHeader.ContentType, "application/json");
-                    string resultXML = wc.UploadString(ApiUrl + "Api/GetSkuInventoryQTY", "POST", dataString);
-                    AwaitingDispatchList = JsonConvert.DeserializeObject<List<AwaitingDispatchVM>>(resultXML);
+                    if (SCIDs.Any())
+                    {
+                        wc.Encoding = Encoding.UTF8;
+                        var nDictionary = new GetSkuInventoryQTYVM { WarehouseIDs = SCIDs, Skus = SKUs };
+                        var dataString = JsonConvert.SerializeObject(nDictionary);
+                        wc.Headers.Add(HttpRequestHeader.ContentType, "application/json");
+                        string resultXML = wc.UploadString(ApiUrl + "Api/GetSkuInventoryQTY", "POST", dataString);
+                        AwaitingDispatchList = JsonConvert.DeserializeObject<List<AwaitingDispatchVM>>(resultXML);
+                    }
                 }
                 catch (WebException ex)
                 {
@@ -748,7 +750,9 @@ namespace PurchaseOrderSys.Controllers
                     OrderQTY = GetOrderQTY(x),
                     //TransferInQTY = GetTransferInQTY(x, Warehouse,"", ref NoList),
                     TransferOutQTY = GetTransferOutQTY(x, Warehouse, "", ref NoList),
+                    WTransferOutQTY = GetWTransferOutQTY(x, Warehouse, "", ref NoList),
                     TransferAwaiting = GetTransferAwaiting(x, Warehouse, ref NoList),//等待移倉的數量
+                    WTransferAwaiting = GetWTransferAwaiting(x, Warehouse, ref NoList),//等待移倉的數量
                     TransferOutCloseQTY = GetTransferOutCloseQTY(x, Warehouse, ref NoList),//移倉已入庫
                     UnfulfillableRMA = GetUnfulfillableRMA(x, Warehouse, ref NoList),//RMA數量
                     Velocity = GetVelocity(x),
@@ -766,9 +770,11 @@ namespace PurchaseOrderSys.Controllers
                     Name = x.Name,
                     SKU = x.SkuNo,
                     TransferInQTY = GetTransferInQTY(x, Warehouse, "To", ref NoList),//接入庫當PO
-                    TransferOutQTY = GetTransferOutQTY(x, Warehouse, "To", ref NoList) * -1,
+                    TransferOutQTY = Math.Abs(GetTransferOutQTY(x, Warehouse, "To", ref NoList)),
+                    WTransferOutQTY = Math.Abs(GetWTransferOutQTY(x, Warehouse, "To", ref NoList)),
                     TransferOutCloseQTY = GetTransferOutCloseQTY(x, Warehouse, ref NoList),//移倉已入庫
                     TransferAwaiting = GetTransferAwaiting(x, Warehouse, ref NoList),//等待移倉的數量
+                    WTransferAwaiting = GetWTransferAwaiting(x, Warehouse, ref NoList),//等待移倉的數量
                 }).ToList());
                 WarehouseVM.AddRange(TransferFromSKU.Select(x => new WarehouseVM
                 {
@@ -777,8 +783,10 @@ namespace PurchaseOrderSys.Controllers
                     SKU = x.SkuNo,
                     //TransferInQTY = GetTransferInQTY(x, Warehouse, "From", ref NoList),
                     TransferOutQTY = GetTransferOutQTY(x, Warehouse, "From", ref NoList),
+                    WTransferOutQTY = GetWTransferOutQTY(x, Warehouse, "From", ref NoList),
                     TransferOutCloseQTY = GetTransferOutCloseQTY(x, Warehouse, ref NoList),
                     TransferAwaiting = GetTransferAwaiting(x, Warehouse, ref NoList),//等待移倉的數量
+                    WTransferAwaiting = GetWTransferAwaiting(x, Warehouse, ref NoList),//等待移倉的數量
                 }).ToList());
                 var NoNewRMASKU = RMASerialsLlist.Where(x => string.IsNullOrWhiteSpace(x.NewSkuNo)).Select(x => x.RMASKU).ToList();//沒有新SKU
                 WarehouseVM.AddRange(NoNewRMASKU.Select(x => new WarehouseVM
@@ -788,9 +796,11 @@ namespace PurchaseOrderSys.Controllers
                     SKU = x.SkuNo,
                     UnfulfillableRMA = GetRMAInQty(x, x.SkuNo, false, null, Warehouse.ID),
                     TransferInQTY = GetTransferInQTY(x, Warehouse, "", ref NoList),//接入庫當PO
-                    TransferOutQTY = GetTransferOutQTY(x, Warehouse, "", ref NoList) * -1,
+                    TransferOutQTY = Math.Abs(GetTransferOutQTY(x, Warehouse, "", ref NoList)),
+                    WTransferOutQTY = Math.Abs(GetWTransferOutQTY(x, Warehouse, "", ref NoList)),
                     TransferOutCloseQTY = GetTransferOutCloseQTY(x, Warehouse, ref NoList),//移倉已入庫
                     TransferAwaiting = GetTransferAwaiting(x, Warehouse, ref NoList),//等待移倉的數量
+                    WTransferAwaiting = GetWTransferAwaiting(x, Warehouse, ref NoList),//等待移倉的數量
                 }).ToList());
                 var NewRMASKU = RMASerialsLlist.Where(x => !string.IsNullOrWhiteSpace(x.NewSkuNo)).Select(x => x.RMASKU).ToList();//有新SKU
                 WarehouseVM.AddRange(NewRMASKU.Select(x => new WarehouseVM
@@ -800,9 +810,11 @@ namespace PurchaseOrderSys.Controllers
                     SKU = x.RMASerialsLlist.FirstOrDefault().NewSkuNo,
                     UnfulfillableRMA = GetRMAInQty(x, x.RMASerialsLlist.FirstOrDefault().NewSkuNo, true, null, Warehouse.ID),
                     TransferInQTY = GetTransferInQTY(x, Warehouse, "", ref NoList),//接入庫當PO
-                    TransferOutQTY = GetTransferOutQTY(x, Warehouse, "", ref NoList) * -1,
+                    TransferOutQTY = Math.Abs(GetTransferOutQTY(x, Warehouse, "", ref NoList)),
+                    WTransferOutQTY = Math.Abs(GetWTransferOutQTY(x, Warehouse, "", ref NoList)),
                     TransferOutCloseQTY = GetTransferOutCloseQTY(x, Warehouse, ref NoList),//移倉已入庫
                     TransferAwaiting = GetTransferAwaiting(x, Warehouse, ref NoList),//等待移倉的數量
+                    WTransferAwaiting = GetWTransferAwaiting(x, Warehouse, ref NoList),//等待移倉的數量
                 }).ToList());
 
                 GroupWarehouseVM = WarehouseVM.GroupBy(x => new { x.SKU }).Select(x => new WarehouseVM //SKU數量總計
@@ -816,8 +828,10 @@ namespace PurchaseOrderSys.Controllers
                     OrderQTY = x.Sum(p => p.OrderQTY),
                     TransferInQTY = x.Sum(p => p.TransferInQTY),
                     TransferOutQTY = x.Sum(p => p.TransferOutQTY),
+                    WTransferOutQTY = x.Sum(p => p.WTransferOutQTY),
                     Velocity = x.Sum(p => p.Velocity),
                     TransferAwaiting = x.Sum(p => p.TransferAwaiting),
+                    WTransferAwaiting = x.Sum(p => p.WTransferAwaiting),
                     Fulfillable = x.Sum(p => p.Fulfillable),
                     Unfulfillable = x.Sum(p => p.TransferOutCloseQTY),
                     DaysOfSupply = x.Sum(p => p.DaysOfSupply),
@@ -928,9 +942,18 @@ namespace PurchaseOrderSys.Controllers
         /// <returns></returns>
         public int GetTransferOutQTY(dynamic SKU, Warehouse Warehouse, string WarehouseKey, ref List<int> WNoList)
         {
-            return GetTransferAwaitingOut(SKU, "Shipped", Warehouse, WarehouseKey, ref WNoList);
+            return GetTransferAwaitingOut(SKU, "Shipped", Warehouse, WarehouseKey,false, ref WNoList);
         }
-
+        /// <summary>
+        /// Winit取移庫入庫序號數量
+        /// </summary>
+        /// <param name="SKU"></param>
+        /// <param name="WarehouseType">倉庫</param>
+        /// <returns></returns>
+        public int GetWTransferOutQTY(dynamic SKU, Warehouse Warehouse, string WarehouseKey, ref List<int> WNoList)
+        {
+            return GetTransferAwaitingOut(SKU, "Shipped", Warehouse, WarehouseKey, true, ref WNoList);
+        }
         /// <summary>
         /// 待移倉的數量
         /// </summary>
@@ -939,7 +962,17 @@ namespace PurchaseOrderSys.Controllers
         /// <returns></returns>
         public int GetTransferAwaiting(dynamic SKU, Warehouse Warehouse, ref List<int> WNoList)
         {
-            return GetTransferAwaitingOut(SKU, "Requested", Warehouse, "", ref WNoList);
+            return GetTransferAwaitingOut(SKU, "Requested", Warehouse, "", false, ref WNoList);
+        }
+        /// <summary>
+        /// 待移倉的數量
+        /// </summary>
+        /// <param name="SKU"></param>
+        /// <param name="Warehouse">倉庫</param>
+        /// <returns></returns>
+        public int GetWTransferAwaiting(dynamic SKU, Warehouse Warehouse, ref List<int> WNoList)
+        {
+            return GetTransferAwaitingOut(SKU, "Requested", Warehouse, "", true, ref WNoList);
         }
         /// <summary>
         /// 還在運送中的數量
@@ -974,7 +1007,7 @@ namespace PurchaseOrderSys.Controllers
         }
 
 
-        public int GetTransferAwaitingOut(dynamic SKU, string Status, Warehouse Warehouse, string WarehouseKey, ref List<int> WNoList)
+        public int GetTransferAwaitingOut(dynamic SKU, string Status, Warehouse Warehouse, string WarehouseKey,bool winit, ref List<int> WNoList)
         {
             if (WNoList == null)
             {
@@ -998,6 +1031,14 @@ namespace PurchaseOrderSys.Controllers
                 {
                     SerialsLlist = SerialsLlist.Where(y => y.TransferSKU.Transfer.FromWID == Warehouse.ID);
                 }
+                if (winit)
+                {
+                    SerialsLlist = SerialsLlist.Where(y => y.TransferSKU.Transfer.Status == Status && y.TransferSKU.Transfer.TransferType == "Winit");
+                }
+                else
+                {
+                    SerialsLlist = SerialsLlist.Where(y => y.TransferSKU.Transfer.Status == Status && y.TransferSKU.Transfer.TransferType != "Winit");
+                }
                 SerialsLlist = SerialsLlist.Where(y => y.TransferSKU.Transfer.Status == Status);
                 SerialsLlist = SerialsLlist.Where(y => !y.SerialsLlistC.Any(z => z.IsEnable));
                 count = SerialsLlist.Sum(y => y.SerialsQTY).Value;
@@ -1019,6 +1060,14 @@ namespace PurchaseOrderSys.Controllers
                 else
                 {
                     SerialsLlist = SerialsLlist.Where(y => y.TransferSKU.Transfer.FromWID == Warehouse.ID);
+                }
+                if (winit)
+                {
+                    SerialsLlist = SerialsLlist.Where(y => y.TransferSKU.Transfer.Status == Status && y.TransferSKU.Transfer.TransferType == "Winit");
+                }
+                else
+                {
+                    SerialsLlist = SerialsLlist.Where(y => y.TransferSKU.Transfer.Status == Status && y.TransferSKU.Transfer.TransferType != "Winit");
                 }
                 SerialsLlist = SerialsLlist.Where(y => y.TransferSKU.Transfer.Status == Status).ToList();
                 SerialsLlist = SerialsLlist.Where(y => !y.SerialsLlistC.Any(z => z.IsEnable)).ToList();

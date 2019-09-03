@@ -217,7 +217,7 @@ namespace PurchaseOrderSys.Controllers
                 }
                 else if (CreditMemo.PurchaseOrderID.HasValue)
                 {
-                    CreditMemo.WarehouseID = CreditMemo.RMA.RMASKU.Where(x => x.IsEnable).FirstOrDefault()?.RMASerialsLlist.Where(x => x.IsEnable).FirstOrDefault()?.WarehouseID ?? CreditMemo.RMA.WarehouseID;
+                    CreditMemo.WarehouseID = CreditMemo.PurchaseOrder.WarehouseID;
                 }
             }
             else

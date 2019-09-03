@@ -226,6 +226,11 @@ namespace PurchaseOrderSys.Controllers
                         SCWS.Update_Order(order);
                     }             
                     db.SaveChanges();
+                    foreach (var item in db.Orders.Where(x => x.IsEnable && x.SCID == OrderID))
+                    {
+                        item.RMAID = newRMA.ID;
+                    }
+                    db.SaveChanges();
                     if (RedirectID == 0)
                     {
                         RedirectID = newRMA.ID;
@@ -293,11 +298,20 @@ namespace PurchaseOrderSys.Controllers
                                     {
                                         try
                                         {
-                                            Serial = SKUitem.Serials[i];
+                                            if (SKUitem.Serials.Any())
+                                            {
+                                                Serial = SKUitem.Serials[i];
+                                            }
+                                            else
+                                            {
+                                                if (string.IsNullOrWhiteSpace(Serial))
+                                                {
+                                                    Serial = db.SerialsLlist.Where(x => x.IsEnable && x.OrderID == OrderID && ((x.PurchaseSKUID.HasValue && x.PurchaseSKU.SkuNo == SKUitem.SKU) || (x.TransferSKUID.HasValue && x.TransferSKU.SkuNo == SKUitem.SKU))).OrderBy(x => x.ID).Skip(i).Take(1).FirstOrDefault()?.SerialsNo;
+                                                }
+                                            }
                                         }
-                                        catch
+                                        catch (Exception ex)
                                         {
-
 
                                         }
                                         RMAModelVMList.Add(new RMAModelVM { ck = index, Order = item.OrderID, SourceID = item.OrderSourceOrderId, QTY = 1, SKU = SKUNo, ProductName = ProductName, UPC = UPC, Serial = Serial });
@@ -913,7 +927,67 @@ namespace PurchaseOrderSys.Controllers
                             CreateAt = dt
                         };
                         RMASKU.RMASerialsLlist.Add(nSerialsLlistIn);
+                        //加入 return reason = return to shipper+ sellable warehouse 自動移倉入庫
+                        if (Reason == "16")
+                        {
+                            if (db.Warehouse.Find(WarehouseID).IsSellable)//可出貨倉
+                            {
+                                //開移倉單
+                                var nTransfer = new Transfer
+                                {
+                                    IsEnable = true,
+                                    Title = RMASKU.RMA.OrderID + "_return to shipper",
+                                    FromWID = WarehouseID,
+                                    ToWID = WarehouseID,
+                                    Status = "Completed",
+                                    Interim = 2,
+                                    CreateBy = "RMAAPI",
+                                    CreateAt = dt
+                                };
+                                var nTransferSKU = new TransferSKU
+                                {
+                                    IsEnable = true,
+                                    QTY = 1,
+                                    SkuNo = RMASKU.SkuNo,
+                                    Name = RMASKU.Name,
+                                    CreateBy = "RMAAPI",
+                                    CreateAt = dt
+                                };
 
+                                foreach (var Serialitem in RMASKU.RMASerialsLlist)
+                                {
+                                    var nSerialsLlist = new SerialsLlist
+                                    {
+                                        IsEnable = true,
+                                        SerialsNo = Serialitem.SerialsNo,
+                                        SerialsQTY = 1,
+                                        SerialsType = "TransferIn",
+                                        CreateBy = "RMAAPI",
+                                        CreateAt = dt,
+                                        ReceivedBy = "RMAAPI",
+                                        ReceivedAt = dt,
+                                    };
+                                    nTransferSKU.SerialsLlist.Add(nSerialsLlist);
+                                    var nRMASerialsLlist = new RMASerialsLlist
+                                    {
+                                        IsEnable = true,
+                                        RMASKUID = RMASKUID,
+                                        RMASerialsLlistP = nSerialsLlistIn,
+                                        SerialsNo = Serialitem.SerialsNo,
+                                        SerialsQTY = -1,
+                                        SerialsType = "TransferOut",
+                                        CreateBy = "RMAAPI",
+                                        CreateAt = dt,
+                                        ReceivedBy = "RMAAPI",
+                                        ReceivedAt = dt,
+                                    };
+                                    nTransferSKU.RMASerialsLlist.Add(nRMASerialsLlist);
+                                }
+                                nTransfer.TransferSKU.Add(nTransferSKU);
+                                db.Transfer.Add(nTransfer);
+                            }
+                        }
+                        db.SaveChanges();
                         try
                         {
                             if (int.TryParse(db.WarehouseSummary.Where(x => x.Type == "SCID" && x.WarehouseID == WarehouseID).FirstOrDefault()?.Val, out ReturnWarehouseID))

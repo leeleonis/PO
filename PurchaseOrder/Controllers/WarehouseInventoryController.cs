@@ -46,7 +46,10 @@ namespace PurchaseOrderSys.Controllers
                 var Awaitinglist = GetAwaitingCount("", SCID);
                 var POQTY = POSerialsLlist.Where(x => x.PurchaseSKU.PurchaseOrder.WarehouseID == Warehouse.ID).Sum(x => x.SerialsQTY) ?? 0;
                 var TinQTY = InSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouse.ID).Sum(x => x.SerialsQTY) ?? 0;
-                var TOutQTY = OutSerialsLlist.Where(x => x.TransferSKU.Transfer.FromWID == Warehouse.ID).Sum(x => x.SerialsQTY) ?? 0;
+                var FOutQTY = OutSerialsLlist.Where(x => x.TransferSKU.Transfer.FromWID == Warehouse.ID && x.TransferSKU.Transfer.TransferType != "Winit" && x.TransferSKU.Transfer.Status == "Shipped").Sum(x => x.SerialsQTY) ?? 0;
+                var WFOutQTY = OutSerialsLlist.Where(x => x.TransferSKU.Transfer.FromWID == Warehouse.ID && x.TransferSKU.Transfer.TransferType == "Winit" && x.TransferSKU.Transfer.Status == "Shipped").Sum(x => x.SerialsQTY) ?? 0;
+                var TOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouse.ID && x.TransferSKU.Transfer.TransferType != "Winit" && x.TransferSKU.Transfer.Status == "Shipped").Sum(x => x.SerialsQTY) ?? 0);
+                var WTOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouse.ID && x.TransferSKU.Transfer.TransferType == "Winit" && x.TransferSKU.Transfer.Status == "Shipped").Sum(x => x.SerialsQTY) ?? 0);
                 var Awaiting = Awaitinglist.Sum(x => x.QTY);
                 var RMAINQTY= RMAINSerialsLlist.Where(x => x.WarehouseID == Warehouse.ID).Sum(x => x.SerialsQTY) ?? 0;
                 var RMAOUTQTY= RMAOUTSerialsLlist.Where(x => x.TransferSKU.Transfer.FromWID == Warehouse.ID).Sum(x => x.SerialsQTY) ?? 0;
@@ -56,10 +59,11 @@ namespace PurchaseOrderSys.Controllers
                     ID = Warehouse.ID,
                     Name = Warehouse.Name,
                     Type = Warehouse.Type,
-                    Aggregate = POQTY + TinQTY + RMAINQTY,
+                    Aggregate = POQTY + TinQTY - Awaiting,
                     Awaiting = Awaiting,
-                    Fulfillable = POQTY + TinQTY - Awaiting,
-                    TransferOutQTY = TOutQTY + RMAOUTQTY
+                    Fulfillable = POQTY + TinQTY + RMAINQTY,
+                    TransferOutQTY = FOutQTY + RMAOUTQTY+ TOutQTY,
+                    WTransferOutQTY = WFOutQTY + WTOutQTY
                     //Aggregate = WarehouseVM.Sum(x => x.Aggregate),
                     //Awaiting = WarehouseVM.Sum(x => x.Awaiting),
                     //Fulfillable = WarehouseVM.Sum(x => x.Fulfillable),

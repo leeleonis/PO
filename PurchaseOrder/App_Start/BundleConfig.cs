@@ -62,6 +62,7 @@ namespace PurchaseOrderSys
                 "~/scripts/plugin/datatables/dataTables.tableTools.min.js",
                 "~/scripts/plugin/datatables/dataTables.bootstrap.min.js",
                 "~/scripts/plugin/datatables/dataTables.rowsGroup.js",
+                "~/scripts/plugin/datatables/dataTables.rowsGroupSpan.js",
                 "~/scripts/plugin/datatable-responsive/datatables.responsive.min.js"
                 ));
 
