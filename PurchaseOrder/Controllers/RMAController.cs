@@ -158,7 +158,7 @@ namespace PurchaseOrderSys.Controllers
                     {
                         var tSKU = Skuitem.SKU.Split('-')[0];
                         var SKURMAList = RMAList.Where(x => x.OrderID == OrderItemDataitem.OrderID && x.SKU == tSKU);
-                        var OrderItemID = order.Items.Where(x => x.ProductID.Contains(Skuitem.SKU)).FirstOrDefault().ID;
+                        var OrderItemID = order.Items.Where(x => x.ProductID.Contains(tSKU)).FirstOrDefault().ID;
                         if (SKURMAList.Any())
                         {
                             var ReasonID = 1;
@@ -306,7 +306,7 @@ namespace PurchaseOrderSys.Controllers
                                             {
                                                 if (string.IsNullOrWhiteSpace(Serial))
                                                 {
-                                                    Serial = db.SerialsLlist.Where(x => x.IsEnable && x.OrderID == OrderID && ((x.PurchaseSKUID.HasValue && x.PurchaseSKU.SkuNo == SKUitem.SKU) || (x.TransferSKUID.HasValue && x.TransferSKU.SkuNo == SKUitem.SKU))).OrderBy(x => x.ID).Skip(i).Take(1).FirstOrDefault()?.SerialsNo;
+                                                    Serial = db.SerialsLlist.Where(x => x.IsEnable && x.OrderID == OrderID && ((x.PurchaseSKUID.HasValue && x.PurchaseSKU.SkuNo == SKUNo) || (x.TransferSKUID.HasValue && x.TransferSKU.SkuNo == SKUitem.SKU))).OrderBy(x => x.ID).Skip(i).Take(1).FirstOrDefault()?.SerialsNo;
                                                 }
                                             }
                                         }

@@ -158,10 +158,33 @@
                                                                 <td>@item.Name</td>
                                                                 <td>@item.Velocity</td>
                                                                 <td>@item.DaysOfSupply</td>
-                                                                <td>@item.Fulfillable</td>
-                                                                <td>@item.Awaiting</td>
-                                                                <td>@item.TransferOutQTY</td>
-                                                                <td>@item.WTransferOutQTY</td>
+                                                                <td>
+                                                                    <a href='@Url.Action("Serials", new { item.SKU,WarehouseID=ViewBag.WarehouseID })'>@item.Fulfillable</a>
+                                                                   
+                                                                </td>
+                                                                <td>
+                                                                    <a href='http://internal.qd.com.tw/overview/order?Status=0'>@item.Awaiting</a>
+                                                                </td>
+                                                                <td>
+                                                                    @if (item.TransferOutQTY > 0)
+                                                                    {
+                                                                        <a href="@Url.Action("index", "Transfer", new { SKU = item.SKU, To = ViewBag.WarehouseID })" target="_blank"> @item.TransferOutQTY</a>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <a href="@Url.Action("index", "Transfer", new { SKU = item.SKU, From = ViewBag.WarehouseID })" target="_blank"> @item.TransferOutQTY</a> 
+                                                                    }
+                                                                </td>
+                                                                <td>
+                                                                    @if (item.WTransferOutQTY > 0)
+                                                                    {
+                                                                        <a href="@Url.Action("index", "TransferWinit", new { SKU = item.SKU, To = ViewBag.WarehouseID })" target="_blank"> @item.WTransferOutQTY</a>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <a href="@Url.Action("index", "TransferWinit", new { SKU = item.SKU, From = ViewBag.WarehouseID })" target="_blank"> @item.WTransferOutQTY</a>
+                                                                    }
+                                                                </td>
                                                                 <td>@item.Aggregate</td>
                                                                 <td>
                                                                     <a class='btn btn-default btn-sm' href='@Url.Action("Statement", new { item.SKU,WarehouseID=ViewBag.WarehouseID })'>Statement</a>
@@ -171,7 +194,7 @@
                                                                 </td>
                                                             </tr>
                                                                 }
-                                                            }
+                                                                    }
                                                         </tbody>
                                                     </table>
                                                 </article>
