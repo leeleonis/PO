@@ -1,0 +1,32 @@
+﻿@model TaskScheduler
+
+<table class="text-center hidden">
+    <tbody class="datagrid-body">
+        @{
+            foreach (TaskLog log in Model.TaskLog)
+            {
+                <tr class="datagrid-row">
+                    <td width="24"><div class="datagrid-cell"></div></td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+<table class="text-center">
+    <tbody class="datagrid-body">
+        @{
+            var TimeZoneConvert = new TimeZoneConvert();
+            foreach (TaskLog log in Model.TaskLog.OrderByDescending(t => t.CreateAt))
+            {
+                <tr class="datagrid-row">
+                    <td><div class="datagrid-cell datagrid-cell-c1-ID"></div></td>
+                    <td><div class="datagrid-cell datagrid-cell-c1-Date">@TimeZoneConvert.InitDateTime(log.CreateAt, EnumData.TimeZone.UTC).ConvertDateTime(EnumData.TimeZone.TST).ToString("MM/dd/yyyy hh:mm tt")</div></td>
+                    <td><div class="datagrid-cell datagrid-cell-c1-Name">@log.Description</div></td>
+                    <td><div class="datagrid-cell datagrid-cell-c1-Result"></div></td>
+                    <td><div class="datagrid-cell datagrid-cell-c1-AdminName"></div></td>
+                    <td><div class="datagrid-cell datagrid-cell-c1-Status"></div></td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

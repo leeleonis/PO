@@ -142,4 +142,14 @@ namespace PurchaseOrderSys
         public Nullable<float> Height { get; set; }
         public Nullable<float> Weight { get; set; }
     }
+
+    public class TaskSchedulerFilter
+    {
+        public int? ID { get; set; }
+        public byte? Status { get; set; }
+        public string Name { get; set; }
+        public string AdminName { get; set; }
+        public DateTime? DateFrom { get; set; }
+        public DateTime? DateTo { get; set; }
+    }
 }

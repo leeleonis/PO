@@ -241,6 +241,7 @@
     <Compile Include="Controllers\DispatchWarehouseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InventoryController.cs" />
+    <Compile Include="Controllers\JobProcessController.cs" />
     <Compile Include="Controllers\MainController.cs" />
     <Compile Include="Controllers\MarketplaceController.cs" />
     <Compile Include="Controllers\MenusController.cs" />
@@ -7763,6 +7764,8 @@
     <Content Include="Views\Order\_CombineTable.cshtml" />
     <Content Include="Views\RMA\Trackgroup.cshtml" />
     <Content Include="Views\RMA\ReturnTracking.cshtml" />
+    <Content Include="Views\JobProcess\Index.cshtml" />
+    <Content Include="Views\JobProcess\_TaskLog.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
