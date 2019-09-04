@@ -130,7 +130,7 @@ namespace PurchaseOrderSys.Controllers
                         {
                             if (skuList.Contains(WinitTransferSKU.SkuNo))
                             {
-                                WinitTransferSKU.winitProductCode = WSKUList.list.Where(x => string.IsNullOrWhiteSpace(x.specification)).FirstOrDefault().code;
+                                WinitTransferSKU.winitProductCode = WSKUList.list.Where(x => !string.IsNullOrWhiteSpace(x.specification)).FirstOrDefault().code;
                             }
                             else
                             {

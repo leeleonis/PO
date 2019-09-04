@@ -43,16 +43,16 @@
                                                                 <th>SKU</th>
                                                                 <th>Date</th>
                                                                 <th>Supplier</th>
-                                                                <th>Channel</th>
-                                                                <th>IS Type</th>
+                                                                <th class="select">Channel</th>
+                                                                <th class="select">IS Type</th>
                                                                 <th>ID</th>
-                                                                <th>Warehouse</th>
+                                                                <th class="select">Warehouse</th>
                                                                 <th>Serial</th>
                                                                 <th>QTY</th>
-                                                                <th>Price</th>
+                                                                @*<th>Price</th>
                                                                 <th>Balance (Aggregate)</th>
                                                                 <th>Balance (Available)</th>
-                                                                <th>Value (Available)</th>
+                                                                <th>Value (Available)</th>*@
                                                             </tr>
                                                         </thead>
                                                         <tfoot></tfoot>
@@ -103,10 +103,10 @@
                                                                     <a href=' @Url.Action("Serials", new { SKU = item.SKU,WarehouseID=ViewBag.WarehouseID })' target="_blank">@item.Serial</a>
                                                                 </td>
                                                                 <td>@item.QTY</td>
-                                                                <td>@item.price</td>
+                                                                @*<td>@item.price</td>
                                                                 <td>@item.BalanceAggregate</td>
                                                                 <td>@item.BalanceAvailable</td>
-                                                                <td>@item.ValueAvailable</td>
+                                                                <td>@item.ValueAvailable</td>*@
                                                             </tr>
                                                             }
                                                         </tbody>
@@ -139,27 +139,31 @@
         //});
         $(document).ready(function () {
             var tableID = "#DataGridC";
-            $(tableID + " thead tr").clone().appendTo($(tableID + " tfoot"));
-            $(tableID + " tfoot th").each(function () {
-                var title = $(this).text();
-                if (title != "") {
-                    $(this).html('<input type="text" placeholder="Search ' + title + '" />');
-                }
-            });
             var DataGridC = $(tableID).DataTable({
                 "columnDefs": [{ "orderable": false, "targets": 0 }],
                 "order": []
             });
-
-            DataGridC.columns().every(function () {
-                var that = this;
-                $('input', this.footer()).on('keyup change', function () {
-                    if (that.search() !== this.value) {
-                        that
-                            .search(this.value)
-                            .draw();
+            $(tableID + " thead tr").clone().appendTo($(tableID + " tfoot"));
+            $(tableID + " tfoot th").each(function (i) {
+                var title = $(this).text();
+                if (title != "") {
+                    if ($(this).hasClass("select")) {
+                        var select = $('<select><option value="">Select</option></select>').appendTo($(this).empty()).on('change', function () {
+                            DataGridC.column(i).search($(this).val()).draw();
+                        });
+                        DataGridC.column(i).data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>')
+                        });
                     }
-                });
+                    else {
+                        $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+                        $('input', this).on('keyup change', function () {
+                            if (DataGridC.column(i).search() !== this.value) {
+                                DataGridC.column(i).search(this.value).draw();
+                            }
+                        });
+                    }
+                }
             });
         });
     </script>

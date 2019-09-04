@@ -47,13 +47,13 @@
                                                                 <th>PO</th>
                                                                 <th>CM</th>
                                                                 <th>Transfer</th>
-                                                                <th>Is Type</th>
-                                                                <th>Stock Status</th>
-                                                                <th>Warehouse</th>
-                                                                <th>Dispatch Location</th>
-                                                                <th>Value</th>
+                                                                <th class="select">Is Type</th>
+                                                                <th class="select">Stock Status</th>
+                                                                <th class="select">Warehouse</th>
+                                                                <th class="select">Dispatch Location</th>
+                                                                @*<th>Value</th>
                                                                 <th>Date</th>
-                                                                <th>History</th>
+                                                                <th>History</th>*@
                                                             </tr>
                                                         </thead>
                                                         <tfoot></tfoot>
@@ -64,7 +64,9 @@
                                                                 {
 
                                                             <tr>
-                                                                <td>@Skuitem.Serial</td>
+                                                                <td>
+                                                                    <a class='GetHistory' href='@Url.Action("GetHistory", new { ID = Skuitem.Serial.Trim() })'>@Skuitem.Serial</a>                                                                
+                                                                </td>
                                                                 <td>
                                                                     @if (Skuitem.Order.HasValue)
                                                                     {
@@ -103,11 +105,11 @@
                                                                 <td>@(Skuitem.Stock == 1 ? "In" : Skuitem.Stock == -1 ? "Out" : "")</td>
                                                                 <td>@Skuitem.Warehouse</td>
                                                                 <td>@Skuitem.DispatchLocation</td>
-                                                                <td>@Skuitem.Value</td>
+                                                                @*<td>@Skuitem.Value</td>
                                                                 <td>@Skuitem.Date</td>
                                                                 <td>
                                                                     <a class='btn btn-default btn-sm GetHistory' href='@Url.Action("GetHistory", new { ID = Skuitem.Serial.Trim() })'>History</a>
-                                                                </td>
+                                                                </td>*@
                                                             </tr>
 
 
@@ -147,28 +149,41 @@
         //});
         $(document).ready(function () {
             var tableID = "#DataGridC";
-            $(tableID + " thead tr").clone().appendTo($(tableID + " tfoot"));
-            $(tableID + " tfoot th").each(function () {
-                var title = $(this).text();
-                if (title != "") {
-                    $(this).html('<input type="text" placeholder="Search ' + title + '" />');
-                }
-            });
             var DataGridC = $(tableID).DataTable({
                 "columnDefs": [{ "orderable": false, "targets": 0 }],
                 "order": []
             });
-
-            DataGridC.columns().every(function () {
-                var that = this;
-                $('input', this.footer()).on('keyup change', function () {
-                    if (that.search() !== this.value) {
-                        that
-                            .search(this.value)
-                            .draw();
+            $(tableID + " thead tr").clone().appendTo($(tableID + " tfoot"));
+            $(tableID + " tfoot th").each(function (i) {
+                var title = $(this).text();
+                if (title != "") {
+                    if ($(this).hasClass("select")) {
+                        var select = $('<select><option value="">Select</option></select>').appendTo($(this).empty()).on('change', function () {
+                            DataGridC.column(i).search($(this).val()).draw();
+                        });
+                        DataGridC.column(i).data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>')
+                        });
                     }
-                });
+                    else {
+                        $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+                        $('input', this).on('keyup change', function () {
+                            if (DataGridC.column(i).search() !== this.value) {
+                                DataGridC.column(i).search(this.value).draw();
+                            }
+                        });
+                    }
+                }
             });
+
+            //DataGridC.columns().every(function () {
+            //    var that = this;
+            //    $('input,select', this.footer()).on('keyup change', function () {
+            //        if (that.search() !== this.value) {
+            //            that.search(this.value).draw();
+            //        }
+            //    });
+            //});
             $("#dialog").dialog({
                 autoOpen: false,
                 width: 800
