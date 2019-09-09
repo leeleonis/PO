@@ -18,7 +18,6 @@ namespace PurchaseOrderSys
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Main", action = "Login", id = UrlParameter.Optional }
                 );
-
             routes.MapRoute(
                 name: "Home",
                 url: "{controller}/{action}/{id}",

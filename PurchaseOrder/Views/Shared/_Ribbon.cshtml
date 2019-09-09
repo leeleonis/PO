@@ -1,8 +1,66 @@
-﻿<div id="ribbon">
+﻿@{ 
+    var Menulist = (List<Menu>)Session["Menu"];
+    var controller = ViewContext.RouteData.Values["controller"].ToString();
+    var action = ViewContext.RouteData.Values["action"].ToString();
+    var controllerlist = Menulist.Where(x => x.Controller == controller).ToList();
+    var actionlist = controllerlist.Where(x => x.Action == action).ToList();
+}
+<div id="ribbon">
     <ol class="breadcrumb">
-        <li><a href="#">@PurchaseOrderSys.App_GlobalResources.Resource.Title</a></li>
-        <li>麵包屑1</li>
-        <li>麵包屑2</li>
-        <li>麵包屑3</li>
+        <li><a href="@Url.Action("index","Main")">@PurchaseOrderSys.App_GlobalResources.Resource.Title</a></li>
+        @if (controllerlist.Any())
+        {
+            if (controllerlist.FirstOrDefault()?.MenuParent != null)
+            {
+                <li>
+                    @(controllerlist.FirstOrDefault()?.MenuParent.Name)
+                </li>
+            }
+            <li>
+                <a href="@Url.Action(controllerlist.FirstOrDefault()?.Action,controllerlist.FirstOrDefault()?.Controller)">
+                    @(controllerlist.FirstOrDefault()?.Name ?? controller)
+                </a>
+            </li>
+        }
+        @if (action.Trim().ToLower() == "index")
+        {
+
+        }
+        else if (action.Trim().ToLower() == "edit")
+        {
+            <li>
+                Edit
+            </li>
+            <li>
+                @(Request.Url.Segments.LastOrDefault())
+            </li>
+        }
+        else if (action.Trim().ToLower() == "EditItem")
+        {
+            <li>
+                Edit
+            </li>
+            <li>
+                @(System.Text.RegularExpressions.Regex.Replace(Request.Url.Query, "[^0-9]", "") )
+            </li>
+        }
+        else if (action.Trim().ToLower() == "indexall")
+        {
+
+        }
+        else
+        {
+            <li>
+                @(action)
+            </li>
+            if (action != Request.Url.Segments.LastOrDefault())
+            {
+                <li>
+                    @(Request.Url.Segments.LastOrDefault())
+                </li>
+            }
+
+        }
+
     </ol>
 </div>

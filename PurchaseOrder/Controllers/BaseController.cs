@@ -666,7 +666,7 @@ namespace PurchaseOrderSys.Controllers
             SKUList.AddRange(NoNewRMAferSKUList);
             var NewRMAferSKUList = db.RMASerialsLlist.AsEnumerable().Where(x => x.IsEnable && x.RMASKUID.HasValue && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.WarehouseID == FromWID && !string.IsNullOrWhiteSpace(x.NewSkuNo)).Select(x => x.NewSkuNo).ToList();//沒有新的SKU
             SKUList.AddRange(NewRMAferSKUList);
-            SKUList = SKUList.Where(x => x == search).Distinct().ToList();
+            SKUList = SKUList.Where(x => x.Contains(search)).Distinct().ToList();
             return SKUList;
         }
         public IEnumerable<WarehouseVM> GetWarehouseVMList(Warehouse Warehouse, string Product, int? FulfillableMin, int? FulfillableMax)
@@ -1883,6 +1883,15 @@ namespace PurchaseOrderSys.Controllers
             sheet1.Cells[16, 6].Value = Transfer.WarehouseTo.Country;
             sheet1.Cells[22, 2].Value = Transfer.WarehouseTo.Country;
 
+            if (Transfer.WarehouseTo.Country == "Australia")
+            {
+                sheet1.Cells[17, 6].Value = "";
+                sheet1.Cells[18, 6].Value = "";
+                sheet1.Cells[19, 6].Value = "";
+                sheet1.Cells[20, 6].Value = "";
+                sheet1.Cells[21, 6].Value = "";
+                sheet1.Cells[22, 6].Value = "";
+            }
             //sheet1.Cells.Style.ShrinkToFit = true;
             foreach (var TransferSKU in Transfer.TransferSKU.Where(x => x.IsEnable && x.SerialsLlist.Any()))
             {

@@ -60,7 +60,7 @@
                                                         <tbody>
                                                             @if (Model != null)
                                                             {
-                                                                foreach (var Skuitem in Model.InventorySerialsItem)
+                                                                foreach (var Skuitem in Model.InventorySerialsItem.Distinct(x=>x.Serial))
                                                                 {
 
                                                             <tr>

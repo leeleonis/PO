@@ -681,11 +681,11 @@ namespace PurchaseOrderSys.Controllers
                         QTY = -1 * Serialsitem.QTY;
                     }
                     var sBarCode = db.WinitTransferBoxItem.Where(x => x.BarCode == Serialsitem.SerialsNo).AsEnumerable().LastOrDefault()?.SerialsNo;
-                    if (!string.IsNullOrWhiteSpace(sBarCode))
+                    if (string.IsNullOrWhiteSpace(sBarCode))
                     {
-                        Serialsitem.SerialsNo = sBarCode;
+                        sBarCode = Serialsitem.SerialsNo;
                     }
-                    var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == Serialsitem.SerialsNo);//檢查是否有序號或是SBarCode
+                    var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == sBarCode);//檢查是否有序號或是SBarCode
                     var PurchaseSKUs = db.PurchaseSKU.Where(x => x.SkuNo == Serialsitem.SkuNo && x.PurchaseOrder.IsEnable && x.IsEnable && !x.SKU.SerialTracking);//無開序號管理才能任意取
                     PurchaseSKUs = PurchaseSKUs.Where(x => x.SerialsLlist.Where(y => y.SerialsQTY > 0 && (y.SerialsType == "PO" || y.SerialsType == "TransferIn" || y.SerialsType == "DropshpOrderIn") && !y.SerialsLlistC.Any(z => z.IsEnable)).Any());
                     if (SerialsLlist.Any())
@@ -736,7 +736,7 @@ namespace PurchaseOrderSys.Controllers
                                     SkuNo = SerialsLlist.FirstOrDefault().TransferSKU.SkuNo;
                                 }
                                 SerialsNo = SerialsLlist.FirstOrDefault().SerialsNo;
-                                db.SaveChanges();
+                   
                                 Dictionarylist.Add(new Tuple<string, string>(SkuNo, SerialsNo));
                             }
                             catch (Exception ex)
@@ -794,6 +794,7 @@ namespace PurchaseOrderSys.Controllers
                     }
                 }
             }
+            db.SaveChanges();
             if (NoDataList.Any())
             {
                 result.SetError("查無序號及貨號：" + string.Join(",", NoDataList));
