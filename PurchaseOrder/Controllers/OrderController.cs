@@ -212,7 +212,7 @@ namespace PurchaseOrderSys.Controllers
         {
             AjaxResult result = new AjaxResult();
 
-            var package = db.Packages.AsNoTracking().First(p => p.ID.Equals(updatePackage.ID));
+            var package = db.Packages.AsNoTracking().FirstOrDefault(p => p.ID.Equals(updatePackage.ID));
 
             try
             {
@@ -222,6 +222,7 @@ namespace PurchaseOrderSys.Controllers
                 {
                     CheckPackageData(package, updatePackage);
 
+                    bool OrderSync = false;
                     foreach (var item in package.Items.Where(i => i.IsEnable))
                     {
                         var updateItem = updatePackage.Items.First(i => i.ID.Equals(item.ID));
@@ -265,14 +266,24 @@ namespace PurchaseOrderSys.Controllers
                                 CreateBy = package.UpdateBy
                             });
 
+                            if (item.SCID.HasValue)
+                            {
+                                OM.UpdateItemSerial(item.ID, new string[] { newSerial });
+                                OrderSync = true;
+                            }
+
                             OM.ActionLog("Add Serial", newSerial);
                         }
                     }
 
                     db.SaveChanges();
+
+                    if (OrderSync) OM.OrderSyncPush();
                 }
 
                 var ViewData = new ViewDataDictionary() {
+                    { "index", CheckPackageIndex(package) },
+                    { "total", db.Packages.Count(p => p.IsEnable && p.OrderID.Equals(package.OrderID)) },
                     { "MethodList", db.ShippingMethods.AsNoTracking().Where(m => m.IsEnable).OrderBy(m => m.Name).Select(m => new SelectListItem() { Text = m.Name, Value = m.ID.ToString() }).ToList() },
                     { "WarehouseList", db.Warehouse.AsNoTracking().Where(w => w.IsEnable && w.IsSellable).OrderBy(w => w.Name).Select(w => new SelectListItem() { Text = w.Name, Value = w.ID.ToString() }).ToList() },
                     { "CurrencyList", db.Currency.AsNoTracking().Select(c => new SelectListItem() { Text = c.Code + " - " + c.Name, Value = c.ID.ToString() }).OrderBy(c => c.Text).ToList() }
@@ -327,6 +338,20 @@ namespace PurchaseOrderSys.Controllers
 
                 SetUpdateData(package, updatePackage, packageEditList);
             }
+        }
+
+        private int CheckPackageIndex(Packages package)
+        {
+            var index = 1;
+            var packageList = db.Packages.Where(p => p.IsEnable && p.OrderID.Equals(package.OrderID)).ToList();
+            foreach(Packages p in packageList)
+            {
+                if (p.ID.Equals(package.ID)) return index;
+
+                index++;
+            }
+
+            return 0;
         }
 
         public string SplitTable(int PackageID, int Qty)

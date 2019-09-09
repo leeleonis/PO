@@ -296,7 +296,7 @@ namespace PurchaseOrderSys.Models
                 newPackage = SC_Api.Add_OrderNewPackage(newPackage);
                 packageData.SCID = newPackage.ID;
 
-                foreach(var item in packageData.Items.Where(i => i.IsEnable))
+                foreach (var item in packageData.Items.Where(i => i.IsEnable))
                 {
                     var newItem = SC_order.Items.First(i => i.ProductID.Equals(item.Sku));
                     newItem.PackageID = newPackage.ID;
@@ -307,16 +307,35 @@ namespace PurchaseOrderSys.Models
 
                 db.SaveChanges();
 
-                foreach(var SC_package in SC_order.Packages.Where(p => oldPackageList.Select(pp => pp.SCID.Value).ToArray().Contains(p.ID)))
+                foreach (var SC_package in SC_order.Packages.Where(p => oldPackageList.Select(pp => pp.SCID.Value).ToArray().Contains(p.ID)))
                 {
                     if (SC_package == null) throw new Exception(string.Format("Not found SC package-{0}!", packageData.SCID));
 
-                    foreach(var SC_item in SC_order.Items.Where(i => i.PackageID.Equals(SC_package.ID)))
+                    foreach (var SC_item in SC_order.Items.Where(i => i.PackageID.Equals(SC_package.ID)))
                     {
                         SC_Api.Delete_Item1(SC_item.OrderID, SC_item.ID);
                     }
                     SC_Api.Delete_Package(SC_package.ID);
                 }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(string.Format("SC Error：{0}", ex.InnerException?.Message ?? ex.Message));
+            }
+        }
+
+        public void UpdateItemSerial(int ItemID, string[] Serials)
+        {
+            if (SC_Api == null) SC_Api = new SC_WebService(ApiUserName, ApiPassword);
+
+            try
+            {
+                if (!SC_Api.Is_login) throw new Exception("SC is not logged in!");
+
+                Items itemData = db.Items.Find(ItemID);
+                if (!itemData.SCID.HasValue) throw new Exception("Not found item's SCID!");
+
+                SC_Api.Update_ItemSerialNumber(itemData.SCID.Value, Serials);
             }
             catch (Exception ex)
             {
