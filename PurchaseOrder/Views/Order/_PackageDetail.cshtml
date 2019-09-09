@@ -1,9 +1,13 @@
 ﻿@model Packages
 @{
     var LangID = EnumData.DataLangList().First().Key;
-    var index = 0;
+    int itemIndex = 0, packageIndex = (int)ViewData["index"], packageTotal = (int)ViewData["total"];
 }
 <div class="col-sm-12" data-package="@Model.ID" data-qty="@Model.Items.Where(i => i.IsEnable).Sum(i => i.Qty)">
+    @if (packageTotal > 1)
+    {
+        <legend>Package @string.Format("{0}/{1}", packageIndex, packageTotal)</legend>
+    }
     @Html.Hidden("ID", Model.ID)
     <table class="table table-bordered text-center">
         <thead>
@@ -37,11 +41,11 @@
         <tbody>
             @foreach (var item in Model.Items.Where(i => i.IsEnable))
             {
-                @Html.Hidden(string.Format("Items[{0}][ID]", index), item.ID);
+                @Html.Hidden(string.Format("Items[{0}][ID]", itemIndex), item.ID);
                 <tr data-item="@item.ID">
                     <td class="text">
                         <span>@item.Sku</span>
-                        @Html.TextBox(string.Format("Items[{0}][Sku]", index), item.Sku, htmlAttributes: new { @class = "form-control" })
+                        @Html.TextBox(string.Format("Items[{0}][Sku]", itemIndex), item.Sku, htmlAttributes: new { @class = "form-control" })
                     </td>
                     <td>@(item.GetSku.SkuLang.FirstOrDefault(l => l.LangID.Equals(LangID))?.Name ?? "")</td>
                     <td class="text" style="@(!item.Serials.Any() ? "padding:0;" : "")">
@@ -60,20 +64,20 @@
                                 }
                             }
                         }
-                        @Html.TextBox(string.Format("Items[{0}][SerialEdit]", index), Serial, htmlAttributes: new { @class = "form-control" })
+                        @Html.TextBox(string.Format("Items[{0}][SerialEdit]", itemIndex), Serial, htmlAttributes: new { @class = "form-control" })
                     </td>
                     <td>@item.UnitPrice</td>
                     <td class="text">
                         <span>@item.ExportValue</span>
-                        @Html.TextBox(string.Format("Items[{0}][ExportValue]", index), item.ExportValue, htmlAttributes: new { @class = "form-control" })
+                        @Html.TextBox(string.Format("Items[{0}][ExportValue]", itemIndex), item.ExportValue, htmlAttributes: new { @class = "form-control" })
                     </td>
                     <td class="text">
                         <span>@item.DLExportValue</span>
-                        @Html.TextBox(string.Format("Items[{0}][DLExportValue]", index), item.DLExportValue, htmlAttributes: new { @class = "form-control" })
+                        @Html.TextBox(string.Format("Items[{0}][DLExportValue]", itemIndex), item.DLExportValue, htmlAttributes: new { @class = "form-control" })
                     </td>
                     <td class="text">
                         <span>@item.Qty</span>
-                        @Html.TextBox(string.Format("Items[{0}][Qty]", index++), item.Qty, htmlAttributes: new { @class = "form-control" })
+                        @Html.TextBox(string.Format("Items[{0}][Qty]", itemIndex++), item.Qty, htmlAttributes: new { @class = "form-control" })
                     </td>
                     <td>@(item.UnitPrice * item.Qty)</td>
                 </tr>

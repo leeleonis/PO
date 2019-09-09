@@ -291,10 +291,12 @@
 
                                                     <div class="form-group" id="list-package">
                                                         @{
-                                                            var ViewData = new ViewDataDictionary() { { "MethodList", ViewBag.MethodList }, { "WarehouseList", ViewBag.WarehouseList }, { "CurrencyList", ViewBag.CurrencyList } };
+                                                            int index = 1;
+                                                            var ViewData = new ViewDataDictionary() { { "total", Model.Packages.Count(p => p.IsEnable) }, { "MethodList", ViewBag.MethodList }, { "WarehouseList", ViewBag.WarehouseList }, { "CurrencyList", ViewBag.CurrencyList } };
 
                                                             foreach (var package in Model.Packages.Where(p => p.IsEnable))
                                                             {
+                                                                ViewData["index"] = index++;
                                                                 Html.RenderPartial("_PackageDetail", package, ViewData);
                                                             }
                                                         }
@@ -493,7 +495,7 @@
                                                                 <td class="no-padding">
                                                                     @{
                                                                         var ActionLogs = Model.ActionLogs.OrderBy(l => l.CreateAt)
-                                                                            .Select(l => string.Format("{0} > {1}\r\n{2}\r\n{3}", l.Item, l.Description, l.CreateBy, l.CreateAt.ToString("yyyy/MM/dd hh:mm tt"))).ToList();
+                                                                            .Select(l => string.Format("{0} > {1}\r\n{2}\r\n{3}", l.Item, l.Description, l.CreateBy, TimeZoneConvert.InitDateTime(l.CreateAt, EnumData.TimeZone.UTC).ConvertDateTime(EnumData.TimeZone.TST).ToString("yyyy/MM/dd hh:mm tt"))).ToList();
                                                                     }
                                                                     <textarea class="form-control" rows="20" readonly>@(ActionLogs.Any() ? string.Join("\r\n┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄\r\n", ActionLogs) : "")</textarea>
                                                                 </td>
