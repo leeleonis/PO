@@ -29,17 +29,11 @@
         else if (action.Trim().ToLower() == "edit")
         {
             <li>
-                Edit
-            </li>
-            <li>
                 @(Request.Url.Segments.LastOrDefault())
             </li>
         }
         else if (action.Trim().ToLower() == "EditItem")
         {
-            <li>
-                Edit
-            </li>
             <li>
                 @(System.Text.RegularExpressions.Regex.Replace(Request.Url.Query, "[^0-9]", "") )
             </li>

@@ -421,7 +421,8 @@ namespace PurchaseOrderSys.Controllers
                     inporCountry = winitWarehouse,
                     inportDeclaredvalue = inportDeclaredvalue,
                     exportDeclaredvalue = exportDeclaredvalue,
-                    battery = battery
+                    battery = battery,
+                    remark = "特批客户"
                 });
             }
             if (string.IsNullOrWhiteSpace(errmsg))

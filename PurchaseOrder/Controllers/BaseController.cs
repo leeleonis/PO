@@ -656,17 +656,17 @@ namespace PurchaseOrderSys.Controllers
         {
             var SKUList = new List<string>();
             //一般入庫
-            var PurchaseSKUList = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.IsEnable && x.PurchaseOrder.WarehouseID == FromWID).Select(x => x.SkuNo).ToList();
+            var PurchaseSKUList = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.IsEnable && x.PurchaseOrder.WarehouseID == FromWID).Select(x => x.SkuNo);
             SKUList.AddRange(PurchaseSKUList);
             //移倉入庫
-            var TransferSKUList = db.TransferSKU.Where(x => x.IsEnable && x.Transfer.IsEnable && x.Transfer.ToWID == FromWID).Select(x => x.SkuNo).ToList();//只找移入的SKU
+            var TransferSKUList = db.TransferSKU.Where(x => x.IsEnable && x.Transfer.IsEnable && x.Transfer.ToWID == FromWID).Select(x => x.SkuNo);//只找移入的SKU
             SKUList.AddRange(TransferSKUList);
             //RMA入庫
-            var NoNewRMAferSKUList = db.RMASerialsLlist.AsEnumerable().Where(x => x.IsEnable && x.RMASKUID.HasValue && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.WarehouseID == FromWID && string.IsNullOrWhiteSpace(x.NewSkuNo)).Select(x => x.RMASKU.SkuNo).ToList();//沒有新的SKU
+            var NoNewRMAferSKUList = db.RMASerialsLlist.AsEnumerable().Where(x => x.IsEnable && x.RMASKUID.HasValue && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.WarehouseID == FromWID && string.IsNullOrWhiteSpace(x.NewSkuNo)).Select(x => x.RMASKU.SkuNo);//沒有新的SKU
             SKUList.AddRange(NoNewRMAferSKUList);
-            var NewRMAferSKUList = db.RMASerialsLlist.AsEnumerable().Where(x => x.IsEnable && x.RMASKUID.HasValue && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.WarehouseID == FromWID && !string.IsNullOrWhiteSpace(x.NewSkuNo)).Select(x => x.NewSkuNo).ToList();//沒有新的SKU
+            var NewRMAferSKUList = db.RMASerialsLlist.AsEnumerable().Where(x => x.IsEnable && x.RMASKUID.HasValue && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.WarehouseID == FromWID && !string.IsNullOrWhiteSpace(x.NewSkuNo)).Select(x => x.NewSkuNo);//沒有新的SKU
             SKUList.AddRange(NewRMAferSKUList);
-            SKUList = SKUList.Where(x => x.Contains(search)).Distinct().ToList();
+            SKUList = SKUList.Distinct().ToList();
             return SKUList;
         }
         public IEnumerable<WarehouseVM> GetWarehouseVMList(Warehouse Warehouse, string Product, int? FulfillableMin, int? FulfillableMax)
