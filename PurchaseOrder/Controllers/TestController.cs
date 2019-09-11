@@ -786,11 +786,11 @@ namespace PurchaseOrderSys.Controllers
 
         public void GetOrderData(int OrderID)
         {
-            using (var OM = new OrderManagement(OrderID))
+            using (var SC_Api = new SC_WebService(ApiUserName, ApiPassword))
             {
-                OM.SC_Api = new SC_WebService(ApiUserName, ApiPassword);
-                OM.SplitPackage(db.Packages.Where(p => p.IsEnable && p.OrderID.Equals(OrderID)).Select(p => p.ID).ToArray());
-                OM.OrderSyncPush();
+                var Order = db.Orders.First(o => o.ID.Equals(OrderID) || o.SCID.Value.Equals(OrderID));
+                var OrderItemData1 = SC_Api.Get_OrderData(Order.SCID.Value).Order.Items.ToList();
+                var OrderItemData2 = SC_Api.Get_OrderInfo(Order.SCID.Value).Items.ToList(); ;
             }
         }
 

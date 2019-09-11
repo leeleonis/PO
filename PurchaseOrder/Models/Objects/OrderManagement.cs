@@ -398,7 +398,7 @@ namespace PurchaseOrderSys.Models
 
         public void ActionLog(string Item, string Description)
         {
-            orderData.ActionLogs.Add(new OrderActionLogs()
+            db.OrderActionLogs.Add(new OrderActionLogs()
             {
                 OrderID = orderData.ID,
                 Item = Item,

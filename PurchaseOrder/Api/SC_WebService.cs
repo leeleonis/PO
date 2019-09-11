@@ -102,10 +102,10 @@ namespace SellerCloud_WebService
             return OS_SellerCloud.Orders_GetDatas(OS_AuthHeader, OS_Options, OrderID);
         }
 
-        //public ExistingOrderInfo Get_OrderInfo(int OrderID)
-        //{
-        //    return OCS_SellerCloud.GetOrder(OCS_AuthHeader, OrderID);
-        //}
+        public ExistingOrderInfo Get_OrderInfo(int OrderID)
+        {
+            return OCS_SellerCloud.GetOrder(OCS_AuthHeader, OrderID);
+        }
 
         //public QDLogistics.OrderCreationService.Order Get_OrderFullData(int OrderID)
         //{
@@ -227,6 +227,11 @@ namespace SellerCloud_WebService
             return OS_SellerCloud.Manufacturer_ListALL(OS_AuthHeader, OS_Options, 163);
         }
 
+        public PostAuthResponse Get_OrderPayments(int OrderID)
+        {
+            OS_Options.PaymentNotNeeded = true;
+            return OS_SellerCloud.Payments_PostAuth(OS_AuthHeader, OS_Options, new PostAuthRequest() { OrderID = OrderID });
+        }
         /***** 取得資料 *****/
 
         /***** 更新資料 *****/
