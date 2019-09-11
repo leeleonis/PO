@@ -51,7 +51,10 @@
                                 <th>SKU</th>
                                 <th>Name</th>
                                 <th>Serial</th>
-                                <th>S Barcode</th>
+                                <th>
+                                    S Barcode
+                                    <a class="btn btn-default" target="_blank" href="@Url.Action("DownloadSCode",new {boxid= BoxItem.ID})">下載</a>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -79,11 +82,12 @@
                                             @item.BarCode
                                             @if (Mod == "Receive")
                                             {
-                                               
+
                                             }
                                             else
                                             {
                                                 <input type="button" onclick="javascript:jsWebClientPrint.print('key=serial&id=@item.WinitTransferSKUID + &Page=@item.FilePage');" value="補印" />
+                                                <a  class="btn btn-default" target="_blank" href="@Url.Action("DownloadSCode",new {item.SerialsLlistID})">下載</a>
                                             }
                                         </td>
                                     </tr>

@@ -103,16 +103,23 @@
                                                     </div>
                                                     <div class="col-sm-4 col-lg-3">
                                                         @*<button type="button" class="btn btn-default">補印Lable</button>
-                                                        <button type="button" class="btn btn-default">補印AWB</button>
-                                                        <button type="button" class="btn btn-default">保留Box</button>*@
+            <button type="button" class="btn btn-default">補印AWB</button>
+            <button type="button" class="btn btn-default">保留Box</button>*@
                                                     </div>
                                                     <div class="col-sm-5 col-lg-2">
                                                         <button type="button" class="btn btn-default" id="printBox">打印Box</button>
                                                         <button type="button" class="btn btn-default" id="printAWB">打印AWB</button>
                                                         @*<button type="button" class="btn btn-default" id="printInvoice">打印發票</button>*@
                                                     </div>
+                                                    <div class="col-sm-4 col-lg-3"></div>
+                                                    <div class="col-sm-4 col-lg-3"></div>
+                                                    <div class="col-sm-4 col-lg-3"></div>
+                                                    <div class="col-sm-5 col-lg-2">
+                                                        <a class="btn btn-default" id="DownloadBox" target="_blank" href="@Url.Action("DownloadBox",new {Model.ID })">下載Box</a>
+                                                        <a class="btn btn-default" id="DownloadAWB" target="_blank" href="@Url.Action("DownloadAWB",new {Model.ID })">下載AWB</a>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                                </div>
                                         </fieldset>
 
                                         <fieldset id="boxitem">
@@ -271,6 +278,18 @@
                             }
                         }
                     });
+                }
+            });
+             $("#DownloadBox").click(function () {
+                if (isChange) {
+                    alert("資料尚未存檔,無法列印");
+                    return false;
+                }
+            });
+            $("#DownloadAWB").click(function () {
+                if (isChange) {
+                    alert("資料尚未存檔,無法列印");
+                    return false;
                 }
             });
             $("#printInvoice").click(function () {
