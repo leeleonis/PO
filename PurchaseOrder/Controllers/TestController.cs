@@ -1003,5 +1003,44 @@ namespace PurchaseOrderSys.Controllers
             }
             return Json(SerialsLlist.Select(x => new { x.SerialsNo, x.Warehouse.Name, Reason = EnumData.RMAReasonList().Where(y => y.Key.ToString() == x.Reason).FirstOrDefault().Value }).ToList(), JsonRequestBehavior.AllowGet);
         }
+        public ActionResult tBOX( int TransferID,int boxid)
+        {
+            var dt = DateTime.UtcNow;
+            var Transfer = db.Transfer.Find(TransferID);
+            foreach (var TransferSKUitem in Transfer.TransferSKU.Where(x => x.IsEnable))
+            {
+                var MerchandiseCode = TransferSKUitem.SkuNo + "-" + Transfer.WarehouseTo.WinitWarehouse;
+                foreach (var Serialsitem in TransferSKUitem.SerialsLlist.Where(x => x.IsEnable))
+                {
+                    if (Serialsitem.WinitTransferBoxItem == null)
+                    {
+                        var WinitTransferSKU = Transfer.WinitTransfer.WinitTransferSKU.Where(x => x.SkuNo == MerchandiseCode).FirstOrDefault();
+                        var WinitTransferSKUID = WinitTransferSKU.ID;
+                        var GBoxList = Transfer.WinitTransfer.WinitTransferBox.Where(x => x.WinitTransferBoxItem.Where(y => y.SkuNo == TransferSKUitem.SkuNo).Any()).GroupBy(x => x.WinitTransferBoxItem.GroupBy(y => y.SkuNo)).ToList();
+                        var FilePage = GBoxList.Sum(x => x.Sum(y => y.WinitTransferBoxItem.Where(z => z.SkuNo == TransferSKUitem.SkuNo).Count())) + 1;
+                        var itemBarcodeList = WinitTransferSKU.itemBarcodeList.Split(';');
+                        var BarCode  = itemBarcodeList[FilePage - 1];
+                        Serialsitem.WinitTransferBoxItem = new WinitTransferBoxItem
+                        {
+                            BarCode = BarCode,
+                            CreateBy = "QDAdmin",
+                            CreateAt = dt,
+                            Value = Serialsitem.TransferSKU.SKU.Logistic?.Price,
+                            SerialsNo = Serialsitem.SerialsNo,
+                            Name = Serialsitem.TransferSKU.Name,
+                            Weight = Serialsitem.TransferSKU.SKU.Logistic?.ShippingWeight,
+                            FilePage = FilePage.ToString(),
+                            SkuNo = Serialsitem.TransferSKU.SkuNo,
+                            WinitTransferSKUID = WinitTransferSKUID,
+                            WinitTransferBoxID = boxid,
+                            MerchandiseCode = MerchandiseCode
+
+                        };
+                        db.SaveChanges();
+                    }
+                }
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
     }
 }

@@ -181,6 +181,7 @@
                 isChange = true;
                 $(this).addClass("editing");
             });
+            $("body").find(".undisabled").prop("disabled", "");
         });
     </script>
     @if (!string.IsNullOrWhiteSpace(ErrMsg))

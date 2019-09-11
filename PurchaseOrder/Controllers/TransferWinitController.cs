@@ -1,5 +1,7 @@
 ﻿using inventorySKU;
 using Ionic.Zip;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 using PurchaseOrderSys.Models;
 using PurchaseOrderSys.NewApi;
 using System;
@@ -421,7 +423,8 @@ namespace PurchaseOrderSys.Controllers
                     inporCountry = winitWarehouse,
                     inportDeclaredvalue = inportDeclaredvalue,
                     exportDeclaredvalue = exportDeclaredvalue,
-                    battery = battery
+                    battery = battery,
+                    remark = "特批客户"
                 });
             }
             if (string.IsNullOrWhiteSpace(errmsg))
@@ -1358,9 +1361,6 @@ namespace PurchaseOrderSys.Controllers
             db.SaveChanges();
             return  Helpers.MyHelps.Mail_Send(MailFrom, MailTos, Ccs, MailSub, MailBody, true, FedExFile1.ToArray(), FedExFile2, false);
         }
-
-
-
         public ActionResult RemoveData(string[] IDList, string SID)
         {
             var Errmsg = "";
@@ -1404,6 +1404,80 @@ namespace PurchaseOrderSys.Controllers
                 return Json(new { status = false, Errmsg }, JsonRequestBehavior.AllowGet);
             }
 
+        }
+        public ActionResult DownloadBox(int ID)
+        {
+            var file = new ZipFile();
+            var OutputStream = new MemoryStream();
+            var WinitTransfer = db.WinitTransfer.Find(ID);
+            var pdfbyte = Convert.FromBase64String(WinitTransfer.PrintPackageLabe);
+            file.AddEntry("Box-" + WinitTransfer.WinitOrderNo + ".pdf", pdfbyte);
+            file.Save(OutputStream);
+            return File(OutputStream.ToArray(), "application/zip", "Box.zip");
+        }
+        public ActionResult DownloadAWB(int ID)
+        {
+            var file = new ZipFile();
+            var OutputStream = new MemoryStream();
+            var WinitTransfer = db.WinitTransfer.Find(ID);
+            foreach (var item in WinitTransfer.WinitTransferBox)
+            {
+                var pdfbyte = Convert.FromBase64String(item.FedExPdf);
+                using (PdfReader reader = new PdfReader(pdfbyte))
+                {
+                    var os = new MemoryStream();
+                    Document document = new Document();
+                    PdfCopy copy = new PdfCopy(document, os);
+                    document.Open();
+                    copy.AddPage(copy.GetImportedPage(reader, 2));
+                    for (int pagenumber = 1; pagenumber <= reader.NumberOfPages; pagenumber++)
+                    {
+                        copy.AddPage(copy.GetImportedPage(reader, pagenumber));
+                    }
+                    document.Close();
+                    file.AddEntry("AWB-" + item.Tracking + ".pdf", os.ToArray());
+                }
+            }
+            file.Save(OutputStream);
+            return File(OutputStream.ToArray(), "application/zip", "AWB.zip");
+        }
+        public ActionResult DownloadSCode(int? SerialsLlistID,int? boxid)
+        {
+            var file = new ZipFile();
+            var OutputStream = new MemoryStream();
+            if (boxid.HasValue)
+            {
+                var WinitTransferBox = db.WinitTransferBox.Find(boxid);
+                foreach (var item in WinitTransferBox.WinitTransferBoxItem)
+                {
+                    var nWinitTransferSKUID = item.WinitTransferSKUID;
+                    var nFilePage = int.Parse(item.FilePage);
+                    file.AddEntry("SCode-" + item.BarCode + ".pdf", SplistSCodePdf(nWinitTransferSKUID, nFilePage));
+                }
+            }
+            else if (SerialsLlistID.HasValue)
+            {
+                var WinitTransferBoxItem = db.WinitTransferBoxItem.Find(SerialsLlistID);
+                file.AddEntry("SCode-" + WinitTransferBoxItem.BarCode + ".pdf", SplistSCodePdf(WinitTransferBoxItem.WinitTransferSKUID, int.Parse(WinitTransferBoxItem.FilePage)));
+            }
+            file.Save(OutputStream);
+            return File(OutputStream.ToArray(), "application/zip", "SCode.zip");
+        }
+
+        private byte[] SplistSCodePdf(int? winitTransferSKUID, int? filePage)
+        {
+            var WinitTransferSKU = db.WinitTransferSKU.Find(winitTransferSKUID);
+            var fileStream = Base64ToMemoryStream(WinitTransferSKU.ItemBarcodeFile);
+            var os = new MemoryStream();
+            using (PdfReader reader = new PdfReader(fileStream))
+            {
+                Document document = new Document();
+                PdfCopy copy = new PdfCopy(document, os);
+                document.Open();
+                copy.AddPage(copy.GetImportedPage(reader, filePage.Value));
+                document.Close();
+            }
+            return os.ToArray();
         }
     }
 }
