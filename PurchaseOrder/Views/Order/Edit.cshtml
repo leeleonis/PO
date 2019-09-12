@@ -1,6 +1,10 @@
 ﻿@model Orders
 @section styles{
     <style>
+        .table > tbody > tr > td {
+            padding: 6px 6px;
+        }
+
         .font-title {
             font-size: 16px !important;
             font-weight: 900 !important;
@@ -82,8 +86,8 @@
                                             <div class="form-group">
                                                 <div class="col-sm-12">
                                                     <div class="form-group">
-                                                        <div class="col-sm-3">
-                                                            <table class="table table-bordered text-center">
+                                                        <div class="col-sm-3" style="width:375px;">
+                                                            <table class="table table-bordered" style="width:300px;">
                                                                 <thead>
                                                                     <tr class="font-title">
                                                                         <th class="text-center" colspan="2">Order Summary</th>
@@ -91,14 +95,14 @@
                                                                 </thead>
                                                                 <tbody>
                                                                     <tr class="@(Model.OrderStatus.Equals((byte)EnumData.OrderStatus.OnHold) ? "bg-danger" : "")">
-                                                                        <td width="140">Order Status：</td>
+                                                                        <td width="132">Order Status：</td>
                                                                         <td class="no-padding">
                                                                             @{
                                                                                 bool isReadOnly = !Model.OrderStatus.Equals((byte)EnumData.OrderStatus.InProcess) && !Model.OrderStatus.Equals((byte)EnumData.OrderStatus.OnHold);
                                                                                 bool isChooseComplete = (Model.PaymentStatus.Equals((byte)EnumData.OrderPaymentStatus.Full) || Model.PaymentStatus.Equals((byte)EnumData.OrderPaymentStatus.OverPaid))
                                                                                     && (Model.FulfillmentStatus.Equals((byte)EnumData.OrderFulfillmentStatus.Full) || Model.FulfillmentStatus.Equals((byte)EnumData.OrderFulfillmentStatus.Partial));
                                                                             }
-                                                                            <select class="form-control" name="OrderStatus" id="select-status" @(isReadOnly ? "disabled" : "")>
+                                                                            <select class="form-control input-sm" name="OrderStatus" id="select-status" @(isReadOnly ? "disabled" : "")>
                                                                                 @foreach (var status in EnumData.OrderStatusList())
                                                                                 {
                                                                                     if (!(Model.OrderStatus.Equals((byte)EnumData.OrderStatus.OnHold) && status.Key.Equals((byte)EnumData.OrderStatus.Completed)))
@@ -123,7 +127,7 @@
                                                                     </tr>
                                                                     <tr>
                                                                         <td>Rush Order：</td>
-                                                                        <td class="no-padding">@Html.DropDownListFor(Model => Model.IsRush, Enum.GetValues(typeof(EnumData.YesNo)).Cast<EnumData.YesNo>().Select(s => new SelectListItem() { Text = s.ToString(), Value = (byte)s == 1 ? bool.TrueString : bool.FalseString }), htmlAttributes: new { @class = "form-control" })</td>
+                                                                        <td class="no-padding">@Html.DropDownListFor(Model => Model.IsRush, Enum.GetValues(typeof(EnumData.YesNo)).Cast<EnumData.YesNo>().Select(s => new SelectListItem() { Text = s.ToString(), Value = (byte)s == 1 ? bool.TrueString : bool.FalseString }), htmlAttributes: new { @class = "form-control input-sm" })</td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>Payment Status：</td>
@@ -163,7 +167,7 @@
 
                                                             <table class="table">
                                                                 <tr>
-                                                                    <td width="164" style="border:0px;">Customer User ID：</td>
+                                                                    <td width="152" style="border:0px;">Customer User ID：</td>
                                                                     <td style="border:0px;">
                                                                         @if (!string.IsNullOrEmpty(Model.CustomerID))
                                                                         {
@@ -178,10 +182,10 @@
                                                             </table>
                                                         </div>
 
-                                                        <div class="col-sm-4">
-                                                            <table class="table table-bordered text-center" style="width:80%;margin: 30px auto;">
+                                                        <div class="col-sm-4" style="width:375px;">
+                                                            <table class="table table-bordered" style="margin: 30px auto;">
                                                                 <tr>
-                                                                    <td>Company：</td>
+                                                                    <td width="120">Company：</td>
                                                                     <td>@Model.GetCompany.Name</td>
                                                                 </tr>
                                                                 <tr>
@@ -314,7 +318,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-sm-3">
+                                                        <div class="col-sm-3" style="width:310px;">
                                                             @{
                                                                 var payment = Model.Payments.OrderByDescending(p => p.Date).FirstOrDefault(p => p.IsEnable);
                                                             }
@@ -325,7 +329,7 @@
                                                                     </tr>
                                                                 </thead>
                                                                 <tr>
-                                                                    <td width="134">Status：</td>
+                                                                    <td width="126">Status：</td>
                                                                     <td>@Enum.GetName(typeof(EnumData.PaymentStatus), payment?.Status ?? 2)</td>
                                                                 </tr>
                                                                 <tr>
@@ -337,7 +341,7 @@
                                                                     <td>@(payment != null ? Enum.GetName(typeof(PurchaseOrderSys.SCService.PaymentMethod), payment.Gateway) : "")</td>
                                                                 </tr>
                                                                 <tr class="font-title text-center">
-                                                                    <th colspan="2">Statement</th>
+                                                                    <th class="text-center" colspan="2">Statement</th>
                                                                 </tr>
                                                                 <tr>
                                                                     <td>Total Value：</td>
@@ -368,7 +372,7 @@
                                                                     <td>@(payment?.Balance)</td>
                                                                 </tr>
                                                                 <tr class="font-title text-center">
-                                                                    <th colspan="2">Other Details</th>
+                                                                    <th class="text-center" colspan="2">Other Details</th>
                                                                 </tr>
                                                                 <tr>
                                                                     <td>Transaction ID #：</td>
@@ -393,7 +397,7 @@
                                                             </table>
                                                         </div>
 
-                                                        <div class="col-sm-2">
+                                                        <div class="col-sm-2" style="300px;">
                                                             <table class="table table-bordered">
                                                                 <thead>
                                                                     <tr class="font-title">
