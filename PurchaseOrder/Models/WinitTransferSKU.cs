@@ -26,6 +26,7 @@ namespace PurchaseOrderSys.Models
         public string ItemBarcodeFile { get; set; }
         public Nullable<int> IndexNo { get; set; }
         public string winitProductCode { get; set; }
+        public string winitstatus { get; set; }
     
         public virtual WinitTransfer WinitTransfer { get; set; }
     }

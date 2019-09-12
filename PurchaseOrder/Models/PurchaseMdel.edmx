@@ -1289,6 +1289,7 @@
           <Property Name="ItemBarcodeFile" Type="text" />
           <Property Name="IndexNo" Type="int" />
           <Property Name="winitProductCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="winitstatus" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <Association Name="FK_AdminUser_AdminGroup">
           <End Role="AdminGroup" Type="Self.AdminGroup" Multiplicity="1" />
@@ -6018,6 +6019,7 @@
           <NavigationProperty Name="WinitTransfer" Relationship="PurchaseOrderModel.FK_WinitTransferSKU_WinitTransfer" FromRole="WinitTransferSKU" ToRole="WinitTransfer" />
           <Property Name="IndexNo" Type="Int32" />
           <Property Name="winitProductCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="winitstatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_WinitTransferSKU_WinitTransfer">
           <End Type="PurchaseOrderModel.WinitTransfer" Role="WinitTransfer" Multiplicity="0..1" />
@@ -7449,6 +7451,7 @@
           <EntitySetMapping Name="WinitTransferSKU">
             <EntityTypeMapping TypeName="PurchaseOrderModel.WinitTransferSKU">
               <MappingFragment StoreEntitySet="WinitTransferSKU">
+                <ScalarProperty Name="winitstatus" ColumnName="winitstatus" />
                 <ScalarProperty Name="winitProductCode" ColumnName="winitProductCode" />
                 <ScalarProperty Name="IndexNo" ColumnName="IndexNo" />
                 <ScalarProperty Name="ItemBarcodeFile" ColumnName="ItemBarcodeFile" />

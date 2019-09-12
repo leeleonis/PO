@@ -190,6 +190,38 @@
                                                             <button type="button" class="btn btn-default" id="printAWB">打印AWB</button>
                                                             <button type="button" class="btn btn-default" id="printInvoice">打印發票</button>
                                                         }
+                                                        @if (string.IsNullOrWhiteSpace(Model.WinitTransfer.PrintPackageLabe))
+                                                        {
+                                                            <a class="btn btn-default" id="DownloadBox" target="_blank" disabled href="@Url.Action("DownloadBox", new { Model.ID })">下載Box</a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a class="btn btn-default" id="DownloadBox" target="_blank" href="@Url.Action("DownloadBox", new { Model.ID })">下載Box</a>
+                                                        }
+                                                        @if (Model.WinitTransfer.WinitTransferBox.Where(x => string.IsNullOrWhiteSpace(x.FedExPdf)).Any())
+                                                        {
+                                                            <a class="btn btn-default" id="DownloadAWB" target="_blank" disabled href="@Url.Action("DownloadAWB",new {Model.ID })">下載AWB</a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a class="btn btn-default" id="DownloadAWB" target="_blank" href="@Url.Action("DownloadAWB",new {Model.ID })">下載AWB</a>
+                                                        }
+                                                        @if (Model.WinitTransfer.WinitTransferBox.Where(x => x.WinitTransferBoxItem.Any()).Any())
+                                                        {
+                                                            <a class="btn btn-default" target="_blank" href="@Url.Action("DownloadSCode",new {TransferID=Model.WinitTransfer.TransferID})">下載SCode</a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a class="btn btn-default" target="_blank" disabled href="@Url.Action("DownloadSCode",new {TransferID=Model.WinitTransfer.TransferID})">下載SCode</a>
+                                                        }
+                                                        @if (string.IsNullOrWhiteSpace(Model.WinitTransfer.InvoiceExcel))
+                                                        {
+                                                            <a class="btn btn-default" id="DownloadInvoice" target="_blank" disabled href="@Url.Action("DownloadInvoice", new { Model.ID })">下載Invoice</a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a class="btn btn-default" id="DownloadInvoice" target="_blank" href="@Url.Action("DownloadInvoice", new { Model.ID })">下載Invoice</a>
+                                                        }
                                                     </div>
                                                 </div>
                                             </div>
@@ -203,6 +235,7 @@
                                                                 </th>
                                                                 <th></th>
                                                                 <th>Winit M碼</th>
+                                                                <th>SKU Registration</th>
                                                                 <th>SKU</th>
                                                                 <th>Product Name</th>
                                                                 <th>QTY</th>
@@ -219,7 +252,7 @@
                                                         {
                                                             <tfoot>
                                                                 <tr>
-                                                                    <td colspan="8">
+                                                                    <td colspan="9">
                                                                         <select id="gebruikerId" name="gebruikerId" class=" form-control" style="width:50%"></select>
                                                                         <button type="button" id="addsku">Add SKU</button>
                                                                     </td>
@@ -283,6 +316,9 @@
                 },
                 {
                     data: "Mcode"
+                },
+                {
+                    data: "SKUR"
                 },
                 {
                     data: "SKU",

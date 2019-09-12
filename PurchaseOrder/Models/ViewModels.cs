@@ -617,6 +617,10 @@ namespace PurchaseOrderSys.Models
         public int ck { get; set; }
         public string sk { get; set; }
         /// <summary>
+        /// Winit SKU 狀態
+        /// </summary>
+        public string SKUR { get; set; }
+        /// <summary>
         /// 品號
         /// </summary>
         public string SKU { get; set; }

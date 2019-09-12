@@ -142,6 +142,40 @@ namespace PurchaseOrderSys.Controllers
                         }
                         db.SaveChanges();
                     }
+                    if (WinitTransferSKU.winitstatus!= "Yes")
+                    {
+                        //檢查審核狀態
+                        var ItemMt = Winit_API.queryItemMtEntitys(WinitTransferSKU.SkuNo, WinitTransferSKU.WinitTransfer.Transfer.WarehouseTo.WinitWarehouse);
+                        if (!ItemMt.list.Any())
+                        {
+                            WinitTransferSKU.winitstatus = "No";
+                        }
+                        else 
+                        {
+                            foreach (var item in ItemMt.list)
+                            {
+                                switch (item.status)
+                                {
+                                    case "PD":
+                                        WinitTransferSKU.winitstatus = "Yes";
+                                        break;
+                                    case "DR":
+                                        WinitTransferSKU.winitstatus = "Pending";
+                                        break;
+                                    case "CO":
+                                        WinitTransferSKU.winitstatus = "Pending";
+                                        break;
+                                    case "WSA":
+                                        WinitTransferSKU.winitstatus = "Pending";
+                                        break;
+                                    case "BK":
+                                        WinitTransferSKU.winitstatus = "No";
+                                        break;
+                                }
+                            }
+                        }
+                        db.SaveChanges();
+                    }
                 }
             }
             var TranSKUVMList = new List<TranSKUVM>();
@@ -152,10 +186,11 @@ namespace PurchaseOrderSys.Controllers
                     ID = item.ID,
                     ck = item.ID,
                     sk = item.SkuNo,
-                    Mcode= Transfer.WinitTransfer.WinitTransferSKU.Where(x=>x.IsEnable&&x.SkuNo.Contains(item.SkuNo)).FirstOrDefault()?.winitProductCode,
+                    SKUR =  Transfer.WinitTransfer.WinitTransferSKU.Where(x => x.IsEnable && x.SkuNo.Contains(item.SkuNo)).FirstOrDefault()?.winitstatus??GetWinitstatus(item.SkuNo + "-" + Transfer.WarehouseTo.WinitWarehouse, Transfer.WarehouseTo.WinitWarehouse),
+                    Mcode = Transfer.WinitTransfer.WinitTransferSKU.Where(x => x.IsEnable && x.SkuNo.Contains(item.SkuNo)).FirstOrDefault()?.winitProductCode,
                     SKU = item.SkuNo,
                     ProductName = item.SKU.SkuLang.Where(x => x.LangID == LangID).FirstOrDefault()?.Name,
-                    ProductMsg= GetNameSize(item.SKU),
+                    ProductMsg = GetNameSize(item.SKU),
                     QTY = item.QTY,
                     TotalReceive = item.SerialsLlist.Where(x => x.SerialsType == "TransferIn").Sum(x => x.SerialsQTY),
                     Serial = GetSerialMulti(item),
@@ -174,6 +209,42 @@ namespace PurchaseOrderSys.Controllers
             Session["TSkuNumberList" + SID] = TranSKUVMList;
             ViewBag.WCPScript = Neodynamic.SDK.Web.WebClientPrint.CreateScript(Url.Action("ProcessRequest", "WebClientPrintAPI", null, HttpContext.Request.Url.Scheme), Url.Action("PrintMyFiles", "Ajax", null, HttpContext.Request.Url.Scheme), HttpContext.Session.SessionID);
             return View(Transfer);
+        }
+
+        private string GetWinitstatus(string skuCode, string importCountryCodee)
+        {
+            var winitstatus = "";
+            var Winit_API = new Winit_API();
+            var ItemMt = Winit_API.queryItemMtEntitys(skuCode, importCountryCodee);
+            if (!ItemMt.list.Any())
+            {
+                winitstatus = "No";
+            }
+            else
+            {
+                foreach (var item in ItemMt.list)
+                {
+                    switch (item.status)
+                    {
+                        case "PD":
+                            winitstatus = "Yes";
+                            break;
+                        case "DR":
+                            winitstatus = "Pending";
+                            break;
+                        case "CO":
+                            winitstatus = "Pending";
+                            break;
+                        case "WSA":
+                            winitstatus = "Pending";
+                            break;
+                        case "BK":
+                            winitstatus = "No";
+                            break;
+                    }
+                }
+            }
+            return winitstatus;
         }
 
         [HttpPost]
@@ -424,7 +495,7 @@ namespace PurchaseOrderSys.Controllers
                     inportDeclaredvalue = inportDeclaredvalue,
                     exportDeclaredvalue = exportDeclaredvalue,
                     battery = battery,
-                    remark = "特批客户"
+                    remark = "特批客戶"
                 });
             }
             if (string.IsNullOrWhiteSpace(errmsg))
@@ -505,8 +576,9 @@ namespace PurchaseOrderSys.Controllers
             }
         }
 
-        private void SavePrep(int ID, List<PostList> Prep)
+        private string SavePrep(int ID, List<PostList> Prep)
         {
+            var Msg = "";
             if (Prep != null)
             {
                 Prep = Prep.Where(x => !string.IsNullOrWhiteSpace(x.val)).Distinct().ToList();
@@ -644,8 +716,9 @@ namespace PurchaseOrderSys.Controllers
             catch (Exception ex)
             {
 
-                var s = ex.ToString();
+                Msg = ex.ToString();
             }
+            return Msg;
         }
 
         private decimal? GetSkuPrice(SerialsLlist serial)
@@ -903,12 +976,20 @@ namespace PurchaseOrderSys.Controllers
                                     WinitTransferSKUID = WinitTransferSKU.ID,
                                     Weight = Weight
                                 });
+                                db.SaveChanges();
                                 print = "key=serial&id=" + WinitTransferSKU.ID + "&Page=" + FilePage;
                                 Session["WinitPrepVMList" + SID] = PrepVMList;
                                 Session["WinitTransferBox" + SID] = WinitTransferBoxList;
 
-                                SavePrep(int.Parse(SID), null);
-                                return Json(new { status = true, print }, JsonRequestBehavior.AllowGet);
+                                var Msg = SavePrep(int.Parse(SID), null);
+                                if (string.IsNullOrWhiteSpace(Msg))
+                                {
+                                    return Json(new { status = true, print }, JsonRequestBehavior.AllowGet);
+                                }
+                                else
+                                {
+                                    return Json(new { status = false }, JsonRequestBehavior.AllowGet);
+                                }
                             }
                             else
                             {
@@ -1429,7 +1510,10 @@ namespace PurchaseOrderSys.Controllers
                     Document document = new Document();
                     PdfCopy copy = new PdfCopy(document, os);
                     document.Open();
-                    copy.AddPage(copy.GetImportedPage(reader, 2));
+                    if (reader.NumberOfPages > 1)
+                    {
+                        copy.AddPage(copy.GetImportedPage(reader, 2));
+                    }
                     for (int pagenumber = 1; pagenumber <= reader.NumberOfPages; pagenumber++)
                     {
                         copy.AddPage(copy.GetImportedPage(reader, pagenumber));
@@ -1441,7 +1525,7 @@ namespace PurchaseOrderSys.Controllers
             file.Save(OutputStream);
             return File(OutputStream.ToArray(), "application/zip", "AWB.zip");
         }
-        public ActionResult DownloadSCode(int? SerialsLlistID,int? boxid)
+        public ActionResult DownloadSCode(int? SerialsLlistID,int? boxid,int? TransferID)
         {
             var file = new ZipFile();
             var OutputStream = new MemoryStream();
@@ -1460,10 +1544,32 @@ namespace PurchaseOrderSys.Controllers
                 var WinitTransferBoxItem = db.WinitTransferBoxItem.Find(SerialsLlistID);
                 file.AddEntry("SCode-" + WinitTransferBoxItem.BarCode + ".pdf", SplistSCodePdf(WinitTransferBoxItem.WinitTransferSKUID, int.Parse(WinitTransferBoxItem.FilePage)));
             }
+            else if (TransferID.HasValue)
+            {
+                var WinitTransfer = db.WinitTransfer.Find(TransferID);
+                foreach (var WinitTransferBox in WinitTransfer.WinitTransferBox.Where(x => x.IsEnable))
+                {
+                    foreach (var item in WinitTransferBox.WinitTransferBoxItem)
+                    {
+                        var nWinitTransferSKUID = item.WinitTransferSKUID;
+                        var nFilePage = int.Parse(item.FilePage);
+                        file.AddEntry("SCode-" + item.BarCode + ".pdf", SplistSCodePdf(nWinitTransferSKUID, nFilePage));
+                    }
+                }
+            }
             file.Save(OutputStream);
             return File(OutputStream.ToArray(), "application/zip", "SCode.zip");
         }
-
+        public ActionResult DownloadInvoice(int ID)
+        {
+            var file = new ZipFile();
+            var OutputStream = new MemoryStream();
+            var transfer = db.Transfer.Find(ID);
+            var fileStream = Base64ToMemoryStream(transfer.WinitTransfer.InvoiceExcel);
+            file.AddEntry("InvoiceExcel-" + transfer.Tracking + ".xlsx", fileStream.ToArray());
+            file.Save(OutputStream);
+            return File(OutputStream.ToArray(), "application/zip", "InvoiceExcel.zip");
+        }
         private byte[] SplistSCodePdf(int? winitTransferSKUID, int? filePage)
         {
             var WinitTransferSKU = db.WinitTransferSKU.Find(winitTransferSKUID);
