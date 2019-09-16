@@ -85,8 +85,8 @@
 
                                             <div class="form-group">
                                                 <div class="col-sm-12">
-                                                    <div class="form-group" style="width:1272px;margin:0 auto;">
-                                                        <div class="col-sm-3" style="width:375px;">
+                                                    <div class="form-group" style="width:1314px;margin:0 auto;">
+                                                        <div class="col-sm-3" style="position:relative">
                                                             <table class="table table-bordered" style="width:300px;">
                                                                 <thead>
                                                                     <tr class="font-title">
@@ -165,7 +165,7 @@
                                                                 </tbody>
                                                             </table>
 
-                                                            <table class="table">
+                                                            <table class="table" style="width:600px;position:absolute;bottom:-140px;left:15px;">
                                                                 <tr>
                                                                     <td width="152" style="border:0px;">Customer User ID：</td>
                                                                     <td style="border:0px;">
@@ -211,7 +211,7 @@
                                                                 <table class="table table-bordered text-center">
                                                                     <thead>
                                                                         <tr class="font-title">
-                                                                            <th class="text-center" colspan="2">Sold To</th>
+                                                                            <th class="text-center" style="font-size:12px;" colspan="2">Sold To</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -222,7 +222,7 @@
                                                                                     var SoldArray = new string[] { SoldAddress?.AddressLine1, SoldAddress?.AddressLine2, SoldAddress?.City, SoldAddress?.State, SoldAddress?.Postcode, SoldAddress?.CountryName, SoldAddress?.PhoneNumber };
                                                                                     var SoldTo = new string[] { string.Format("{0}, {1}", SoldAddress?.FirstName, SoldAddress?.LastName), string.Join("\r\n", SoldArray.Except(new string[] { "", null })) };
                                                                                 }
-                                                                                <textarea class="form-control" style="resize:none;font-size:16px;" rows="8" readonly>@string.Join("\r\n", SoldTo)</textarea>
+                                                                                <textarea class="form-control" style="resize:none;font-size:14px;" rows="8" readonly>@string.Join("\r\n", SoldTo)</textarea>
                                                                             </td>
                                                                         </tr>
                                                                     </tbody>
@@ -233,14 +233,10 @@
                                                                 <table class="table table-bordered">
                                                                     <thead>
                                                                         <tr class="font-title">
-                                                                            <th class="text-center" colspan="2">
+                                                                            <th class="text-center" style="font-size:12px;" colspan="2">
                                                                                 Ship To
                                                                                 <div style="position: absolute;top: 1px;right: 1px;">
-                                                                                    <button type="button" class="btn btn-default" onclick="AddressEdit(this);">Edit</button>
-                                                                                </div>
-                                                                                <div style="position: absolute;top: 1px;right: 1px;display: none;">
-                                                                                    <button type="button" class="btn btn-default" onclick="$('#address-ship').find('input').each(function (i, input) { $(input).val($(input).data('reset'));});">Reset</button>
-                                                                                    <button type="button" class="btn btn-default" onclick="AddressSave(this);">Save</button>
+                                                                                    <button type="button" class="btn btn-default btn-sm" onclick="$addressDialog.dialog('open');">Edit</button>
                                                                                 </div>
                                                                             </th>
                                                                         </tr>
@@ -253,64 +249,7 @@
                                                                                     var ShipsArray = new string[] { ShipAddress?.AddressLine1, ShipAddress?.AddressLine2, ShipAddress?.City, ShipAddress?.State, ShipAddress?.Postcode, ShipAddress?.CountryName, ShipAddress?.PhoneNumber };
                                                                                     var ShipTo = new string[] { string.Format("{0}, {1}", ShipAddress?.FirstName, ShipAddress?.LastName), string.Join("\r\n", ShipsArray.Except(new string[] { "", null })) };
                                                                                 }
-                                                                                <textarea class="form-control" style="resize:none;font-size:16px;" rows="8" readonly>@string.Join("\r\n", ShipTo)</textarea>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </tbody>
-                                                                    <tbody id="edit-address" style="display:none;">
-                                                                        <tr>
-                                                                            <td width="123">First Name：</td>
-                                                                            <td class="no-padding">
-                                                                                <input type="hidden" name="ID" value="@(ShipAddress?.ID)" data-reset="@(ShipAddress?.ID)" />
-                                                                                <input type="text" class="form-control" name="FirstName" value="@(ShipAddress?.FirstName)" data-reset="@(ShipAddress?.FirstName)" />
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>Last Name：</td>
-                                                                            <td class="no-padding">
-                                                                                <input type="text" class="form-control" name="LastName" value="@(ShipAddress?.LastName)" data-reset="@(ShipAddress?.LastName)" />
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>Address Line 1：</td>
-                                                                            <td class="no-padding">
-                                                                                <input type="text" class="form-control" name="AddressLine1" value="@(ShipAddress?.AddressLine1)" data-reset="@(ShipAddress?.AddressLine1)" />
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>Address Line 2：</td>
-                                                                            <td class="no-padding">
-                                                                                <input type="text" class="form-control" name="AddressLine2" value="@(ShipAddress?.AddressLine2)" data-reset="@(ShipAddress?.AddressLine2)" />
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>City：</td>
-                                                                            <td class="no-padding">
-                                                                                <input type="text" class="form-control" name="City" value="@(ShipAddress?.City)" data-reset="@(ShipAddress?.City)" />
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>State：</td>
-                                                                            <td class="no-padding">
-                                                                                <input type="text" class="form-control" name="State" value="@(ShipAddress?.State)" data-reset="@(ShipAddress?.State)" />
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>Postcode：</td>
-                                                                            <td class="no-padding">
-                                                                                <input type="text" class="form-control" name="Postcode" value="@(ShipAddress?.Postcode)" data-reset="@(ShipAddress?.Postcode)" />
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>Country：</td>
-                                                                            <td class="no-padding">
-                                                                                @Html.DropDownList("CountryCode", EnumData.CountryList().Select(c => new SelectListItem() { Text = c.Value, Value = c.Key, Selected = c.Key.Equals(ShipAddress?.CountryCode.ToUpper()) }).ToList(), htmlAttributes: new { @class = "form-control" })
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>PhoneNumber：</td>
-                                                                            <td class="no-padding">
-                                                                                <input type="text" class="form-control" name="PhoneNumber" value="@(ShipAddress?.PhoneNumber)" data-reset="@(ShipAddress?.PhoneNumber)" />
+                                                                                <textarea class="form-control" style="resize:none;font-size:14px;" rows="8" readonly>@string.Join("\r\n", ShipTo)</textarea>
                                                                             </td>
                                                                         </tr>
                                                                     </tbody>
@@ -397,11 +336,11 @@
                                                             </table>
                                                         </div>
 
-                                                        <div class="col-sm-2" style="300px;">
+                                                        <div class="col-sm-2" style="width:300px;">
                                                             <table class="table table-bordered">
                                                                 <thead>
                                                                     <tr class="font-title">
-                                                                        <th>Logs</th>
+                                                                        <th class="text-center">Logs</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
@@ -520,6 +459,75 @@
     </section>
 </div>
 <div class="hidden">
+    <div id="dialog-address" class="easyui-dialog" title="Edit Address" data-options="iconCls:'icon-edit',closed:true,draggable:false,resizable:false" style="width:400px;">
+        <div data-options="region:'center'">
+            <table class="table table-bordered">
+                <tbody id="edit-address">
+                    <tr>
+                        <td width="123">First Name：</td>
+                        <td class="no-padding">
+                            <input type="hidden" name="ID" value="@(ShipAddress?.ID)" data-reset="@(ShipAddress?.ID)" />
+                            <input type="text" class="form-control" name="FirstName" value="@(ShipAddress?.FirstName)" data-reset="@(ShipAddress?.FirstName)" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Last Name：</td>
+                        <td class="no-padding">
+                            <input type="text" class="form-control" name="LastName" value="@(ShipAddress?.LastName)" data-reset="@(ShipAddress?.LastName)" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Address Line 1：</td>
+                        <td class="no-padding">
+                            <input type="text" class="form-control" name="AddressLine1" value="@(ShipAddress?.AddressLine1)" data-reset="@(ShipAddress?.AddressLine1)" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Address Line 2：</td>
+                        <td class="no-padding">
+                            <input type="text" class="form-control" name="AddressLine2" value="@(ShipAddress?.AddressLine2)" data-reset="@(ShipAddress?.AddressLine2)" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>City：</td>
+                        <td class="no-padding">
+                            <input type="text" class="form-control" name="City" value="@(ShipAddress?.City)" data-reset="@(ShipAddress?.City)" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>State：</td>
+                        <td class="no-padding">
+                            <input type="text" class="form-control" name="State" value="@(ShipAddress?.State)" data-reset="@(ShipAddress?.State)" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Postcode：</td>
+                        <td class="no-padding">
+                            <input type="text" class="form-control" name="Postcode" value="@(ShipAddress?.Postcode)" data-reset="@(ShipAddress?.Postcode)" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Country：</td>
+                        <td class="no-padding">
+                            @Html.DropDownList("CountryCode", EnumData.CountryList().Select(c => new SelectListItem() { Text = c.Value, Value = c.Key, Selected = c.Key.Equals(ShipAddress?.CountryCode.ToUpper()) }).ToList(), htmlAttributes: new { @class = "form-control" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>PhoneNumber：</td>
+                        <td class="no-padding">
+                            <input type="text" class="form-control" name="PhoneNumber" value="@(ShipAddress?.PhoneNumber)" data-reset="@(ShipAddress?.PhoneNumber)" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:3px;" colspan="2">
+                            <button type="button" class="btn btn-default" onclick="$('#address-ship').find('input').each(function (i, input) { $(input).val($(input).data('reset'));});">Reset</button>
+                            <button type="button" class="btn btn-default" onclick="AddressSave(this);">Save</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
     <div id="dialog-splitQty" class="easyui-dialog" title="Split Package" data-options="iconCls:'icon-edit',closed:true,draggable:false,resizable:false,onBeforeClose:function(){return SplitPackage.CloseCheck();}" style="width:400px;">
         <div data-options="region:'center'">
             <table class="table table-bordered text-right">
@@ -554,7 +562,7 @@
 
         var pageUrl = $('#data-form').attr('action');
         var $statusSelect = $('#select-status'), $actionSelect = $('#select-action'), $packageList = $('#list-package');
-        var $splitQtyDialog = $('#dialog-splitQty'), $packageDialog = $('#dialog-package');
+        var $addressDialog = $('#dialog-address'), $splitQtyDialog = $('#dialog-splitQty'), $packageDialog = $('#dialog-package');
 
         $(document).ready(function () {
             $('[rel="popover"]').popover();
@@ -577,24 +585,18 @@
                 OrderAction.SelectAction($(this).val());
             });
         });
-
-        var AddressEdit = function (btn) {
-            $(btn).parent('div').hide().siblings('div').show();
-            $('#edit-address').show().siblings('tbody').hide();
-        };
-
+        
         var AddressSave = function (btn) {
             var data = $('#edit-address').find('input, select').serializeArray();
 
             website.AjaxUrl('../AddressSave', 'post', data).done(function (response) {
                 if (response.status) {
                     alert('Update success!');
-
-                    $('#edit-address').hide().siblings('tbody').show().find('textarea').val(response.data);
-                    return $(btn).parent('div').hide().siblings('div').show();
                 } else {
-                    return alert(response.message);
+                    alert(response.message);
                 }
+
+                $addressDialog.dialog('close');
             });
         };
 

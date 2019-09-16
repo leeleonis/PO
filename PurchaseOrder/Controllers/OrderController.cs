@@ -182,8 +182,8 @@ namespace PurchaseOrderSys.Controllers
                 if (!address.AddressLine1.Equals(updateAddress.AddressLine1))
                     OM.ActionLog("Change Ship to", "Address1 to " + updateAddress.AddressLine1);
 
-                if (!address.AddressLine2.Equals(updateAddress.AddressLine2))
-                    OM.ActionLog("Change Ship to", "Address2 to " + updateAddress.AddressLine2 ?? "Empty");
+                if ((string.IsNullOrEmpty(address.AddressLine2) && !string.IsNullOrEmpty(updateAddress.AddressLine2)) || !address.AddressLine2.Equals(updateAddress.AddressLine2))
+                    OM.ActionLog("Change Ship to", "Address2 to " + (updateAddress.AddressLine2 ?? "Empty"));
 
                 if (!address.City.Equals(updateAddress.City))
                     OM.ActionLog("Change Ship to", "City to " + updateAddress.City);
