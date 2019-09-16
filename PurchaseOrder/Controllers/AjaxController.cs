@@ -685,13 +685,13 @@ namespace PurchaseOrderSys.Controllers
                     {
                         sBarCode = Serialsitem.SerialsNo;
                     }
-                    var SerialsLlist = db.SerialsLlist.Where(x => x.SerialsNo == sBarCode);//檢查是否有序號或是SBarCode
+                    var SerialsLlist = db.SerialsLlist.Where(x => x.IsEnable && x.SerialsNo == sBarCode && !x.SerialsLlistC.Any(y => y.IsEnable) && ((x.PurchaseSKUID.HasValue && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable) || (x.TransferSKUID.HasValue && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable)));//檢查是否有序號或是SBarCode
                     var PurchaseSKUs = db.PurchaseSKU.Where(x => x.SkuNo == Serialsitem.SkuNo && x.PurchaseOrder.IsEnable && x.IsEnable && !x.SKU.SerialTracking);//無開序號管理才能任意取
                     PurchaseSKUs = PurchaseSKUs.Where(x => x.SerialsLlist.Where(y => y.SerialsQTY > 0 && (y.SerialsType == "PO" || y.SerialsType == "TransferIn" || y.SerialsType == "DropshpOrderIn") && !y.SerialsLlistC.Any(z => z.IsEnable)).Any());
                     if (SerialsLlist.Any())
                     {
-                        SerialsLlist = SerialsLlist.Where(x => x.SerialsQTY > 0 && (x.SerialsType == "PO" || x.SerialsType == "TransferIn" || x.SerialsType == "DropshpOrderIn") && !x.SerialsLlistC.Any(y => y.IsEnable));//PO和TransferIn才能出貨
-                        if (SerialsLlist.Sum(x => x.SerialsQTY) > 0)
+                        var POSerialsLlist = SerialsLlist.Where(x => x.SerialsQTY > 0 && (x.SerialsType == "PO" || x.SerialsType == "TransferIn" || x.SerialsType == "DropshpOrderIn"));//PO和TransferIn才能出貨
+                        if (POSerialsLlist.Any())
                         {
                             using (var OM = new OrderManagement(Serialsitem.OrderID))
                             {
@@ -712,31 +712,33 @@ namespace PurchaseOrderSys.Controllers
                             {
                                 IsEnable = true,
                                 OrderID = Serialsitem.OrderID,
-                                PurchaseSKUID = SerialsLlist.FirstOrDefault().PurchaseSKUID,
-                                TransferSKUID = SerialsLlist.FirstOrDefault().TransferSKUID,
-                                PID = SerialsLlist.FirstOrDefault().ID,
+                                PurchaseSKUID = POSerialsLlist.LastOrDefault().PurchaseSKUID,
+                                TransferSKUID = POSerialsLlist.LastOrDefault().TransferSKUID,
+                                PID = POSerialsLlist.LastOrDefault().ID,
                                 SerialsNo = Serialsitem.SerialsNo,
                                 SerialsType = "Order",
                                 SerialsQTY = -1,
                                 Memo = JsonConvert.SerializeObject(ShipmentOrder),
                                 CreateAt = DateTime.UtcNow,
                                 CreateBy = "APIUser",
+                                ReceivedAt = DateTime.UtcNow,
+                                ReceivedBy = "APIUser"
                             };
                             db.SerialsLlist.Add(nSerials);
                             try
                             {
                                 var SkuNo = "";
                                 var SerialsNo = "";
-                                if (SerialsLlist.FirstOrDefault().PurchaseSKUID.HasValue)
+                                if (POSerialsLlist.LastOrDefault().PurchaseSKUID.HasValue)
                                 {
-                                    SkuNo = SerialsLlist.FirstOrDefault().PurchaseSKU.SkuNo;
+                                    SkuNo = POSerialsLlist.LastOrDefault().PurchaseSKU.SkuNo;
                                 }
-                                else if (SerialsLlist.FirstOrDefault().TransferSKUID.HasValue)
+                                else if (POSerialsLlist.LastOrDefault().TransferSKUID.HasValue)
                                 {
-                                    SkuNo = SerialsLlist.FirstOrDefault().TransferSKU.SkuNo;
+                                    SkuNo = POSerialsLlist.LastOrDefault().TransferSKU.SkuNo;
                                 }
-                                SerialsNo = SerialsLlist.FirstOrDefault().SerialsNo;
-                   
+                                SerialsNo = POSerialsLlist.LastOrDefault().SerialsNo;
+
                                 Dictionarylist.Add(new Tuple<string, string>(SkuNo, SerialsNo));
                             }
                             catch (Exception ex)
@@ -746,7 +748,78 @@ namespace PurchaseOrderSys.Controllers
                         }
                         else
                         {
-                            result.SetError(Serialsitem.SerialsNo + "：此序號已經出貨");
+                            var WinitSerialsLlist = SerialsLlist.Where(x => x.SerialsType == "TransferOut" && x.TransferSKU.Transfer.TransferType == "Winit");//檢查是否有序號或是SBarCode
+                            if (WinitSerialsLlist.Any())
+                            {
+                                //自動入庫,
+                                var nInSerials = new SerialsLlist {
+                                    IsEnable = true,
+                                    PurchaseSKUID = WinitSerialsLlist.LastOrDefault().PurchaseSKUID,
+                                    TransferSKUID = WinitSerialsLlist.LastOrDefault().TransferSKUID,
+                                    PID = WinitSerialsLlist.LastOrDefault().ID,
+                                    SerialsNo = Serialsitem.SerialsNo,
+                                    SerialsType = "TransferIn",
+                                    SerialsQTY = 1,
+                                    Memo = "AUTO ADD",
+                                    CreateAt = DateTime.UtcNow,
+                                    CreateBy = "APIUser",
+                                };
+                                //訂單出庫
+                                using (var OM = new OrderManagement(Serialsitem.OrderID))
+                                {
+                                    try
+                                    {
+                                        var order = OM.OrderSync(Serialsitem.OrderID);
+                                        if (order.CreateAt.CompareTo(order.UpdateAt.Value) == 0)
+                                        {
+                                            OM.ActionLog("Order", "Sync Data");
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        TempData["ErrorMsg"] = ex.InnerException?.Message ?? ex.Message;
+                                    }
+                                }
+                                var nSerials = new SerialsLlist
+                                {
+                                    IsEnable = true,
+                                    OrderID = Serialsitem.OrderID,
+                                    PurchaseSKUID = WinitSerialsLlist.LastOrDefault().PurchaseSKUID,
+                                    TransferSKUID = WinitSerialsLlist.LastOrDefault().TransferSKUID,
+                                    SerialsNo = Serialsitem.SerialsNo,
+                                    SerialsType = "Order",
+                                    SerialsQTY = -1,
+                                    Memo = JsonConvert.SerializeObject(ShipmentOrder),
+                                    CreateAt = DateTime.UtcNow,
+                                    CreateBy = "APIUser",
+                                };
+                                nInSerials.SerialsLlistC.Add(nSerials);
+                                db.SerialsLlist.Add(nInSerials);
+                                try
+                                {
+                                    var SkuNo = "";
+                                    var SerialsNo = "";
+                                    if (WinitSerialsLlist.LastOrDefault().PurchaseSKUID.HasValue)
+                                    {
+                                        SkuNo = WinitSerialsLlist.LastOrDefault().PurchaseSKU.SkuNo;
+                                    }
+                                    else if (WinitSerialsLlist.LastOrDefault().TransferSKUID.HasValue)
+                                    {
+                                        SkuNo = WinitSerialsLlist.LastOrDefault().TransferSKU.SkuNo;
+                                    }
+                                    SerialsNo = WinitSerialsLlist.LastOrDefault().SerialsNo;
+
+                                    Dictionarylist.Add(new Tuple<string, string>(SkuNo, SerialsNo));
+                                }
+                                catch (Exception ex)
+                                {
+                                    Err = ex.ToString();
+                                }
+                            }
+                            else
+                            {
+                                result.SetError(Serialsitem.SerialsNo + "：此序號已經出貨");
+                            }
                         }
                     }
                     else if (PurchaseSKUs.Any())
@@ -1815,7 +1888,7 @@ namespace PurchaseOrderSys.Controllers
             var Winit_API = new  Winit_API();
             var ApiSetting = db.ApiSetting.Find(16);
             AjaxResult result = new AjaxResult();
-            var TransferList = db.Transfer.Where(x => x.IsEnable && x.TransferType == "Winit" && x.Status == "Shipped");
+            var TransferList = db.Transfer.Where(x => x.IsEnable && x.TransferType == "Winit" && (x.Status == "Shipped" || x.Status == "Received"));
             foreach (var Transfer in TransferList)
             {
                 foreach (var WinitTransferSKU in Transfer.WinitTransfer.WinitTransferSKU)
@@ -1833,7 +1906,7 @@ namespace PurchaseOrderSys.Controllers
                 if (QueryOrderTracking.trackingList.Any())
                 {
                     Transfer.WinitTransfer.WinitStatus = QueryOrderTracking.trackingList.LastOrDefault().trackingDesc;
-                    if (QueryOrderTracking.trackingList.LastOrDefault().trackingCode == "OWS" && !string.IsNullOrWhiteSpace(Transfer.WinitTransfer.WinitOrderNo))//有上架資料才比對
+                    if ((QueryOrderTracking.trackingList.LastOrDefault().trackingCode == "OWS"|| QueryOrderTracking.trackingList.LastOrDefault().trackingCode == "OWA") && !string.IsNullOrWhiteSpace(Transfer.WinitTransfer.WinitOrderNo))//有上架資料才比對
                     {
                         var Allin = true;
                         //var QueryOrderTrackingList = Winit_API.QueryOrderTracking(item.WinitTransfer.WinitOrderNo);
@@ -1842,10 +1915,10 @@ namespace PurchaseOrderSys.Controllers
                         foreach (var TransferSKU in TransferSKUList)
                         {
                             var actualQuantity = OrderDetail.merchandiseList.Where(x => x.merchandiseCode.Contains(TransferSKU.SkuNo)).FirstOrDefault().actualQuantity;//實際上架數量
-                            var SerialsLlist = TransferSKU.SerialsLlist.Where(x => x.IsEnable && x.SerialsType == "TransferOut" && !x.SerialsLlistC.Any(y => y.IsEnable));
+                            var SerialsLlist = TransferSKU.SerialsLlist.Where(x => x.IsEnable && x.SerialsType == "TransferOut");//查移出的
                             if (Math.Abs(SerialsLlist.Sum(x => x.SerialsQTY).Value) == actualQuantity)//和實際上架數一樣，直接入庫
                             {
-                                foreach (var Serials in SerialsLlist)
+                                foreach (var Serials in SerialsLlist.Where(x => !x.SerialsLlistC.Any(y => y.IsEnable)))//沒有入庫的全部入庫
                                 {
                                     Serials.SerialsLlistC.Add(new SerialsLlist
                                     {
