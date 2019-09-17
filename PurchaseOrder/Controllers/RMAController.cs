@@ -263,12 +263,16 @@ namespace PurchaseOrderSys.Controllers
             var RMAModelVMList = new List<RMAModelVM>();
             if (OrderID.HasValue || !string.IsNullOrWhiteSpace(SourceID) || !string.IsNullOrWhiteSpace(UserID))
             {
+                var OrderItemData = GetOrderItemData(OrderID, SourceID, UserID, 3);
+                if (!OrderID.HasValue)
+                {
+                    OrderID = OrderItemData.LastOrDefault().OrderID;
+                }
                 var HaveSerialsLlist = db.SerialsLlist.Where(x => x.OrderID == OrderID && ((x.PurchaseSKUID.HasValue && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable) || (x.TransferSKUID.HasValue && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable))).Any();
                 if (!HaveSerialsLlist)
                 {
                     return Json(new { success = false, errmsg = "系統內無出貨資料" }, JsonRequestBehavior.AllowGet);
                 }
-                var OrderItemData = GetOrderItemData(OrderID, SourceID, UserID, 3);
                 var NoSKU = new List<string>();
                 int index = 0;
                 if (OrderItemData != null && OrderItemData.Count() > 0)

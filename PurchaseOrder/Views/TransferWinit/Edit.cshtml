@@ -15,10 +15,14 @@
     ViewBag.BoxLabelSize = Model.WinitTransfer.BoxLabelSize;
     ViewBag.SBarcodeLabelType = Model.WinitTransfer.SBarcodeLabelType;
     ShippingList.Where(q => q.Value == "35").First().Selected = true;
+    var i = 0;
 }
 <style>
     .error {
         background-color: red !important;
+    }
+    td.noSerial {
+        background-color: yellow !important;
     }
 </style>
 <div id="content">
@@ -47,45 +51,38 @@
                                 <div id="content" class="tab-content">
                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                     <div class="tab-pane" id="hb1">
+                                        <h1><b>Transfer# @Model.ID　　</b><a href="https://seller.winit.com.cn/WHInbound/orderDetailDelivery/orderNo/@Model.WinitTransfer.WinitOrderNo" target="_blank"><b>External Transfer # @Model.WinitTransfer.WinitOrderNo</b></a> </h1>
                                         <fieldset>
-                                            <legend>Edit</legend>
+                                            <legend></legend>
                                             <div class="form-group">
-                                                @Html.Label("Transfer #:", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("ID", new { htmlAttributes = new { @class = "form-control " + TStatus, disabled } })
-                                                </div>
-                                                @Html.Label("External Transfer #:", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    <a href='https://seller.winit.com.cn/WHInbound/orderDetailDelivery/orderNo/@Model.WinitTransfer.WinitOrderNo' target="_blank" class="form-control">@Model.WinitTransfer.WinitOrderNo</a>
-                                                </div>
+                                                @*@Html.Label("Transfer #:", htmlAttributes: new { @class = "control-label col-sm-2" })
+            <div class="col-sm-9 col-lg-2">
+                @Html.Editor("ID", new { htmlAttributes = new { @class = "form-control " + TStatus, disabled } })
+            </div>
+            @Html.Label("External Transfer #:", htmlAttributes: new { @class = "control-label col-sm-2" })
+            <div class="col-sm-9 col-lg-2">
+                <a href='https://seller.winit.com.cn/WHInbound/orderDetailDelivery/orderNo/@Model.WinitTransfer.WinitOrderNo' target="_blank" class="form-control">@Model.WinitTransfer.WinitOrderNo</a>
+            </div>*@
                                                 @Html.Label("Status:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.DropDownListFor(model => model.Status, TransferStatusDDL, htmlAttributes: new { @class = "form-control " + TStatus, disabled })
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
                                                 @Html.Label("From:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.DropDownList("FromWID", FromWarehouseDDL, htmlAttributes: new { @class = "form-control " + TStatus, disabled })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.Label("Carrier:", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownList("Carrier", ShippingList, DefaultSelect, htmlAttributes: new { @class = "form-control " + TStatus, disabled })
                                                 </div>
                                                 @Html.Label("To", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.DropDownList("ToWID", ToWarehouseDDL, htmlAttributes: new { @class = "form-control " + TStatus, disabled })
                                                 </div>
-                                                @Html.Label("Carrier:", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownList("Carrier", ShippingList, DefaultSelect, htmlAttributes: new { @class = "form-control " + TStatus, disabled })
-                                                </div>
                                             </div>
                                             <div class="form-group">
-                                                @Html.Label("Box Label Size:", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownList("BoxLabelSize", BoxLabelSize, htmlAttributes: new { @class = "form-control" })
-                                                </div>
-                                                @Html.Label("S Barcode Label Type:", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownList("SBarcodeLabelType", SBarcodeLabelType, htmlAttributes: new { @class = "form-control" })
-                                                </div>
                                                 @Html.Label("Tracking:", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @if (string.IsNullOrWhiteSpace(Model.Tracking))
@@ -98,11 +95,25 @@
                                                     }
 
                                                 </div>
+                                                @Html.Label("Box Label Size:", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownList("BoxLabelSize", BoxLabelSize, htmlAttributes: new { @class = "form-control" })
+                                                </div>
                                             </div>
                                             <div class="form-group">
 
+                                                @Html.Label(" Total Weight:", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    <label class="control-label col-sm-4" >@(Model.WinitTransfer.WinitTransferBox.Sum(x => x.Weight)/1000) KG</label>
+                                                </div>
+                                                @Html.Label("S Barcode Label Type:", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.DropDownList("SBarcodeLabelType", SBarcodeLabelType, htmlAttributes: new { @class = "form-control" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
                                                 @Html.Label("Title", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-10">
+                                                <div class="col-sm-9 col-lg-6">
                                                     @Html.Editor("Title", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
                                             </div>
@@ -114,9 +125,9 @@
                                                     @if (Model.Status == "Pending")
                                                     {
                                                         @*<div class="col-lg-offset-10">
-                                                            <a class='btn btn-info btn-sm' href="~/File/TransferExample.xlsx">Transfer Example</a>
-                                                            <a class='btn btn-danger btn-sm Excel' valID=" @Model.ID">Create by Excel</a>
-                                                        </div>*@
+                        <a class='btn btn-info btn-sm' href="~/File/TransferExample.xlsx">Transfer Example</a>
+                        <a class='btn btn-danger btn-sm Excel' valID=" @Model.ID">Create by Excel</a>
+                    </div>*@
                                                         <button type="button" class='btn btn-default btn-sm' id='Request'>Request</button>
                                                     }
                                                     else if (Model.Status == "Requested")
@@ -153,9 +164,9 @@
                                                     }
                                                     <a class='btn btn-default btn-sm' id='DeleteSKU'>Delete</a>
                                                     @*
-                                                        <a type="button" href="@Url.Action("Unrequest",new { Model.ID})" class='btn btn-default btn-sm' id='btn-Add'>Unrequest</a>
-                                                        <a type="button" href="@Url.Action("Save",new { Model.ID})" class='btn btn-default btn-sm' id='btn-Add'>Save</a>
-                                                        <a type="button" href="@Url.Action("Delete",new { Model.ID})" class='btn btn-default btn-sm' id='btn-Add'>Delete</a>*@
+                <a type="button" href="@Url.Action("Unrequest",new { Model.ID})" class='btn btn-default btn-sm' id='btn-Add'>Unrequest</a>
+                <a type="button" href="@Url.Action("Save",new { Model.ID})" class='btn btn-default btn-sm' id='btn-Add'>Save</a>
+                <a type="button" href="@Url.Action("Delete",new { Model.ID})" class='btn btn-default btn-sm' id='btn-Add'>Delete</a>*@
                                                 </div>
                                                 <div class="col-sm-9  col-lg-6">
                                                     <div class="col-sm-9  col-lg-offset-2">
@@ -225,44 +236,123 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <article class="col-xs-12">
-                                                    <table id="DataGrid" class="table table-striped table-bordered">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>
-                                                                    <input type="checkbox" />
-                                                                </th>
-                                                                <th></th>
-                                                                <th>Winit M碼</th>
-                                                                <th>SKU Registration</th>
-                                                                <th>SKU</th>
-                                                                <th>Product Name</th>
-                                                                <th>QTY</th>
-                                                                <th>Serial</th>
-                                                                @*<th>Label</th>*@
-                                                                <th>Total Received</th>
-                                                                <th>Price</th>
-                                                                @*<th>TWN (Available)</th>*@
-                                                                @*<th>Winit US WC (Available)</th>*@
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody></tbody>
-                                                        @if (Model.Status == "Pending")
-                                                        {
-                                                            <tfoot>
-                                                                <tr>
-                                                                    <td colspan="9">
-                                                                        <select id="gebruikerId" name="gebruikerId" class=" form-control" style="width:50%"></select>
-                                                                        <button type="button" id="addsku">Add SKU</button>
-                                                                    </td>
-                                                                </tr>
-                                                            </tfoot>
-                                                        }
-                                                    </table>
-                                                </article>
-                                            </div>
-                                        </fieldset>
+                                            @if (Model.Status == "Shipped" || Model.Status == "Received" || Model.Status == "Completed")
+                                            {
+                                                foreach (var BoxItem in Model.WinitTransfer.WinitTransferBox)
+                                                {
+                                                    <legend> </legend>
+                                                   
+                                                    <div class="row">
+                                                    <h1><b> Box @(i + 1)</b></h1> 
+                                                        <div class="form-group">
+                                                            <div class="col-sm-4 col-lg-2">
+                                                                <label class="control-label col-sm-12">Carrier:@(ShippingList.Where(x => x.Value == Model.Carrier).FirstOrDefault()?.Text)</label>
+                                                            </div>
+                                                            <div class="col-sm-6 col-lg-2">
+                                                                <label class="control-label col-sm-12">Tracking: <a href='https://www.fedex.com/apps/fedextrack/?action=track&trackingnumber=@BoxItem.Tracking' target="_blank">@(BoxItem.Tracking)</a></label>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="col-sm-4 col-lg-2">
+                                                                <label class="control-label col-sm-12">Length: @BoxItem.Length CM</label>
+                                                            </div>
+                                                            <div class="col-sm-4 col-lg-2">
+                                                                <label class="control-label col-sm-12">Width: @BoxItem.Width CM</label>
+                                                            </div>
+                                                            <div class="col-sm-4 col-lg-2">
+                                                                <label class="control-label col-sm-12">Height: @BoxItem.Heigth CM</label>
+                                                            </div>
+                                                            <div class="col-sm-4 col-lg-2">
+                                                                <label class="control-label col-sm-12">Weight: @(BoxItem.Weight/1000) KG</label>
+                                                            </div>
+                                                        </div>
+                                                        <article class="col-xs-12">
+                                                            <table class="table table-striped table-bordered BoxDataGrid">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>SKU</th>
+                                                                        <th>Name</th>
+                                                                        <th>Serial</th>
+                                                                        <th>
+                                                                            S Barcode
+                                                                            @*<a class="btn btn-default" target="_blank" href="@Url.Action("DownloadSCode", new { boxid = BoxItem.ID })">下載</a>*@
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @foreach (var item in BoxItem.WinitTransferBoxItem)
+                                                                    {
+                                                                        var noSerial = "noSerial";
+                                                                        if (item.SerialsLlist.SerialsLlistC.Where(x => x.IsEnable && x.SerialsType == "TransferIn").Any())
+                                                                        {
+                                                                            noSerial = "";
+                                                                        }
+                                                                        <tr >
+                                                                            <td class="@noSerial">@item.SkuNo</td>
+                                                                            <td class="@noSerial">
+                                                                                @Html.Raw(item.Name)
+                                                                                <br />
+                                                                                @Html.GetNameSize(item.SerialsLlist.TransferSKU.SKU);
+                                                                            </td>
+                                                                            <td class="@noSerial">
+                                                                                @item.SerialsNo
+
+                                                                            </td>
+                                                                            <td class="@noSerial">
+                                                                                @item.BarCode
+                                                                            </td>
+                                                                        </tr>
+                                                                    }
+                                                                </tbody>
+                                                            </table>
+                                                        </article>
+                                                    </div>
+                                                        i++;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <div class="row">
+                                                        <article class="col-xs-12">
+                                                            <table id="DataGrid" class="table table-striped table-bordered">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>
+                                                                            <input type="checkbox" />
+                                                                        </th>
+                                                                        <th></th>
+                                                                        <th>Winit M碼</th>
+                                                                        <th>SKU Registration</th>
+                                                                        <th>SKU</th>
+                                                                        <th>Product Name</th>
+                                                                        <th>QTY</th>
+                                                                        <th>Serial</th>
+                                                                        @*<th>Label</th>*@
+                                                                        <th>Total Received</th>
+                                                                        <th>Price</th>
+                                                                        @*<th>TWN (Available)</th>*@
+                                                                        @*<th>Winit US WC (Available)</th>*@
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody></tbody>
+                                                                @if (Model.Status == "Pending")
+                                                                {
+                                                                    <tfoot>
+                                                                        <tr>
+                                                                            <td colspan="9">
+                                                                                <select id="gebruikerId" name="gebruikerId" class=" form-control" style="width:50%"></select>
+                                                                                <button type="button" id="addsku">Add SKU</button>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tfoot>
+                                                                }
+                                                            </table>
+                                                        </article>
+                                                    </div>
+                                                }
+
+</fieldset>
                                     </div>
                                 </div>
                                 <div class="widget-footer">
@@ -379,7 +469,7 @@
             },
             "rowCallback": function (row, data, index) {
                 if (data.Prep != 0) {
-                    $('td', row).css('background-color', 'yellow');
+                    $('td', row).addClass('noSerial');
                 }
             },
         });

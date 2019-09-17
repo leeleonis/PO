@@ -495,7 +495,7 @@ namespace PurchaseOrderSys.Controllers
                     inportDeclaredvalue = inportDeclaredvalue,
                     exportDeclaredvalue = exportDeclaredvalue,
                     battery = battery,
-                    remark = "特批客戶"
+                    //remark = "特批客戶"
                 });
             }
             if (string.IsNullOrWhiteSpace(errmsg))

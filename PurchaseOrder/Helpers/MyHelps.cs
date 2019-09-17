@@ -450,6 +450,47 @@ namespace PurchaseOrderSys.Helpers
             var labelHtml = htmlHelper.Label(name, Text, attrs);
             return MvcHtmlString.Create(labelHtml.ToHtmlString());
         }
+        public static MvcHtmlString GetNameSize(this HtmlHelper htmlHelper, SKU x)
+        {
+            string name = "";
+            var Size = "";
+            var iSize = "";
+            var inch = 0.0393700787;
+            var lbs = 0.00220462262;
+            var Zero = false;
+            if (x.Logistic != null)
+            {
+                if (x.Logistic.ShippingWeight == 0)
+                {
+                    Zero = true;
+                }
+                if (x.Logistic.ShippingLength == 0)
+                {
+                    Zero = true;
+                }
+                if (x.Logistic.ShippingWidth == 0)
+                {
+                    Zero = true;
+                }
+                if (x.Logistic.ShippingHeight == 0)
+                {
+                    Zero = true;
+                }
+                name += "Shipping Weight: " + x.Logistic.ShippingWeight + " g / " + (x.Logistic.ShippingWeight * lbs).ToString("f2") + " lbs<br/>"; ;
+                Size += x.Logistic.ShippingLength + " x ";
+                iSize += (x.Logistic.ShippingLength * inch).ToString("f2") + " x "; ;
+                Size += x.Logistic.ShippingWidth + " x ";
+                iSize += (x.Logistic.ShippingWidth * inch).ToString("f2") + " x "; ;
+                Size += x.Logistic.ShippingHeight;
+                iSize += (x.Logistic.ShippingHeight * inch).ToString("f2");
+                name += "Shipping Dimension: " + Size + " mm / " + iSize + " inch";
+            }
+            if (Zero)
+            {
+                return MvcHtmlString.Create("<label style='font-size:80%; color:red' >" + name + "</label>");
+            }
+            return MvcHtmlString.Create("<label style='font-size:80%' >" + name + "</label>");
+        }
         /// <summary>
         /// 取工作日
         /// </summary>
