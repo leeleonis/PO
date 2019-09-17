@@ -357,8 +357,8 @@
                                                             </table>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <div class="col-sm-6 col-sm-offset-6 col-lg-3 col-lg-offset-9">
+                                                    <div class="form-group" style="width:1314px; height:25px;margin:0 auto;position:relative">
+                                                        <div class="col-sm-12" style="width:350px;position:absolute;right:5px;">
                                                             <div class="input-group">
                                                                 <span class="input-group-addon font-bg">Shipping Actions</span>
                                                                 <select class="form-control" id="select-action">
@@ -381,7 +381,7 @@
                                                         </div>
                                                     </div>
                                                     <hr />
-                                                    <div class="form-group" id="list-package">
+                                                    <div class="form-group" id="list-package" style="width:1314px;margin:0 auto;">
                                                         @{
                                                             int index = 1;
                                                             var ViewData = new ViewDataDictionary() { { "total", Model.Packages.Count(p => p.IsEnable) }, { "MethodList", ViewBag.MethodList }, { "WarehouseList", ViewBag.WarehouseList }, { "CurrencyList", ViewBag.CurrencyList } };
@@ -394,8 +394,8 @@
                                                         }
                                                     </div>
                                                     <hr />
-                                                    <div class="form-group">
-                                                        <div class="col-sm-3">
+                                                    <div class="form-group" style="width:1314px;margin:0 auto;">
+                                                        <div class="col-sm-4">
                                                             <table class="table table-bordered">
                                                                 <thead>
                                                                     <tr class="font-title">
@@ -411,7 +411,7 @@
                                                                 </tbody>
                                                             </table>
                                                         </div>
-                                                        <div class="col-sm-6">
+                                                        <div class="col-sm-8">
                                                             <table class="table table-bordered">
                                                                 <thead>
                                                                     <tr class="font-title">
