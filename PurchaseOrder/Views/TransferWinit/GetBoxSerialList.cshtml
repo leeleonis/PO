@@ -1,0 +1,36 @@
+﻿@model IEnumerable<BoxSerialList>
+@{
+    Layout = null;
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th width="100px">
+                Serial
+            </th>
+            <th width="100px">
+                S Code
+            </th>
+            <th>
+                貨況
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ToList())
+        {
+        <tr>
+            <td>
+                @item.SerialsNo
+            </td>
+            <td>
+                @item.BarCode
+            </td>
+            <td>
+                @item.Status
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+

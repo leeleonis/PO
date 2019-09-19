@@ -1560,6 +1560,14 @@ namespace PurchaseOrderSys.Controllers
             file.Save(OutputStream);
             return File(OutputStream.ToArray(), "application/zip", "SCode.zip");
         }
+        public ActionResult GetBoxSerialList(int boxid, string skuno)
+        {
+            var WinitTransferBox = db.WinitTransferBox.Find(boxid);
+            var SerialsLlist = WinitTransferBox.WinitTransferBoxItem.Where(x => x.SkuNo == skuno).Select(x => new BoxSerialList { SerialsNo = x.SerialsLlist.SerialsNo, BarCode = x.BarCode, Status = GetType(x.SerialsLlist) }).ToList();
+            var partial = ControlToString("~/Views/TransferWinit/GetBoxSerialList.cshtml", SerialsLlist);
+            return Json(new { status = true, partial }, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult DownloadInvoice(int ID)
         {
             var file = new ZipFile();
@@ -1569,6 +1577,23 @@ namespace PurchaseOrderSys.Controllers
             file.AddEntry("InvoiceExcel-" + transfer.Tracking + ".xlsx", fileStream.ToArray());
             file.Save(OutputStream);
             return File(OutputStream.ToArray(), "application/zip", "InvoiceExcel.zip");
+        }
+        private string GetType(SerialsLlist SerialsLlist)
+        {
+            var returnval = "";
+            if (SerialsLlist.SerialsLlistC.Where(x => x.SerialsType == "TransferIn").Any())
+            {
+                returnval = "已入庫";
+            }
+            else if (SerialsLlist.TransferSKU.Transfer.Status == "Requested")
+            {
+                returnval = "待出庫";
+            }
+            else if (SerialsLlist.TransferSKU.Transfer.Status == "Shipped")
+            {
+                returnval = "已出庫";
+            }
+            return returnval;
         }
         private byte[] SplistSCodePdf(int? winitTransferSKUID, int? filePage)
         {

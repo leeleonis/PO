@@ -44,7 +44,7 @@
                                                             <th>@Html.DisplayName("Type")</th>
                                                             <th>@Html.DisplayName("Fulfillable")</th>
                                                             <th>@Html.DisplayName("Awaiting Dispatch")</th>
-                                                            <th>@Html.DisplayName("Transit (Unfulfillable)")</th>
+                                                            <th>@Html.DisplayName("Transit (Out) & Transit(In)")</th>
                                                             <th>@Html.DisplayName("WinitTransit (Unfulfillable)")</th>
                                                             <th>@Html.DisplayName("Aggregate")</th>
                                                             <th>SKU ITEM</th>
@@ -61,8 +61,8 @@
                                                             <td>@item.Type</td>
                                                             <td>@item.Fulfillable</td>
                                                             <td>@item.Awaiting</td>
-                                                            <td>@item.TransferOutQTY</td>
-                                                            <td>@item.WTransferOutQTY</td>
+                                                            <td>@item.TransferOutQTY / @item.TransferInQTY</td>
+                                                            <td>@item.WTransferOutQTY / @item.WTransferInQTY</td>
                                                             <td>@item.Aggregate</td>
                                                             <td>
                                                                 <a class='btn btn-default btn-sm' id='index' href='@Url.Action("index", "WarehouseInventory", new { item.ID })'>SKU</a>

@@ -7769,6 +7769,7 @@
     <Content Include="Views\RMA\ReturnTracking.cshtml" />
     <Content Include="Views\JobProcess\Index.cshtml" />
     <Content Include="Views\JobProcess\_TaskLog.cshtml" />
+    <Content Include="Views\TransferWinit\GetBoxSerialList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

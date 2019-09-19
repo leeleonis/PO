@@ -790,6 +790,10 @@ namespace PurchaseOrderSys.Models
         public int UnfulfillableTransit { get; internal set; }
         public int TotalVelocity { get; internal set; }
         public int Aggregate { get; internal set; }
+        public int TransferOutQTY { get; internal set; }
+        public int TransferInQTY { get; internal set; }
+        public int WTransferOutQTY { get; internal set; }
+        public int WTransferInQTY { get; internal set; }
     }
     [Serializable]
     public class SkuPurchasingVM
@@ -1022,7 +1026,15 @@ namespace PurchaseOrderSys.Models
         /// <summary>
         /// Winit移庫出庫數
         /// </summary>
-        public int WTransferOutQTY { get; internal set; }
+        public int WTransferOutQTY { get;  set; }
+        /// <summary>
+        /// 移庫入庫數
+        /// </summary>
+        public int? TransferInQTY { get; set; }
+        /// <summary>
+        /// Winit移庫入庫數
+        /// </summary>
+        public int WTransferInQTY { get; set; }
     }
     [Serializable]
     public class WarehouseVM
@@ -1098,6 +1110,7 @@ namespace PurchaseOrderSys.Models
         /// Winit等待移倉的數量
         /// </summary>
         public int WTransferAwaiting { get; set; }
+        public int WTransferInQTY { get; internal set; }
     }
     [Serializable]
     public class CompanyVM
@@ -1504,5 +1517,11 @@ namespace PurchaseOrderSys.Models
         public decimal? Value { get; set; }
         public DateTime? Date { get; set; }
     }
-
+    [Serializable]
+    public class BoxSerialList
+    {
+        public string SerialsNo { get; set; }
+        public string BarCode { get; set; }
+        public string Status { get; set; }
+    }
 }

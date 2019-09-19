@@ -167,21 +167,21 @@
                                                                 <td>
                                                                     @if (item.TransferOutQTY > 0)
                                                                     {
-                                                                        <a href="@Url.Action("index", "Transfer", new { SKU = item.SKU, To = ViewBag.WarehouseID })" target="_blank"> @item.TransferOutQTY</a>
+                                                                    <a href="@Url.Action("index", "Transfer", new { SKU = item.SKU, To = ViewBag.WarehouseID })" target="_blank"> @item.TransferOutQTY / @item.TransferInQTY</a>
                                                                     }
                                                                     else
                                                                     {
-                                                                        <a href="@Url.Action("index", "Transfer", new { SKU = item.SKU, From = ViewBag.WarehouseID })" target="_blank"> @item.TransferOutQTY</a> 
+                                                                    <a href="@Url.Action("index", "Transfer", new { SKU = item.SKU, From = ViewBag.WarehouseID })" target="_blank"> @item.TransferOutQTY / @item.TransferInQTY</a> 
                                                                     }
                                                                 </td>
                                                                 <td>
                                                                     @if (item.WTransferOutQTY > 0)
                                                                     {
-                                                                        <a href="@Url.Action("index", "TransferWinit", new { SKU = item.SKU, To = ViewBag.WarehouseID })" target="_blank"> @item.WTransferOutQTY</a>
+                                                                    <a href="@Url.Action("index", "TransferWinit", new { SKU = item.SKU, To = ViewBag.WarehouseID })" target="_blank"> @item.WTransferOutQTY / @item.WTransferInQTY</a>
                                                                     }
                                                                     else
                                                                     {
-                                                                        <a href="@Url.Action("index", "TransferWinit", new { SKU = item.SKU, From = ViewBag.WarehouseID })" target="_blank"> @item.WTransferOutQTY</a>
+                                                                    <a href="@Url.Action("index", "TransferWinit", new { SKU = item.SKU, From = ViewBag.WarehouseID })" target="_blank"> @item.WTransferOutQTY / @item.WTransferInQTY</a>
                                                                     }
                                                                 </td>
                                                                 <td>@item.Aggregate</td>
