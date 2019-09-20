@@ -12,8 +12,8 @@ namespace PurchaseOrderSys.Models
 {
     public class OrderManagement : IDisposable
     {
-        private static string ApiUserName = "test@qd.com.tw";
-        private static string ApiPassword = "prU$U9R7CHl3O#uXU6AcH6ch";
+        private static readonly string ApiUserName = "test@qd.com.tw";
+        private static readonly string ApiPassword = "prU$U9R7CHl3O#uXU6AcH6ch";
         private PurchaseOrderEntities db = new PurchaseOrderEntities();
 
         private Orders orderData;
@@ -49,11 +49,7 @@ namespace PurchaseOrderSys.Models
                 order.OrderStatus = EnumData.OrderStatusList().First(s => s.Value.Equals(EnumData.OrderStatusList(true)[order.OrderStatus])).Key;
                 order.PaymentStatus = EnumData.OrderPaymentStatusList().First(p => p.Value.Equals(EnumData.OrderPaymentStatusList(true)[order.PaymentStatus])).Key;
                 order.FulfilledDate = order.FulfilledDate.HasValue && !order.FulfilledDate.Equals(DateTime.MinValue) ? order.FulfilledDate : null;
-
-                if (order.RMAID.HasValue)
-                {
-                    order.RMAID = db.RMA.FirstOrDefault(r => r.SCRMA.Equals(order.RMAID.ToString()))?.ID ?? order.RMAID;
-                }
+                order.RMAID = orderData?.RMAID ?? db.RMA.FirstOrDefault(r => r.SCRMA.Equals(order.RMAID.ToString()))?.ID;
 
                 if (orderData != null)
                 {
@@ -213,7 +209,7 @@ namespace PurchaseOrderSys.Models
             return EnumData.OrderFulfillmentStatus.None;
         }
 
-        public void SplitPackage(int[] PackageIDs)
+        public void SplitPackageToSC(int[] PackageIDs)
         {
             if (SC_Api == null) SC_Api = new SC_WebService(ApiUserName, ApiPassword);
 
@@ -275,7 +271,7 @@ namespace PurchaseOrderSys.Models
             }
         }
 
-        public void CombinePackage(int[] OldPackageIDs)
+        public void CombinePackageToSC(int[] OldPackageIDs)
         {
 
             if (SC_Api == null) SC_Api = new SC_WebService(ApiUserName, ApiPassword);
@@ -324,7 +320,7 @@ namespace PurchaseOrderSys.Models
             }
         }
 
-        public void UpdateItemSerial(int ItemID, string[] Serials)
+        public void UpdateItemSerialToSC(int ItemID, string[] Serials)
         {
             if (SC_Api == null) SC_Api = new SC_WebService(ApiUserName, ApiPassword);
 
@@ -343,7 +339,70 @@ namespace PurchaseOrderSys.Models
             }
         }
 
-        public void MarkShipPackage(int PackageID)
+        public void UpdateAddressToSC(int AddressID)
+        {
+            if (SC_Api == null) SC_Api = new SC_WebService(ApiUserName, ApiPassword);
+
+            try
+            {
+                if (!orderData.SCID.HasValue) throw new Exception("Not found order's SCID!");
+
+                if (!SC_Api.Is_login) throw new Exception("SC is not logged in!");
+
+                var addressData = db.OrderAddresses.Find(AddressID);
+                var SC_address = SC_Api.Get_OrderData(orderData.SCID.Value).Order.ShippingAddress;
+
+                SC_address.FirstName = addressData.FirstName;
+                SC_address.LastName = addressData.LastName;
+                SC_address.StreetLine1 = addressData.AddressLine1;
+                SC_address.StreetLine2 = addressData.AddressLine2;
+                SC_address.City = addressData.City;
+                SC_address.StateName = addressData.State;
+                SC_address.PostalCode = addressData.Postcode;
+                SC_address.CountryCode = addressData.CountryCode;
+                SC_address.CountryName = addressData.CountryName;
+                SC_address.PhoneNumber = addressData.PhoneNumber;
+                SC_address.EmailAddress = addressData.EmailAddress;
+
+                SC_Api.Update_OrderAddress(orderData.SCID.Value, SC_address);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(string.Format("SC Error：{0}", ex.InnerException?.Message ?? ex.Message));
+            }
+        }
+
+        public void UpdatePaymentToSC(int PaymentID)
+        {
+            if (SC_Api == null) SC_Api = new SC_WebService(ApiUserName, ApiPassword);
+
+            try
+            {
+                if (!orderData.SCID.HasValue) throw new Exception("Not found order's SCID!");
+
+                if (!SC_Api.Is_login) throw new Exception("SC is not logged in!");
+
+                var paymentData = db.Payments.Find(PaymentID);
+                var SC_order = SC_Api.Get_OrderData(orderData.SCID.Value).Order;
+                var SC_payment = SC_order.Payments.First(p => p.ID.Equals(paymentData.SCID.Value));
+
+                SC_order.ShippingTotal = paymentData.ShippingCharge;
+                SC_order.InsuranceTotal = paymentData.InsuranceCharge;
+                SC_order.GrandTotal = paymentData.GrandTotal;
+                SC_payment.PaymentStatus = (PaymentStatus)EnumData.OrderPaymentStatusList(true).Select(s => (int)s.Key).ToArray()[paymentData.Status];
+                SC_payment.AuditDate = paymentData.Date.HasValue ? new Helpers.TimeZoneConvert(paymentData.Date.Value, EnumData.TimeZone.UTC).ConvertDateTime(EnumData.TimeZone.EST) : DateTime.MinValue;
+                SC_payment.PaymentMethod = (PaymentMethod)paymentData.Gateway;
+                SC_payment.Amount = paymentData.PaymentTotal;
+
+                SC_Api.Update_Order(SC_order);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(string.Format("SC Error：{0}", ex.InnerException?.Message ?? ex.Message));
+            }
+        }
+
+        public void MarkShipPackageToSC(int PackageID)
         {
             if (SC_Api == null) SC_Api = new SC_WebService(ApiUserName, ApiPassword);
 
@@ -377,7 +436,7 @@ namespace PurchaseOrderSys.Models
             }
         }
 
-        public void ChangeOrderStatus(byte Status)
+        public void ChangeOrderStatusToSC(byte Status)
         {
             if (SC_Api == null) SC_Api = new SC_WebService(ApiUserName, ApiPassword);
 

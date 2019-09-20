@@ -32,6 +32,9 @@
         #list-package > div.edit .text {
             padding: 0px;
         }
+            #list-package > div.edit .text input, #list-package > div.edit .text select {
+                border-color:red;
+            }
 
             #list-package > div.edit .text span, #list-package > div.edit button.edit {
                 display: none;
@@ -85,7 +88,7 @@
 
                                             <div class="form-group">
                                                 <div class="col-sm-12">
-                                                    <div class="form-group" style="width:1314px;margin:0 auto;">
+                                                    <div class="form-group" style="width:1320px;margin:0 auto;">
                                                         <div class="col-sm-3" style="position:relative">
                                                             <table class="table table-bordered" style="width:300px;">
                                                                 <thead>
@@ -249,7 +252,7 @@
                                                                                     var ShipsArray = new string[] { ShipAddress?.AddressLine1, ShipAddress?.AddressLine2, ShipAddress?.City, ShipAddress?.State, ShipAddress?.Postcode, ShipAddress?.CountryName, ShipAddress?.PhoneNumber };
                                                                                     var ShipTo = new string[] { string.Format("{0}, {1}", ShipAddress?.FirstName, ShipAddress?.LastName), string.Join("\r\n", ShipsArray.Except(new string[] { "", null })) };
                                                                                 }
-                                                                                <textarea class="form-control" style="resize:none;font-size:14px;" rows="8" readonly>@string.Join("\r\n", ShipTo)</textarea>
+                                                                                <textarea class="form-control" id="area-ship" style="resize:none;font-size:14px;" rows="8" readonly>@string.Join("\r\n", ShipTo)</textarea>
                                                                             </td>
                                                                         </tr>
                                                                     </tbody>
@@ -264,7 +267,12 @@
                                                             <table class="table table-bordered">
                                                                 <thead>
                                                                     <tr class="font-title">
-                                                                        <th class="text-center" colspan="2">Payment</th>
+                                                                        <th class="text-center" colspan="2">
+                                                                            Payment
+                                                                            <div style="position: absolute;top: 2px;right: 15px;">
+                                                                                <button type="button" class="btn btn-default" onclick="$paymentDialog.dialog('open');">Edit</button>
+                                                                            </div>
+                                                                        </th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tr>
@@ -336,7 +344,7 @@
                                                             </table>
                                                         </div>
 
-                                                        <div class="col-sm-2" style="width:300px;">
+                                                        <div class="col-sm-2" style="width:305px;">
                                                             <table class="table table-bordered">
                                                                 <thead>
                                                                     <tr class="font-title">
@@ -357,7 +365,7 @@
                                                             </table>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group" style="width:1314px; height:25px;margin:0 auto;position:relative">
+                                                    <div class="form-group" style="width:1320px; height:25px;margin:0 auto;position:relative">
                                                         <div class="col-sm-12" style="width:350px;position:absolute;right:5px;">
                                                             <div class="input-group">
                                                                 <span class="input-group-addon font-bg">Shipping Actions</span>
@@ -381,7 +389,7 @@
                                                         </div>
                                                     </div>
                                                     <hr />
-                                                    <div class="form-group" id="list-package" style="width:1314px;margin:0 auto;">
+                                                    <div class="form-group" id="list-package" style="width:1320px;margin:0 auto;">
                                                         @{
                                                             int index = 1;
                                                             var ViewData = new ViewDataDictionary() { { "total", Model.Packages.Count(p => p.IsEnable) }, { "MethodList", ViewBag.MethodList }, { "WarehouseList", ViewBag.WarehouseList }, { "CurrencyList", ViewBag.CurrencyList } };
@@ -394,7 +402,7 @@
                                                         }
                                                     </div>
                                                     <hr />
-                                                    <div class="form-group" style="width:1314px;margin:0 auto;">
+                                                    <div class="form-group" style="width:1320px;margin:0 auto;">
                                                         <div class="col-sm-4">
                                                             <table class="table table-bordered">
                                                                 <thead>
@@ -520,8 +528,68 @@
                     </tr>
                     <tr>
                         <td style="padding:3px;" colspan="2">
-                            <button type="button" class="btn btn-default" onclick="$('#address-ship').find('input').each(function (i, input) { $(input).val($(input).data('reset'));});">Reset</button>
-                            <button type="button" class="btn btn-default" onclick="AddressSave(this);">Save</button>
+                            <button type="button" class="btn btn-default" onclick="$('#edit-address').find('input').each(function (i, input) { $(input).val($(input).data('reset'));});">Reset</button>
+                            <button type="button" class="btn btn-default" onclick="AddressSave();">Save</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div id="dialog-payment" class="easyui-dialog" title="Edit Payment" data-options="iconCls:'icon-edit',closed:true,draggable:false,resizable:false" style="width:400px;">
+        <div data-options="region:'center'">
+            <table class="table table-bordered">
+                <tbody id="edit-payment">
+                    <tr>
+                        <td width="126">Status：</td>
+                        <td class="no-padding">
+                            <input type="hidden" name="ID" value="@(payment?.ID)" data-reset="@(payment?.ID)" />
+                            @Html.DropDownList("Status", Enum.GetValues(typeof(EnumData.PaymentStatus)).Cast<EnumData.PaymentStatus>().Select(s => new SelectListItem() { Text = s.ToString(), Value = ((byte)s).ToString(), Selected = ((byte)s).Equals(payment?.Status ?? 2) }).ToList(), htmlAttributes: new { @class = "form-control" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Date：</td>
+                        <td class="no-padding">
+                            @{
+                                var paymentDate = payment != null ? TimeZoneConvert.DateTimeToString(payment?.Date, EnumData.TimeZone.UTC, EnumData.TimeZone.TST) : "";
+                            }
+                            <input type="text" class="form-control" name="Date" value="@paymentDate" data-reset="@paymentDate" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Gateway：</td>
+                        <td class="no-padding">
+                            @Html.DropDownList("Gateway", Enum.GetValues(typeof(PurchaseOrderSys.SCService.PaymentMethod)).Cast<PurchaseOrderSys.SCService.PaymentMethod>().Select(g => new SelectListItem() { Text = g.ToString(), Value = ((int)g).ToString(), Selected = ((int)g).Equals(payment?.Gateway ?? 5) }).ToList(), htmlAttributes: new { @class = "form-control" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Shipping：</td>
+                        <td class="no-padding">
+                            <input type="text" class="form-control" name="ShippingCharge" value="@(payment?.ShippingCharge ?? 0)" data-reset="@(payment?.ShippingCharge ?? 0)" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Insurance：</td>
+                        <td class="no-padding">
+                            <input type="text" class="form-control" name="InsuranceCharge" value="@(payment?.InsuranceCharge ?? 0)" data-reset="@(payment?.InsuranceCharge ?? 0)" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Payment Total：</td>
+                        <td class="no-padding">
+                            <input type="text" class="form-control" name="PaymentTotal" value="@(payment?.PaymentTotal ?? 0)" data-reset="@(payment?.PaymentTotal ?? 0)" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Refund：</td>
+                        <td class="no-padding">
+                            <input type="text" class="form-control" name="Refund" value="@(payment?.Refund ?? 0)" data-reset="@(payment?.Refund ?? 0)" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:3px;" colspan="2">
+                            <button type="button" class="btn btn-default" onclick="$('#edit-payment').find('input').each(function (i, input) { $(input).val($(input).data('reset'));});">Reset</button>
+                            <button type="button" class="btn btn-default" onclick="PaymentSave();">Save</button>
                         </td>
                     </tr>
                 </tbody>
@@ -562,7 +630,7 @@
 
         var pageUrl = $('#data-form').attr('action');
         var $statusSelect = $('#select-status'), $actionSelect = $('#select-action'), $packageList = $('#list-package');
-        var $addressDialog = $('#dialog-address'), $splitQtyDialog = $('#dialog-splitQty'), $packageDialog = $('#dialog-package');
+        var $addressDialog = $('#dialog-address'), $paymentDialog = $('#dialog-payment'), $splitQtyDialog = $('#dialog-splitQty'), $packageDialog = $('#dialog-package');
 
         $(document).ready(function () {
             $('[rel="popover"]').popover();
@@ -585,18 +653,34 @@
                 OrderAction.SelectAction($(this).val());
             });
         });
-        
-        var AddressSave = function (btn) {
+
+        var AddressSave = function () {
             var data = $('#edit-address').find('input, select').serializeArray();
 
             website.AjaxUrl('../AddressSave', 'post', data).done(function (response) {
+                if (response.status) {
+                    alert('Update success!');
+
+                    $('#area-ship').val(response.data);
+                } else {
+                    alert(response.message);
+                }
+
+                $addressDialog.dialog('close');
+            });
+        };
+
+        var PaymentSave = function () {
+            var data = $('#edit-payment').find('input, select').serializeArray();
+
+            website.AjaxUrl('../PaymentSave', 'post', data).done(function (response) {
                 if (response.status) {
                     alert('Update success!');
                 } else {
                     alert(response.message);
                 }
 
-                $addressDialog.dialog('close');
+                location.href = pageUrl;
             });
         };
 
@@ -607,6 +691,21 @@
                 }
             });
         };
+
+        var PackageReset = function (ID) {
+            $packageList.children("div").each(function () {
+                if ($(this).data('package') == ID) {
+                    var $package = $(this);
+
+                    $.ajax('../PackageContent?PackageID=' + ID).done(function (response) {
+                        console.log(response);
+                        $package.after(response).remove();
+                    });
+                } else {
+                    alert("Not found!");
+                }
+            });
+        }
 
         var PackageSave = function (ID) {
             $packageList.children("div").each(function () {
