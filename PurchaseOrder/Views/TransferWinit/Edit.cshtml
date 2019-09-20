@@ -24,6 +24,16 @@
     td.noSerial {
         background-color: yellow !important;
     }
+    .dataTable thead .details-control:before {
+        font-family: FontAwesome;
+        content: "";
+        font-size: 1.4em;
+        color: #739e73;
+    }
+    .dataTable thead .shown .details-control:before {
+        content: "";
+        color: #a90329;
+    }
 </style>
 <div id="content">
     <section id="widget-grid" class="">
@@ -128,9 +138,9 @@
                                                     @if (Model.Status == "Pending")
                                                     {
                                                         @*<div class="col-lg-offset-10">
-                        <a class='btn btn-info btn-sm' href="~/File/TransferExample.xlsx">Transfer Example</a>
-                        <a class='btn btn-danger btn-sm Excel' valID=" @Model.ID">Create by Excel</a>
-                    </div>*@
+                <a class='btn btn-info btn-sm' href="~/File/TransferExample.xlsx">Transfer Example</a>
+                <a class='btn btn-danger btn-sm Excel' valID=" @Model.ID">Create by Excel</a>
+            </div>*@
                                                         <button type="button" class='btn btn-default btn-sm' id='Request'>Request</button>
                                                     }
                                                     else if (Model.Status == "Requested")
@@ -165,11 +175,15 @@
                                                     {
 
                                                     }
-                                                    <a class='btn btn-default btn-sm' id='DeleteSKU'>Delete</a>
+                                                    @if (Model.Status != "Completed")
+                                                    {
+                                                        <a class='btn btn-default btn-sm' id='DeleteSKU'>Delete</a>
+                                                    }
+
                                                     @*
-                <a type="button" href="@Url.Action("Unrequest",new { Model.ID})" class='btn btn-default btn-sm' id='btn-Add'>Unrequest</a>
-                <a type="button" href="@Url.Action("Save",new { Model.ID})" class='btn btn-default btn-sm' id='btn-Add'>Save</a>
-                <a type="button" href="@Url.Action("Delete",new { Model.ID})" class='btn btn-default btn-sm' id='btn-Add'>Delete</a>*@
+        <a type="button" href="@Url.Action("Unrequest",new { Model.ID})" class='btn btn-default btn-sm' id='btn-Add'>Unrequest</a>
+        <a type="button" href="@Url.Action("Save",new { Model.ID})" class='btn btn-default btn-sm' id='btn-Add'>Save</a>
+        <a type="button" href="@Url.Action("Delete",new { Model.ID})" class='btn btn-default btn-sm' id='btn-Add'>Delete</a>*@
                                                 </div>
                                                 <div class="col-sm-9  col-lg-6">
                                                     <div class="col-sm-9  col-lg-offset-2">
@@ -177,8 +191,8 @@
                                                         @if (Model.Status == "Pending")
                                                         {
                                                             <div class="col-sm-9  col-lg-offset-8">
-                                                                <a class='btn btn-info btn-sm' href="~/File/TransferExample.xlsx">Transfer Example</a>
-                                                                <a class='btn btn-danger btn-sm Excel' valID=" @Model.ID">Create by Excel</a>
+                                                                <a class='btn btn-info btn-sm' href="~/File/TransferWinitExample.xlsx">Download Example</a>
+                                                                <a class='btn btn-danger btn-sm Excel' valID=" @Model.ID">Upload Template</a>
                                                             </div>
                                                             @*<button type="button" class='btn btn-default btn-sm' id='Request'>Request</button>*@
                                                         }
@@ -277,6 +291,7 @@
                                                                 <thead>
                                                                     <tr>
                                                                         <th></th>
+                                                                        <th>Winit M碼</th>
                                                                         <th>SKU</th>
                                                                         <th>Name</th>
                                                                         <th>Sent QTY</th>
@@ -295,7 +310,11 @@
                                                                         }
                                                                     <tr>
                                                                         <td class="details-control @noSerial" boxid="@BoxItem.ID" skuno="@item.Key"></td>
-                                                                        <td class="@noSerial">@item.FirstOrDefault().SkuNo</td>
+                                                                        <td class="@noSerial">@(item.FirstOrDefault().WinitTransferBox.WinitTransfer.WinitTransferSKU.Where(x => x.IsEnable && x.SkuNo.Contains(item.FirstOrDefault().SkuNo)).FirstOrDefault()?.winitProductCode)</td>
+                                                                        <td class="@noSerial">
+                                                                            <a target='_blank' href='@Url.Action("edit", "Sku",new { id=item.FirstOrDefault().SkuNo})#6'>@item.FirstOrDefault().SkuNo</a>
+
+                                                                        </td>
                                                                         <td class="@noSerial">
                                                                             @Html.Raw(item.FirstOrDefault().Name)
                                                                             <br />
@@ -329,10 +348,10 @@
                                                                         <th>SKU Registration</th>
                                                                         <th>SKU</th>
                                                                         <th>Product Name</th>
-                                                                        <th>QTY</th>
-                                                                        <th>Serial</th>
+                                                                        <th>Planned QTY</th>
+                                                                        <th>Sent QTY</th>
                                                                         @*<th>Label</th>*@
-                                                                        <th>Total Received</th>
+                                                                        <th>Received QTY</th>
                                                                         <th>Price</th>
                                                                         @*<th>TWN (Available)</th>*@
                                                                         @*<th>Winit US WC (Available)</th>*@
@@ -507,7 +526,6 @@
             }
         });
         $('.BoxDataGrid tbody').on('click', 'td.details-control', function () {
-            var table=  $(this).closest('table');
             //var BoxDataGrid = $(table).DataTable({});
             var tr = $(this).closest('tr');
             var row = BoxDataGrid.row(tr);
@@ -524,6 +542,34 @@
                 row.child(GetBoxSerialList(boxid, skuno)).show();
                 tr.addClass('shown');
             }
+        });
+        $('.BoxDataGrid thead').on('click', 'th.details-control', function () {
+            //if ($(this).isShown()) {
+            //    $(this).removeClass('shown');
+            //}
+            //else {
+            //    $(this).addClass('shown');
+            //}
+            var table = $(this).closest('table');
+            //var BoxDataGrid = $(table).DataTable({});
+            table.find("tr").each(function () {
+                var td = $(this).find('.details-control');
+                var tr = $(this);
+                var row = BoxDataGrid.row($(this));
+                if (row.child.isShown()) {
+                    // This row is already open - close it
+                    row.child.hide();
+                    tr.removeClass('shown');
+                  
+                }
+                else {
+                    // Open this row
+                    var boxid = $(td).attr("boxid");
+                    var skuno = $(td).attr("skuno");
+                    row.child(GetBoxSerialList(boxid, skuno)).show();
+                    tr.addClass('shown');
+                }
+            });
         });
         $("#gebruikerId").select2({
             minimumInputLength: 1,
@@ -657,7 +703,7 @@
             var url = '@Url.Action("SerialsExcel", "Ajax")'
             $.ajax({
                 url: url,
-                data: { id: $(this).attr("valID"), key: "TransferExcel" },
+                data: { id: $(this).attr("valID"), key: "TransferWinitExcel" },
                 success: function (data) {
                     $("#dialog").dialog({
                         title: "Excel"

@@ -666,6 +666,10 @@ namespace PurchaseOrderSys.Controllers
             SKUList.AddRange(NoNewRMAferSKUList);
             var NewRMAferSKUList = db.RMASerialsLlist.AsEnumerable().Where(x => x.IsEnable && x.RMASKUID.HasValue && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.WarehouseID == FromWID && !string.IsNullOrWhiteSpace(x.NewSkuNo)).Select(x => x.NewSkuNo);//沒有新的SKU
             SKUList.AddRange(NewRMAferSKUList);
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                SKUList = SKUList.Where(x => x == search).ToList();
+            }
             SKUList = SKUList.Distinct().ToList();
             return SKUList;
         }

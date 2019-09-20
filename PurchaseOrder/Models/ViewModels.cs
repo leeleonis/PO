@@ -1279,6 +1279,13 @@ namespace PurchaseOrderSys.Models
         public decimal? Discount { get; set; }
     }
     [Serializable]
+    public class AddWinitSKUVM
+    {
+        public string SKU { get; set; }
+        public int? Qty { get; set; }
+        public decimal? Price { get; set; }
+    }
+    [Serializable]
     public class TransferItemVM
     {
         public int ID { get; set; }

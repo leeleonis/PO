@@ -1426,6 +1426,106 @@ namespace PurchaseOrderSys.Controllers
                 }
                 return Json(new { status = true, reload = true }, JsonRequestBehavior.AllowGet);
             }
+            else if (key == "TransferWinitExcel")//SKU及序號上傳
+            {
+                var AddWinitSKUVMList = new List<AddWinitSKUVM>();
+                using (var package = new ExcelPackage(ExcelFile.InputStream))
+                {
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
+                    //int col = 1;
+
+                    for (int row = 2; worksheet.Cells[row, 1].Value != null || worksheet.Cells[row, 2].Value != null; row++)
+                    {
+                        var Qty = 0;
+                        var Price = 0m;
+                        var SKU = worksheet.Cells[row, 1].Value?.ToString();
+                        var sQty = worksheet.Cells[row, 2].Value?.ToString();
+                        var sPrice = worksheet.Cells[row, 3].Value?.ToString();
+                        int.TryParse(sQty, out Qty);
+                        decimal.TryParse(sPrice, out Price);
+                        AddWinitSKUVMList.Add(new AddWinitSKUVM
+                        {
+                            SKU = SKU,
+                            Qty = Qty,
+                            Price = Price
+                        });
+
+                    }
+                }
+                //AddWinitSKUVMList = AddWinitSKUVMList.Where(x => !string.IsNullOrWhiteSpace(x.SKU) && x.Qty.HasValue).ToList();
+                var NoSKU = AddWinitSKUVMList.Where(x => string.IsNullOrWhiteSpace(x.SKU)).ToList();
+                if (NoSKU.Any())
+                {
+                    return Json(new { status = false, Msg = "有數量，SKU必填" }, JsonRequestBehavior.AllowGet);
+                }
+                var NoQty = AddWinitSKUVMList.Where(x => x.Qty < 1).ToList();
+                if (NoQty.Any())
+                {
+                    return Json(new { status = false, Msg = string.Join(Environment.NewLine, NoQty.Select(x => x.SKU).Distinct()) + Environment.NewLine + "數量必填" }, JsonRequestBehavior.AllowGet);
+                }
+                var OverSku = AddWinitSKUVMList.GroupBy(x => x.SKU).Where(g => g.Count() > 1).Select(x => x.Key);
+                if (OverSku.Any())
+                {
+                    return Json(new { status = false, Msg = string.Join(Environment.NewLine, OverSku.Distinct()) + Environment.NewLine + "SKU重複" }, JsonRequestBehavior.AllowGet);
+                }
+                var Transfer = db.Transfer.Find(id);
+                var FromWID = Transfer.FromWID;
+                if (FromWID.HasValue)
+                {
+                    var dt = DateTime.UtcNow;
+                    foreach (var item in AddWinitSKUVMList)
+                    {
+                        var SKUList = new List<string>();
+                        SKUList = SearchSkuByWarehouse(item.SKU, FromWID.Value);
+                        if (SKUList.Any())
+                        {
+                            var SKU = db.SKU.Find(item.SKU)?.SkuLang.Where(x => x.LangID == LangID).FirstOrDefault();
+                            if (SKU != null)
+                            {
+                                if (item.Price.HasValue && item.Price > 0 && item.Price != SKU.GetSku.Logistic.Price)//
+                                {
+
+                                    SKU.GetSku.Logistic.Price = item.Price.Value;
+                                }
+                                var nTransferSKU = Transfer.TransferSKU.Where(x => x.SkuNo == item.SKU).FirstOrDefault();
+                                if (nTransferSKU == null)//沒有資料就新增
+                                {
+                                    nTransferSKU = new TransferSKU
+                                    {
+                                        IsEnable = true,
+                                        QTY = item.Qty,
+                                        SkuNo = item.SKU,
+                                        Name = SKU.Name,
+                                        CreateBy = UserBy,
+                                        CreateAt = dt
+                                    };
+                                    Transfer.TransferSKU.Add(nTransferSKU);
+                                }
+                                else
+                                {
+                                    nTransferSKU.QTY = item.Qty;
+                                    nTransferSKU.UpdateBy = UserBy;
+                                    nTransferSKU.UpdateAt = dt;
+                                }
+                                db.SaveChanges();
+                            }
+                            else
+                            {
+                                return Json(new { status = false, Msg = item.SKU + " SKU不存在" }, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                        else
+                        {
+                            return Json(new { status = false, Msg = item.SKU + " 出貨倉無此SKU" }, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                }
+                else
+                {
+                    return Json(new { status = false, Msg = "移倉單未設定出貨倉" }, JsonRequestBehavior.AllowGet);
+                }
+                return Json(new { status = true, reload = true }, JsonRequestBehavior.AllowGet);
+            }
             else
             {
                 return Json(new { status = false, Msg = "參數錯誤" }, JsonRequestBehavior.AllowGet);
