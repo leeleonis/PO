@@ -1003,7 +1003,7 @@ namespace PurchaseOrderSys.Controllers
             }
             return Json(SerialsLlist.Select(x => new { x.SerialsNo, x.Warehouse.Name, Reason = EnumData.RMAReasonList().Where(y => y.Key.ToString() == x.Reason).FirstOrDefault().Value }).ToList(), JsonRequestBehavior.AllowGet);
         }
-        public ActionResult tBOX( int TransferID,int boxid)
+        public ActionResult tBOX(int TransferID, int boxid)
         {
             var dt = DateTime.UtcNow;
             var Transfer = db.Transfer.Find(TransferID);
@@ -1019,7 +1019,7 @@ namespace PurchaseOrderSys.Controllers
                         var GBoxList = Transfer.WinitTransfer.WinitTransferBox.Where(x => x.WinitTransferBoxItem.Where(y => y.SkuNo == TransferSKUitem.SkuNo).Any()).GroupBy(x => x.WinitTransferBoxItem.GroupBy(y => y.SkuNo)).ToList();
                         var FilePage = GBoxList.Sum(x => x.Sum(y => y.WinitTransferBoxItem.Where(z => z.SkuNo == TransferSKUitem.SkuNo).Count())) + 1;
                         var itemBarcodeList = WinitTransferSKU.itemBarcodeList.Split(';');
-                        var BarCode  = itemBarcodeList[FilePage - 1];
+                        var BarCode = itemBarcodeList[FilePage - 1];
                         Serialsitem.WinitTransferBoxItem = new WinitTransferBoxItem
                         {
                             BarCode = BarCode,
@@ -1039,6 +1039,21 @@ namespace PurchaseOrderSys.Controllers
                         db.SaveChanges();
                     }
                 }
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult SerialsLlistReset()
+        {
+            var SerialsLlist = db.SerialsLlist.Where(x => x.PID.HasValue && x.SerialsNo != x.SerialsLlistP.SerialsNo).ToList();
+            foreach (var item in SerialsLlist)
+            {
+                item.PID = null;
+                db.SaveChanges();
+                //if (item.SerialsLlistP.SerialsNo != item.SerialsNo)
+                //{
+                //    item.SerialsNo = item.SerialsLlistP.SerialsNo;
+                //}
+
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }

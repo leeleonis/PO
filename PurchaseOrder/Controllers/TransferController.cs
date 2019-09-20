@@ -332,7 +332,6 @@ namespace PurchaseOrderSys.Controllers
                     {
                         IsEnable = true,
                         TransferSKUID = item.ID,
-                        PID = x.ID,
                         CreateAt = CreateAt,
                         CreateBy = CreateBy,
                         ReceivedAt = CreateAt,

@@ -690,7 +690,7 @@ namespace PurchaseOrderSys.Controllers
                     PurchaseSKUs = PurchaseSKUs.Where(x => x.SerialsLlist.Where(y => y.SerialsQTY > 0 && (y.SerialsType == "PO" || y.SerialsType == "TransferIn" || y.SerialsType == "DropshpOrderIn") && !y.SerialsLlistC.Any(z => z.IsEnable)).Any());
                     if (SerialsLlist.Any())
                     {
-                        var POSerialsLlist = SerialsLlist.Where(x => x.SerialsQTY > 0 && (x.SerialsType == "PO" || x.SerialsType == "TransferIn" || x.SerialsType == "DropshpOrderIn"));//PO和TransferIn才能出貨
+                        var POSerialsLlist = SerialsLlist.Where(x => x.SerialsQTY > 0 && (x.SerialsType == "PO" || x.SerialsType == "TransferIn" || x.SerialsType == "DropshpOrderIn")).ToList();//PO和TransferIn才能出貨
                         if (POSerialsLlist.Any())
                         {
                             using (var OM = new OrderManagement(Serialsitem.OrderID))
@@ -715,7 +715,7 @@ namespace PurchaseOrderSys.Controllers
                                 PurchaseSKUID = POSerialsLlist.LastOrDefault().PurchaseSKUID,
                                 TransferSKUID = POSerialsLlist.LastOrDefault().TransferSKUID,
                                 PID = POSerialsLlist.LastOrDefault().ID,
-                                SerialsNo = Serialsitem.SerialsNo,
+                                SerialsNo = sBarCode,
                                 SerialsType = "Order",
                                 SerialsQTY = -1,
                                 Memo = JsonConvert.SerializeObject(ShipmentOrder),
@@ -748,7 +748,7 @@ namespace PurchaseOrderSys.Controllers
                         }
                         else
                         {
-                            var WinitSerialsLlist = SerialsLlist.Where(x => x.SerialsType == "TransferOut" && x.TransferSKU.Transfer.TransferType == "Winit");//檢查是否有序號或是SBarCode
+                            var WinitSerialsLlist = SerialsLlist.Where(x => x.SerialsType == "TransferOut" && x.TransferSKU.Transfer.TransferType == "Winit").ToList();//檢查是否有序號或是SBarCode
                             if (WinitSerialsLlist.Any())
                             {
                                 //自動入庫,
@@ -1340,7 +1340,7 @@ namespace PurchaseOrderSys.Controllers
                                                         {
                                                             IsEnable = true,
                                                             SerialsNo = Serial.SerialsNo,
-                                                            SerialsQTY = 1,
+                                                            SerialsQTY = -1,
                                                             SerialsType = "TransferOut",
                                                             CreateBy = UserBy,
                                                             CreateAt = dt,

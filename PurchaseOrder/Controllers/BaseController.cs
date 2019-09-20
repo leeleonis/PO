@@ -671,6 +671,125 @@ namespace PurchaseOrderSys.Controllers
         }
         public IEnumerable<WarehouseVM> GetWarehouseVMList(Warehouse Warehouse, string Product, int? FulfillableMin, int? FulfillableMax)
         {
+            var GroupWarehouseVM = new List<WarehouseVM>();
+          
+            var AllSKUList = db.SKU.Where(x => x.IsEnable ).Select(x => new { x.SkuID, x.SkuLang.FirstOrDefault().Name }).ToList();//&& x.Status == 1
+            if (!string.IsNullOrWhiteSpace( Product))
+            {
+                AllSKUList = AllSKUList.Where(x => x.SkuID == Product).ToList();
+            }
+            if (Warehouse.Type == "Interim")
+            {
+                var WarehouseVM = new List<WarehouseVM>();
+                var NoRmaTransferSKU = db.TransferSKU.Where(x => x.IsEnable && x.Transfer.Interim == Warehouse.ID && x.Transfer.Status == "Shipped" && !x.RMASerialsLlist.Any());//無RMA移倉中
+                var RmaTransferSKU = db.TransferSKU.Where(x => x.IsEnable && x.Transfer.Interim == Warehouse.ID && x.Transfer.Status == "Shipped" && x.RMASerialsLlist.Any());//有RMA移倉中
+                if (!string.IsNullOrWhiteSpace(Product))
+                {
+                    NoRmaTransferSKU = NoRmaTransferSKU.Where(x => x.SkuNo == Product);
+                    RmaTransferSKU = RmaTransferSKU.Where(x => x.RMASerialsLlist.Where(y => y.NewSkuNo == Product).Any() || x.SkuNo == Product);
+                }
+                WarehouseVM.AddRange(NoRmaTransferSKU.Select(x => new WarehouseVM
+                {
+                    ID = x.ID,
+                    Name = x.Name,
+                    SKU = x.SkuNo,
+                    POQTY = x.SerialsLlist.Where(y => (y.SerialsType == "TransferOut" && !y.SerialsLlistC.Any(z => z.IsEnable))).Sum(y => y.SerialsQTY) * -1 ?? 0//借用
+                }).ToList());
+                WarehouseVM.AddRange(RmaTransferSKU.Select(x => new WarehouseVM
+                {
+                    ID = x.ID,
+                    Name = x.Name,
+                    SKU = x.SkuNo,
+                    POQTY = x.RMASerialsLlist.Where(y => (y.SerialsType == "TransferOut" && !y.RMASerialsLlistC.Any())).Sum(y => y.SerialsQTY) * -1 ?? 0//借用
+                }).ToList());
+                GroupWarehouseVM = WarehouseVM.GroupBy(x => new { x.SKU }).Select(x => new WarehouseVM //SKU數量總計
+                {
+                    ID = x.FirstOrDefault().ID,
+                    Name = x.FirstOrDefault().Name,
+                    SKU = x.Key.SKU,
+                    POQTY = x.Sum(p => p.POQTY),
+                    CMQTY = x.Sum(p => p.CMQTY),
+                    OrderQTY = x.Sum(p => p.OrderQTY),
+                    TransferInQTY = x.Sum(p => p.TransferInQTY),
+                    TransferOutQTY = x.Sum(p => p.TransferOutQTY),
+                    Velocity = x.Sum(p => p.Velocity),
+                    TransferAwaiting = x.Sum(p => p.TransferAwaiting),
+                    //DaysOfSupply = x.Sum(p => p.DaysOfSupply),
+                    //Aggregate = x.Sum(p => p.Aggregate),
+                    //Awaiting = x.Sum(p => p.Awaiting),
+                    //Fulfillable = x.Sum(p => p.Fulfillable),
+                    //Unfulfillable = x.Sum(p => p.Unfulfillable),
+                }).ToList();
+            }
+            else
+            {
+                var edt = DateTime.UtcNow;
+                var sdt = edt.AddDays(-30);
+                var POSerialsLlist = db.SerialsLlist.Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "PO" && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable).ToList();
+                var InSerialsLlist = db.SerialsLlist.Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferIn" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).ToList();
+                var OutSerialsLlist = db.SerialsLlist.Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferOut" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).ToList();
+                var RMAINSerialsLlist = db.RMASerialsLlist.Where(x => x.IsEnable && !x.RMASerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "RMAIn" && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable).ToList();
+                var RMAOUTSerialsLlist = db.RMASerialsLlist.Where(x => x.IsEnable && !x.RMASerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferOut" && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable && !x.TransferSKU.SerialsLlist.Where(y => y.IsEnable && y.SerialsType == "TransferIn").Any()).ToList();
+                var OrderSerialsLlist = db.SerialsLlist.Where(x => x.IsEnable && x.SerialsType == "Order" && x.CreateAt >= sdt && x.CreateAt <= edt).ToList();
+                var SCID = Warehouse.WarehouseSummary.Where(x => x.Type == "SCID").FirstOrDefault()?.Val;
+                var Awaitinglist = GetAwaitingCount("", SCID);
+                foreach (var SKUitem in AllSKUList)
+                {
+                    //PO
+                    var POQTY = POSerialsLlist.Where(x => x.PurchaseSKU.PurchaseOrder.WarehouseID == Warehouse.ID && x.PurchaseSKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0;
+                    //移倉入庫
+                    var TinQTY = InSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouse.ID && x.TransferSKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0;
+                    //移倉已Shipped
+                    var FOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.FromWID == Warehouse.ID && x.TransferSKU.Transfer.TransferType != "Winit" && x.TransferSKU.Transfer.Status == "Shipped" && x.TransferSKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
+                    var WFOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.FromWID == Warehouse.ID && x.TransferSKU.Transfer.TransferType == "Winit" && x.TransferSKU.Transfer.Status == "Shipped" && x.TransferSKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
+                    var TOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouse.ID && x.TransferSKU.Transfer.TransferType != "Winit" && x.TransferSKU.Transfer.Status == "Shipped" && x.TransferSKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
+                    var WTOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouse.ID && x.TransferSKU.Transfer.TransferType == "Winit" && x.TransferSKU.Transfer.Status == "Shipped" && x.TransferSKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
+
+                    //移倉未Shipped
+                    var UnFOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.FromWID == Warehouse.ID && x.TransferSKU.Transfer.TransferType != "Winit" && x.TransferSKU.Transfer.Status == "Requested" && x.TransferSKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
+                    var UnWFOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.FromWID == Warehouse.ID && x.TransferSKU.Transfer.TransferType == "Winit" && x.TransferSKU.Transfer.Status == "Requested" && x.TransferSKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
+                    var UnTOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouse.ID && x.TransferSKU.Transfer.TransferType != "Winit" && x.TransferSKU.Transfer.Status == "Requested" && x.TransferSKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
+                    var UnWTOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouse.ID && x.TransferSKU.Transfer.TransferType == "Winit" && x.TransferSKU.Transfer.Status == "Requested" && x.TransferSKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
+
+                    //待出貨
+                    var Awaiting = Awaitinglist.Where(x=>x.SKU==SKUitem.SkuID).Sum(x => x.QTY);
+                    var RMAINQTY = RMAINSerialsLlist.Where(x => x.WarehouseID == Warehouse.ID && x.RMASKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0;
+                    var FRMAOUTQTY = Math.Abs(RMAOUTSerialsLlist.Where(x => x.TransferSKU.Transfer.FromWID == Warehouse.ID && x.RMASKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
+                    var TRMAOUTQTY = Math.Abs(RMAOUTSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouse.ID && x.RMASKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
+                    var Velocity = Math.Abs(OrderSerialsLlist.Where(x => (x.TransferSKUID.HasValue && x.TransferSKU.SkuNo == SKUitem.SkuID) || (x.PurchaseSKUID.HasValue && x.PurchaseSKU.SkuNo == SKUitem.SkuID)).Sum(x => x.SerialsQTY) ?? 0);
+
+
+                    GroupWarehouseVM.Add(new WarehouseVM
+                    {
+                        Name = SKUitem.Name,
+                        SKU= SKUitem.SkuID,
+                        Aggregate = POQTY + TinQTY + RMAINQTY - Awaiting,
+                        Awaiting = Awaiting,
+                        Fulfillable = POQTY + TinQTY + RMAINQTY,
+                        TransferOutQTY = FOutQTY + FRMAOUTQTY,
+                        TransferInQTY = TOutQTY + TRMAOUTQTY,
+                        WTransferOutQTY = WFOutQTY,
+                        WTransferInQTY = WTOutQTY,
+                        Velocity= Velocity
+                        //Aggregate = WarehouseVM.Sum(x => x.Aggregate),
+                        //Awaiting = WarehouseVM.Sum(x => x.Awaiting),
+                        //Fulfillable = WarehouseVM.Sum(x => x.Fulfillable),
+                        //TransferOutQTY = WarehouseVM.Sum(x => x.TransferOutQTY)
+                    });
+                }
+            }
+            if (FulfillableMin.HasValue)
+            {
+                GroupWarehouseVM = GroupWarehouseVM.Where(x => x.Aggregate >= FulfillableMin).ToList();
+            }
+            if (FulfillableMax.HasValue)
+            {
+                GroupWarehouseVM = GroupWarehouseVM.Where(x => x.Aggregate <= FulfillableMax).ToList();
+            }
+            return GroupWarehouseVM.OrderByDescending(x => x.Fulfillable);
+        }
+        public IEnumerable<WarehouseVM> OldGetWarehouseVMList(Warehouse Warehouse, string Product, int? FulfillableMin, int? FulfillableMax)
+        {
             var SCID = Warehouse.WarehouseSummary.Where(x => x.Type == "SCID").FirstOrDefault()?.Val;
             var Awaitinglist = GetAwaitingCount("", SCID);
             var AllSKUList = db.SKU.Where(x => x.IsEnable && x.Status == 1).Select(x => new { x.SkuID, x.SkuLang.FirstOrDefault().Name }).ToList();
