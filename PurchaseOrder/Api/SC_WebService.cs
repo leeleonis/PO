@@ -301,6 +301,11 @@ namespace SellerCloud_WebService
         {
             return OS_SellerCloud.SaveProduct(OS_AuthHeader, OS_Options, Product, ref errorMessage);
         }
+
+        public bool Update_OrderAddress(int OrderID, PurchaseOrderSys.SCService.Address address)
+        {
+            return OS_SellerCloud.Orders_SaveAddress(OS_AuthHeader, OS_Options, OrderID, address);
+        }
         /***** 更新資料 *****/
 
         /***** 新增資料 *****/

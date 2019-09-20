@@ -94,7 +94,7 @@ namespace PurchaseOrderSys.Controllers
                             {
                                 job.AddLog("開始在SC上更改訂單狀態");
                                 OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
-                                OM.ChangeOrderStatus(order.OrderStatus);
+                                OM.ChangeOrderStatusToSC(order.OrderStatus);
                                 OM.OrderSyncPush();
                                 job.AddLog("完成訂單狀態更改");
                             }
@@ -158,6 +158,31 @@ namespace PurchaseOrderSys.Controllers
                 CheckAddressData(address, updateAddress);
                 db.SaveChanges();
 
+                if (address.SCID.HasValue)
+                {
+                    JobProcess job = new JobProcess(string.Format("更改訂單【{0}】的地址至SC", address.OrderID));
+                    job.AddWord(() =>
+                    {
+                        try
+                        {
+                            using (var OM = new OrderManagement(address.OrderID))
+                            {
+                                job.AddLog("開始在SC上更改訂單地址");
+                                OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
+                                OM.UpdateAddressToSC(address.ID);
+                                OM.OrderSyncPush();
+                                job.AddLog("完成訂單地址更改");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            return ex.InnerException?.Message ?? ex.Message;
+                        }
+
+                        return "";
+                    });
+                }
+
                 var ShipsArray = new string[] { address.AddressLine1, address.AddressLine2, address.City, address.State, address.Postcode, address.CountryName, address.PhoneNumber };
                 result.data = string.Join("\r\n", new string[] { string.Format("{0}, {1}", address.FirstName, address.LastName), string.Join("\r\n", ShipsArray.Except(new string[] { "", null })) });
             }
@@ -208,6 +233,90 @@ namespace PurchaseOrderSys.Controllers
         }
 
         [HttpPost]
+        public ActionResult PaymentSave(Payments updatePayment)
+        {
+            AjaxResult result = new AjaxResult();
+
+            var payment = db.Payments.Find(updatePayment.ID);
+
+            try
+            {
+                if (payment == null) throw new Exception("Not found address!");
+
+                updatePayment.GrandTotal = payment.TotalValue + updatePayment.ShippingCharge + updatePayment.InsuranceCharge;
+                updatePayment.Balance = updatePayment.PaymentTotal - updatePayment.Refund - updatePayment.GrandTotal;
+                CheckPaymentData(payment, updatePayment);
+                db.SaveChanges();
+
+                if (payment.SCID.HasValue)
+                {
+                    JobProcess job = new JobProcess(string.Format("更改訂單【{0}】的帳單至SC", payment.OrderID));
+                    job.AddWord(() =>
+                    {
+                        try
+                        {
+                            using (var OM = new OrderManagement(payment.OrderID))
+                            {
+                                job.AddLog("開始在SC上更改訂單帳單");
+                                OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
+                                OM.UpdatePaymentToSC(payment.ID);
+                                OM.OrderSyncPush();
+                                job.AddLog("完成訂單帳單更改");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            return ex.InnerException?.Message ?? ex.Message;
+                        }
+
+                        return "";
+                    });
+                }
+            }
+            catch (Exception e)
+            {
+                result.SetError(e.InnerException?.Message ?? e.Message);
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        private void CheckPaymentData(Payments payment, Payments updatePayment)
+        {
+            using (var OM = new OrderManagement(payment.OrderID))
+            {
+                if (!payment.Status.Equals(updatePayment.Status))
+                    OM.ActionLog("Change Payment", "Status to " + Enum.GetName(typeof(EnumData.PaymentStatus), updatePayment.Status));
+
+                if ((!payment.Date.HasValue && updatePayment.Date.HasValue) || (payment.Date.Value.CompareTo(updatePayment.Date ?? DateTime.MinValue) != 0))
+                    OM.ActionLog("Change Payment", "Date to " + (updatePayment.Date.HasValue ? updatePayment.Date.ToString() : "Empty"));
+
+                if (!payment.Gateway.Equals(updatePayment.Gateway))
+                    OM.ActionLog("Change Payment", "Gateway to " + Enum.GetName(typeof(SCService.PaymentMethod), updatePayment.Status));
+                
+                if (!payment.ShippingCharge.Equals(updatePayment.ShippingCharge))
+                    OM.ActionLog("Change Payment", "Shipping to " + updatePayment.ShippingCharge);
+
+                if (!payment.InsuranceCharge.Equals(updatePayment.InsuranceCharge))
+                    OM.ActionLog("Change Payment", "Insurance to" + updatePayment.InsuranceCharge);
+
+                if (!payment.GrandTotal.Equals(updatePayment.GrandTotal))
+                    OM.ActionLog("Change Payment", "Grand Total to" + updatePayment.GrandTotal);
+
+                if (!payment.PaymentTotal.Equals(updatePayment.PaymentTotal))
+                    OM.ActionLog("Change Payment", "Payment Total to " + updatePayment.PaymentTotal);
+
+                if (!payment.Refund.Equals(updatePayment.Refund))
+                    OM.ActionLog("Change Payment", "Refund to " + updatePayment.Refund);
+
+                if (!payment.Balance.Equals(updatePayment.Balance))
+                    OM.ActionLog("Change Payment", "Balance to " + updatePayment.Balance);
+
+                SetUpdateData(payment, updatePayment, new string[] { "Status", "Date", "Gateway", "ShippingCharge", "InsuranceCharge", "GrandTotal", "PaymentTotal", "Refund", "Balance" });
+            }
+        }
+
+        [HttpPost]
         public ActionResult PackageSave(Packages updatePackage)
         {
             AjaxResult result = new AjaxResult();
@@ -220,6 +329,8 @@ namespace PurchaseOrderSys.Controllers
 
                 using (var OM = new OrderManagement(package.OrderID))
                 {
+                    OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
+
                     CheckPackageData(package, updatePackage);
 
                     bool OrderSync = false;
@@ -268,7 +379,7 @@ namespace PurchaseOrderSys.Controllers
 
                             if (item.SCID.HasValue)
                             {
-                                OM.UpdateItemSerial(item.ID, new string[] { newSerial });
+                                OM.UpdateItemSerialToSC(item.ID, new string[] { newSerial });
                                 OrderSync = true;
                             }
 
@@ -281,15 +392,7 @@ namespace PurchaseOrderSys.Controllers
                     if (OrderSync) OM.OrderSyncPush();
                 }
 
-                var ViewData = new ViewDataDictionary() {
-                    { "index", CheckPackageIndex(package) },
-                    { "total", db.Packages.Count(p => p.IsEnable && p.OrderID.Equals(package.OrderID)) },
-                    { "MethodList", db.ShippingMethods.AsNoTracking().Where(m => m.IsEnable).OrderBy(m => m.Name).Select(m => new SelectListItem() { Text = m.Name, Value = m.ID.ToString() }).ToList() },
-                    { "WarehouseList", db.Warehouse.AsNoTracking().Where(w => w.IsEnable && w.IsSellable).OrderBy(w => w.Name).Select(w => new SelectListItem() { Text = w.Name, Value = w.ID.ToString() }).ToList() },
-                    { "CurrencyList", db.Currency.AsNoTracking().Select(c => new SelectListItem() { Text = c.Code + " - " + c.Name, Value = c.ID.ToString() }).OrderBy(c => c.Text).ToList() }
-                };
-
-                result.data = RenderViewToString(ControllerContext, "_PackageDetail", package, ViewData);
+                result.data = PackageContent(package.ID);
             }
             catch (Exception ex)
             {
@@ -297,6 +400,21 @@ namespace PurchaseOrderSys.Controllers
             }
 
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public string PackageContent(int PackageID)
+        {
+            var package = db.Packages.Find(PackageID);
+
+            var ViewData = new ViewDataDictionary() {
+                { "index", CheckPackageIndex(package) },
+                { "total", db.Packages.Count(p => p.IsEnable && p.OrderID.Equals(package.OrderID)) },
+                { "MethodList", db.ShippingMethods.AsNoTracking().Where(m => m.IsEnable).OrderBy(m => m.Name).Select(m => new SelectListItem() { Text = m.Name, Value = m.ID.ToString() }).ToList() },
+                { "WarehouseList", db.Warehouse.AsNoTracking().Where(w => w.IsEnable && w.IsSellable).OrderBy(w => w.Name).Select(w => new SelectListItem() { Text = w.Name, Value = w.ID.ToString() }).ToList() },
+                { "CurrencyList", db.Currency.AsNoTracking().Select(c => new SelectListItem() { Text = c.Code + " - " + c.Name, Value = c.ID.ToString() }).OrderBy(c => c.Text).ToList() }
+            };
+
+            return RenderViewToString(ControllerContext, "_PackageDetail", package, ViewData);
         }
 
         private void CheckPackageData(Packages package, Packages updatePackage)
@@ -344,7 +462,7 @@ namespace PurchaseOrderSys.Controllers
         {
             var index = 1;
             var packageList = db.Packages.Where(p => p.IsEnable && p.OrderID.Equals(package.OrderID)).ToList();
-            foreach(Packages p in packageList)
+            foreach (Packages p in packageList)
             {
                 if (p.ID.Equals(package.ID)) return index;
 
@@ -476,7 +594,7 @@ namespace PurchaseOrderSys.Controllers
                         {
                             job.AddLog("開始在SC上進訂單分批");
                             OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
-                            OM.SplitPackage(packageData.Select(p => p.ID).ToArray());
+                            OM.SplitPackageToSC(packageData.Select(p => p.ID).ToArray());
                             OM.OrderSyncPush();
                             job.AddLog("完成包裹分批");
                         }
@@ -582,7 +700,7 @@ namespace PurchaseOrderSys.Controllers
                             {
                                 job.AddLog("開始在SC上進行包裹整合");
                                 OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
-                                OM.CombinePackage(oldPackageIDs);
+                                OM.CombinePackageToSC(oldPackageIDs);
                                 OM.OrderSyncPush();
                                 job.AddLog("完成包裹整合");
                             }
@@ -645,7 +763,7 @@ namespace PurchaseOrderSys.Controllers
                             {
                                 job.AddLog("開始在SC上進行包裹Mrak Ship");
                                 OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
-                                OM.MarkShipPackage(package.ID);
+                                OM.MarkShipPackageToSC(package.ID);
                                 OM.OrderSyncPush();
                                 job.AddLog("完成包裹Mrak Ship");
                             }
