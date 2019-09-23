@@ -2,6 +2,7 @@
 using Ionic.Zip;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using OfficeOpenXml;
 using PurchaseOrderSys.Models;
 using PurchaseOrderSys.NewApi;
 using System;
@@ -1577,6 +1578,43 @@ namespace PurchaseOrderSys.Controllers
             file.AddEntry("InvoiceExcel-" + transfer.Tracking + ".xlsx", fileStream.ToArray());
             file.Save(OutputStream);
             return File(OutputStream.ToArray(), "application/zip", "InvoiceExcel.zip");
+        }
+        public ActionResult DownloadExcelOut(int ID)
+        {
+            var WinitTransfer = db.WinitTransfer.Find(ID);
+            var OutputStream = new MemoryStream();
+            //在記憶體中建立一個Excel物件
+            ExcelPackage ep = new ExcelPackage();
+            //加入一個Sheet
+            ep.Workbook.Worksheets.Add("MySheet");
+            //取得剛剛加入的Sheet(實體Sheet就叫MySheet)
+            ExcelWorksheet sheet1 = ep.Workbook.Worksheets["MySheet"];//取得Sheet1 
+            sheet1.Cells[1, 1].Value = "Box";//
+            sheet1.Cells[1, 2].Value = "Winit M Code";//
+            sheet1.Cells[1, 3].Value = "SKU";//
+            sheet1.Cells[1, 4].Value = "Serial";//
+            sheet1.Cells[1, 5].Value = "S Code";//
+            sheet1.Cells[1, 6].Value = "Stock Status";//
+            sheet1.Cells[1, 7].Value = "Price";//
+            //迴圈部份自由料理
+            int row = 1;
+            var box = 0;
+            foreach (var WinitTransferBoxitem in WinitTransfer.WinitTransferBox)
+            {
+                box++;
+                foreach (var WinitTransferBoxItem in WinitTransferBoxitem.WinitTransferBoxItem)
+                {
+                    row++;
+                    sheet1.Cells[row, 1].Value = box;
+                    sheet1.Cells[row, 2].Value = WinitTransferBoxItem.WinitTransferBox.WinitTransfer.WinitTransferSKU.Where(x => x.IsEnable && x.SkuNo.Contains(WinitTransferBoxItem.SkuNo)).FirstOrDefault()?.winitProductCode;
+                    sheet1.Cells[row, 3].Value = WinitTransferBoxItem.SkuNo;
+                    sheet1.Cells[row, 4].Value = WinitTransferBoxItem.SerialsNo;
+                    sheet1.Cells[row, 5].Value = WinitTransferBoxItem.BarCode;
+                    sheet1.Cells[row, 6].Value = WinitTransferBoxItem.SerialsLlist.SerialsLlistC.Where(x => x.IsEnable && x.SerialsType == "TransferIn").Any() ? "已入庫" : "已出庫";
+                    sheet1.Cells[row, 7].Value = WinitTransferBoxItem.SerialsLlist.TransferSKU.SKU.Logistic.Price;
+                }
+            }
+            return File(ep.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "WinitBoxExcel" + WinitTransfer.Transfer.Tracking + ".xlsx");
         }
         private string GetType(SerialsLlist SerialsLlist)
         {

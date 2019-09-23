@@ -186,12 +186,12 @@
         <a type="button" href="@Url.Action("Delete",new { Model.ID})" class='btn btn-default btn-sm' id='btn-Add'>Delete</a>*@
                                                 </div>
                                                 <div class="col-sm-9  col-lg-6">
-                                                    <div class="col-sm-9  col-lg-offset-2">
+                                                    <div class="col-sm-12  col-lg-offset-2">
 
                                                         @if (Model.Status == "Pending")
                                                         {
                                                             <div class="col-sm-9  col-lg-offset-8">
-                                                                <a class='btn btn-info btn-sm' href="~/File/TransferWinitExample.xlsx">Download Example</a>
+                                                                <a class='btn btn-info btn-sm' href="~/File/TransferWinitExample.xlsx">Download Template</a>
                                                                 <a class='btn btn-danger btn-sm Excel' valID=" @Model.ID">Upload Template</a>
                                                             </div>
                                                             @*<button type="button" class='btn btn-default btn-sm' id='Request'>Request</button>*@
@@ -250,6 +250,10 @@
                                                         {
                                                             <a class="btn btn-default" id="DownloadInvoice" target="_blank" href="@Url.Action("DownloadInvoice", new { Model.ID })">下載Invoice</a>
                                                         }
+                                                        @if (Model.Status == "Shipped" || Model.Status == "Received" || Model.Status == "Completed")
+                                                        {
+                                                            <a class="btn btn-default" id="ExcelOut" target="_blank" href="@Url.Action("DownloadExcelOut", new { Model.ID })">Excel匯出</a>
+                                                        }
                                                     </div>
                                                 </div>
                                             </div>
@@ -290,7 +294,7 @@
                                                             <table class="table table-striped table-bordered BoxDataGrid">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th></th>
+                                                                        <th class="details-control"></th>
                                                                         <th>Winit M碼</th>
                                                                         <th>SKU</th>
                                                                         <th>Name</th>
@@ -543,31 +547,34 @@
                 tr.addClass('shown');
             }
         });
-        $('.BoxDataGrid thead').on('click', 'th.details-control', function () {
-            //if ($(this).isShown()) {
-            //    $(this).removeClass('shown');
-            //}
-            //else {
-            //    $(this).addClass('shown');
-            //}
+        $('.BoxDataGrid thead').on('click', 'th.details-control', function () {  
+            var mtr = $(this).closest('tr');
+            if ($(mtr).hasClass('shown')) {
+                $(mtr).removeClass('shown')
+            }
+            else {
+                $(mtr).addClass('shown')
+            }
             var table = $(this).closest('table');
             //var BoxDataGrid = $(table).DataTable({});
-            table.find("tr").each(function () {
+            $(table).find("tbody tr").each(function () {
                 var td = $(this).find('.details-control');
                 var tr = $(this);
-                var row = BoxDataGrid.row($(this));
+                var row = BoxDataGrid.row(tr);
                 if (row.child.isShown()) {
                     // This row is already open - close it
                     row.child.hide();
                     tr.removeClass('shown');
-                  
                 }
                 else {
                     // Open this row
                     var boxid = $(td).attr("boxid");
                     var skuno = $(td).attr("skuno");
-                    row.child(GetBoxSerialList(boxid, skuno)).show();
-                    tr.addClass('shown');
+                    if (boxid != undefined) {
+
+                        row.child(GetBoxSerialList(boxid, skuno)).show();
+                        tr.addClass('shown');
+                    }
                 }
             });
         });
