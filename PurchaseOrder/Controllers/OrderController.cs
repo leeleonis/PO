@@ -14,7 +14,7 @@ namespace PurchaseOrderSys.Controllers
     [CheckSession]
     public class OrderController : BaseController
     {
-        private readonly string[] packageEditList = new string[] { "ShippingMethod", "Export", "ExportMethod", "ExportValue", "UploadTracking", "Tracking", "DLExport", "DLExportMethod", "DLExportValue", "DLUploadTracking", "DLTracking", "ShipWarehouse" };
+        private readonly string[] packageEditList = new string[] { "ShippingMethod", "Export", "ExportMethod", "ExportValue", "UploadTracking", "Tracking", "DLExport", "DLExportMethod", "DLExportValue", "DLTracking", "ShipWarehouse" };
 
         // GET: Order
         public ActionResult Index()
@@ -207,7 +207,7 @@ namespace PurchaseOrderSys.Controllers
                 if (!address.AddressLine1.Equals(updateAddress.AddressLine1))
                     OM.ActionLog("Change Ship to", "Address1 to " + updateAddress.AddressLine1);
 
-                if ((string.IsNullOrEmpty(address.AddressLine2) && !string.IsNullOrEmpty(updateAddress.AddressLine2)) || !address.AddressLine2.Equals(updateAddress.AddressLine2))
+                if ((string.IsNullOrEmpty(address.AddressLine2) && !string.IsNullOrEmpty(updateAddress.AddressLine2)) || address.AddressLine2 != updateAddress.AddressLine2)
                     OM.ActionLog("Change Ship to", "Address2 to " + (updateAddress.AddressLine2 ?? "Empty"));
 
                 if (!address.City.Equals(updateAddress.City))
@@ -342,6 +342,12 @@ namespace PurchaseOrderSys.Controllers
                         {
                             OM.ActionLog("Change Sku", string.Format("{0} to {1}", item.Sku, updateItem.Sku));
                             item.Sku = updateItem.Sku;
+
+                            if (item.SCID.HasValue)
+                            {
+                                OM.ChangeOrderSkuToSC(item.ID, item.Sku);
+                                OrderSync = true;
+                            }
                         }
 
                         if (!item.ExportValue.Equals(updateItem.ExportValue))
@@ -427,7 +433,7 @@ namespace PurchaseOrderSys.Controllers
                 if (!package.ShippingMethod.Equals(updatePackage.ShippingMethod))
                     OM.ActionLog("Change Shipping Setting", string.Format("Method to {0}", db.ShippingMethods.Find(updatePackage.ShippingMethod).Name));
 
-                if (!package.Tracking.Equals(updatePackage.Tracking))
+                if ((string.IsNullOrEmpty(package.Tracking) && !string.IsNullOrEmpty(updatePackage.Tracking)) || package.Tracking != updatePackage.Tracking)
                     OM.ActionLog("Change Shipping Setting", string.Format("Tracking to {0}", updatePackage.Tracking ?? "Empty"));
 
                 if (!package.UploadTracking.Equals(updatePackage.UploadTracking))
@@ -442,7 +448,7 @@ namespace PurchaseOrderSys.Controllers
                 if (!package.ExportValue.Equals(updatePackage.ExportValue))
                     OM.ActionLog("Change Shipping Setting", string.Format("Export Value to {0}", updatePackage.ExportValue.ToString()));
 
-                if (!package.DLTracking.Equals(updatePackage.DLTracking))
+                if ((string.IsNullOrEmpty(package.DLTracking) && !string.IsNullOrEmpty(updatePackage.DLTracking)) || package.DLTracking != updatePackage.DLTracking)
                     OM.ActionLog("Change DL Shipping Setting", string.Format("Tracking to {0}", updatePackage.DLTracking ?? "Empty"));
 
                 if (!package.DLExport.Equals(updatePackage.DLExport))
@@ -693,7 +699,7 @@ namespace PurchaseOrderSys.Controllers
 
                     if (oldPackageList.All(p => p.SCID.HasValue))
                     {
-                        JobProcess job = new JobProcess("Test");
+                        JobProcess job = new JobProcess(string.Format("整合訂單【{0}】的包裹", package.OrderID));
                         job.AddWord(() =>
                         {
                             try
@@ -733,11 +739,12 @@ namespace PurchaseOrderSys.Controllers
 
                 if (package == null) throw new Exception("Not found package!");
 
-                package.ShippingStatus = (byte)EnumData.OrderShippingStatus.已出貨;
-
                 using (var OM = new OrderManagement(package.OrderID))
                 {
                     OM.ActionLog("Package", "Mark Ship");
+                    OM.MarkShip(package.ID);
+
+                    package.ShippingStatus = (byte)EnumData.OrderShippingStatus.已出貨;
 
                     var order = db.Orders.Find(package.OrderID);
                     var fulfillmentStatus = OM.CheckFulfillmentStatus(order);
@@ -756,7 +763,7 @@ namespace PurchaseOrderSys.Controllers
 
                     if (order.SCID.HasValue)
                     {
-                        JobProcess job = new JobProcess("Test");
+                        JobProcess job = new JobProcess(string.Format("Mark Ship訂單【{0}】", package.OrderID));
                         job.AddWord(() =>
                         {
                             try

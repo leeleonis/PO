@@ -10,20 +10,13 @@ using SellerCloud_WebService;
 
 namespace PurchaseOrderSys.Models
 {
-    public class OrderManagement : IDisposable
+    public class OrderManagement : Common, IDisposable
     {
-        private static readonly string ApiUserName = "test@qd.com.tw";
-        private static readonly string ApiPassword = "prU$U9R7CHl3O#uXU6AcH6ch";
-        private PurchaseOrderEntities db = new PurchaseOrderEntities();
-
         private Orders orderData;
 
         public SC_WebService SC_Api;
 
-        private readonly string AdminName = HttpContext.Current.Session["AdminName"]?.ToString() ?? "System";
         private readonly DateTime UtcNow = DateTime.UtcNow;
-
-        private bool disposedValue = false; // 偵測多餘的呼叫
 
         public OrderManagement() : this(null) { }
 
@@ -97,25 +90,37 @@ namespace PurchaseOrderSys.Models
 
                 foreach (var item in order.Items)
                 {
+                    item.PackageID = db.Packages.AsNoTracking().First(p => p.SCID.Value.Equals(item.PackageID)).ID;
+
+                    if (item.Sku.Any(s => new char[] { '-', '_' }.Contains(s)))
+                    {
+                        item.OriginSku = item.Sku;
+                        item.Sku = item.Sku.Split('_')[0].Split('-')[0];
+                    }
+
                     if (orderData.Items.Any(i => i.SCID.Value.Equals(item.SCID.Value)))
                     {
                         var itemData = orderData.Items.First(i => i.SCID.Value.Equals(item.SCID.Value));
-                        SetUpdateData(itemData, item, new string[] { "IsEnable", "ExportValue", "DLExportValue", "Qty", "eBayItemID", "eBayTransationID", "SalesRecordNumber" });
+                        SetUpdateData(itemData, item, new string[] { "IsEnable", "Sku", "OriginSku", "ExportValue", "DLExportValue", "Qty", "eBayItemID", "eBayTransationID", "SalesRecordNumber" });
                     }
                     else
                     {
-                        item.PackageID = db.Packages.AsNoTracking().First(p => p.SCID.Value.Equals(item.PackageID)).ID;
-
-                        if (item.Sku.Any(s => new char[] { '-', '_' }.Contains(s)))
-                        {
-                            item.OriginSku = item.Sku;
-                            item.Sku = item.Sku.Split('_')[0].Split('-')[0];
-                        }
-
                         item.CreateBy = AdminName;
                         item.CreateAt = UtcNow;
                         orderData.Items.Add(item);
                     }
+                }
+
+                db.SaveChanges();
+
+                foreach (var item in orderData.Items.Where(i => !order.Items.Select(ii => ii.SCID.Value).Contains(i.SCID.Value)))
+                {
+                    item.IsEnable = false;
+                }
+
+                foreach(var package in orderData.Packages.Where(p => !p.Items.Any(i => i.IsEnable)))
+                {
+                    package.IsEnable = false;
                 }
 
                 db.SaveChanges();
@@ -129,6 +134,11 @@ namespace PurchaseOrderSys.Models
                         serial.CreateAt = UtcNow;
                         orderData.Serials.Add(serial);
                     }
+                }
+
+                foreach(var serial in orderData.Serials.Where(s => !order.Serials.Select(ss => ss.SerialNumber).Contains(s.SerialNumber)))
+                {
+                    orderData.Serials.Remove(serial);
                 }
 
                 foreach (var payment in order.Payments)
@@ -209,6 +219,45 @@ namespace PurchaseOrderSys.Models
             return EnumData.OrderFulfillmentStatus.None;
         }
 
+        public void MarkShip(int PackageID)
+        {
+            try
+            {
+                List<dynamic> data = new List<dynamic>();
+                foreach (Items item in db.Packages.Find(PackageID).Items.Where(i => i.IsEnable))
+                {
+                    if (item.Serials.Any())
+                    {
+                        data.AddRange(item.Serials.Select(s => new
+                        {
+                            OrderID = s.Orders.SCID.Value,
+                            SkuNo = s.Sku,
+                            SerialsNo = s.SerialNumber,
+                            QTY = 1
+                        }).ToList());
+                    }
+                    else
+                    {
+                        data.Add(new
+                        {
+                            OrderID = item.GetOrder.SCID.Value,
+                            SkuNo = item.Sku,
+                            SerialsNo = "",
+                            QTY = item.Qty
+                        });
+                    }
+                }
+
+                Response<Dictionary<string, List<string>>> response = Request<Dictionary<string, List<string>>>("Ajax/ShipmentByOrder", "post", data, 1);
+                if (!response.Status) throw new Exception(response.Message);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.InnerException?.Message ?? ex.Message);
+            }
+        }
+
+        /** SC Action **/
         public void SplitPackageToSC(int[] PackageIDs)
         {
             if (SC_Api == null) SC_Api = new SC_WebService(ApiUserName, ApiPassword);
@@ -414,7 +463,7 @@ namespace PurchaseOrderSys.Models
 
                 Packages packageData = orderData.Packages.First(p => p.ID.Equals(PackageID));
                 Order SC_order = SC_Api.Get_OrderData(orderData.SCID.Value).Order;
-                Package SC_package = SC_order.Packages.FirstOrDefault(p => p.ID.Equals(packageData.SCID));
+                Package SC_package = SC_order.Packages.FirstOrDefault(p => p.ID.Equals(packageData.SCID.Value));
 
                 if (SC_package == null) throw new Exception(string.Format("Not found SC package-{0}!", packageData.SCID));
 
@@ -455,6 +504,33 @@ namespace PurchaseOrderSys.Models
             }
         }
 
+        public void ChangeOrderSkuToSC(int ItemID, string Sku)
+        {
+            if (SC_Api == null) SC_Api = new SC_WebService(ApiUserName, ApiPassword);
+
+            try
+            {
+                if (!orderData.SCID.HasValue) throw new Exception("Not found order's SCID!");
+
+                if (!SC_Api.Is_login) throw new Exception("SC is not logged in!");
+
+                Items itemData = db.Items.Find(ItemID);
+                if (!itemData.SCID.HasValue) throw new Exception("Not found item's SCID!");
+
+                var SC_order = SC_Api.Get_OrderData(orderData.SCID.Value).Order;
+                OrderItem SC_item = SC_order.Items.FirstOrDefault(i => i.ID.Equals(itemData.SCID.Value));
+
+                if (SC_item == null) throw new Exception(string.Format("Not found SC item-{0}!", itemData.SCID));
+
+                SC_item.ProductID = Sku;
+                SC_Api.Update_OrderItem(SC_item);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(string.Format("SC Error：{0}", ex.InnerException?.Message ?? ex.Message));
+            }
+        }
+
         public void ActionLog(string Item, string Description)
         {
             db.OrderActionLogs.Add(new OrderActionLogs()
@@ -484,68 +560,6 @@ namespace PurchaseOrderSys.Models
             }
             TypeInfoList.FirstOrDefault(info => info.Name.Equals("UpdateBy")).SetValue(originData, AdminName);
             TypeInfoList.FirstOrDefault(info => info.Name.Equals("UpdateAt")).SetValue(originData, UtcNow);
-        }
-
-        private Response<T> Request<T>(string url, string method = "post", object data = null) where T : new()
-        {
-            Response<T> response = new Response<T>();
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://internal.qd.com.tw/" + url);
-            //HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:49920/" + url);
-            request.ContentType = "application/json";
-            request.Method = method;
-            request.ProtocolVersion = HttpVersion.Version10;
-
-            if (data != null)
-            {
-                using (StreamWriter streamWriter = new StreamWriter(request.GetRequestStream()))
-                {
-                    var json = JsonConvert.SerializeObject(data);
-                    streamWriter.Write(json);
-                    streamWriter.Flush();
-                }
-            }
-
-            HttpWebResponse httpResponse = (HttpWebResponse)request.GetResponse();
-            using (StreamReader streamReader = new StreamReader(httpResponse.GetResponseStream()))
-            {
-                response = JsonConvert.DeserializeObject<Response<T>>(streamReader.ReadToEnd());
-            }
-
-            return response;
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    // TODO: 處置受控狀態 (受控物件)。
-                }
-
-                // TODO: 釋放非受控資源 (非受控物件) 並覆寫下方的完成項。
-                // TODO: 將大型欄位設為 null。
-
-                db = null;
-                orderData = null;
-
-                disposedValue = true;
-            }
-        }
-
-        // TODO: 僅當上方的 Dispose(bool disposing) 具有會釋放非受控資源的程式碼時，才覆寫完成項。
-        // ~StockKeepingUnit() {
-        //   // 請勿變更這個程式碼。請將清除程式碼放入上方的 Dispose(bool disposing) 中。
-        //   Dispose(false);
-        // }
-
-        // 加入這個程式碼的目的在正確實作可處置的模式。
-        public void Dispose()
-        {
-            // 請勿變更這個程式碼。請將清除程式碼放入上方的 Dispose(bool disposing) 中。
-            Dispose(true);
-            // TODO: 如果上方的完成項已被覆寫，即取消下行的註解狀態。
-            // GC.SuppressFinalize(this);
         }
     }
 }

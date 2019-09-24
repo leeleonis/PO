@@ -47,7 +47,7 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "OrderActionLogs_Item", ResourceType = typeof(App_GlobalResources.Resource))]
             [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-            [MaxLength(20, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  Item { get; set; }
     
     		    
@@ -55,7 +55,7 @@ namespace PurchaseOrderSys.Models
     		/// Description
     		/// </summary>        
     	    [Display(Name = "OrderActionLogs_Description", ResourceType = typeof(App_GlobalResources.Resource))]
-            [MaxLength(50, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+            [MaxLength(100, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  Description { get; set; }
     
     		    
