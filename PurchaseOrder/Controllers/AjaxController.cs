@@ -822,7 +822,7 @@ namespace PurchaseOrderSys.Controllers
                             }
                         }
                     }
-                    else if (PurchaseSKUs.Any())
+                    else if (PurchaseSKUs.Any())//無序號管理
                     {
                         var PurchaseSKU = PurchaseSKUs.FirstOrDefault();
                         var PSerialsLlist = PurchaseSKU.SerialsLlist.Where(x => x.SerialsQTY > 0 && (x.SerialsType == "PO" || x.SerialsType == "TransferIn") && !x.SerialsLlistC.Any(y => y.IsEnable)).Take(QTY);//PO和TransferIn才能出貨
