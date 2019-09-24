@@ -697,12 +697,10 @@
                 if ($(this).data('package') == ID) {
                     var $package = $(this);
 
-                    $.ajax('../PackageContent?PackageID=' + ID).done(function (response) {
+                    return $.ajax('../PackageContent?PackageID=' + ID).done(function (response) {
                         console.log(response);
                         $package.after(response).remove();
                     });
-                } else {
-                    alert("Not found!");
                 }
             });
         }
@@ -713,7 +711,7 @@
                     var $package = $(this);
                     var data = $package.find('input, select').serializeArray();
 
-                    website.AjaxUrl('../PackageSave', 'post', data).done(function (response) {
+                    return website.AjaxUrl('../PackageSave', 'post', data).done(function (response) {
                         if (response.status) {
                             alert('Update success!');
 
@@ -722,9 +720,6 @@
                             return alert(response.message);
                         }
                     });
-
-                } else {
-                    alert("Not found!");
                 }
             });
         };
