@@ -18,6 +18,7 @@ namespace PurchaseOrderSys.Models
         public AdminUser()
         {
             this.WarehouseUser = new HashSet<WarehouseUser>();
+            this.PageAuth = new HashSet<PageAuth>();
         }
     
         public bool IsEnable { get; set; }
@@ -39,5 +40,7 @@ namespace PurchaseOrderSys.Models
         public virtual AdminGroup AdminGroup { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<WarehouseUser> WarehouseUser { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PageAuth> PageAuth { get; set; }
     }
 }

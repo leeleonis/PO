@@ -228,7 +228,11 @@ namespace PurchaseOrderSys.Controllers
                     db.SaveChanges();
                     foreach (var item in db.Orders.Where(x => x.IsEnable && x.SCID == OrderID))
                     {
-                        item.RMAID = newRMA.ID;
+                        using (var OM = new OrderManagement(item.ID))
+                        {
+                            item.RMAID = newRMA.ID;
+                            OM.ActionLog("Order", "Create RMA - " + item.RMAID);
+                        }
                     }
                     db.SaveChanges();
                     if (RedirectID == 0)

@@ -493,6 +493,12 @@
     <Compile Include="Models\PackagesMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PageAuth.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PageAuthMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Payments.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
     </Compile>

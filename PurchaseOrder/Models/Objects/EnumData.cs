@@ -511,5 +511,7 @@ namespace PurchaseOrderSys.Models
 
             return Enum.GetValues(typeof(ShippingMethodType)).Cast<ShippingMethodType>().ToDictionary(s => (byte)s, s => Type[(byte)s]);
         }
+
+        public enum PageAuthType { OrderIndex, OrderEdit, SkuIndex, SkuEdit };
     }
 }

@@ -449,8 +449,8 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="OrderID" Type="int" Nullable="false" />
           <Property Name="PackageID" Type="int" Nullable="false" />
-          <Property Name="Item" Type="nvarchar" MaxLength="20" Nullable="false" />
-          <Property Name="Description" Type="nvarchar" MaxLength="50" />
+          <Property Name="Item" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="100" />
           <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="CreateAt" Type="datetime" Nullable="false" />
         </EntityType>
@@ -590,6 +590,19 @@
           <Property Name="UpdateAt" Type="datetime" />
           <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="CreateAt" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PageAuth">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="User" Type="int" Nullable="false" />
+          <Property Name="Type" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="AuthGroup" Type="nvarchar(max)" />
+          <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreateAt" Type="datetime" Nullable="false" />
+          <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="UpdateAt" Type="datetime" />
         </EntityType>
         <EntityType Name="Payments">
           <Key>
@@ -1812,6 +1825,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PageAuth_AdminUser">
+          <End Role="AdminUser" Type="Self.AdminUser" Multiplicity="1" />
+          <End Role="PageAuth" Type="Self.PageAuth" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AdminUser">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PageAuth">
+              <PropertyRef Name="User" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Payment_Order">
           <End Role="Orders" Type="Self.Orders" Multiplicity="1" />
           <End Role="Payments" Type="Self.Payments" Multiplicity="*" />
@@ -2601,6 +2626,7 @@
           <EntitySet Name="PackageContent" EntityType="Self.PackageContent" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PackageContentLang" EntityType="Self.PackageContentLang" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Packages" EntityType="Self.Packages" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PageAuth" EntityType="Self.PageAuth" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Payments" EntityType="Self.Payments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PriceGroup" EntityType="Self.PriceGroup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PurchaseNote" EntityType="Self.PurchaseNote" Schema="dbo" store:Type="Tables" />
@@ -2804,6 +2830,10 @@
           <AssociationSet Name="FK_Packages_Warehouse1" Association="Self.FK_Packages_Warehouse1">
             <End Role="Warehouse" EntitySet="Warehouse" />
             <End Role="Packages" EntitySet="Packages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PageAuth_AdminUser" Association="Self.FK_PageAuth_AdminUser">
+            <End Role="AdminUser" EntitySet="AdminUser" />
+            <End Role="PageAuth" EntitySet="PageAuth" />
           </AssociationSet>
           <AssociationSet Name="FK_Payment_Order" Association="Self.FK_Payment_Order">
             <End Role="Orders" EntitySet="Orders" />
@@ -3537,6 +3567,11 @@
             <End Role="TaskScheduler" EntitySet="TaskScheduler" />
             <End Role="TaskLog" EntitySet="TaskLog" />
           </AssociationSet>
+          <EntitySet Name="PageAuth" EntityType="PurchaseOrderModel.PageAuth" />
+          <AssociationSet Name="FK_PageAuth_AdminUser" Association="PurchaseOrderModel.FK_PageAuth_AdminUser">
+            <End Role="AdminUser" EntitySet="AdminUser" />
+            <End Role="PageAuth" EntitySet="PageAuth" />
+          </AssociationSet>
           <EntitySet Name="inventory" EntityType="PurchaseOrderModel.inventory" />
           <AssociationSet Name="FK_inventory_SKU" Association="PurchaseOrderModel.FK_inventory_SKU">
             <End Role="SKU" EntitySet="SKU" />
@@ -3582,6 +3617,7 @@
           <Property Name="UpdateAt" Type="DateTime" Precision="3" />
           <NavigationProperty Name="AdminGroup" Relationship="PurchaseOrderModel.FK_AdminUser_AdminGroup" FromRole="AdminUser" ToRole="AdminGroup" />
           <NavigationProperty Name="WarehouseUser" Relationship="PurchaseOrderModel.FK_WarehouseUser_AdminUser" FromRole="AdminUser" ToRole="WarehouseUser" />
+          <NavigationProperty Name="PageAuth" Relationship="PurchaseOrderModel.FK_PageAuth_AdminUser" FromRole="AdminUser" ToRole="PageAuth" />
         </EntityType>
         <EntityType Name="Auth">
           <Key>
@@ -5502,8 +5538,8 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="OrderID" Type="Int32" Nullable="false" />
           <Property Name="PackageID" Type="Int32" Nullable="false" />
-          <Property Name="Item" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Item" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="GetOrder" Relationship="PurchaseOrderModel.FK_OrderActionLog_Order" FromRole="OrderActionLogs" ToRole="Orders" />
@@ -6243,6 +6279,32 @@
             </Principal>
             <Dependent Role="TaskLog">
               <PropertyRef Name="Scheduler" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="PageAuth">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="User" Type="Int32" Nullable="false" />
+          <Property Name="Type" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="AuthGroup" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="AdminUser" Relationship="PurchaseOrderModel.FK_PageAuth_AdminUser" FromRole="PageAuth" ToRole="AdminUser" />
+        </EntityType>
+        <Association Name="FK_PageAuth_AdminUser">
+          <End Type="PurchaseOrderModel.AdminUser" Role="AdminUser" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.PageAuth" Role="PageAuth" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AdminUser">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PageAuth">
+              <PropertyRef Name="User" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -7646,6 +7708,20 @@
                 <ScalarProperty Name="Result" ColumnName="Result" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PageAuth">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.PageAuth">
+              <MappingFragment StoreEntitySet="PageAuth">
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="AuthGroup" ColumnName="AuthGroup" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="User" ColumnName="User" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

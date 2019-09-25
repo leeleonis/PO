@@ -361,7 +361,7 @@ namespace PurchaseOrderSys.Controllers
 
                         SetUpdateData(item, updateItem, new string[] { "ExportValue", "DLExportValue", "Qty" });
 
-                        var updateSerial = !string.IsNullOrEmpty(item.SerialEdit) ? item.SerialEdit.Split(',').Select(s => s.Trim()).ToArray() : new string[] { };
+                        var updateSerial = !string.IsNullOrEmpty(updateItem.SerialEdit) ? updateItem.SerialEdit.Split(',').Select(s => s.Trim()).ToArray() : new string[] { };
                         foreach (var serial in item.Serials)
                         {
                             serial.IsEnable = updateSerial.Contains(serial.SerialNumber);
