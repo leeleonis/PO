@@ -33,7 +33,7 @@
                         </td>
                         <td class="font-bg" width="130">Carrier</td>
                         <td class="text" width="300">
-                            <span>@Model.GetMethod.LastMile.Name</span>
+                            @Model.GetMethod.LastMile.Name
                         </td>
                         <td class="font-bg" width="130">Fulfillment Date</td>
                         <td class="text" width="300">
@@ -148,7 +148,7 @@
                             </td>
                             <td class="font-bg">Carrier</td>
                             <td class="text">
-                                <span>@(Model.GetMethod?.FirstMile?.Name ?? "")</span>
+                                @(Model.GetMethod?.FirstMile?.Name ?? "")
                             </td>
                         </tr>
                     </tbody>
@@ -185,7 +185,7 @@
                     @Html.Hidden(string.Format("Items[{0}][ID]", itemIndex), item.ID);
                     <tr data-item="@item.ID">
                         <td class="text">
-                            <span>@item.Sku</span>
+                            <span><a href="@Url.Action("Edit", "Sku", new { ID = item.Sku })" target="_blank">@item.Sku</a></span>
                             @Html.TextBox(string.Format("Items[{0}][Sku]", itemIndex), item.Sku, htmlAttributes: new { @class = "form-control" })
                         </td>
                         <td>
