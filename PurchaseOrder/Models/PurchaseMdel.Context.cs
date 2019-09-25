@@ -91,5 +91,6 @@ namespace PurchaseOrderSys.Models
         public virtual DbSet<PurchaseNoteImg> PurchaseNoteImg { get; set; }
         public virtual DbSet<TaskLog> TaskLog { get; set; }
         public virtual DbSet<TaskScheduler> TaskScheduler { get; set; }
+        public virtual DbSet<inventory> inventory { get; set; }
     }
 }

@@ -307,6 +307,23 @@
           <Property Name="ImgType" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="PurchaseSKUID" Type="int" />
         </EntityType>
+        <EntityType Name="inventory">
+          <Key>
+            <PropertyRef Name="WarehouseID" />
+            <PropertyRef Name="SkuID" />
+          </Key>
+          <Property Name="WarehouseID" Type="int" Nullable="false" />
+          <Property Name="SkuID" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Fulfillable" Type="int" Nullable="false" />
+          <Property Name="Awaiting" Type="int" Nullable="false" />
+          <Property Name="UnfulfillableTransit" Type="int" Nullable="false" />
+          <Property Name="TotalVelocity" Type="int" Nullable="false" />
+          <Property Name="Aggregate" Type="int" Nullable="false" />
+          <Property Name="TransferOutQTY" Type="int" Nullable="false" />
+          <Property Name="TransferInQTY" Type="int" Nullable="false" />
+          <Property Name="WTransferOutQTY" Type="int" Nullable="false" />
+          <Property Name="WTransferInQTY" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Items">
           <Key>
             <PropertyRef Name="ID" />
@@ -432,8 +449,8 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="OrderID" Type="int" Nullable="false" />
           <Property Name="PackageID" Type="int" Nullable="false" />
-          <Property Name="Item" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Description" Type="nvarchar" MaxLength="100" />
+          <Property Name="Item" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="50" />
           <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="CreateAt" Type="datetime" Nullable="false" />
         </EntityType>
@@ -1444,6 +1461,30 @@
             </Principal>
             <Dependent Role="ImgFile">
               <PropertyRef Name="PurchaseSKUID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_inventory_SKU">
+          <End Role="SKU" Type="Self.SKU" Multiplicity="1" />
+          <End Role="inventory" Type="Self.inventory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SKU">
+              <PropertyRef Name="SkuID" />
+            </Principal>
+            <Dependent Role="inventory">
+              <PropertyRef Name="SkuID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_inventory_Warehouse">
+          <End Role="Warehouse" Type="Self.Warehouse" Multiplicity="1" />
+          <End Role="inventory" Type="Self.inventory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Warehouse">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="inventory">
+              <PropertyRef Name="WarehouseID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2544,6 +2585,7 @@
           <EntitySet Name="Currency" EntityType="Self.Currency" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DirectLine" EntityType="Self.DirectLine" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ImgFile" EntityType="Self.ImgFile" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="inventory" EntityType="Self.inventory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Items" EntityType="Self.Items" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="KitSku" EntityType="Self.KitSku" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Logistic" EntityType="Self.Logistic" Schema="dbo" store:Type="Tables" />
@@ -2646,6 +2688,14 @@
           <AssociationSet Name="FK_ImgFile_PurchaseSKU" Association="Self.FK_ImgFile_PurchaseSKU">
             <End Role="PurchaseSKU" EntitySet="PurchaseSKU" />
             <End Role="ImgFile" EntitySet="ImgFile" />
+          </AssociationSet>
+          <AssociationSet Name="FK_inventory_SKU" Association="Self.FK_inventory_SKU">
+            <End Role="SKU" EntitySet="SKU" />
+            <End Role="inventory" EntitySet="inventory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_inventory_Warehouse" Association="Self.FK_inventory_Warehouse">
+            <End Role="Warehouse" EntitySet="Warehouse" />
+            <End Role="inventory" EntitySet="inventory" />
           </AssociationSet>
           <AssociationSet Name="FK_Item_Order" Association="Self.FK_Item_Order">
             <End Role="Orders" EntitySet="Orders" />
@@ -3487,6 +3537,15 @@
             <End Role="TaskScheduler" EntitySet="TaskScheduler" />
             <End Role="TaskLog" EntitySet="TaskLog" />
           </AssociationSet>
+          <EntitySet Name="inventory" EntityType="PurchaseOrderModel.inventory" />
+          <AssociationSet Name="FK_inventory_SKU" Association="PurchaseOrderModel.FK_inventory_SKU">
+            <End Role="SKU" EntitySet="SKU" />
+            <End Role="inventory" EntitySet="inventory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_inventory_Warehouse" Association="PurchaseOrderModel.FK_inventory_Warehouse">
+            <End Role="Warehouse" EntitySet="Warehouse" />
+            <End Role="inventory" EntitySet="inventory" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="AdminGroup">
           <Key>
@@ -3931,6 +3990,7 @@
           <NavigationProperty Name="RMASerialsLlist" Relationship="PurchaseOrderModel.FK_RMASerialsLlist_SKU" FromRole="SKU" ToRole="RMASerialsLlist" />
           <NavigationProperty Name="OrderItems" Relationship="PurchaseOrderModel.FK_Item_SKU" FromRole="SKU" ToRole="Items" />
           <NavigationProperty Name="OrderSerials" Relationship="PurchaseOrderModel.FK_OrderSerials_SKU" FromRole="SKU" ToRole="OrderSerials" />
+          <NavigationProperty Name="inventory" Relationship="PurchaseOrderModel.FK_inventory_SKU" FromRole="SKU" ToRole="inventory" />
         </EntityType>
         <EntityType Name="Sku_Attribute">
           <Key>
@@ -4138,6 +4198,7 @@
           <NavigationProperty Name="Packages" Relationship="PurchaseOrderModel.FK_Packages_Warehouse" FromRole="Warehouse" ToRole="Packages" />
           <NavigationProperty Name="ReturnPackages" Relationship="PurchaseOrderModel.FK_Packages_Warehouse1" FromRole="Warehouse" ToRole="Packages" />
           <NavigationProperty Name="CreditMemo" Relationship="PurchaseOrderModel.FK_CreditMemo_Warehouse" FromRole="Warehouse" ToRole="CreditMemo" />
+          <NavigationProperty Name="inventory" Relationship="PurchaseOrderModel.FK_inventory_Warehouse" FromRole="Warehouse" ToRole="inventory" />
         </EntityType>
         <EntityType Name="WarehouseSummary">
           <Key>
@@ -5441,8 +5502,8 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="OrderID" Type="Int32" Nullable="false" />
           <Property Name="PackageID" Type="Int32" Nullable="false" />
-          <Property Name="Item" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Item" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="GetOrder" Relationship="PurchaseOrderModel.FK_OrderActionLog_Order" FromRole="OrderActionLogs" ToRole="Orders" />
@@ -6182,6 +6243,49 @@
             </Principal>
             <Dependent Role="TaskLog">
               <PropertyRef Name="Scheduler" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="inventory">
+          <Key>
+            <PropertyRef Name="WarehouseID" />
+            <PropertyRef Name="SkuID" />
+          </Key>
+          <Property Name="WarehouseID" Type="Int32" Nullable="false" />
+          <Property Name="SkuID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Fulfillable" Type="Int32" Nullable="false" />
+          <Property Name="Awaiting" Type="Int32" Nullable="false" />
+          <Property Name="UnfulfillableTransit" Type="Int32" Nullable="false" />
+          <Property Name="TotalVelocity" Type="Int32" Nullable="false" />
+          <Property Name="Aggregate" Type="Int32" Nullable="false" />
+          <Property Name="TransferOutQTY" Type="Int32" Nullable="false" />
+          <Property Name="TransferInQTY" Type="Int32" Nullable="false" />
+          <Property Name="WTransferOutQTY" Type="Int32" Nullable="false" />
+          <Property Name="WTransferInQTY" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="SKU" Relationship="PurchaseOrderModel.FK_inventory_SKU" FromRole="inventory" ToRole="SKU" />
+          <NavigationProperty Name="Warehouse" Relationship="PurchaseOrderModel.FK_inventory_Warehouse" FromRole="inventory" ToRole="Warehouse" />
+        </EntityType>
+        <Association Name="FK_inventory_SKU">
+          <End Type="PurchaseOrderModel.SKU" Role="SKU" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.inventory" Role="inventory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SKU">
+              <PropertyRef Name="SkuID" />
+            </Principal>
+            <Dependent Role="inventory">
+              <PropertyRef Name="SkuID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_inventory_Warehouse">
+          <End Type="PurchaseOrderModel.Warehouse" Role="Warehouse" Multiplicity="1" />
+          <End Type="PurchaseOrderModel.inventory" Role="inventory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Warehouse">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="inventory">
+              <PropertyRef Name="WarehouseID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -7543,6 +7647,23 @@
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="inventory">
+            <EntityTypeMapping TypeName="PurchaseOrderModel.inventory">
+              <MappingFragment StoreEntitySet="inventory">
+                <ScalarProperty Name="WTransferInQTY" ColumnName="WTransferInQTY" />
+                <ScalarProperty Name="WTransferOutQTY" ColumnName="WTransferOutQTY" />
+                <ScalarProperty Name="TransferInQTY" ColumnName="TransferInQTY" />
+                <ScalarProperty Name="TransferOutQTY" ColumnName="TransferOutQTY" />
+                <ScalarProperty Name="Aggregate" ColumnName="Aggregate" />
+                <ScalarProperty Name="TotalVelocity" ColumnName="TotalVelocity" />
+                <ScalarProperty Name="UnfulfillableTransit" ColumnName="UnfulfillableTransit" />
+                <ScalarProperty Name="Awaiting" ColumnName="Awaiting" />
+                <ScalarProperty Name="Fulfillable" ColumnName="Fulfillable" />
+                <ScalarProperty Name="SkuID" ColumnName="SkuID" />
+                <ScalarProperty Name="WarehouseID" ColumnName="WarehouseID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

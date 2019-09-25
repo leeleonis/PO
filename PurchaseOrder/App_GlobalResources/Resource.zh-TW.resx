@@ -2931,4 +2931,37 @@
   <data name="TaskScheduler_CreateAt" xml:space="preserve">
     <value>建立日期</value>
   </data>
+  <data name="inventory_WarehouseID" xml:space="preserve">
+    <value>倉庫ID</value>
+  </data>
+  <data name="inventory_SkuID" xml:space="preserve">
+    <value>SKDID</value>
+  </data>
+  <data name="inventory_Fulfillable" xml:space="preserve">
+    <value>實際庫存</value>
+  </data>
+  <data name="inventory_Awaiting" xml:space="preserve">
+    <value>待出貨</value>
+  </data>
+  <data name="inventory_UnfulfillableTransit" xml:space="preserve">
+    <value>運送中</value>
+  </data>
+  <data name="inventory_TotalVelocity" xml:space="preserve">
+    <value>30天出貨數</value>
+  </data>
+  <data name="inventory_Aggregate" xml:space="preserve">
+    <value>可上架庫存</value>
+  </data>
+  <data name="inventory_TransferOutQTY" xml:space="preserve">
+    <value>移倉出庫回量</value>
+  </data>
+  <data name="inventory_TransferInQTY" xml:space="preserve">
+    <value>移倉等待入庫數量</value>
+  </data>
+  <data name="inventory_WTransferOutQTY" xml:space="preserve">
+    <value>Winit移倉出庫回量</value>
+  </data>
+  <data name="inventory_WTransferInQTY" xml:space="preserve">
+    <value>Winit移倉等待入庫數量</value>
+  </data>
 </root>

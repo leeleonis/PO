@@ -30,6 +30,7 @@ namespace PurchaseOrderSys.Models
             this.Packages = new HashSet<Packages>();
             this.ReturnPackages = new HashSet<Packages>();
             this.CreditMemo = new HashSet<CreditMemo>();
+            this.inventory = new HashSet<inventory>();
         }
     
         public bool IsEnable { get; set; }
@@ -84,5 +85,7 @@ namespace PurchaseOrderSys.Models
         public virtual ICollection<Packages> ReturnPackages { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CreditMemo> CreditMemo { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<inventory> inventory { get; set; }
     }
 }

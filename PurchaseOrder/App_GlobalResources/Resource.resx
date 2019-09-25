@@ -3158,4 +3158,37 @@
   <data name="TaskScheduler_CreateAt" xml:space="preserve">
     <value></value>
   </data>
+  <data name="inventory_WarehouseID" xml:space="preserve">
+    <value>WarehouseID</value>
+  </data>
+  <data name="inventory_SkuID" xml:space="preserve">
+    <value>SkuID</value>
+  </data>
+  <data name="inventory_Fulfillable" xml:space="preserve">
+    <value>Fulfillable</value>
+  </data>
+  <data name="inventory_Awaiting" xml:space="preserve">
+    <value>Awaiting</value>
+  </data>
+  <data name="inventory_UnfulfillableTransit" xml:space="preserve">
+    <value>UnfulfillableTransit</value>
+  </data>
+  <data name="inventory_TotalVelocity" xml:space="preserve">
+    <value>TotalVelocity</value>
+  </data>
+  <data name="inventory_Aggregate" xml:space="preserve">
+    <value>Aggregate</value>
+  </data>
+  <data name="inventory_TransferOutQTY" xml:space="preserve">
+    <value>TransferOutQTY</value>
+  </data>
+  <data name="inventory_TransferInQTY" xml:space="preserve">
+    <value>TransferInQTY</value>
+  </data>
+  <data name="inventory_WTransferOutQTY" xml:space="preserve">
+    <value>WTransferOutQTY</value>
+  </data>
+  <data name="inventory_WTransferInQTY" xml:space="preserve">
+    <value>WTransferInQTY</value>
+  </data>
 </root>

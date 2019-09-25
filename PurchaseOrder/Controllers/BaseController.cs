@@ -676,8 +676,8 @@ namespace PurchaseOrderSys.Controllers
         public IEnumerable<WarehouseVM> GetWarehouseVMList(Warehouse Warehouse, string Product, int? FulfillableMin, int? FulfillableMax)
         {
             var GroupWarehouseVM = new List<WarehouseVM>();
-          
-            var AllSKUList = db.SKU.Where(x => x.IsEnable ).Select(x => new { x.SkuID, x.SkuLang.FirstOrDefault().Name }).ToList();//&& x.Status == 1
+
+            var AllSKUList = db.SKU.AsNoTracking().Where(x => x.IsEnable && x.Status == 1).Select(x => new { x.SkuID, x.SkuLang.FirstOrDefault().Name }).ToList();//
             if (!string.IsNullOrWhiteSpace( Product))
             {
                 AllSKUList = AllSKUList.Where(x => x.SkuID == Product).ToList();
@@ -685,8 +685,8 @@ namespace PurchaseOrderSys.Controllers
             if (Warehouse.Type == "Interim")
             {
                 var WarehouseVM = new List<WarehouseVM>();
-                var NoRmaTransferSKU = db.TransferSKU.Where(x => x.IsEnable && x.Transfer.Interim == Warehouse.ID && x.Transfer.Status == "Shipped" && !x.RMASerialsLlist.Any());//無RMA移倉中
-                var RmaTransferSKU = db.TransferSKU.Where(x => x.IsEnable && x.Transfer.Interim == Warehouse.ID && x.Transfer.Status == "Shipped" && x.RMASerialsLlist.Any());//有RMA移倉中
+                var NoRmaTransferSKU = db.TransferSKU.AsNoTracking().Where(x => x.IsEnable && x.Transfer.Interim == Warehouse.ID && x.Transfer.Status == "Shipped" && !x.RMASerialsLlist.Any());//無RMA移倉中
+                var RmaTransferSKU = db.TransferSKU.AsNoTracking().Where(x => x.IsEnable && x.Transfer.Interim == Warehouse.ID && x.Transfer.Status == "Shipped" && x.RMASerialsLlist.Any());//有RMA移倉中
                 if (!string.IsNullOrWhiteSpace(Product))
                 {
                     NoRmaTransferSKU = NoRmaTransferSKU.Where(x => x.SkuNo == Product);
@@ -729,12 +729,12 @@ namespace PurchaseOrderSys.Controllers
             {
                 var edt = DateTime.UtcNow;
                 var sdt = edt.AddDays(-30);
-                var POSerialsLlist = db.SerialsLlist.Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "PO" && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable).ToList();
-                var InSerialsLlist = db.SerialsLlist.Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferIn" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).ToList();
-                var OutSerialsLlist = db.SerialsLlist.Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferOut" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).ToList();
-                var RMAINSerialsLlist = db.RMASerialsLlist.Where(x => x.IsEnable && !x.RMASerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "RMAIn" && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable).ToList();
-                var RMAOUTSerialsLlist = db.RMASerialsLlist.Where(x => x.IsEnable && !x.RMASerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferOut" && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable && !x.TransferSKU.SerialsLlist.Where(y => y.IsEnable && y.SerialsType == "TransferIn").Any()).ToList();
-                var OrderSerialsLlist = db.SerialsLlist.Where(x => x.IsEnable && x.SerialsType == "Order" && x.CreateAt >= sdt && x.CreateAt <= edt).ToList();
+                var POSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "PO" && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable).ToList();
+                var InSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferIn" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).ToList();
+                var OutSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferOut" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).ToList();
+                var RMAINSerialsLlist = db.RMASerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.RMASerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "RMAIn" && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable).ToList();
+                var RMAOUTSerialsLlist = db.RMASerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.RMASerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferOut" && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable && !x.TransferSKU.SerialsLlist.Where(y => y.IsEnable && y.SerialsType == "TransferIn").Any()).ToList();
+                var OrderSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && x.SerialsType == "Order" && x.CreateAt >= sdt && x.CreateAt <= edt).ToList();
                 var SCID = Warehouse.WarehouseSummary.Where(x => x.Type == "SCID").FirstOrDefault()?.Val;
                 var Awaitinglist = GetAwaitingCount("", SCID);
                 foreach (var SKUitem in AllSKUList)
@@ -774,7 +774,7 @@ namespace PurchaseOrderSys.Controllers
                         TransferInQTY = TOutQTY + TRMAOUTQTY,
                         WTransferOutQTY = WFOutQTY,
                         WTransferInQTY = WTOutQTY,
-                        Velocity= Velocity
+                        Velocity= Velocity,
                         //Aggregate = WarehouseVM.Sum(x => x.Aggregate),
                         //Awaiting = WarehouseVM.Sum(x => x.Awaiting),
                         //Fulfillable = WarehouseVM.Sum(x => x.Fulfillable),

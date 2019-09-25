@@ -364,6 +364,12 @@
     <Compile Include="Models\DirectLineMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\inventory.cs">
+      <DependentUpon>PurchaseMdel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\inventoryMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ItemsMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>

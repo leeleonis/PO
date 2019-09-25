@@ -2167,6 +2167,105 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查詢類似 Aggregate 的當地語系化字串。
+        /// </summary>
+        public static string inventory_Aggregate {
+            get {
+                return ResourceManager.GetString("inventory_Aggregate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Awaiting 的當地語系化字串。
+        /// </summary>
+        public static string inventory_Awaiting {
+            get {
+                return ResourceManager.GetString("inventory_Awaiting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Fulfillable 的當地語系化字串。
+        /// </summary>
+        public static string inventory_Fulfillable {
+            get {
+                return ResourceManager.GetString("inventory_Fulfillable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 SkuID 的當地語系化字串。
+        /// </summary>
+        public static string inventory_SkuID {
+            get {
+                return ResourceManager.GetString("inventory_SkuID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 TotalVelocity 的當地語系化字串。
+        /// </summary>
+        public static string inventory_TotalVelocity {
+            get {
+                return ResourceManager.GetString("inventory_TotalVelocity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 TransferInQTY 的當地語系化字串。
+        /// </summary>
+        public static string inventory_TransferInQTY {
+            get {
+                return ResourceManager.GetString("inventory_TransferInQTY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 TransferOutQTY 的當地語系化字串。
+        /// </summary>
+        public static string inventory_TransferOutQTY {
+            get {
+                return ResourceManager.GetString("inventory_TransferOutQTY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 UnfulfillableTransit 的當地語系化字串。
+        /// </summary>
+        public static string inventory_UnfulfillableTransit {
+            get {
+                return ResourceManager.GetString("inventory_UnfulfillableTransit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 WarehouseID 的當地語系化字串。
+        /// </summary>
+        public static string inventory_WarehouseID {
+            get {
+                return ResourceManager.GetString("inventory_WarehouseID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 WTransferInQTY 的當地語系化字串。
+        /// </summary>
+        public static string inventory_WTransferInQTY {
+            get {
+                return ResourceManager.GetString("inventory_WTransferInQTY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 WTransferOutQTY 的當地語系化字串。
+        /// </summary>
+        public static string inventory_WTransferOutQTY {
+            get {
+                return ResourceManager.GetString("inventory_WTransferOutQTY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
         public static string Items_CreateAt {
