@@ -156,7 +156,6 @@ namespace PurchaseOrderSys.Controllers
                 if (address == null) throw new Exception("Not found address!");
 
                 CheckAddressData(address, updateAddress);
-                db.SaveChanges();
 
                 if (address.SCID.HasValue)
                 {
@@ -229,6 +228,7 @@ namespace PurchaseOrderSys.Controllers
                     OM.ActionLog("Change Address", "PhoneNumber to " + updateAddress.PhoneNumber);
 
                 SetUpdateData(address, updateAddress, new string[] { "FirstName", "LastName", "AddressLine1", "AddressLine2", "City", "State", "Postcode", "CountryCode", "PhoneNumber" });
+                db.SaveChanges();
             }
         }
 
@@ -246,7 +246,6 @@ namespace PurchaseOrderSys.Controllers
                 updatePayment.GrandTotal = payment.TotalValue + updatePayment.ShippingCharge + updatePayment.InsuranceCharge;
                 updatePayment.Balance = updatePayment.PaymentTotal - updatePayment.Refund - updatePayment.GrandTotal;
                 CheckPaymentData(payment, updatePayment);
-                db.SaveChanges();
 
                 if (payment.SCID.HasValue)
                 {
@@ -313,6 +312,7 @@ namespace PurchaseOrderSys.Controllers
                     OM.ActionLog("Change Payment", "Balance to " + updatePayment.Balance);
 
                 SetUpdateData(payment, updatePayment, new string[] { "Status", "Date", "Gateway", "ShippingCharge", "InsuranceCharge", "GrandTotal", "PaymentTotal", "Refund", "Balance" });
+                db.SaveChanges();
             }
         }
 
@@ -321,7 +321,7 @@ namespace PurchaseOrderSys.Controllers
         {
             AjaxResult result = new AjaxResult();
 
-            var package = db.Packages.AsNoTracking().FirstOrDefault(p => p.ID.Equals(updatePackage.ID));
+            var package = db.Packages.FirstOrDefault(p => p.ID.Equals(updatePackage.ID));
 
             try
             {
@@ -461,6 +461,7 @@ namespace PurchaseOrderSys.Controllers
                     OM.ActionLog("Change DL Shipping Setting", string.Format("Export Value to {0}", updatePackage.DLExportValue.ToString()));
 
                 SetUpdateData(package, updatePackage, packageEditList);
+                db.SaveChanges();
             }
         }
 
