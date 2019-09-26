@@ -6,7 +6,16 @@
     var AuthItem = new List<int>();
     if (!string.IsNullOrWhiteSpace(Auth))
     {
-        AuthItem = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(Auth).Where(x => x.Value.Any()).Select(x => int.Parse(x.Key)).ToList();
+        try
+        {
+            AuthItem = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(Auth).Where(x => x.Value.Any()).Select(x => int.Parse(x.Key)).ToList();
+        }
+        catch (Exception)
+        {
+
+
+        }
+
     }
     if (mod == "UE" || mod == "UI")
     {

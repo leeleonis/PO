@@ -8,7 +8,15 @@
     var GAuthItem =new Dictionary<string, List<string>>();//群組的權限
     if (!string.IsNullOrWhiteSpace(Auth))
     {
-        GAuthItem = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(Auth);
+        try
+        {
+            GAuthItem = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(Auth);
+        }
+        catch (Exception)
+        {
+
+        }
+
     }
     if (ViewBag.UserAuth!=null)
     {
@@ -26,7 +34,7 @@
                 {
                     var disabled = "";
                     var chk = "";
-                    var MenuAuthLis = Model.Auth.Split(';').ToList();
+                    var MenuAuthLis = Model.Auth?.Split(';').ToList();
                     if (!(MenuSet.HasValue && MenuSet.Value) && !MenuAuthLis.Contains(item.Value))
                     {
                         disabled = "disabled";

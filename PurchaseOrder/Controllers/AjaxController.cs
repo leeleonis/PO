@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using Newtonsoft.Json;
@@ -2170,6 +2171,121 @@ namespace PurchaseOrderSys.Controllers
             System.Web.HttpContext.Current.Response.End();
 
         }
+        public class MyThread
+        {
+            public Models.Warehouse Warehouseitem { set; get; }
+            public List<string> AllSKUList { set; get; }
+            public List<AwaitingDispatchVM> Awaitinglist { set; get; }
+            public void ThreadMain()
+            {
+                System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+                sw.Reset();
+                sw.Start();
+                int threadId = Thread.CurrentThread.ManagedThreadId;
+                Console.WriteLine("報行ID：" + threadId + " ;開始時間：" + sw.ElapsedMilliseconds);
+                using (PurchaseOrderEntities dbW = new PurchaseOrderEntities())
+                {
+                    //dbW.Configuration.AutoDetectChangesEnabled = false;
+                    //dbW.Configuration.LazyLoadingEnabled = false;
+                    //dbW.Configuration.ProxyCreationEnabled = false;
+                    var edt = DateTime.UtcNow;
+                    var sdt = edt.AddDays(-30);
+                    var POSerialsLlist = dbW.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "PO" && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable).Include(x=>x.PurchaseSKU).Include(x=>x.PurchaseSKU.PurchaseOrder).ToList();
+                    var InSerialsLlist = dbW.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferIn" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).Include(x=>x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
+                    var OutSerialsLlist = dbW.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferOut" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
+                    var RMAINSerialsLlist = dbW.RMASerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.RMASerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "RMAIn" && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable).Include(x=>x.RMASKU).Include(x=>x.RMASKU.RMA).ToList();
+                    var RMAOUTSerialsLlist = dbW.RMASerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.RMASerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferOut" && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable && !x.TransferSKU.SerialsLlist.Where(y => y.IsEnable && y.SerialsType == "TransferIn").Any()).Include(x => x.RMASKU).Include(x => x.RMASKU.RMA).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
+                    var OrderSerialsLlist = dbW.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && x.SerialsType == "Order" && x.CreateAt >= sdt && x.CreateAt <= edt).Include(x => x.PurchaseSKU).Include(x => x.PurchaseSKU.PurchaseOrder).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
+                    var inventory = new List<inventory>();
+                    foreach (var SKUitem in AllSKUList)
+                    {
+                        //PO
+                        var POQTY = POSerialsLlist.Where(x => x.PurchaseSKU.PurchaseOrder.WarehouseID == Warehouseitem.ID && x.PurchaseSKU.SkuNo == SKUitem).Sum(x => x.SerialsQTY) ?? 0;
+                        //移倉入庫
+                        var TinQTY = InSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouseitem.ID && x.TransferSKU.SkuNo == SKUitem).Sum(x => x.SerialsQTY) ?? 0;
+                        //移倉已Shipped
+                        var FOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.FromWID == Warehouseitem.ID && x.TransferSKU.Transfer.TransferType != "Winit" && x.TransferSKU.Transfer.Status == "Shipped" && x.TransferSKU.SkuNo == SKUitem).Sum(x => x.SerialsQTY) ?? 0);
+                        var WFOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.FromWID == Warehouseitem.ID && x.TransferSKU.Transfer.TransferType == "Winit" && x.TransferSKU.Transfer.Status == "Shipped" && x.TransferSKU.SkuNo == SKUitem).Sum(x => x.SerialsQTY) ?? 0);
+                        var TOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouseitem.ID && x.TransferSKU.Transfer.TransferType != "Winit" && x.TransferSKU.Transfer.Status == "Shipped" && x.TransferSKU.SkuNo == SKUitem).Sum(x => x.SerialsQTY) ?? 0);
+                        var WTOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouseitem.ID && x.TransferSKU.Transfer.TransferType == "Winit" && x.TransferSKU.Transfer.Status == "Shipped" && x.TransferSKU.SkuNo == SKUitem).Sum(x => x.SerialsQTY) ?? 0);
+
+                        //移倉未Shipped
+                        var UnFOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.FromWID == Warehouseitem.ID && x.TransferSKU.Transfer.TransferType != "Winit" && x.TransferSKU.Transfer.Status == "Requested" && x.TransferSKU.SkuNo == SKUitem).Sum(x => x.SerialsQTY) ?? 0);
+                        var UnWFOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.FromWID == Warehouseitem.ID && x.TransferSKU.Transfer.TransferType == "Winit" && x.TransferSKU.Transfer.Status == "Requested" && x.TransferSKU.SkuNo == SKUitem).Sum(x => x.SerialsQTY) ?? 0);
+                        var UnTOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouseitem.ID && x.TransferSKU.Transfer.TransferType != "Winit" && x.TransferSKU.Transfer.Status == "Requested" && x.TransferSKU.SkuNo == SKUitem).Sum(x => x.SerialsQTY) ?? 0);
+                        var UnWTOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouseitem.ID && x.TransferSKU.Transfer.TransferType == "Winit" && x.TransferSKU.Transfer.Status == "Requested" && x.TransferSKU.SkuNo == SKUitem).Sum(x => x.SerialsQTY) ?? 0);
+
+                        //待出貨
+                        var Awaiting = Awaitinglist.Where(x => x.SKU == SKUitem).Sum(x => x.QTY);
+                        var RMAINQTY = RMAINSerialsLlist.Where(x => x.WarehouseID == Warehouseitem.ID && x.RMASKU.SkuNo == SKUitem).Sum(x => x.SerialsQTY) ?? 0;
+                        var FRMAOUTQTY = Math.Abs(RMAOUTSerialsLlist.Where(x => x.TransferSKU.Transfer.FromWID == Warehouseitem.ID && x.RMASKU.SkuNo == SKUitem).Sum(x => x.SerialsQTY) ?? 0);
+                        var TRMAOUTQTY = Math.Abs(RMAOUTSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouseitem.ID && x.RMASKU.SkuNo == SKUitem).Sum(x => x.SerialsQTY) ?? 0);
+                        var Velocity = Math.Abs(OrderSerialsLlist.Where(x => (x.TransferSKUID.HasValue && x.TransferSKU.SkuNo == SKUitem) || (x.PurchaseSKUID.HasValue && x.PurchaseSKU.SkuNo == SKUitem)).Sum(x => x.SerialsQTY) ?? 0);
+
+
+                        inventory.Add(new inventory
+                        {
+                            WarehouseID = Warehouseitem.ID,
+                            SkuID = SKUitem,
+                            Aggregate = POQTY + TinQTY + RMAINQTY - Awaiting,
+                            Awaiting = Awaiting,
+                            Fulfillable = POQTY + TinQTY + RMAINQTY,
+                            TransferOutQTY = FOutQTY + FRMAOUTQTY,
+                            TransferInQTY = TOutQTY + TRMAOUTQTY,
+                            WTransferOutQTY = WFOutQTY,
+                            WTransferInQTY = WTOutQTY,
+                            TotalVelocity = Velocity
+                            //Aggregate = WarehouseVM.Sum(x => x.Aggregate),
+                            //Awaiting = WarehouseVM.Sum(x => x.Awaiting),
+                            //Fulfillable = WarehouseVM.Sum(x => x.Fulfillable),
+                            //TransferOutQTY = WarehouseVM.Sum(x => x.TransferOutQTY)
+                        });
+                    }
+                    dbW.BulkDelete(dbW.inventory.Where(x => x.WarehouseID == Warehouseitem.ID));
+                    //dbW.inventory.RemoveRange(dbW.inventory.Where(x=>x.WarehouseID== Warehouseitem.ID).ToList());
+                    dbW.SaveChanges();
+                    dbW.BulkInsert(inventory);
+                    //dbW.inventory.AddRange(inventory);
+                    dbW.SaveChanges();
+                    Console.WriteLine("報行ID：" + threadId + " ;結束時間：" + sw.ElapsedMilliseconds);
+                }
+            }
+        }
+        [AllowAnonymous]
+        public ActionResult nWarehouseInventory()
+        {
+            //var deltimeS = "";
+            //var deltimeE = "";
+            //var QuytimeS = "";
+            //var QuytimeE = "";
+            //var SatimeS = "";
+            //var SatimeE = "";
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            sw.Reset();
+            sw.Start();
+            var QuytimeS = "開始查詢：" + sw.ElapsedMilliseconds;
+            var Warehouse = db.Warehouse.Where(x => x.IsEnable).ToList();
+            var AllSKUList = db.SKU.AsNoTracking().Where(x => x.IsEnable).Select(x => x.SkuID).ToList();// && x.Status == 1
+          
+            var threadlist = new List<Thread>();
+            foreach (var Warehouseitem in Warehouse)
+            {
+                var SCID = Warehouseitem.WarehouseSummary.Where(x => x.Type == "SCID").FirstOrDefault()?.Val;
+                var Awaitinglist = GetAwaitingCount("", SCID);
+
+                MyThread myThread = new MyThread();
+                myThread.Warehouseitem = Warehouseitem;
+                myThread.AllSKUList = AllSKUList;
+                myThread.Awaitinglist = Awaitinglist;
+                Thread thread = new Thread(myThread.ThreadMain);
+                threadlist.Add(thread);
+                thread.Start();
+
+            }
+            sw.Stop();
+            var EdtimeE = "結束" + sw.ElapsedMilliseconds;
+            return Json(new { QuytimeS , EdtimeE }, JsonRequestBehavior.AllowGet);
+        }
         [AllowAnonymous]
         public ActionResult WarehouseInventory()
         {
@@ -2184,21 +2300,20 @@ namespace PurchaseOrderSys.Controllers
             sw.Start();
             using (PurchaseOrderEntities dbW = new PurchaseOrderEntities())
             {
-                //dbW.Configuration.AutoDetectChangesEnabled = false;
-                //dbW.Configuration.LazyLoadingEnabled = false;
-                //dbW.Configuration.ProxyCreationEnabled = false;
+                dbW.Configuration.AutoDetectChangesEnabled = false;
+                dbW.Configuration.LazyLoadingEnabled = false;
+                dbW.Configuration.ProxyCreationEnabled = false;
                 var Warehouse = dbW.Warehouse.Where(x => x.IsEnable).ToList();
-                var AllSKUList = dbW.SKU.AsNoTracking().Where(x => x.IsEnable && x.Status == 1).Select(x => new { x.SkuID, x.SkuLang.FirstOrDefault().Name }).ToList();//
+                var AllSKUList = dbW.SKU.AsNoTracking().Where(x => x.IsEnable).Select(x =>  x.SkuID).Distinct().ToList();// && x.Status == 1
                 QuytimeS = "開始查詢：" + sw.ElapsedMilliseconds;
                 var edt = DateTime.UtcNow;
                 var sdt = edt.AddDays(-30);
-                var POSerialsLlist = dbW.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "PO" && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable).ToList();
-                var InSerialsLlist = dbW.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferIn" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).ToList();
-                var OutSerialsLlist = dbW.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferOut" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).ToList();
-                var RMAINSerialsLlist = dbW.RMASerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.RMASerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "RMAIn" && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable).ToList();
-                var RMAOUTSerialsLlist = dbW.RMASerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.RMASerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferOut" && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable && !x.TransferSKU.SerialsLlist.Where(y => y.IsEnable && y.SerialsType == "TransferIn").Any()).ToList();
-                var OrderSerialsLlist = dbW.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && x.SerialsType == "Order" && x.CreateAt >= sdt && x.CreateAt <= edt).ToList();
-
+                var POSerialsLlist = dbW.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "PO" && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable).Include(x => x.PurchaseSKU).Include(x => x.PurchaseSKU.PurchaseOrder).ToList();
+                var InSerialsLlist = dbW.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferIn" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
+                var OutSerialsLlist = dbW.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferOut" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
+                var RMAINSerialsLlist = dbW.RMASerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.RMASerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "RMAIn" && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable).Include(x => x.RMASKU).Include(x => x.RMASKU.RMA).ToList();
+                var RMAOUTSerialsLlist = dbW.RMASerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.RMASerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferOut" && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable && !x.TransferSKU.SerialsLlist.Where(y => y.IsEnable && y.SerialsType == "TransferIn").Any()).Include(x => x.RMASKU).Include(x => x.RMASKU.RMA).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
+                var OrderSerialsLlist = dbW.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && x.SerialsType == "Order" && x.CreateAt >= sdt && x.CreateAt <= edt).Include(x => x.PurchaseSKU).Include(x => x.PurchaseSKU.PurchaseOrder).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
                 var inventory = new List<inventory>();
                 foreach (var Warehouseitem in Warehouse)
                 {
@@ -2208,33 +2323,33 @@ namespace PurchaseOrderSys.Controllers
                     foreach (var SKUitem in AllSKUList)
                     {
                         //PO
-                        var POQTY = POSerialsLlist.Where(x => x.PurchaseSKU.PurchaseOrder.WarehouseID == Warehouseitem.ID && x.PurchaseSKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0;
+                        var POQTY = POSerialsLlist.Where(x => x.PurchaseSKU.PurchaseOrder.WarehouseID == Warehouseitem.ID && x.PurchaseSKU.SkuNo == SKUitem).Sum(x => x.SerialsQTY) ?? 0;
                         //移倉入庫
-                        var TinQTY = InSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouseitem.ID && x.TransferSKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0;
+                        var TinQTY = InSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouseitem.ID && x.TransferSKU.SkuNo == SKUitem).Sum(x => x.SerialsQTY) ?? 0;
                         //移倉已Shipped
-                        var FOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.FromWID == Warehouseitem.ID && x.TransferSKU.Transfer.TransferType != "Winit" && x.TransferSKU.Transfer.Status == "Shipped" && x.TransferSKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
-                        var WFOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.FromWID == Warehouseitem.ID && x.TransferSKU.Transfer.TransferType == "Winit" && x.TransferSKU.Transfer.Status == "Shipped" && x.TransferSKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
-                        var TOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouseitem.ID && x.TransferSKU.Transfer.TransferType != "Winit" && x.TransferSKU.Transfer.Status == "Shipped" && x.TransferSKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
-                        var WTOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouseitem.ID && x.TransferSKU.Transfer.TransferType == "Winit" && x.TransferSKU.Transfer.Status == "Shipped" && x.TransferSKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
+                        var FOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.FromWID == Warehouseitem.ID && x.TransferSKU.Transfer.TransferType != "Winit" && x.TransferSKU.Transfer.Status == "Shipped" && x.TransferSKU.SkuNo == SKUitem).Sum(x => x.SerialsQTY) ?? 0);
+                        var WFOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.FromWID == Warehouseitem.ID && x.TransferSKU.Transfer.TransferType == "Winit" && x.TransferSKU.Transfer.Status == "Shipped" && x.TransferSKU.SkuNo == SKUitem).Sum(x => x.SerialsQTY) ?? 0);
+                        var TOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouseitem.ID && x.TransferSKU.Transfer.TransferType != "Winit" && x.TransferSKU.Transfer.Status == "Shipped" && x.TransferSKU.SkuNo == SKUitem).Sum(x => x.SerialsQTY) ?? 0);
+                        var WTOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouseitem.ID && x.TransferSKU.Transfer.TransferType == "Winit" && x.TransferSKU.Transfer.Status == "Shipped" && x.TransferSKU.SkuNo == SKUitem).Sum(x => x.SerialsQTY) ?? 0);
 
                         //移倉未Shipped
-                        var UnFOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.FromWID == Warehouseitem.ID && x.TransferSKU.Transfer.TransferType != "Winit" && x.TransferSKU.Transfer.Status == "Requested" && x.TransferSKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
-                        var UnWFOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.FromWID == Warehouseitem.ID && x.TransferSKU.Transfer.TransferType == "Winit" && x.TransferSKU.Transfer.Status == "Requested" && x.TransferSKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
-                        var UnTOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouseitem.ID && x.TransferSKU.Transfer.TransferType != "Winit" && x.TransferSKU.Transfer.Status == "Requested" && x.TransferSKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
-                        var UnWTOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouseitem.ID && x.TransferSKU.Transfer.TransferType == "Winit" && x.TransferSKU.Transfer.Status == "Requested" && x.TransferSKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
+                        var UnFOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.FromWID == Warehouseitem.ID && x.TransferSKU.Transfer.TransferType != "Winit" && x.TransferSKU.Transfer.Status == "Requested" && x.TransferSKU.SkuNo == SKUitem).Sum(x => x.SerialsQTY) ?? 0);
+                        var UnWFOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.FromWID == Warehouseitem.ID && x.TransferSKU.Transfer.TransferType == "Winit" && x.TransferSKU.Transfer.Status == "Requested" && x.TransferSKU.SkuNo == SKUitem).Sum(x => x.SerialsQTY) ?? 0);
+                        var UnTOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouseitem.ID && x.TransferSKU.Transfer.TransferType != "Winit" && x.TransferSKU.Transfer.Status == "Requested" && x.TransferSKU.SkuNo == SKUitem).Sum(x => x.SerialsQTY) ?? 0);
+                        var UnWTOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouseitem.ID && x.TransferSKU.Transfer.TransferType == "Winit" && x.TransferSKU.Transfer.Status == "Requested" && x.TransferSKU.SkuNo == SKUitem).Sum(x => x.SerialsQTY) ?? 0);
 
                         //待出貨
-                        var Awaiting = Awaitinglist.Where(x => x.SKU == SKUitem.SkuID).Sum(x => x.QTY);
-                        var RMAINQTY = RMAINSerialsLlist.Where(x => x.WarehouseID == Warehouseitem.ID && x.RMASKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0;
-                        var FRMAOUTQTY = Math.Abs(RMAOUTSerialsLlist.Where(x => x.TransferSKU.Transfer.FromWID == Warehouseitem.ID && x.RMASKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
-                        var TRMAOUTQTY = Math.Abs(RMAOUTSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouseitem.ID && x.RMASKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
-                        var Velocity = Math.Abs(OrderSerialsLlist.Where(x => (x.TransferSKUID.HasValue && x.TransferSKU.SkuNo == SKUitem.SkuID) || (x.PurchaseSKUID.HasValue && x.PurchaseSKU.SkuNo == SKUitem.SkuID)).Sum(x => x.SerialsQTY) ?? 0);
+                        var Awaiting = Awaitinglist.Where(x => x.SKU == SKUitem).Sum(x => x.QTY);
+                        var RMAINQTY = RMAINSerialsLlist.Where(x => x.WarehouseID == Warehouseitem.ID && x.RMASKU.SkuNo == SKUitem).Sum(x => x.SerialsQTY) ?? 0;
+                        var FRMAOUTQTY = Math.Abs(RMAOUTSerialsLlist.Where(x => x.TransferSKU.Transfer.FromWID == Warehouseitem.ID && x.RMASKU.SkuNo == SKUitem).Sum(x => x.SerialsQTY) ?? 0);
+                        var TRMAOUTQTY = Math.Abs(RMAOUTSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouseitem.ID && x.RMASKU.SkuNo == SKUitem).Sum(x => x.SerialsQTY) ?? 0);
+                        var Velocity = Math.Abs(OrderSerialsLlist.Where(x => (x.TransferSKUID.HasValue && x.TransferSKU.SkuNo == SKUitem) || (x.PurchaseSKUID.HasValue && x.PurchaseSKU.SkuNo == SKUitem)).Sum(x => x.SerialsQTY) ?? 0);
 
 
                         inventory.Add(new inventory
                         {
                             WarehouseID = Warehouseitem.ID,
-                            SkuID = SKUitem.SkuID,
+                            SkuID = SKUitem,
                             Aggregate = POQTY + TinQTY + RMAINQTY - Awaiting,
                             Awaiting = Awaiting,
                             Fulfillable = POQTY + TinQTY + RMAINQTY,
@@ -2250,21 +2365,22 @@ namespace PurchaseOrderSys.Controllers
                         });
                     }
                 }
-                dbW.inventory.AddRange(inventory);
+                //dbW.inventory.AddRange(inventory);
                 QuytimeE = "結束查詢：" + sw.ElapsedMilliseconds;
 
                 deltimeS = "開使刪除：" + sw.ElapsedMilliseconds;
-                db.inventory.RemoveRange(db.inventory.ToList());
-                db.SaveChanges();
+                //db.inventory.RemoveRange(db.inventory.ToList());
+                dbW.BulkDelete(db.inventory);
+                dbW.SaveChanges();
                 deltimeE = "結束刪除：" + sw.ElapsedMilliseconds;
-
                 SatimeS = "開始存檔：" + sw.ElapsedMilliseconds;
+                dbW.BulkInsert(inventory);
                 dbW.SaveChanges();
                 SatimeE = "結束存檔：" + sw.ElapsedMilliseconds;
             }
             sw.Stop();
             var EdtimeE = "結束" + sw.ElapsedMilliseconds;
-            return Json(new { deltimeS, deltimeE, QuytimeS, QuytimeE, SatimeS, SatimeE, EdtimeE }, JsonRequestBehavior.AllowGet);
+            return Json(new { QuytimeS, QuytimeE, deltimeS, deltimeE, SatimeS, SatimeE, EdtimeE }, JsonRequestBehavior.AllowGet);
         }
     }
     public class DropshpOrderBySC

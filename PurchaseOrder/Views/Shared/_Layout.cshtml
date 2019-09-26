@@ -142,7 +142,7 @@
                     $(this).prop("checked", true);
                 });
             });
-            @*oTable = $('#dt_basic').dataTable({
+            oTable = $('#dt_basic').dataTable({
                 "columnDefs": [{ "orderable": false, "targets": "nosort" }],
                 "order": [],
                 "bJQueryUI": true,
@@ -157,7 +157,7 @@
                         }
                     }]
                 }
-            });*@
+            });
             $("body").on("click", "#saveexit", function (){
                 $("form").prepend('<input type="hidden" name="saveexit" value="true" />');
                 $(this).prop("disabled", "disabled");

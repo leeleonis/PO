@@ -93,8 +93,8 @@ namespace PurchaseOrderSys.Controllers
             AdminGroup OadminGroup = db.AdminGroup.Find(adminGroup.ID);
             adminGroup.Auth = AuthToString(auth);
             SetEditDatas(OadminGroup,adminGroup, EditList);
-            //db.Entry(OadminGroup).State = EntityState.Modified;
-            //db.SaveChanges();
+            db.Entry(OadminGroup).State = EntityState.Modified;
+            db.SaveChanges();
             return RedirectToAction("Index");
 
         }
