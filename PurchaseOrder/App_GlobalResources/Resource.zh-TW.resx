@@ -2964,4 +2964,28 @@
   <data name="inventory_WTransferInQTY" xml:space="preserve">
     <value>Winit移倉等待入庫數量</value>
   </data>
+  <data name="PageAuth_ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="PageAuth_User" xml:space="preserve">
+    <value>使用者</value>
+  </data>
+  <data name="PageAuth_Type" xml:space="preserve">
+    <value>權限類型</value>
+  </data>
+  <data name="PageAuth_AuthGroup" xml:space="preserve">
+    <value>功能權限組合</value>
+  </data>
+  <data name="PageAuth_CreateBy" xml:space="preserve">
+    <value>建立者</value>
+  </data>
+  <data name="PageAuth_CreateAt" xml:space="preserve">
+    <value>建立時間</value>
+  </data>
+  <data name="PageAuth_UpdateBy" xml:space="preserve">
+    <value>修改者</value>
+  </data>
+  <data name="PageAuth_UpdateAt" xml:space="preserve">
+    <value>修改時間</value>
+  </data>
 </root>

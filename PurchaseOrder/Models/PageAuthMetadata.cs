@@ -1,4 +1,5 @@
-using System; 
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -13,11 +14,12 @@ namespace PurchaseOrderSys.Models
     [MetadataType(typeof(PageAuthMetadata))]
     public  partial class PageAuth
     {
-    
-    	/// <summary>
-    	/// PageAuth Metadata class
-    	/// </summary>
-    	public   class PageAuthMetadata
+        public Dictionary<string, bool> GroupEdit { get; set; }
+
+        /// <summary>
+        /// PageAuth Metadata class
+        /// </summary>
+        public   class PageAuthMetadata
     	{
     		    
     		/// <summary>

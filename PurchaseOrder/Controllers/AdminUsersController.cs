@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using inventorySKU;
+using Newtonsoft.Json;
 using PurchaseOrderSys.Models;
 
 namespace PurchaseOrderSys.Controllers
@@ -92,7 +93,7 @@ namespace PurchaseOrderSys.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Group,Name,Account")] AdminUser EadminUser, Dictionary<string, List<string>> auth)
+        public ActionResult Edit([Bind(Include = "ID,Group,Name,Account")] AdminUser EadminUser, Dictionary<string, List<string>> auth, List<PageAuth> PageAuth)
         {
             var oadminUser = db.AdminUser.Find(EadminUser.ID);
             oadminUser.Group = EadminUser.Group;
@@ -101,6 +102,27 @@ namespace PurchaseOrderSys.Controllers
             oadminUser.Auth = AuthToString(auth);
             db.Entry(oadminUser).State = EntityState.Modified;
             db.SaveChanges();
+
+            if (PageAuth.Any())
+            {
+                foreach(var pageUpdate in PageAuth)
+                {
+                    pageUpdate.AuthGroup = JsonConvert.SerializeObject(pageUpdate.GroupEdit);
+                    var pageData = oadminUser.PageAuth.FirstOrDefault(a => a.ID.Equals(pageUpdate.ID));
+                    if(pageData != null)
+                    {
+                        SetUpdateData(pageData, pageUpdate, new string[] { "AuthGroup" });
+                    }
+                    else
+                    {
+                        pageUpdate.CreateBy = Session["AdminName"].ToString();
+                        pageUpdate.CreateAt = DateTime.UtcNow;
+                        oadminUser.PageAuth.Add(pageUpdate);
+                    }
+                }
+                db.SaveChanges();
+            }
+
             return RedirectToAction("Index");
         }
 
