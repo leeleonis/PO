@@ -18,9 +18,11 @@
 
                         <h2></h2>
                         <ul class="nav nav-tabs pull-right">
-                            <li><a data-toggle="tab" href="#hb1">@ViewBag.title</a></li>
+                            <li>
+                                <a data-toggle="tab" href="#hb1"><b>@ViewBag.title</b> </a>
+                            </li>
                         </ul>
-                      
+
                     </header>
 
                     <div>
@@ -33,61 +35,59 @@
                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                     <div class="tab-pane" id="hb1">
                                         <fieldset>
-                                            <legend>@ViewBag.title</legend>
-                                            @Html.Display("Company")
+                                            <legend><b>@ViewBag.title</b> </legend>
+                                            <b>@Html.Display("Company")</b>
                                             <br />
-                                            @Html.Display("WarehouseType")
+                                            <a> @Html.Display("WarehouseType")</a>
                                             <div class="form-group">
                                                 @*@Html.Label("Company", htmlAttributes: new { @class = "control-label col-sm-2" })
-            <div class="col-sm-9 col-lg-2">
-                @Html.Editor("Company", new { htmlAttributes = new { @class = "form-control" } })
-            </div>*@
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("Company", new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>*@
                                                 @Html.Label("Fulfillable", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("Fulfillable", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
+                                                @Html.Label("Transit(Out)", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("TransferOutQTY", new { htmlAttributes = new { @class = "form-control" } })
+                                                </div>
+                                                @Html.Label("Transit(In)", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("TransferInQTY", new { htmlAttributes = new { @class = "form-control" } })
+                                                </div>
                                             </div>
                                             <div class="form-group">
                                                 @*@Html.Label("Warehouse Type", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("WarehouseType", new { htmlAttributes = new { @class = "form-control" } })
-                                                </div>*@
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("WarehouseType", new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>*@
                                                 @Html.Label("Awaiting Dispatch", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("Awaiting", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
+                                                @Html.Label("Winit Transit(Out)", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("WTransferOutQTY", new { htmlAttributes = new { @class = "form-control" } })
+                                                </div>
+                                                @Html.Label("Winit Transit(In)", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Editor("WTransferInQTY", new { htmlAttributes = new { @class = "form-control" } })
+                                                </div>
                                             </div>
                                             <div class="form-group">
                                                 @*@Html.Label("Fulfillable", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Fulfillable", new { htmlAttributes = new { @class = "form-control" } })
-                                                </div>*@
+                                                    <div class="col-sm-9 col-lg-2">
+                                                        @Html.Editor("Fulfillable", new { htmlAttributes = new { @class = "form-control" } })
+                                                    </div>*@
                                                 @Html.Label("Aggregate", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("Aggregate", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @*@Html.Label("Location", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Location", new { htmlAttributes = new { @class = "form-control" } })
-                                                </div>*@
-                                                @Html.Label("Unfulfillable - Transit", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("UnfulfillableTransit", new { htmlAttributes = new { @class = "form-control" } })
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                @*@Html.Label("Countries", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Countries", new { htmlAttributes = new { @class = "form-control" } })
-                                                </div>*@
                                                 @Html.Label("Total Velocity (30 days)", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("TotalVelocity", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
                                                 @Html.Label("Marketplace", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("Marketplace", new { htmlAttributes = new { @class = "form-control" } })
@@ -96,7 +96,8 @@
 
 
                                         </fieldset>
-                                        <fieldset>
+                                        <fieldset style="display:none">
+                                            @*20190926 SKYPE 停用*@
                                             <legend>Search</legend>
                                             <div class="form-group">
                                                 @Html.Label("Product", htmlAttributes: new { @class = "control-label col-sm-2" })
@@ -117,101 +118,105 @@
                                                 </div>
                                             </div>
                                         </fieldset>
-                                        <fieldset>
-                                            <legend></legend>
-                                            <div class="form-group">
-                                                <div class="col-sm-9  col-lg-offset-10">
-                                                    <a type="button" href="@Url.Action("ExcelQTY","DispatchWarehouse",new {ViewBag.WarehouseID})" class='btn btn-primary btn-sm' id='btn-Add' target="_blank">Download SKU QTY</a>
-                                                    <a type="button" href="@Url.Action("ExcelSerial","DispatchWarehouse",new {ViewBag.WarehouseID})" class='btn btn-primary btn-sm' id='btn-Add' target="_blank">Download SKU Serials</a>
-                                                </div>
+                                    <fieldset>
+                                        <legend></legend>
+                                        <div class="form-group">
+                                            <div class="col-sm-9  col-lg-offset-10">
+                                                <a type="button" href="@Url.Action("ExcelQTY","DispatchWarehouse",new {ViewBag.WarehouseID})" class='btn btn-primary btn-sm' id='btn-Add' target="_blank">Export QTY</a>
+                                                <a type="button" href="@Url.Action("ExcelSerial","DispatchWarehouse",new {ViewBag.WarehouseID})" class='btn btn-primary btn-sm' id='btn-Add' target="_blank">Export Serials</a>
                                             </div>
-                                            <div class="row">
-                                                <article class="col-xs-12">
-                                                    <table id="DataGridC" class="table table-striped table-bordered">
-                                                        <thead>
-                                                            <tr>
-                                                                <th><input type="checkbox" /></th>
-                                                                <th>SKU</th>
-                                                                <th width="30%">Name</th>
-                                                                <th>Velocity (30 days)</th>
-                                                                <th>Days of supply</th>
-                                                                <th>Fulfillable</th>
-                                                                <th>Awaiting Dispatch</th>
-                                                                <th>Transit (Out) & Transit(In)</th>
-                                                                <th>WinitTransit (Out) & WinitTransit (In)</th>
-                                                                <th>Aggregate</th>
+                                        </div>
+                                        <div class="row">
+                                            <article class="col-xs-12">
+                                                <table id="DataGridC" class="table table-striped table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>
+                                                                <input type="checkbox" />
+                                                            </th>
+                                                            <th>SKU</th>
+                                                            <th width="30%">Name</th>
+                                                            <th>Velocity (30 days)</th>
+                                                            <th>Days of supply</th>
+                                                            <th>Fulfillable</th>
+                                                            <th>Awaiting Dispatch</th>
+                                                            <th>Transit (Out) & Transit(In)</th>
+                                                            <th>WinitTransit (Out) & WinitTransit (In)</th>
+                                                            <th>Aggregate</th>
 
-                                                                <th></th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tfoot></tfoot>
-                                                        <tbody>
-                                                            @if (Model.WarehouseVM != null)
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tfoot></tfoot>
+                                                    <tbody>
+                                                        @if (Model.WarehouseVM != null)
+                                                        {
+                                                            foreach (var item in Model.WarehouseVM)
                                                             {
-                                                                foreach (var item in Model.WarehouseVM)
-                                                                {
-                                                            <tr>
-                                                                <td><input type="checkbox" value="@item.SKU"></td>
-                                                                <td>
-                                                                    <a href=' @Url.Action("edit", "Sku", new { id = item.SKU })' target="_blank">@(item.SKU)</a>
-                                                                </td>
-                                                                <td>@item.Name</td>
-                                                                <td>@item.Velocity</td>
-                                                                <td>@item.DaysOfSupply</td>
-                                                                <td>
-                                                                    <a href='@Url.Action("Serials", new { item.SKU,WarehouseID=ViewBag.WarehouseID })'>@item.Fulfillable</a>                                  
-                                                                </td>
-                                                                <td>
-                                                                    <a href='http://internal.qd.com.tw/overview/order?Status=0&SKU=@item.SKU'  target="_blank">@item.Awaiting</a>
-                                                                </td>
-                                                                <td>
-                                                                    @if (item.TransferOutQTY > 0)
-                                                                    {
-                                                                    <a href="@Url.Action("index", "Transfer", new { SKU = item.SKU, To = ViewBag.WarehouseID })" target="_blank"> @item.TransferOutQTY / @item.TransferInQTY</a>
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                    <a href="@Url.Action("index", "Transfer", new { SKU = item.SKU, From = ViewBag.WarehouseID })" target="_blank"> @item.TransferOutQTY / @item.TransferInQTY</a> 
-                                                                    }
-                                                                </td>
-                                                                <td>
-                                                                    @if (item.WTransferOutQTY > 0)
-                                                                    {
-                                                                    <a href="@Url.Action("index", "TransferWinit", new { SKU = item.SKU, To = ViewBag.WarehouseID })" target="_blank"> @item.WTransferOutQTY / @item.WTransferInQTY</a>
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                    <a href="@Url.Action("index", "TransferWinit", new { SKU = item.SKU, From = ViewBag.WarehouseID })" target="_blank"> @item.WTransferOutQTY / @item.WTransferInQTY</a>
-                                                                    }
-                                                                </td>
-                                                                <td>@item.Aggregate</td>
-                                                                <td>
-                                                                    <a class='btn btn-default btn-sm' href='@Url.Action("Statement", new { item.SKU,WarehouseID=ViewBag.WarehouseID })'>Statement</a>
-                                                                    <a class='btn btn-default btn-sm' href='@Url.Action("Serials", new { item.SKU,WarehouseID=ViewBag.WarehouseID })'>Serials</a>
-                                                                    <a class='btn btn-default btn-sm' href='@Url.Action("Inventory", new { item.SKU ,WarehouseID=ViewBag.WarehouseID})'>Inventory</a>
-                                                                    <a class='btn btn-default btn-sm' href='@Url.Action("Purchasing", new { item.SKU ,WarehouseID=ViewBag.WarehouseID})'>Purchasing</a>
-                                                                </td>
-                                                            </tr>
-                                                                }
-                                                                    }
-                                                        </tbody>
-                                                    </table>
-                                                </article>
-                                            </div>
-                                        </fieldset>
-                                    </div>
+                                                                <tr>
+                                                                    <td>
+                                                                        <input type="checkbox" value="@item.SKU">
+                                                                    </td>
+                                                                    <td>
+                                                                        <a href=' @Url.Action("edit", "Sku", new { id = item.SKU })' target="_blank">@(item.SKU)</a>
+                                                                    </td>
+                                                                    <td>@item.Name</td>
+                                                                    <td>@item.Velocity</td>
+                                                                    <td>@item.DaysOfSupply</td>
+                                                                    <td>
+                                                                        <a href='@Url.Action("Serials", new { item.SKU,WarehouseID=ViewBag.WarehouseID })'>@item.Fulfillable</a>
+                                                                    </td>
+                                                                    <td>
+                                                                        <a href='http://internal.qd.com.tw/overview/order?Status=0&SKU=@item.SKU' target="_blank">@item.Awaiting</a>
+                                                                    </td>
+                                                                    <td>
+                                                                        @if (item.TransferOutQTY > 0)
+                                                                        {
+                                                                            <a href="@Url.Action("index", "Transfer", new { SKU = item.SKU, To = ViewBag.WarehouseID })" target="_blank"> @item.TransferOutQTY / @item.TransferInQTY</a>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <a href="@Url.Action("index", "Transfer", new { SKU = item.SKU, From = ViewBag.WarehouseID })" target="_blank"> @item.TransferOutQTY / @item.TransferInQTY</a>
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        @if (item.WTransferOutQTY > 0)
+                                                                        {
+                                                                            <a href="@Url.Action("index", "TransferWinit", new { SKU = item.SKU, To = ViewBag.WarehouseID })" target="_blank"> @item.WTransferOutQTY / @item.WTransferInQTY</a>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <a href="@Url.Action("index", "TransferWinit", new { SKU = item.SKU, From = ViewBag.WarehouseID })" target="_blank"> @item.WTransferOutQTY / @item.WTransferInQTY</a>
+                                                                        }
+                                                                    </td>
+                                                                    <td>@item.Aggregate</td>
+                                                                    <td>
+                                                                        <a class='btn btn-default btn-sm' href='@Url.Action("Statement", new { item.SKU,WarehouseID=ViewBag.WarehouseID })'>Statement</a>
+                                                                        <a class='btn btn-default btn-sm' href='@Url.Action("Serials", new { item.SKU,WarehouseID=ViewBag.WarehouseID })'>Serials</a>
+                                                                        <a class='btn btn-default btn-sm' href='@Url.Action("Inventory", new { item.SKU ,WarehouseID=ViewBag.WarehouseID})'>Inventory</a>
+                                                                        <a class='btn btn-default btn-sm' href='@Url.Action("Purchasing", new { item.SKU ,WarehouseID=ViewBag.WarehouseID})'>Purchasing</a>
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </article>
+                                        </div>
+                                    </fieldset>
                                 </div>
-                                @*<div class="widget-footer">
-                                       <button type="submit" class="btn btn-primary" id="save">儲存</button>
-                                        <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index")'">返回</button>
-                                    </div>*@
-                            </form>
-                        </div>
+                            </div>
+                            @*<div class="widget-footer">
+                                   <button type="submit" class="btn btn-primary" id="save">儲存</button>
+                                    <button type="button" class="btn btn-default" onclick="location.href='@Url.Action("Index")'">返回</button>
+                                </div>*@
+                        </form>
                     </div>
                 </div>
-            </article>
-        </div>
-    </section>
+            </div>
+        </article>
+    </div>
+</section>
 </div>
 @section pagespecific {
     <script type="text/javascript">
@@ -235,10 +240,11 @@
                 }
             });
             var DataGridC = $(tableID).DataTable({
+                "pageLength": 50,
                 "columnDefs": [{ "orderable": false, "targets": 0 }],
                 "order": []
             });
-           
+
             DataGridC.columns().every(function () {
                 var that = this;
                 $('input', this.footer()).on('keyup change', function () {

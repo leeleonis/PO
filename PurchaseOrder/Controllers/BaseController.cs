@@ -668,7 +668,7 @@ namespace PurchaseOrderSys.Controllers
             SKUList.AddRange(NewRMAferSKUList);
             if (!string.IsNullOrWhiteSpace(search))
             {
-                SKUList = SKUList.Where(x => x == search).ToList();
+                SKUList = SKUList.Where(x => x.Contains(search)).ToList();
             }
             SKUList = SKUList.Distinct().ToList();
             return SKUList;
@@ -729,12 +729,12 @@ namespace PurchaseOrderSys.Controllers
             {
                 var edt = DateTime.UtcNow;
                 var sdt = edt.AddDays(-30);
-                var POSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "PO" && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable).ToList();
-                var InSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferIn" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).ToList();
-                var OutSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferOut" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).ToList();
-                var RMAINSerialsLlist = db.RMASerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.RMASerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "RMAIn" && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable).ToList();
-                var RMAOUTSerialsLlist = db.RMASerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.RMASerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferOut" && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable && !x.TransferSKU.SerialsLlist.Where(y => y.IsEnable && y.SerialsType == "TransferIn").Any()).ToList();
-                var OrderSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && x.SerialsType == "Order" && x.CreateAt >= sdt && x.CreateAt <= edt).ToList();
+                var POSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "PO" && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable).Include(x => x.PurchaseSKU).Include(x => x.PurchaseSKU.PurchaseOrder).ToList();
+                var InSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferIn" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
+                var OutSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferOut" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
+                var RMAINSerialsLlist = db.RMASerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.RMASerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "RMAIn" && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable).Include(x => x.RMASKU).Include(x => x.RMASKU.RMA).ToList();
+                var RMAOUTSerialsLlist = db.RMASerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.RMASerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferOut" && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable && !x.TransferSKU.SerialsLlist.Where(y => y.IsEnable && y.SerialsType == "TransferIn").Any()).Include(x => x.RMASKU).Include(x => x.RMASKU.RMA).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
+                var OrderSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && x.SerialsType == "Order" && x.CreateAt >= sdt && x.CreateAt <= edt).Include(x => x.PurchaseSKU).Include(x => x.PurchaseSKU.PurchaseOrder).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
                 var SCID = Warehouse.WarehouseSummary.Where(x => x.Type == "SCID").FirstOrDefault()?.Val;
                 var Awaitinglist = GetAwaitingCount("", SCID);
                 foreach (var SKUitem in AllSKUList)

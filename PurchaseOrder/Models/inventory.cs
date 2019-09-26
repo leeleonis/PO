@@ -25,6 +25,7 @@ namespace PurchaseOrderSys.Models
         public int TransferInQTY { get; set; }
         public int WTransferOutQTY { get; set; }
         public int WTransferInQTY { get; set; }
+        public System.DateTime CreateAt { get; set; }
     
         public virtual SKU SKU { get; set; }
         public virtual Warehouse Warehouse { get; set; }

@@ -323,6 +323,7 @@
           <Property Name="TransferInQTY" Type="int" Nullable="false" />
           <Property Name="WTransferOutQTY" Type="int" Nullable="false" />
           <Property Name="WTransferInQTY" Type="int" Nullable="false" />
+          <Property Name="CreateAt" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="Items">
           <Key>
@@ -6326,6 +6327,7 @@
           <Property Name="WTransferInQTY" Type="Int32" Nullable="false" />
           <NavigationProperty Name="SKU" Relationship="PurchaseOrderModel.FK_inventory_SKU" FromRole="inventory" ToRole="SKU" />
           <NavigationProperty Name="Warehouse" Relationship="PurchaseOrderModel.FK_inventory_Warehouse" FromRole="inventory" ToRole="Warehouse" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         <Association Name="FK_inventory_SKU">
           <End Type="PurchaseOrderModel.SKU" Role="SKU" Multiplicity="1" />
@@ -7729,6 +7731,7 @@
           <EntitySetMapping Name="inventory">
             <EntityTypeMapping TypeName="PurchaseOrderModel.inventory">
               <MappingFragment StoreEntitySet="inventory">
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
                 <ScalarProperty Name="WTransferInQTY" ColumnName="WTransferInQTY" />
                 <ScalarProperty Name="WTransferOutQTY" ColumnName="WTransferOutQTY" />
                 <ScalarProperty Name="TransferInQTY" ColumnName="TransferInQTY" />

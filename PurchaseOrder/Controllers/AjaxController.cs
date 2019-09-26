@@ -84,14 +84,14 @@ namespace PurchaseOrderSys.Controllers
 
         public ActionResult SkuNumberGet(string Search)
         {
-            var dataList = db.SkuLang.Where(x => x.LangID == LangID && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
+            var dataList = db.SkuLang.Where(x => x.LangID == LangID && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name, disabled = x.GetSku.Status != 1 });
             return Json(new { items = dataList }, JsonRequestBehavior.AllowGet);
         }
         public ActionResult TSkuNumberGet(string Search, int FromWID, string Key)
         {
             var SKUList = new List<string>();
             SKUList = SearchSkuByWarehouse(Search, FromWID);
-            var dataList = db.SkuLang.Where(x => x.LangID == LangID && SKUList.Contains(x.Sku) && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name }).ToList();
+            var dataList = db.SkuLang.Where(x => x.LangID == LangID && SKUList.Contains(x.Sku) && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name, disabled = x.GetSku.Status != 1 }).ToList();
             //var dataList = db.SkuLang.Where(x => x.LangID == "zh-tw" && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });  
             return Json(new { items = dataList }, JsonRequestBehavior.AllowGet);
         }
@@ -101,7 +101,7 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult CMSkuNumberGet(string Search, int PurchaseOrderID)
         {
             var PurchaseSKUList = db.PurchaseSKU.Where(x => x.IsEnable && x.PurchaseOrder.IsEnable && x.PurchaseOrderID == PurchaseOrderID && x.SerialsLlist.Sum(y => y.SerialsQTY) > 0).Select(x => x.SkuNo);
-            var dataList = db.SkuLang.Where(x => x.LangID == LangID && PurchaseSKUList.Contains(x.Sku) && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
+            var dataList = db.SkuLang.Where(x => x.LangID == LangID && PurchaseSKUList.Contains(x.Sku) && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name, disabled = x.GetSku.Status != 1 });
             //var dataList = db.SkuLang.Where(x => x.LangID == "zh-tw" && (x.Sku.Contains(Search) || x.Name.Contains(Search))).Take(20).Select(x => new SelectItem { id = x.Sku, text = x.Sku + "_" + x.Name });
             return Json(new { items = dataList }, JsonRequestBehavior.AllowGet);
         }
@@ -2176,6 +2176,13 @@ namespace PurchaseOrderSys.Controllers
             public Models.Warehouse Warehouseitem { set; get; }
             public List<string> AllSKUList { set; get; }
             public List<AwaitingDispatchVM> Awaitinglist { set; get; }
+            public List<SerialsLlist> POSerialsLlist { get;  set; }
+            public List<SerialsLlist> InSerialsLlist { get; internal set; }
+            public List<SerialsLlist> OutSerialsLlist { get; internal set; }
+            public List<RMASerialsLlist> RMAINSerialsLlist { get; internal set; }
+            public List<RMASerialsLlist> RMAOUTSerialsLlist { get; internal set; }
+            public List<SerialsLlist> OrderSerialsLlist { get; internal set; }
+
             public void ThreadMain()
             {
                 System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
@@ -2185,17 +2192,11 @@ namespace PurchaseOrderSys.Controllers
                 Console.WriteLine("報行ID：" + threadId + " ;開始時間：" + sw.ElapsedMilliseconds);
                 using (PurchaseOrderEntities dbW = new PurchaseOrderEntities())
                 {
-                    //dbW.Configuration.AutoDetectChangesEnabled = false;
-                    //dbW.Configuration.LazyLoadingEnabled = false;
-                    //dbW.Configuration.ProxyCreationEnabled = false;
-                    var edt = DateTime.UtcNow;
-                    var sdt = edt.AddDays(-30);
-                    var POSerialsLlist = dbW.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "PO" && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable).Include(x=>x.PurchaseSKU).Include(x=>x.PurchaseSKU.PurchaseOrder).ToList();
-                    var InSerialsLlist = dbW.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferIn" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).Include(x=>x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
-                    var OutSerialsLlist = dbW.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferOut" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
-                    var RMAINSerialsLlist = dbW.RMASerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.RMASerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "RMAIn" && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable).Include(x=>x.RMASKU).Include(x=>x.RMASKU.RMA).ToList();
-                    var RMAOUTSerialsLlist = dbW.RMASerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.RMASerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferOut" && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable && !x.TransferSKU.SerialsLlist.Where(y => y.IsEnable && y.SerialsType == "TransferIn").Any()).Include(x => x.RMASKU).Include(x => x.RMASKU.RMA).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
-                    var OrderSerialsLlist = dbW.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && x.SerialsType == "Order" && x.CreateAt >= sdt && x.CreateAt <= edt).Include(x => x.PurchaseSKU).Include(x => x.PurchaseSKU.PurchaseOrder).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
+                    dbW.Configuration.AutoDetectChangesEnabled = false;
+                    dbW.Configuration.LazyLoadingEnabled = false;
+                    dbW.Configuration.ProxyCreationEnabled = false;
+
+
                     var inventory = new List<inventory>();
                     foreach (var SKUitem in AllSKUList)
                     {
@@ -2252,21 +2253,22 @@ namespace PurchaseOrderSys.Controllers
             }
         }
         [AllowAnonymous]
-        public ActionResult nWarehouseInventory()
+        public ActionResult WarehouseInventory()
         {
-            //var deltimeS = "";
-            //var deltimeE = "";
-            //var QuytimeS = "";
-            //var QuytimeE = "";
-            //var SatimeS = "";
-            //var SatimeE = "";
+            var edt = DateTime.UtcNow;
+            var sdt = edt.AddDays(-30);
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             sw.Reset();
             sw.Start();
             var QuytimeS = "開始查詢：" + sw.ElapsedMilliseconds;
-            var Warehouse = db.Warehouse.Where(x => x.IsEnable).ToList();
+            var Warehouse = db.Warehouse.AsNoTracking().Where(x => x.IsEnable).Include(x=>x.WarehouseSummary).ToList();
             var AllSKUList = db.SKU.AsNoTracking().Where(x => x.IsEnable).Select(x => x.SkuID).ToList();// && x.Status == 1
-          
+            var POSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "PO" && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable).Include(x => x.PurchaseSKU).Include(x => x.PurchaseSKU.PurchaseOrder).ToList();
+            var InSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferIn" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
+            var OutSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferOut" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
+            var RMAINSerialsLlist = db.RMASerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.RMASerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "RMAIn" && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable).Include(x => x.RMASKU).Include(x => x.RMASKU.RMA).ToList();
+            var RMAOUTSerialsLlist = db.RMASerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.RMASerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferOut" && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable && !x.TransferSKU.SerialsLlist.Where(y => y.IsEnable && y.SerialsType == "TransferIn").Any()).Include(x => x.RMASKU).Include(x => x.RMASKU.RMA).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
+            var OrderSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && x.SerialsType == "Order" && x.CreateAt >= sdt && x.CreateAt <= edt).Include(x => x.PurchaseSKU).Include(x => x.PurchaseSKU.PurchaseOrder).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
             var threadlist = new List<Thread>();
             foreach (var Warehouseitem in Warehouse)
             {
@@ -2277,6 +2279,14 @@ namespace PurchaseOrderSys.Controllers
                 myThread.Warehouseitem = Warehouseitem;
                 myThread.AllSKUList = AllSKUList;
                 myThread.Awaitinglist = Awaitinglist;
+                myThread.POSerialsLlist = POSerialsLlist;
+                myThread.InSerialsLlist = InSerialsLlist;
+                myThread.OutSerialsLlist = OutSerialsLlist;
+                myThread.RMAINSerialsLlist = RMAINSerialsLlist;
+                myThread.RMAOUTSerialsLlist = RMAOUTSerialsLlist;
+                myThread.OrderSerialsLlist = OrderSerialsLlist;
+
+
                 Thread thread = new Thread(myThread.ThreadMain);
                 threadlist.Add(thread);
                 thread.Start();
@@ -2287,7 +2297,7 @@ namespace PurchaseOrderSys.Controllers
             return Json(new { QuytimeS , EdtimeE }, JsonRequestBehavior.AllowGet);
         }
         [AllowAnonymous]
-        public ActionResult WarehouseInventory()
+        public ActionResult oWarehouseInventory()
         {
             var deltimeS = "";
             var deltimeE = "";

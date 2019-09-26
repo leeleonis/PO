@@ -74,6 +74,7 @@ namespace PurchaseOrderSys.Models
     {
         public string id { get; set; }
         public string text { get; set; }
+        public bool disabled { get; set; }
     }
     public class Country
     {

@@ -56,15 +56,15 @@
                                                             foreach (var item in Model)
                                                             {
                                                         <tr>
-                                                            <td>@item.ID</td>
-                                                            <td>@item.Name</td>
-                                                            <td>@item.Type</td>
-                                                            <td>@item.Fulfillable</td>
-                                                            <td>@item.Awaiting</td>
-                                                            <td>@item.TransferOutQTY / @item.TransferInQTY</td>
-                                                            <td>@item.WTransferOutQTY / @item.WTransferInQTY</td>
-                                                            <td>@item.Aggregate</td>
-                                                            <td>
+                                                            <td  align='center' valign="middle">@item.ID</td>
+                                                            <td  align='center' valign="middle">@item.Name</td>
+                                                            <td  align='center' valign="middle">@item.Type</td>
+                                                            <td  align='center' valign="middle">@item.Fulfillable</td>
+                                                            <td  align='center' valign="middle">@item.Awaiting</td>
+                                                            <td  align='center' valign="middle">@item.TransferOutQTY / @item.TransferInQTY</td>
+                                                            <td  align='center' valign="middle">@item.WTransferOutQTY / @item.WTransferInQTY</td>
+                                                            <td  align='center' valign="middle">@item.Aggregate</td>
+                                                            <td  align='center' valign="middle">
                                                                 <a class='btn btn-default btn-sm' id='index' href='@Url.Action("index", "WarehouseInventory", new { item.ID })'>SKU</a>
                                                             </td>
                                                         </tr>
