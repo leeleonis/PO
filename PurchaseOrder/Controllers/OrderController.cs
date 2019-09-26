@@ -365,8 +365,8 @@ namespace PurchaseOrderSys.Controllers
                         foreach (var serial in item.Serials)
                         {
                             serial.IsEnable = updateSerial.Contains(serial.SerialNumber);
-                            serial.UpdateAt = package.UpdateAt.Value;
                             serial.UpdateBy = package.UpdateBy;
+                            serial.UpdateAt = package.UpdateAt.Value;
 
                             if (!serial.IsEnable)
                                 OM.ActionLog("Remove Serial", serial.SerialNumber);
@@ -380,7 +380,8 @@ namespace PurchaseOrderSys.Controllers
                                 ItemID = item.ID,
                                 Sku = item.Sku,
                                 SerialNumber = newSerial,
-                                CreateBy = package.UpdateBy
+                                CreateBy = package.UpdateBy,
+                                CreateAt = package.UpdateAt.Value
                             });
 
                             if (item.SCID.HasValue)
