@@ -4003,6 +4003,78 @@ namespace PurchaseOrderSys.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string PageAuth_AuthGroup {
+            get {
+                return ResourceManager.GetString("PageAuth_AuthGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string PageAuth_CreateAt {
+            get {
+                return ResourceManager.GetString("PageAuth_CreateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string PageAuth_CreateBy {
+            get {
+                return ResourceManager.GetString("PageAuth_CreateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string PageAuth_ID {
+            get {
+                return ResourceManager.GetString("PageAuth_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string PageAuth_Type {
+            get {
+                return ResourceManager.GetString("PageAuth_Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string PageAuth_UpdateAt {
+            get {
+                return ResourceManager.GetString("PageAuth_UpdateAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string PageAuth_UpdateBy {
+            get {
+                return ResourceManager.GetString("PageAuth_UpdateBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string PageAuth_User {
+            get {
+                return ResourceManager.GetString("PageAuth_User", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 PaidAmount 的當地語系化字串。
         /// </summary>
         public static string PaidAmount {

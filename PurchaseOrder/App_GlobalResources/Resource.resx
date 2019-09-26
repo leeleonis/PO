@@ -3191,4 +3191,28 @@
   <data name="inventory_WTransferInQTY" xml:space="preserve">
     <value>WTransferInQTY</value>
   </data>
+  <data name="PageAuth_ID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PageAuth_User" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PageAuth_Type" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PageAuth_AuthGroup" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PageAuth_CreateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PageAuth_CreateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PageAuth_UpdateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PageAuth_UpdateAt" xml:space="preserve">
+    <value></value>
+  </data>
 </root>

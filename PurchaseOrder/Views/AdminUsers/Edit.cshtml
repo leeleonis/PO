@@ -91,7 +91,7 @@
                                                 @{ 
                                                     var auth = Model.PageAuth.FirstOrDefault(a => a.Type.Equals("OrderEdit"));
                                                     var authGroup = !string.IsNullOrEmpty(auth?.AuthGroup) ? JsonConvert.DeserializeObject<Dictionary<string, bool>>(auth.AuthGroup) : new Dictionary<string, bool>();
-                                                    var groupName = "authGroup[" + pageAuthIndex++ + "]";
+                                                    var groupName = "PageAuth[" + pageAuthIndex++ + "]";
                                                 }
                                                 @Html.Hidden(groupName + "[ID]", auth?.ID ?? 0)
                                                 @Html.Hidden(groupName + "[User]", auth?.User ?? Model.ID)
@@ -101,39 +101,39 @@
                                                         <tbody>
                                                             <tr>
                                                                 <td><span>Order Status</span></td>
-                                                                <td width="100">@Html.BooleanSwitch(groupName + "[GroupData][OrderStatus]", authGroup.ContainsKey("OrderStatus") ? authGroup["OrderStatus"] : true)</td>
+                                                                <td width="100">@Html.BooleanSwitch(groupName + "[GroupEdit][OrderStatus]", authGroup.ContainsKey("OrderStatus") ? authGroup["OrderStatus"] : true)</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><span>Rush Order</span></td>
-                                                                <td>@Html.BooleanSwitch(groupName + "[GroupData][RushOrder]", authGroup.ContainsKey("RushOrder") ? authGroup["RushOrder"] : true)</td>
+                                                                <td>@Html.BooleanSwitch(groupName + "[GroupEdit][RushOrder]", authGroup.ContainsKey("RushOrder") ? authGroup["RushOrder"] : true)</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><span>Create RMA</span></td>
-                                                                <td>@Html.BooleanSwitch(groupName + "[GroupData][CreateRMA]", authGroup.ContainsKey("CreateRMA") ? authGroup["CreateRMA"] : true)</td>
+                                                                <td>@Html.BooleanSwitch(groupName + "[GroupEdit][CreateRMA]", authGroup.ContainsKey("CreateRMA") ? authGroup["CreateRMA"] : true)</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><span>Edit Address</span></td>
-                                                                <td>@Html.BooleanSwitch(groupName + "[GroupData][EditAddress]", authGroup.ContainsKey("EditAddress") ? authGroup["EditAddress"] : true)</td>
+                                                                <td>@Html.BooleanSwitch(groupName + "[GroupEdit][EditAddress]", authGroup.ContainsKey("EditAddress") ? authGroup["EditAddress"] : true)</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><span>Edit Payment</span></td>
-                                                                <td>@Html.BooleanSwitch(groupName + "[GroupData][EditPayment]", authGroup.ContainsKey("EditPayment") ? authGroup["EditPayment"] : true)</td>
+                                                                <td>@Html.BooleanSwitch(groupName + "[GroupEdit][EditPayment]", authGroup.ContainsKey("EditPayment") ? authGroup["EditPayment"] : true)</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><span>Shipping Action</span></td>
-                                                                <td>@Html.BooleanSwitch(groupName + "[GroupData][ShippingAction]", authGroup.ContainsKey("ShippingAction") ? authGroup["ShippingAction"] : true)</td>
+                                                                <td>@Html.BooleanSwitch(groupName + "[GroupEdit][ShippingAction]", authGroup.ContainsKey("ShippingAction") ? authGroup["ShippingAction"] : true)</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><span>Edit Sku</span></td>
-                                                                <td>@Html.BooleanSwitch(groupName + "[GroupData][EditSku]", authGroup.ContainsKey("EditSku") ? authGroup["EditSku"] : true)</td>
+                                                                <td>@Html.BooleanSwitch(groupName + "[GroupEdit][EditSku]", authGroup.ContainsKey("EditSku") ? authGroup["EditSku"] : true)</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><span>Shipping Setting</span></td>
-                                                                <td>@Html.BooleanSwitch(groupName + "[GroupData][ShippingSetting]", authGroup.ContainsKey("ShippingSetting") ? authGroup["ShippingSetting"] : true)</td>
+                                                                <td>@Html.BooleanSwitch(groupName + "[GroupEdit][ShippingSetting]", authGroup.ContainsKey("ShippingSetting") ? authGroup["ShippingSetting"] : true)</td>
                                                             </tr>
                                                             <tr>
                                                                 <td><span>Mark Shipped</span></td>
-                                                                <td>@Html.BooleanSwitch(groupName + "[GroupData][MarkShipped]", authGroup.ContainsKey("MarkShipped") ? authGroup["MarkShipped"] : true)</td>
+                                                                <td>@Html.BooleanSwitch(groupName + "[GroupEdit][MarkShipped]", authGroup.ContainsKey("MarkShipped") ? authGroup["MarkShipped"] : true)</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -171,7 +171,6 @@
                     mod: "UE"
                 }, function (data) {
                     $("#auth-list").html(data);
-                    //$('.onoffswitch-checkbox').attr('disabled', 'true');
                 });
             });
         });
