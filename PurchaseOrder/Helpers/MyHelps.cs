@@ -513,6 +513,26 @@ namespace PurchaseOrderSys.Helpers
             }
             return dt.Value;
         }
+
+        public static bool CheckPageAuth(string page, string auth, HttpSessionStateBase session)
+        {
+            bool isManager = (bool)session["IsManager"];
+
+            if (!isManager)
+            {
+                if (session["PageAuth"] != null)
+                {
+                    var pageList = session["PageAuth"] as Dictionary<string, Dictionary<string, bool>>;
+
+                    if (pageList.ContainsKey(page))
+                    {
+                        return pageList[page][auth];
+                    }
+                }
+                return false;
+            }
+            return true;
+        }
     }
 
     public class TimeZoneConvert

@@ -32,8 +32,9 @@
         #list-package > div.edit .text {
             padding: 0px;
         }
+
             #list-package > div.edit .text input, #list-package > div.edit .text select {
-                border-color:red;
+                border-color: red;
             }
 
             #list-package > div.edit .text span, #list-package > div.edit button.edit {
@@ -101,7 +102,7 @@
                                                                         <td width="132">Order Status：</td>
                                                                         <td class="no-padding">
                                                                             @{
-                                                                                bool isReadOnly = !Model.OrderStatus.Equals((byte)EnumData.OrderStatus.InProcess) && !Model.OrderStatus.Equals((byte)EnumData.OrderStatus.OnHold);
+                                                                                bool isReadOnly = !MyHelps.CheckPageAuth("OrderEdit", "OrderStatus", Session) || (!Model.OrderStatus.Equals((byte)EnumData.OrderStatus.InProcess) && !Model.OrderStatus.Equals((byte)EnumData.OrderStatus.OnHold));
                                                                                 bool isChooseComplete = (Model.PaymentStatus.Equals((byte)EnumData.OrderPaymentStatus.Full) || Model.PaymentStatus.Equals((byte)EnumData.OrderPaymentStatus.OverPaid))
                                                                                     && (Model.FulfillmentStatus.Equals((byte)EnumData.OrderFulfillmentStatus.Full) || Model.FulfillmentStatus.Equals((byte)EnumData.OrderFulfillmentStatus.Partial));
                                                                             }
@@ -130,7 +131,10 @@
                                                                     </tr>
                                                                     <tr>
                                                                         <td>Rush Order：</td>
-                                                                        <td class="no-padding">@Html.DropDownListFor(Model => Model.IsRush, Enum.GetValues(typeof(EnumData.YesNo)).Cast<EnumData.YesNo>().Select(s => new SelectListItem() { Text = s.ToString(), Value = (byte)s == 1 ? bool.TrueString : bool.FalseString }), htmlAttributes: new { @class = "form-control input-sm" })</td>
+                                                                        <td class="no-padding">
+                                                                            @Html.DropDownListFor(Model => Model.IsRush, Enum.GetValues(typeof(EnumData.YesNo)).Cast<EnumData.YesNo>().Select(s => new SelectListItem() { Text = s.ToString(), Value = (byte)s == 1 ? bool.TrueString : bool.FalseString }), htmlAttributes: new { @class = "form-control input-sm", @disabled = !MyHelps.CheckPageAuth("OrderEdit", "RushOrder", Session) ? "disabled" : "" })
+                                                                            <input type="hidden" name="IsRush" value="@Model.IsRush" />
+                                                                        </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>Payment Status：</td>
@@ -161,7 +165,10 @@
                                                                             }
                                                                             else
                                                                             {
-                                                                                <a class="btn btn-default btn-sm" href="@Url.Action("Create", "RMA", new { QDOrderID = Model.ID, OrderID = Model.SCID })" target="_blank">Create</a>
+                                                                                if (MyHelps.CheckPageAuth("OrderEdit", "CreateRMA", Session))
+                                                                                {
+                                                                                    <a class="btn btn-default btn-sm" href="@Url.Action("Create", "RMA", new { QDOrderID = Model.ID, OrderID = Model.SCID })" target="_blank">Create</a>
+                                                                                }
                                                                             }
                                                                         </td>
                                                                     </tr>
@@ -238,9 +245,12 @@
                                                                         <tr class="font-title">
                                                                             <th class="text-center" style="font-size:12px;" colspan="2">
                                                                                 Ship To
-                                                                                <div style="position: absolute;top: 1px;right: 1px;">
-                                                                                    <button type="button" class="btn btn-default btn-sm" onclick="$addressDialog.dialog('open');">Edit</button>
-                                                                                </div>
+                                                                                @if (MyHelps.CheckPageAuth("OrderEdit", "EditAddress", Session))
+                                                                                {
+                                                                                    <div style="position: absolute;top: 1px;right: 1px;">
+                                                                                        <button type="button" class="btn btn-default btn-sm" onclick="$addressDialog.dialog('open');">Edit</button>
+                                                                                    </div>
+                                                                                }
                                                                             </th>
                                                                         </tr>
                                                                     </thead>
@@ -269,9 +279,12 @@
                                                                     <tr class="font-title">
                                                                         <th class="text-center" colspan="2">
                                                                             Payment
-                                                                            <div style="position: absolute;top: 2px;right: 15px;">
-                                                                                <button type="button" class="btn btn-default" onclick="$paymentDialog.dialog('open');">Edit</button>
-                                                                            </div>
+                                                                            @if (MyHelps.CheckPageAuth("OrderEdit", "EditPayment", Session))
+                                                                            {
+                                                                                <div style="position: absolute;top: 2px;right: 15px;">
+                                                                                    <button type="button" class="btn btn-default" onclick="$paymentDialog.dialog('open');">Edit</button>
+                                                                                </div>
+                                                                            }
                                                                         </th>
                                                                     </tr>
                                                                 </thead>
@@ -369,7 +382,7 @@
                                                         <div class="col-sm-12" style="width:350px;position:absolute;right:5px;">
                                                             <div class="input-group">
                                                                 <span class="input-group-addon font-bg">Shipping Actions</span>
-                                                                <select class="form-control" id="select-action">
+                                                                <select class="form-control" id="select-action" @(!MyHelps.CheckPageAuth("OrderEdit", "ShippingAction", Session) ? "disabled" : "")>
                                                                     <option value="">Select Action</option>
                                                                     @if (Model.OrderStatus.Equals((byte)EnumData.OrderStatus.InProcess))
                                                                     {

@@ -3,6 +3,9 @@
     var LangID = EnumData.DataLangList().First().Key;
     int itemIndex = 0, packageIndex = (int)ViewData["index"], packageTotal = (int)ViewData["total"];
     bool eBayOrder = Model.GetOrder.Channel.Equals((byte)EnumData.OrderChannel.eBay);
+
+    bool ShippingSetting = MyHelps.CheckPageAuth("OrderEdit", "ShippingSetting", Session);
+    bool EditSku = MyHelps.CheckPageAuth("OrderEdit", "EditSku", Session);
 }
 <div class="col-sm-12 no-padding" data-package="@Model.ID" data-qty="@Model.Items.Where(i => i.IsEnable).Sum(i => i.Qty)">
     @if (packageTotal > 1)
@@ -29,11 +32,12 @@
                         <td class="font-bg" width="130">Warehouse</td>
                         <td class="text" width="300">
                             <span>@Model.GetWarehouse.Name</span>
-                            @Html.DropDownListFor(Model => Model.ShipWarehouse, (List<SelectListItem>)ViewData["WarehouseList"], htmlAttributes: new { @class = "form-control" })
+                            @Html.DropDownListFor(Model => Model.ShipWarehouse, (List<SelectListItem>)ViewData["WarehouseList"], htmlAttributes: new { @class = "form-control", @disabled = !ShippingSetting ? "disabled" : "" })
+                            <input type="hidden" name="ShipWarehouse" value="@Model.ShipWarehouse" />
                         </td>
                         <td class="font-bg" width="130">Carrier</td>
-                        <td class="text" width="300">
-                            @Model.GetMethod.LastMile.Name
+                        <td width="300">
+                            <span>@Model.GetMethod.LastMile.Name</span>
                         </td>
                         <td class="font-bg" width="130">Fulfillment Date</td>
                         <td class="text" width="300">
@@ -46,7 +50,8 @@
                         <td class="font-bg">Tracking</td>
                         <td class="text">
                             <span>@(Model.Tracking ?? "")</span>
-                            @Html.TextBoxFor(Model => Model.Tracking, htmlAttributes: new { @class = "form-control" })
+                            @Html.TextBoxFor(Model => Model.Tracking, htmlAttributes: new { @class = "form-control", @disabled = !ShippingSetting ? "disabled" : "" })
+                            <input type="hidden" name="Tracking" value="@Model.Tracking" />
                         </td>
                         <td colspan="2" rowspan="2"></td>
                     </tr>
@@ -54,7 +59,8 @@
                         <td class="font-bg">Shipping Method</td>
                         <td class="text">
                             <span>@Model.GetMethod.Name</span>
-                            @Html.DropDownListFor(Model => Model.ShippingMethod, (List<SelectListItem>)ViewData["MethodList"], htmlAttributes: new { @class = "form-control" })
+                            @Html.DropDownListFor(Model => Model.ShippingMethod, (List<SelectListItem>)ViewData["MethodList"], htmlAttributes: new { @class = "form-control", @disabled = !ShippingSetting ? "disabled" : "" })
+                            <input type="hidden" name="ShippingMethod" value="@Model.ShippingMethod" />
                         </td>
                         <td class="font-bg">
                             Upload Tracking
@@ -69,7 +75,8 @@
                         </td>
                         <td class="text">
                             <span>@Enum.GetName(typeof(EnumData.YesNo), Model.UploadTracking)</span>
-                            @Html.DropDownListFor(Model => Model.UploadTracking, Enum.GetValues(typeof(EnumData.YesNo)).Cast<EnumData.YesNo>().Select(s => new SelectListItem() { Text = s.ToString(), Value = (byte)s == 1 ? bool.TrueString : bool.FalseString }), htmlAttributes: new { @class = "form-control" })
+                            @Html.DropDownListFor(Model => Model.UploadTracking, Enum.GetValues(typeof(EnumData.YesNo)).Cast<EnumData.YesNo>().Select(s => new SelectListItem() { Text = s.ToString(), Value = (byte)s == 1 ? bool.TrueString : bool.FalseString }), htmlAttributes: new { @class = "form-control", @disabled = !ShippingSetting ? "disabled" : "" })
+                            <input type="hidden" name="UploadTracking" value="@Model.UploadTracking" />
                         </td>
                     </tr>
                 </table>
@@ -81,7 +88,8 @@
                             <td class="font-bg" width="130">Export</td>
                             <td class="text" width="300">
                                 <span>@Enum.GetName(typeof(EnumData.Export), Model.Export)</span>
-                                @Html.DropDownListFor(Model => Model.Export, Enum.GetValues(typeof(EnumData.Export)).Cast<EnumData.Export>().Select(s => new SelectListItem() { Text = s.ToString(), Value = ((byte)s).ToString() }), htmlAttributes: new { @class = "form-control" })
+                                @Html.DropDownListFor(Model => Model.Export, Enum.GetValues(typeof(EnumData.Export)).Cast<EnumData.Export>().Select(s => new SelectListItem() { Text = s.ToString(), Value = ((byte)s).ToString() }), htmlAttributes: new { @class = "form-control", @disabled = !ShippingSetting ? "disabled" : "" })
+                                <input type="hidden" name="Export" value="@Model.Export" />
                             </td>
                             <td class="font-bg" width="130">Export Currency</td>
                             <td id="text-currency" width="300">
@@ -94,7 +102,9 @@
                             <td class="font-bg">Export Method</td>
                             <td class="text">
                                 <span>@EnumData.ExportMethodList()[Model.ExportMethod]</span>
-                                @Html.DropDownListFor(Model => Model.ExportMethod, EnumData.ExportMethodList().Select(s => new SelectListItem() { Text = s.Value, Value = s.Key.ToString() }), htmlAttributes: new { @class = "form-control" })
+                                @Html.DropDownListFor(Model => Model.ExportMethod, EnumData.ExportMethodList().Select(s => new SelectListItem() { Text = s.Value, Value = s.Key.ToString() }), htmlAttributes: new { @class = "form-control", @disabled = !ShippingSetting ? "disabled" : "" })
+                                <input type="hidden" name="ExportMethod" value="@Model.ExportMethod" />
+                            </td>
                             </td>
                             <td colspan="2" rowspan="2"></td>
                         </tr>
@@ -102,7 +112,9 @@
                             <td class="font-bg">Export Value</td>
                             <td class="text">
                                 <span>@Model.ExportValue</span>
-                                @Html.TextBoxFor(Model => Model.ExportValue, htmlAttributes: new { @class = "form-control" })
+                                @Html.TextBoxFor(Model => Model.ExportValue, htmlAttributes: new { @class = "form-control", @disabled = !ShippingSetting ? "disabled" : "" })
+                                <input type="hidden" name="ExportValue" value="@Model.ExportValue" />
+                            </td>
                             </td>
                         </tr>
                     </tbody>
@@ -115,7 +127,8 @@
                             <td class="font-bg" width="130">Export</td>
                             <td class="text" width="300">
                                 <span>@Enum.GetName(typeof(EnumData.Export), Model.DLExport)</span>
-                                @Html.DropDownListFor(Model => Model.DLExport, Enum.GetValues(typeof(EnumData.Export)).Cast<EnumData.Export>().Select(s => new SelectListItem() { Text = s.ToString(), Value = ((byte)s).ToString() }), htmlAttributes: new { @class = "form-control" })
+                                @Html.DropDownListFor(Model => Model.DLExport, Enum.GetValues(typeof(EnumData.Export)).Cast<EnumData.Export>().Select(s => new SelectListItem() { Text = s.ToString(), Value = ((byte)s).ToString() }), htmlAttributes: new { @class = "form-control", @disabled = !ShippingSetting ? "disabled" : "" })
+                                <input type="hidden" name="DLExport" value="@Model.DLExport" />
                             </td>
                             <td class="font-bg" width="130">Export Currency</td>
                             <td width="300">
@@ -125,14 +138,16 @@
                             <td class="font-bg" width="130">Tracking</td>
                             <td class="text" width="300">
                                 <span>@(Model.DLTracking ?? "")</span>
-                                @Html.TextBoxFor(Model => Model.DLTracking, htmlAttributes: new { @class = "form-control" })
+                                @Html.TextBoxFor(Model => Model.DLTracking, htmlAttributes: new { @class = "form-control", @disabled = !ShippingSetting ? "disabled" : "" })
+                                <input type="hidden" name="DLTracking" value="@Model.DLTracking" />
                             </td>
                         </tr>
                         <tr>
                             <td class="font-bg">Export Method</td>
                             <td class="text">
                                 <span>@EnumData.ExportMethodList()[Model.DLExportMethod]</span>
-                                @Html.DropDownListFor(Model => Model.DLExportMethod, EnumData.ExportMethodList().Select(s => new SelectListItem() { Text = s.Value, Value = s.Key.ToString() }), htmlAttributes: new { @class = "form-control" })
+                                @Html.DropDownListFor(Model => Model.DLExportMethod, EnumData.ExportMethodList().Select(s => new SelectListItem() { Text = s.Value, Value = s.Key.ToString() }), htmlAttributes: new { @class = "form-control", @disabled = !ShippingSetting ? "disabled" : "" })
+                                <input type="hidden" name="DLExportMethod" value="@Model.DLExportMethod" />
                             </td>
                             <td class="font-bg" width="132">Box ID</td>
                             <td class="text">
@@ -144,7 +159,8 @@
                             <td class="font-bg">Export Value</td>
                             <td class="text">
                                 <span>@Model.DLExportValue</span>
-                                @Html.TextBoxFor(Model => Model.DLExportValue, htmlAttributes: new { @class = "form-control" })
+                                @Html.TextBoxFor(Model => Model.DLExportValue, htmlAttributes: new { @class = "form-control", @disabled = !ShippingSetting ? "disabled" : "" })
+                                <input type="hidden" name="DLExportValue" value="@Model.DLExportValue" />
                             </td>
                             <td class="font-bg">Carrier</td>
                             <td class="text">
@@ -186,7 +202,8 @@
                     <tr data-item="@item.ID">
                         <td class="text">
                             <span><a href="@Url.Action("Edit", "Sku", new { ID = item.Sku })" target="_blank">@item.Sku</a></span>
-                            @Html.TextBox(string.Format("Items[{0}][Sku]", itemIndex), item.Sku, htmlAttributes: new { @class = "form-control" })
+                            @Html.TextBox(string.Format("Items[{0}][Sku]", itemIndex), item.Sku, htmlAttributes: new { @class = "form-control", @disabled = !EditSku ? "disabled" : "" })
+                            <input type="hidden" name="Sku" value="@item.Sku" />
                         </td>
                         <td>
                             @if (eBayOrder)
@@ -215,20 +232,24 @@
                                     }
                                 }
                             }
-                            @Html.TextBox(string.Format("Items[{0}][SerialEdit]", itemIndex), Serial, htmlAttributes: new { @class = "form-control" })
+                            @Html.TextBox(string.Format("Items[{0}][SerialEdit]", itemIndex), Serial, htmlAttributes: new { @class = "form-control", @disabled = !EditSku ? "disabled" : "" })
+                            <input type="hidden" name="SerialEdit" value="@Serial" />
                         </td>
                         <td>@item.UnitPrice</td>
                         <td class="text">
                             <span>@item.ExportValue</span>
-                            @Html.TextBox(string.Format("Items[{0}][ExportValue]", itemIndex), item.ExportValue, htmlAttributes: new { @class = "form-control" })
+                            @Html.TextBox(string.Format("Items[{0}][ExportValue]", itemIndex), item.ExportValue, htmlAttributes: new { @class = "form-control", @disabled = !EditSku ? "disabled" : "" })
+                            <input type="hidden" name="ExportValue" value="@item.ExportValue" />
                         </td>
                         <td class="text">
                             <span>@item.DLExportValue</span>
-                            @Html.TextBox(string.Format("Items[{0}][DLExportValue]", itemIndex), item.DLExportValue, htmlAttributes: new { @class = "form-control" })
+                            @Html.TextBox(string.Format("Items[{0}][DLExportValue]", itemIndex), item.DLExportValue, htmlAttributes: new { @class = "form-control", @disabled = !EditSku ? "disabled" : "" })
+                            <input type="hidden" name="DLExportValue" value="@item.DLExportValue" />
                         </td>
                         <td class="text">
                             <span>@item.Qty</span>
-                            @Html.TextBox(string.Format("Items[{0}][Qty]", itemIndex++), item.Qty, htmlAttributes: new { @class = "form-control" })
+                            @Html.TextBox(string.Format("Items[{0}][Qty]", itemIndex++), item.Qty, htmlAttributes: new { @class = "form-control", @disabled = !EditSku ? "disabled" : "" })
+                            <input type="hidden" name="Qty" value="@item.Qty" />
                         </td>
                         <td>@(item.UnitPrice * item.Qty)</td>
                     </tr>
@@ -236,11 +257,14 @@
             </tbody>
         </table>
         <div class="form-group">
-            @if (Model.ShippingStatus.Equals((byte)EnumData.OrderShippingStatus.未安排) && Model.GetOrder.OrderStatus.Equals((byte)EnumData.OrderStatus.InProcess) && (Model.GetOrder.PaymentStatus.Equals((byte)EnumData.OrderPaymentStatus.Full) || Model.GetOrder.PaymentStatus.Equals((byte)EnumData.OrderPaymentStatus.OverPaid)))
+            @if (MyHelps.CheckPageAuth("OrderEdit", "MarkShipped", Session))
             {
-                <div class="col-sm-12 text-center">
-                    <button type="button" class="btn btn-default btn-lg" onclick="if (confirm('確定要Mark Ship?')) { PackageMarkShip(@Model.ID); }">Mark Ship</button>
-                </div>
+                if (Model.ShippingStatus.Equals((byte)EnumData.OrderShippingStatus.未安排) && Model.GetOrder.OrderStatus.Equals((byte)EnumData.OrderStatus.InProcess) && (Model.GetOrder.PaymentStatus.Equals((byte)EnumData.OrderPaymentStatus.Full) || Model.GetOrder.PaymentStatus.Equals((byte)EnumData.OrderPaymentStatus.OverPaid)))
+                {
+                    <div class="col-sm-12 text-center">
+                        <button type="button" class="btn btn-default btn-lg" onclick="if (confirm('確定要Mark Ship?')) { PackageMarkShip(@Model.ID); }">Mark Ship</button>
+                    </div>
+                }
             }
         </div>
     </div>

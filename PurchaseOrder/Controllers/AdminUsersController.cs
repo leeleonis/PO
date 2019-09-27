@@ -54,10 +54,10 @@ namespace PurchaseOrderSys.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Group,Name,Account,Password")] AdminUser adminUser, Dictionary<string, List<string>> auth)
+        public ActionResult Create([Bind(Include = "Group,Name,Account,Password")] AdminUser adminUser, Dictionary<string, List<string>> auth, List<PageAuth> PageAuth)
         {
-          
-            adminUser.CreateBy = "Test";
+
+            adminUser.CreateBy = Session["AdminName"].ToString();
             adminUser.CreateAt = DateTime.UtcNow;
             ModelState.Remove("CreateBy");
             if (ModelState.IsValid)
@@ -65,6 +65,19 @@ namespace PurchaseOrderSys.Controllers
                 adminUser.Auth = AuthToString(auth);
                 db.AdminUser.Add(adminUser);
                 db.SaveChanges();
+
+                if (PageAuth.Any())
+                {
+                    foreach (var pageUpdate in PageAuth)
+                    {
+                        pageUpdate.AuthGroup = JsonConvert.SerializeObject(pageUpdate.GroupEdit);
+                        pageUpdate.CreateBy = Session["AdminName"].ToString();
+                        pageUpdate.CreateAt = DateTime.UtcNow;
+                        adminUser.PageAuth.Add(pageUpdate);
+                    }
+                    db.SaveChanges();
+                }
+
                 return RedirectToAction("Index");
             }
 
@@ -105,11 +118,11 @@ namespace PurchaseOrderSys.Controllers
 
             if (PageAuth.Any())
             {
-                foreach(var pageUpdate in PageAuth)
+                foreach (var pageUpdate in PageAuth)
                 {
                     pageUpdate.AuthGroup = JsonConvert.SerializeObject(pageUpdate.GroupEdit);
                     var pageData = oadminUser.PageAuth.FirstOrDefault(a => a.ID.Equals(pageUpdate.ID));
-                    if(pageData != null)
+                    if (pageData != null)
                     {
                         SetUpdateData(pageData, pageUpdate, new string[] { "AuthGroup" });
                     }

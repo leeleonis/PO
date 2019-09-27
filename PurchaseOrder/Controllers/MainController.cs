@@ -94,7 +94,7 @@ namespace PurchaseOrderSys.Controllers
             else
             {
                 //IsManger先設為 true
-                return SetSessionData(true, AdminUser.Name, AdminUser.ApiUserName, AdminUser.ApiPassword, AdminUser.ID, AdminUser.Group, 0, AdminUser.TimeZone, AdminUser.Auth, AdminUser.AdminGroup.Auth);
+                return SetSessionData(false, AdminUser.Name, AdminUser.ApiUserName, AdminUser.ApiPassword, AdminUser.ID, AdminUser.Group, 0, AdminUser.TimeZone, AdminUser.Auth, AdminUser.AdminGroup.Auth, AdminUser.PageAuth.ToList());
             }
 
         }
@@ -120,7 +120,7 @@ namespace PurchaseOrderSys.Controllers
         /// <param name="Auth"></param>
         /// <param name="GAuth"></param>
         /// <returns></returns>
-        private bool SetSessionData(bool IsManger, string AdminName, string ApiUserName, string ApiPassword, int AdminId = 0, int GroupId = 0, int WarehouseId = 0, int TimeZone = -1, string Auth = null, string GAuth = null)
+        private bool SetSessionData(bool IsManger, string AdminName, string ApiUserName, string ApiPassword, int AdminId = 0, int GroupId = 0, int WarehouseId = 0, int TimeZone = -1, string Auth = null, string GAuth = null, List<PageAuth> PageAuth = null)
         {
             var Menu = db.Menu.Where(x => x.IsEnable == true).Include(m => m.MenuParent).Include(m=>m.MenuLang);//選單
             var Authlist =new Dictionary<string, List<string>>();//使用者權限
@@ -151,6 +151,7 @@ namespace PurchaseOrderSys.Controllers
             Session.Add("AdminName", AdminName);
             Session.Add("GroupId", GroupId);
             Session.Add("Auth", TAuthlist);
+            Session.Add("PageAuth", PageAuth?.ToDictionary(a => a.Type, a => JsonConvert.DeserializeObject<Dictionary<string, bool>>(a.AuthGroup)));
             Session.Add("ApiUserName", ApiUserName);
             Session.Add("ApiPassword", ApiPassword);
             Session.Add("WarehouseID", WarehouseId);
