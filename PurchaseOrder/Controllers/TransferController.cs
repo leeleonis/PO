@@ -59,7 +59,18 @@ namespace PurchaseOrderSys.Controllers
                 Transferlist = Transferlist.Where(x => x.Tracking == TransferSearchVM.Tracking);
             }
             TransferSearchVM.Transferlist = Transferlist.Take(2000);
-
+            foreach (var item in TransferSearchVM.Transferlist)//修改狀
+            {
+                if (item.Status == "Received" || item.Status == "Shipped")
+                {
+                    if (item.TransferSKU.Where(x => x.IsEnable).Sum(x => x.QTY) == item.TransferSKU.Where(x => x.IsEnable).Sum(x => x.SerialsLlist.Where(y => y.SerialsType == "TransferIn").Sum(y => y.SerialsQTY)))
+                    {
+                        item.Status = "Completed";
+                    }
+                   
+                }
+            }
+            db.SaveChanges();
             return View(TransferSearchVM);
         }
         public ActionResult Create()

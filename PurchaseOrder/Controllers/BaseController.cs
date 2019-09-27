@@ -744,10 +744,10 @@ namespace PurchaseOrderSys.Controllers
                     //移倉入庫
                     var TinQTY = InSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouse.ID && x.TransferSKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0;
                     //移倉已Shipped
-                    var FOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.FromWID == Warehouse.ID && x.TransferSKU.Transfer.TransferType != "Winit" && x.TransferSKU.Transfer.Status == "Shipped" && x.TransferSKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
-                    var WFOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.FromWID == Warehouse.ID && x.TransferSKU.Transfer.TransferType == "Winit" && x.TransferSKU.Transfer.Status == "Shipped" && x.TransferSKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
-                    var TOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouse.ID && x.TransferSKU.Transfer.TransferType != "Winit" && x.TransferSKU.Transfer.Status == "Shipped" && x.TransferSKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
-                    var WTOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouse.ID && x.TransferSKU.Transfer.TransferType == "Winit" && x.TransferSKU.Transfer.Status == "Shipped" && x.TransferSKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
+                    var FOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.FromWID == Warehouse.ID && x.TransferSKU.Transfer.TransferType != "Winit" && (x.TransferSKU.Transfer.Status == "Shipped" || x.TransferSKU.Transfer.Status == "Received") && x.TransferSKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
+                    var WFOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.FromWID == Warehouse.ID && x.TransferSKU.Transfer.TransferType == "Winit" && (x.TransferSKU.Transfer.Status == "Shipped" || x.TransferSKU.Transfer.Status == "Received") && x.TransferSKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
+                    var TOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouse.ID && x.TransferSKU.Transfer.TransferType != "Winit" && (x.TransferSKU.Transfer.Status == "Shipped" || x.TransferSKU.Transfer.Status == "Received") && x.TransferSKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
+                    var WTOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouse.ID && x.TransferSKU.Transfer.TransferType == "Winit" && (x.TransferSKU.Transfer.Status == "Shipped" || x.TransferSKU.Transfer.Status == "Received") && x.TransferSKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
 
                     //移倉未Shipped
                     var UnFOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.FromWID == Warehouse.ID && x.TransferSKU.Transfer.TransferType != "Winit" && x.TransferSKU.Transfer.Status == "Requested" && x.TransferSKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
@@ -756,25 +756,30 @@ namespace PurchaseOrderSys.Controllers
                     var UnWTOutQTY = Math.Abs(OutSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouse.ID && x.TransferSKU.Transfer.TransferType == "Winit" && x.TransferSKU.Transfer.Status == "Requested" && x.TransferSKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
 
                     //待出貨
-                    var Awaiting = Awaitinglist.Where(x=>x.SKU==SKUitem.SkuID).Sum(x => x.QTY);
+                    var Awaiting = Awaitinglist.Where(x => x.SKU == SKUitem.SkuID).Sum(x => x.QTY);
+                    //RMA入庫
                     var RMAINQTY = RMAINSerialsLlist.Where(x => x.WarehouseID == Warehouse.ID && x.RMASKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0;
-                    var FRMAOUTQTY = Math.Abs(RMAOUTSerialsLlist.Where(x => x.TransferSKU.Transfer.FromWID == Warehouse.ID && x.RMASKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
-                    var TRMAOUTQTY = Math.Abs(RMAOUTSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouse.ID && x.RMASKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
-                    var Velocity = Math.Abs(OrderSerialsLlist.Where(x => (x.TransferSKUID.HasValue && x.TransferSKU.SkuNo == SKUitem.SkuID) || (x.PurchaseSKUID.HasValue && x.PurchaseSKU.SkuNo == SKUitem.SkuID)).Sum(x => x.SerialsQTY) ?? 0);
-
+                    //RMA移倉已Shipped
+                    var FRMAOUTQTY = Math.Abs(RMAOUTSerialsLlist.Where(x => x.TransferSKU.Transfer.FromWID == Warehouse.ID && (x.TransferSKU.Transfer.Status == "Shipped" || x.TransferSKU.Transfer.Status == "Received") && x.RMASKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
+                    var TRMAOUTQTY = Math.Abs(RMAOUTSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouse.ID && (x.TransferSKU.Transfer.Status == "Shipped" || x.TransferSKU.Transfer.Status == "Received") && x.RMASKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
+                    //RMA移倉未Shipped
+                    var UnFRMAOUTQTY = Math.Abs(RMAOUTSerialsLlist.Where(x => x.TransferSKU.Transfer.FromWID == Warehouse.ID && x.TransferSKU.Transfer.Status == "Requested" && x.RMASKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
+                    var UnTRMAOUTQTY = Math.Abs(RMAOUTSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouse.ID && x.TransferSKU.Transfer.Status == "Requested" && x.RMASKU.SkuNo == SKUitem.SkuID).Sum(x => x.SerialsQTY) ?? 0);
+                    //30天出貨數量
+                    //var Velocity = Math.Abs(OrderSerialsLlist.Where(x => (x.TransferSKUID.HasValue && x.TransferSKU.SkuNo == SKUitem.SkuID) || (x.PurchaseSKUID.HasValue && x.PurchaseSKU.SkuNo == SKUitem.SkuID)).Sum(x => x.SerialsQTY) ?? 0);
 
                     GroupWarehouseVM.Add(new WarehouseVM
                     {
                         Name = SKUitem.Name,
                         SKU= SKUitem.SkuID,
-                        Aggregate = POQTY + TinQTY + RMAINQTY - Awaiting,
+                        Aggregate = POQTY + TinQTY + RMAINQTY + UnFOutQTY + UnWFOutQTY + UnTOutQTY + UnWTOutQTY + UnFRMAOUTQTY + UnTRMAOUTQTY - Awaiting,
                         Awaiting = Awaiting,
-                        Fulfillable = POQTY + TinQTY + RMAINQTY,
+                        Fulfillable = POQTY + TinQTY + RMAINQTY + UnFOutQTY + UnWFOutQTY + UnTOutQTY + UnWTOutQTY + UnFRMAOUTQTY + UnTRMAOUTQTY,
                         TransferOutQTY = FOutQTY + FRMAOUTQTY,
                         TransferInQTY = TOutQTY + TRMAOUTQTY,
                         WTransferOutQTY = WFOutQTY,
                         WTransferInQTY = WTOutQTY,
-                        Velocity= Velocity,
+                        //TotalVelocity = Velocity,
                         //Aggregate = WarehouseVM.Sum(x => x.Aggregate),
                         //Awaiting = WarehouseVM.Sum(x => x.Awaiting),
                         //Fulfillable = WarehouseVM.Sum(x => x.Fulfillable),
