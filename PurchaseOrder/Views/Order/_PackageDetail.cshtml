@@ -105,7 +105,6 @@
                                 @Html.DropDownListFor(Model => Model.ExportMethod, EnumData.ExportMethodList().Select(s => new SelectListItem() { Text = s.Value, Value = s.Key.ToString() }), htmlAttributes: new { @class = "form-control", @disabled = !ShippingSetting ? "disabled" : "" })
                                 <input type="hidden" name="ExportMethod" value="@Model.ExportMethod" />
                             </td>
-                            </td>
                             <td colspan="2" rowspan="2"></td>
                         </tr>
                         <tr>
@@ -114,7 +113,6 @@
                                 <span>@Model.ExportValue</span>
                                 @Html.TextBoxFor(Model => Model.ExportValue, htmlAttributes: new { @class = "form-control", @disabled = !ShippingSetting ? "disabled" : "" })
                                 <input type="hidden" name="ExportValue" value="@Model.ExportValue" />
-                            </td>
                             </td>
                         </tr>
                     </tbody>
