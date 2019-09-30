@@ -19,6 +19,42 @@ namespace PurchaseOrderSys.Controllers
             var WarehouseInventoryVM = new WarehouseInventoryVM();
             WarehouseInventoryVM.Name = Warehouse.Name;
             WarehouseInventoryVM.WarehouseType = Warehouse.Type;
+            WarehouseInventoryVM.WarehouseVM = Warehouse.inventory.OrderByDescending(x=>x.Fulfillable).Select(x => new WarehouseVM
+            {
+                Name = x.Warehouse.Name,
+                SKU = x.SkuID,
+                Aggregate = x.Aggregate,
+                Awaiting = x.Awaiting,
+                Fulfillable = x.Fulfillable,
+                TransferOutQTY = x.TransferOutQTY,
+                TransferInQTY = x.TransferInQTY,
+                WTransferOutQTY = x.WTransferOutQTY,
+                WTransferInQTY = x.WTransferInQTY,
+                TransferAwaiting = x.UnfulfillableTransit,
+                Velocity = x.TotalVelocity
+            });
+            WarehouseInventoryVM.Fulfillable = WarehouseInventoryVM.WarehouseVM.Sum(x => x.Fulfillable);
+            WarehouseInventoryVM.Awaiting = WarehouseInventoryVM.WarehouseVM.Sum(x => x.Awaiting);
+            WarehouseInventoryVM.Aggregate = WarehouseInventoryVM.WarehouseVM.Sum(x => x.Aggregate);
+            WarehouseInventoryVM.UnfulfillableTransit = WarehouseInventoryVM.WarehouseVM.Sum(x => x.TransferAwaiting);
+            WarehouseInventoryVM.TransferOutQTY = WarehouseInventoryVM.WarehouseVM.Sum(x => x.TransferOutQTY);
+            WarehouseInventoryVM.TransferInQTY = WarehouseInventoryVM.WarehouseVM.Sum(x => x.TransferInQTY);
+            WarehouseInventoryVM.WTransferOutQTY = WarehouseInventoryVM.WarehouseVM.Sum(x => x.WTransferOutQTY);
+            WarehouseInventoryVM.WTransferInQTY = WarehouseInventoryVM.WarehouseVM.Sum(x => x.WTransferInQTY);
+            WarehouseInventoryVM.TotalVelocity = WarehouseInventoryVM.WarehouseVM.Sum(x => x.Velocity);
+            WarehouseInventoryVM.Location = Warehouse.Location;
+            WarehouseInventoryVM.Countries = Warehouse.Countries;
+            WarehouseInventoryVM.Marketplace = Warehouse.Marketplace;
+            WarehouseInventoryVM.Company = Warehouse.Company;
+            return View(WarehouseInventoryVM);
+        }
+        public ActionResult oIndex(int ID, string Product, int? FulfillableMin, int? FulfillableMax)
+        {
+            ViewBag.WarehouseID = ID;
+            var Warehouse = db.Warehouse.Find(ID);
+            var WarehouseInventoryVM = new WarehouseInventoryVM();
+            WarehouseInventoryVM.Name = Warehouse.Name;
+            WarehouseInventoryVM.WarehouseType = Warehouse.Type;
             WarehouseInventoryVM.WarehouseVM = GetWarehouseVMList(Warehouse, Product, FulfillableMin, FulfillableMax);
             WarehouseInventoryVM.Fulfillable = WarehouseInventoryVM.WarehouseVM.Sum(x=>x.Fulfillable);
             WarehouseInventoryVM.Awaiting = WarehouseInventoryVM.WarehouseVM.Sum(x => x.Awaiting);
@@ -36,6 +72,23 @@ namespace PurchaseOrderSys.Controllers
             return View(WarehouseInventoryVM);
         }
         public ActionResult IndexAll()
+        {
+            var WarehouseAllVMList = db.inventory.Include(x => x.Warehouse).GroupBy(x => x.WarehouseID).Select(x => new WarehouseAllVM
+            {
+                ID = x.Key,
+                Name = x.FirstOrDefault().Warehouse.Name,
+                Type = x.FirstOrDefault().Warehouse.Type,
+                Aggregate = x.Sum(y => y.Aggregate),
+                Awaiting = x.Sum(y => y.Awaiting),
+                Fulfillable = x.Sum(y => y.Fulfillable),
+                TransferOutQTY = x.Sum(y => y.TransferOutQTY),
+                TransferInQTY = x.Sum(y => y.TransferInQTY),
+                WTransferOutQTY = x.Sum(y => y.WTransferOutQTY),
+                WTransferInQTY = x.Sum(y => y.WTransferInQTY),
+            });
+            return View(WarehouseAllVMList);
+        }
+        public ActionResult OIndexAll()
         {
             var WarehouseAllVMList = new List<WarehouseAllVM>();
             var WarehouseList = db.Warehouse.Where(x => x.IsEnable).Include(x=>x.WarehouseSummary).ToList();

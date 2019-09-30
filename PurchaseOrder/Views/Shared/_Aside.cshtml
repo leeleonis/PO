@@ -19,7 +19,7 @@
                             if (IsManager || AuthList.Contains(item.MenuID))
                             {
                                 var href = "#";
-                                if (!string.IsNullOrEmpty(item.Controller))
+                                if (!string.IsNullOrEmpty(item.Controller)&& !string.IsNullOrEmpty(item.Action))
                                 {
                                     href = Url.Action(item.Action, item.Controller);
                                 }

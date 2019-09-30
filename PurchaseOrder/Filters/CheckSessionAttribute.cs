@@ -59,10 +59,13 @@ namespace inventorySKU
                         context.Controller.ViewBag.Edit = Authlist.Value.Value.Contains("2");
                         context.Controller.ViewBag.Delete = Authlist.Value.Value.Contains("3");
                         context.Controller.ViewBag.Print = Authlist.Value.Value.Contains("4");
-                        if (!(((actionName == "index"||actionName == "getdata") && Authlist.Value.Value.Contains("0")) || (actionName == "create" && Authlist.Value.Value.Contains("1")) || ((actionName == "edit"|| actionName == "update") && Authlist.Value.Value.Contains("2")) || (actionName == "delete" && Authlist.Value.Value.Contains("3")) || (actionName == "print" && Authlist.Value.Value.Contains("4"))))
+                        if (!(((actionName == "index" || actionName.Contains("get")) && Authlist.Value.Value.Contains("0")) || (actionName.Contains("create") && Authlist.Value.Value.Contains("1")) || ((actionName.Contains("edit") || actionName == "update") && Authlist.Value.Value.Contains("2")) || (actionName == "delete" && Authlist.Value.Value.Contains("3")) || (actionName == "print" && Authlist.Value.Value.Contains("4"))))
                         {
-                            context.Result = new RedirectToRouteResult(new RouteValueDictionary { { "controller", "Main" }, { "action", "Login" }, { "id", UrlParameter.Optional } });
-                            context.Controller.TempData["ErrMsg"] = PurchaseOrderSys.App_GlobalResources.Resource.AttributeErr;
+                            if (!Authlist.Value.Value.Contains("2") || !Authlist.Value.Value.Contains("1"))
+                            {
+                                context.Result = new RedirectToRouteResult(new RouteValueDictionary { { "controller", "Main" }, { "action", "Login" }, { "id", UrlParameter.Optional } });
+                                context.Controller.TempData["ErrMsg"] = PurchaseOrderSys.App_GlobalResources.Resource.AttributeErr;
+                            }
                         }
                     }
                     else
@@ -75,7 +78,7 @@ namespace inventorySKU
                            { "id", UrlParameter.Optional }
                           });
                         context.Controller.TempData["ErrMsg"] = PurchaseOrderSys.App_GlobalResources.Resource.AttributeErr;
-                        //context.Result = new ContentResult { Content = "權限不足" };
+                        context.Result = new ContentResult { Content = "權限不足" };
                     }
                 }
             }

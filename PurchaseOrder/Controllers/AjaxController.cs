@@ -674,7 +674,7 @@ namespace PurchaseOrderSys.Controllers
                 {
                     if (db.SKU.Where(x => x.SkuID == Serialsitem.SkuNo && x.SerialTracking).Any() && string.IsNullOrWhiteSpace(Serialsitem.SerialsNo))
                     {
-                        result.SetError(Serialsitem.SkuNo + "：有序號管理，序號不可空值");
+                        result.SetError("訂單號：" + Serialsitem.OrderID + "; " + Serialsitem.SkuNo + "：有序號管理，序號不可空值");
                         return Json(result, JsonRequestBehavior.AllowGet);
                     }
                     var QTY = 0;
@@ -825,7 +825,7 @@ namespace PurchaseOrderSys.Controllers
                             }
                             else
                             {
-                                result.SetError(Serialsitem.SerialsNo + "：此序號已經出貨");
+                                result.SetError("訂單號：" + Serialsitem.OrderID + "; " + Serialsitem.SerialsNo + "：此序號已經出貨");
                             }
                         }
                     }
@@ -865,12 +865,12 @@ namespace PurchaseOrderSys.Controllers
                         }
                         else
                         {
-                            NoDataList.Add(Serialsitem.OrderID + "：(SKU：" + Serialsitem.SkuNo + ";Serial：無序號產品)");
+                            NoDataList.Add("訂單號：" + Serialsitem.OrderID + "; " + Serialsitem.OrderID + "：(SKU：" + Serialsitem.SkuNo + ";Serial：無序號產品)");
                         }
                     }
                     else
                     {
-                        NoDataList.Add(Serialsitem.OrderID + "：(SKU：" + Serialsitem.SkuNo + ";Serial：" + Serialsitem.SerialsNo + ")");
+                        NoDataList.Add("訂單號：" + Serialsitem.OrderID + "; " + Serialsitem.OrderID + "：(SKU：" + Serialsitem.SkuNo + ";Serial：" + Serialsitem.SerialsNo + ")");
                     }
                 }
             }

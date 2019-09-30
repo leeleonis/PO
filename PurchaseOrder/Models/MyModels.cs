@@ -173,57 +173,66 @@ namespace PurchaseOrderSys.Models
         {
             var modifiedEntities = ChangeTracker.Entries().Where(x => x.State == EntityState.Added || x.State == EntityState.Modified).ToList();
             base.SaveChanges();
-            foreach (var change in modifiedEntities)
+            try
             {
-                var entityName = change.Entity.GetType().FullName;
-
-                if (entityName == "PurchaseOrderSys.Models.SerialsLlist")
+                foreach (var change in modifiedEntities)
                 {
+                    var entityName = change.Entity.GetType().FullName;
 
-                    var edt = DateTime.UtcNow;
-                    var sdt = edt.AddDays(-30);
-                    var ESerialsLlist = ((SerialsLlist)change.Entity);
-                    var SkuNo = ESerialsLlist.PurchaseSKU?.SkuNo ?? ESerialsLlist.TransferSKU.SkuNo;
-                    //var WarehouseList = new List<int?> { ESerialsLlist.PurchaseSKU?.PurchaseOrder.WarehouseID, ESerialsLlist.TransferSKU?.Transfer.ToWID, ESerialsLlist.TransferSKU?.Transfer.FromWID };
-                    //WarehouseList = WarehouseList.Where(x => x.HasValue).ToList();
-                    var dbWarehouse = Warehouse.AsNoTracking().Where(x => x.IsEnable ).Include(x => x.WarehouseSummary).ToList();//&& WarehouseList.Contains(x.ID)
-
-                    var dbAllSKUList = SKU.AsNoTracking().Where(x => x.IsEnable && x.SkuID == SkuNo).Select(x => x.SkuID).ToList();// && x.Status == 1
-
-                    var dbPOSerialsLlist = SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "PO" && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable).Include(x => x.PurchaseSKU).Include(x => x.PurchaseSKU.PurchaseOrder).ToList();
-                    var dbInSerialsLlist = SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferIn" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
-                    var dbOutSerialsLlist = SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferOut" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
-                    var dbRMAINSerialsLlist = RMASerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.RMASerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "RMAIn" && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable).Include(x => x.RMASKU).Include(x => x.RMASKU.RMA).ToList();
-                    var dbRMAOUTSerialsLlist = RMASerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.RMASerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferOut" && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable && !x.TransferSKU.SerialsLlist.Where(y => y.IsEnable && y.SerialsType == "TransferIn").Any()).Include(x => x.RMASKU).Include(x => x.RMASKU.RMA).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
-                    var dbOrderSerialsLlist = SerialsLlist.AsNoTracking().Where(x => x.IsEnable && x.SerialsType == "Order" && x.CreateAt >= sdt && x.CreateAt <= edt).Include(x => x.PurchaseSKU).Include(x => x.PurchaseSKU.PurchaseOrder).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
-                    var threadlist = new List<Thread>();
-                    foreach (var Warehouseitem in dbWarehouse)
+                    if (entityName == "PurchaseOrderSys.Models.SerialsLlist")
                     {
-                        var SCID = Warehouseitem.WarehouseSummary.Where(x => x.Type == "SCID").FirstOrDefault()?.Val;
-                        var dbAwaitinglist = GetAwaitingCount("", SCID);
 
-                        MyThread myThread = new MyThread();
-                        myThread.Warehouseitem = Warehouseitem;
-                        myThread.AllSKUList = dbAllSKUList;
-                        myThread.Awaitinglist = dbAwaitinglist;
-                        myThread.POSerialsLlist = dbPOSerialsLlist;
-                        myThread.InSerialsLlist = dbInSerialsLlist;
-                        myThread.OutSerialsLlist = dbOutSerialsLlist;
-                        myThread.RMAINSerialsLlist = dbRMAINSerialsLlist;
-                        myThread.RMAOUTSerialsLlist = dbRMAOUTSerialsLlist;
-                        myThread.OrderSerialsLlist = dbOrderSerialsLlist;
+                        var edt = DateTime.UtcNow;
+                        var sdt = edt.AddDays(-30);
+                        var ESerialsLlist = ((SerialsLlist)change.Entity);
+                        var SkuNo = ESerialsLlist.PurchaseSKU?.SkuNo ?? ESerialsLlist.TransferSKU.SkuNo;
+                        //var WarehouseList = new List<int?> { ESerialsLlist.PurchaseSKU?.PurchaseOrder.WarehouseID, ESerialsLlist.TransferSKU?.Transfer.ToWID, ESerialsLlist.TransferSKU?.Transfer.FromWID };
+                        //WarehouseList = WarehouseList.Where(x => x.HasValue).ToList();
+                        var dbWarehouse = Warehouse.AsNoTracking().Where(x => x.IsEnable).Include(x => x.WarehouseSummary).ToList();//&& WarehouseList.Contains(x.ID)
+
+                        var dbAllSKUList = SKU.AsNoTracking().Where(x => x.IsEnable && x.SkuID == SkuNo).Select(x => x.SkuID).ToList();// && x.Status == 1
+
+                        var dbPOSerialsLlist = SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "PO" && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable).Include(x => x.PurchaseSKU).Include(x => x.PurchaseSKU.PurchaseOrder).ToList();
+                        var dbInSerialsLlist = SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferIn" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
+                        var dbOutSerialsLlist = SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferOut" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
+                        var dbRMAINSerialsLlist = RMASerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.RMASerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "RMAIn" && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable).Include(x => x.RMASKU).Include(x => x.RMASKU.RMA).ToList();
+                        var dbRMAOUTSerialsLlist = RMASerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.RMASerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferOut" && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable && !x.TransferSKU.SerialsLlist.Where(y => y.IsEnable && y.SerialsType == "TransferIn").Any()).Include(x => x.RMASKU).Include(x => x.RMASKU.RMA).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
+                        var dbOrderSerialsLlist = SerialsLlist.AsNoTracking().Where(x => x.IsEnable && x.SerialsType == "Order" && x.CreateAt >= sdt && x.CreateAt <= edt).Include(x => x.PurchaseSKU).Include(x => x.PurchaseSKU.PurchaseOrder).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
+                        var threadlist = new List<Thread>();
+                        foreach (var Warehouseitem in dbWarehouse)
+                        {
+                            var SCID = Warehouseitem.WarehouseSummary.Where(x => x.Type == "SCID").FirstOrDefault()?.Val;
+                            var dbAwaitinglist = GetAwaitingCount("", SCID);
+
+                            MyThread myThread = new MyThread();
+                            myThread.Warehouseitem = Warehouseitem;
+                            myThread.AllSKUList = dbAllSKUList;
+                            myThread.Awaitinglist = dbAwaitinglist;
+                            myThread.POSerialsLlist = dbPOSerialsLlist;
+                            myThread.InSerialsLlist = dbInSerialsLlist;
+                            myThread.OutSerialsLlist = dbOutSerialsLlist;
+                            myThread.RMAINSerialsLlist = dbRMAINSerialsLlist;
+                            myThread.RMAOUTSerialsLlist = dbRMAOUTSerialsLlist;
+                            myThread.OrderSerialsLlist = dbOrderSerialsLlist;
 
 
-                        Thread thread = new Thread(myThread.ThreadMain);
-                        threadlist.Add(thread);
-                        thread.Start();
+                            Thread thread = new Thread(myThread.ThreadMain);
+                            threadlist.Add(thread);
+                            thread.Start();
+
+                        }
+
 
                     }
 
-
                 }
+            }
+            catch (Exception)
+            {
+
 
             }
+
             return base.SaveChanges();
         }
     }
