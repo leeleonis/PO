@@ -132,7 +132,11 @@
                                                                     <tr>
                                                                         <td>Rush Order：</td>
                                                                         <td class="no-padding">
-                                                                            @Html.DropDownListFor(Model => Model.IsRush, Enum.GetValues(typeof(EnumData.YesNo)).Cast<EnumData.YesNo>().Select(s => new SelectListItem() { Text = s.ToString(), Value = (byte)s == 1 ? bool.TrueString : bool.FalseString }), htmlAttributes: new { @class = "form-control input-sm", @disabled = !MyHelps.CheckPageAuth("OrderEdit", "RushOrder", Session) ? "disabled" : "" })
+                                                                            @{ 
+                                                                                object Enabled = new { @class = "form-control sm" };
+                                                                                object Disabled = new { @class = "form-control sm", @disabled = "" };
+                                                                            }
+                                                                            @Html.DropDownListFor(Model => Model.IsRush, Enum.GetValues(typeof(EnumData.YesNo)).Cast<EnumData.YesNo>().Select(s => new SelectListItem() { Text = s.ToString(), Value = (byte)s == 1 ? bool.TrueString : bool.FalseString }), htmlAttributes: MyHelps.CheckPageAuth("OrderEdit", "RushOrder", Session) ? Enabled : Disabled)
                                                                             <input type="hidden" name="IsRush" value="@Model.IsRush" />
                                                                         </td>
                                                                     </tr>
