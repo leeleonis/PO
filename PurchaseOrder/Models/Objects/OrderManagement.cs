@@ -113,7 +113,7 @@ namespace PurchaseOrderSys.Models
 
                 db.SaveChanges();
 
-                foreach (var item in orderData.Items.Where(i => !order.Items.Select(ii => ii.SCID.Value).Contains(i.SCID.Value)))
+                foreach (var item in orderData.Items.Where(i => !i.SCID.HasValue || !order.Items.Select(ii => ii.SCID.Value).Contains(i.SCID.Value)))
                 {
                     item.IsEnable = false;
                 }

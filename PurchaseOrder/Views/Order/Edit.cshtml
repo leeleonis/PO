@@ -46,7 +46,7 @@
     TimeZoneConvert TimeZoneConvert = new TimeZoneConvert();
 }
 <div id="content">
-    @if (TempData["ErrorMsg"] != null)
+    @if (TempData.ContainsKey("ErrorMsg"))
     {
         <div class="row">
             <div class="col-sm-12">
@@ -132,7 +132,7 @@
                                                                     <tr>
                                                                         <td>Rush Order：</td>
                                                                         <td class="no-padding">
-                                                                            @{ 
+                                                                            @{
                                                                                 object Enabled = new { @class = "form-control sm" };
                                                                                 object Disabled = new { @class = "form-control sm", @disabled = "" };
                                                                             }

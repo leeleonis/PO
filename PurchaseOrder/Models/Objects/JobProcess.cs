@@ -51,7 +51,7 @@ namespace PurchaseOrderSys.Models
                         StatusLog(EnumData.TaskStatus.執行完);
                     }
                 }
-            }, TaskContinuationOptions.ExecuteSynchronously);
+            }, TaskContinuationOptions.None);
         }
 
         internal void AddWord(Func<object, string> work, object data)
@@ -80,13 +80,14 @@ namespace PurchaseOrderSys.Models
                         StatusLog(EnumData.TaskStatus.執行完);
                     }
                 }
-            }, TaskContinuationOptions.ExecuteSynchronously);
+            }, TaskContinuationOptions.None);
         }
 
         internal void AddLog(string description)
         {
-            TaskScheduler.TaskLog.Add(new TaskLog()
+            db.TaskLog.Add(new TaskLog()
             {
+                Scheduler = TaskScheduler.ID,
                 Description = description,
                 CreateBy = AdminName,
                 CreateAt = DateTime.UtcNow
