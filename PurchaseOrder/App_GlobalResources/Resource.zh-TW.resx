@@ -2988,4 +2988,10 @@
   <data name="PageAuth_UpdateAt" xml:space="preserve">
     <value>修改時間</value>
   </data>
+  <data name="Marketplace_DispatchTime" xml:space="preserve">
+    <value>Dispatch Time</value>
+  </data>
+  <data name="Orders_ShippingTime" xml:space="preserve">
+    <value>Shipping Time</value>
+  </data>
 </root>

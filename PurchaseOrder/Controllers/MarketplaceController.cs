@@ -14,7 +14,7 @@ namespace PurchaseOrderSys.Controllers
     [CheckSession]
     public class MarketplaceController : BaseController
     {
-        private string[] EditList = new string[] { "FullName", "GlobalID", "CountryCode", "CompanyID", "CurrencyID", "NetoGroup" };
+        private string[] EditList = new string[] { "FullName", "GlobalID", "CountryCode", "CompanyID", "CurrencyID", "NetoGroup", "DispatchTime" };
         // GET: Marketplace
         public ActionResult Index()
         {
@@ -50,7 +50,7 @@ namespace PurchaseOrderSys.Controllers
         // 詳細資訊，請參閱 https://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IsEnable,ID,FullName,GlobalID,CountryCode,CompanyID,CurrencyID,NetoGroup")] Marketplace marketplace)
+        public ActionResult Create([Bind(Include = "IsEnable,ID,FullName,GlobalID,CountryCode,CompanyID,CurrencyID,NetoGroup,DispatchTime")] Marketplace marketplace)
         {
             marketplace.CreateAt = DateTime.UtcNow;
             marketplace.CreateBy = Session["AdminName"].ToString();
@@ -79,7 +79,7 @@ namespace PurchaseOrderSys.Controllers
         // 詳細資訊，請參閱 https://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,FullName,GlobalID,CountryCode,CompanyID,CurrencyID,NetoGroup")] Marketplace updateData)
+        public ActionResult Edit([Bind(Include = "ID,FullName,GlobalID,CountryCode,CompanyID,CurrencyID,NetoGroup,DispatchTime")] Marketplace updateData)
         {
             Marketplace marketplace = db.Marketplace.Find(updateData.ID);
             if (marketplace == null) return HttpNotFound();
@@ -132,6 +132,7 @@ namespace PurchaseOrderSys.Controllers
             if (filter.CompanyID.HasValue) MarketplaceFilter = MarketplaceFilter.Where(m => m.CompanyID.Value.Equals(filter.CompanyID.Value));
             if (filter.CurrencyID.HasValue) MarketplaceFilter = MarketplaceFilter.Where(m => m.CurrencyID.Value.Equals(filter.CurrencyID.Value));
             if (filter.NetoGroup.HasValue) MarketplaceFilter = MarketplaceFilter.Where(m => m.NetoGroup.Value.Equals(filter.NetoGroup.Value));
+            if (filter.DispatchTime.HasValue) MarketplaceFilter = MarketplaceFilter.Where(m => m.DispatchTime.Equals(filter.DispatchTime.Value));
 
             if (MarketplaceFilter.Any())
             {
@@ -148,7 +149,8 @@ namespace PurchaseOrderSys.Controllers
                     m.CountryCode,
                     m.CompanyID,
                     m.CurrencyID,
-                    m.NetoGroup
+                    m.NetoGroup,
+                    m.DispatchTime
                 }).ToList());
             }
 

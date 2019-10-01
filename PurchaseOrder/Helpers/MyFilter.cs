@@ -129,6 +129,7 @@ namespace PurchaseOrderSys
         public Nullable<int> CompanyID { get; set; }
         public Nullable<int> CurrencyID { get; set; }
         public Nullable<int> NetoGroup { get; set; }
+        public Nullable<int> DispatchTime { get; set; }
     }
 
     public class BoxTypeFilter

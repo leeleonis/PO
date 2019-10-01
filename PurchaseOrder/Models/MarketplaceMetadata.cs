@@ -1,11 +1,12 @@
-using System;
+using System; 
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// Marketplace class
     /// </summary>
@@ -85,6 +86,14 @@ namespace PurchaseOrderSys.Models
     		/// </summary>        
     	    [Display(Name = "Marketplace_Status", ResourceType = typeof(App_GlobalResources.Resource))]
     		public Nullable<bool>  Status { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Dispatch Time
+    		/// </summary>        
+    	    [Display(Name = "Marketplace_DispatchTime", ResourceType = typeof(App_GlobalResources.Resource))]
+            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public int  DispatchTime { get; set; }
     
     		    
     		/// <summary>

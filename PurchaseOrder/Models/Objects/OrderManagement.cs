@@ -44,14 +44,16 @@ namespace PurchaseOrderSys.Models
                 order.FulfilledDate = order.FulfilledDate.HasValue && !order.FulfilledDate.Equals(DateTime.MinValue) ? order.FulfilledDate : null;
                 order.RMAID = orderData?.RMAID ?? db.RMA.FirstOrDefault(r => r.SCRMA.Equals(order.RMAID.ToString()))?.ID;
 
+                var orderUpdateList = new string[] { "IsRush", "RMAID", "OrderStatus", "PaymentStatus", "PaymentDate", "FulfillmentStatus", "FulfilledDate", "ShippingTime", "Comment" };
                 if (orderData != null)
                 {
-                    SetUpdateData(orderData, order, new string[] { "IsRush", "RMAID", "OrderStatus", "PaymentStatus", "PaymentDate", "FulfillmentStatus", "FulfilledDate", "Comment" });
+                    SetUpdateData(orderData, order, orderUpdateList);
                 }
                 else
                 {
                     orderData = new Orders() { CreateBy = AdminName, CreateAt = UtcNow };
-                    SetUpdateData(orderData, order, new string[] { "IsRush", "OrderParent", "OrderSourceID", "SCID", "RMAID", "CustomerID", "CustomerEmail", "OrderStatus", "OrderDate", "PaymentStatus", "PaymentDate", "FulfillmentStatus", "FulfilledDate", "BuyerNote", "Comment" });
+                    orderUpdateList = orderUpdateList.Concat(new string[] { "OrderParent", "OrderSourceID", "SCID", "CustomerID", "CustomerEmail", "OrderDate", "BuyerNote" }).ToArray();
+                    SetUpdateData(orderData, order, orderUpdateList);
                     orderData.Company = db.Company.AsNoTracking().First(c => c.CompanySCID.Value.Equals(order.Company)).ID;
                     orderData.Channel = EnumData.OrderChannelList().First(c => c.Value.Equals(EnumData.OrderChannelList(true)[order.Channel])).Key;
                     db.Orders.Add(orderData);

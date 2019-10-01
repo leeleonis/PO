@@ -2727,6 +2727,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         /// <summary>
         ///   查詢類似  的當地語系化字串。
         /// </summary>
+        public static string Marketplace_DispatchTime {
+            get {
+                return ResourceManager.GetString("Marketplace_DispatchTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
         public static string Marketplace_FullName {
             get {
                 return ResourceManager.GetString("Marketplace_FullName", resourceCulture);
@@ -3549,6 +3558,15 @@ namespace PurchaseOrderSys.App_GlobalResources {
         public static string Orders_SCID {
             get {
                 return ResourceManager.GetString("Orders_SCID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似  的當地語系化字串。
+        /// </summary>
+        public static string Orders_ShippingTime {
+            get {
+                return ResourceManager.GetString("Orders_ShippingTime", resourceCulture);
             }
         }
         

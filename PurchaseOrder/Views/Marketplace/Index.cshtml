@@ -94,6 +94,11 @@
                         return website.IsEmpty(row.IsFilter) ? datagrid.setDropdown(row.ID, this.field, selectOption['NetoGroup'], value.toString()) : value;
                     }
                 }, {
+                    field: "DispatchTime", title: "@Html.DisplayNameFor(model => model.DispatchTime)", width: 100, align: "center", sortable: false,
+                    formatter: function (value, row, index) {
+                        return website.IsEmpty(row.IsFilter) ? datagrid.setInputText(row.ID, this.field, value) : value;
+                    }
+                }, {
                     field: "Save", title: "Save", width: 90, align: "center", sortable: false,
                     formatter: function (value, row, index) {
                         if (website.IsEmpty(row.IsFilter)) {
@@ -133,7 +138,8 @@
                 CountryCode: $('.filterColumn .s-countryCode').val(),
                 CompanyID: $('.filterColumn .s-companyID').val(),
                 CurrencyID: $('.filterColumn .s-currencyID').val(),
-                NetoGroup: $('.filterColumn .s-netoGroup').val()
+                NetoGroup: $('.filterColumn .s-netoGroup').val(),
+                DispatchTime: $('.filterColumn .s-dispatchTime').val()
             };
         }
 
@@ -147,6 +153,7 @@
                 CompanyID: "<input type='text' class='form-control s-companyID' value='" + (!website.IsEmpty(filterValue['CompanyID']) ? filterValue['CompanyID'] : '') + "'>",
                 CurrencyID: "<input type='text' class='form-control s-currencyID' value='" + (!website.IsEmpty(filterValue['CurrencyID']) ? filterValue['CurrencyID'] : '') + "'>",
                 NetoGroup: "<input type='text' class='form-control s-netoGroup' value='" + (!website.IsEmpty(filterValue['NetoGroup']) ? filterValue['NetoGroup'] : '') + "'>",
+                DispatchTime: "<input type='text' class='form-control s-dispatchTime' value='" + (!website.IsEmpty(filterValue['DispatchTime']) ? filterValue['DispatchTime'] : '') + "'>",
                 Save: "<button type='button' class='btn btn-default btn-sm' onclick='SaveData()'>SAVE ALL</button>"
             };
         }
@@ -202,6 +209,7 @@
                 CompanyID: $("select#CompanyID:eq(" + index + ")").val(),
                 CurrencyID: $("select#CurrencyID:eq(" + index + ")").val(),
                 NetoGroup: $("select#NetoGroup:eq(" + index + ")").val(),
+                DispatchTime: $("input#DispatchTime:eq(" + index + ")").val(),
                 Status: row.Status
             }
         }

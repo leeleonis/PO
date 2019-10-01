@@ -2406,6 +2406,24 @@ namespace PurchaseOrderSys.Controllers
             var EdtimeE = "結束" + sw.ElapsedMilliseconds;
             return Json(new { QuytimeS, QuytimeE, deltimeS, deltimeE, SatimeS, SatimeE, EdtimeE }, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult GetOrderSummary(int OrderID)
+        {
+            AjaxResult result = new AjaxResult();
+
+            var order = db.Orders.FirstOrDefault(o => o.IsEnable && (o.ID.Equals(OrderID) || (o.SCID.HasValue && o.SCID.Value.Equals(OrderID))));
+
+            try
+            {
+                if (order == null) throw new Exception("Not found order!");
+
+            }catch(Exception ex)
+            {
+                result.SetError(ex.InnerException?.Message ?? ex.Message);
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
     }
     public class DropshpOrderBySC
     {

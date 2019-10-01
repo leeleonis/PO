@@ -44,6 +44,7 @@ namespace PurchaseOrderSys.Models
         public Nullable<System.DateTime> PaymentDate { get; set; }
         public byte FulfillmentStatus { get; set; }
         public Nullable<System.DateTime> FulfilledDate { get; set; }
+        public int ShippingTime { get; set; }
         public string BuyerNote { get; set; }
         public string Comment { get; set; }
         public string UpdateBy { get; set; }
