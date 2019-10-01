@@ -55,7 +55,8 @@ namespace PurchaseOrderSys.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Name")] AdminGroup adminGroup, Dictionary<string, List<string>> auth)
         {
-            adminGroup.CreateBy = "Test";
+            adminGroup.IsEnable = true;
+            adminGroup.CreateBy = Session["AdminName"].ToString();
             adminGroup.CreateAt = DateTime.UtcNow;
             ModelState.Remove("CreateBy");
             adminGroup.Auth = AuthToString(auth);

@@ -23,7 +23,7 @@ namespace PurchaseOrderSys.Controllers
         // GET: AdminUsers
         public ActionResult Index()
         {
-            var adminUser = db.AdminUser.Include(a => a.AdminGroup);
+            var adminUser = db.AdminUser.Where(x=>x.IsEnable).Include(a => a.AdminGroup);
             return View(adminUser.ToList());
         }
 
@@ -56,12 +56,14 @@ namespace PurchaseOrderSys.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Group,Name,Account,Password")] AdminUser adminUser, Dictionary<string, List<string>> auth, List<PageAuth> PageAuth)
         {
-
+            adminUser.IsEnable = true;
             adminUser.CreateBy = Session["AdminName"].ToString();
             adminUser.CreateAt = DateTime.UtcNow;
-            ModelState.Remove("CreateBy");
-            if (ModelState.IsValid)
-            {
+            //ModelState.Remove("CreateBy");
+            //if (ModelState.IsValid)
+            //{
+
+            //}
                 adminUser.Auth = AuthToString(auth);
                 db.AdminUser.Add(adminUser);
                 db.SaveChanges();
@@ -79,10 +81,8 @@ namespace PurchaseOrderSys.Controllers
                 }
 
                 return RedirectToAction("Index");
-            }
-
-            ViewBag.Group = new SelectList(db.AdminGroup, "ID", "Name", adminUser.Group);
-            return View(adminUser);
+            //ViewBag.Group = new SelectList(db.AdminGroup, "ID", "Name", adminUser.Group);
+            //return View(adminUser);
         }
 
         // GET: AdminUsers/Edit/5
@@ -97,7 +97,7 @@ namespace PurchaseOrderSys.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.Group = new SelectList(db.AdminGroup, "ID", "Name", adminUser.Group);
+            ViewBag.GroupList = db.AdminGroup.Select(x => new SelectListItem { Text = x.Name, Value = x.ID.ToString() });
             return View(adminUser);
         }
 
@@ -144,16 +144,22 @@ namespace PurchaseOrderSys.Controllers
         // GET: AdminUsers/Delete/5
         public ActionResult Delete(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            AdminUser adminUser = db.AdminUser.Find(id);
-            if (adminUser == null)
-            {
-                return HttpNotFound();
-            }
-            return View(adminUser);
+            var oadminUser = db.AdminUser.Find(id);
+            oadminUser.IsEnable = false;
+            oadminUser.UpdateAt = DateTime.UtcNow;
+            oadminUser.UpdateBy = Session["AdminName"].ToString();
+            db.SaveChanges();
+            return RedirectToAction("Index");
+            //if (id == null)
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
+            //AdminUser adminUser = db.AdminUser.Find(id);
+            //if (adminUser == null)
+            //{
+            //    return HttpNotFound();
+            //}
+            //return View(adminUser);
         }
 
         // POST: AdminUsers/Delete/5

@@ -7128,6 +7128,7 @@
     <Content Include="Scripts\jquery-3.1.0.slim.min.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.min.js" />
+    <Content Include="Scripts\jquery.blockUI.js" />
     <Content Include="Scripts\jquery.easyui-1.4.3.js" />
     <Content Include="Scripts\jquery.easyui-1.4.3.min.js" />
     <Content Include="Scripts\jquery.easyui.mobile-1.4.3.js" />
@@ -7786,6 +7787,7 @@
     <Content Include="Views\JobProcess\Index.cshtml" />
     <Content Include="Views\JobProcess\_TaskLog.cshtml" />
     <Content Include="Views\TransferWinit\GetBoxSerialList.cshtml" />
+    <Content Include="Views\Main\PasswordChange.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

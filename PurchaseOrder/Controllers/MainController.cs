@@ -44,6 +44,19 @@ namespace PurchaseOrderSys.Controllers
 
             return View();
         }
+        public ActionResult PasswordChange()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult PasswordChange(string Password)
+        {
+            var AdminId = (int)Session["AdminId"];
+            var AdminUser = db.AdminUser.Find(AdminId);
+            AdminUser.Password = Password;
+            db.SaveChanges();
+            return View();
+        }
         //登入
         public ActionResult Login()
         {
@@ -82,7 +95,6 @@ namespace PurchaseOrderSys.Controllers
         {
             if (Account == "weypro" && Password == "weypro12ab")
             {
-
                 return SetSessionData(true, "QDAdmin", ApiUserName, ApiPassword);
             }
 

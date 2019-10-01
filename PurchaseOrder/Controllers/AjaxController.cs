@@ -2262,14 +2262,15 @@ namespace PurchaseOrderSys.Controllers
         [AllowAnonymous]
         public ActionResult WarehouseInventory()
         {
+            AjaxResult result = new AjaxResult();
             var edt = DateTime.UtcNow;
             var sdt = edt.AddDays(-30);
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             sw.Reset();
             sw.Start();
             var QuytimeS = "開始查詢：" + sw.ElapsedMilliseconds;
-            var Warehouse = db.Warehouse.AsNoTracking().Where(x => x.IsEnable).Include(x=>x.WarehouseSummary).ToList();
-            var AllSKUList = db.SKU.AsNoTracking().Where(x => x.IsEnable).Select(x => x.SkuID).ToList();// && x.Status == 1
+            var Warehouse = db.Warehouse.AsNoTracking().Where(x => x.IsEnable).Include(x => x.WarehouseSummary).ToList();
+            var AllSKUList = db.SKU.AsNoTracking().Where(x => x.IsEnable && x.Status == 1).Select(x => x.SkuID).ToList();//
             var POSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "PO" && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable).Include(x => x.PurchaseSKU).Include(x => x.PurchaseSKU.PurchaseOrder).ToList();
             var InSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferIn" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
             var OutSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferOut" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
@@ -2281,7 +2282,6 @@ namespace PurchaseOrderSys.Controllers
             {
                 var SCID = Warehouseitem.WarehouseSummary.Where(x => x.Type == "SCID").FirstOrDefault()?.Val;
                 var Awaitinglist = GetAwaitingCount("", SCID);
-
                 MyThread myThread = new MyThread();
                 myThread.Warehouseitem = Warehouseitem;
                 myThread.AllSKUList = AllSKUList;
@@ -2292,16 +2292,13 @@ namespace PurchaseOrderSys.Controllers
                 myThread.RMAINSerialsLlist = RMAINSerialsLlist;
                 myThread.RMAOUTSerialsLlist = RMAOUTSerialsLlist;
                 myThread.OrderSerialsLlist = OrderSerialsLlist;
-
-
                 Thread thread = new Thread(myThread.ThreadMain);
                 threadlist.Add(thread);
                 thread.Start();
-
             }
             sw.Stop();
             var EdtimeE = "結束" + sw.ElapsedMilliseconds;
-            return Json(new { QuytimeS , EdtimeE }, JsonRequestBehavior.AllowGet);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
         [AllowAnonymous]
         public ActionResult oWarehouseInventory()

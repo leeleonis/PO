@@ -34,6 +34,11 @@
                                 <div class="tab-pane" id="hb1">
                                     <fieldset>
                                         <legend></legend>
+                                        <div class="form-group">
+                                            <div class="col-sm-9  col-lg-offset-10">
+                                                <a class='btn btn-primary btn-sm' id='Refresh'>Refresh </a>
+                                            </div>
+                                        </div>
                                         <div class="row">
                                             <article class="col-xs-12">
                                                 <table id="DataGrid" class="table table-striped table-bordered">
@@ -55,19 +60,19 @@
                                                         {
                                                             foreach (var item in Model)
                                                             {
-                                                        <tr>
-                                                            <td  align='center' valign="middle">@item.ID</td>
-                                                            <td  align='center' valign="middle">@item.Name</td>
-                                                            <td  align='center' valign="middle">@item.Type</td>
-                                                            <td  align='center' valign="middle">@item.Fulfillable</td>
-                                                            <td  align='center' valign="middle">@item.Awaiting</td>
-                                                            <td  align='center' valign="middle">@item.TransferOutQTY / @item.TransferInQTY</td>
-                                                            <td  align='center' valign="middle">@item.WTransferOutQTY / @item.WTransferInQTY</td>
-                                                            <td  align='center' valign="middle">@item.Aggregate</td>
-                                                            <td  align='center' valign="middle">
-                                                                <a class='btn btn-default btn-sm' id='index' href='@Url.Action("index", "WarehouseInventory", new { item.ID })'>SKU</a>
-                                                            </td>
-                                                        </tr>
+                                                                <tr>
+                                                                    <td align='center' valign="middle">@item.ID</td>
+                                                                    <td align='center' valign="middle">@item.Name</td>
+                                                                    <td align='center' valign="middle">@item.Type</td>
+                                                                    <td align='center' valign="middle">@item.Fulfillable</td>
+                                                                    <td align='center' valign="middle">@item.Awaiting</td>
+                                                                    <td align='center' valign="middle">@item.TransferOutQTY / @item.TransferInQTY</td>
+                                                                    <td align='center' valign="middle">@item.WTransferOutQTY / @item.WTransferInQTY</td>
+                                                                    <td align='center' valign="middle">@item.Aggregate</td>
+                                                                    <td align='center' valign="middle">
+                                                                        <a class='btn btn-default btn-sm' id='index' href='@Url.Action("index", "WarehouseInventory", new { item.ID })'>SKU</a>
+                                                                    </td>
+                                                                </tr>
                                                             }
                                                         }
                                                     </tbody>
@@ -85,6 +90,7 @@
     </section>
 </div>
 @section pagespecific {
+    <script src="~/Scripts/jquery.blockUI.js"></script>
     <script type="text/javascript">
         var hash = window.location.hash;
         $('ul.nav-tabs li').eq(hash.substr(1)).addClass('active');
@@ -94,7 +100,30 @@
         //    dateFormat: 'yy-mm-dd'
         //});
         $(document).ready(function () {
-            $('#DataGrid').DataTable();
+            $('#DataGrid').DataTable({
+                "pageLength": 50,
+            });
+            $("#Refresh").click(function () {
+                if (confirm("Update inventory may take over 20 minutes to finish. Do you wish to continue?")) {
+                    $.ajax({
+                        url: '@Url.Action("WarehouseInventory", "Ajax")',
+                        beforeSend: function (XMLHttpRequest) {
+                            $.blockUI({
+                                message: '<h1>loading...</h1>'
+                            });
+                        },
+                        success: function (data) {
+                            window.location.reload();
+                        },
+                        complete: function (XMLHttpRequest, textStatus) {
+
+                        },
+                        error: function (XMLHttpRequest, textStatus) {
+
+                        }
+                    });
+                }
+            });
         });
     </script>
 }

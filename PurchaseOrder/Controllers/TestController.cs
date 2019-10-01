@@ -1042,10 +1042,34 @@ namespace PurchaseOrderSys.Controllers
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult DelTransferWinit(int id)
+        {
+            var Transfer = db.Transfer.Find(id);
+            if (Transfer.WinitTransfer != null)
+            {
+                foreach (var item in Transfer.WinitTransfer?.WinitTransferBox?.ToList())
+                {
+                    db.WinitTransferBoxItem.RemoveRange(item.WinitTransferBoxItem.ToList());
+                    db.WinitTransferBox.Remove(item);
+                }
+                db.WinitTransferSKU.RemoveRange(Transfer.WinitTransfer.WinitTransferSKU.ToList());
+                db.WinitTransfer.Remove(Transfer.WinitTransfer);
+            }
+
+
+            foreach (var TransferSKUitem in Transfer.TransferSKU.ToList())
+            {
+                db.SerialsLlist.RemoveRange(TransferSKUitem.SerialsLlist.ToList());
+                db.TransferSKU.Remove(TransferSKUitem);
+            }
+            db.Transfer.Remove(Transfer);
+            //db.SaveChanges();
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
         public ActionResult SerialsLlistReset()
         {
-            var SerialsLlist = db.SerialsLlist.Where(x => x.PID.HasValue && x.SerialsNo != x.SerialsLlistP.SerialsNo).ToList();
-            foreach (var item in SerialsLlist)
+            var SerialsLlist = db.SerialsLlist.Where(x => x.PID.HasValue && x.SerialsNo != x.SerialsLlistP.SerialsNo);
+            foreach (var item in SerialsLlist.ToList())
             {
                 item.PID = null;
                 db.SaveChanges();
