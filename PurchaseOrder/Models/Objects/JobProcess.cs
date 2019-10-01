@@ -29,7 +29,8 @@ namespace PurchaseOrderSys.Models
         {
             StatusLog(EnumData.TaskStatus.執行中);
 
-            Task = System.Threading.Tasks.Task.Factory.StartNew(work);
+            Task = new Task<string>(work);
+
             Task.ContinueWith((Task) =>
             {
                 if (Task.IsFaulted)
@@ -52,13 +53,15 @@ namespace PurchaseOrderSys.Models
                     }
                 }
             }, TaskContinuationOptions.None);
+
+            Task.Start();
         }
 
         internal void AddWord(Func<object, string> work, object data)
         {
             StatusLog(EnumData.TaskStatus.執行中);
 
-            Task = System.Threading.Tasks.Task.Factory.StartNew(work, data);
+            Task = new Task<string>(work, data);
             Task.ContinueWith((Task) =>
             {
                 if (Task.IsFaulted)
@@ -81,6 +84,8 @@ namespace PurchaseOrderSys.Models
                     }
                 }
             }, TaskContinuationOptions.None);
+
+            Task.Start();
         }
 
         internal void AddLog(string description)
