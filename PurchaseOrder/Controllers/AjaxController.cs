@@ -1308,7 +1308,7 @@ namespace PurchaseOrderSys.Controllers
                                                 }
                                                 else
                                                 {
-                                                    if (Serial.PurchaseSKUID.HasValue&& Serial.PurchaseSKU.SkuNo == nTransferSKU.SkuNo)
+                                                    if (Serial.PurchaseSKUID.HasValue && Serial.PurchaseSKU.SkuNo == nTransferSKU.SkuNo)
                                                     {
                                                         var nSerialsLlist = new SerialsLlist
                                                         {
@@ -2176,7 +2176,7 @@ namespace PurchaseOrderSys.Controllers
             public Models.Warehouse Warehouseitem { set; get; }
             public List<string> AllSKUList { set; get; }
             public List<AwaitingDispatchVM> Awaitinglist { set; get; }
-            public List<SerialsLlist> POSerialsLlist { get;  set; }
+            public List<SerialsLlist> POSerialsLlist { get; set; }
             public List<SerialsLlist> InSerialsLlist { get; internal set; }
             public List<SerialsLlist> OutSerialsLlist { get; internal set; }
             public List<RMASerialsLlist> RMAINSerialsLlist { get; internal set; }
@@ -2268,7 +2268,7 @@ namespace PurchaseOrderSys.Controllers
             sw.Reset();
             sw.Start();
             var QuytimeS = "開始查詢：" + sw.ElapsedMilliseconds;
-            var Warehouse = db.Warehouse.AsNoTracking().Where(x => x.IsEnable).Include(x=>x.WarehouseSummary).ToList();
+            var Warehouse = db.Warehouse.AsNoTracking().Where(x => x.IsEnable).Include(x => x.WarehouseSummary).ToList();
             var AllSKUList = db.SKU.AsNoTracking().Where(x => x.IsEnable).Select(x => x.SkuID).ToList();// && x.Status == 1
             var POSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "PO" && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable).Include(x => x.PurchaseSKU).Include(x => x.PurchaseSKU.PurchaseOrder).ToList();
             var InSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferIn" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
@@ -2301,7 +2301,7 @@ namespace PurchaseOrderSys.Controllers
             }
             sw.Stop();
             var EdtimeE = "結束" + sw.ElapsedMilliseconds;
-            return Json(new { QuytimeS , EdtimeE }, JsonRequestBehavior.AllowGet);
+            return Json(new { QuytimeS, EdtimeE }, JsonRequestBehavior.AllowGet);
         }
         [AllowAnonymous]
         public ActionResult oWarehouseInventory()
@@ -2321,7 +2321,7 @@ namespace PurchaseOrderSys.Controllers
                 dbW.Configuration.LazyLoadingEnabled = false;
                 dbW.Configuration.ProxyCreationEnabled = false;
                 var Warehouse = dbW.Warehouse.Where(x => x.IsEnable).ToList();
-                var AllSKUList = dbW.SKU.AsNoTracking().Where(x => x.IsEnable).Select(x =>  x.SkuID).Distinct().ToList();// && x.Status == 1
+                var AllSKUList = dbW.SKU.AsNoTracking().Where(x => x.IsEnable).Select(x => x.SkuID).Distinct().ToList();// && x.Status == 1
                 QuytimeS = "開始查詢：" + sw.ElapsedMilliseconds;
                 var edt = DateTime.UtcNow;
                 var sdt = edt.AddDays(-30);
@@ -2417,7 +2417,31 @@ namespace PurchaseOrderSys.Controllers
             {
                 if (order == null) throw new Exception("Not found order!");
 
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
+            {
+                result.SetError(ex.InnerException?.Message ?? ex.Message);
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult SyncOrderData(int OrderID)
+        {
+            AjaxResult result = new AjaxResult();
+
+            try
+            {
+                using (var OM = new OrderManagement(OrderID))
+                {
+                    var order = OM.OrderSync(OrderID);
+                    if (order.CreateAt.CompareTo(order.UpdateAt.Value) == 0)
+                    {
+                        OM.ActionLog("Order", "Sync Data");
+                    }
+                }
+            }
+            catch (Exception ex)
             {
                 result.SetError(ex.InnerException?.Message ?? ex.Message);
             }
