@@ -1308,7 +1308,7 @@ namespace PurchaseOrderSys.Controllers
                                                 }
                                                 else
                                                 {
-                                                    if (Serial.PurchaseSKUID.HasValue&& Serial.PurchaseSKU.SkuNo == nTransferSKU.SkuNo)
+                                                    if (Serial.PurchaseSKUID.HasValue && Serial.PurchaseSKU.SkuNo == nTransferSKU.SkuNo)
                                                     {
                                                         var nSerialsLlist = new SerialsLlist
                                                         {
@@ -2176,7 +2176,7 @@ namespace PurchaseOrderSys.Controllers
             public Models.Warehouse Warehouseitem { set; get; }
             public List<string> AllSKUList { set; get; }
             public List<AwaitingDispatchVM> Awaitinglist { set; get; }
-            public List<SerialsLlist> POSerialsLlist { get;  set; }
+            public List<SerialsLlist> POSerialsLlist { get; set; }
             public List<SerialsLlist> InSerialsLlist { get; internal set; }
             public List<SerialsLlist> OutSerialsLlist { get; internal set; }
             public List<RMASerialsLlist> RMAINSerialsLlist { get; internal set; }
@@ -2282,6 +2282,7 @@ namespace PurchaseOrderSys.Controllers
             {
                 var SCID = Warehouseitem.WarehouseSummary.Where(x => x.Type == "SCID").FirstOrDefault()?.Val;
                 var Awaitinglist = GetAwaitingCount("", SCID);
+
                 MyThread myThread = new MyThread();
                 myThread.Warehouseitem = Warehouseitem;
                 myThread.AllSKUList = AllSKUList;
@@ -2292,9 +2293,12 @@ namespace PurchaseOrderSys.Controllers
                 myThread.RMAINSerialsLlist = RMAINSerialsLlist;
                 myThread.RMAOUTSerialsLlist = RMAOUTSerialsLlist;
                 myThread.OrderSerialsLlist = OrderSerialsLlist;
+
+
                 Thread thread = new Thread(myThread.ThreadMain);
                 threadlist.Add(thread);
                 thread.Start();
+
             }
             sw.Stop();
             var EdtimeE = "結束" + sw.ElapsedMilliseconds;
@@ -2318,7 +2322,7 @@ namespace PurchaseOrderSys.Controllers
                 dbW.Configuration.LazyLoadingEnabled = false;
                 dbW.Configuration.ProxyCreationEnabled = false;
                 var Warehouse = dbW.Warehouse.Where(x => x.IsEnable).ToList();
-                var AllSKUList = dbW.SKU.AsNoTracking().Where(x => x.IsEnable).Select(x =>  x.SkuID).Distinct().ToList();// && x.Status == 1
+                var AllSKUList = dbW.SKU.AsNoTracking().Where(x => x.IsEnable).Select(x => x.SkuID).Distinct().ToList();// && x.Status == 1
                 QuytimeS = "開始查詢：" + sw.ElapsedMilliseconds;
                 var edt = DateTime.UtcNow;
                 var sdt = edt.AddDays(-30);
@@ -2402,6 +2406,48 @@ namespace PurchaseOrderSys.Controllers
             sw.Stop();
             var EdtimeE = "結束" + sw.ElapsedMilliseconds;
             return Json(new { QuytimeS, QuytimeE, deltimeS, deltimeE, SatimeS, SatimeE, EdtimeE }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetOrderSummary(int OrderID)
+        {
+            AjaxResult result = new AjaxResult();
+
+            var order = db.Orders.FirstOrDefault(o => o.IsEnable && (o.ID.Equals(OrderID) || (o.SCID.HasValue && o.SCID.Value.Equals(OrderID))));
+
+            try
+            {
+                if (order == null) throw new Exception("Not found order!");
+
+            }
+            catch (Exception ex)
+            {
+                result.SetError(ex.InnerException?.Message ?? ex.Message);
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult SyncOrderData(int OrderID)
+        {
+            AjaxResult result = new AjaxResult();
+
+            try
+            {
+                using (var OM = new OrderManagement(OrderID))
+                {
+                    var order = OM.OrderSync(OrderID);
+                    if (order.CreateAt.CompareTo(order.UpdateAt.Value) == 0)
+                    {
+                        OM.ActionLog("Order", "Sync Data");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                result.SetError(ex.InnerException?.Message ?? ex.Message);
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
     public class DropshpOrderBySC

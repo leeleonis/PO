@@ -3215,4 +3215,10 @@
   <data name="PageAuth_UpdateAt" xml:space="preserve">
     <value></value>
   </data>
+  <data name="Marketplace_DispatchTime" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Orders_ShippingTime" xml:space="preserve">
+    <value></value>
+  </data>
 </root>

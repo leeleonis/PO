@@ -164,6 +164,14 @@ namespace PurchaseOrderSys.Models
     
     		    
     		/// <summary>
+    		/// Shipping Time
+    		/// </summary>        
+    	    [Display(Name = "Orders_ShippingTime", ResourceType = typeof(App_GlobalResources.Resource))]
+            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public int  ShippingTime { get; set; }
+    
+    		    
+    		/// <summary>
     		/// Buyer Note
     		/// </summary>        
     	    [Display(Name = "Orders_BuyerNote", ResourceType = typeof(App_GlobalResources.Resource))]

@@ -397,6 +397,7 @@
           <Property Name="CurrencyID" Type="int" />
           <Property Name="NetoGroup" Type="int" />
           <Property Name="Status" Type="bit" />
+          <Property Name="DispatchTime" Type="int" Nullable="false" />
           <Property Name="CreateBy" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="CreateAt" Type="datetime" Nullable="false" />
           <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
@@ -515,6 +516,7 @@
           <Property Name="PaymentDate" Type="datetime2" Precision="7" />
           <Property Name="FulfillmentStatus" Type="tinyint" Nullable="false" />
           <Property Name="FulfilledDate" Type="datetime" />
+          <Property Name="ShippingTime" Type="int" Nullable="false" />
           <Property Name="BuyerNote" Type="nvarchar(max)" />
           <Property Name="Comment" Type="nvarchar(max)" />
           <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
@@ -4753,6 +4755,7 @@
           <Property Name="CurrencyID" Type="Int32" />
           <Property Name="NetoGroup" Type="Int32" />
           <Property Name="Status" Type="Boolean" />
+          <Property Name="DispatchTime" Type="Int32" Nullable="false" />
           <Property Name="CreateBy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -5567,6 +5570,7 @@
           <Property Name="PaymentDate" Type="DateTime" Precision="7" />
           <Property Name="FulfillmentStatus" Type="Byte" Nullable="false" />
           <Property Name="FulfilledDate" Type="DateTime" Precision="3" />
+          <Property Name="ShippingTime" Type="Int32" Nullable="false" />
           <Property Name="BuyerNote" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -7082,6 +7086,7 @@
           <EntitySetMapping Name="Marketplace">
             <EntityTypeMapping TypeName="PurchaseOrderModel.Marketplace">
               <MappingFragment StoreEntitySet="Marketplace">
+                <ScalarProperty Name="DispatchTime" ColumnName="DispatchTime" />
                 <ScalarProperty Name="NetoGroup" ColumnName="NetoGroup" />
                 <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
                 <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
@@ -7387,6 +7392,7 @@
           <EntitySetMapping Name="Orders">
             <EntityTypeMapping TypeName="PurchaseOrderModel.Orders">
               <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="ShippingTime" ColumnName="ShippingTime" />
                 <ScalarProperty Name="RMAID" ColumnName="RMAID" />
                 <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
                 <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />

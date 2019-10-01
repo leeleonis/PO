@@ -29,6 +29,7 @@ namespace PurchaseOrderSys.Models
         public Nullable<int> CurrencyID { get; set; }
         public Nullable<int> NetoGroup { get; set; }
         public Nullable<bool> Status { get; set; }
+        public int DispatchTime { get; set; }
         public string CreateBy { get; set; }
         public System.DateTime CreateAt { get; set; }
         public string UpdateBy { get; set; }
