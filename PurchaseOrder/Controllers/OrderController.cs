@@ -157,7 +157,7 @@ namespace PurchaseOrderSys.Controllers
 
                 CheckAddressData(address, updateAddress);
 
-                if (address.SCID.HasValue)
+                if (address.GetOrder.SCID.HasValue)
                 {
                     JobProcess job = new JobProcess(string.Format("更改訂單【{0}】的地址至SC", address.OrderID));
                     job.AddWord(() =>

@@ -115,7 +115,7 @@
                                                 @Html.Label(" Total Weight (Planned / Shipped): ", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     <label class="control-label col-sm-6">
-                                                        @(((Model.TransferSKU.Sum(x => (x.SKU?.Logistic?.ShippingWeight ?? 0) * (x.QTY??0))) / 1000m).ToString("N2")) / 
+                                                        @(((Model.TransferSKU.Where(x => x.IsEnable).Sum(x => (x.SKU?.Logistic?.ShippingWeight ?? 0) * (x.QTY??0))) / 1000m).ToString("N2")) / 
                                                         @(((Model.WinitTransfer.WinitTransferBox.Sum(x => (x.Weight ?? 0)) ) / 1000m).ToString("N2")) KG
                                                     </label>
                                                 </div>
