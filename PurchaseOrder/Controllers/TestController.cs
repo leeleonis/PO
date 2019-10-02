@@ -915,12 +915,12 @@ namespace PurchaseOrderSys.Controllers
 
         public void Task_Test()
         {
-            JobProcess job = new JobProcess("Test");
-            job.AddWord(() =>
+            JobProcess job = new JobProcess("Task Test");
+            job.Task = new System.Threading.Tasks.Task<string>(() =>
             {
                 try
                 {
-                    job.AddLog("123");
+                    job.AddLog("Task Test");
                 }
                 catch (Exception ex)
                 {
@@ -929,6 +929,7 @@ namespace PurchaseOrderSys.Controllers
 
                 return "";
             });
+            job.StartWork();
         }
 
         public ActionResult Autoreturntoshipper()

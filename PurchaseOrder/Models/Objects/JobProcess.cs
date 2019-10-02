@@ -8,7 +8,7 @@ namespace PurchaseOrderSys.Models
 {
     public class JobProcess : Common, IDisposable
     {
-        private Task<string> Task;
+        public Task<string> Task;
         public TaskScheduler TaskScheduler;
 
         public JobProcess(string Name)
@@ -25,12 +25,8 @@ namespace PurchaseOrderSys.Models
             db.SaveChanges();
         }
 
-        internal void AddWord(Func<string> work)
+        public void StartWork()
         {
-            StatusLog(EnumData.TaskStatus.執行中);
-
-            Task = new Task<string>(work);
-
             Task.ContinueWith((Task) =>
             {
                 if (Task.IsFaulted)
@@ -53,6 +49,37 @@ namespace PurchaseOrderSys.Models
                     }
                 }
             }, TaskContinuationOptions.None);
+
+            StatusLog(EnumData.TaskStatus.執行中);
+            Task.Start();
+        }
+
+        internal void AddWord(Func<string> work)
+        {
+            Task.ContinueWith((Task) =>
+            {
+                if (Task.IsFaulted)
+                {
+                    Fail(Task.Exception.Message);
+                }
+                else if (Task.IsCanceled)
+                {
+                    Fail("工作已取消");
+                }
+                else
+                {
+                    if (!string.IsNullOrWhiteSpace(Task.Result))
+                    {
+                        Fail(Task.Result);
+                    }
+                    else
+                    {
+                        StatusLog(EnumData.TaskStatus.執行完);
+                    }
+                }
+            }, TaskContinuationOptions.None);
+
+            StatusLog(EnumData.TaskStatus.執行中);
 
             Task.Start();
         }
