@@ -16,6 +16,7 @@ using PurchaseOrderSys.PurchaseOrderService;
 using PurchaseOrderSys.SCService;
 using SellerCloud_WebService;
 using PurchaseOrderSys.NewApi;
+using System.Threading.Tasks;
 
 namespace PurchaseOrderSys.Controllers
 {
@@ -916,8 +917,10 @@ namespace PurchaseOrderSys.Controllers
         public void Task_Test()
         {
             JobProcess job = new JobProcess("Task Test");
-            job.Task = new System.Threading.Tasks.Task<string>(() =>
+            job.Task = Task.Factory.StartNew(() =>
             {
+                job.StartWork();
+
                 try
                 {
                     job.AddLog("Task Test");
@@ -929,7 +932,6 @@ namespace PurchaseOrderSys.Controllers
 
                 return "";
             });
-            job.StartWork();
         }
 
         public ActionResult Autoreturntoshipper()
