@@ -426,6 +426,9 @@ namespace PurchaseOrderSys.Controllers
                     item.Subtotal = (QTYOrdered * (Price - Discount));
                 }
                 odataList.AddRange(dataList);
+
+                odataList = odataList.Distinct(x => x.SKU).ToList();
+
             }
             if (VendorID.HasValue)
             {
