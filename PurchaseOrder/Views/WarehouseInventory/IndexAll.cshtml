@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<WarehouseAllVM>
 @{
     ViewBag.ptitle = "Warehouse";
+    var UpdateAt = (DateTime)ViewBag.UpdateAt;
 }
 
 <style>
@@ -37,6 +38,9 @@
                                         <div class="form-group">
                                             <div class="col-sm-9  col-lg-offset-10">
                                                 <a class='btn btn-primary btn-sm' id='Refresh'>Refresh </a>
+                                            </div>
+                                            <div class="col-sm-9  col-lg-offset-10">
+                                                Last Updated On @(UpdateAt.ToLocalTime())
                                             </div>
                                         </div>
                                         <div class="row">

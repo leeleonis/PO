@@ -51,11 +51,18 @@ namespace PurchaseOrderSys.Controllers
         [HttpPost]
         public ActionResult PasswordChange(string Password)
         {
-            var AdminId = (int)Session["AdminId"];
-            var AdminUser = db.AdminUser.Find(AdminId);
-            AdminUser.Password = Password;
-            db.SaveChanges();
-            return View();
+            try
+            {
+                var AdminId = (int)Session["AdminId"];
+                var AdminUser = db.AdminUser.Find(AdminId);
+                AdminUser.Password = Password;
+                db.SaveChanges();
+            }
+            catch (Exception)
+            {
+
+            }
+            return RedirectToAction("Login");
         }
         //登入
         public ActionResult Login()

@@ -966,6 +966,16 @@ namespace PurchaseOrderSys.Controllers
                                     Name = Serial.TransferSKU.Name;
                                     Weight = Serial.TransferSKU.SKU.Logistic?.ShippingWeight ?? 0;
                                 }
+                                //檢查是否有用過
+                                for (int i = 1; i <= FilePage; i++)
+                                {
+                                    if (!WinitTransferBox.WinitTransferBoxItem.Where(x=>x.BarCode == itemBarcodeList[i - 1]).Any())
+                                    {
+                                        FilePage = i;
+                                        break;
+                                    }
+                                }
+
                                 WinitTransferBox.WinitTransferBoxItem.Add(new WinitTransferBoxItem
                                 {
                                     SkuNo = SkuNo,
@@ -1327,7 +1337,7 @@ namespace PurchaseOrderSys.Controllers
             var set = WinitTransferBoxList.Count() - 1;
             return Json(new { status = true, html, set }, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult DelSerialsNo(string serial, int ID)
+        public ActionResult DelSerialsNo(string serial, int ID,int serialID)
         {
             var WinitTransferBoxList = (List<WinitTransferBox>)Session["WinitTransferBox" + ID];
             var PrepVMList = (List<TransferItemVM>)Session["WinitPrepVMList" + ID];
@@ -1335,7 +1345,7 @@ namespace PurchaseOrderSys.Controllers
             {
                 foreach (var item in Boxitem.WinitTransferBoxItem.ToList())
                 {
-                    if (item.SerialsNo.Trim() == serial.Trim())
+                    if (item.SerialsLlistID == serialID)
                     {
                         Boxitem.WinitTransferBoxItem.Remove(item);
                     }
@@ -1345,7 +1355,7 @@ namespace PurchaseOrderSys.Controllers
             {
                 foreach (var item in Prepitem.SerialsLlist.ToList())
                 {
-                    if (item.SerialsNo.Trim() == serial.Trim())
+                    if (item.ID == serialID)
                     {
                         Prepitem.SerialsLlist.Remove(item);
                     }
@@ -1353,6 +1363,11 @@ namespace PurchaseOrderSys.Controllers
             }
             Session["WinitTransferBox" + ID] = WinitTransferBoxList;
             Session["WinitPrepVMList" + ID] = PrepVMList;
+
+            var oSerialsLlist = db.SerialsLlist.Find(serialID);
+            db.WinitTransferBoxItem.Remove(oSerialsLlist.WinitTransferBoxItem);
+            db.SerialsLlist.Remove(oSerialsLlist);
+            db.SaveChanges();
             return Json(new { status = true }, JsonRequestBehavior.AllowGet);
         }
         public ActionResult Ship(int ID)

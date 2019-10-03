@@ -1113,6 +1113,57 @@ namespace PurchaseOrderSys.Models
         public int WTransferInQTY { get; internal set; }
     }
     [Serializable]
+    public class InventoryVM
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public string Type { get; set; }
+        /// <summary>
+        /// 歷史入庫數量，包含 PO Transfer 和訂單
+        /// </summary>
+        public int? CumulativeOrders { get; set; }
+        /// <summary>
+        /// 可出貨的庫存
+        /// </summary>
+        public int? Fulfillable { get; set; }
+        /// <summary>
+        /// 等待出貨的庫總量
+        /// </summary>
+        public int? Awaiting { get; set; }
+        /// <summary>
+        /// 可上架的庫存總數
+        /// </summary>
+        public int? Aggregate { get; set; }
+        /// <summary>
+        /// 移庫出庫數
+        /// </summary>
+        public int? TransferOutQTY { get; set; }
+        /// <summary>
+        /// Winit移庫出庫數
+        /// </summary>
+        public int WTransferOutQTY { get; set; }
+        /// <summary>
+        /// 移庫入庫數
+        /// </summary>
+        public int? TransferInQTY { get; set; }
+        /// <summary>
+        /// Winit移庫入庫數
+        /// </summary>
+        public int WTransferInQTY { get; set; }
+        /// <summary>
+        /// 歷史銷售數量
+        /// </summary>
+        public int? CumulativeSalse { get; set; }
+        /// <summary>
+        /// 歷史TransferOut的數量
+        /// </summary>
+        public int? CumulativeTransferOut { get; set; }
+        /// <summary>
+        /// 扣除的庫存 CM RMA 遺失 報廢
+        /// </summary>
+        public int? WritroffInventory { get; set; }
+    }
+    [Serializable]
     public class CompanyVM
     {
         /// <summary>

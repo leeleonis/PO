@@ -2171,6 +2171,12 @@ namespace PurchaseOrderSys.Controllers
             System.Web.HttpContext.Current.Response.End();
 
         }
+        public ActionResult CheckSkuInventory(string skuid, string SCID)
+        {
+            var WarehouseID = db.WarehouseSummary.Where(x => x.Type == "SCID" && x.Val == SCID).FirstOrDefault()?.WarehouseID;
+            var Fulfillable = db.inventory.Where(x => x.WarehouseID == WarehouseID && x.SkuID == skuid).FirstOrDefault()?.Fulfillable;
+            return Json(Fulfillable, JsonRequestBehavior.AllowGet);
+        }
         public class MyThread
         {
             public Models.Warehouse Warehouseitem { set; get; }
@@ -2259,6 +2265,7 @@ namespace PurchaseOrderSys.Controllers
                 }
             }
         }
+
         [AllowAnonymous]
         public ActionResult WarehouseInventory()
         {
@@ -2282,7 +2289,6 @@ namespace PurchaseOrderSys.Controllers
             {
                 var SCID = Warehouseitem.WarehouseSummary.Where(x => x.Type == "SCID").FirstOrDefault()?.Val;
                 var Awaitinglist = GetAwaitingCount("", SCID);
-
                 MyThread myThread = new MyThread();
                 myThread.Warehouseitem = Warehouseitem;
                 myThread.AllSKUList = AllSKUList;

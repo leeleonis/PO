@@ -14,6 +14,7 @@ namespace PurchaseOrderSys.Controllers
         // GET: Warehouse
         public ActionResult Index(int ID, string Product, int? FulfillableMin, int? FulfillableMax)
         {
+            ViewBag.UpdateAt = db.inventory.OrderByDescending(x => x.CreateAt).FirstOrDefault().CreateAt;
             ViewBag.WarehouseID = ID;
             var Warehouse = db.Warehouse.Find(ID);
             var WarehouseInventoryVM = new WarehouseInventoryVM();
@@ -73,6 +74,7 @@ namespace PurchaseOrderSys.Controllers
         }
         public ActionResult IndexAll()
         {
+            ViewBag.UpdateAt = db.inventory.OrderByDescending(x => x.CreateAt).FirstOrDefault().CreateAt;
             var WarehouseAllVMList = db.inventory.Include(x => x.Warehouse).GroupBy(x => x.WarehouseID).Select(x => new WarehouseAllVM
             {
                 ID = x.Key,

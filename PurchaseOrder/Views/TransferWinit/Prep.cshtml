@@ -325,13 +325,15 @@
                 $(this).addClass("boxselect");
             });
             $("body").on("click", ".delserials", function () {
-                var serial = $(this).attr("value");
+                var serialID = $(this).attr("value");
+                var serial = $(this).attr("SerialsNo");
                 if (confirm("是否確定刪除：" + serial)) {
                     $.ajax({
                         type: "post",
                         url: "@Url.Action("DelSerialsNo")",
                         data: {
                             ID: "@Html.Display("ID")",
+                            serialID: serialID,
                             serial: serial
                         },
                         success: function (data) {

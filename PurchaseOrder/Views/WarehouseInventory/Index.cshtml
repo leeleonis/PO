@@ -1,6 +1,7 @@
 ﻿@model WarehouseInventoryVM
 @{
     ViewBag.title = Model.Name + " Warehouse";
+    var UpdateAt = (DateTime)ViewBag.UpdateAt;
 }
 <style>
     tfoot {
@@ -46,15 +47,15 @@
                                                     </div>*@
                                                 @Html.Label("Fulfillable", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Fulfillable", new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.Display("Fulfillable", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
                                                 @Html.Label("Transit(Out)", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("TransferOutQTY", new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.Display("TransferOutQTY", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
                                                 @Html.Label("Transit(In)", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("TransferInQTY", new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.Display("TransferInQTY", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -64,15 +65,15 @@
                                                     </div>*@
                                                 @Html.Label("Awaiting Dispatch", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Awaiting", new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.Display("Awaiting", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
                                                 @Html.Label("Winit Transit(Out)", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("WTransferOutQTY", new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.Display("WTransferOutQTY", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
                                                 @Html.Label("Winit Transit(In)", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("WTransferInQTY", new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.Display("WTransferInQTY", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -82,15 +83,15 @@
                                                     </div>*@
                                                 @Html.Label("Aggregate", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Aggregate", new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.Display("Aggregate", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
                                                 @Html.Label("Total Velocity (30 days)", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("TotalVelocity", new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.Display("TotalVelocity", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
                                                 @Html.Label("Marketplace", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.Editor("Marketplace", new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.Display("Marketplace", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
                                             </div>
 
@@ -124,6 +125,11 @@
                                                 <div class="col-sm-9  col-lg-offset-10">
                                                     <a type="button" href="@Url.Action("ExcelQTY","DispatchWarehouse",new {ViewBag.WarehouseID})" class='btn btn-primary btn-sm' id='btn-Add' target="_blank">Export QTY</a>
                                                     <a type="button" href="@Url.Action("ExcelSerial","DispatchWarehouse",new {ViewBag.WarehouseID})" class='btn btn-primary btn-sm' id='btn-Add' target="_blank">Export Serials</a>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-sm-9  col-lg-offset-10">
+                                                    Last Updated On @(UpdateAt.ToLocalTime())
                                                 </div>
                                             </div>
                                             <div class="row">
