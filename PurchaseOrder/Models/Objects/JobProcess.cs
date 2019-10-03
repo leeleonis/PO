@@ -27,6 +27,8 @@ namespace PurchaseOrderSys.Models
 
         public void StartWork()
         {
+            StatusLog(EnumData.TaskStatus.執行中);
+
             Task.ContinueWith((Task) =>
             {
                 if (Task.IsFaulted)
@@ -49,9 +51,6 @@ namespace PurchaseOrderSys.Models
                     }
                 }
             }, TaskContinuationOptions.None);
-
-            StatusLog(EnumData.TaskStatus.執行中);
-            Task.Start();
         }
 
         internal void AddWord(Func<string> work)
@@ -129,10 +128,13 @@ namespace PurchaseOrderSys.Models
 
         internal void StatusLog(EnumData.TaskStatus status)
         {
-            TaskScheduler.Status = (byte)status;
-            TaskScheduler.UpdateAt = DateTime.UtcNow;
-            TaskScheduler.UpdateBy = AdminName;
-            db.SaveChanges();
+            lock (TaskScheduler)
+            {
+                TaskScheduler.Status = (byte)status;
+                TaskScheduler.UpdateAt = DateTime.UtcNow;
+                TaskScheduler.UpdateBy = AdminName;
+                db.SaveChanges();
+            }
         }
 
         internal void Fail(string message)
