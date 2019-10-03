@@ -917,7 +917,7 @@ namespace PurchaseOrderSys.Controllers
         public void Task_Test()
         {
             JobProcess job = new JobProcess("Task Test");
-            job.Task = Task.Factory.StartNew(() =>
+            job.Task = Task.Run(() =>
             {
                 job.StartWork();
 
