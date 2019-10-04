@@ -1066,6 +1066,28 @@ namespace PurchaseOrderSys.Controllers
             //db.SaveChanges();
             return Json(true, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult WinitBarCodeRes(int id)
+        {
+            var Transfer = db.Transfer.Find(id);
+            var WinitTransferSKU = Transfer.WinitTransfer.WinitTransferSKU;
+            var WinitTransferBox = Transfer.WinitTransfer.WinitTransferBox;
+            foreach (var WinitTransferSKUitem in WinitTransferSKU)
+            {
+                var itemBarcodeList = WinitTransferSKUitem.itemBarcodeList.Split(';');
+                var FilePage = 1;
+                foreach (var WinitTransferBoxitem in WinitTransferBox)
+                {
+                    foreach (var item in WinitTransferBoxitem.WinitTransferBoxItem.Where(x => x.MerchandiseCode == WinitTransferSKUitem.SkuNo))
+                    {
+                        item.BarCode = itemBarcodeList[FilePage - 1];
+                        item.FilePage = FilePage.ToString();
+                        FilePage++;
+                    }
+                }
+            }
+            db.SaveChanges();
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
         public ActionResult SerialsLlistReset()
         {
             var SerialsLlist = db.SerialsLlist.Where(x => x.PID.HasValue && x.SerialsNo != x.SerialsLlistP.SerialsNo);

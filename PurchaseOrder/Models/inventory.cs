@@ -26,6 +26,11 @@ namespace PurchaseOrderSys.Models
         public int WTransferOutQTY { get; set; }
         public int WTransferInQTY { get; set; }
         public System.DateTime CreateAt { get; set; }
+        public Nullable<int> CumulativeOrders { get; set; }
+        public Nullable<int> CumulativeSalse { get; set; }
+        public Nullable<int> CumulativeTransferOut { get; set; }
+        public Nullable<int> WritroffInventory { get; set; }
+        public Nullable<int> TotalInventory { get; set; }
     
         public virtual SKU SKU { get; set; }
         public virtual Warehouse Warehouse { get; set; }

@@ -324,6 +324,11 @@
           <Property Name="WTransferOutQTY" Type="int" Nullable="false" />
           <Property Name="WTransferInQTY" Type="int" Nullable="false" />
           <Property Name="CreateAt" Type="datetime" Nullable="false" />
+          <Property Name="CumulativeOrders" Type="int" />
+          <Property Name="CumulativeSalse" Type="int" />
+          <Property Name="CumulativeTransferOut" Type="int" />
+          <Property Name="WritroffInventory" Type="int" />
+          <Property Name="TotalInventory" Type="int" />
         </EntityType>
         <EntityType Name="Items">
           <Key>
@@ -6332,6 +6337,11 @@
           <NavigationProperty Name="SKU" Relationship="PurchaseOrderModel.FK_inventory_SKU" FromRole="inventory" ToRole="SKU" />
           <NavigationProperty Name="Warehouse" Relationship="PurchaseOrderModel.FK_inventory_Warehouse" FromRole="inventory" ToRole="Warehouse" />
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CumulativeOrders" Type="Int32" />
+          <Property Name="CumulativeSalse" Type="Int32" />
+          <Property Name="CumulativeTransferOut" Type="Int32" />
+          <Property Name="WritroffInventory" Type="Int32" />
+          <Property Name="TotalInventory" Type="Int32" />
         </EntityType>
         <Association Name="FK_inventory_SKU">
           <End Type="PurchaseOrderModel.SKU" Role="SKU" Multiplicity="1" />
@@ -7737,6 +7747,11 @@
           <EntitySetMapping Name="inventory">
             <EntityTypeMapping TypeName="PurchaseOrderModel.inventory">
               <MappingFragment StoreEntitySet="inventory">
+                <ScalarProperty Name="TotalInventory" ColumnName="TotalInventory" />
+                <ScalarProperty Name="WritroffInventory" ColumnName="WritroffInventory" />
+                <ScalarProperty Name="CumulativeTransferOut" ColumnName="CumulativeTransferOut" />
+                <ScalarProperty Name="CumulativeSalse" ColumnName="CumulativeSalse" />
+                <ScalarProperty Name="CumulativeOrders" ColumnName="CumulativeOrders" />
                 <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
                 <ScalarProperty Name="WTransferInQTY" ColumnName="WTransferInQTY" />
                 <ScalarProperty Name="WTransferOutQTY" ColumnName="WTransferOutQTY" />

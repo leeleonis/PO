@@ -1162,6 +1162,10 @@ namespace PurchaseOrderSys.Models
         /// 扣除的庫存 CM RMA 遺失 報廢
         /// </summary>
         public int? WritroffInventory { get; set; }
+        /// <summary>
+        /// 總庫存
+        /// </summary>
+        public int? TotalInventory { get; set; }
     }
     [Serializable]
     public class CompanyVM

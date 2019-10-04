@@ -1562,16 +1562,23 @@ namespace PurchaseOrderSys.Controllers
 
 
         [HttpPost]
-        public ActionResult GateVendorCurrency(int id)
+        public ActionResult GateVendorCurrency(int? id)
         {
-            var VendorLIst = db.VendorLIst.Find(id);
-            if (VendorLIst != null)
+            if (id.HasValue)
             {
-                return Json(new { status = true, VendorLIst.Currency, VendorLIst.Tax }, JsonRequestBehavior.AllowGet);
+                var VendorLIst = db.VendorLIst.Find(id);
+                if (VendorLIst != null)
+                {
+                    return Json(new { status = true, VendorLIst.Currency, VendorLIst.Tax }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { status = false, Msg = "查無資料" }, JsonRequestBehavior.AllowGet);
+                }
             }
             else
             {
-                return Json(new { status = false, Msg = "查無資料" }, JsonRequestBehavior.AllowGet);
+                return Json(new { status = false, Msg = "VendorID 不能為空" }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -2281,6 +2288,7 @@ namespace PurchaseOrderSys.Controllers
             var QuytimeS = "開始查詢：" + sw.ElapsedMilliseconds;
             var Warehouse = db.Warehouse.AsNoTracking().Where(x => x.IsEnable).Include(x => x.WarehouseSummary).ToList();
             var AllSKUList = db.SKU.AsNoTracking().Where(x => x.IsEnable && x.Status == 1).Select(x => x.SkuID).ToList();//
+            var AllSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable).Include(x => x.PurchaseSKU).Include(x => x.PurchaseSKU.PurchaseOrder).ToList();
             var POSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "PO" && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable).Include(x => x.PurchaseSKU).Include(x => x.PurchaseSKU.PurchaseOrder).ToList();
             var InSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferIn" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
             var OutSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferOut" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();

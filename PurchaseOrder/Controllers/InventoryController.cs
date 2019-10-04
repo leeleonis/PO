@@ -17,13 +17,10 @@ namespace PurchaseOrderSys.Controllers
         [HttpPost]
         public ActionResult Index(int? WarehouseID, string SKU, bool IsInventory)
         {
+            var WarehouseVMList = new List<WarehouseVM>();
             var Warehouse = db.Warehouse.Find(WarehouseID);
             int? FulfillableMin = null;
             int? FulfillableMax = null;
-            if (Warehouse==null)
-            {
-                Warehouse = new Warehouse();
-            }
             if (IsInventory)
             {
                 FulfillableMin = 1;
@@ -32,7 +29,19 @@ namespace PurchaseOrderSys.Controllers
             {
                 FulfillableMax = 0;
             }
-            var WarehouseVMList = GetWarehouseVMList(Warehouse, SKU, FulfillableMin, FulfillableMax);
+            if (Warehouse == null)
+            {
+                var WarehouseList = db.Warehouse.Where(x => x.Type != "Interim").ToList();
+                foreach (var Warehouseitem in WarehouseList)
+                {
+                    WarehouseVMList.AddRange(GetWarehouseVMList(Warehouseitem, SKU, FulfillableMin, FulfillableMax));
+                }
+            }
+            else
+            {
+                WarehouseVMList.AddRange(GetWarehouseVMList(Warehouse, SKU, FulfillableMin, FulfillableMax));
+            }
+
             return View(WarehouseVMList);
         }
     }

@@ -969,7 +969,7 @@ namespace PurchaseOrderSys.Controllers
                                 //檢查是否有用過
                                 for (int i = 1; i <= FilePage; i++)
                                 {
-                                    if (!WinitTransferBox.WinitTransferBoxItem.Where(x=>x.BarCode == itemBarcodeList[i - 1]).Any())
+                                    if (!WinitTransferBoxList.Where(y => y.WinitTransferBoxItem.Where(x => x.BarCode == itemBarcodeList[i - 1]).Any()).Any())
                                     {
                                         FilePage = i;
                                         break;
