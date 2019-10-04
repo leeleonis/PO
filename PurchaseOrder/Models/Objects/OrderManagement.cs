@@ -12,7 +12,7 @@ namespace PurchaseOrderSys.Models
 {
     public class OrderManagement : Common, IDisposable
     {
-        private Orders orderData;
+        public Orders orderData;
 
         public SC_WebService SC_Api;
 

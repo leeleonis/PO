@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -8,6 +9,7 @@ namespace PurchaseOrderSys.Models
 {
     public class JobProcess : Common, IDisposable
     {
+        public Thread Work;
         public Task<string> Task;
         public TaskScheduler TaskScheduler;
 
@@ -25,32 +27,18 @@ namespace PurchaseOrderSys.Models
             db.SaveChanges();
         }
 
-        public void StartWork()
+        public void StartWork(ThreadStart work)
         {
+            Work = new Thread(work);
+
             StatusLog(EnumData.TaskStatus.執行中);
 
-            Task.ContinueWith((Task) =>
-            {
-                if (Task.IsFaulted)
-                {
-                    Fail(Task.Exception.Message);
-                }
-                else if (Task.IsCanceled)
-                {
-                    Fail("工作已取消");
-                }
-                else
-                {
-                    if (!string.IsNullOrWhiteSpace(Task.Result))
-                    {
-                        Fail(Task.Result);
-                    }
-                    else
-                    {
-                        StatusLog(EnumData.TaskStatus.執行完);
-                    }
-                }
-            }, TaskContinuationOptions.None);
+            Work.Start();
+        }
+
+        public void FinishWork()
+        {
+            StatusLog(EnumData.TaskStatus.執行完);
         }
 
         internal void AddWord(Func<string> work)

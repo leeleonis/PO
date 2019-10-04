@@ -33,6 +33,8 @@ namespace PurchaseOrderSys.Controllers
             {
                 using (var OM = new OrderManagement(id))
                 {
+                    order = OM.orderData;
+
                     try
                     {
                         order = OM.OrderSync(id);

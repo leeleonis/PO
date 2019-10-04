@@ -917,20 +917,17 @@ namespace PurchaseOrderSys.Controllers
         public void Task_Test()
         {
             JobProcess job = new JobProcess("Task Test");
-            job.Task = Task.Run(() =>
+            job.StartWork(() =>
             {
-                job.StartWork();
-
                 try
                 {
                     job.AddLog("Task Test");
+                    job.FinishWork();
                 }
                 catch (Exception ex)
                 {
-                    return ex.InnerException?.Message ?? ex.Message;
+                    //return ex.InnerException?.Message ?? ex.Message;
                 }
-
-                return "";
             });
         }
 
