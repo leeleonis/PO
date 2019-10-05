@@ -2425,16 +2425,24 @@ namespace PurchaseOrderSys.Controllers
             return Json(new { QuytimeS, QuytimeE, deltimeS, deltimeE, SatimeS, SatimeE, EdtimeE }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetOrderSummary(int OrderID)
+        public ActionResult GetOrderSummary(int[] OrderIDs)
         {
             AjaxResult result = new AjaxResult();
 
-            var order = db.Orders.FirstOrDefault(o => o.IsEnable && (o.ID.Equals(OrderID) || (o.SCID.HasValue && o.SCID.Value.Equals(OrderID))));
+            var orderList = db.Orders.Where(o => o.IsEnable && (OrderIDs.Contains(o.ID) || (o.SCID.HasValue && OrderIDs.Contains(o.SCID.Value))));
 
             try
             {
-                if (order == null) throw new Exception("Not found order!");
+                if (!orderList.Any()) throw new Exception("Not found orders!");
 
+                result.data = orderList.Select(o => new
+                {
+                    o.ID,
+                    o.SCID,
+                    o.ShippingTime,
+                    o.GetCompany.Marketplace.FirstOrDefault(m => m.CountryCode.Equals(o.Addresses.First(a => a.Type.Equals((byte)EnumData.OrderAddressType.Shipped)).CountryCode)).DispatchTime,
+                    RushOrder = o.IsRush || o.ShippingTime <= 3
+                }).ToList();
             }
             catch (Exception ex)
             {
