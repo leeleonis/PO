@@ -606,7 +606,7 @@ namespace PurchaseOrderSys.Controllers
                         //OrderID = x.OrderID,
                         PurchaseSKUID = x.PurchaseSKUID,
                         //RMAID = x.RMAID,
-                        SerialsNo = x.SerialsNo,
+                        SerialsNo = x.SerialsNo.Trim(),
                         SerialsQTY = -1,
                         SerialsType = "TransferOut"//等待移倉
                     }).ToList();
@@ -651,7 +651,7 @@ namespace PurchaseOrderSys.Controllers
                                         UpdateBy = CreateBy,
                                         OrderID = x.OrderID,
                                         PurchaseSKUID = x.PurchaseSKUID,
-                                        SerialsNo = x.SerialsNo,
+                                        SerialsNo = x.SerialsNo.Trim(),
                                         SerialsQTY = -1,
                                         SerialsType = "TransferOut"//等待移倉
                                     }).ToList();
@@ -793,7 +793,7 @@ namespace PurchaseOrderSys.Controllers
                         //OrderID = x.OrderID,
                         PurchaseSKUID = x.PurchaseSKUID,
                         //RMAID = x.RMAID,
-                        SerialsNo = x.SerialsNo,
+                        SerialsNo = x.SerialsNo.Trim(),
                         SerialsQTY = 1,
                         SerialsType = "TransferIn"
                     }).ToList();
@@ -819,7 +819,7 @@ namespace PurchaseOrderSys.Controllers
                         //OrderID = x.OrderID,
                         //PurchaseSKUID = x.PurchaseSKUID,
                         //RMAID = x.RMAID,
-                        SerialsNo = x.SerialsNo,
+                        SerialsNo = x.SerialsNo.Trim(),
                         SerialsQTY = 1,
                         SerialsType = "TransferIn"
                     }).ToList();
@@ -862,7 +862,7 @@ namespace PurchaseOrderSys.Controllers
                                         //OrderID = x.OrderID,
                                         //PurchaseSKUID = x.PurchaseSKUID,
                                         //RMAID = x.RMAID,
-                                        SerialsNo = SerialOut.SerialsNo,
+                                        SerialsNo = SerialOut.SerialsNo.Trim(),
                                         SerialsQTY = 1,
                                         SerialsType = "TransferIn"
                                     });
@@ -980,7 +980,7 @@ namespace PurchaseOrderSys.Controllers
                                 {
                                     SkuNo = SkuNo,
                                     SerialsLlistID = Serial.ID,
-                                    SerialsNo = Serial.SerialsNo,
+                                    SerialsNo = Serial.SerialsNo.Trim(),
                                     Name = Name,
                                     BarCode = itemBarcodeList[FilePage - 1],
                                     FilePage = FilePage.ToString(),

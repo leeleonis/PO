@@ -211,7 +211,7 @@ namespace PurchaseOrderSys.Controllers
                                     new RMAOrderSerialsLlist
                                     {
                                         IsEnable = true,
-                                        SerialsNo = RMAListitem.Serial,
+                                        SerialsNo = RMAListitem.Serial.Trim(),
                                         SerialsQTY = 1,
                                         CreateBy = UserBy,
                                         CreateAt = CreateAt
@@ -461,8 +461,8 @@ namespace PurchaseOrderSys.Controllers
 
                     nRMAEdit.QTYOrdered = RMASKUitem.QTYOrdered;
                     nRMAEdit.ProductName = RMASKUitem.SKU.SkuLang.Where(y => y.LangID == LangID).FirstOrDefault()?.Name;
-                    nRMAEdit.ReturnedSerialsNo = RMASerial?.SerialsNo;
-                    nRMAEdit.OrderSerialsNo = Serialitem.SerialsNo;
+                    nRMAEdit.ReturnedSerialsNo = RMASerial?.SerialsNo.Trim();
+                    nRMAEdit.OrderSerialsNo = Serialitem.SerialsNo.Trim();
                     nRMAEdit.UPCEAN = RMASKUitem.SKU.UPC + "/" + RMASKUitem.SKU.EAN;
                     nRMAEdit.Reason = Serialitem.Reason?? RMASKUitem.Reason;
                     nRMAEdit.TrWarehouse = RMASerial?.Warehouse.Name;
@@ -574,7 +574,7 @@ namespace PurchaseOrderSys.Controllers
         {
             var RMASerialsLlist = db.RMASerialsLlist.Find(oid);
             var dt = DateTime.UtcNow;
-            RMASerialsLlist.NewSkuNo = RMASerialsLlist.RMASKU.SkuNo + NewSKU;
+            RMASerialsLlist.NewSkuNo = RMASerialsLlist.RMASKU.SkuNo.Split('_')[0] + NewSKU;
             RMASerialsLlist.NewSKUCreateAt = dt;
             RMASerialsLlist.NewSKUCreateBy = UserBy;
             db.SaveChanges();
@@ -927,7 +927,7 @@ namespace PurchaseOrderSys.Controllers
                             WarehouseID = WarehouseID,
                             Reason = Reason,
                             SerialsType = "RMAIn",
-                            SerialsNo = serials,
+                            SerialsNo = serials.Trim(),
                             SerialsQTY = 1,
                             ReceivedBy = UserBy,
                             ReceivedAt = dt,
@@ -967,7 +967,7 @@ namespace PurchaseOrderSys.Controllers
                                     var nSerialsLlist = new SerialsLlist
                                     {
                                         IsEnable = true,
-                                        SerialsNo = Serialitem.SerialsNo,
+                                        SerialsNo = Serialitem.SerialsNo.Trim(),
                                         SerialsQTY = 1,
                                         SerialsType = "TransferIn",
                                         CreateBy = "RMAAPI",
@@ -981,7 +981,7 @@ namespace PurchaseOrderSys.Controllers
                                         IsEnable = true,
                                         RMASKUID = RMASKUID,
                                         RMASerialsLlistP = nSerialsLlistIn,
-                                        SerialsNo = Serialitem.SerialsNo,
+                                        SerialsNo = Serialitem.SerialsNo.Trim(),
                                         SerialsQTY = -1,
                                         SerialsType = "TransferOut",
                                         CreateBy = "RMAAPI",
