@@ -916,19 +916,39 @@ namespace PurchaseOrderSys.Controllers
 
         public void Task_Test()
         {
-            JobProcess job = new JobProcess("Task Test");
-            job.StartWork(() =>
+            JobProcess job1 = new JobProcess("Task Test1");
+            job1.StartWork(Func_Test1);
+            JobProcess job2 = new JobProcess("Task Test2");
+            job2.AddWork(Func_Test2, job2);
+        }
+
+        private void Func_Test1(object JobProcess)
+        {
+            try
             {
-                try
-                {
-                    job.AddLog("Task Test");
-                    job.FinishWork();
-                }
-                catch (Exception ex)
-                {
-                    //return ex.InnerException?.Message ?? ex.Message;
-                }
-            });
+                var job = JobProcess as JobProcess;
+                job.AddLog("Task Test1");
+                job.FinishWork();
+            }
+            catch
+            {
+                //return ex.InnerException?.Message ?? ex.Message;
+            }
+        }
+
+        private string Func_Test2(object JobProcess)
+        {
+            try
+            {
+                var job = JobProcess as JobProcess;
+                job.AddLog("Task Test2");
+            }
+            catch (Exception ex)
+            {
+                return ex.InnerException?.Message ?? ex.Message;
+            }
+
+            return "";
         }
 
         public ActionResult Autoreturntoshipper()

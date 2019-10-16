@@ -27,13 +27,13 @@ namespace PurchaseOrderSys.Models
             db.SaveChanges();
         }
 
-        public void StartWork(ThreadStart work)
+        public void StartWork(ParameterizedThreadStart work)
         {
             Work = new Thread(work);
 
             StatusLog(EnumData.TaskStatus.執行中);
 
-            Work.Start();
+            Work.Start(this);
         }
 
         public void FinishWork()
@@ -41,7 +41,7 @@ namespace PurchaseOrderSys.Models
             StatusLog(EnumData.TaskStatus.執行完);
         }
 
-        internal void AddWord(Func<string> work)
+        internal void AddWork(Func<string> work)
         {
             Task.ContinueWith((Task) =>
             {
@@ -71,7 +71,7 @@ namespace PurchaseOrderSys.Models
             Task.Start();
         }
 
-        internal void AddWord(Func<object, string> work, object data)
+        internal void AddWork(Func<object, string> work, object data)
         {
             StatusLog(EnumData.TaskStatus.執行中);
 
