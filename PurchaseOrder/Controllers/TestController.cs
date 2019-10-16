@@ -938,8 +938,7 @@ namespace PurchaseOrderSys.Controllers
             var SerialsLlist = new List<RMASerialsLlist>();
             foreach (var Serialitem in RMASerialsLlist)
             {
-                //if (Serialitem.Reason == "16")
-                if (true)
+                if (Serialitem.Reason == "16")
                 {
                     var dt = DateTime.UtcNow;
                     //開移倉單
