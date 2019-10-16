@@ -146,7 +146,7 @@ namespace PurchaseOrderSys.Controllers
 
 
                     JobProcess job = new JobProcess(string.Format("新增品號【{0}】資料至NETO、SC", sku.SkuID));
-                    job.AddWord(() =>
+                    job.AddWork(() =>
                     {
                         try
                         {
@@ -331,7 +331,7 @@ namespace PurchaseOrderSys.Controllers
                                 newSku = SKU.CreateSku(newSku, newLang);
 
                                 JobProcess job = new JobProcess(string.Format("新增品號【{0}】資料至NETO、SC", newSku.SkuID));
-                                job.AddWord(() =>
+                                job.AddWork(() =>
                                 {
                                     try
                                     {
@@ -598,7 +598,7 @@ namespace PurchaseOrderSys.Controllers
                 using (StockKeepingUnit SKU = new StockKeepingUnit(sku))
                 {
                     JobProcess job = new JobProcess(string.Format("更新品號【{0}】資料至NETO、SC", sku.SkuID));
-                    job.AddWord(() =>
+                    job.AddWork(() =>
                     {
                         try
                         {
@@ -955,7 +955,7 @@ namespace PurchaseOrderSys.Controllers
             using (StockKeepingUnit SKU = new StockKeepingUnit(sku))
             {
                 JobProcess job = new JobProcess(string.Format("更新品號【{0}】資料至NETO、SC", sku.SkuID));
-                job.AddWord(() =>
+                job.AddWork(() =>
                 {
                     try
                     {

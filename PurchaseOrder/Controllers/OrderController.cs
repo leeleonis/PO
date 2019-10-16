@@ -90,7 +90,7 @@ namespace PurchaseOrderSys.Controllers
                     if (order.SCID.HasValue)
                     {
                         JobProcess job = new JobProcess(string.Format("更改訂單【{0}】的狀態至SC", order.ID));
-                        job.AddWord(() =>
+                        job.AddWork(() =>
                         {
                             try
                             {
@@ -162,7 +162,7 @@ namespace PurchaseOrderSys.Controllers
                 if (address.GetOrder.SCID.HasValue)
                 {
                     JobProcess job = new JobProcess(string.Format("更改訂單【{0}】的地址至SC", address.OrderID));
-                    job.AddWord(() =>
+                    job.AddWork(() =>
                     {
                         try
                         {
@@ -252,7 +252,7 @@ namespace PurchaseOrderSys.Controllers
                 if (payment.SCID.HasValue)
                 {
                     JobProcess job = new JobProcess(string.Format("更改訂單【{0}】的帳單至SC", payment.OrderID));
-                    job.AddWord(() =>
+                    job.AddWork(() =>
                     {
                         try
                         {
@@ -598,7 +598,7 @@ namespace PurchaseOrderSys.Controllers
                     OM.ActionLog("Change Shipping Actions", "Split Package");
 
                     JobProcess job = new JobProcess(string.Format("分批訂單【{0}】的包裹", package.OrderID));
-                    job.AddWord(() =>
+                    job.AddWork(() =>
                     {
                         try
                         {
@@ -704,7 +704,7 @@ namespace PurchaseOrderSys.Controllers
                     if (oldPackageList.All(p => p.SCID.HasValue))
                     {
                         JobProcess job = new JobProcess(string.Format("整合訂單【{0}】的包裹", package.OrderID));
-                        job.AddWord(() =>
+                        job.AddWork(() =>
                         {
                             try
                             {
@@ -768,7 +768,7 @@ namespace PurchaseOrderSys.Controllers
                     if (order.SCID.HasValue)
                     {
                         JobProcess job = new JobProcess(string.Format("Mark Ship訂單【{0}】", package.OrderID));
-                        job.AddWord(() =>
+                        job.AddWork(() =>
                         {
                             try
                             {
