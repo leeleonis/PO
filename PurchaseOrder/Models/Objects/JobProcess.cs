@@ -10,7 +10,7 @@ namespace PurchaseOrderSys.Models
     public class JobProcess : Common, IDisposable
     {
         public Thread Work;
-        public Task<string> Task;
+        public Task<string> Taskk;
         public TaskScheduler TaskScheduler;
 
         public JobProcess(string Name)
@@ -41,9 +41,9 @@ namespace PurchaseOrderSys.Models
             StatusLog(EnumData.TaskStatus.執行完);
         }
 
-        internal void AddWork(Func<string> work)
+        public void AddWork(Func<string> work)
         {
-            Task.ContinueWith((Task) =>
+            Taskk.ContinueWith((Task) =>
             {
                 if (Task.IsFaulted)
                 {
@@ -66,17 +66,14 @@ namespace PurchaseOrderSys.Models
                 }
             }, TaskContinuationOptions.None);
 
-            StatusLog(EnumData.TaskStatus.執行中);
-
-            Task.Start();
+            Task.Factory.StartNew(work).GetAwaiter().GetResult();
         }
 
-        internal void AddWork(Func<object, string> work, object data)
+        public string AddWork(Func<object, string> work, object data)
         {
-            StatusLog(EnumData.TaskStatus.執行中);
+            Taskk = Task.Factory.StartNew(work, data);
 
-            Task = new Task<string>(work, data);
-            Task.ContinueWith((Task) =>
+            Taskk.ContinueWith((Task) =>
             {
                 if (Task.IsFaulted)
                 {
@@ -99,7 +96,8 @@ namespace PurchaseOrderSys.Models
                 }
             }, TaskContinuationOptions.None);
 
-            Task.Start();
+            return Taskk.GetAwaiter().GetResult();
+            
         }
 
         internal void AddLog(string description)

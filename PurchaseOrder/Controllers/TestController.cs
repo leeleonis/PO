@@ -916,12 +916,12 @@ namespace PurchaseOrderSys.Controllers
 
         public void Task_Test()
         {
-            JobProcess job1 = new JobProcess("Task Test1");
-            Func_Test1(job1);
+            //JobProcess job1 = new JobProcess("Task Test1");
+            //Func_Test1(job1);
 //            job1.StartWork(Func_Test1);
             JobProcess job2 = new JobProcess("Task Test2");
-            Func_Test2(job2);
-            //job2.AddWork(Func_Test2, job2);
+            job2.AddWork(Func_Test2, job2);
+            Response.Write(string.Format("ID：{0}，Staus：{1}，Result：{2}", job2.Taskk.Id, job2.Taskk.Status, job2.Taskk.Result));
         }
 
         private void Func_Test1(object JobProcess)
@@ -943,6 +943,7 @@ namespace PurchaseOrderSys.Controllers
             try
             {
                 var job = JobProcess as JobProcess;
+                job.StatusLog(EnumData.TaskStatus.執行中);
                 job.AddLog("Task Test2");
             }
             catch (Exception ex)
@@ -950,7 +951,7 @@ namespace PurchaseOrderSys.Controllers
                 return ex.InnerException?.Message ?? ex.Message;
             }
 
-            return "";
+            return "Finish!";
         }
 
         public ActionResult Autoreturntoshipper()
