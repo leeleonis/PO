@@ -83,7 +83,7 @@ namespace PurchaseOrderSys.Controllers
         [HttpPost]
         public ActionResult Create(Transfer Transfer, string SID)
         {
-            var CreateBy = UserBy;
+            var CreateBy =  Session["AdminName"].ToString();
             var CreateAt = DateTime.UtcNow;
             Transfer.CreateBy = CreateBy;
             Transfer.CreateAt = CreateAt;
@@ -171,7 +171,7 @@ namespace PurchaseOrderSys.Controllers
                 }
             }
 
-            oTransfer.UpdateBy = UserBy;
+            oTransfer.UpdateBy =  Session["AdminName"].ToString();
             oTransfer.UpdateAt = dt;
 
             var odataList = (List<TranSKUVM>)Session["TSkuNumberList" + SID];
@@ -186,14 +186,14 @@ namespace PurchaseOrderSys.Controllers
                         if (SKUitem.QTY != item.QTY)
                         {
                             SKUitem.QTY = item.QTY;
-                            SKUitem.UpdateBy = UserBy;
+                            SKUitem.UpdateBy =  Session["AdminName"].ToString();
                             SKUitem.UpdateAt = dt;
                         }
                     }
                 }
                 else
                 {
-                    oTransfer.TransferSKU.Add(new TransferSKU { IsEnable = true, SkuNo = item.SKU, Name = item.ProductName, QTY = item.QTY, CreateBy = UserBy, CreateAt = dt });
+                    oTransfer.TransferSKU.Add(new TransferSKU { IsEnable = true, SkuNo = item.SKU, Name = item.ProductName, QTY = item.QTY, CreateBy =  Session["AdminName"].ToString(), CreateAt = dt });
                 }
 
             }
@@ -205,7 +205,7 @@ namespace PurchaseOrderSys.Controllers
                     foreach (var SKUitem in TransferSKUList)
                     {
                         SKUitem.IsEnable = false;
-                        SKUitem.UpdateBy = UserBy;
+                        SKUitem.UpdateBy =  Session["AdminName"].ToString();
                         SKUitem.UpdateAt = dt;
                     }
                 }
@@ -298,7 +298,7 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult Receive(int ID, List<PostList> Prep, bool? saveexit)
         {
             Prep = Prep.Where(x => !string.IsNullOrWhiteSpace(x.val)).Distinct().ToList();
-            var CreateBy = UserBy;
+            var CreateBy =  Session["AdminName"].ToString();
             var CreateAt = DateTime.UtcNow;
             var ReceiveVMList = (List<TransferItemVM>)Session["ReceiveVMList" + ID];
             var oTransfer = db.Transfer.Find(ID);
@@ -446,7 +446,7 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult Prep(int ID, List<PostList> Prep, bool? saveexit)
         {
             Prep = Prep.Where(x => !string.IsNullOrWhiteSpace(x.val)).Distinct().ToList();
-            var CreateBy = UserBy;
+            var CreateBy =  Session["AdminName"].ToString();
             var CreateAt = DateTime.UtcNow;
             var PrepVMList = (List<TransferItemVM>)Session["PrepVMList" + ID];
             var oTransfer = db.Transfer.Find(ID);
@@ -694,7 +694,7 @@ namespace PurchaseOrderSys.Controllers
                 Transfer.Status = "Pending";
             }
            
-            Transfer.UpdateBy = UserBy;
+            Transfer.UpdateBy =  Session["AdminName"].ToString();
             Transfer.UpdateAt = DateTime.UtcNow;
             db.SaveChanges();
 
@@ -704,7 +704,7 @@ namespace PurchaseOrderSys.Controllers
         {
             var Transfer= db.Transfer.Find(ID);
             Transfer.Status = "Shipped";
-            Transfer.UpdateBy = UserBy;
+            Transfer.UpdateBy =  Session["AdminName"].ToString();
             Transfer.UpdateAt = DateTime.UtcNow;
             db.SaveChanges();
 
@@ -715,7 +715,7 @@ namespace PurchaseOrderSys.Controllers
         {
             var Transfer = db.Transfer.Find(ID);
             Transfer.Status = "Received";
-            Transfer.UpdateBy = UserBy;
+            Transfer.UpdateBy =  Session["AdminName"].ToString();
             Transfer.UpdateAt = DateTime.UtcNow;
             db.SaveChanges();
             return RedirectToAction("Edit", new { ID });
@@ -725,7 +725,7 @@ namespace PurchaseOrderSys.Controllers
         {
             var Transfer = db.Transfer.Find(ID);
             Transfer.Status = "Completed";
-            Transfer.UpdateBy = UserBy;
+            Transfer.UpdateBy =  Session["AdminName"].ToString();
             Transfer.UpdateAt = DateTime.UtcNow;
             db.SaveChanges();
 

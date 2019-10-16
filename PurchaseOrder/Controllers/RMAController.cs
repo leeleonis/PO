@@ -150,7 +150,7 @@ namespace PurchaseOrderSys.Controllers
                         FinalShippingFee = FinalShippingFee,
                         SCRMA = RMAId.ToString(),
                         SCUserID = OrderItemDataitem.eBayUserID,
-                        CreateBy = UserBy,
+                        CreateBy =  Session["AdminName"].ToString(),
                         CreateAt = CreateAt
                     };
                     db.RMA.Add(newRMA);
@@ -204,7 +204,7 @@ namespace PurchaseOrderSys.Controllers
                                     WarehouseID = RMAListitem.Warehouse,
                                     UnitPrice = UnitPrice,
                                     RMAItemID = RMAItemID,
-                                    CreateBy = UserBy,
+                                    CreateBy =  Session["AdminName"].ToString(),
                                     CreateAt = CreateAt
                                 };
                                 newRMASKU.RMAOrderSerialsLlist.Add(
@@ -213,7 +213,7 @@ namespace PurchaseOrderSys.Controllers
                                         IsEnable = true,
                                         SerialsNo = RMAListitem.Serial.Trim(),
                                         SerialsQTY = 1,
-                                        CreateBy = UserBy,
+                                        CreateBy =  Session["AdminName"].ToString(),
                                         CreateAt = CreateAt
                                     });
                                 newRMA.RMASKU.Add(newRMASKU);
@@ -507,7 +507,7 @@ namespace PurchaseOrderSys.Controllers
             OldRMA.OtherCosts = RMA.OtherCosts;
             //OldRMA.ReturnTracking = RMA.ReturnTracking;
             //OldRMA.Carrier = RMA.Carrier;
-            OldRMA.UpdateBy = UserBy;
+            OldRMA.UpdateBy =  Session["AdminName"].ToString();
             OldRMA.UpdateAt = dt;
             if (RMAList != null)
             {
@@ -522,13 +522,13 @@ namespace PurchaseOrderSys.Controllers
                                 if (string.IsNullOrWhiteSpace(OrderSerialsLlistitem.Reason) || RMAListitem.Reason != OrderSerialsLlistitem.Reason)
                                 {
                                     OrderSerialsLlistitem.Reason = RMAListitem.Reason;
-                                    OrderSerialsLlistitem.UpdateBy = UserBy;
+                                    OrderSerialsLlistitem.UpdateBy =  Session["AdminName"].ToString();
                                     OrderSerialsLlistitem.UpdateAt = dt;
                                 }
                                 if (!RMAListitem.Warehouse.HasValue || RMAListitem.Warehouse != OrderSerialsLlistitem.WarehouseID)
                                 {
                                     OrderSerialsLlistitem.WarehouseID = RMAListitem.Warehouse;
-                                    OrderSerialsLlistitem.UpdateBy = UserBy;
+                                    OrderSerialsLlistitem.UpdateBy =  Session["AdminName"].ToString();
                                     OrderSerialsLlistitem.UpdateAt = dt;
                                 }
                                 if (RMAListitem.ReceiveNo == OrderSerialsLlistitem.SerialsNo)
@@ -552,13 +552,13 @@ namespace PurchaseOrderSys.Controllers
                             //if (!string.IsNullOrWhiteSpace(RMAListitem.Reason) && RMAListitem.Reason != RMASKUitem.Reason)
                             //{
                             //    RMASKUitem.Reason = RMAListitem.Reason;
-                            //    RMASKUitem.UpdateBy = UserBy;
+                            //    RMASKUitem.UpdateBy =  Session["AdminName"].ToString();
                             //    RMASKUitem.UpdateAt = dt;
                             //}
                             //if (RMAListitem.Warehouse.HasValue && RMAListitem.Warehouse != RMASKUitem.WarehouseID)
                             //{
                             //    RMASKUitem.WarehouseID = RMAListitem.Warehouse;
-                            //    RMASKUitem.UpdateBy = UserBy;
+                            //    RMASKUitem.UpdateBy =  Session["AdminName"].ToString();
                             //    RMASKUitem.UpdateAt = dt;
                             //}
                         }
@@ -576,7 +576,7 @@ namespace PurchaseOrderSys.Controllers
             var dt = DateTime.UtcNow;
             RMASerialsLlist.NewSkuNo = RMASerialsLlist.RMASKU.SkuNo.Split('_')[0] + NewSKU;
             RMASerialsLlist.NewSKUCreateAt = dt;
-            RMASerialsLlist.NewSKUCreateBy = UserBy;
+            RMASerialsLlist.NewSKUCreateBy =  Session["AdminName"].ToString();
             db.SaveChanges();
             return Json(new { status = true }, JsonRequestBehavior.AllowGet);
             //}
@@ -595,13 +595,13 @@ namespace PurchaseOrderSys.Controllers
                 if (ID.HasValue && ID != 0)
                 {
                     var RMAOrderTracking = db.RMAOrderTracking.Find(ID);
-                    var nPurchaseNote = new PurchaseNote { IsEnable = true, Note = Note, NoteType = "txt", CreateAt = DateTime.UtcNow, CreateBy = UserBy };
+                    var nPurchaseNote = new PurchaseNote { IsEnable = true, Note = Note, NoteType = "txt", CreateAt = DateTime.UtcNow, CreateBy =  Session["AdminName"].ToString() };
                     if (Img != null)
                     {
                         foreach (var Imgitem in Img)
                         {
                             var ImgName = SaveImg(Imgitem);
-                            nPurchaseNote.PurchaseNoteImg.Add(new PurchaseNoteImg { IsEnable = true, Img = ImgName, ImgType = Imgitem.ContentType, CreateAt = DateTime.UtcNow, CreateBy = UserBy });
+                            nPurchaseNote.PurchaseNoteImg.Add(new PurchaseNoteImg { IsEnable = true, Img = ImgName, ImgType = Imgitem.ContentType, CreateAt = DateTime.UtcNow, CreateBy =  Session["AdminName"].ToString() });
                             //db.SaveChanges();
                             //PurchaseNoteList = RMA.PurchaseNote.ToList();
                         }
@@ -613,14 +613,14 @@ namespace PurchaseOrderSys.Controllers
                 else
                 {
                     var RMAOrderSerialsLlist = db.RMAOrderSerialsLlist.Where(x => IDList.Contains(x.ID) && x.IsEnable);
-                    var nRMAOrderTracking = new RMAOrderTracking { IsEnable = true, CreateAt = DateTime.UtcNow, CreateBy = UserBy };
-                    var nPurchaseNote = new PurchaseNote { IsEnable = true, Note = Note, NoteType = "txt", CreateAt = DateTime.UtcNow, CreateBy = UserBy };
+                    var nRMAOrderTracking = new RMAOrderTracking { IsEnable = true, CreateAt = DateTime.UtcNow, CreateBy =  Session["AdminName"].ToString() };
+                    var nPurchaseNote = new PurchaseNote { IsEnable = true, Note = Note, NoteType = "txt", CreateAt = DateTime.UtcNow, CreateBy =  Session["AdminName"].ToString() };
                     if (Img != null)
                     {
                         foreach (var Imgitem in Img)
                         {
                             var ImgName = SaveImg(Imgitem);
-                            nPurchaseNote.PurchaseNoteImg.Add(new PurchaseNoteImg { IsEnable = true, Img = ImgName, ImgType = Imgitem.ContentType, CreateAt = DateTime.UtcNow, CreateBy = UserBy });
+                            nPurchaseNote.PurchaseNoteImg.Add(new PurchaseNoteImg { IsEnable = true, Img = ImgName, ImgType = Imgitem.ContentType, CreateAt = DateTime.UtcNow, CreateBy =  Session["AdminName"].ToString() });
                             //db.SaveChanges();
                             //PurchaseNoteList = RMA.PurchaseNote.ToList();
                         }
@@ -658,13 +658,13 @@ namespace PurchaseOrderSys.Controllers
                 if (ID.HasValue && ID != 0)
                 {
                     var RMA = db.RMA.Find(ID);
-                    var nPurchaseNote = new PurchaseNote { IsEnable = true, Note = Note, NoteType = "txt", CreateAt = DateTime.UtcNow, CreateBy = UserBy };
+                    var nPurchaseNote = new PurchaseNote { IsEnable = true, Note = Note, NoteType = "txt", CreateAt = DateTime.UtcNow, CreateBy =  Session["AdminName"].ToString() };
                     if (Img != null)
                     {
                         foreach (var Imgitem in Img)
                         {
                             var ImgName = SaveImg(Imgitem);
-                            nPurchaseNote.PurchaseNoteImg.Add(new PurchaseNoteImg { IsEnable = true, Img = ImgName, ImgType = Imgitem.ContentType, CreateAt = DateTime.UtcNow, CreateBy = UserBy });
+                            nPurchaseNote.PurchaseNoteImg.Add(new PurchaseNoteImg { IsEnable = true, Img = ImgName, ImgType = Imgitem.ContentType, CreateAt = DateTime.UtcNow, CreateBy =  Session["AdminName"].ToString() });
                             //db.SaveChanges();
                             //PurchaseNoteList = RMA.PurchaseNote.ToList();
                         }
@@ -680,7 +680,7 @@ namespace PurchaseOrderSys.Controllers
                     {
                         PurchaseNoteList = new List<PurchaseNote>();
                     }
-                    var nPurchaseNote = new PurchaseNote { IsEnable = true, Note = Note, NoteType = "txt", CreateAt = DateTime.UtcNow, CreateBy = UserBy };
+                    var nPurchaseNote = new PurchaseNote { IsEnable = true, Note = Note, NoteType = "txt", CreateAt = DateTime.UtcNow, CreateBy =  Session["AdminName"].ToString() };
                     PurchaseNoteList.Add(nPurchaseNote);
                     if (Img != null)
                     {
@@ -690,7 +690,7 @@ namespace PurchaseOrderSys.Controllers
                             Imgitem.InputStream.CopyTo(target);
                             byte[] data = target.ToArray();
                             string ImgName = Convert.ToBase64String(data, 0, data.Length);
-                            nPurchaseNote.PurchaseNoteImg.Add(new PurchaseNoteImg { IsEnable = true, Img = ImgName, ImgType = "Url", CreateAt = DateTime.UtcNow, CreateBy = UserBy });
+                            nPurchaseNote.PurchaseNoteImg.Add(new PurchaseNoteImg { IsEnable = true, Img = ImgName, ImgType = "Url", CreateAt = DateTime.UtcNow, CreateBy =  Session["AdminName"].ToString() });
                         }
                     }
                     Session["RMAPurchaseNote" + SID] = PurchaseNoteList;
@@ -723,7 +723,7 @@ namespace PurchaseOrderSys.Controllers
                     if (ID.HasValue && ID != 0)
                     {
                         var Note = SaveImg(Imgitem);
-                        RMA.PurchaseNote.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = "Url", CreateAt = DateTime.UtcNow, CreateBy = UserBy });
+                        RMA.PurchaseNote.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = "Url", CreateAt = DateTime.UtcNow, CreateBy =  Session["AdminName"].ToString() });
                         db.SaveChanges();
                         PurchaseNoteList = RMA.PurchaseNote.ToList();
                     }
@@ -740,7 +740,7 @@ namespace PurchaseOrderSys.Controllers
                             PurchaseNoteList = new List<PurchaseNote>();
                         }
 
-                        PurchaseNoteList.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = NoteType, CreateAt = DateTime.UtcNow, CreateBy = UserBy });
+                        PurchaseNoteList.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = NoteType, CreateAt = DateTime.UtcNow, CreateBy =  Session["AdminName"].ToString() });
                         Session["RMAPurchaseNote" + SID] = PurchaseNoteList;
                     }
                 }
@@ -911,7 +911,7 @@ namespace PurchaseOrderSys.Controllers
                     //                        IsEnable = true,
                     //                        SerialsNo = serials,
                     //                        SerialsQTY = 1,
-                    //                        CreateBy = UserBy,
+                    //                        CreateBy =  Session["AdminName"].ToString(),
                     //                        CreateAt = dt
                     //                    });
                     //                }
@@ -929,9 +929,9 @@ namespace PurchaseOrderSys.Controllers
                             SerialsType = "RMAIn",
                             SerialsNo = serials.Trim(),
                             SerialsQTY = 1,
-                            ReceivedBy = UserBy,
+                            ReceivedBy =  Session["AdminName"].ToString(),
                             ReceivedAt = dt,
-                            CreateBy = UserBy,
+                            CreateBy =  Session["AdminName"].ToString(),
                             CreateAt = dt
                         };
                         RMASKU.RMASerialsLlist.Add(nSerialsLlistIn);
@@ -1111,7 +1111,7 @@ namespace PurchaseOrderSys.Controllers
                         var dt = DateTime.UtcNow;
                         RMASKU.IsEnable = false;
                         RMASKU.UpdateAt = dt;
-                        RMASKU.UpdateBy = UserBy;
+                        RMASKU.UpdateBy =  Session["AdminName"].ToString();
                         db.SaveChanges();
                     }
                 }
@@ -1259,7 +1259,7 @@ namespace PurchaseOrderSys.Controllers
         {
             var RMA = db.RMA.Find(rmaid);
             int[] IDList = (int[])TempData["IDList" + rmaid];
-            var CreateBy = UserBy;
+            var CreateBy =  Session["AdminName"].ToString();
             var CreateAt = DateTime.UtcNow;
             RMAOrderTracking.CreateAt = CreateAt;
             RMAOrderTracking.CreateBy = CreateBy;
@@ -1307,7 +1307,7 @@ namespace PurchaseOrderSys.Controllers
                 else
                 {
                     var RMAOrderSerialsLlist = db.RMAOrderSerialsLlist.Where(x => IDList.Contains(x.ID) && x.IsEnable);
-                    var nRMAOrderTracking = new RMAOrderTracking { IsEnable = true, Carrier = Carrier, ReturnTracking = ReturnTracking, CreateAt = DateTime.UtcNow, CreateBy = UserBy };
+                    var nRMAOrderTracking = new RMAOrderTracking { IsEnable = true, Carrier = Carrier, ReturnTracking = ReturnTracking, CreateAt = DateTime.UtcNow, CreateBy =  Session["AdminName"].ToString() };
                     foreach (var item in RMAOrderSerialsLlist)
                     {
                         if (!item.RMAOrderTrackingID.HasValue)
@@ -1319,7 +1319,7 @@ namespace PurchaseOrderSys.Controllers
                             item.RMAOrderTracking.Carrier = Carrier;
                             item.RMAOrderTracking.ReturnTracking = ReturnTracking;
                             item.RMAOrderTracking.UpdateAt = DateTime.UtcNow;
-                            item.RMAOrderTracking.UpdateBy = UserBy;
+                            item.RMAOrderTracking.UpdateBy =  Session["AdminName"].ToString();
                         }
                     }
                     db.SaveChanges();

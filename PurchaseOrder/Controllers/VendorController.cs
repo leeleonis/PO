@@ -23,7 +23,7 @@ namespace PurchaseOrderSys.Controllers
         [HttpPost]
         public ActionResult Create(VendorLIst VendorLIst)
         {
-            VendorLIst.CreateBy = UserBy;
+            VendorLIst.CreateBy =  Session["AdminName"].ToString();
             VendorLIst.CreateAt = DateTime.UtcNow;
             db.VendorLIst.Add(VendorLIst);
             db.SaveChanges();
@@ -60,7 +60,7 @@ namespace PurchaseOrderSys.Controllers
             oVendorLIst.Email = VendorLIst.Email;
             oVendorLIst.EmailCC = VendorLIst.EmailCC;
             oVendorLIst.SCID = VendorLIst.SCID;
-            oVendorLIst.UpdateBy = UserBy;
+            oVendorLIst.UpdateBy =  Session["AdminName"].ToString();
             oVendorLIst.UpdateAt = DateTime.UtcNow;
 
             var BrandList = db.Brand.Where(x => x.IsEnable&& Brand.Contains(x.ID)).ToList();
@@ -80,7 +80,7 @@ namespace PurchaseOrderSys.Controllers
             var oVendorLIst = db.VendorLIst.Find(id);
             oVendorLIst.IsEnable = false;
             oVendorLIst.DelAt= DateTime.UtcNow;
-            oVendorLIst.DelBy = UserBy;
+            oVendorLIst.DelBy =  Session["AdminName"].ToString();
             db.SaveChanges();
             return RedirectToAction("Index");
         }

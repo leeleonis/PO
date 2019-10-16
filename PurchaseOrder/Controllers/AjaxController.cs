@@ -928,6 +928,11 @@ namespace PurchaseOrderSys.Controllers
         [HttpPost]
         public ActionResult ImgUpload(int id, string key, string ImgType, IEnumerable<HttpPostedFileBase> ImgFile)
         {
+            var CreateBy = "POAPI";
+            if (Session["AdminName"] != null)
+            {
+                CreateBy = Session["AdminName"].ToString();
+            }
             if (key == "SKU")
             {
                 var PurchaseSKU = db.PurchaseSKU.Find(id);
@@ -946,10 +951,10 @@ namespace PurchaseOrderSys.Controllers
                                 PictureType = "Logistic",
                                 FileSize = file.ContentLength,
                                 FileName = Url,
-                                CreateBy = UserBy,
+                                CreateBy =  CreateBy ,
                                 CreateAt = DateTime.UtcNow,
                                 UpdateAt = DateTime.UtcNow,
-                                UpdateBy = UserBy
+                                UpdateBy =  Session["AdminName"].ToString()
                             });
 
                             #region 停用
@@ -965,10 +970,10 @@ namespace PurchaseOrderSys.Controllers
                             //        PictureType = "Logistic",
                             //         FileSize= file.ContentLength,
                             //        FileName = Url,
-                            //        CreateBy = UserBy,
+                            //        CreateBy =  CreateBy ,
                             //        CreateAt = DateTime.UtcNow,
                             //        UpdateAt = DateTime.UtcNow,
-                            //        UpdateBy = UserBy
+                            //        UpdateBy =  Session["AdminName"].ToString()
                             //    });
                             //}
                             //else
@@ -977,7 +982,7 @@ namespace PurchaseOrderSys.Controllers
                             //    SkuPicture.FileName = Url;
                             //    SkuPicture.FileSize = file.ContentLength;
                             //    SkuPicture.UpdateAt = DateTime.UtcNow;
-                            //    SkuPicture.UpdateBy = UserBy;
+                            //    SkuPicture.UpdateBy =  Session["AdminName"].ToString();
                             //}
                             //var Url = SaveImg(file);
                             //PurchaseSKU.ImgFile.Add(new ImgFile
@@ -985,7 +990,7 @@ namespace PurchaseOrderSys.Controllers
                             //    IsEnable = true,
                             //    ImgType = ImgType,
                             //    Url = Url,
-                            //    CreateBy = UserBy,
+                            //    CreateBy =  CreateBy ,
                             //    CreateAt = DateTime.UtcNow
                             //});
                             #endregion
@@ -1026,6 +1031,11 @@ namespace PurchaseOrderSys.Controllers
         [HttpPost]
         public ActionResult UpSerialsExcel(int id, string key, HttpPostedFileBase ExcelFile)
         {
+            var CreateBy = "POAPI";
+            if (Session["AdminName"] != null)
+            {
+                CreateBy = Session["AdminName"].ToString();
+            }
             if (key == "Addserials")//序號上傳
             {
                 var ExcelSerialslist = new List<string>();
@@ -1182,7 +1192,7 @@ namespace PurchaseOrderSys.Controllers
                                     Price = item.Key.Price,
                                     Discount = item.Key.Discount,
                                     QTYOrdered = item.QTYOrdered,
-                                    CreateBy = UserBy,
+                                    CreateBy =  CreateBy ,
                                     CreateAt = dt
                                 };
                                 //比對資料，並寫回資料庫
@@ -1266,7 +1276,7 @@ namespace PurchaseOrderSys.Controllers
                                 var SKU = db.SKU.Find(Gserialitem.Key)?.SkuLang.Where(x => x.LangID == LangID).FirstOrDefault();
                                 if (SKU != null)
                                 {
-                                    var nTransferSKU = Transfer.TransferSKU.Where(x => x.SkuNo == Gserialitem.Key).FirstOrDefault();
+                                    var nTransferSKU = Transfer.TransferSKU.Where(x => x.IsEnable && x.SkuNo == Gserialitem.Key).FirstOrDefault();
                                     if (nTransferSKU == null)//沒有資料就新增
                                     {
                                         nTransferSKU = new TransferSKU
@@ -1275,7 +1285,7 @@ namespace PurchaseOrderSys.Controllers
                                             QTY = Gserialitem.item.Count(),
                                             SkuNo = Gserialitem.Key,
                                             Name = SKU.Name,
-                                            CreateBy = UserBy,
+                                            CreateBy =  CreateBy ,
                                             CreateAt = dt
                                         };
                                         Transfer.TransferSKU.Add(nTransferSKU);
@@ -1283,7 +1293,7 @@ namespace PurchaseOrderSys.Controllers
                                     else
                                     {
                                         nTransferSKU.QTY = Gserialitem.item.Count();
-                                        nTransferSKU.UpdateBy = UserBy;
+                                        nTransferSKU.UpdateBy =  Session["AdminName"].ToString();
                                         nTransferSKU.UpdateAt = dt;
                                     }
                                     var SerialTracking = SKU.GetSku.SerialTracking;//有序號管理
@@ -1321,9 +1331,9 @@ namespace PurchaseOrderSys.Controllers
                                                             SerialsNo = Serial.SerialsNo.Trim(),
                                                             SerialsQTY = -1,
                                                             SerialsType = "TransferOut",
-                                                            CreateBy = UserBy,
+                                                            CreateBy =  CreateBy ,
                                                             CreateAt = dt,
-                                                            ReceivedBy = UserBy,
+                                                            ReceivedBy =  Session["AdminName"].ToString(),
                                                             ReceivedAt = dt,
                                                         };
                                                         nTransferSKU.SerialsLlist.Add(nSerialsLlist);
@@ -1338,9 +1348,9 @@ namespace PurchaseOrderSys.Controllers
                                                             SerialsNo = Serial.SerialsNo.Trim(),
                                                             SerialsQTY = -1,
                                                             SerialsType = "TransferOut",
-                                                            CreateBy = UserBy,
+                                                            CreateBy =  CreateBy ,
                                                             CreateAt = dt,
-                                                            ReceivedBy = UserBy,
+                                                            ReceivedBy =  Session["AdminName"].ToString(),
                                                             ReceivedAt = dt,
                                                         };
                                                         nTransferSKU.SerialsLlist.Add(nSerialsLlist);
@@ -1369,9 +1379,9 @@ namespace PurchaseOrderSys.Controllers
                                                             SerialsNo = Serial.SerialsNo.Trim(),
                                                             SerialsQTY = -1,
                                                             SerialsType = "TransferOut",
-                                                            CreateBy = UserBy,
+                                                            CreateBy =  CreateBy ,
                                                             CreateAt = dt,
-                                                            ReceivedBy = UserBy,
+                                                            ReceivedBy =  Session["AdminName"].ToString(),
                                                             ReceivedAt = dt,
                                                         };
                                                         nTransferSKU.SerialsLlist.Add(nSerialsLlist);
@@ -1439,7 +1449,7 @@ namespace PurchaseOrderSys.Controllers
                             }
                             else
                             {
-                                Transfer.UpdateBy = UserBy;
+                                Transfer.UpdateBy =  Session["AdminName"].ToString();
                                 Transfer.UpdateAt = dt;
                                 Transfer.Status = "Requested";
                                 db.SaveChanges();
@@ -1514,7 +1524,7 @@ namespace PurchaseOrderSys.Controllers
 
                                     SKU.GetSku.Logistic.Price = item.Price.Value;
                                 }
-                                var nTransferSKU = Transfer.TransferSKU.Where(x => x.SkuNo == item.SKU).FirstOrDefault();
+                                var nTransferSKU = Transfer.TransferSKU.Where(x => x.IsEnable && x.SkuNo == item.SKU).FirstOrDefault();
                                 if (nTransferSKU == null)//沒有資料就新增
                                 {
                                     nTransferSKU = new TransferSKU
@@ -1523,7 +1533,7 @@ namespace PurchaseOrderSys.Controllers
                                         QTY = item.Qty,
                                         SkuNo = item.SKU,
                                         Name = SKU.Name,
-                                        CreateBy = UserBy,
+                                        CreateBy =  CreateBy ,
                                         CreateAt = dt
                                     };
                                     Transfer.TransferSKU.Add(nTransferSKU);
@@ -1531,7 +1541,7 @@ namespace PurchaseOrderSys.Controllers
                                 else
                                 {
                                     nTransferSKU.QTY = item.Qty;
-                                    nTransferSKU.UpdateBy = UserBy;
+                                    nTransferSKU.UpdateBy =  Session["AdminName"].ToString();
                                     nTransferSKU.UpdateAt = dt;
                                 }
                                 db.SaveChanges();
@@ -1845,6 +1855,11 @@ namespace PurchaseOrderSys.Controllers
         }
         public ActionResult CreateDropShipPO(DropshpOrderBySC DropshpOrderBySC)
         {
+            var CreateBy = "POAPI";
+            if (Session["AdminName"] != null)
+            {
+                CreateBy = Session["AdminName"].ToString();
+            }
             SCWS = new SC_WebService(ApiUserName, ApiPassword);
             AjaxResult result = new AjaxResult();
             try
@@ -1886,7 +1901,7 @@ namespace PurchaseOrderSys.Controllers
                         Tax = Vendor.Tax,
                         Description = DropshpOrderBySC.PurchaseTitle,
                         InvoiceNo = DropshpOrderBySC.Invoice,
-                        CreateBy = UserBy,
+                        CreateBy = CreateBy,
                         CreateAt = CreateAt
                     };
                     if (DropshpOrderBySC.Items != null)
@@ -1901,7 +1916,7 @@ namespace PurchaseOrderSys.Controllers
                                 SkuNo = item.Sku,
                                 VendorSKU = item.Sku,
                                 QTYOrdered = item.Qty,
-                                CreateBy = UserBy,
+                                CreateBy = CreateBy,
                                 CreateAt = CreateAt
                             };
                             nPurchaseOrder.PurchaseSKU.Add(nPurchaseSKU);
@@ -1916,9 +1931,9 @@ namespace PurchaseOrderSys.Controllers
                                         SerialsType = "DropshpOrderIn",
                                         SerialsNo = SerialNumberitem.Trim(),
                                         SerialsQTY = 1,
-                                        ReceivedBy = UserBy,
+                                        ReceivedBy =  Session["AdminName"].ToString(),
                                         ReceivedAt = dt,
-                                        CreateBy = UserBy,
+                                        CreateBy =  CreateBy ,
                                         CreateAt = dt
                                     };
                                     nPurchaseSKU.SerialsLlist.Add(nSerialsLlistIn);
@@ -1929,9 +1944,9 @@ namespace PurchaseOrderSys.Controllers
                                     //    SerialsType = "DropshpOrderOut",
                                     //    SerialsNo = SerialNumberitem,
                                     //    SerialsQTY = -1,
-                                    //    ReceivedBy = UserBy,
+                                    //    ReceivedBy =  Session["AdminName"].ToString(),
                                     //    ReceivedAt = dt,
-                                    //    CreateBy = UserBy,
+                                    //    CreateBy =  CreateBy ,
                                     //    CreateAt = dt
                                     //};
                                     //nSerialsLlistIn.SerialsLlistC.Add(nSerialsLlistOut);
@@ -1975,9 +1990,9 @@ namespace PurchaseOrderSys.Controllers
                                         SerialsType = "DropshpOrderIn",
                                         SerialsNo = SerialNumberitem.Trim(),
                                         SerialsQTY = 1,
-                                        ReceivedBy = UserBy,
+                                        ReceivedBy =  Session["AdminName"].ToString(),
                                         ReceivedAt = dt,
-                                        CreateBy = UserBy,
+                                        CreateBy =  CreateBy ,
                                         CreateAt = dt
                                     };
                                     oPurchaseSKU.SerialsLlist.Add(nSerialsLlistIn);
@@ -1988,9 +2003,9 @@ namespace PurchaseOrderSys.Controllers
                                     //    SerialsType = "DropshpOrderOut",
                                     //    SerialsNo = SerialNumberitem,
                                     //    SerialsQTY = -1,
-                                    //    ReceivedBy = UserBy,
+                                    //    ReceivedBy =  Session["AdminName"].ToString(),
                                     //    ReceivedAt = dt,
-                                    //    CreateBy = UserBy,
+                                    //    CreateBy =  CreateBy ,
                                     //    CreateAt = dt
                                     //};
                                     //nSerialsLlistIn.SerialsLlistC.Add(nSerialsLlistOut);
@@ -2017,7 +2032,11 @@ namespace PurchaseOrderSys.Controllers
         }
         public ActionResult CheckTracking()
         {
-            var CreateBy = UserBy;
+            var CreateBy =  "POAPI" ;
+            if (Session["AdminName"] != null)
+            {
+                CreateBy = Session["AdminName"].ToString();
+            }
             var CreateAt = DateTime.UtcNow;
             var Winit_API = new Winit_API();
             var ApiSetting = db.ApiSetting.Find(16);

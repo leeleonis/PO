@@ -83,7 +83,7 @@ namespace PurchaseOrderSys.Controllers
                 CreditStatus = filter.CreditStatus,
                 CreditDate = filter.CreditDate,
                 CreditAmount = filter.CreditAmount,
-                CreateBy = UserBy,
+                CreateBy =  Session["AdminName"].ToString(),
                 CreateAt = DateTime.UtcNow
             };
             db.CreditMemo.Add(CreditMemo);
@@ -101,7 +101,7 @@ namespace PurchaseOrderSys.Controllers
                     CreditQTY = x.CreditQTY,
                     Credit = x.Credit,
                     QTYReceived = x.QTYReceived,
-                    CreateBy = UserBy,
+                    CreateBy =  Session["AdminName"].ToString(),
                     CreateAt = DateTime.UtcNow
                 });
                 foreach (var item in PurchaseSKUlist)
@@ -121,7 +121,7 @@ namespace PurchaseOrderSys.Controllers
                             IsEnable = true,
                             ImgType = "VendorCM",
                             Url = Url,
-                            CreateBy = UserBy,
+                            CreateBy =  Session["AdminName"].ToString(),
                             CreateAt = DateTime.UtcNow
                         });
                     }
@@ -156,7 +156,7 @@ namespace PurchaseOrderSys.Controllers
                 {
                     CreditMemo.IsEnable = false;
                     CreditMemo.UpdateAt = UpdateAt;
-                    CreditMemo.UpdateBy = UserBy;
+                    CreditMemo.UpdateBy =  Session["AdminName"].ToString();
                     foreach (var item in CreditMemo.PurchaseSKU)
                     {
 
@@ -168,7 +168,7 @@ namespace PurchaseOrderSys.Controllers
                         {
                             item.IsEnable = false;
                             item.UpdateAt = UpdateAt;
-                            item.UpdateBy = UserBy;
+                            item.UpdateBy =  Session["AdminName"].ToString();
                         }
                     }
                 }
@@ -198,7 +198,7 @@ namespace PurchaseOrderSys.Controllers
                 PODate = filter.PODate,
                 POStatus = filter.POStatus,
                 POType = filter.POType,
-                CreateBy = UserBy,
+                CreateBy =  Session["AdminName"].ToString(),
                 CreateAt = DateTime.UtcNow
             };
             db.PurchaseOrder.Add(PurchaseOrder);
@@ -315,7 +315,7 @@ namespace PurchaseOrderSys.Controllers
             if (filter.CreditDate.HasValue) CreditMemo.CreditDate = filter.CreditDate;
             if (filter.CreditAmount.HasValue) CreditMemo.CreditAmount = filter.CreditAmount;
             if (filter.WarehouseID.HasValue) CreditMemo.WarehouseID = filter.WarehouseID;
-            CreditMemo.UpdateBy = UserBy;
+            CreditMemo.UpdateBy =  Session["AdminName"].ToString();
             CreditMemo.UpdateAt = dt;
 
             if (VendorCM != null && VendorCM.Any())
@@ -330,7 +330,7 @@ namespace PurchaseOrderSys.Controllers
                             IsEnable = true,
                             ImgType = "VendorCM",
                             Url = Url,
-                            CreateBy = UserBy,
+                            CreateBy =  Session["AdminName"].ToString(),
                             CreateAt = dt
                         });
                     }
@@ -361,19 +361,19 @@ namespace PurchaseOrderSys.Controllers
                             if (SKUitem.CreditQTY != item.CreditQTY)
                             {
                                 SKUitem.CreditQTY = item.CreditQTY;
-                                SKUitem.UpdateBy = UserBy;
+                                SKUitem.UpdateBy =  Session["AdminName"].ToString();
                                 SKUitem.UpdateAt = dt;
                             }
                             if (SKUitem.Credit != item.Credit)
                             {
                                 SKUitem.Credit = item.Credit;
-                                SKUitem.UpdateBy = UserBy;
+                                SKUitem.UpdateBy =  Session["AdminName"].ToString();
                                 SKUitem.UpdateAt = dt;
                             }
                             if (SKUitem.QTYOrdered != item.QTYOrdered)
                             {
                                 SKUitem.QTYOrdered = item.QTYOrdered;
-                                SKUitem.UpdateBy = UserBy;
+                                SKUitem.UpdateBy =  Session["AdminName"].ToString();
                                 SKUitem.UpdateAt = dt;
                             }
                         }
@@ -382,7 +382,7 @@ namespace PurchaseOrderSys.Controllers
                     {
                         item.IsEnable = true;
                         item.CreateAt = dt;
-                        item.CreateBy = UserBy;
+                        item.CreateBy =  Session["AdminName"].ToString();
                         CreditMemo.PurchaseSKU.Add(item);
                     }
                 }
@@ -395,7 +395,7 @@ namespace PurchaseOrderSys.Controllers
                         foreach (var SKUitem in oldPurchaseSKU)
                         {
                             SKUitem.IsEnable = false;
-                            SKUitem.UpdateBy = UserBy;
+                            SKUitem.UpdateBy =  Session["AdminName"].ToString();
                             SKUitem.UpdateAt = dt;
                         }
                         //db.SaveChanges();
@@ -433,7 +433,7 @@ namespace PurchaseOrderSys.Controllers
                 oCreditMemo.InvoiceNo = CreditMemo.InvoiceNo;
             }
             oCreditMemo.UpdateAt = UpdateAt;
-            oCreditMemo.UpdateBy = UserBy;
+            oCreditMemo.UpdateBy =  Session["AdminName"].ToString();
             foreach (var QTYReturneditem in QTYReturned)
             {
                 if (!string.IsNullOrWhiteSpace(QTYReturneditem.val))
@@ -471,7 +471,7 @@ namespace PurchaseOrderSys.Controllers
                         SerialsType = "CM",
                         SerialsNo = item.SerialsNo.Trim(),
                         SerialsQTY = -1,
-                        CreateBy = UserBy,
+                        CreateBy =  Session["AdminName"].ToString(),
                         CreateAt = UpdateAt
                     };
                     PurchaseSKU.SerialsLlist.Add(nSerialsLlist);
@@ -739,7 +739,7 @@ namespace PurchaseOrderSys.Controllers
         {
 
             PurchaseSKU.IsEnable = true;
-            PurchaseSKU.CreateBy = UserBy;
+            PurchaseSKU.CreateBy =  Session["AdminName"].ToString();
             PurchaseSKU.CreateAt = DateTime.UtcNow;
             db.PurchaseSKU.Add(PurchaseSKU);
             db.SaveChanges();
@@ -829,7 +829,7 @@ namespace PurchaseOrderSys.Controllers
                                 SerialsType = "CM",
                                 SerialsNo = serials.Trim(),
                                 SerialsQTY = -1,
-                                CreateBy = UserBy,
+                                CreateBy =  Session["AdminName"].ToString(),
                                 CreateAt = dt
                             };
                             db.SerialsLlist.Add(nSerialsLlist);
@@ -859,7 +859,7 @@ namespace PurchaseOrderSys.Controllers
                                     SerialsType = "CM",
                                     SerialsNo = serials.Trim(),
                                     SerialsQTY = -1,
-                                    CreateBy = UserBy,
+                                    CreateBy =  Session["AdminName"].ToString(),
                                     CreateAt = dt
                                 };
                                 db.SerialsLlist.Add(nSerialsLlist);
@@ -926,7 +926,7 @@ namespace PurchaseOrderSys.Controllers
                     Carrier = PoSerialsLlist.PurchaseSKU.PurchaseOrder.Carrier,
                     Tracking = PoSerialsLlist.PurchaseSKU.PurchaseOrder.Tracking,
                     CreditStatus = "Completed",
-                    CreateBy = UserBy,
+                    CreateBy =  Session["AdminName"].ToString(),
                     CreateAt = DateTime.UtcNow
                 };
                 db.CreditMemo.Add(CreditMemo);
@@ -942,7 +942,7 @@ namespace PurchaseOrderSys.Controllers
                     CreditQTY = PoSerialsLlist.PurchaseSKU.CreditQTY,
                     Credit = PoSerialsLlist.PurchaseSKU.Credit,
                     QTYReceived = PoSerialsLlist.PurchaseSKU.QTYReceived,
-                    CreateBy = UserBy,
+                    CreateBy =  Session["AdminName"].ToString(),
                     CreateAt = DateTime.UtcNow
                 };
                 if (ckSerialsLlist.Any())
@@ -954,7 +954,7 @@ namespace PurchaseOrderSys.Controllers
                         SerialsType = "CM",
                         SerialsNo = PoSerialsLlist.SerialsNo.Trim(),
                         SerialsQTY = -1,
-                        CreateBy = UserBy,
+                        CreateBy =  Session["AdminName"].ToString(),
                         CreateAt = DateTime.UtcNow
                     });
                   
@@ -968,7 +968,7 @@ namespace PurchaseOrderSys.Controllers
                         SerialsType = "CM",
                         SerialsNo = PoSerialsLlist.SerialsNo.Trim(),
                         SerialsQTY = -1,
-                        CreateBy = UserBy,
+                        CreateBy =  Session["AdminName"].ToString(),
                         CreateAt = DateTime.UtcNow
                     });
                 }
