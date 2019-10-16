@@ -89,16 +89,19 @@ namespace PurchaseOrderSys.Controllers
 
                     if (order.SCID.HasValue)
                     {
-                        JobProcess job = new JobProcess(string.Format("更改訂單【{0}】的狀態至SC", order.ID));
-                        job.AddWork(() =>
+                        JobProcess Job = new JobProcess(string.Format("更改訂單【{0}】的狀態至SC", order.ID));
+                        Job.AddWork(Task =>
                         {
                             try
                             {
-                                job.AddLog("開始在SC上更改訂單狀態");
+                                JobProcess WorkJob = Task as JobProcess;
+                                WorkJob.StatusLog(EnumData.TaskStatus.執行中);
+
+                                WorkJob.AddLog("開始在SC上更改訂單狀態");
                                 OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
                                 OM.ChangeOrderStatusToSC(order.OrderStatus);
                                 OM.OrderSyncPush();
-                                job.AddLog("完成訂單狀態更改");
+                                WorkJob.AddLog("完成訂單狀態更改");
                             }
                             catch (Exception ex)
                             {
@@ -106,7 +109,7 @@ namespace PurchaseOrderSys.Controllers
                             }
 
                             return "";
-                        });
+                        }, Job);
                     }
                 }
             }

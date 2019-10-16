@@ -9,9 +9,9 @@ namespace PurchaseOrderSys.Models
 {
     public class JobProcess : Common, IDisposable
     {
-        public Thread Work;
-        public Task<string> Task;
-        public TaskScheduler TaskScheduler;
+        private Thread Work;
+        private Task<string> Task;
+        private TaskScheduler TaskScheduler;
 
         public JobProcess(string Name)
         {

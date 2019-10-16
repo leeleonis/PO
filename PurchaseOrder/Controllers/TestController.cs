@@ -920,7 +920,7 @@ namespace PurchaseOrderSys.Controllers
             job1.AddWork(Func_Test1, job1);
             JobProcess job2 = new JobProcess("Task Test2");
             job2.AddWork(Func_Test2, job2);
-            Response.Write(string.Format("ID：{0}，Staus：{1}，Result：{2}", job2.Task.Id, job2.Task.Status, job2.Task.Result));
+            //Response.Write(string.Format("ID：{0}，Staus：{1}，Result：{2}", job2.Task.Id, job2.Task.Status, job2.Task.Result));
         }
 
         private string Func_Test1(object JobProcess)
