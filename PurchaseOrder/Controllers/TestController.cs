@@ -917,9 +917,11 @@ namespace PurchaseOrderSys.Controllers
         public void Task_Test()
         {
             JobProcess job1 = new JobProcess("Task Test1");
-            job1.StartWork(Func_Test1);
+            Func_Test1(job1);
+//            job1.StartWork(Func_Test1);
             JobProcess job2 = new JobProcess("Task Test2");
-            job2.AddWork(Func_Test2, job2);
+            Func_Test2(job2);
+            //job2.AddWork(Func_Test2, job2);
         }
 
         private void Func_Test1(object JobProcess)
