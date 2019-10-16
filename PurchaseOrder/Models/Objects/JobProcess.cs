@@ -10,21 +10,24 @@ namespace PurchaseOrderSys.Models
     public class JobProcess : Common, IDisposable
     {
         public Thread Work;
-        public Task<string> Taskk;
+        public Task<string> Task;
         public TaskScheduler TaskScheduler;
 
         public JobProcess(string Name)
         {
-            TaskScheduler = new TaskScheduler()
+            lock (db)
             {
-                Name = Name,
-                Status = (byte)EnumData.TaskStatus.未執行,
-                CreateBy = AdminName,
-                CreateAt = DateTime.UtcNow
-            };
+                TaskScheduler = new TaskScheduler()
+                {
+                    Name = Name,
+                    Status = (byte)EnumData.TaskStatus.未執行,
+                    CreateBy = AdminName,
+                    CreateAt = DateTime.UtcNow
+                };
 
-            db.TaskScheduler.Add(TaskScheduler);
-            db.SaveChanges();
+                db.TaskScheduler.Add(TaskScheduler);
+                db.SaveChanges();
+            }
         }
 
         public void StartWork(ParameterizedThreadStart work)
@@ -43,7 +46,9 @@ namespace PurchaseOrderSys.Models
 
         public void AddWork(Func<string> work)
         {
-            Taskk.ContinueWith((Task) =>
+            Task = System.Threading.Tasks.Task.Factory.StartNew(work);
+
+            Task.ContinueWith((Task) =>
             {
                 if (Task.IsFaulted)
                 {
@@ -64,16 +69,14 @@ namespace PurchaseOrderSys.Models
                         StatusLog(EnumData.TaskStatus.執行完);
                     }
                 }
-            }, TaskContinuationOptions.None);
-
-            Task.Factory.StartNew(work).GetAwaiter().GetResult();
+            }, TaskContinuationOptions.ExecuteSynchronously);
         }
 
-        public string AddWork(Func<object, string> work, object data)
+        public void AddWork(Func<object, string> work, object data)
         {
-            Taskk = Task.Factory.StartNew(work, data);
-
-            Taskk.ContinueWith((Task) =>
+            Task = System.Threading.Tasks.Task.Factory.StartNew(work, data);
+            
+            Task.ContinueWith((Task) =>
             {
                 if (Task.IsFaulted)
                 {
@@ -94,27 +97,27 @@ namespace PurchaseOrderSys.Models
                         StatusLog(EnumData.TaskStatus.執行完);
                     }
                 }
-            }, TaskContinuationOptions.None);
-
-            return Taskk.GetAwaiter().GetResult();
-            
+            }, TaskContinuationOptions.ExecuteSynchronously);   
         }
 
         internal void AddLog(string description)
         {
-            db.TaskLog.Add(new TaskLog()
+            lock (db)
             {
-                Scheduler = TaskScheduler.ID,
-                Description = description,
-                CreateBy = AdminName,
-                CreateAt = DateTime.UtcNow
-            });
-            db.SaveChanges();
+                db.TaskLog.Add(new TaskLog()
+                {
+                    Scheduler = TaskScheduler.ID,
+                    Description = description,
+                    CreateBy = AdminName,
+                    CreateAt = DateTime.UtcNow
+                });
+                db.SaveChanges();
+            }
         }
 
         internal void StatusLog(EnumData.TaskStatus status)
         {
-            lock (TaskScheduler)
+            lock (db)
             {
                 TaskScheduler.Status = (byte)status;
                 TaskScheduler.UpdateAt = DateTime.UtcNow;

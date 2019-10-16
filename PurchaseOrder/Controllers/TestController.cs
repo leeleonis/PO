@@ -921,7 +921,7 @@ namespace PurchaseOrderSys.Controllers
 //            job1.StartWork(Func_Test1);
             JobProcess job2 = new JobProcess("Task Test2");
             job2.AddWork(Func_Test2, job2);
-            Response.Write(string.Format("ID：{0}，Staus：{1}，Result：{2}", job2.Taskk.Id, job2.Taskk.Status, job2.Taskk.Result));
+            Response.Write(string.Format("ID：{0}，Staus：{1}，Result：{2}", job2.Task.Id, job2.Task.Status, job2.Task.Result));
         }
 
         private void Func_Test1(object JobProcess)
@@ -945,13 +945,14 @@ namespace PurchaseOrderSys.Controllers
                 var job = JobProcess as JobProcess;
                 job.StatusLog(EnumData.TaskStatus.執行中);
                 job.AddLog("Task Test2");
+                System.Threading.Thread.Sleep(10000);
             }
             catch (Exception ex)
             {
                 return ex.InnerException?.Message ?? ex.Message;
             }
 
-            return "Finish!";
+            return "";
         }
 
         public ActionResult Autoreturntoshipper()
