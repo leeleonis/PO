@@ -513,7 +513,7 @@ namespace PurchaseOrderSys.Controllers
                                 {
                                     IsEnable = true,
                                     SerialsType = "DropshpOrderIn",
-                                    SerialsNo = serials,
+                                    SerialsNo = serials.Trim(),
                                     SerialsQTY = 1,
                                     ReceivedBy = UserBy,
                                     ReceivedAt = dt,
@@ -525,7 +525,7 @@ namespace PurchaseOrderSys.Controllers
                                 {
                                     IsEnable = true,
                                     SerialsType = "DropshpOrderOut",
-                                    SerialsNo = serials,
+                                    SerialsNo = serials.Trim(),
                                     SerialsQTY = -1,
                                     ReceivedBy = UserBy,
                                     ReceivedAt = dt,
@@ -546,7 +546,7 @@ namespace PurchaseOrderSys.Controllers
                                 {
                                     IsEnable = true,
                                     SerialsType = "PO",
-                                    SerialsNo = serials,
+                                    SerialsNo = serials.Trim(),
                                     SerialsQTY = 1,
                                     ReceivedBy = UserBy,
                                     ReceivedAt = dt,

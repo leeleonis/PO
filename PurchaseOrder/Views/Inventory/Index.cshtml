@@ -32,24 +32,17 @@
                                         <fieldset>
                                             <legend>Search</legend>
                                             <div class="form-group">
-                                                @Html.Label("SKU", htmlAttributes: new { @class = "control-label col-sm-1" })
+                                                @Html.Label("SKU/Product Name", htmlAttributes: new { @class = "control-label col-sm-1" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.Editor("SKU", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
-                                                @Html.Label("Warehouse", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                @*@Html.Label("Warehouse", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
                                                     @Html.DropDownList("WarehouseID", Warehouselist, DefaultSelect, htmlAttributes: new { @class = "form-control" })
-                                                </div>
-                                                @Html.Label("有無庫存", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                </div>*@
+                                                @Html.Label("In Stock", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    <label class="radio radio-inline">
-                                                        @Html.RadioButton("IsInventory", true,  new { @class = "radiobox", @checked = "checked" })
-                                                        <span>是</span>
-                                                    </label>
-                                                    <label class="radio radio-inline">
-                                                        @Html.RadioButton("IsInventory", false, new { @class = "radiobox"})
-                                                        <span>否</span>
-                                                    </label>
+                                                    @Html.DropDownList("IsInventory", Warehouselist, DefaultSelect, htmlAttributes: new { @class = "form-control" })
                                                 </div>
                                                 <button type="submit" class="btn btn-primary" id="Query">查詢</button>
                                             </div>

@@ -316,7 +316,7 @@ namespace PurchaseOrderSys.Controllers
                             SerialsLlist = new SerialsLlist
                             {
                                 IsEnable = true,
-                                SerialsNo = serial,
+                                SerialsNo = serial.Trim(),
                                 SerialsQTY = 1,
                                 SerialsType = "PO",
                                 CreateBy = CreateBy,
@@ -332,7 +332,7 @@ namespace PurchaseOrderSys.Controllers
                                 BarCode = Sbarcode,
                                 Name = SKUNAME,
                                 SkuNo = SKU.SkuID,
-                                SerialsNo = serial,
+                                SerialsNo = serial.Trim(),
                                 CreateBy = CreateBy,
                                 CreateAt = dt
                             };
@@ -960,8 +960,7 @@ namespace PurchaseOrderSys.Controllers
             var SerialsLlist = new List<RMASerialsLlist>();
             foreach (var Serialitem in RMASerialsLlist)
             {
-                //if (Serialitem.Reason == "16")
-                if (true)
+                if (Serialitem.Reason == "16")
                 {
                     var dt = DateTime.UtcNow;
                     //開移倉單
@@ -990,7 +989,7 @@ namespace PurchaseOrderSys.Controllers
                     var nSerialsLlist = new SerialsLlist
                     {
                         IsEnable = true,
-                        SerialsNo = Serialitem.SerialsNo,
+                        SerialsNo = Serialitem.SerialsNo.Trim(),
                         SerialsQTY = 1,
                         SerialsType = "TransferIn",
                         CreateBy = "RMAAPI",
@@ -1004,7 +1003,7 @@ namespace PurchaseOrderSys.Controllers
                         IsEnable = true,
                         RMASKUID = Serialitem.RMASKUID,
                         RMASerialsLlistP = Serialitem,
-                        SerialsNo = Serialitem.SerialsNo,
+                        SerialsNo = Serialitem.SerialsNo.Trim(),
                         SerialsQTY = -1,
                         SerialsType = "TransferOut",
                         CreateBy = "RMAAPI",
@@ -1048,7 +1047,7 @@ namespace PurchaseOrderSys.Controllers
                             CreateBy = "QDAdmin",
                             CreateAt = dt,
                             Value = Serialsitem.TransferSKU.SKU.Logistic?.Price,
-                            SerialsNo = Serialsitem.SerialsNo,
+                            SerialsNo = Serialsitem.SerialsNo.Trim(),
                             Name = Serialsitem.TransferSKU.Name,
                             Weight = Serialsitem.TransferSKU.SKU.Logistic?.ShippingWeight,
                             FilePage = FilePage.ToString(),

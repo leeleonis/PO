@@ -768,26 +768,28 @@
                     }
                 }
             });
-            $("#VendorID").click(function () {
-                var url = '@Url.Action("GateVendorCurrency", "Ajax")'
-                $.ajax({
-                    traditional: true,
-                    type: "post",
-                    url: url,
-                    data: {
-                        ID: $(this).val(),
-                    },
-                    success: function (data) {
-                        if (data.status) {
-                            $("#Currency").val(data.Currency);
-                            $("#Tax").val(data.Tax);
-                            DataGridC.draw();
+            $("#VendorID").change(function () {
+                if ($(this).val() != "") {
+                    var url = '@Url.Action("GateVendorCurrency", "Ajax")'
+                    $.ajax({
+                        traditional: true,
+                        type: "post",
+                        url: url,
+                        data: {
+                            ID: $(this).val(),
+                        },
+                        success: function (data) {
+                            if (data.status) {
+                                $("#Currency").val(data.Currency);
+                                $("#Tax").val(data.Tax);
+                                DataGridC.draw();
+                            }
+                            else {
+                                alert(data.Errmsg);
+                            }
                         }
-                        else {
-                            alert(data.Errmsg);
-                        }
-                    }
-                });
+                    });
+                }
             });
             $("#addsku").click(function () {
                 var VendorID = $("#VendorID").val();

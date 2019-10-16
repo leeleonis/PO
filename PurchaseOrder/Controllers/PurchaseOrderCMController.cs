@@ -456,7 +456,6 @@ namespace PurchaseOrderSys.Controllers
 
         private void CMFreeSerials(PurchaseSKU PurchaseSKU, DateTime UpdateAt)
         {
-
             var count = PurchaseSKU.QTYReturned ?? 0;
             var CMSerialsLlistCount = PurchaseSKU.SerialsLlist.Where(x => x.SerialsType == "CM").Count();//CM數
             if (count > CMSerialsLlistCount)
@@ -470,7 +469,7 @@ namespace PurchaseOrderSys.Controllers
                         PurchaseSKUID = item.PurchaseSKUID,
                         PID = item.ID,
                         SerialsType = "CM",
-                        SerialsNo = item.SerialsNo,
+                        SerialsNo = item.SerialsNo.Trim(),
                         SerialsQTY = -1,
                         CreateBy = UserBy,
                         CreateAt = UpdateAt
@@ -828,7 +827,7 @@ namespace PurchaseOrderSys.Controllers
                                 PurchaseSKUID = PurchaseSKUID,
                                 PID = PID,
                                 SerialsType = "CM",
-                                SerialsNo = serials,
+                                SerialsNo = serials.Trim(),
                                 SerialsQTY = -1,
                                 CreateBy = UserBy,
                                 CreateAt = dt
@@ -858,7 +857,7 @@ namespace PurchaseOrderSys.Controllers
                                     TransferSKUID= TSerialsLlist.TransferSKUID,
                                     PID = PID,
                                     SerialsType = "CM",
-                                    SerialsNo = serials,
+                                    SerialsNo = serials.Trim(),
                                     SerialsQTY = -1,
                                     CreateBy = UserBy,
                                     CreateAt = dt
@@ -953,7 +952,7 @@ namespace PurchaseOrderSys.Controllers
                         IsEnable = true,
                         PID = ckSerialsLlist.FirstOrDefault().ID,
                         SerialsType = "CM",
-                        SerialsNo = PoSerialsLlist.SerialsNo,
+                        SerialsNo = PoSerialsLlist.SerialsNo.Trim(),
                         SerialsQTY = -1,
                         CreateBy = UserBy,
                         CreateAt = DateTime.UtcNow
@@ -967,7 +966,7 @@ namespace PurchaseOrderSys.Controllers
                         IsEnable = true,
                         PID = ckRMASerialsLlist.FirstOrDefault().ID,
                         SerialsType = "CM",
-                        SerialsNo = PoSerialsLlist.SerialsNo,
+                        SerialsNo = PoSerialsLlist.SerialsNo.Trim(),
                         SerialsQTY = -1,
                         CreateBy = UserBy,
                         CreateAt = DateTime.UtcNow

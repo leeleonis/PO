@@ -724,7 +724,7 @@ namespace PurchaseOrderSys.Controllers
                                 PurchaseSKUID = POSerialsLlist.LastOrDefault().PurchaseSKUID,
                                 TransferSKUID = POSerialsLlist.LastOrDefault().TransferSKUID,
                                 PID = POSerialsLlist.LastOrDefault().ID,
-                                SerialsNo = sBarCode,
+                                SerialsNo = sBarCode.Trim(),
                                 SerialsType = "Order",
                                 SerialsQTY = -1,
                                 Memo = JsonConvert.SerializeObject(ShipmentOrder),
@@ -746,7 +746,7 @@ namespace PurchaseOrderSys.Controllers
                                 {
                                     SkuNo = POSerialsLlist.LastOrDefault().TransferSKU.SkuNo;
                                 }
-                                SerialsNo = POSerialsLlist.LastOrDefault().SerialsNo;
+                                SerialsNo = POSerialsLlist.LastOrDefault().SerialsNo.Trim();
 
                                 Dictionarylist.Add(new Tuple<string, string>(SkuNo, SerialsNo));
                             }
@@ -767,7 +767,7 @@ namespace PurchaseOrderSys.Controllers
                                     PurchaseSKUID = WinitSerialsLlist.LastOrDefault().PurchaseSKUID,
                                     TransferSKUID = WinitSerialsLlist.LastOrDefault().TransferSKUID,
                                     PID = WinitSerialsLlist.LastOrDefault().ID,
-                                    SerialsNo = Serialsitem.SerialsNo,
+                                    SerialsNo = Serialsitem.SerialsNo.Trim(),
                                     SerialsType = "TransferIn",
                                     SerialsQTY = 1,
                                     Memo = "AUTO ADD",
@@ -796,7 +796,7 @@ namespace PurchaseOrderSys.Controllers
                                     OrderID = Serialsitem.OrderID,
                                     PurchaseSKUID = WinitSerialsLlist.LastOrDefault().PurchaseSKUID,
                                     TransferSKUID = WinitSerialsLlist.LastOrDefault().TransferSKUID,
-                                    SerialsNo = Serialsitem.SerialsNo,
+                                    SerialsNo = Serialsitem.SerialsNo.Trim(),
                                     SerialsType = "Order",
                                     SerialsQTY = -1,
                                     Memo = JsonConvert.SerializeObject(ShipmentOrder),
@@ -817,7 +817,7 @@ namespace PurchaseOrderSys.Controllers
                                     {
                                         SkuNo = WinitSerialsLlist.LastOrDefault().TransferSKU.SkuNo;
                                     }
-                                    SerialsNo = WinitSerialsLlist.LastOrDefault().SerialsNo;
+                                    SerialsNo = WinitSerialsLlist.LastOrDefault().SerialsNo.Trim();
 
                                     Dictionarylist.Add(new Tuple<string, string>(SkuNo, SerialsNo));
                                 }
@@ -850,7 +850,7 @@ namespace PurchaseOrderSys.Controllers
                                         PurchaseSKUID = item.PurchaseSKUID,
                                         TransferSKUID = item.TransferSKUID,
                                         PID = item.ID,
-                                        SerialsNo = item.SerialsNo,
+                                        SerialsNo = item.SerialsNo.Trim(),
                                         SerialsType = "Order",
                                         SerialsQTY = -1,
                                         CreateAt = DateTime.UtcNow,
@@ -1318,7 +1318,7 @@ namespace PurchaseOrderSys.Controllers
                                                             IsEnable = true,
                                                             PurchaseSKUID = Serial.PurchaseSKUID,
                                                             PID = Serial.ID,
-                                                            SerialsNo = Serial.SerialsNo,
+                                                            SerialsNo = Serial.SerialsNo.Trim(),
                                                             SerialsQTY = -1,
                                                             SerialsType = "TransferOut",
                                                             CreateBy = UserBy,
@@ -1335,7 +1335,7 @@ namespace PurchaseOrderSys.Controllers
                                                         {
                                                             IsEnable = true,
                                                             PID = Serial.ID,
-                                                            SerialsNo = Serial.SerialsNo,
+                                                            SerialsNo = Serial.SerialsNo.Trim(),
                                                             SerialsQTY = -1,
                                                             SerialsType = "TransferOut",
                                                             CreateBy = UserBy,
@@ -1366,7 +1366,7 @@ namespace PurchaseOrderSys.Controllers
                                                         var nSerialsLlist = new SerialsLlist
                                                         {
                                                             IsEnable = true,
-                                                            SerialsNo = Serial.SerialsNo,
+                                                            SerialsNo = Serial.SerialsNo.Trim(),
                                                             SerialsQTY = -1,
                                                             SerialsType = "TransferOut",
                                                             CreateBy = UserBy,
@@ -1740,7 +1740,7 @@ namespace PurchaseOrderSys.Controllers
                                 newRMASKU.RMASerialsLlist.Add(new RMASerialsLlist
                                 {
                                     IsEnable = true,
-                                    SerialsNo = Serialitem,
+                                    SerialsNo = Serialitem.Trim(),
                                     SerialsQTY = 1,
                                     Reason = Reason.ToString(),
                                     WarehouseID = WarehouseID,
@@ -1753,7 +1753,7 @@ namespace PurchaseOrderSys.Controllers
                                 newRMASKU.RMAOrderSerialsLlist.Add(new RMAOrderSerialsLlist
                                 {
                                     IsEnable = true,
-                                    SerialsNo = Serialitem,
+                                    SerialsNo = Serialitem.Trim(),
                                     SerialsQTY = 1,
                                     CreateBy = "RMAAPI",
                                     CreateAt = dt,
@@ -1798,7 +1798,7 @@ namespace PurchaseOrderSys.Controllers
                                 var nSerialsLlist = new SerialsLlist
                                 {
                                     IsEnable = true,
-                                    SerialsNo = Serialitem.SerialsNo,
+                                    SerialsNo = Serialitem.SerialsNo.Trim(),
                                     SerialsQTY = 1,
                                     SerialsType = "TransferIn",
                                     CreateBy = "RMAAPI",
@@ -1812,7 +1812,7 @@ namespace PurchaseOrderSys.Controllers
                                     IsEnable = true,
                                     RMASKUID = RMASKUitem.ID,
                                     PID = Serialitem.ID,
-                                    SerialsNo = Serialitem.SerialsNo,
+                                    SerialsNo = Serialitem.SerialsNo.Trim(),
                                     SerialsQTY = -1,
                                     SerialsType = "TransferOut",
                                     CreateBy = "RMAAPI",
@@ -1914,7 +1914,7 @@ namespace PurchaseOrderSys.Controllers
                                     {
                                         IsEnable = true,
                                         SerialsType = "DropshpOrderIn",
-                                        SerialsNo = SerialNumberitem,
+                                        SerialsNo = SerialNumberitem.Trim(),
                                         SerialsQTY = 1,
                                         ReceivedBy = UserBy,
                                         ReceivedAt = dt,
@@ -1973,7 +1973,7 @@ namespace PurchaseOrderSys.Controllers
                                     {
                                         IsEnable = true,
                                         SerialsType = "DropshpOrderIn",
-                                        SerialsNo = SerialNumberitem,
+                                        SerialsNo = SerialNumberitem.Trim(),
                                         SerialsQTY = 1,
                                         ReceivedBy = UserBy,
                                         ReceivedAt = dt,
@@ -2066,7 +2066,7 @@ namespace PurchaseOrderSys.Controllers
                                         //OrderID = x.OrderID,
                                         PurchaseSKUID = Serials.PurchaseSKUID,
                                         //RMAID = x.RMAID,
-                                        SerialsNo = Serials.SerialsNo,
+                                        SerialsNo = Serials.SerialsNo.Trim(),
                                         SerialsQTY = 1,
                                         SerialsType = "TransferIn"
                                     });
@@ -2184,7 +2184,8 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult CheckSkuInventory(string skuid, string SCID)
         {
             var WarehouseID = db.WarehouseSummary.Where(x => x.Type == "SCID" && x.Val == SCID).FirstOrDefault()?.WarehouseID;
-            var Fulfillable = db.inventory.Where(x => x.WarehouseID == WarehouseID && x.SkuID == skuid).FirstOrDefault()?.Fulfillable;
+            var inventory = db.inventory.Where(x => x.WarehouseID == WarehouseID && x.SkuID == skuid).FirstOrDefault();
+            var Fulfillable = inventory?.Fulfillable - inventory?.Awaiting;
             return Json(Fulfillable, JsonRequestBehavior.AllowGet);
         }
         public class MyThread
@@ -2440,7 +2441,7 @@ namespace PurchaseOrderSys.Controllers
                     o.ID,
                     o.SCID,
                     o.ShippingTime,
-                    o.GetCompany.Marketplace.FirstOrDefault(m => m.CountryCode.Equals(o.Addresses.First(a => a.Type.Equals((byte)EnumData.OrderAddressType.Shipped)).CountryCode)).DispatchTime,
+                    o.GetCompany.Marketplace.FirstOrDefault(m => m.CountryCode.Equals(o.Addresses.FirstOrDefault(a => a.Type.Equals((byte)EnumData.OrderAddressType.Shipped)).CountryCode)).DispatchTime,
                     RushOrder = o.IsRush || o.ShippingTime <= 3
                 }).ToList();
             }

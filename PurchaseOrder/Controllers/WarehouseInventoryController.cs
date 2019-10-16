@@ -20,9 +20,9 @@ namespace PurchaseOrderSys.Controllers
             var WarehouseInventoryVM = new WarehouseInventoryVM();
             WarehouseInventoryVM.Name = Warehouse.Name;
             WarehouseInventoryVM.WarehouseType = Warehouse.Type;
-            WarehouseInventoryVM.WarehouseVM = Warehouse.inventory.OrderByDescending(x=>x.Fulfillable).Select(x => new WarehouseVM
+            WarehouseInventoryVM.WarehouseVM = Warehouse.inventory.OrderByDescending(x => x.Fulfillable).Select(x => new WarehouseVM
             {
-                Name = x.Warehouse.Name,
+                Name = x.SKU.SkuLang.Where(y => y.LangID == LangID).FirstOrDefault()?.Name,
                 SKU = x.SkuID,
                 Aggregate = x.Aggregate,
                 Awaiting = x.Awaiting,
