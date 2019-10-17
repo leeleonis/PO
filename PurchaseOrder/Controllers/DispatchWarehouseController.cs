@@ -91,7 +91,7 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult Create(Warehouse Warehouse ,string[] Shippingmethods,string SCID,string Warehouse3P)
         {
             Warehouse.IsEnable = true;
-            Warehouse.CreateBy = UserBy;
+            Warehouse.CreateBy =  Session["AdminName"].ToString();
             Warehouse.CreateAt = DateTime.UtcNow;
             db.Warehouse.Add(Warehouse);
             if (Shippingmethods!=null&& Shippingmethods.Any())
@@ -178,7 +178,7 @@ namespace PurchaseOrderSys.Controllers
             if (!string.IsNullOrWhiteSpace(Warehouse.Country)) OldWarehouse.Country = Warehouse.Country;
             if (!string.IsNullOrWhiteSpace(Warehouse.Phone)) OldWarehouse.Phone = Warehouse.Phone;
 
-            OldWarehouse.UpdateBy = UserBy;
+            OldWarehouse.UpdateBy =  Session["AdminName"].ToString();
             OldWarehouse.UpdateAt = DateTime.UtcNow;
 
             if (Shippingmethods != null && Shippingmethods.Any())
@@ -284,7 +284,7 @@ namespace PurchaseOrderSys.Controllers
         {
             var Warehouse = db.Warehouse.Find(id);
             Warehouse.IsEnable = false;
-            Warehouse.UpdateBy = UserBy;
+            Warehouse.UpdateBy =  Session["AdminName"].ToString();
             Warehouse.UpdateAt = DateTime.UtcNow;
             db.SaveChanges();
             return RedirectToAction("Index");

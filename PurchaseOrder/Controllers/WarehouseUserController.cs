@@ -34,7 +34,7 @@ namespace PurchaseOrderSys.Controllers
             {
                 WarehouseUser.Purview = "";
             }
-            WarehouseUser.CreateBy = UserBy;
+            WarehouseUser.CreateBy =  Session["AdminName"].ToString();
             WarehouseUser.CreateAt = DateTime.UtcNow;
             db.WarehouseUser.Add(WarehouseUser);
             db.SaveChanges();
@@ -65,7 +65,7 @@ namespace PurchaseOrderSys.Controllers
             }
             OldWarehouseUser.WarehouseID = WarehouseUser.WarehouseID;
             OldWarehouseUser.AdminUserID = WarehouseUser.AdminUserID;
-            OldWarehouseUser.UpdateBy = UserBy;
+            OldWarehouseUser.UpdateBy =  Session["AdminName"].ToString();
             OldWarehouseUser.UpdateAt = DateTime.UtcNow;
             db.SaveChanges();
             return RedirectToAction("Index");
@@ -74,7 +74,7 @@ namespace PurchaseOrderSys.Controllers
         {
             var OldWarehouseUser = db.WarehouseUser.Find(ID);
             OldWarehouseUser.IsEnable = false;
-            OldWarehouseUser.UpdateBy = UserBy;
+            OldWarehouseUser.UpdateBy =  Session["AdminName"].ToString();
             OldWarehouseUser.UpdateAt = DateTime.UtcNow;
             db.SaveChanges();
             return RedirectToAction("Index");

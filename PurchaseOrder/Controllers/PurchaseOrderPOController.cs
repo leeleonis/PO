@@ -63,7 +63,7 @@ namespace PurchaseOrderSys.Controllers
                 InvoiceNo = filter.InvoiceNo,
                 Description = filter.Description,
                 Tax = filter.Tax,
-                CreateBy = UserBy,
+                CreateBy =  Session["AdminName"].ToString(),
                 CreateAt = CreateAt
             };
             db.PurchaseOrder.Add(nPurchaseOrder);
@@ -82,7 +82,7 @@ namespace PurchaseOrderSys.Controllers
                     Discount = x.Discount,
                     DiscountedPrice = x.DiscountedPrice,
                     Credit = x.Credit,
-                    CreateBy = UserBy,
+                    CreateBy =  Session["AdminName"].ToString(),
                     CreateAt = CreateAt
                 });
                 foreach (var item in PurchaseSKUlist)
@@ -117,7 +117,7 @@ namespace PurchaseOrderSys.Controllers
                             IsEnable = true,
                             ImgType = "VendorInvoice",
                             Url = Url,
-                            CreateBy = UserBy,
+                            CreateBy =  Session["AdminName"].ToString(),
                             CreateAt = CreateAt
                         });
                     }
@@ -136,7 +136,7 @@ namespace PurchaseOrderSys.Controllers
                             IsEnable = true,
                             ImgType = "PaymentProof",
                             Url = Url,
-                            CreateBy = UserBy,
+                            CreateBy =  Session["AdminName"].ToString(),
                             CreateAt = CreateAt
                         });
                     }
@@ -418,7 +418,7 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult CreateItem(PurchaseSKU PurchaseSKU)
         {
             PurchaseSKU.IsEnable = true;
-            PurchaseSKU.CreateBy = UserBy;
+            PurchaseSKU.CreateBy =  Session["AdminName"].ToString();
             PurchaseSKU.CreateAt = DateTime.UtcNow;
             db.PurchaseSKU.Add(PurchaseSKU);
             db.SaveChanges();
@@ -563,7 +563,7 @@ namespace PurchaseOrderSys.Controllers
             PurchaseOrder.ShippingCost = filter.ShippingCost;
             PurchaseOrder.Other = filter.Other;
             PurchaseOrder.Description= filter.Description;
-            PurchaseOrder.UpdateBy = UserBy;
+            PurchaseOrder.UpdateBy =  Session["AdminName"].ToString();
             PurchaseOrder.UpdateAt = dt;
 
             var dataList = (List<PoSKUVM>)Session["SkuNumberList" + filter.ID];
@@ -594,25 +594,25 @@ namespace PurchaseOrderSys.Controllers
                             if (SKUitem.Price != item.Price)
                             {
                                 SKUitem.Price = item.Price;
-                                SKUitem.UpdateBy = UserBy;
+                                SKUitem.UpdateBy =  Session["AdminName"].ToString();
                                 SKUitem.UpdateAt = dt;
                             }
                             if (SKUitem.Discount != item.Discount)
                             {
                                 SKUitem.Discount = item.Discount;
-                                SKUitem.UpdateBy = UserBy;
+                                SKUitem.UpdateBy =  Session["AdminName"].ToString();
                                 SKUitem.UpdateAt = dt;
                             }
                             if (SKUitem.Credit != item.Credit)
                             {
                                 SKUitem.Credit = item.Credit;
-                                SKUitem.UpdateBy = UserBy;
+                                SKUitem.UpdateBy =  Session["AdminName"].ToString();
                                 SKUitem.UpdateAt = dt;
                             }
                             if (SKUitem.QTYOrdered != item.QTYOrdered)
                             {
                                 SKUitem.QTYOrdered = item.QTYOrdered;
-                                SKUitem.UpdateBy = UserBy;
+                                SKUitem.UpdateBy =  Session["AdminName"].ToString();
                                 SKUitem.UpdateAt = dt;
                             }
                         }
@@ -620,7 +620,7 @@ namespace PurchaseOrderSys.Controllers
                     else
                     {
                         item.CreateAt = dt;
-                        item.CreateBy = UserBy;
+                        item.CreateBy =  Session["AdminName"].ToString();
                         PurchaseOrder.PurchaseSKU.Add(item);
                     }
                 }
@@ -633,7 +633,7 @@ namespace PurchaseOrderSys.Controllers
                         foreach (var SKUitem in oldPurchaseSKU)
                         {
                             SKUitem.IsEnable = false;
-                            SKUitem.UpdateBy = UserBy;
+                            SKUitem.UpdateBy =  Session["AdminName"].ToString();
                             SKUitem.UpdateAt = dt;
                         }
                         //db.SaveChanges();
@@ -652,7 +652,7 @@ namespace PurchaseOrderSys.Controllers
                             IsEnable = true,
                             ImgType = "VendorInvoice",
                             Url = Url,
-                            CreateBy = UserBy,
+                            CreateBy =  Session["AdminName"].ToString(),
                             CreateAt = DateTime.UtcNow
                         });
                     }
@@ -671,7 +671,7 @@ namespace PurchaseOrderSys.Controllers
                             IsEnable = true,
                             ImgType = "PaymentProof",
                             Url = Url,
-                            CreateBy = UserBy,
+                            CreateBy =  Session["AdminName"].ToString(),
                             CreateAt = DateTime.UtcNow
                         });
                     }
@@ -750,7 +750,7 @@ namespace PurchaseOrderSys.Controllers
                 oPurchaseOrder.InvoiceNo = PurchaseOrder.InvoiceNo;
             }
             oPurchaseOrder.UpdateAt = UpdateAt;
-            oPurchaseOrder.UpdateBy = UserBy;
+            oPurchaseOrder.UpdateBy =  Session["AdminName"].ToString();
             var UpdateSKUList = new List<PurchaseSKU>();
             foreach (var QTYReceiveditem in QTYReceived)
             {
@@ -800,9 +800,9 @@ namespace PurchaseOrderSys.Controllers
                         SerialsNo = "POA" + PurchaseSKU.ID + dt.ToString("MMddHHmmssfff") + i,
                         SerialsType = "PO",
                         SerialsQTY = 1,
-                        ReceivedBy = UserBy,
+                        ReceivedBy =  Session["AdminName"].ToString(),
                         ReceivedAt = UpdateAt,
-                        CreateBy = UserBy,
+                        CreateBy =  Session["AdminName"].ToString(),
                         CreateAt = UpdateAt
                     };
                     PurchaseSKU.SerialsLlist.Add(nSerialsLlist);
@@ -902,9 +902,9 @@ namespace PurchaseOrderSys.Controllers
                         SerialsType = "DropshpOrderIn",
                         SerialsNo = serials.Trim(),
                         SerialsQTY = 1,
-                        ReceivedBy = UserBy,
+                        ReceivedBy =  Session["AdminName"].ToString(),
                         ReceivedAt = dt,
-                        CreateBy = UserBy,
+                        CreateBy =  Session["AdminName"].ToString(),
                         CreateAt = dt
                     };
                     PurchaseSKU.SerialsLlist.Add(nSerialsLlistIn);
@@ -915,9 +915,9 @@ namespace PurchaseOrderSys.Controllers
                         SerialsType = "DropshpOrderOut",
                         SerialsNo = serials.Trim(),
                         SerialsQTY = -1,
-                        ReceivedBy = UserBy,
+                        ReceivedBy =  Session["AdminName"].ToString(),
                         ReceivedAt = dt,
-                        CreateBy = UserBy,
+                        CreateBy =  Session["AdminName"].ToString(),
                         CreateAt = dt
                     };
                     nSerialsLlistIn.SerialsLlistC.Add(nSerialsLlistOut);
@@ -951,9 +951,9 @@ namespace PurchaseOrderSys.Controllers
                         SerialsType = "PO",
                         SerialsNo = serials.Trim(),
                         SerialsQTY = 1,
-                        ReceivedBy = UserBy,
+                        ReceivedBy =  Session["AdminName"].ToString(),
                         ReceivedAt = dt,
-                        CreateBy = UserBy,
+                        CreateBy =  Session["AdminName"].ToString(),
                         CreateAt = dt
                     };
                     db.SerialsLlist.Add(nSerialsLlist);
@@ -984,7 +984,7 @@ namespace PurchaseOrderSys.Controllers
                 if (ID.HasValue && ID != 0)
                 {
                     var PurchaseOrder = db.PurchaseOrder.Find(ID);
-                    PurchaseOrder.PurchaseNote.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = "txt", CreateAt = DateTime.UtcNow, CreateBy = UserBy });
+                    PurchaseOrder.PurchaseNote.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = "txt", CreateAt = DateTime.UtcNow, CreateBy =  Session["AdminName"].ToString() });
                     db.SaveChanges();
                     PurchaseNoteList = PurchaseOrder.PurchaseNote.ToList();
                 }
@@ -996,7 +996,7 @@ namespace PurchaseOrderSys.Controllers
                         PurchaseNoteList = new List<PurchaseNote>();
                     }
 
-                    PurchaseNoteList.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = "txt", CreateAt = DateTime.UtcNow, CreateBy = UserBy });
+                    PurchaseNoteList.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = "txt", CreateAt = DateTime.UtcNow, CreateBy =  Session["AdminName"].ToString() });
                     Session["POPurchaseNote" + SID] = PurchaseNoteList;
                 }
                 return Json(new { status = true, datalist = PurchaseNoteList.OrderByDescending(x => x.CreateAt).Select(x => new { CreateAt = x.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss"), x.CreateBy, x.Note, x.NoteType }).ToList() }, JsonRequestBehavior.AllowGet);
@@ -1021,7 +1021,7 @@ namespace PurchaseOrderSys.Controllers
                 {
                     var Note = SaveImg(Img);
                     var PurchaseOrder = db.PurchaseOrder.Find(ID);
-                    PurchaseOrder.PurchaseNote.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = "Url", CreateAt = DateTime.UtcNow, CreateBy = UserBy });
+                    PurchaseOrder.PurchaseNote.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = "Url", CreateAt = DateTime.UtcNow, CreateBy =  Session["AdminName"].ToString() });
                     db.SaveChanges();
                     PurchaseNoteList = PurchaseOrder.PurchaseNote.ToList();
                 }
@@ -1038,7 +1038,7 @@ namespace PurchaseOrderSys.Controllers
                         PurchaseNoteList = new List<PurchaseNote>();
                     }
 
-                    PurchaseNoteList.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = NoteType, CreateAt = DateTime.UtcNow, CreateBy = UserBy });
+                    PurchaseNoteList.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = NoteType, CreateAt = DateTime.UtcNow, CreateBy =  Session["AdminName"].ToString() });
                     Session["POPurchaseNote"+ SID] = PurchaseNoteList;
                 }
                 return Json(new { status = true, datalist = PurchaseNoteList.OrderByDescending(x => x.CreateAt).Select(x => new { CreateAt = x.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss"), x.CreateBy, x.Note, x.NoteType }).ToList() }, JsonRequestBehavior.AllowGet);
@@ -1063,7 +1063,7 @@ namespace PurchaseOrderSys.Controllers
                 PODate = filter.PODate,
                 POStatus = filter.POStatus,
                 POType = filter.POType,
-                CreateBy = UserBy,
+                CreateBy =  Session["AdminName"].ToString(),
                 CreateAt = DateTime.UtcNow
             };
             db.PurchaseOrder.Add(PurchaseOrder);
@@ -1099,7 +1099,7 @@ namespace PurchaseOrderSys.Controllers
                     Warehouse = PurchaseOrder.Warehouse,
                     Currency = PurchaseOrder.Currency,
                     Tax = PurchaseOrder.Tax,
-                    CreateBy = UserBy,
+                    CreateBy =  Session["AdminName"].ToString(),
                     CreateAt = CreateAt,
                 };
                 db.PurchaseOrder.Add(nPurchaseOrder);
@@ -1117,7 +1117,7 @@ namespace PurchaseOrderSys.Controllers
                 var PurchaseOrder = db.PurchaseOrder.Find(ID);
                 PurchaseOrder.IsEnable = false;
                 PurchaseOrder.UpdateAt = UpdateAt;
-                PurchaseOrder.UpdateBy = UserBy;
+                PurchaseOrder.UpdateBy =  Session["AdminName"].ToString();
                 foreach (var item in PurchaseOrder.PurchaseSKU)
                 {
 
@@ -1129,7 +1129,7 @@ namespace PurchaseOrderSys.Controllers
                     {
                         item.IsEnable = false;
                         item.UpdateAt = UpdateAt;
-                        item.UpdateBy = UserBy;
+                        item.UpdateBy =  Session["AdminName"].ToString();
                     }
                 }
             }

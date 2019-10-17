@@ -109,7 +109,7 @@ namespace PurchaseOrderSys.Controllers
             }
             else
             {
-                SerialsLlist.CreateBy = UserBy;
+                SerialsLlist.CreateBy =  Session["AdminName"].ToString();
                 SerialsLlist.CreateAt = DateTime.UtcNow;
                 db.SerialsLlist.Add(SerialsLlist);
                 db.SaveChanges();

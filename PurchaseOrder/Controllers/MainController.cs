@@ -176,11 +176,7 @@ namespace PurchaseOrderSys.Controllers
             Session.Add("WarehouseID", WarehouseId);
             Session.Add("TimeZone", TimeZone);
             Session.Add("Menu", Menu.ToList());
-            UserBy = AdminName;
-
             //Session.Add("Warehouse", db.Warehouse.Where(x => x.IsEnable).ToList());
-           
-
             return true;
         }
 

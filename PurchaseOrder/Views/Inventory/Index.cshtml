@@ -3,6 +3,20 @@
     ViewBag.title = "倉庫庫存";
     var Warehouselist = EnumData.WarehouseDDL().Select(x => new SelectListItem { Text = x.Value, Value = x.Key }).ToList();
     var DefaultSelect = PurchaseOrderSys.App_GlobalResources.Resource.DefaultSelect;
+    ViewBag.SumFulfillable = Model?.Sum(x => x.Fulfillable);
+    ViewBag.SumTransferOutQTY = Model?.Sum(x => x.TransferOutQTY);
+    ViewBag.SumTransferInQTY = Model?.Sum(x => x.TransferInQTY);
+    ViewBag.SumAwaiting = Model?.Sum(x => x.Awaiting);
+    ViewBag.SumWTransferOutQTY = Model?.Sum(x => x.WTransferOutQTY);
+    ViewBag.SumTransferInQTY = Model?.Sum(x => x.TransferInQTY);
+    ViewBag.SumAggregate = Model?.Sum(x => x.Aggregate);
+    ViewBag.SumTotalVelocity = Model?.Sum(x => x.Velocity);
+    var InStockList = new List<SelectListItem> {
+         new SelectListItem{  Value="A" , Text="All"},
+         new SelectListItem{  Value="Y" , Text="Yes"},
+         new SelectListItem{  Value="N" , Text="No"}
+    };
+    //ViewBag.SumMarketplace = Model?.Sum(x => x.Marketplace);
 }
 <style>
     tfoot {
@@ -16,7 +30,7 @@
                 <div class="jarviswidget" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
-                        <h2>查詢</h2>
+                        <h2></h2>
                         <ul class="nav nav-tabs pull-right">
                             <li><a data-toggle="tab" href="#hb1">@ViewBag.title</a></li>
                         </ul>
@@ -37,15 +51,77 @@
                                                     @Html.Editor("SKU", new { htmlAttributes = new { @class = "form-control" } })
                                                 </div>
                                                 @*@Html.Label("Warehouse", htmlAttributes: new { @class = "control-label col-sm-2" })
-                                                <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownList("WarehouseID", Warehouselist, DefaultSelect, htmlAttributes: new { @class = "form-control" })
-                                                </div>*@
+                <div class="col-sm-9 col-lg-2">
+                    @Html.DropDownList("WarehouseID", Warehouselist, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                </div>*@
                                                 @Html.Label("In Stock", htmlAttributes: new { @class = "control-label col-sm-2" })
                                                 <div class="col-sm-9 col-lg-2">
-                                                    @Html.DropDownList("IsInventory", Warehouselist, DefaultSelect, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.DropDownList("IsInventory", InStockList, htmlAttributes: new { @class = "form-control" })
                                                 </div>
                                                 <button type="submit" class="btn btn-primary" id="Query">查詢</button>
                                             </div>
+                                        </fieldset>
+                                        <fieldset>
+                                            <legend><b>Summary (Total)</b> </legend>
+                                            <b>@Html.Display("Company")</b>
+                                            <br />
+                                            <a> @Html.Display("WarehouseType")</a>
+                                            <div class="form-group">
+                                                @*@Html.Label("Company", htmlAttributes: new { @class = "control-label col-sm-2" })
+                <div class="col-sm-9 col-lg-2">
+                    @Html.Editor("Company", new { htmlAttributes = new { @class = "form-control" } })
+                </div>*@
+                                                @Html.Label("Fulfillable", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Display("SumFulfillable", new { htmlAttributes = new { @class = "form-control" } })
+                                                </div>
+                                                @Html.Label("Transit(Out)", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Display("SumTransferOutQTY", new { htmlAttributes = new { @class = "form-control" } })
+                                                </div>
+                                                @Html.Label("Transit(In)", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Display("SumTransferInQTY", new { htmlAttributes = new { @class = "form-control" } })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @*@Html.Label("Warehouse Type", htmlAttributes: new { @class = "control-label col-sm-2" })
+                <div class="col-sm-9 col-lg-2">
+                    @Html.Editor("WarehouseType", new { htmlAttributes = new { @class = "form-control" } })
+                </div>*@
+                                                @Html.Label("Awaiting Dispatch", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Display("SumAwaiting", new { htmlAttributes = new { @class = "form-control" } })
+                                                </div>
+                                                @Html.Label("Winit Transit(Out)", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Display("SumWTransferOutQTY", new { htmlAttributes = new { @class = "form-control" } })
+                                                </div>
+                                                @Html.Label("Winit Transit(In)", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Display("SumWTransferInQTY", new { htmlAttributes = new { @class = "form-control" } })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @*@Html.Label("Fulfillable", htmlAttributes: new { @class = "control-label col-sm-2" })
+                <div class="col-sm-9 col-lg-2">
+                    @Html.Editor("Fulfillable", new { htmlAttributes = new { @class = "form-control" } })
+                </div>*@
+                                                @Html.Label("Aggregate", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Display("SumAggregate", new { htmlAttributes = new { @class = "form-control" } })
+                                                </div>
+                                                @Html.Label("Total Velocity (30 days)", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Display("SumTotalVelocity", new { htmlAttributes = new { @class = "form-control" } })
+                                                </div>
+                                                @*@Html.Label("Marketplace", htmlAttributes: new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-9 col-lg-2">
+                                                    @Html.Display("SumMarketplace", new { htmlAttributes = new { @class = "form-control" } })
+                                                </div>*@
+                                            </div>
+
+
                                         </fieldset>
                                         <fieldset>
                                             <div class="row">
@@ -53,10 +129,18 @@
                                                     <table id="DataGridC" class="table table-striped table-bordered">
                                                         <thead>
                                                             <tr>
+                                                                <th>Warehouse Name</th>
+                                                                <th>Warehouse Type</th>
                                                                 <th>SKU</th>
                                                                 <th width="30%">Name</th>
+                                                                <th>Cumulative Inventory</th>
                                                                 <th>Fulfillable</th>
+                                                                <th>Awaiting Dispatch</th>
+                                                                <th>Transit (Out) & Transit(In)</th>
+                                                                <th>WinitTransit (Out) & WinitTransit (In)</th>
                                                                 <th>Aggregate</th>
+                                                                <th>Writr-off Inventory</th>
+                                                                <th>Total Inventory</th>
                                                             </tr>
                                                         </thead>
                                                         <tfoot></tfoot>
@@ -65,14 +149,44 @@
                                                             {
                                                                 foreach (var item in Model)
                                                                 {
-                                                                    <tr>
-                                                                        <td>
-                                                                            <a href=' @Url.Action("edit", "Sku", new { id = item.SKU })' target="_blank">@(item.SKU)</a>
-                                                                        </td>
-                                                                        <td>@item.Name</td>
-                                                                        <td>@item.Fulfillable</td>
-                                                                        <td>@item.Aggregate</td>
-                                                                    </tr>
+                                                            <tr>
+                                                                <td>@item.WarehouseName</td>
+                                                                <td>@item.WarehouseType</td>
+                                                                <td>
+                                                                    <a href=' @Url.Action("edit", "Sku", new { id = item.SKU })' target="_blank">@(item.SKU)</a>
+                                                                </td>
+                                                                <td>@item.Name</td>
+                                                                <td></td>
+                                                                <td>
+                                                                    <a href='@Url.Action("Serials", new { item.SKU,WarehouseID=ViewBag.WarehouseID })'>@item.Fulfillable</a>
+                                                                </td>
+                                                                <td>
+                                                                    <a href='http://internal.qd.com.tw/overview/order?Status=0&SKU=@item.SKU' target="_blank">@item.Awaiting</a>
+                                                                </td>
+                                                                <td>
+                                                                    @if (item.TransferOutQTY > 0)
+                                                                    {
+                                                                        <a href="@Url.Action("index", "Transfer", new { SKU = item.SKU, To = ViewBag.WarehouseID })" target="_blank"> @item.TransferOutQTY / @item.TransferInQTY</a>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <a href="@Url.Action("index", "Transfer", new { SKU = item.SKU, From = ViewBag.WarehouseID })" target="_blank"> @item.TransferOutQTY / @item.TransferInQTY</a>
+                                                                    }
+                                                                </td>
+                                                                <td>
+                                                                    @if (item.WTransferOutQTY > 0)
+                                                                    {
+                                                                        <a href="@Url.Action("index", "TransferWinit", new { SKU = item.SKU, To = ViewBag.WarehouseID })" target="_blank"> @item.WTransferOutQTY / @item.WTransferInQTY</a>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <a href="@Url.Action("index", "TransferWinit", new { SKU = item.SKU, From = ViewBag.WarehouseID })" target="_blank"> @item.WTransferOutQTY / @item.WTransferInQTY</a>
+                                                                    }
+                                                                </td>
+                                                                <td>@item.Aggregate</td>
+                                                                <td></td>
+                                                                <td></td>
+                                                            </tr>
                                                                 }
                                                             }
                                                         </tbody>

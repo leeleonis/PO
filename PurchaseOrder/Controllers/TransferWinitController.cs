@@ -80,7 +80,7 @@ namespace PurchaseOrderSys.Controllers
         [HttpPost]
         public ActionResult Create(Transfer Transfer, string SID, string BoxLabelSize, string SBarcodeLabelType)
         {
-            var CreateBy = UserBy;
+            var CreateBy =  Session["AdminName"].ToString();
             var CreateAt = DateTime.UtcNow;
             Transfer.TransferType = "Winit";
             Transfer.Status = "Pending";
@@ -264,12 +264,12 @@ namespace PurchaseOrderSys.Controllers
             if (!string.IsNullOrWhiteSpace(Transfer.Tracking)) oTransfer.Tracking = Transfer.Tracking;
 
 
-            oTransfer.UpdateBy = UserBy;
+            oTransfer.UpdateBy =  Session["AdminName"].ToString();
             oTransfer.UpdateAt = dt;
 
             oTransfer.WinitTransfer.BoxLabelSize = BoxLabelSize;
             oTransfer.WinitTransfer.SBarcodeLabelType = SBarcodeLabelType;
-            oTransfer.WinitTransfer.CreateBy = UserBy;
+            oTransfer.WinitTransfer.CreateBy =  Session["AdminName"].ToString();
             oTransfer.WinitTransfer.CreateAt = dt;
 
 
@@ -285,14 +285,14 @@ namespace PurchaseOrderSys.Controllers
                         if (SKUitem.QTY != item.QTY)
                         {
                             SKUitem.QTY = item.QTY;
-                            SKUitem.UpdateBy = UserBy;
+                            SKUitem.UpdateBy =  Session["AdminName"].ToString();
                             SKUitem.UpdateAt = dt;
                         }
                     }
                 }
                 else
                 {
-                    oTransfer.TransferSKU.Add(new TransferSKU { IsEnable = true, SkuNo = item.SKU, Name = item.ProductName, QTY = item.QTY, CreateBy = UserBy, CreateAt = dt });
+                    oTransfer.TransferSKU.Add(new TransferSKU { IsEnable = true, SkuNo = item.SKU, Name = item.ProductName, QTY = item.QTY, CreateBy =  Session["AdminName"].ToString(), CreateAt = dt });
                 }
                 var Logistic = db.Logistic.Find(item.SKU);
                 if (Logistic != null)
@@ -301,7 +301,7 @@ namespace PurchaseOrderSys.Controllers
                 }
                 else
                 {
-                    db.Logistic.Add(new Logistic { Sku = item.SKU, Price = item.Price ?? 0, BoxID = 1, CreateBy = UserBy, CreateAt = dt });
+                    db.Logistic.Add(new Logistic { Sku = item.SKU, Price = item.Price ?? 0, BoxID = 1, CreateBy =  Session["AdminName"].ToString(), CreateAt = dt });
                 }
 
             }
@@ -313,7 +313,7 @@ namespace PurchaseOrderSys.Controllers
                     foreach (var SKUitem in TransferSKUList)
                     {
                         SKUitem.IsEnable = false;
-                        SKUitem.UpdateBy = UserBy;
+                        SKUitem.UpdateBy =  Session["AdminName"].ToString();
                         SKUitem.UpdateAt = dt;
                     }
                 }
@@ -418,7 +418,7 @@ namespace PurchaseOrderSys.Controllers
                             SkuNo = productCode,
                             ItemBarcodeFile = PrintV2.itemBarcodeFile,
                             itemBarcodeList = string.Join(";", PrintV2.itemBarcodeList),
-                            CreateBy = UserBy,
+                            CreateBy =  Session["AdminName"].ToString(),
                             CreateAt = dt
                         });
                     }
@@ -529,7 +529,7 @@ namespace PurchaseOrderSys.Controllers
                 db.WinitTransferSKU.RemoveRange(Transfer.WinitTransfer.WinitTransferSKU.ToList());
             }
 
-            Transfer.UpdateBy = UserBy;
+            Transfer.UpdateBy =  Session["AdminName"].ToString();
             Transfer.UpdateAt = DateTime.UtcNow;
             db.SaveChanges();
 
@@ -586,7 +586,7 @@ namespace PurchaseOrderSys.Controllers
             }
             var PrepVMList = (List<TransferItemVM>)Session["WinitPrepVMList" + ID];
             var WinitTransferBoxList = (List<WinitTransferBox>)Session["WinitTransferBox" + ID];
-            var CreateBy = UserBy;
+            var CreateBy =  Session["AdminName"].ToString();
             var CreateAt = DateTime.UtcNow;
             var oTransfer = db.Transfer.Find(ID);
             foreach (var item in oTransfer.TransferSKU.Where(x => x.IsEnable))
@@ -766,7 +766,7 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult Receive(int ID, List<PostList> Prep, bool? saveexit)
         {
             Prep = Prep.Where(x => !string.IsNullOrWhiteSpace(x.val)).Distinct().ToList();
-            var CreateBy = UserBy;
+            var CreateBy =  Session["AdminName"].ToString();
             var CreateAt = DateTime.UtcNow;
             var ReceiveVMList = (List<TransferItemVM>)Session["ReceiveVMList" + ID];
             var oTransfer = db.Transfer.Find(ID);
@@ -1383,7 +1383,7 @@ namespace PurchaseOrderSys.Controllers
                     if (status)
                     {
                         Transfer.Status = "Shipped";
-                        Transfer.UpdateBy = UserBy;
+                        Transfer.UpdateBy =  Session["AdminName"].ToString();
                         Transfer.UpdateAt = DateTime.UtcNow;
                         db.SaveChanges();
                     }

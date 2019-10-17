@@ -1040,6 +1040,14 @@ namespace PurchaseOrderSys.Models
     public class WarehouseVM
     {
         public int ID { get; set; }
+        /// <summary>
+        /// 倉庫名稱
+        /// </summary>
+        public string WarehouseName { get; set; }
+        /// <summary>
+        /// 倉庫類型
+        /// </summary>
+        public string WarehouseType { get; set; }
         public string SKU { get; set; }
         public string Name { get; set; }
         /// <summary>
@@ -1105,12 +1113,32 @@ namespace PurchaseOrderSys.Models
         /// <summary>
         /// Winit移庫出庫數
         /// </summary>
-        public int WTransferOutQTY { get; internal set; }
+        public int WTransferOutQTY { get; set; }
         /// <summary>
         /// Winit等待移倉的數量
         /// </summary>
         public int WTransferAwaiting { get; set; }
-        public int WTransferInQTY { get; internal set; }
+        public int WTransferInQTY { get; set; }
+        /// <summary>
+        /// 歷史入庫數包含PO及Transit(In)
+        /// </summary>
+        public int Cumulativeinventory { get; set; }
+        /// <summary>
+        /// 歷史銷售數量
+        /// </summary>
+        public int CumulativeSalse { get; set; }
+        /// <summary>
+        /// 歷史TransferOut的數量 包含WINIT
+        /// </summary>
+        public int CumulativeTransferOut { get; set; }
+        /// <summary>
+        /// 扣除的庫存 CM RMA 遺失 報廢
+        /// </summary>
+        public int? WritroffInventory { get; set; }
+        /// <summary>
+        /// 總庫存
+        /// </summary>
+        public int? TotalInventory { get; set; }
     }
     [Serializable]
     public class InventoryVM

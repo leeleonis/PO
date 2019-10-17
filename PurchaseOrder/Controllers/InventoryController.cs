@@ -15,33 +15,33 @@ namespace PurchaseOrderSys.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult Index(int? WarehouseID, string SKU, bool IsInventory)
+        public ActionResult Index(int? WarehouseID, string SKU, string IsInventory)
         {
             var WarehouseVMList = new List<WarehouseVM>();
-            var Warehouse = db.Warehouse.Find(WarehouseID);
+
             int? FulfillableMin = null;
             int? FulfillableMax = null;
-            if (IsInventory)
+            if (IsInventory == "Y")
             {
                 FulfillableMin = 1;
             }
-            else
+            else if (IsInventory == "N")
             {
                 FulfillableMax = 0;
             }
-            if (Warehouse == null)
+            if (WarehouseID.HasValue)
+            {
+                var Warehouse = db.Warehouse.Find(WarehouseID);
+                WarehouseVMList.AddRange(nGetWarehouseVMList(Warehouse, SKU, FulfillableMin, FulfillableMax));
+            }
+            else
             {
                 var WarehouseList = db.Warehouse.Where(x => x.Type != "Interim").ToList();
                 foreach (var Warehouseitem in WarehouseList)
                 {
-                    WarehouseVMList.AddRange(GetWarehouseVMList(Warehouseitem, SKU, FulfillableMin, FulfillableMax));
+                    WarehouseVMList.AddRange(nGetWarehouseVMList(Warehouseitem, SKU, FulfillableMin, FulfillableMax));
                 }
             }
-            else
-            {
-                WarehouseVMList.AddRange(GetWarehouseVMList(Warehouse, SKU, FulfillableMin, FulfillableMax));
-            }
-
             return View(WarehouseVMList);
         }
     }

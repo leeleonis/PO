@@ -23,13 +23,19 @@ namespace PurchaseOrderSys.Controllers
         protected string ApiUrl = "http://internal.qd.com.tw/";
         //protected string ApiUrl = "http://localhost:49920/";
         protected string FileUploads = "~/Uploads";
-        public static string UserBy = "test";
-        public static string LangID = "en-US";
-        public static string ApiUserName = "test@qd.com.tw";
-        public static string ApiPassword = "prU$U9R7CHl3O#uXU6AcH6ch";
+        //protected static string  Session["AdminName"].ToString() = "test";
+        protected static string LangID = "en-US";
+        protected static string ApiUserName = "test@qd.com.tw";
+        protected static string ApiPassword = "prU$U9R7CHl3O#uXU6AcH6ch";
         protected PurchaseOrderEntities db = new PurchaseOrderEntities();
         public static SellerCloud_WebService.SC_WebService SCWS;
-
+        //public BaseController()
+        //{
+        //    if (Session != null && Session["AdminName"] != null)
+        //    {
+        //         Session["AdminName"].ToString() = Session["AdminName"].ToString();
+        //    }
+        //}
         protected string RenderPartialViewToString()
         {
             return RenderPartialViewToString(null, null);
@@ -149,7 +155,7 @@ namespace PurchaseOrderSys.Controllers
                 {
                     var Note = SaveImg(Img);
                     var CreditMemo = db.CreditMemo.Find(ID);
-                    CreditMemo.PurchaseNote.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = "Url", CreateAt = DateTime.UtcNow, CreateBy = UserBy });
+                    CreditMemo.PurchaseNote.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = "Url", CreateAt = DateTime.UtcNow, CreateBy = Session["AdminName"].ToString() });
                     db.SaveChanges();
                     CMPurchaseNote = CreditMemo.PurchaseNote.ToList();
                 }
@@ -166,7 +172,7 @@ namespace PurchaseOrderSys.Controllers
                         CMPurchaseNote = new List<PurchaseNote>();
                     }
 
-                    CMPurchaseNote.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = NoteType, CreateAt = DateTime.UtcNow, CreateBy = UserBy });
+                    CMPurchaseNote.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = NoteType, CreateAt = DateTime.UtcNow, CreateBy = Session["AdminName"].ToString() });
                     Session["CMPurchaseNote"] = CMPurchaseNote;
                 }
                 return Json(new { status = true, datalist = CMPurchaseNote.OrderByDescending(x => x.CreateAt).Select(x => new { CreateAt = x.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss"), x.CreateBy, x.Note, x.NoteType }).ToList() }, JsonRequestBehavior.AllowGet);
@@ -185,7 +191,7 @@ namespace PurchaseOrderSys.Controllers
                 if (ID.HasValue && ID != 0)
                 {
                     var CreditMemo = db.CreditMemo.Find(ID);
-                    CreditMemo.PurchaseNote.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = "txt", CreateAt = DateTime.UtcNow, CreateBy = UserBy });
+                    CreditMemo.PurchaseNote.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = "txt", CreateAt = DateTime.UtcNow, CreateBy = Session["AdminName"].ToString() });
                     db.SaveChanges();
                     CMPurchaseNote = CreditMemo.PurchaseNote.ToList();
                 }
@@ -197,7 +203,7 @@ namespace PurchaseOrderSys.Controllers
                         CMPurchaseNote = new List<PurchaseNote>();
                     }
 
-                    CMPurchaseNote.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = "txt", CreateAt = DateTime.UtcNow, CreateBy = UserBy });
+                    CMPurchaseNote.Add(new PurchaseNote { IsEnable = true, Note = Note, NoteType = "txt", CreateAt = DateTime.UtcNow, CreateBy = Session["AdminName"].ToString() });
                     Session["CMPurchaseNote" + SID] = CMPurchaseNote;
                 }
                 return Json(new { status = true, datalist = CMPurchaseNote.OrderByDescending(x => x.CreateAt).Select(x => new { CreateAt = x.CreateAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss"), x.CreateBy, x.Note, x.NoteType }).ToList() }, JsonRequestBehavior.AllowGet);
@@ -515,9 +521,9 @@ namespace PurchaseOrderSys.Controllers
                                     SerialsType = "DropshpOrderIn",
                                     SerialsNo = serials.Trim(),
                                     SerialsQTY = 1,
-                                    ReceivedBy = UserBy,
+                                    ReceivedBy =  Session["AdminName"].ToString(),
                                     ReceivedAt = dt,
-                                    CreateBy = UserBy,
+                                    CreateBy =  Session["AdminName"].ToString(),
                                     CreateAt = dt
                                 };
                                 PurchaseSKU.SerialsLlist.Add(nSerialsLlistIn);
@@ -527,9 +533,9 @@ namespace PurchaseOrderSys.Controllers
                                     SerialsType = "DropshpOrderOut",
                                     SerialsNo = serials.Trim(),
                                     SerialsQTY = -1,
-                                    ReceivedBy = UserBy,
+                                    ReceivedBy =  Session["AdminName"].ToString(),
                                     ReceivedAt = dt,
-                                    CreateBy = UserBy,
+                                    CreateBy =  Session["AdminName"].ToString(),
                                     CreateAt = dt
                                 };
                                 nSerialsLlistIn.SerialsLlistC.Add(nSerialsLlistOut);
@@ -548,9 +554,9 @@ namespace PurchaseOrderSys.Controllers
                                     SerialsType = "PO",
                                     SerialsNo = serials.Trim(),
                                     SerialsQTY = 1,
-                                    ReceivedBy = UserBy,
+                                    ReceivedBy =  Session["AdminName"].ToString(),
                                     ReceivedAt = dt,
-                                    CreateBy = UserBy,
+                                    CreateBy =  Session["AdminName"].ToString(),
                                     CreateAt = dt
                                 };
                                 PurchaseSKU.SerialsLlist.Add(nSerialsLlist);
@@ -672,6 +678,39 @@ namespace PurchaseOrderSys.Controllers
             }
             SKUList = SKUList.Distinct().ToList();
             return SKUList;
+        }
+        public IEnumerable<WarehouseVM> nGetWarehouseVMList(Warehouse Warehouse, string Product, int? FulfillableMin, int? FulfillableMax)
+        {
+            var inventory = db.inventory.Where(x=>x.WarehouseID== Warehouse.ID);
+            if (!string.IsNullOrWhiteSpace(Product))
+            {
+                var SKUList = db.SkuLang.Where(x=>x.Sku.Contains(Product)||x.Name.Contains(Product)).Select(x=>x.Sku).Distinct().ToList();
+                inventory = inventory.Where(x => SKUList.Contains(x.SkuID));
+            }
+            if (FulfillableMin.HasValue)
+            {
+                inventory = inventory.Where(x => x.Fulfillable >= FulfillableMin);
+            }
+            if (FulfillableMax.HasValue)
+            {
+                inventory = inventory.Where(x => x.Fulfillable <= FulfillableMax);
+            }
+            var GroupWarehouseVM = inventory.Select(x => new WarehouseVM
+            {
+                WarehouseName = x.Warehouse.Name,
+                WarehouseType = x.Warehouse.Type,
+                SKU = x.SkuID,
+                Name = x.SKU.SkuLang.Where(y => y.LangID == LangID).FirstOrDefault().Name,
+                Fulfillable = x.Fulfillable,
+                Awaiting = x.Awaiting,
+                TransferOutQTY = x.TransferOutQTY,
+                TransferInQTY = x.TransferInQTY,
+                WTransferOutQTY = x.WTransferOutQTY,
+                WTransferInQTY = x.WTransferInQTY,
+                Aggregate = x.Aggregate,
+                Velocity = x.TotalVelocity
+            });
+            return GroupWarehouseVM;
         }
         public IEnumerable<WarehouseVM> GetWarehouseVMList(Warehouse Warehouse, string Product, int? FulfillableMin, int? FulfillableMax)
         {

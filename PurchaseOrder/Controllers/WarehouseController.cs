@@ -24,7 +24,7 @@ namespace PurchaseOrderSys.Controllers
         [HttpPost]
         public ActionResult Create(Warehouse Warehouse)
         {
-            Warehouse.CreateBy = UserBy;
+            Warehouse.CreateBy =  Session["AdminName"].ToString();
             Warehouse.CreateAt = DateTime.UtcNow;
             db.Warehouse.Add(Warehouse);
             try
@@ -55,7 +55,7 @@ namespace PurchaseOrderSys.Controllers
             var OldWarehouse = db.Warehouse.Find(Warehouse.ID);
            
 
-            OldWarehouse.UpdateBy = UserBy;
+            OldWarehouse.UpdateBy =  Session["AdminName"].ToString();
             OldWarehouse.UpdateAt = DateTime.UtcNow;
             db.SaveChanges();
             return RedirectToAction("Index");
@@ -64,7 +64,7 @@ namespace PurchaseOrderSys.Controllers
         {
             var OldWarehouse = db.Warehouse.Find(ID);
             OldWarehouse.IsEnable = false;
-            OldWarehouse.UpdateBy = UserBy;
+            OldWarehouse.UpdateBy =  Session["AdminName"].ToString();
             OldWarehouse.UpdateAt = DateTime.UtcNow;
             db.SaveChanges();
             return RedirectToAction("Index");
