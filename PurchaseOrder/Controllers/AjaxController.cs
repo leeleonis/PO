@@ -2430,10 +2430,12 @@ namespace PurchaseOrderSys.Controllers
         {
             AjaxResult result = new AjaxResult();
 
-            var orderList = db.Orders.Where(o => o.IsEnable && (OrderIDs.Contains(o.ID) || (o.SCID.HasValue && OrderIDs.Contains(o.SCID.Value))));
-
             try
             {
+                if(OrderIDs.Any()) throw new Exception("Not get any order IDs!");
+
+                var orderList = db.Orders.Where(o => o.IsEnable && (OrderIDs.Contains(o.ID) || (o.SCID.HasValue && OrderIDs.Contains(o.SCID.Value))));
+
                 if (!orderList.Any()) throw new Exception("Not found orders!");
 
                 result.data = orderList.Select(o => new
