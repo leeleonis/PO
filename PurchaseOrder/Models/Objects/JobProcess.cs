@@ -15,8 +15,6 @@ namespace PurchaseOrderSys.Models
 
         public JobProcess(string Name)
         {
-            lock (db)
-            {
                 TaskScheduler = new TaskScheduler()
                 {
                     Name = Name,
@@ -27,7 +25,6 @@ namespace PurchaseOrderSys.Models
 
                 db.TaskScheduler.Add(TaskScheduler);
                 db.SaveChanges();
-            }
         }
 
         public void StartWork(ParameterizedThreadStart work)
@@ -110,8 +107,6 @@ namespace PurchaseOrderSys.Models
 
         public void AddLog(string description)
         {
-            lock (db)
-            {
                 db.TaskLog.Add(new TaskLog()
                 {
                     Scheduler = TaskScheduler.ID,
@@ -120,18 +115,14 @@ namespace PurchaseOrderSys.Models
                     CreateAt = DateTime.UtcNow
                 });
                 db.SaveChanges();
-            }
         }
 
         public void StatusLog(EnumData.TaskStatus status)
         {
-            lock (db)
-            {
                 TaskScheduler.Status = (byte)status;
                 TaskScheduler.UpdateAt = DateTime.UtcNow;
                 TaskScheduler.UpdateBy = AdminName;
                 db.SaveChanges();
-            }
         }
 
         private void Fail(string message)
