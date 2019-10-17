@@ -9,8 +9,8 @@ namespace PurchaseOrderSys.Models
 {
     public class JobProcess : Common, IDisposable
     {
-        private Thread Work;
-        private Task<string> Task;
+        public Thread Work;
+        public Task<string> Task;
         private TaskScheduler TaskScheduler;
 
         public JobProcess(string Name)
@@ -97,10 +97,18 @@ namespace PurchaseOrderSys.Models
                         StatusLog(EnumData.TaskStatus.執行完);
                     }
                 }
-            }, TaskContinuationOptions.ExecuteSynchronously);   
+            }, TaskContinuationOptions.ExecuteSynchronously);
         }
 
-        internal void AddLog(string description)
+        public void Func_test()
+        {
+            StatusLog(EnumData.TaskStatus.執行中);
+            AddLog("Task Test3");
+            Thread.Sleep(5000);
+            FinishWork();
+        }
+
+        public void AddLog(string description)
         {
             lock (db)
             {
@@ -115,7 +123,7 @@ namespace PurchaseOrderSys.Models
             }
         }
 
-        internal void StatusLog(EnumData.TaskStatus status)
+        public void StatusLog(EnumData.TaskStatus status)
         {
             lock (db)
             {
@@ -126,7 +134,7 @@ namespace PurchaseOrderSys.Models
             }
         }
 
-        internal void Fail(string message)
+        private void Fail(string message)
         {
             TaskScheduler.Result = message;
             StatusLog(EnumData.TaskStatus.執行失敗);
