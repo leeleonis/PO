@@ -2451,7 +2451,7 @@ namespace PurchaseOrderSys.Controllers
 
             try
             {
-                if(OrderIDs.Any()) throw new Exception("Not get any order IDs!");
+                if(OrderIDs == null || !OrderIDs.Any()) throw new Exception("Not get any order IDs!");
 
                 var orderList = db.Orders.Where(o => o.IsEnable && (OrderIDs.Contains(o.ID) || (o.SCID.HasValue && OrderIDs.Contains(o.SCID.Value))));
 
