@@ -708,7 +708,11 @@ namespace PurchaseOrderSys.Controllers
                 WTransferOutQTY = x.WTransferOutQTY,
                 WTransferInQTY = x.WTransferInQTY,
                 Aggregate = x.Aggregate,
-                Velocity = x.TotalVelocity
+                Velocity = x.TotalVelocity,
+                TotalInventory = x.TotalInventory,
+                Cumulativeinventory = x.CumulativeOrders ?? 0,
+                CumulativeSalse = x.CumulativeSalse ?? 0,
+                CumulativeTransferOut = x.CumulativeTransferOut ?? 0,
             });
             return GroupWarehouseVM;
         }

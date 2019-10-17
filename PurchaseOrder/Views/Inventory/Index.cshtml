@@ -139,6 +139,8 @@
                                                                 <th>Transit (Out) & Transit(In)</th>
                                                                 <th>WinitTransit (Out) & WinitTransit (In)</th>
                                                                 <th>Aggregate</th>
+                                                                <td>Cumulative Salse</td>
+                                                                <td>Cumulative TransferOut</td>
                                                                 <th>Writr-off Inventory</th>
                                                                 <th>Total Inventory</th>
                                                             </tr>
@@ -156,7 +158,7 @@
                                                                     <a href=' @Url.Action("edit", "Sku", new { id = item.SKU })' target="_blank">@(item.SKU)</a>
                                                                 </td>
                                                                 <td>@item.Name</td>
-                                                                <td></td>
+                                                                <td>@item.Cumulativeinventory</td>
                                                                 <td>
                                                                     <a href='@Url.Action("Serials", new { item.SKU,WarehouseID=ViewBag.WarehouseID })'>@item.Fulfillable</a>
                                                                 </td>
@@ -184,8 +186,10 @@
                                                                     }
                                                                 </td>
                                                                 <td>@item.Aggregate</td>
-                                                                <td></td>
-                                                                <td></td>
+                                                                <td>@item.CumulativeSalse</td>
+                                                                <td>@item.CumulativeTransferOut</td>
+                                                                <td>@item.WritroffInventory</td>
+                                                                <td>@item.TotalInventory</td>
                                                             </tr>
                                                                 }
                                                             }
