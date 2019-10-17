@@ -916,12 +916,15 @@ namespace PurchaseOrderSys.Controllers
 
         public void Task_Test()
         {
-            JobProcess job1 = new JobProcess("Task Test1");
-            job1.AddWork(Func_Test1, job1);
-            JobProcess job2 = new JobProcess("Task Test2");
-            job2.AddWork(Func_Test2, job2);
-            Response.Write(string.Format("Task1 ID：{0}，Staus：{1}，Result：{2} <br />", job1.Task.Id, job1.Task.Status, job1.Task.Result));
-            Response.Write(string.Format("Task2 ID：{0}，Staus：{1}，Result：{2}", job2.Task.Id, job2.Task.Status, job2.Task.Result));
+            JobProcess job3 = new JobProcess("Task Test3");
+            var thread = new System.Threading.Thread(job3.Func_test);
+            thread.Start();
+            //JobProcess job1 = new JobProcess("Task Test1");
+            //job1.AddWork(Func_Test1, job1);
+            //JobProcess job2 = new JobProcess("Task Test2");
+            //job2.AddWork(Func_Test2, job2);
+            //Response.Write(string.Format("Task1 ID：{0}，Staus：{1}，Result：{2} <br />", job1.Task.Id, job1.Task.Status, job1.Task.Result));
+            //Response.Write(string.Format("Task2 ID：{0}，Staus：{1}，Result：{2}", job2.Task.Id, job2.Task.Status, job2.Task.Result));
         }
 
         private string Func_Test1(object JobProcess)
@@ -956,6 +959,21 @@ namespace PurchaseOrderSys.Controllers
             }
 
             return "";
+        }
+        private void Func_Test3()
+        {
+            try
+            {
+                JobProcess job = new JobProcess("Task Test3");
+                job.StatusLog(EnumData.TaskStatus.執行中);
+                job.AddLog("Task Test3");
+                System.Threading.Thread.Sleep(5000);
+                job.FinishWork();
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.InnerException?.Message ?? ex.Message;
+            }
         }
 
         public ActionResult Autoreturntoshipper()

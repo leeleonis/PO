@@ -15,7 +15,7 @@ namespace PurchaseOrderSys.Models
         protected static string ApiUserName = "test@qd.com.tw";
         protected static string ApiPassword = "prU$U9R7CHl3O#uXU6AcH6ch";
 
-        protected readonly string AdminName = HttpContext.Current.Session["AdminName"]?.ToString() ?? "System";
+        protected readonly string AdminName = HttpContext.Current?.Session["AdminName"]?.ToString() ?? "System";
 
         private readonly string[] RequestUrl = new string[] { "http://internal.qd.com.tw/", "http://internal.qd.com.tw:8080/" };
 
