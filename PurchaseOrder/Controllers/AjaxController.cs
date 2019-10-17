@@ -954,7 +954,7 @@ namespace PurchaseOrderSys.Controllers
                                 CreateBy =  CreateBy ,
                                 CreateAt = DateTime.UtcNow,
                                 UpdateAt = DateTime.UtcNow,
-                                UpdateBy =  Session["AdminName"].ToString()
+                                UpdateBy = CreateBy
                             });
 
                             #region 停用
@@ -1293,7 +1293,7 @@ namespace PurchaseOrderSys.Controllers
                                     else
                                     {
                                         nTransferSKU.QTY = Gserialitem.item.Count();
-                                        nTransferSKU.UpdateBy =  Session["AdminName"].ToString();
+                                        nTransferSKU.UpdateBy = CreateBy;
                                         nTransferSKU.UpdateAt = dt;
                                     }
                                     var SerialTracking = SKU.GetSku.SerialTracking;//有序號管理
@@ -1333,7 +1333,7 @@ namespace PurchaseOrderSys.Controllers
                                                             SerialsType = "TransferOut",
                                                             CreateBy =  CreateBy ,
                                                             CreateAt = dt,
-                                                            ReceivedBy =  Session["AdminName"].ToString(),
+                                                            ReceivedBy = CreateBy,
                                                             ReceivedAt = dt,
                                                         };
                                                         nTransferSKU.SerialsLlist.Add(nSerialsLlist);
@@ -1350,7 +1350,7 @@ namespace PurchaseOrderSys.Controllers
                                                             SerialsType = "TransferOut",
                                                             CreateBy =  CreateBy ,
                                                             CreateAt = dt,
-                                                            ReceivedBy =  Session["AdminName"].ToString(),
+                                                            ReceivedBy = CreateBy,
                                                             ReceivedAt = dt,
                                                         };
                                                         nTransferSKU.SerialsLlist.Add(nSerialsLlist);
@@ -1381,7 +1381,7 @@ namespace PurchaseOrderSys.Controllers
                                                             SerialsType = "TransferOut",
                                                             CreateBy =  CreateBy ,
                                                             CreateAt = dt,
-                                                            ReceivedBy =  Session["AdminName"].ToString(),
+                                                            ReceivedBy = CreateBy,
                                                             ReceivedAt = dt,
                                                         };
                                                         nTransferSKU.SerialsLlist.Add(nSerialsLlist);
@@ -1449,7 +1449,7 @@ namespace PurchaseOrderSys.Controllers
                             }
                             else
                             {
-                                Transfer.UpdateBy =  Session["AdminName"].ToString();
+                                Transfer.UpdateBy = CreateBy;
                                 Transfer.UpdateAt = dt;
                                 Transfer.Status = "Requested";
                                 db.SaveChanges();
@@ -1541,7 +1541,7 @@ namespace PurchaseOrderSys.Controllers
                                 else
                                 {
                                     nTransferSKU.QTY = item.Qty;
-                                    nTransferSKU.UpdateBy =  Session["AdminName"].ToString();
+                                    nTransferSKU.UpdateBy = CreateBy;
                                     nTransferSKU.UpdateAt = dt;
                                 }
                                 db.SaveChanges();
@@ -1931,7 +1931,7 @@ namespace PurchaseOrderSys.Controllers
                                         SerialsType = "DropshpOrderIn",
                                         SerialsNo = SerialNumberitem.Trim(),
                                         SerialsQTY = 1,
-                                        ReceivedBy =  Session["AdminName"].ToString(),
+                                        ReceivedBy = CreateBy,
                                         ReceivedAt = dt,
                                         CreateBy =  CreateBy ,
                                         CreateAt = dt
@@ -1990,7 +1990,7 @@ namespace PurchaseOrderSys.Controllers
                                         SerialsType = "DropshpOrderIn",
                                         SerialsNo = SerialNumberitem.Trim(),
                                         SerialsQTY = 1,
-                                        ReceivedBy =  Session["AdminName"].ToString(),
+                                        ReceivedBy = CreateBy,
                                         ReceivedAt = dt,
                                         CreateBy =  CreateBy ,
                                         CreateAt = dt
@@ -2218,6 +2218,7 @@ namespace PurchaseOrderSys.Controllers
             public List<RMASerialsLlist> RMAINSerialsLlist { get; internal set; }
             public List<RMASerialsLlist> RMAOUTSerialsLlist { get; internal set; }
             public List<SerialsLlist> OrderSerialsLlist { get; internal set; }
+            public List<SerialsLlist> AllSerialsLlist { get; internal set; }
 
             public void ThreadMain()
             {
@@ -2264,8 +2265,12 @@ namespace PurchaseOrderSys.Controllers
                         var UnTRMAOUTQTY = Math.Abs(RMAOUTSerialsLlist.Where(x => x.TransferSKU.Transfer.ToWID == Warehouseitem.ID && x.TransferSKU.Transfer.Status == "Requested" && x.RMASKU.SkuNo == SKUitem).Sum(x => x.SerialsQTY) ?? 0);
                         //30天出貨數量
                         var Velocity = Math.Abs(OrderSerialsLlist.Where(x => (x.TransferSKUID.HasValue && x.TransferSKU.SkuNo == SKUitem) || (x.PurchaseSKUID.HasValue && x.PurchaseSKU.SkuNo == SKUitem)).Sum(x => x.SerialsQTY) ?? 0);
-
-
+                        // 歷史資料
+                        var CumulativeOrders = Math.Abs(AllSerialsLlist.Where(x => x.SerialsType == "PO" && x.PurchaseSKU.PurchaseOrder.WarehouseID == Warehouseitem.ID && x.PurchaseSKU.SkuNo == SKUitem).Sum(x => x.SerialsQTY) ?? 0) + Math.Abs(AllSerialsLlist.Where(x => x.SerialsType == "TransferIn" && x.TransferSKU.Transfer.ToWID == Warehouseitem.ID && x.TransferSKU.SkuNo == SKUitem).Sum(x => x.SerialsQTY) ?? 0);
+                        var CumulativeSalse = Math.Abs(AllSerialsLlist.Where(x => x.SerialsType == "Order" && ((x.TransferSKUID.HasValue && x.TransferSKU.Transfer.ToWID == Warehouseitem.ID && x.TransferSKU.SkuNo == SKUitem) || (!x.TransferSKUID.HasValue && x.PurchaseSKUID.HasValue && x.PurchaseSKU.PurchaseOrder.WarehouseID == Warehouseitem.ID && x.PurchaseSKU.SkuNo == SKUitem))).Sum(x => x.SerialsQTY) ?? 0);
+                        var CumulativeTransferOut = Math.Abs(AllSerialsLlist.Where(x => x.SerialsType == "TransferOut" && x.TransferSKU.Transfer.FromWID == Warehouseitem.ID && x.TransferSKU.SkuNo == SKUitem).Sum(x => x.SerialsQTY) ?? 0);
+                        var WritroffInventory = Math.Abs(AllSerialsLlist.Where(x => x.SerialsType == "CM" && ((x.TransferSKUID.HasValue && x.TransferSKU.Transfer.ToWID == Warehouseitem.ID && x.TransferSKU.SkuNo == SKUitem) || (!x.TransferSKUID.HasValue && x.PurchaseSKUID.HasValue && x.PurchaseSKU.CreditMemoID.HasValue && x.PurchaseSKU.CreditMemo.PurchaseOrder.WarehouseID == Warehouseitem.ID && x.PurchaseSKU.SkuNo == SKUitem))).Sum(x => x.SerialsQTY) ?? 0);
+                        //var TotalInventory = 0;
                         inventory.Add(new inventory
                         {
                             WarehouseID = Warehouseitem.ID,
@@ -2278,6 +2283,11 @@ namespace PurchaseOrderSys.Controllers
                             WTransferOutQTY = WFOutQTY,
                             WTransferInQTY = WTOutQTY,
                             TotalVelocity = Velocity,
+                            CumulativeOrders = CumulativeOrders,
+                            CumulativeSalse = CumulativeSalse,
+                            CumulativeTransferOut = CumulativeTransferOut,
+                            WritroffInventory = WritroffInventory,
+                            TotalInventory = POQTY + TinQTY + RMAINQTY + UnFOutQTY + UnWFOutQTY + UnTOutQTY + UnWTOutQTY + UnFRMAOUTQTY + UnTRMAOUTQTY,
                             CreateAt = DateTime.UtcNow
                             //Aggregate = WarehouseVM.Sum(x => x.Aggregate),
                             //Awaiting = WarehouseVM.Sum(x => x.Awaiting),
@@ -2308,7 +2318,7 @@ namespace PurchaseOrderSys.Controllers
             var QuytimeS = "開始查詢：" + sw.ElapsedMilliseconds;
             var Warehouse = db.Warehouse.AsNoTracking().Where(x => x.IsEnable).Include(x => x.WarehouseSummary).ToList();
             var AllSKUList = db.SKU.AsNoTracking().Where(x => x.IsEnable && x.Status == 1).Select(x => x.SkuID).ToList();//
-            var AllSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable).Include(x => x.PurchaseSKU).Include(x => x.PurchaseSKU.PurchaseOrder).ToList();
+            var AllSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable).Include(x => x.PurchaseSKU).Include(x => x.PurchaseSKU.PurchaseOrder).Include(x=>x.TransferSKU).Include(x => x.TransferSKU.Transfer).Include(x => x.PurchaseSKU.CreditMemo.PurchaseOrder).ToList();
             var POSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "PO" && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable).Include(x => x.PurchaseSKU).Include(x => x.PurchaseSKU.PurchaseOrder).ToList();
             var InSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferIn" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
             var OutSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferOut" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
@@ -2322,6 +2332,7 @@ namespace PurchaseOrderSys.Controllers
                 var Awaitinglist = GetAwaitingCount("", SCID);
                 MyThread myThread = new MyThread();
                 myThread.Warehouseitem = Warehouseitem;
+                myThread.AllSerialsLlist = AllSerialsLlist;
                 myThread.AllSKUList = AllSKUList;
                 myThread.Awaitinglist = Awaitinglist;
                 myThread.POSerialsLlist = POSerialsLlist;
