@@ -1,4 +1,5 @@
-﻿using PurchaseOrderSys.Models;
+﻿using inventorySKU;
+using PurchaseOrderSys.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,16 +8,21 @@ using System.Web.Mvc;
 
 namespace PurchaseOrderSys.Controllers
 {
+    [CheckSession]
     public class InventoryController : BaseController
     {
         // GET: Inventory
         public ActionResult Index()
         {
+            ViewBag.RefreshInventory = HttpContext.Application["RefreshInventory"].ToString();
+            ViewBag.UpdateAt = db.inventory.OrderByDescending(x => x.CreateAt).FirstOrDefault().CreateAt;
             return View();
         }
         [HttpPost]
         public ActionResult Index(int? WarehouseID, string SKU, string IsInventory)
         {
+            ViewBag.RefreshInventory = HttpContext.Application["RefreshInventory"].ToString();
+            ViewBag.UpdateAt = db.inventory.OrderByDescending(x => x.CreateAt).FirstOrDefault().CreateAt;
             var WarehouseVMList = new List<WarehouseVM>();
 
             int? FulfillableMin = null;

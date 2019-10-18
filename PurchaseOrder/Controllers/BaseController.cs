@@ -31,9 +31,9 @@ namespace PurchaseOrderSys.Controllers
         public static SellerCloud_WebService.SC_WebService SCWS;
         //public BaseController()
         //{
-        //    if (Session != null && Session["AdminName"] != null)
+        //    if (HttpContext != null && HttpContext.Application["RefreshInventory"] != null)
         //    {
-        //         Session["AdminName"].ToString() = Session["AdminName"].ToString();
+             
         //    }
         //}
         protected string RenderPartialViewToString()
@@ -713,6 +713,7 @@ namespace PurchaseOrderSys.Controllers
                 Cumulativeinventory = x.CumulativeOrders ?? 0,
                 CumulativeSalse = x.CumulativeSalse ?? 0,
                 CumulativeTransferOut = x.CumulativeTransferOut ?? 0,
+                WritroffInventory = x.WritroffInventory
             });
             return GroupWarehouseVM;
         }

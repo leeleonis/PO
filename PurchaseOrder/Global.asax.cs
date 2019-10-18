@@ -22,6 +22,7 @@ namespace PurchaseOrderSys
             //System.Web.ModelBinding.ModelMetadataProviders.Current  = new CustomModelMetadataProvider();
 
             Application["TaskFactory"] = new TaskFactory(new LimitedConcurrencyLevelTaskScheduler(20));
+            Application["RefreshInventory"] = "N";
         }
         protected void Application_BeginRequest(Object sender, EventArgs e)
         {
