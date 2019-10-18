@@ -914,6 +914,7 @@ namespace PurchaseOrderSys.Controllers
             return new ShipResult(true);
         }
 
+        [AllowAnonymous]
         public void Task_Test()
         {
             //JobProcess job3 = new JobProcess("Task Test3");
