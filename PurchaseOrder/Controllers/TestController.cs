@@ -916,13 +916,26 @@ namespace PurchaseOrderSys.Controllers
 
         public void Task_Test()
         {
-            JobProcess job3 = new JobProcess("Task Test3");
-            var thread = new System.Threading.Thread(job3.Func_test);
-            thread.Start();
-            //JobProcess job1 = new JobProcess("Task Test1");
-            //job1.AddWork(Func_Test1, job1);
-            //JobProcess job2 = new JobProcess("Task Test2");
-            //job2.AddWork(Func_Test2, job2);
+            //JobProcess job3 = new JobProcess("Task Test3");
+            //var thread = new System.Threading.Thread(job3.Func_test);
+            //thread.Start();
+            JobProcess job1 = new JobProcess("Task Test1");
+            job1.AddWork(Func_Test1, job1);
+            JobProcess job2 = new JobProcess("Task Test2");
+            job2.AddWork(() => {
+                try
+                {
+                    job2.StatusLog(EnumData.TaskStatus.執行中);
+                    job2.AddLog("Task Test2");
+                    System.Threading.Thread.Sleep(5000);
+                }
+                catch (Exception ex)
+                {
+                    return ex.InnerException?.Message ?? ex.Message;
+                }
+
+                return "";
+            });
             //Response.Write(string.Format("Task1 ID：{0}，Staus：{1}，Result：{2} <br />", job1.Task.Id, job1.Task.Status, job1.Task.Result));
             //Response.Write(string.Format("Task2 ID：{0}，Staus：{1}，Result：{2}", job2.Task.Id, job2.Task.Status, job2.Task.Result));
         }

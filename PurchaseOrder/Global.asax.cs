@@ -2,10 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using PurchaseOrderSys.Models;
 
 namespace PurchaseOrderSys
 {
@@ -18,6 +20,8 @@ namespace PurchaseOrderSys
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             //System.Web.ModelBinding.ModelMetadataProviders.Current  = new CustomModelMetadataProvider();
+
+            Application["TaskFactory"] = new TaskFactory(new LimitedConcurrencyLevelTaskScheduler(20));
         }
         protected void Application_BeginRequest(Object sender, EventArgs e)
         {
