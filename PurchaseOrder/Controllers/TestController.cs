@@ -17,6 +17,7 @@ using PurchaseOrderSys.SCService;
 using SellerCloud_WebService;
 using PurchaseOrderSys.NewApi;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace PurchaseOrderSys.Controllers
 {
@@ -917,9 +918,6 @@ namespace PurchaseOrderSys.Controllers
         [AllowAnonymous]
         public void Task_Test()
         {
-            //JobProcess job3 = new JobProcess("Task Test3");
-            //var thread = new System.Threading.Thread(job3.Func_test);
-            //thread.Start();
             JobProcess job1 = new JobProcess("Task Test1");
             job1.AddWork(Func_Test1, job1);
             JobProcess job2 = new JobProcess("Task Test2");
@@ -929,7 +927,7 @@ namespace PurchaseOrderSys.Controllers
                 {
                     job2.StatusLog(EnumData.TaskStatus.執行中);
                     job2.AddLog("Task Test2");
-                    System.Threading.Thread.Sleep(5000);
+                    Thread.Sleep(5000);
                 }
                 catch (Exception ex)
                 {
@@ -940,8 +938,12 @@ namespace PurchaseOrderSys.Controllers
             });
             JobProcess job3 = new JobProcess("Task Test3");
             job1.AddWork(Func_Test3, job3);
-            Response.Write(string.Format("Task1 ID：{0}，Staus：{1}，Result：{2} <br />", job1.Task.Id, job1.Task.Status, job1.Task.Result));
-            Response.Write(string.Format("Task2 ID：{0}，Staus：{1}，Result：{2}", job2.Task.Id, job2.Task.Status, job2.Task.Result));
+            //Response.Write(string.Format("Task1 ID：{0}，Staus：{1}，Result：{2} <br />", job1.Task.Id, job1.Task.Status, job1.Task.Result));
+            //Response.Write(string.Format("Task2 ID：{0}，Staus：{1}，Result：{2}", job2.Task.Id, job2.Task.Status, job2.Task.Result));
+
+            MyThread myThread = new MyThread();
+            Thread thread = new Thread(myThread.Func_Test);
+            thread.Start();
         }
 
         private string Func_Test1(object JobProcess)
@@ -951,29 +953,29 @@ namespace PurchaseOrderSys.Controllers
                 var job = JobProcess as JobProcess;
                 job.Task.ContinueWith((Task) =>
                 {
-                               if (Task.IsFaulted)
-                               {
-                                   job.Fail(Task.Exception.Message);
-                               }
-                               else if (Task.IsCanceled)
-                               {
-                                   job.Fail("工作已取消");
-                               }
-                               else
-                               {
-                                   if (!string.IsNullOrWhiteSpace(Task.Result))
-                                   {
-                                       job.Fail(Task.Result);
-                                   }
-                                   else
-                                   {
-                                       job.StatusLog(EnumData.TaskStatus.執行完);
-                                   }
-                               }
-                           }, TaskContinuationOptions.ExecuteSynchronously);
+                    if (Task.IsFaulted)
+                    {
+                        job.Fail(Task.Exception.Message);
+                    }
+                    else if (Task.IsCanceled)
+                    {
+                        job.Fail("工作已取消");
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrWhiteSpace(Task.Result))
+                        {
+                            job.Fail(Task.Result);
+                        }
+                        else
+                        {
+                            job.StatusLog(EnumData.TaskStatus.執行完);
+                        }
+                    }
+                }, TaskContinuationOptions.ExecuteSynchronously);
                 job.StatusLog(EnumData.TaskStatus.執行中);
                 job.AddLog("Task Test1");
-                System.Threading.Thread.Sleep(10000);
+                Thread.Sleep(10000);
             }
             catch (Exception ex)
             {
@@ -990,7 +992,7 @@ namespace PurchaseOrderSys.Controllers
                 var job = JobProcess as JobProcess;
                 job.StatusLog(EnumData.TaskStatus.執行中);
                 job.AddLog("Task Test2");
-                System.Threading.Thread.Sleep(5000);
+                Thread.Sleep(5000);
             }
             catch (Exception ex)
             {
@@ -1007,7 +1009,7 @@ namespace PurchaseOrderSys.Controllers
                 var job = JobProcess as JobProcess;
                 job.StatusLog(EnumData.TaskStatus.執行中);
                 job.AddLog("Task Test3");
-                System.Threading.Thread.Sleep(5000);
+                Thread.Sleep(5000);
                 job.FinishWork();
             }
             catch (Exception ex)

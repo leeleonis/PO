@@ -12,8 +12,6 @@ namespace PurchaseOrderSys.Models
         public Task<string> Task;
         private TaskScheduler TaskScheduler;
 
-        private TaskFactory Factory = System.Web.HttpContext.Current.Application.Get("TaskFactory") as TaskFactory;
-
         public JobProcess(string Name)
         {
                 TaskScheduler = new TaskScheduler()
@@ -44,7 +42,7 @@ namespace PurchaseOrderSys.Models
 
         public void AddWork(Func<string> work)
         {
-            Task = Factory.StartNew(work);
+            Task = System.Threading.Tasks.Task.Factory.StartNew(work);
 
             //Task.ContinueWith((Task) =>
             //{
@@ -72,8 +70,8 @@ namespace PurchaseOrderSys.Models
 
         public void AddWork(Func<object, string> work, object data)
         {
-            Task = Factory.StartNew(work, data);
-            
+            Task = System.Threading.Tasks.Task.Factory.StartNew(work, data);
+
             //Task.ContinueWith((Task) =>
             //{
             //    if (Task.IsFaulted)

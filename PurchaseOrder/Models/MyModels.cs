@@ -329,5 +329,14 @@ namespace PurchaseOrderSys.Models
                 Console.WriteLine("報行ID：" + threadId + " ;結束時間：" + sw.ElapsedMilliseconds);
             }
         }
+
+        public void Func_Test()
+        {
+            var job = new JobProcess("Task Test");
+            job.StatusLog(EnumData.TaskStatus.執行中);
+            job.AddLog("Task Test");
+            Thread.Sleep(5000);
+            job.FinishWork();
+        }
     }
 }
