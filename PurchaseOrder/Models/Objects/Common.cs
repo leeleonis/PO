@@ -10,7 +10,7 @@ namespace PurchaseOrderSys.Models
 {
     public class Common
     {
-        protected PurchaseOrderEntities db = new PurchaseOrderEntities();
+        protected PurchaseOrderEntities dbC = new PurchaseOrderEntities();
 
         protected static string ApiUserName = "test@qd.com.tw";
         protected static string ApiPassword = "prU$U9R7CHl3O#uXU6AcH6ch";
@@ -20,6 +20,13 @@ namespace PurchaseOrderSys.Models
         private readonly string[] RequestUrl = new string[] { "http://internal.qd.com.tw/", "http://internal.qd.com.tw:8080/" };
 
         private bool disposedValue = false; // 偵測多餘的呼叫
+
+        public Common()
+        {
+            dbC.Configuration.AutoDetectChangesEnabled = false;
+            dbC.Configuration.LazyLoadingEnabled = false;
+            dbC.Configuration.ProxyCreationEnabled = false;
+        }
 
         protected Response<T> Request<T>(string url, string method = "post", object data = null, int urlIndex = 0) where T : new()
         {
@@ -60,7 +67,7 @@ namespace PurchaseOrderSys.Models
 
                 // TODO: 釋放非受控資源 (非受控物件) 並覆寫下方的完成項。
                 // TODO: 將大型欄位設為 null。
-                db = null;
+                dbC = null;
                 disposedValue = true;
             }
         }

@@ -20,8 +20,6 @@ namespace PurchaseOrderSys
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             //System.Web.ModelBinding.ModelMetadataProviders.Current  = new CustomModelMetadataProvider();
-
-            Application["TaskFactory"] = new TaskFactory(new LimitedConcurrencyLevelTaskScheduler(20));
         }
         protected void Application_BeginRequest(Object sender, EventArgs e)
         {

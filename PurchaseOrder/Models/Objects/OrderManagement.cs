@@ -27,7 +27,7 @@ namespace PurchaseOrderSys.Models
 
         public void SetOrderData(int ID)
         {
-            orderData = db.Orders.FirstOrDefault(o => o.ID.Equals(ID) || o.SCID.Value.Equals(ID));
+            orderData = dbC.Orders.FirstOrDefault(o => o.ID.Equals(ID) || o.SCID.Value.Equals(ID));
         }
 
         public Orders OrderSync(int? OrderSCID)
@@ -42,7 +42,7 @@ namespace PurchaseOrderSys.Models
                 order.OrderStatus = EnumData.OrderStatusList().First(s => s.Value.Equals(EnumData.OrderStatusList(true)[order.OrderStatus])).Key;
                 order.PaymentStatus = EnumData.OrderPaymentStatusList().First(p => p.Value.Equals(EnumData.OrderPaymentStatusList(true)[order.PaymentStatus])).Key;
                 order.FulfilledDate = order.FulfilledDate.HasValue && !order.FulfilledDate.Equals(DateTime.MinValue) ? order.FulfilledDate : null;
-                order.RMAID = orderData?.RMAID ?? db.RMA.FirstOrDefault(r => r.SCRMA.Equals(order.RMAID.ToString()))?.ID;
+                order.RMAID = orderData?.RMAID ?? dbC.RMA.FirstOrDefault(r => r.SCRMA.Equals(order.RMAID.ToString()))?.ID;
 
                 var orderUpdateList = new string[] { "IsRush", "RMAID", "OrderStatus", "PaymentStatus", "PaymentDate", "FulfillmentStatus", "FulfilledDate", "ShippingTime", "Comment" };
                 if (orderData != null)
@@ -54,21 +54,21 @@ namespace PurchaseOrderSys.Models
                     orderData = new Orders() { CreateBy = AdminName, CreateAt = UtcNow };
                     orderUpdateList = orderUpdateList.Concat(new string[] { "OrderParent", "OrderSourceID", "SCID", "CustomerID", "CustomerEmail", "OrderDate", "BuyerNote" }).ToArray();
                     SetUpdateData(orderData, order, orderUpdateList);
-                    orderData.Company = db.Company.AsNoTracking().First(c => c.CompanySCID.Value.Equals(order.Company)).ID;
+                    orderData.Company = dbC.Company.AsNoTracking().First(c => c.CompanySCID.Value.Equals(order.Company)).ID;
                     orderData.Channel = EnumData.OrderChannelList().First(c => c.Value.Equals(EnumData.OrderChannelList(true)[order.Channel])).Key;
-                    db.Orders.Add(orderData);
+                    dbC.Orders.Add(orderData);
                 }
 
-                db.SaveChanges();
+                dbC.SaveChanges();
 
                 foreach (var package in order.Packages)
                 {
-                    package.ShipWarehouse = db.WarehouseSummary.AsNoTracking().First(w => w.IsEnable && w.Type.Equals("SCID") && w.Val.Equals(package.ShipWarehouse.ToString())).WarehouseID;
-                    package.ReturnWarehouse = db.WarehouseSummary.AsNoTracking().First(w => w.IsEnable && w.Type.Equals("SCID") && w.Val.Equals(package.ReturnWarehouse.ToString())).WarehouseID;
+                    package.ShipWarehouse = dbC.WarehouseSummary.AsNoTracking().First(w => w.IsEnable && w.Type.Equals("SCID") && w.Val.Equals(package.ShipWarehouse.ToString())).WarehouseID;
+                    package.ReturnWarehouse = dbC.WarehouseSummary.AsNoTracking().First(w => w.IsEnable && w.Type.Equals("SCID") && w.Val.Equals(package.ReturnWarehouse.ToString())).WarehouseID;
 
                     if (package.ShippingMethod == 0)
                     {
-                        package.ShippingMethod = db.ShippingMethods.First(m => m.IsEnable).ID;
+                        package.ShippingMethod = dbC.ShippingMethods.First(m => m.IsEnable).ID;
                     }
 
                     if (orderData.Packages.Any(p => p.SCID.Value.Equals(package.SCID.Value)))
@@ -79,20 +79,20 @@ namespace PurchaseOrderSys.Models
                     else
                     {
                         var ExportCurrency = Enum.GetName(typeof(CurrencyCodeType2), package.ExportCurrency);
-                        package.ExportCurrency = db.Currency.AsNoTracking().First(c => c.Code.ToLower().Equals(ExportCurrency.ToLower())).ID;
+                        package.ExportCurrency = dbC.Currency.AsNoTracking().First(c => c.Code.ToLower().Equals(ExportCurrency.ToLower())).ID;
                         var DLExportCurrency = Enum.GetName(typeof(CurrencyCodeType2), package.DLExportCurrency);
-                        package.DLExportCurrency = db.Currency.AsNoTracking().First(c => c.Code.ToLower().Equals(DLExportCurrency.ToLower())).ID;
+                        package.DLExportCurrency = dbC.Currency.AsNoTracking().First(c => c.Code.ToLower().Equals(DLExportCurrency.ToLower())).ID;
                         package.CreateBy = AdminName;
                         package.CreateAt = UtcNow;
                         orderData.Packages.Add(package);
                     }
                 }
 
-                db.SaveChanges();
+                dbC.SaveChanges();
 
                 foreach (var item in order.Items)
                 {
-                    item.PackageID = db.Packages.AsNoTracking().First(p => p.SCID.Value.Equals(item.PackageID)).ID;
+                    item.PackageID = dbC.Packages.AsNoTracking().First(p => p.SCID.Value.Equals(item.PackageID)).ID;
 
                     if (item.Sku.Any(s => new char[] { '-', '_' }.Contains(s)))
                     {
@@ -113,7 +113,7 @@ namespace PurchaseOrderSys.Models
                     }
                 }
 
-                db.SaveChanges();
+                dbC.SaveChanges();
 
                 foreach (var item in orderData.Items.Where(i => !i.SCID.HasValue || !order.Items.Select(ii => ii.SCID.Value).Contains(i.SCID.Value)))
                 {
@@ -125,13 +125,13 @@ namespace PurchaseOrderSys.Models
                     package.IsEnable = false;
                 }
 
-                db.SaveChanges();
+                dbC.SaveChanges();
 
                 foreach (var serial in order.Serials)
                 {
                     if (!orderData.Serials.Any(s => s.SerialNumber.Equals(serial.SerialNumber)))
                     {
-                        serial.ItemID = db.Items.AsNoTracking().First(i => i.SCID.Value.Equals(serial.ItemID)).ID;
+                        serial.ItemID = dbC.Items.AsNoTracking().First(i => i.SCID.Value.Equals(serial.ItemID)).ID;
                         serial.CreateBy = AdminName;
                         serial.CreateAt = UtcNow;
                         orderData.Serials.Add(serial);
@@ -165,9 +165,9 @@ namespace PurchaseOrderSys.Models
                     orderData.Addresses.Add(shipTo);
                 }
 
-                db.SaveChanges();
+                dbC.SaveChanges();
 
-                orderData = db.Orders.AsNoTracking().First(o => o.ID.Equals(orderData.ID));
+                orderData = dbC.Orders.AsNoTracking().First(o => o.ID.Equals(orderData.ID));
                 orderData.OrderStatus = (byte)CheckOrderStatus(orderData);
                 orderData.OrderType = (byte)CheckOrderType(orderData);
                 orderData.FulfillmentStatus = (byte)CheckFulfillmentStatus(orderData);
@@ -226,7 +226,7 @@ namespace PurchaseOrderSys.Models
             try
             {
                 List<dynamic> data = new List<dynamic>();
-                foreach (Items item in db.Packages.Find(PackageID).Items.Where(i => i.IsEnable))
+                foreach (Items item in dbC.Packages.Find(PackageID).Items.Where(i => i.IsEnable))
                 {
                     if (item.Serials.Any())
                     {
@@ -314,7 +314,7 @@ namespace PurchaseOrderSys.Models
                     }
                 }
 
-                db.SaveChanges();
+                dbC.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -352,7 +352,7 @@ namespace PurchaseOrderSys.Models
                     item.SCID = newItem.ID;
                 }
 
-                db.SaveChanges();
+                dbC.SaveChanges();
 
                 foreach (var SC_package in SC_order.Packages.Where(p => oldPackageList.Select(pp => pp.SCID.Value).ToArray().Contains(p.ID)))
                 {
@@ -379,7 +379,7 @@ namespace PurchaseOrderSys.Models
             {
                 if (!SC_Api.Is_login) throw new Exception("SC is not logged in!");
 
-                Items itemData = db.Items.Find(ItemID);
+                Items itemData = dbC.Items.Find(ItemID);
                 if (!itemData.SCID.HasValue) throw new Exception("Not found item's SCID!");
 
                 SC_Api.Update_ItemSerialNumber(itemData.SCID.Value, Serials);
@@ -400,7 +400,7 @@ namespace PurchaseOrderSys.Models
 
                 if (!SC_Api.Is_login) throw new Exception("SC is not logged in!");
 
-                var addressData = db.OrderAddresses.Find(AddressID);
+                var addressData = dbC.OrderAddresses.Find(AddressID);
                 var SC_address = SC_Api.Get_OrderData(orderData.SCID.Value).Order.ShippingAddress;
 
                 SC_address.FirstName = addressData.FirstName;
@@ -433,7 +433,7 @@ namespace PurchaseOrderSys.Models
 
                 if (!SC_Api.Is_login) throw new Exception("SC is not logged in!");
 
-                var paymentData = db.Payments.Find(PaymentID);
+                var paymentData = dbC.Payments.Find(PaymentID);
                 var SC_order = SC_Api.Get_OrderData(orderData.SCID.Value).Order;
                 var SC_payment = SC_order.Payments.First(p => p.ID.Equals(paymentData.SCID.Value));
 
@@ -516,7 +516,7 @@ namespace PurchaseOrderSys.Models
 
                 if (!SC_Api.Is_login) throw new Exception("SC is not logged in!");
 
-                Items itemData = db.Items.Find(ItemID);
+                Items itemData = dbC.Items.Find(ItemID);
                 if (!itemData.SCID.HasValue) throw new Exception("Not found item's SCID!");
 
                 var SC_order = SC_Api.Get_OrderData(orderData.SCID.Value).Order;
@@ -535,7 +535,7 @@ namespace PurchaseOrderSys.Models
 
         public void ActionLog(string Item, string Description)
         {
-            db.OrderActionLogs.Add(new OrderActionLogs()
+            dbC.OrderActionLogs.Add(new OrderActionLogs()
             {
                 OrderID = orderData.ID,
                 Item = Item,
@@ -544,7 +544,7 @@ namespace PurchaseOrderSys.Models
                 CreateAt = UtcNow
             });
 
-            db.SaveChanges();
+            dbC.SaveChanges();
         }
 
         public void OrderSyncPush()

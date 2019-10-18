@@ -14,16 +14,16 @@ namespace PurchaseOrderSys.Models
 
         public JobProcess(string Name)
         {
-                TaskScheduler = new TaskScheduler()
-                {
-                    Name = Name,
-                    Status = (byte)EnumData.TaskStatus.未執行,
-                    CreateBy = AdminName,
-                    CreateAt = DateTime.UtcNow
-                };
+            TaskScheduler = new TaskScheduler()
+            {
+                Name = Name,
+                Status = (byte)EnumData.TaskStatus.未執行,
+                CreateBy = AdminName,
+                CreateAt = DateTime.UtcNow
+            };
 
-                db.TaskScheduler.Add(TaskScheduler);
-                db.SaveChanges();
+            dbC.TaskScheduler.Add(TaskScheduler);
+            dbC.SaveChanges();
         }
 
         public void StartWork(ParameterizedThreadStart work)
@@ -106,22 +106,23 @@ namespace PurchaseOrderSys.Models
 
         public void AddLog(string description)
         {
-                db.TaskLog.Add(new TaskLog()
-                {
-                    Scheduler = TaskScheduler.ID,
-                    Description = description,
-                    CreateBy = AdminName,
-                    CreateAt = DateTime.UtcNow
-                });
-                db.SaveChanges();
+            dbC.TaskLog.Add(new TaskLog()
+            {
+                Scheduler = TaskScheduler.ID,
+                Description = description,
+                CreateBy = AdminName,
+                CreateAt = DateTime.UtcNow
+            });
+            dbC.SaveChanges();
         }
 
         public void StatusLog(EnumData.TaskStatus status)
         {
-                TaskScheduler.Status = (byte)status;
-                TaskScheduler.UpdateAt = DateTime.UtcNow;
-                TaskScheduler.UpdateBy = AdminName;
-                db.SaveChanges();
+            TaskScheduler.Status = (byte)status;
+            TaskScheduler.UpdateAt = DateTime.UtcNow;
+            TaskScheduler.UpdateBy = AdminName;
+            dbC.Entry(TaskScheduler).State = System.Data.Entity.EntityState.Modified;
+            dbC.SaveChanges();
         }
 
         public void Fail(string message)
