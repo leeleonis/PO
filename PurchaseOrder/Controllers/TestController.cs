@@ -936,8 +936,8 @@ namespace PurchaseOrderSys.Controllers
 
                 return "";
             });
-            //Response.Write(string.Format("Task1 ID：{0}，Staus：{1}，Result：{2} <br />", job1.Task.Id, job1.Task.Status, job1.Task.Result));
-            //Response.Write(string.Format("Task2 ID：{0}，Staus：{1}，Result：{2}", job2.Task.Id, job2.Task.Status, job2.Task.Result));
+            Response.Write(string.Format("Task1 ID：{0}，Staus：{1}，Result：{2} <br />", job1.Task.Id, job1.Task.Status, job1.Task.Result));
+            Response.Write(string.Format("Task2 ID：{0}，Staus：{1}，Result：{2}", job2.Task.Id, job2.Task.Status, job2.Task.Result));
         }
 
         private string Func_Test1(object JobProcess)
