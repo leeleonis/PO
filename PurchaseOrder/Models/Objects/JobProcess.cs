@@ -46,56 +46,56 @@ namespace PurchaseOrderSys.Models
         {
             Task = Factory.StartNew(work);
 
-            Task.ContinueWith((Task) =>
-            {
-                if (Task.IsFaulted)
-                {
-                    Fail(Task.Exception.Message);
-                }
-                else if (Task.IsCanceled)
-                {
-                    Fail("工作已取消");
-                }
-                else
-                {
-                    if (!string.IsNullOrWhiteSpace(Task.Result))
-                    {
-                        Fail(Task.Result);
-                    }
-                    else
-                    {
-                        StatusLog(EnumData.TaskStatus.執行完);
-                    }
-                }
-            }, TaskContinuationOptions.ExecuteSynchronously);
+            //Task.ContinueWith((Task) =>
+            //{
+            //    if (Task.IsFaulted)
+            //    {
+            //        Fail(Task.Exception.Message);
+            //    }
+            //    else if (Task.IsCanceled)
+            //    {
+            //        Fail("工作已取消");
+            //    }
+            //    else
+            //    {
+            //        if (!string.IsNullOrWhiteSpace(Task.Result))
+            //        {
+            //            Fail(Task.Result);
+            //        }
+            //        else
+            //        {
+            //            StatusLog(EnumData.TaskStatus.執行完);
+            //        }
+            //    }
+            //}, TaskContinuationOptions.ExecuteSynchronously);
         }
 
         public void AddWork(Func<object, string> work, object data)
         {
             Task = Factory.StartNew(work, data);
             
-            Task.ContinueWith((Task) =>
-            {
-                if (Task.IsFaulted)
-                {
-                    Fail(Task.Exception.Message);
-                }
-                else if (Task.IsCanceled)
-                {
-                    Fail("工作已取消");
-                }
-                else
-                {
-                    if (!string.IsNullOrWhiteSpace(Task.Result))
-                    {
-                        Fail(Task.Result);
-                    }
-                    else
-                    {
-                        StatusLog(EnumData.TaskStatus.執行完);
-                    }
-                }
-            }, TaskContinuationOptions.ExecuteSynchronously);
+            //Task.ContinueWith((Task) =>
+            //{
+            //    if (Task.IsFaulted)
+            //    {
+            //        Fail(Task.Exception.Message);
+            //    }
+            //    else if (Task.IsCanceled)
+            //    {
+            //        Fail("工作已取消");
+            //    }
+            //    else
+            //    {
+            //        if (!string.IsNullOrWhiteSpace(Task.Result))
+            //        {
+            //            Fail(Task.Result);
+            //        }
+            //        else
+            //        {
+            //            StatusLog(EnumData.TaskStatus.執行完);
+            //        }
+            //    }
+            //}, TaskContinuationOptions.ExecuteSynchronously);
         }
 
         public void Func_test()
@@ -126,7 +126,7 @@ namespace PurchaseOrderSys.Models
                 db.SaveChanges();
         }
 
-        private void Fail(string message)
+        public void Fail(string message)
         {
             TaskScheduler.Result = message;
             StatusLog(EnumData.TaskStatus.執行失敗);

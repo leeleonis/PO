@@ -922,7 +922,8 @@ namespace PurchaseOrderSys.Controllers
             JobProcess job1 = new JobProcess("Task Test1");
             job1.AddWork(Func_Test1, job1);
             JobProcess job2 = new JobProcess("Task Test2");
-            job2.AddWork(() => {
+            job2.AddWork(() =>
+            {
                 try
                 {
                     job2.StatusLog(EnumData.TaskStatus.執行中);
@@ -936,6 +937,8 @@ namespace PurchaseOrderSys.Controllers
 
                 return "";
             });
+            JobProcess job3 = new JobProcess("Task Test3");
+            job1.AddWork(Func_Test3, job3);
             Response.Write(string.Format("Task1 ID：{0}，Staus：{1}，Result：{2} <br />", job1.Task.Id, job1.Task.Status, job1.Task.Result));
             Response.Write(string.Format("Task2 ID：{0}，Staus：{1}，Result：{2}", job2.Task.Id, job2.Task.Status, job2.Task.Result));
         }
@@ -945,6 +948,28 @@ namespace PurchaseOrderSys.Controllers
             try
             {
                 var job = JobProcess as JobProcess;
+                job.Task.ContinueWith((Task) =>
+                {
+                               if (Task.IsFaulted)
+                               {
+                                   job.Fail(Task.Exception.Message);
+                               }
+                               else if (Task.IsCanceled)
+                               {
+                                   job.Fail("工作已取消");
+                               }
+                               else
+                               {
+                                   if (!string.IsNullOrWhiteSpace(Task.Result))
+                                   {
+                                       job.Fail(Task.Result);
+                                   }
+                                   else
+                                   {
+                                       job.StatusLog(EnumData.TaskStatus.執行完);
+                                   }
+                               }
+                           }, TaskContinuationOptions.ExecuteSynchronously);
                 job.StatusLog(EnumData.TaskStatus.執行中);
                 job.AddLog("Task Test1");
                 System.Threading.Thread.Sleep(10000);
@@ -973,11 +998,12 @@ namespace PurchaseOrderSys.Controllers
 
             return "";
         }
-        private void Func_Test3()
+
+        private string Func_Test3(object JobProcess)
         {
             try
             {
-                JobProcess job = new JobProcess("Task Test3");
+                var job = JobProcess as JobProcess;
                 job.StatusLog(EnumData.TaskStatus.執行中);
                 job.AddLog("Task Test3");
                 System.Threading.Thread.Sleep(5000);
@@ -985,8 +1011,10 @@ namespace PurchaseOrderSys.Controllers
             }
             catch (Exception ex)
             {
-                var msg = ex.InnerException?.Message ?? ex.Message;
+                return ex.InnerException?.Message ?? ex.Message;
             }
+
+            return "";
         }
 
         public ActionResult Autoreturntoshipper()
