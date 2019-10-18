@@ -1,7 +1,9 @@
 ﻿@model IEnumerable<WarehouseAllVM>
 @{
-    ViewBag.ptitle = "Warehouse";
-    var UpdateAt = (DateTime)ViewBag.UpdateAt;
+                /**/
+
+                ViewBag.ptitle = "Warehouse";
+                var UpdateAt = (DateTime)ViewBag.UpdateAt;
 }
 
 <style>
@@ -130,6 +132,16 @@
             });
         });
     </script>
+    @if (ViewBag.RefreshInventory == "Y")
+    {
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $.blockUI({
+                    message: '<h1>loading...</h1>'
+                });
+            });
+        </script>
+    }
 }
 
 

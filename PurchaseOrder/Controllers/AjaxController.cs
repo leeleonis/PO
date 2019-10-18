@@ -2310,46 +2310,56 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult WarehouseInventory()
         {
             AjaxResult result = new AjaxResult();
-            var edt = DateTime.UtcNow;
-            var sdt = edt.AddDays(-30);
-            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-            sw.Reset();
-            sw.Start();
-            var QuytimeS = "開始查詢：" + sw.ElapsedMilliseconds;
-            var Warehouse = db.Warehouse.AsNoTracking().Where(x => x.IsEnable).Include(x => x.WarehouseSummary).ToList();
-            var AllSKUList = db.SKU.AsNoTracking().Where(x => x.IsEnable && x.Status == 1).Select(x => x.SkuID).ToList();//
-            var AllSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable).Include(x => x.PurchaseSKU).Include(x => x.PurchaseSKU.PurchaseOrder).Include(x=>x.TransferSKU).Include(x => x.TransferSKU.Transfer).Include(x => x.PurchaseSKU.CreditMemo.PurchaseOrder).ToList();
-            var POSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && (x.SerialsType == "PO") && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable).Include(x => x.PurchaseSKU).Include(x => x.PurchaseSKU.PurchaseOrder).ToList();
-            var InSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferIn" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
-            var OutSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferOut" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
-            var RMAINSerialsLlist = db.RMASerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.RMASerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "RMAIn" && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable).Include(x => x.RMASKU).Include(x => x.RMASKU.RMA).ToList();
-            var RMAOUTSerialsLlist = db.RMASerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.RMASerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferOut" && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable && !x.TransferSKU.SerialsLlist.Where(y => y.IsEnable && y.SerialsType == "TransferIn").Any()).Include(x => x.RMASKU).Include(x => x.RMASKU.RMA).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
-            var OrderSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && x.SerialsType == "Order" && x.CreateAt >= sdt && x.CreateAt <= edt).Include(x => x.PurchaseSKU).Include(x => x.PurchaseSKU.PurchaseOrder).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
-            var threadlist = new List<Thread>();
-            foreach (var Warehouseitem in Warehouse)
+            if (HttpContext.Application["RefreshInventory"].ToString() == "N")
             {
-                var SCID = Warehouseitem.WarehouseSummary.Where(x => x.Type == "SCID").FirstOrDefault()?.Val;
-                var Awaitinglist = GetAwaitingCount("", SCID);
-                MyThread myThread = new MyThread();
-                myThread.Warehouseitem = Warehouseitem;
-                myThread.AllSerialsLlist = AllSerialsLlist;
-                myThread.AllSKUList = AllSKUList;
-                myThread.Awaitinglist = Awaitinglist;
-                myThread.POSerialsLlist = POSerialsLlist;
-                myThread.InSerialsLlist = InSerialsLlist;
-                myThread.OutSerialsLlist = OutSerialsLlist;
-                myThread.RMAINSerialsLlist = RMAINSerialsLlist;
-                myThread.RMAOUTSerialsLlist = RMAOUTSerialsLlist;
-                myThread.OrderSerialsLlist = OrderSerialsLlist;
+                var edt = DateTime.UtcNow;
+                var sdt = edt.AddDays(-30);
+                System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+                sw.Reset();
+                sw.Start();
+                var QuytimeS = "開始查詢：" + sw.ElapsedMilliseconds;
+                var Warehouse = db.Warehouse.AsNoTracking().Where(x => x.IsEnable).Include(x => x.WarehouseSummary).ToList();
+                var AllSKUList = db.SKU.AsNoTracking().Where(x => x.IsEnable && x.Status == 1).Select(x => x.SkuID).ToList();//
+                var AllSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable).Include(x => x.PurchaseSKU).Include(x => x.PurchaseSKU.PurchaseOrder).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).Include(x => x.PurchaseSKU.CreditMemo.PurchaseOrder).ToList();
+                var POSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && (x.SerialsType == "PO") && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable).Include(x => x.PurchaseSKU).Include(x => x.PurchaseSKU.PurchaseOrder).ToList();
+                var InSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferIn" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
+                var OutSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.SerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferOut" && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
+                var RMAINSerialsLlist = db.RMASerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.RMASerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "RMAIn" && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable).Include(x => x.RMASKU).Include(x => x.RMASKU.RMA).ToList();
+                var RMAOUTSerialsLlist = db.RMASerialsLlist.AsNoTracking().Where(x => x.IsEnable && !x.RMASerialsLlistC.Any(y => y.IsEnable) && x.SerialsType == "TransferOut" && x.RMASKU.IsEnable && x.RMASKU.RMA.IsEnable && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable && !x.TransferSKU.SerialsLlist.Where(y => y.IsEnable && y.SerialsType == "TransferIn").Any()).Include(x => x.RMASKU).Include(x => x.RMASKU.RMA).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
+                var OrderSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && x.SerialsType == "Order" && x.CreateAt >= sdt && x.CreateAt <= edt).Include(x => x.PurchaseSKU).Include(x => x.PurchaseSKU.PurchaseOrder).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
+                var threadlist = new List<Thread>();
+                HttpContext.Application["RefreshInventory"] = "Y";
+
+                foreach (var Warehouseitem in Warehouse)
+                {
+                    var SCID = Warehouseitem.WarehouseSummary.Where(x => x.Type == "SCID").FirstOrDefault()?.Val;
+                    var Awaitinglist = GetAwaitingCount("", SCID);
+                    MyThread myThread = new MyThread();
+                    myThread.Warehouseitem = Warehouseitem;
+                    myThread.AllSerialsLlist = AllSerialsLlist;
+                    myThread.AllSKUList = AllSKUList;
+                    myThread.Awaitinglist = Awaitinglist;
+                    myThread.POSerialsLlist = POSerialsLlist;
+                    myThread.InSerialsLlist = InSerialsLlist;
+                    myThread.OutSerialsLlist = OutSerialsLlist;
+                    myThread.RMAINSerialsLlist = RMAINSerialsLlist;
+                    myThread.RMAOUTSerialsLlist = RMAOUTSerialsLlist;
+                    myThread.OrderSerialsLlist = OrderSerialsLlist;
 
 
-                Thread thread = new Thread(myThread.ThreadMain);
-                threadlist.Add(thread);
-                thread.Start();
+                    Thread thread = new Thread(myThread.ThreadMain);
+                    threadlist.Add(thread);
+                    thread.Start();
 
+                }
+                foreach (var item in threadlist)
+                {
+                   item.Join();
+                }
+                HttpContext.Application["RefreshInventory"] = "N";
+                sw.Stop();
+                var EdtimeE = "結束" + sw.ElapsedMilliseconds;
             }
-            sw.Stop();
-            var EdtimeE = "結束" + sw.ElapsedMilliseconds;
             return Json(result, JsonRequestBehavior.AllowGet);
         }
         [AllowAnonymous]
