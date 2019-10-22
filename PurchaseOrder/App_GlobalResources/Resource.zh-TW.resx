@@ -148,7 +148,7 @@
     <value>啟用</value>
   </data>
   <data name="PurchaseOrder_ID" xml:space="preserve">
-    <value>NULL</value>
+    <value>採購單號</value>
   </data>
   <data name="PurchaseOrder_Name" xml:space="preserve">
     <value>名稱</value>
@@ -247,16 +247,16 @@
     <value>啟用</value>
   </data>
   <data name="PurchaseSKU_ID" xml:space="preserve">
-    <value>NULL</value>
+    <value>SKU ID</value>
   </data>
   <data name="PurchaseSKU_Name" xml:space="preserve">
     <value>名稱</value>
   </data>
   <data name="PurchaseSKU_PurchaseOrderID" xml:space="preserve">
-    <value>NULL</value>
+    <value>採購單號</value>
   </data>
   <data name="PurchaseSKU_SkuNo" xml:space="preserve">
-    <value>NULL</value>
+    <value>SKU NO</value>
   </data>
   <data name="PurchaseSKU_QTYOrdered" xml:space="preserve">
     <value>訂購數量</value>
@@ -301,7 +301,7 @@
     <value>入庫時間</value>
   </data>
   <data name="PurchaseSKU_VendorSKU" xml:space="preserve">
-    <value>供應商品號</value>
+    <value>Vendor SKU</value>
   </data>
   <data name="SerialsLlist_ID" xml:space="preserve">
     <value>NULL</value>
@@ -382,7 +382,7 @@
     <value>下個月折讓金額</value>
   </data>
   <data name="PurchaseSKU_QTYReceived" xml:space="preserve">
-    <value>NULL</value>
+    <value>入庫數量</value>
   </data>
   <data name="CMCreditNote_IsEnable" xml:space="preserve">
     <value>啟用</value>
@@ -592,7 +592,7 @@
     <value>啟用</value>
   </data>
   <data name="VendorLIst_ID" xml:space="preserve">
-    <value>NULL</value>
+    <value>流水號</value>
   </data>
   <data name="VendorLIst_VendorNo" xml:space="preserve">
     <value>供應商的統編</value>
@@ -658,7 +658,7 @@
     <value>可出貨</value>
   </data>
   <data name="Warehouse_ID" xml:space="preserve">
-    <value>NULL</value>
+    <value>流水號</value>
   </data>
   <data name="Warehouse_Name" xml:space="preserve">
     <value>名稱</value>
@@ -694,7 +694,7 @@
     <value>上架的平台</value>
   </data>
   <data name="Warehouse_Company" xml:space="preserve">
-    <value>供應商</value>
+    <value>公司名稱</value>
   </data>
   <data name="WarehouseUser_IsEnable" xml:space="preserve">
     <value>啟用</value>
@@ -706,10 +706,10 @@
     <value>倉庫權限</value>
   </data>
   <data name="WarehouseUser_WarehouseID" xml:space="preserve">
-    <value>倉庫流水號</value>
+    <value>倉庫</value>
   </data>
   <data name="WarehouseUser_AdminUserID" xml:space="preserve">
-    <value>使用者流水號</value>
+    <value>使用者</value>
   </data>
   <data name="WarehouseUser_CreateBy" xml:space="preserve">
     <value>建立者</value>
@@ -724,10 +724,10 @@
     <value>修改時間</value>
   </data>
   <data name="AdminUser_IsEnable" xml:space="preserve">
-    <value>啟用</value>
+    <value>使用者啟用</value>
   </data>
   <data name="AdminUser_ID" xml:space="preserve">
-    <value>流水號</value>
+    <value>使用者ID</value>
   </data>
   <data name="AdminUser_Group" xml:space="preserve">
     <value>組別</value>
@@ -757,16 +757,16 @@
     <value>權限</value>
   </data>
   <data name="AdminUser_CreateBy" xml:space="preserve">
-    <value>建立者</value>
+    <value>使用者建立者</value>
   </data>
   <data name="AdminUser_CreateAt" xml:space="preserve">
-    <value>建立時間</value>
+    <value>使用者建立時間</value>
   </data>
   <data name="AdminUser_UpdateBy" xml:space="preserve">
-    <value>修改者</value>
+    <value>使用者修改者</value>
   </data>
   <data name="AdminUser_UpdateAt" xml:space="preserve">
-    <value>修改時間</value>
+    <value>使用者修改時間</value>
   </data>
   <data name="Transfer_IsEnable" xml:space="preserve">
     <value>啟用</value>
@@ -856,22 +856,22 @@
     <value>權限不足</value>
   </data>
   <data name="Menu_IsEnable" xml:space="preserve">
-    <value>NULL</value>
+    <value>網頁啟用</value>
   </data>
   <data name="Menu_MenuID" xml:space="preserve">
-    <value>NULL</value>
+    <value>網頁ID</value>
   </data>
   <data name="Menu_Name" xml:space="preserve">
-    <value>NULL</value>
+    <value>網頁名稱</value>
   </data>
   <data name="Menu_PrevID" xml:space="preserve">
-    <value>父層MenuID</value>
+    <value>父層網頁ID</value>
   </data>
   <data name="Menu_Controller" xml:space="preserve">
-    <value>NULL</value>
+    <value>Controller</value>
   </data>
   <data name="Menu_Action" xml:space="preserve">
-    <value>NULL</value>
+    <value>Action</value>
   </data>
   <data name="Menu_Auth" xml:space="preserve">
     <value>功能權限</value>
@@ -880,28 +880,28 @@
     <value>排序-由小到大</value>
   </data>
   <data name="AdminGroup_IsEnable" xml:space="preserve">
-    <value>啟用</value>
+    <value>群組啟用</value>
   </data>
   <data name="AdminGroup_ID" xml:space="preserve">
-    <value>NULL</value>
+    <value>群組ID</value>
   </data>
   <data name="AdminGroup_Name" xml:space="preserve">
-    <value>名稱</value>
+    <value>群組名稱</value>
   </data>
   <data name="AdminGroup_Auth" xml:space="preserve">
-    <value>權限</value>
+    <value>群組權限</value>
   </data>
   <data name="AdminGroup_CreateBy" xml:space="preserve">
-    <value>建立者</value>
+    <value>群組建立者</value>
   </data>
   <data name="AdminGroup_CreateAt" xml:space="preserve">
-    <value>建立時間</value>
+    <value>群組建立時間</value>
   </data>
   <data name="AdminGroup_UpdateBy" xml:space="preserve">
-    <value>修改者</value>
+    <value>群組修改者</value>
   </data>
   <data name="AdminGroup_UpdateAt" xml:space="preserve">
-    <value>修改時間</value>
+    <value>群組修改時間</value>
   </data>
   <data name="MenuLang_MenuID" xml:space="preserve">
     <value>選單ID</value>
@@ -928,10 +928,10 @@
     <value>啟用</value>
   </data>
   <data name="Brand_ID" xml:space="preserve">
-    <value>NULL</value>
+    <value>品牌ID</value>
   </data>
   <data name="Brand_NetoID" xml:space="preserve">
-    <value>NULL</value>
+    <value>Neto ID</value>
   </data>
   <data name="Brand_Name" xml:space="preserve">
     <value>名稱</value>
@@ -955,7 +955,7 @@
     <value>啟用</value>
   </data>
   <data name="Company_ID" xml:space="preserve">
-    <value>NULL</value>
+    <value>公司ID</value>
   </data>
   <data name="Company_Name" xml:space="preserve">
     <value>名稱</value>
@@ -970,10 +970,10 @@
     <value>關聯的公司</value>
   </data>
   <data name="Company_eBayAccountID" xml:space="preserve">
-    <value>NULL</value>
+    <value>eBay帳號</value>
   </data>
   <data name="Company_AmazonAccountID" xml:space="preserve">
-    <value>NULL</value>
+    <value>Amazon帳號</value>
   </data>
   <data name="Company_CreateBy" xml:space="preserve">
     <value>建立者</value>
@@ -991,7 +991,7 @@
     <value>啟用</value>
   </data>
   <data name="SkuAttribute_ID" xml:space="preserve">
-    <value>NULL</value>
+    <value>屬性ID</value>
   </data>
   <data name="SkuAttribute_Type" xml:space="preserve">
     <value>屬性類型</value>
@@ -1033,7 +1033,7 @@
     <value>啟用</value>
   </data>
   <data name="SkuAttributeType_ID" xml:space="preserve">
-    <value>NULL</value>
+    <value>類型ID</value>
   </data>
   <data name="SkuAttributeType_Name" xml:space="preserve">
     <value>名稱</value>
@@ -1054,13 +1054,13 @@
     <value>啟用</value>
   </data>
   <data name="SkuType_ID" xml:space="preserve">
-    <value>NULL</value>
+    <value>品項ID</value>
   </data>
   <data name="SkuType_NetoID" xml:space="preserve">
     <value>Neto ID</value>
   </data>
   <data name="SkuType_AttributeGroup" xml:space="preserve">
-    <value>此品項所使用的屬性組合</value>
+    <value>屬性組合</value>
   </data>
   <data name="SkuType_CreateBy" xml:space="preserve">
     <value>建立者</value>
@@ -1099,7 +1099,7 @@
     <value>啟用</value>
   </data>
   <data name="Condition_ID" xml:space="preserve">
-    <value>NULL</value>
+    <value>狀態ID</value>
   </data>
   <data name="Condition_Name" xml:space="preserve">
     <value>名稱</value>
@@ -1159,22 +1159,22 @@
     <value>啟用</value>
   </data>
   <data name="SKU_SkuID" xml:space="preserve">
-    <value>SKDID</value>
+    <value>SKU</value>
   </data>
   <data name="SKU_Type" xml:space="preserve">
-    <value>品號類型-Single、Variation、Kit、Shadow</value>
+    <value>品號類型</value>
   </data>
   <data name="SKU_ParentSku" xml:space="preserve">
     <value>Variation Parent</value>
   </data>
   <data name="SKU_Condition" xml:space="preserve">
-    <value>狀態ID</value>
+    <value>狀況</value>
   </data>
   <data name="SKU_Category" xml:space="preserve">
-    <value>品項ID</value>
+    <value>品項</value>
   </data>
   <data name="SKU_Brand" xml:space="preserve">
-    <value>品牌ID</value>
+    <value>品牌</value>
   </data>
   <data name="SKU_EAN" xml:space="preserve">
     <value>EAN</value>
@@ -1336,13 +1336,13 @@
     <value>啟用</value>
   </data>
   <data name="CreditMemo_ID" xml:space="preserve">
-    <value>流水號</value>
+    <value>CM單號</value>
   </data>
   <data name="CreditMemo_PurchaseOrderID" xml:space="preserve">
-    <value>PO號碼</value>
+    <value>CM號碼</value>
   </data>
   <data name="CreditMemo_CompanyID" xml:space="preserve">
-    <value>採購的公司</value>
+    <value>公司</value>
   </data>
   <data name="CreditMemo_VendorID" xml:space="preserve">
     <value>供應商</value>
@@ -1360,7 +1360,7 @@
     <value>CM的種類</value>
   </data>
   <data name="CreditMemo_CMDate" xml:space="preserve">
-    <value>訂貨日</value>
+    <value>CM日期</value>
   </data>
   <data name="CreditMemo_ShippingStatus" xml:space="preserve">
     <value>退貨運輸狀態</value>
@@ -1414,7 +1414,7 @@
     <value>啟用</value>
   </data>
   <data name="PackageContent_ID" xml:space="preserve">
-    <value>NULL</value>
+    <value>ID</value>
   </data>
   <data name="PackageContent_TypeID" xml:space="preserve">
     <value>品項ID</value>
@@ -1561,7 +1561,7 @@
     <value>是否預設</value>
   </data>
   <data name="Currency_ID" xml:space="preserve">
-    <value>NULL</value>
+    <value>ID</value>
   </data>
   <data name="Currency_Name" xml:space="preserve">
     <value>名稱</value>
@@ -1585,7 +1585,7 @@
     <value>修改時間</value>
   </data>
   <data name="NetoGroup_ID" xml:space="preserve">
-    <value>NULL</value>
+    <value>ID</value>
   </data>
   <data name="NetoGroup_Name" xml:space="preserve">
     <value>名稱</value>
@@ -1618,7 +1618,7 @@
     <value>是否使用</value>
   </data>
   <data name="PriceGroup_ID" xml:space="preserve">
-    <value>NULL</value>
+    <value>ID</value>
   </data>
   <data name="PriceGroup_Sku" xml:space="preserve">
     <value>品號</value>
@@ -1657,7 +1657,7 @@
     <value>幣別</value>
   </data>
   <data name="Marketplace_IsEnable" xml:space="preserve">
-    <value>是否預設</value>
+    <value>是否啟用</value>
   </data>
   <data name="Marketplace_ID" xml:space="preserve">
     <value>賣埸ID</value>
@@ -1669,7 +1669,7 @@
     <value>全球賣場ID</value>
   </data>
   <data name="Marketplace_CountryCode" xml:space="preserve">
-    <value>國家</value>
+    <value>國家代碼</value>
   </data>
   <data name="Marketplace_CompanyID" xml:space="preserve">
     <value>公司</value>
@@ -1696,7 +1696,7 @@
     <value>修改時間</value>
   </data>
   <data name="PurchaseSKU_CreditMemoID" xml:space="preserve">
-    <value>CM單ID</value>
+    <value>CM單號</value>
   </data>
   <data name="PurchaseSKU_QTYReturned" xml:space="preserve">
     <value>退貨數量</value>
@@ -1720,7 +1720,7 @@
     <value>名稱</value>
   </data>
   <data name="OrderLog_ID" xml:space="preserve">
-    <value>NULL</value>
+    <value>ID</value>
   </data>
   <data name="OrderLog_SCID" xml:space="preserve">
     <value>SCID</value>
@@ -1747,7 +1747,7 @@
     <value>出庫時對應ID</value>
   </data>
   <data name="SerialsLlist_SerialsQTY" xml:space="preserve">
-    <value>數量 1入庫；-1出庫</value>
+    <value>數量</value>
   </data>
   <data name="SerialsLlist_TransferSKUID" xml:space="preserve">
     <value>移倉單ID</value>
@@ -1780,10 +1780,10 @@
     <value>源頭訂單的 ID</value>
   </data>
   <data name="RMA_CompanyID" xml:space="preserve">
-    <value>該 Order # 所屬的公司</value>
+    <value>訂單所屬的公司</value>
   </data>
   <data name="RMA_WarehouseID" xml:space="preserve">
-    <value>倉庫ID，訂單出貨庫倉</value>
+    <value>訂單出貨庫倉</value>
   </data>
   <data name="RMA_Country" xml:space="preserve">
     <value>訂單的收件國家</value>
@@ -1813,10 +1813,10 @@
     <value>運輸商</value>
   </data>
   <data name="RMA_Channel" xml:space="preserve">
-    <value>寄件地址的國家</value>
+    <value>訂單平台</value>
   </data>
   <data name="BoxType_ID" xml:space="preserve">
-    <value>NULL</value>
+    <value>ID</value>
   </data>
   <data name="BoxType_Name" xml:space="preserve">
     <value>名稱</value>
@@ -1852,28 +1852,28 @@
     <value>裝箱類型</value>
   </data>
   <data name="Logistic_CaseWidth" xml:space="preserve">
-    <value>寬</value>
+    <value>Case 寬</value>
   </data>
   <data name="Logistic_CaseLength" xml:space="preserve">
-    <value>長</value>
+    <value>Case 長</value>
   </data>
   <data name="Logistic_CaseHeight" xml:space="preserve">
-    <value>高</value>
+    <value>Case 高</value>
   </data>
   <data name="Logistic_CaseWeight" xml:space="preserve">
-    <value>重量</value>
+    <value>Case 重量</value>
   </data>
   <data name="Logistic_ShippingWidth" xml:space="preserve">
-    <value>寬</value>
+    <value>Shipping 寬</value>
   </data>
   <data name="Logistic_ShippingLength" xml:space="preserve">
-    <value>長</value>
+    <value>Shipping 長</value>
   </data>
   <data name="Logistic_ShippingHeight" xml:space="preserve">
-    <value>高</value>
+    <value>Shipping 高</value>
   </data>
   <data name="Logistic_ShippingWeight" xml:space="preserve">
-    <value>重量</value>
+    <value>Shipping 重量</value>
   </data>
   <data name="Logistic_OriginCountry" xml:space="preserve">
     <value>生產國家</value>
@@ -1906,7 +1906,7 @@
     <value>啟用</value>
   </data>
   <data name="RMASKU_ID" xml:space="preserve">
-    <value>NULL</value>
+    <value>ID</value>
   </data>
   <data name="RMASKU_Name" xml:space="preserve">
     <value>名稱</value>
@@ -1945,10 +1945,10 @@
     <value>入庫時間</value>
   </data>
   <data name="RMASKU_WarehouseID" xml:space="preserve">
-    <value>倉庫ID，預設入庫倉</value>
+    <value>預設入庫倉</value>
   </data>
   <data name="RMASerialsLlist_ID" xml:space="preserve">
-    <value>NULL</value>
+    <value>ID</value>
   </data>
   <data name="RMASerialsLlist_RMASKUID" xml:space="preserve">
     <value>SKUID</value>
@@ -1990,13 +1990,13 @@
     <value>維修單號</value>
   </data>
   <data name="Brand_SCID" xml:space="preserve">
-    <value>NULL</value>
+    <value>SC ID</value>
   </data>
   <data name="RMAOrderSerialsLlist_IsEnable" xml:space="preserve">
     <value>啟用</value>
   </data>
   <data name="RMAOrderSerialsLlist_ID" xml:space="preserve">
-    <value>NULL</value>
+    <value>流水號</value>
   </data>
   <data name="RMAOrderSerialsLlist_RMASKUID" xml:space="preserve">
     <value>SKUID</value>
@@ -2005,7 +2005,7 @@
     <value>Serials號碼</value>
   </data>
   <data name="RMAOrderSerialsLlist_SerialsQTY" xml:space="preserve">
-    <value>數量 1入庫；-1出庫</value>
+    <value>數量 </value>
   </data>
   <data name="RMAOrderSerialsLlist_CreateBy" xml:space="preserve">
     <value>建立者</value>
@@ -2029,7 +2029,7 @@
     <value>若有問題，立即停止入庫作業並且告知主管！</value>
   </data>
   <data name="PurchaseOrder_Description" xml:space="preserve">
-    <value>PO Title</value>
+    <value>Description</value>
 	  </data>
   <data name="ApiSetting_IsEnable" xml:space="preserve">
     <value>NULL</value>
@@ -2077,7 +2077,7 @@
     <value>建立日期</value>
   </data>
   <data name="Carriers_IsEnable" xml:space="preserve">
-    <value>啟用</value>
+    <value>NULL</value>
   </data>
   <data name="Carriers_ID" xml:space="preserve">
     <value>NULL</value>
@@ -2482,7 +2482,7 @@
     <value>付款日期</value>
   </data>
   <data name="Payments_Gateway" xml:space="preserve">
-    <value>付款方式</value>
+    <value>NULL</value>
   </data>
   <data name="Payments_TotalValue" xml:space="preserve">
     <value>NULL</value>
@@ -2593,7 +2593,7 @@
     <value>Box流水號</value>
   </data>
   <data name="WinitTransferBox_WinitTransferID" xml:space="preserve">
-    <value>NULL</value>
+    <value>WinitTransferID</value>
   </data>
   <data name="WinitTransferBox_Length" xml:space="preserve">
     <value>長度</value>
@@ -2623,13 +2623,13 @@
     <value>修改時間</value>
   </data>
   <data name="WinitTransferBoxItem_WinitTransferBoxID" xml:space="preserve">
-    <value>對應WinitTransferBoxOrder</value>
+    <value>對應WinitTransferBox</value>
   </data>
   <data name="WinitTransferBoxItem_SerialsLlistID" xml:space="preserve">
     <value>對應SerialsLlist</value>
   </data>
   <data name="WinitTransferBoxItem_BarCode" xml:space="preserve">
-    <value>S BarCode標籤</value>
+    <value>BOX標籤</value>
   </data>
   <data name="WinitTransferBoxItem_CreateBy" xml:space="preserve">
     <value>建立者</value>
@@ -2647,61 +2647,61 @@
     <value>申報價值</value>
   </data>
   <data name="RMA_SCUserID" xml:space="preserve">
-    <value>SC UserID</value>
+    <value>Customer User ID</value>
   </data>
   <data name="RMA_RestockingFee" xml:space="preserve">
-    <value>退件時跟客人收的手續費</value>
+    <value>RestockingFee</value>
   </data>
   <data name="SerialsLlist_IsEnable" xml:space="preserve">
     <value>啟用</value>
   </data>
   <data name="RMA_OtherCosts" xml:space="preserve">
-    <value>其他的費用</value>
+    <value>Other Costs</value>
   </data>
   <data name="RMA_ReturnShippingCos" xml:space="preserve">
-    <value>在退件時所產生的費用</value>
+    <value>Return Shipping Cost</value>
   </data>
   <data name="RMA_Reason" xml:space="preserve">
-    <value>退貨的原因</value>
+    <value>Reason</value>
   </data>
   <data name="RMASerialsLlist_IsEnable" xml:space="preserve">
     <value>啟用</value>
   </data>
   <data name="RMASKU_Reason" xml:space="preserve">
-    <value>退貨的原因</value>
+    <value>Reason</value>
   </data>
   <data name="PurchaseNote_NoteType" xml:space="preserve">
-    <value>Note的種類</value>
+    <value>Note Type</value>
   </data>
   <data name="PurchaseNote_CreditMemoID" xml:space="preserve">
-    <value>CM單號</value>
+    <value>Credit Memo ID</value>
   </data>
   <data name="PurchaseNote_TransferID" xml:space="preserve">
-    <value>TransferID</value>
+    <value>Transfer ID</value>
   </data>
   <data name="PurchaseNote_RMAID" xml:space="preserve">
     <value>RMAID</value>
   </data>
   <data name="RMASerialsLlist_NewSKUCreateAt" xml:space="preserve">
-    <value>新SKU建立時間</value>
+    <value>New SKU CreateAt</value>
   </data>
   <data name="RMASerialsLlist_NewSKUCreateBy" xml:space="preserve">
-    <value>新SKU建立者</value>
+    <value>New SKU CreateBy</value>
   </data>
   <data name="RMASerialsLlist_NewSkuNo" xml:space="preserve">
-    <value>新SKU NO</value>
+    <value>New Sku No</value>
   </data>
   <data name="RMASerialsLlist_TransferSKUID" xml:space="preserve">
-    <value>移倉單ID</value>
+    <value>Transfer SKU ID</value>
   </data>
   <data name="RMASerialsLlist_Reason" xml:space="preserve">
-    <value>退貨的原因</value>
+    <value>Reason</value>
   </data>
   <data name="Items_ExportValue" xml:space="preserve">
-    <value>NULL</value>
+    <value>出口價值</value>
   </data>
   <data name="Items_DLExportValue" xml:space="preserve">
-    <value>NULL</value>
+    <value>DL出口價值</value>
   </data>
   <data name="WinitTransferSKU_IsEnable" xml:space="preserve">
     <value>啟用</value>
@@ -2710,7 +2710,7 @@
     <value>Box流水號</value>
   </data>
   <data name="WinitTransferSKU_WinitTransferID" xml:space="preserve">
-    <value>NULL</value>
+    <value>WinitTransferID</value>
   </data>
   <data name="WinitTransferSKU_SkuNo" xml:space="preserve">
     <value>SkuNo</value>
@@ -2737,10 +2737,10 @@
     <value>Email</value>
   </data>
   <data name="VendorLIst_EmailCC" xml:space="preserve">
-    <value>EmailCC</value>
+    <value>Email CC</value>
   </data>
   <data name="VendorLIst_SCID" xml:space="preserve">
-    <value>對應SC VendorID</value>
+    <value>SCID</value>
   </data>
   <data name="Items_eBayTransationID" xml:space="preserve">
     <value>NULL</value>
@@ -2764,13 +2764,13 @@
     <value>Official Website</value>
   </data>
   <data name="SkuType_HSCode" xml:space="preserve">
-    <value>稅則編號</value>
+    <value>HSCode</value>
   </data>
   <data name="RMAOrderTracking_IsEnable" xml:space="preserve">
     <value>啟用</value>
   </data>
   <data name="RMAOrderTracking_ID" xml:space="preserve">
-    <value>NULL</value>
+    <value>ID</value>
   </data>
   <data name="RMAOrderTracking_ReturnTracking" xml:space="preserve">
     <value>逆物流的運單號</value>
@@ -2993,194 +2993,5 @@
   </data>
   <data name="Orders_ShippingTime" xml:space="preserve">
     <value>Shipping Time</value>
-  </data>
-  <data name="ApiSetting_ID" xml:space="preserve">
-    <value>NULL</value>
-  </data>
-  <data name="Auth_ID" xml:space="preserve">
-    <value>NULL</value>
-  </data>
-  <data name="Auth_Name" xml:space="preserve">
-    <value>名稱</value>
-  </data>
-  <data name="Auth_Value" xml:space="preserve">
-    <value>權限代表值</value>
-  </data>
-  <data name="Company_CompanySCID" xml:space="preserve">
-    <value>對應SCID</value>
-  </data>
-  <data name="CreditMemo_RMAID" xml:space="preserve">
-    <value>RMAID</value>
-  </data>
-  <data name="CreditMemo_WarehouseID" xml:space="preserve">
-    <value>NULL</value>
-  </data>
-  <data name="DirectLine_MaxDeclared" xml:space="preserve">
-    <value>最大出口價值</value>
-  </data>
-  <data name="ImgFile_ImgType" xml:space="preserve">
-    <value>檔案的種類</value>
-  </data>
-  <data name="ImgFile_PurchaseSKUID" xml:space="preserve">
-    <value>SKUID</value>
-  </data>
-  <data name="inventory_CreateAt" xml:space="preserve">
-    <value>建立時間</value>
-  </data>
-  <data name="inventory_CumulativeOrders" xml:space="preserve">
-    <value>歷史入庫數量，包含 PO Transfer 和訂單</value>
-  </data>
-  <data name="inventory_CumulativeSalse" xml:space="preserve">
-    <value>歷史銷售數量</value>
-  </data>
-  <data name="inventory_CumulativeTransferOut" xml:space="preserve">
-    <value>歷史TransferOut的數量</value>
-  </data>
-  <data name="inventory_WritroffInventory" xml:space="preserve">
-    <value>扣除的庫存 CM RMA 遺失 報廢</value>
-  </data>
-  <data name="inventory_TotalInventory" xml:space="preserve">
-    <value>總庫存</value>
-  </data>
-  <data name="PurchaseNote_RMAOrderTrackingID" xml:space="preserve">
-    <value>NULL</value>
-  </data>
-  <data name="PurchaseNoteImg_ImgType" xml:space="preserve">
-    <value>檔案格式</value>
-  </data>
-  <data name="PurchaseOrder_SCPurchaseID" xml:space="preserve">
-    <value>SC上的訂單ID</value>
-  </data>
-  <data name="PurchaseOrder_Memo" xml:space="preserve">
-    <value>Memo</value>
-  </data>
-  <data name="PurchaseSKU_CreditQTY" xml:space="preserve">
-    <value>折讓數量</value>
-  </data>
-  <data name="RMA_FinalShippingFee" xml:space="preserve">
-    <value>運費</value>
-  </data>
-  <data name="RMA_Memo" xml:space="preserve">
-    <value>註記</value>
-  </data>
-  <data name="RMA_QDID" xml:space="preserve">
-    <value>QD order ID</value>
-  </data>
-  <data name="RMAOrderSerialsLlist_ReturnTracking" xml:space="preserve">
-    <value>逆物流的運單號</value>
-  </data>
-  <data name="RMAOrderSerialsLlist_Carrier" xml:space="preserve">
-    <value>運輸商</value>
-  </data>
-  <data name="RMAOrderSerialsLlist_RMAOrderTrackingID" xml:space="preserve">
-    <value>NULL</value>
-  </data>
-  <data name="RMAOrderSerialsLlist_WarehouseID" xml:space="preserve">
-    <value>倉庫ID，預設入庫倉</value>
-  </data>
-  <data name="RMAOrderSerialsLlist_Reason" xml:space="preserve">
-    <value>退貨的原因</value>
-  </data>
-  <data name="RMAOrderSerialsLlist_UpdateBy" xml:space="preserve">
-    <value>修改者</value>
-  </data>
-  <data name="RMAOrderSerialsLlist_UpdateAt" xml:space="preserve">
-    <value>修改時間</value>
-  </data>
-  <data name="RMASerialsLlist_PurchaseSKUID" xml:space="preserve">
-    <value>SKUID</value>
-  </data>
-  <data name="RMASKU_UnitPrice" xml:space="preserve">
-    <value>單價</value>
-  </data>
-  <data name="RMASKU_RMAItemID" xml:space="preserve">
-    <value>SC的RMA_Item ID</value>
-  </data>
-  <data name="RMASKU_CreditMemoID" xml:space="preserve">
-    <value>CM單ID</value>
-  </data>
-  <data name="SerialsLlist_RMASKUID" xml:space="preserve">
-    <value>RMAID</value>
-  </data>
-  <data name="SerialsLlist_QDID" xml:space="preserve">
-    <value>QD訂單ID</value>
-  </data>
-  <data name="SkuPicture_PictureType" xml:space="preserve">
-    <value>用來區分，Logistic的圖檔和Picture的圖檔</value>
-  </data>
-  <data name="Transfer_TransferType" xml:space="preserve">
-    <value>移倉單種類</value>
-  </data>
-  <data name="TransferSKU_WinitNo" xml:space="preserve">
-    <value>Winit單品標籤號碼</value>
-  </data>
-  <data name="VendorBrand_VendorID" xml:space="preserve">
-    <value>NULL</value>
-  </data>
-  <data name="VendorBrand_BrandID" xml:space="preserve">
-    <value>NULL</value>
-  </data>
-  <data name="WinitTransfer_SBarcodeLabelType" xml:space="preserve">
-    <value>S Barcode 標籤格式</value>
-  </data>
-  <data name="WinitTransfer_BoxLabelSize" xml:space="preserve">
-    <value>BOX 標籤格式</value>
-  </data>
-  <data name="WinitTransfer_WinitOrderNo" xml:space="preserve">
-    <value>Winit入庫單號</value>
-  </data>
-  <data name="WinitTransfer_PrintPackageLabe" xml:space="preserve">
-    <value>標籤</value>
-  </data>
-  <data name="WinitTransfer_PackingList" xml:space="preserve">
-    <value>PackingListExcel</value>
-  </data>
-  <data name="WinitTransfer_CheckList" xml:space="preserve">
-    <value>CheckList 壓縮檔</value>
-  </data>
-  <data name="WinitTransfer_InvoiceExcel" xml:space="preserve">
-    <value>商業發票Excel</value>
-  </data>
-  <data name="WinitTransfer_WinitStatus" xml:space="preserve">
-    <value>Winit訂單狀態</value>
-  </data>
-  <data name="WinitTransferBox_PackageNo" xml:space="preserve">
-    <value>包裹號碼</value>
-  </data>
-  <data name="WinitTransferBox_FedExPdf" xml:space="preserve">
-    <value>NULL</value>
-  </data>
-  <data name="WinitTransferBox_Tracking" xml:space="preserve">
-    <value>追蹤單號</value>
-  </data>
-  <data name="WinitTransferBoxItem_SerialsNo" xml:space="preserve">
-    <value>Serials號碼</value>
-  </data>
-  <data name="WinitTransferBoxItem_Name" xml:space="preserve">
-    <value>名稱</value>
-  </data>
-  <data name="WinitTransferBoxItem_Weight" xml:space="preserve">
-    <value>重量</value>
-  </data>
-  <data name="WinitTransferBoxItem_FilePage" xml:space="preserve">
-    <value>對應PDF檔的頁數</value>
-  </data>
-  <data name="WinitTransferBoxItem_SkuNo" xml:space="preserve">
-    <value>SkuNo</value>
-  </data>
-  <data name="WinitTransferBoxItem_WinitTransferSKUID" xml:space="preserve">
-    <value>NULL</value>
-  </data>
-  <data name="WinitTransferBoxItem_MerchandiseCode" xml:space="preserve">
-    <value>Winit SKU</value>
-  </data>
-  <data name="WinitTransferSKU_IndexNo" xml:space="preserve">
-    <value>目前已用S碼</value>
-  </data>
-  <data name="WinitTransferSKU_winitProductCode" xml:space="preserve">
-    <value>WINIT產品編碼</value>
-  </data>
-  <data name="WinitTransferSKU_winitstatus" xml:space="preserve">
-    <value>WINIT產品狀態</value>
   </data>
 </root>
