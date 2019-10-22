@@ -332,11 +332,44 @@ namespace PurchaseOrderSys.Models
 
         public void Func_Test()
         {
-            var job = new JobProcess("Task Test");
-            job.StatusLog(EnumData.TaskStatus.執行中);
-            job.AddLog("Task Test");
-            Thread.Sleep(5000);
-            job.FinishWork();
+            using (PurchaseOrderEntities db_test = new PurchaseOrderEntities())
+            {
+                var TaskScheduler = new TaskScheduler()
+                {
+                    Name = "Task_Test",
+                    Status = (byte)EnumData.TaskStatus.未執行,
+                    CreateBy = "Test",
+                    CreateAt = DateTime.UtcNow
+                };
+
+                db_test.TaskScheduler.Add(TaskScheduler);
+                db_test.SaveChanges();
+
+                Thread.Sleep(5000);
+
+                TaskScheduler.Status = (byte)EnumData.TaskStatus.執行中;
+                TaskScheduler.UpdateAt = DateTime.UtcNow;
+                TaskScheduler.UpdateBy = "Test";
+                db_test.Entry(TaskScheduler).State = EntityState.Modified;
+                db_test.SaveChanges();
+
+                db_test.TaskLog.Add(new TaskLog()
+                {
+                    Scheduler = TaskScheduler.ID,
+                    Description = "Task_Test",
+                    CreateBy = "Test",
+                    CreateAt = DateTime.UtcNow
+                });
+                db_test.SaveChanges();
+
+                Thread.Sleep(5000);
+
+                TaskScheduler.Status = (byte)EnumData.TaskStatus.執行完;
+                TaskScheduler.UpdateAt = DateTime.UtcNow;
+                TaskScheduler.UpdateBy = "Test";
+                db_test.Entry(TaskScheduler).State = EntityState.Modified;
+                db_test.SaveChanges();
+            }
         }
     }
 }
