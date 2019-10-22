@@ -20,12 +20,11 @@ namespace PurchaseOrderSys.Models
         private readonly string[] RequestUrl = new string[] { "http://internal.qd.com.tw/", "http://internal.qd.com.tw:8080/" };
 
         private bool disposedValue = false; // 偵測多餘的呼叫
-
         public Common()
         {
-            dbC.Configuration.AutoDetectChangesEnabled = false;
-            dbC.Configuration.LazyLoadingEnabled = false;
-            dbC.Configuration.ProxyCreationEnabled = false;
+            //dbC.Configuration.AutoDetectChangesEnabled = false;
+            //dbC.Configuration.LazyLoadingEnabled = false;
+            //dbC.Configuration.ProxyCreationEnabled = false;
         }
 
         protected Response<T> Request<T>(string url, string method = "post", object data = null, int urlIndex = 0) where T : new()
