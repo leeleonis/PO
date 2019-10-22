@@ -930,9 +930,9 @@ namespace PurchaseOrderSys.Controllers
             {
                 var TaskScheduler = new Models.TaskScheduler()
                 {
-                    Name = "Task_Test",
+                    Name = "Task_Test2",
                     Status = (byte)EnumData.TaskStatus.未執行,
-                    CreateBy = "Test",
+                    CreateBy = "Test2",
                     CreateAt = DateTime.UtcNow
                 };
 
@@ -943,15 +943,15 @@ namespace PurchaseOrderSys.Controllers
 
                 TaskScheduler.Status = (byte)EnumData.TaskStatus.執行中;
                 TaskScheduler.UpdateAt = DateTime.UtcNow;
-                TaskScheduler.UpdateBy = "Test";
+                TaskScheduler.UpdateBy = "Test2";
                 db_test.Entry(TaskScheduler).State = EntityState.Modified;
                 db_test.SaveChanges();
 
                 db_test.TaskLog.Add(new TaskLog()
                 {
                     Scheduler = TaskScheduler.ID,
-                    Description = "Task_Test",
-                    CreateBy = "Test",
+                    Description = "Task_Test2",
+                    CreateBy = "Test2",
                     CreateAt = DateTime.UtcNow
                 });
                 db_test.SaveChanges();
@@ -960,7 +960,7 @@ namespace PurchaseOrderSys.Controllers
 
                 TaskScheduler.Status = (byte)EnumData.TaskStatus.執行完;
                 TaskScheduler.UpdateAt = DateTime.UtcNow;
-                TaskScheduler.UpdateBy = "Test";
+                TaskScheduler.UpdateBy = "Test2";
                 db_test.Entry(TaskScheduler).State = EntityState.Modified;
                 db_test.SaveChanges();
             }
