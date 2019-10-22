@@ -19,6 +19,7 @@ namespace PurchaseOrderSys
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            Application["RefreshInventory"] = "N";
             //System.Web.ModelBinding.ModelMetadataProviders.Current  = new CustomModelMetadataProvider();
         }
         protected void Application_BeginRequest(Object sender, EventArgs e)
