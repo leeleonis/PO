@@ -920,11 +920,54 @@ namespace PurchaseOrderSys.Controllers
         {
             MyThread myThread = new MyThread();
             Thread thread1 = new Thread(myThread.Func_Test);
-            Thread thread2 = new Thread(Func_Test1);
+            Thread thread2 = new Thread(Func_Test2);
             thread1.Start();
+            thread2.Start();
+            Func_Test1();
         }
 
         private void Func_Test1()
+        {
+            using (PurchaseOrderEntities db_test = new PurchaseOrderEntities())
+            {
+                var TaskScheduler = new Models.TaskScheduler()
+                {
+                    Name = "Task_Test1",
+                    Status = (byte)EnumData.TaskStatus.未執行,
+                    CreateBy = "Test1",
+                    CreateAt = DateTime.UtcNow
+                };
+
+                db_test.TaskScheduler.Add(TaskScheduler);
+                db_test.SaveChanges();
+
+                Thread.Sleep(5000);
+
+                TaskScheduler.Status = (byte)EnumData.TaskStatus.執行中;
+                TaskScheduler.UpdateAt = DateTime.UtcNow;
+                TaskScheduler.UpdateBy = "Test1";
+                db_test.Entry(TaskScheduler).State = EntityState.Modified;
+                db_test.SaveChanges();
+
+                db_test.TaskLog.Add(new TaskLog()
+                {
+                    Scheduler = TaskScheduler.ID,
+                    Description = "Task_Test1",
+                    CreateBy = "Test1",
+                    CreateAt = DateTime.UtcNow
+                });
+                db_test.SaveChanges();
+
+                Thread.Sleep(5000);
+
+                TaskScheduler.Status = (byte)EnumData.TaskStatus.執行完;
+                TaskScheduler.UpdateAt = DateTime.UtcNow;
+                TaskScheduler.UpdateBy = "Test1";
+                db_test.Entry(TaskScheduler).State = EntityState.Modified;
+                db_test.SaveChanges();
+            }
+        }
+        private void Func_Test2()
         {
             using (PurchaseOrderEntities db_test = new PurchaseOrderEntities())
             {
