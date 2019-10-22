@@ -18,6 +18,7 @@ using SellerCloud_WebService;
 using PurchaseOrderSys.NewApi;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Data.Entity;
 
 namespace PurchaseOrderSys.Controllers
 {
@@ -917,107 +918,54 @@ namespace PurchaseOrderSys.Controllers
 
         public void Task_Test()
         {
-            JobProcess job1 = new JobProcess("Task Test1");
-            job1.AddWork(Func_Test1, job1);
-            JobProcess job2 = new JobProcess("Task Test2");
-            job2.AddWork(() =>
-            {
-                try
-                {
-                    job2.StatusLog(EnumData.TaskStatus.執行中);
-                    job2.AddLog("Task Test2");
-                    Thread.Sleep(5000);
-                }
-                catch (Exception ex)
-                {
-                    return ex.InnerException?.Message ?? ex.Message;
-                }
-
-                return "";
-            });
-            JobProcess job3 = new JobProcess("Task Test3");
-            job1.AddWork(Func_Test3, job3);
-            //Response.Write(string.Format("Task1 ID：{0}，Staus：{1}，Result：{2} <br />", job1.Task.Id, job1.Task.Status, job1.Task.Result));
-            //Response.Write(string.Format("Task2 ID：{0}，Staus：{1}，Result：{2}", job2.Task.Id, job2.Task.Status, job2.Task.Result));
-
             MyThread myThread = new MyThread();
-            Thread thread = new Thread(myThread.Func_Test);
-            thread.Start();
+            Thread thread1 = new Thread(myThread.Func_Test);
+            Thread thread2 = new Thread(Func_Test1);
+            thread1.Start();
         }
 
-        private string Func_Test1(object JobProcess)
+        private void Func_Test1()
         {
-            try
+            using (PurchaseOrderEntities db_test = new PurchaseOrderEntities())
             {
-                var job = JobProcess as JobProcess;
-                job.Task.ContinueWith((Task) =>
+                var TaskScheduler = new Models.TaskScheduler()
                 {
-                    if (Task.IsFaulted)
-                    {
-                        job.Fail(Task.Exception.Message);
-                    }
-                    else if (Task.IsCanceled)
-                    {
-                        job.Fail("工作已取消");
-                    }
-                    else
-                    {
-                        if (!string.IsNullOrWhiteSpace(Task.Result))
-                        {
-                            job.Fail(Task.Result);
-                        }
-                        else
-                        {
-                            job.StatusLog(EnumData.TaskStatus.執行完);
-                        }
-                    }
-                }, TaskContinuationOptions.ExecuteSynchronously);
-                job.StatusLog(EnumData.TaskStatus.執行中);
-                job.AddLog("Task Test1");
-                Thread.Sleep(10000);
-            }
-            catch (Exception ex)
-            {
-                return ex.InnerException?.Message ?? ex.Message;
-            }
+                    Name = "Task_Test",
+                    Status = (byte)EnumData.TaskStatus.未執行,
+                    CreateBy = "Test",
+                    CreateAt = DateTime.UtcNow
+                };
 
-            return "";
-        }
+                db_test.TaskScheduler.Add(TaskScheduler);
+                db_test.SaveChanges();
 
-        private string Func_Test2(object JobProcess)
-        {
-            try
-            {
-                var job = JobProcess as JobProcess;
-                job.StatusLog(EnumData.TaskStatus.執行中);
-                job.AddLog("Task Test2");
                 Thread.Sleep(5000);
-            }
-            catch (Exception ex)
-            {
-                return ex.InnerException?.Message ?? ex.Message;
-            }
 
-            return "";
-        }
+                TaskScheduler.Status = (byte)EnumData.TaskStatus.執行中;
+                TaskScheduler.UpdateAt = DateTime.UtcNow;
+                TaskScheduler.UpdateBy = "Test";
+                db_test.Entry(TaskScheduler).State = EntityState.Modified;
+                db_test.SaveChanges();
 
-        private string Func_Test3(object JobProcess)
-        {
-            try
-            {
-                var job = JobProcess as JobProcess;
-                job.StatusLog(EnumData.TaskStatus.執行中);
-                job.AddLog("Task Test3");
+                db_test.TaskLog.Add(new TaskLog()
+                {
+                    Scheduler = TaskScheduler.ID,
+                    Description = "Task_Test",
+                    CreateBy = "Test",
+                    CreateAt = DateTime.UtcNow
+                });
+                db_test.SaveChanges();
+
                 Thread.Sleep(5000);
-                job.FinishWork();
-            }
-            catch (Exception ex)
-            {
-                return ex.InnerException?.Message ?? ex.Message;
-            }
 
-            return "";
+                TaskScheduler.Status = (byte)EnumData.TaskStatus.執行完;
+                TaskScheduler.UpdateAt = DateTime.UtcNow;
+                TaskScheduler.UpdateBy = "Test";
+                db_test.Entry(TaskScheduler).State = EntityState.Modified;
+                db_test.SaveChanges();
+            }
         }
+
 
         public ActionResult Autoreturntoshipper()
         {

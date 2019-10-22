@@ -23,9 +23,9 @@ namespace PurchaseOrderSys.Models
 
         public Common()
         {
-            dbC.Configuration.AutoDetectChangesEnabled = false;
-            dbC.Configuration.LazyLoadingEnabled = false;
-            dbC.Configuration.ProxyCreationEnabled = false;
+            //dbC.Configuration.AutoDetectChangesEnabled = false;
+            //dbC.Configuration.LazyLoadingEnabled = false;
+            //dbC.Configuration.ProxyCreationEnabled = false;
         }
 
         protected Response<T> Request<T>(string url, string method = "post", object data = null, int urlIndex = 0) where T : new()
