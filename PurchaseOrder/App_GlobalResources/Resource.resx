@@ -3221,4 +3221,193 @@
   <data name="Orders_ShippingTime" xml:space="preserve">
     <value></value>
   </data>
+  <data name="ApiSetting_ID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Auth_ID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Auth_Name" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Auth_Value" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Company_CompanySCID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="CreditMemo_RMAID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="CreditMemo_WarehouseID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="DirectLine_MaxDeclared" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ImgFile_ImgType" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ImgFile_PurchaseSKUID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="inventory_CreateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="inventory_CumulativeOrders" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="inventory_CumulativeSalse" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="inventory_CumulativeTransferOut" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="inventory_WritroffInventory" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="inventory_TotalInventory" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PurchaseNote_RMAOrderTrackingID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PurchaseNoteImg_ImgType" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PurchaseOrder_SCPurchaseID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PurchaseOrder_Memo" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PurchaseSKU_CreditQTY" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="RMA_FinalShippingFee" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="RMA_Memo" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="RMA_QDID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="RMAOrderSerialsLlist_ReturnTracking" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="RMAOrderSerialsLlist_Carrier" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="RMAOrderSerialsLlist_RMAOrderTrackingID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="RMAOrderSerialsLlist_WarehouseID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="RMAOrderSerialsLlist_Reason" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="RMAOrderSerialsLlist_UpdateBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="RMAOrderSerialsLlist_UpdateAt" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="RMASerialsLlist_PurchaseSKUID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="RMASKU_UnitPrice" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="RMASKU_RMAItemID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="RMASKU_CreditMemoID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SerialsLlist_RMASKUID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SerialsLlist_QDID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SkuPicture_PictureType" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Transfer_TransferType" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="TransferSKU_WinitNo" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="VendorBrand_VendorID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="VendorBrand_BrandID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="WinitTransfer_SBarcodeLabelType" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="WinitTransfer_BoxLabelSize" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="WinitTransfer_WinitOrderNo" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="WinitTransfer_PrintPackageLabe" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="WinitTransfer_PackingList" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="WinitTransfer_CheckList" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="WinitTransfer_InvoiceExcel" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="WinitTransfer_WinitStatus" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="WinitTransferBox_PackageNo" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="WinitTransferBox_FedExPdf" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="WinitTransferBox_Tracking" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="WinitTransferBoxItem_SerialsNo" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="WinitTransferBoxItem_Name" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="WinitTransferBoxItem_Weight" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="WinitTransferBoxItem_FilePage" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="WinitTransferBoxItem_SkuNo" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="WinitTransferBoxItem_WinitTransferSKUID" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="WinitTransferBoxItem_MerchandiseCode" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="WinitTransferSKU_IndexNo" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="WinitTransferSKU_winitProductCode" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="WinitTransferSKU_winitstatus" xml:space="preserve">
+    <value></value>
+  </data>
 </root>
