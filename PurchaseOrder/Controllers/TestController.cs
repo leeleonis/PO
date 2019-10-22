@@ -934,6 +934,8 @@ namespace PurchaseOrderSys.Controllers
                 {
                     Name = "Task_Test1",
                     Status = (byte)EnumData.TaskStatus.未執行,
+                    UpdateBy = "Test1",
+                    UpdateAt = DateTime.UtcNow,
                     CreateBy = "Test1",
                     CreateAt = DateTime.UtcNow
                 };
@@ -975,6 +977,8 @@ namespace PurchaseOrderSys.Controllers
                 {
                     Name = "Task_Test2",
                     Status = (byte)EnumData.TaskStatus.未執行,
+                    UpdateBy = "Test2",
+                    UpdateAt = DateTime.UtcNow,
                     CreateBy = "Test2",
                     CreateAt = DateTime.UtcNow
                 };

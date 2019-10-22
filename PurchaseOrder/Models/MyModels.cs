@@ -338,6 +338,8 @@ namespace PurchaseOrderSys.Models
                 {
                     Name = "Task_Test",
                     Status = (byte)EnumData.TaskStatus.未執行,
+                    UpdateBy = "Test",
+                    UpdateAt = DateTime.UtcNow,
                     CreateBy = "Test",
                     CreateAt = DateTime.UtcNow
                 };
