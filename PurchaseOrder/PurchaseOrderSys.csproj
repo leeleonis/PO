@@ -367,6 +367,9 @@
     <Compile Include="Models\DirectLineMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ImgFileMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\inventory.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
     </Compile>
@@ -376,10 +379,27 @@
     <Compile Include="Models\ItemsMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\KitSkuMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\LogisticMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MarketplaceMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MenuLangMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MenuMetadata.cs">
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ModelTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ModelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\NetoGroupMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Objects\Common.cs" />
@@ -387,17 +407,11 @@
     <Compile Include="Models\ImgFile.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ImgFileMetadata.cs">
-      <DependentUpon>ModelTemplate.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Items.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\KitSku.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\KitSkuMetadata.cs">
-      <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Logistic.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
@@ -411,23 +425,9 @@
     <Compile Include="Models\MenuLang.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\MenuLangMetadata.cs">
-      <DependentUpon>ModelTemplate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\MenuMetadata.cs">
-      <DependentUpon>ModelTemplate.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ModelTemplate.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ModelTemplate.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\MyModels.cs" />
     <Compile Include="Models\NetoGroup.cs">
       <DependentUpon>PurchaseMdel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\NetoGroupMetadata.cs">
-      <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Objects\JobProcess.cs" />
     <Compile Include="Models\Objects\Neto\NetoApi.cs" />
