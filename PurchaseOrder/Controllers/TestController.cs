@@ -918,103 +918,23 @@ namespace PurchaseOrderSys.Controllers
 
         public void Task_Test()
         {
-            //MyThread myThread = new MyThread();
-            //Thread thread1 = new Thread(myThread.Func_Test);
-            Thread thread2 = new Thread(Func_Test1);
-            //thread1.Start();
-            thread2.Start();
-            //Func_Test1();
-        }
-
-        private void Func_Test1()
-        {
-            var TaskScheduler = new Models.TaskScheduler()
-            {
-                Name = "Task_Test1",
-                Status = (byte)EnumData.TaskStatus.未執行,
-                CreateBy = "Test1",
-                CreateAt = DateTime.UtcNow
-            };
-
-            db.TaskScheduler.Add(TaskScheduler);
-            db.SaveChanges();
-
-            Thread.Sleep(5000);
-
-            TaskScheduler.Status = (byte)EnumData.TaskStatus.執行中;
-            TaskScheduler.UpdateAt = DateTime.UtcNow;
-            TaskScheduler.UpdateBy = "Test1";
-            db.Entry(TaskScheduler).State = EntityState.Modified;
-            db.SaveChanges();
-
-            db.TaskLog.Add(new TaskLog()
-            {
-                Scheduler = TaskScheduler.ID,
-                Description = "Task_Test1",
-                CreateBy = "Test1",
-                CreateAt = DateTime.UtcNow
-            });
-            db.SaveChanges();
-
-            Thread.Sleep(5000);
-
-            TaskScheduler.Status = (byte)EnumData.TaskStatus.執行完;
-            TaskScheduler.UpdateAt = DateTime.UtcNow;
-            TaskScheduler.UpdateBy = "Test1";
-            db.Entry(TaskScheduler).State = EntityState.Modified;
-            db.SaveChanges();
-        }
-
-        private void Func_Test2()
-        {
-            using (PurchaseOrderEntities db_test = new PurchaseOrderEntities())
+            JobProcess Job = new JobProcess("Task Test");
+            Job.AddWork(() =>
             {
                 try
                 {
-                    var TaskScheduler = new Models.TaskScheduler()
-                    {
-                        Name = "Task_Test2",
-                        Status = (byte)EnumData.TaskStatus.未執行,
-                        UpdateBy = "Test2",
-                        UpdateAt = DateTime.UtcNow,
-                        CreateBy = "Test2",
-                        CreateAt = DateTime.UtcNow
-                    };
-
-                    db_test.TaskScheduler.Add(TaskScheduler);
-                    db_test.SaveChanges();
-
-                    Thread.Sleep(5000);
-
-                    TaskScheduler.Status = (byte)EnumData.TaskStatus.執行中;
-                    TaskScheduler.UpdateAt = DateTime.UtcNow;
-                    TaskScheduler.UpdateBy = "Test2";
-                    db_test.Entry(TaskScheduler).State = EntityState.Modified;
-                    db_test.SaveChanges();
-
-                    db_test.TaskLog.Add(new TaskLog()
-                    {
-                        Scheduler = TaskScheduler.ID,
-                        Description = "Task_Test2",
-                        CreateBy = "Test2",
-                        CreateAt = DateTime.UtcNow
-                    });
-                    db_test.SaveChanges();
-
-                    Thread.Sleep(5000);
-
-                    TaskScheduler.Status = (byte)EnumData.TaskStatus.執行完;
-                    TaskScheduler.UpdateAt = DateTime.UtcNow;
-                    TaskScheduler.UpdateBy = "Test2";
-                    db_test.Entry(TaskScheduler).State = EntityState.Modified;
-                    db_test.SaveChanges();
+                    Thread.Sleep(2000);
+                    Job.AddLog("Task Test");
+                    Thread.Sleep(3000);
                 }
                 catch (Exception ex)
                 {
+                    Job.Fail(ex.InnerException?.Message ?? ex.Message);
                 }
-            }
-        }
 
+                return "";
+            });
+        }
 
         public ActionResult Autoreturntoshipper()
         {
