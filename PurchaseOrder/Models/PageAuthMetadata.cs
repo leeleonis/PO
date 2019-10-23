@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System; 
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,11 +15,11 @@ namespace PurchaseOrderSys.Models
     public  partial class PageAuth
     {
         public Dictionary<string, bool> GroupEdit { get; set; }
-
-        /// <summary>
-        /// PageAuth Metadata class
-        /// </summary>
-        public   class PageAuthMetadata
+    
+    	/// <summary>
+    	/// PageAuth Metadata class
+    	/// </summary>
+    	public   class PageAuthMetadata
     	{
     		    
     		/// <summary>

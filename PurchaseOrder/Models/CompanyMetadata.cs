@@ -1,11 +1,12 @@
-using System;
+using System; 
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace PurchaseOrderSys.Models
 {
-
+    
     /// <summary>
     /// Company class
     /// </summary>
@@ -83,14 +84,6 @@ namespace PurchaseOrderSys.Models
     
     		    
     		/// <summary>
-    		/// Currency ID
-    		/// </summary>        
-    	    [Display(Name = "Company_CurrencyID", ResourceType = typeof(App_GlobalResources.Resource))]
-            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
-    		public int  CurrencyID { get; set; }
-    
-    		    
-    		/// <summary>
     		/// Create By
     		/// </summary>        
     	    [Display(Name = "Company_CreateBy", ResourceType = typeof(App_GlobalResources.Resource))]
@@ -131,6 +124,14 @@ namespace PurchaseOrderSys.Models
     	    [Display(Name = "Company_CompanyNo", ResourceType = typeof(App_GlobalResources.Resource))]
             [MaxLength(20, ErrorMessageResourceName = "MaxLength", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
     		public string  CompanyNo { get; set; }
+    
+    		    
+    		/// <summary>
+    		/// Currency ID
+    		/// </summary>        
+    	    [Display(Name = "Company_CurrencyID", ResourceType = typeof(App_GlobalResources.Resource))]
+            [Required(ErrorMessageResourceName = "Required", ErrorMessageResourceType = typeof(App_GlobalResources.Resource))]
+    		public int  CurrencyID { get; set; }
     
     		    
     		/// <summary>
