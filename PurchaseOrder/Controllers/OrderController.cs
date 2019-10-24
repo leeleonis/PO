@@ -90,23 +90,24 @@ namespace PurchaseOrderSys.Controllers
                     if (order.SCID.HasValue)
                     {
                         JobProcess Job = new JobProcess(string.Format("更改訂單【{0}】的狀態至SC", order.ID));
-                        Job.AddWork(() =>
+                        try
                         {
-                            try
-                            {
-                                Job.AddLog("開始在SC上更改訂單狀態");
-                                OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
-                                OM.ChangeOrderStatusToSC(order.OrderStatus);
-                                OM.OrderSyncPush();
-                                Job.AddLog("完成訂單狀態更改");
-                            }
-                            catch (Exception ex)
-                            {
-                                Job.Fail(ex.InnerException?.Message ?? ex.Message);
-                            }
+                            Job.StatusLog(EnumData.TaskStatus.執行中);
 
-                            return "";
-                        });
+                            Job.AddLog("開始在SC上更改訂單狀態");
+
+                            OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
+                            OM.ChangeOrderStatusToSC(order.OrderStatus);
+                            OM.OrderSyncPush();
+
+                            Job.AddLog("完成訂單狀態更改");
+
+                            Job.StatusLog(EnumData.TaskStatus.執行完);
+                        }
+                        catch (Exception ex)
+                        {
+                            Job.Fail(ex.InnerException?.Message ?? ex.Message);
+                        }
                     }
                 }
             }
@@ -161,27 +162,28 @@ namespace PurchaseOrderSys.Controllers
 
                 if (address.GetOrder.SCID.HasValue)
                 {
-                    JobProcess job = new JobProcess(string.Format("更改訂單【{0}】的地址至SC", address.OrderID));
-                    job.AddWork(() =>
+                    using (var OM = new OrderManagement(address.OrderID))
                     {
+                        JobProcess job = new JobProcess(string.Format("更改訂單【{0}】的地址至SC", address.OrderID));
                         try
                         {
-                            using (var OM = new OrderManagement(address.OrderID))
-                            {
-                                job.AddLog("開始在SC上更改訂單地址");
-                                OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
-                                OM.UpdateAddressToSC(address.ID);
-                                OM.OrderSyncPush();
-                                job.AddLog("完成訂單地址更改");
-                            }
+                            job.StatusLog(EnumData.TaskStatus.執行中);
+
+                            job.AddLog("開始在SC上更改訂單地址");
+
+                            OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
+                            OM.UpdateAddressToSC(address.ID);
+                            OM.OrderSyncPush();
+
+                            job.AddLog("完成訂單地址更改");
+
+                            job.StatusLog(EnumData.TaskStatus.執行完);
                         }
                         catch (Exception ex)
                         {
-                            return ex.InnerException?.Message ?? ex.Message;
+                            job.Fail(ex.InnerException?.Message ?? ex.Message);
                         }
-
-                        return "";
-                    });
+                    }
                 }
 
                 var ShipsArray = new string[] { address.AddressLine1, address.AddressLine2, address.City, address.State, address.Postcode, address.CountryName, address.PhoneNumber };
@@ -252,26 +254,27 @@ namespace PurchaseOrderSys.Controllers
                 if (payment.SCID.HasValue)
                 {
                     JobProcess job = new JobProcess(string.Format("更改訂單【{0}】的帳單至SC", payment.OrderID));
-                    job.AddWork(() =>
+                    try
                     {
-                        try
+                        using (var OM = new OrderManagement(payment.OrderID))
                         {
-                            using (var OM = new OrderManagement(payment.OrderID))
-                            {
-                                job.AddLog("開始在SC上更改訂單帳單");
-                                OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
-                                OM.UpdatePaymentToSC(payment.ID);
-                                OM.OrderSyncPush();
-                                job.AddLog("完成訂單帳單更改");
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            return ex.InnerException?.Message ?? ex.Message;
-                        }
+                            job.StatusLog(EnumData.TaskStatus.執行中);
 
-                        return "";
-                    });
+                            job.AddLog("開始在SC上更改訂單帳單");
+
+                            OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
+                            OM.UpdatePaymentToSC(payment.ID);
+                            OM.OrderSyncPush();
+
+                            job.AddLog("完成訂單帳單更改");
+
+                            job.StatusLog(EnumData.TaskStatus.執行完);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        job.Fail(ex.InnerException?.Message ?? ex.Message);
+                    }
                 }
             }
             catch (Exception e)
@@ -294,7 +297,7 @@ namespace PurchaseOrderSys.Controllers
 
                 if (!payment.Gateway.Equals(updatePayment.Gateway))
                     OM.ActionLog("Change Payment", "Gateway to " + Enum.GetName(typeof(SCService.PaymentMethod), updatePayment.Status));
-                
+
                 if (!payment.ShippingCharge.Equals(updatePayment.ShippingCharge))
                     OM.ActionLog("Change Payment", "Shipping to " + updatePayment.ShippingCharge);
 
@@ -598,23 +601,24 @@ namespace PurchaseOrderSys.Controllers
                     OM.ActionLog("Change Shipping Actions", "Split Package");
 
                     JobProcess job = new JobProcess(string.Format("分批訂單【{0}】的包裹", package.OrderID));
-                    job.AddWork(() =>
+                    try
                     {
-                        try
-                        {
-                            job.AddLog("開始在SC上進訂單分批");
-                            OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
-                            OM.SplitPackageToSC(packageData.Select(p => p.ID).ToArray());
-                            OM.OrderSyncPush();
-                            job.AddLog("完成包裹分批");
-                        }
-                        catch (Exception ex)
-                        {
-                            return ex.InnerException?.Message ?? ex.Message;
-                        }
+                        job.StatusLog(EnumData.TaskStatus.執行中);
 
-                        return "";
-                    });
+                        job.AddLog("開始在SC上進訂單分批");
+
+                        OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
+                        OM.SplitPackageToSC(packageData.Select(p => p.ID).ToArray());
+                        OM.OrderSyncPush();
+
+                        job.AddLog("完成包裹分批");
+
+                        job.StatusLog(EnumData.TaskStatus.執行完);
+                    }
+                    catch (Exception ex)
+                    {
+                        job.Fail(ex.InnerException?.Message ?? ex.Message);
+                    }
                 }
             }
             catch (Exception ex)
@@ -704,23 +708,24 @@ namespace PurchaseOrderSys.Controllers
                     if (oldPackageList.All(p => p.SCID.HasValue))
                     {
                         JobProcess job = new JobProcess(string.Format("整合訂單【{0}】的包裹", package.OrderID));
-                        job.AddWork(() =>
+                        try
                         {
-                            try
-                            {
-                                job.AddLog("開始在SC上進行包裹整合");
-                                OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
-                                OM.CombinePackageToSC(oldPackageIDs);
-                                OM.OrderSyncPush();
-                                job.AddLog("完成包裹整合");
-                            }
-                            catch (Exception ex)
-                            {
-                                return ex.InnerException?.Message ?? ex.Message;
-                            }
+                            job.StatusLog(EnumData.TaskStatus.執行中);
 
-                            return "";
-                        });
+                            job.AddLog("開始在SC上進行包裹整合");
+
+                            OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
+                            OM.CombinePackageToSC(oldPackageIDs);
+                            OM.OrderSyncPush();
+
+                            job.AddLog("完成包裹整合");
+
+                            job.StatusLog(EnumData.TaskStatus.執行完);
+                        }
+                        catch (Exception ex)
+                        {
+                            job.Fail(ex.InnerException?.Message ?? ex.Message);
+                        }
                     }
                 }
             }
@@ -768,23 +773,24 @@ namespace PurchaseOrderSys.Controllers
                     if (order.SCID.HasValue)
                     {
                         JobProcess job = new JobProcess(string.Format("Mark Ship訂單【{0}】", package.OrderID));
-                        job.AddWork(() =>
+                        try
                         {
-                            try
-                            {
-                                job.AddLog("開始在SC上進行包裹Mrak Ship");
-                                OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
-                                OM.MarkShipPackageToSC(package.ID);
-                                OM.OrderSyncPush();
-                                job.AddLog("完成包裹Mrak Ship");
-                            }
-                            catch (Exception ex)
-                            {
-                                return ex.InnerException?.Message ?? ex.Message;
-                            }
+                            job.StatusLog(EnumData.TaskStatus.執行中);
 
-                            return "";
-                        });
+                            job.AddLog("開始在SC上進行包裹Mrak Ship");
+
+                            OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
+                            OM.MarkShipPackageToSC(package.ID);
+                            OM.OrderSyncPush();
+
+                            job.AddLog("完成包裹Mrak Ship");
+
+                            job.StatusLog(EnumData.TaskStatus.執行完);
+                        }
+                        catch (Exception ex)
+                        {
+                            job.Fail(ex.InnerException?.Message ?? ex.Message);
+                        }
                     }
                 }
 

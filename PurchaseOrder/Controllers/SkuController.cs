@@ -147,6 +147,8 @@ namespace PurchaseOrderSys.Controllers
                     JobProcess job = new JobProcess(string.Format("新增品號【{0}】資料至NETO、SC", sku.SkuID));
                     try
                     {
+                        job.StatusLog(EnumData.TaskStatus.執行中);
+
                         job.AddLog("開始新增品號資料");
 
                         SKU.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
@@ -154,6 +156,8 @@ namespace PurchaseOrderSys.Controllers
                         SKU.CreateSkuToSC();
 
                         job.AddLog("完成品號資料新增");
+
+                        job.StatusLog(EnumData.TaskStatus.執行完);
                     }
                     catch (Exception ex)
                     {
@@ -328,6 +332,8 @@ namespace PurchaseOrderSys.Controllers
                                 JobProcess job = new JobProcess(string.Format("新增品號【{0}】資料至NETO、SC", newSku.SkuID));
                                 try
                                 {
+                                    job.StatusLog(EnumData.TaskStatus.執行中);
+
                                     job.AddLog("開始新增品號資料");
 
                                     SKU.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
@@ -335,6 +341,8 @@ namespace PurchaseOrderSys.Controllers
                                     SKU.CreateSkuToSC();
 
                                     job.AddLog("完成品號資料新增");
+
+                                    job.StatusLog(EnumData.TaskStatus.執行完);
                                 }
                                 catch (Exception ex)
                                 {
@@ -591,6 +599,8 @@ namespace PurchaseOrderSys.Controllers
                     JobProcess job = new JobProcess(string.Format("更新品號【{0}】資料至NETO、SC", sku.SkuID));
                     try
                     {
+                        job.StatusLog(EnumData.TaskStatus.執行中);
+
                         job.AddLog("開始更新品號資料");
 
                         SKU.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
@@ -614,6 +624,8 @@ namespace PurchaseOrderSys.Controllers
                             }
                             job.AddLog("完成品號U品更新");
                         }
+
+                        job.StatusLog(EnumData.TaskStatus.執行完);
                     }
                     catch (Exception ex)
                     {
@@ -941,36 +953,40 @@ namespace PurchaseOrderSys.Controllers
             using (StockKeepingUnit SKU = new StockKeepingUnit(sku))
             {
                 JobProcess job = new JobProcess(string.Format("更新品號【{0}】資料至NETO、SC", sku.SkuID));
-                    try
+                try
+                {
+                    job.StatusLog(EnumData.TaskStatus.執行中);
+
+                    job.AddLog("開始更新品號資料");
+
+                    SKU.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
+                    SKU.UpdateSkuToNeto();
+                    SKU.UpdateSkuToSC();
+                    job.AddLog("完成品號資料更新");
+
+                    if (sku.Type.Equals((byte)EnumData.SkuType.Variation))
                     {
-                        job.AddLog("開始更新品號資料");
-
-                        SKU.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
-                        SKU.UpdateSkuToNeto();
-                        SKU.UpdateSkuToSC();
-                        job.AddLog("完成品號資料更新");
-
-                        if (sku.Type.Equals((byte)EnumData.SkuType.Variation))
-                        {
-                            SKU.UpdateVariationToNeto();
-                            job.AddLog("完成品號Variaction更新");
-                        }
-
-                        if (sku.Type.Equals((byte)EnumData.SkuType.Single) && sku.Condition.Equals(1))
-                        {
-                            foreach (var condition in db.Condition.Where(c => c.IsEnable && !c.ID.Equals(sku.Condition)).ToList())
-                            {
-                                SKU.SetSkuData(sku.SkuID + condition.Suffix);
-                                SKU.UpdateSkuToNeto();
-                                SKU.UpdateSkuToSC();
-                            }
-                            job.AddLog("完成品號U品更新");
-                        }
+                        SKU.UpdateVariationToNeto();
+                        job.AddLog("完成品號Variaction更新");
                     }
-                    catch (Exception ex)
+
+                    if (sku.Type.Equals((byte)EnumData.SkuType.Single) && sku.Condition.Equals(1))
                     {
-                        job.Fail(ex.InnerException?.Message ?? ex.Message);
+                        foreach (var condition in db.Condition.Where(c => c.IsEnable && !c.ID.Equals(sku.Condition)).ToList())
+                        {
+                            SKU.SetSkuData(sku.SkuID + condition.Suffix);
+                            SKU.UpdateSkuToNeto();
+                            SKU.UpdateSkuToSC();
+                        }
+                        job.AddLog("完成品號U品更新");
                     }
+
+                    job.StatusLog(EnumData.TaskStatus.執行完);
+                }
+                catch (Exception ex)
+                {
+                    job.Fail(ex.InnerException?.Message ?? ex.Message);
+                }
             }
 
             return Json(result, JsonRequestBehavior.AllowGet);
