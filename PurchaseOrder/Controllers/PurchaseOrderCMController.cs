@@ -808,15 +808,15 @@ namespace PurchaseOrderSys.Controllers
             {
                 return Json(new { status = false, Errmsg = "序號數不可大於退貨數" }, JsonRequestBehavior.AllowGet);
             }
-            var SerialsLlist = db.SerialsLlist.Where(x => x.IsEnable && x.SerialsNo == serials);
+            var SerialsLlist = db.SerialsLlist.Where(x => x.IsEnable && x.SerialsNo == serials && !x.SerialsLlistC.Any(y => y.IsEnable) && (x.SerialsType == "PO" || x.SerialsType == "TransferIn"));
             
             if (!SerialsLlist.Where(x => x.PurchaseSKU.ID == PurchaseSKU.ID).Any())//檢查序號是否重複，同訂單同序號不能新增
             {
                 if (SerialsLlist.Sum(x => x.SerialsQTY) > 0)
                 {
-                    if (SerialsLlist.Where(x => x.PurchaseSKU.SkuNo == PurchaseSKU.SkuNo).Any())
+                    if (SerialsLlist.Where(x => (x.TransferSKUID.HasValue && x.TransferSKU.SkuNo == PurchaseSKU.SkuNo) || (x.PurchaseSKU.SkuNo == PurchaseSKU.SkuNo)).Any())
                     {
-                        var oSerialsLlist = SerialsLlist.Where(x => x.PurchaseSKU.SkuNo == PurchaseSKU.SkuNo && x.SerialsQTY > 0 && !x.SerialsLlistC.Any(y => y.IsEnable)).OrderByDescending(x => x.ID).FirstOrDefault();
+                        var oSerialsLlist = SerialsLlist.Where(x => ((x.TransferSKUID.HasValue && x.TransferSKU.SkuNo == PurchaseSKU.SkuNo) || (x.PurchaseSKU.SkuNo == PurchaseSKU.SkuNo)) && x.SerialsQTY > 0 && !x.SerialsLlistC.Any(y => y.IsEnable)).OrderByDescending(x => x.ID).FirstOrDefault();
                         if (oSerialsLlist != null)
                         {
                             var PID = oSerialsLlist.ID;

@@ -2222,6 +2222,7 @@ namespace PurchaseOrderSys.Controllers
 
             public void ThreadMain()
             {
+                bool Sleep = (DateTime.UtcNow.Hour > 1 && DateTime.UtcNow.Hour < 16);
                 System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
                 sw.Reset();
                 sw.Start();
@@ -2232,8 +2233,6 @@ namespace PurchaseOrderSys.Controllers
                     dbW.Configuration.AutoDetectChangesEnabled = false;
                     dbW.Configuration.LazyLoadingEnabled = false;
                     dbW.Configuration.ProxyCreationEnabled = false;
-
-
                     var inventory = new List<inventory>();
                     foreach (var SKUitem in AllSKUList)
                     {
@@ -2294,6 +2293,14 @@ namespace PurchaseOrderSys.Controllers
                             //Fulfillable = WarehouseVM.Sum(x => x.Fulfillable),
                             //TransferOutQTY = WarehouseVM.Sum(x => x.TransferOutQTY)
                         });
+                        //if (inventory.Count() % 100 == 0)
+                        if (Sleep)
+                        {
+                            {
+                                //Thread.Sleep(1000);
+                            }
+                        }
+                       
                     }
                     dbW.BulkDelete(dbW.inventory.Where(x => x.WarehouseID == Warehouseitem.ID));
                     //dbW.inventory.RemoveRange(dbW.inventory.Where(x=>x.WarehouseID== Warehouseitem.ID).ToList());
@@ -2301,7 +2308,7 @@ namespace PurchaseOrderSys.Controllers
                     dbW.BulkInsert(inventory);
                     //dbW.inventory.AddRange(inventory);
                     dbW.SaveChanges();
-                    Console.WriteLine("報行ID：" + threadId + " ;結束時間：" + sw.ElapsedMilliseconds);
+                   Console.WriteLine("報行ID：" + threadId + " ;結束時間：" + sw.ElapsedMilliseconds);
                 }
             }
         }
@@ -2329,7 +2336,6 @@ namespace PurchaseOrderSys.Controllers
                 var OrderSerialsLlist = db.SerialsLlist.AsNoTracking().Where(x => x.IsEnable && x.SerialsType == "Order" && x.CreateAt >= sdt && x.CreateAt <= edt).Include(x => x.PurchaseSKU).Include(x => x.PurchaseSKU.PurchaseOrder).Include(x => x.TransferSKU).Include(x => x.TransferSKU.Transfer).ToList();
                 var threadlist = new List<Thread>();
                 HttpContext.Application["RefreshInventory"] = "Y";
-
                 foreach (var Warehouseitem in Warehouse)
                 {
                     var SCID = Warehouseitem.WarehouseSummary.Where(x => x.Type == "SCID").FirstOrDefault()?.Val;
@@ -2348,14 +2354,25 @@ namespace PurchaseOrderSys.Controllers
 
 
                     Thread thread = new Thread(myThread.ThreadMain);
+                    thread.Priority = ThreadPriority.BelowNormal;
                     threadlist.Add(thread);
                     thread.Start();
 
                 }
-                foreach (var item in threadlist)
-                {
-                   item.Join();
-                }
+                //var i = 0;
+                //foreach (var item in threadlist)
+                //{
+                //    item.Start();
+                //    if (threadlist.Count() <= 5)
+                //    {
+                //        item.Join();
+                //    }
+                //    else if (i > 5)
+                //    {
+                //        item.Join();
+                //    }
+                //    i++;
+                //}
                 HttpContext.Application["RefreshInventory"] = "N";
                 sw.Stop();
                 var EdtimeE = "結束" + sw.ElapsedMilliseconds;
