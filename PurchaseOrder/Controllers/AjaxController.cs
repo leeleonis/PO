@@ -1613,7 +1613,7 @@ namespace PurchaseOrderSys.Controllers
                     ImagePath = s.SkuPicture.Where(x => x.PictureType == "Logistic").Select(x => x.FileName)
                 }).ToList();
 
-                result.data = IDs.ToDictionary(ID => ID, ID => skuList.FirstOrDefault(s => s.Sku.Equals(ID.Split(new char[] { '-' }))));
+                result.data = IDs.ToDictionary(ID => ID, ID => skuList.FirstOrDefault(s => s.Sku.Equals(ID.Split(new char[] { '-' })[0])));
             }
             catch (Exception e)
             {
