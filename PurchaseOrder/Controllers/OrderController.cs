@@ -160,31 +160,31 @@ namespace PurchaseOrderSys.Controllers
 
                 CheckAddressData(address, updateAddress);
 
-                if (address.GetOrder.SCID.HasValue)
-                {
-                    using (var OM = new OrderManagement(address.OrderID))
-                    {
-                        JobProcess job = new JobProcess(string.Format("更改訂單【{0}】的地址至SC", address.OrderID));
-                        try
-                        {
-                            job.StatusLog(EnumData.TaskStatus.執行中);
+                //if (address.GetOrder.SCID.HasValue)
+                //{
+                //    using (var OM = new OrderManagement(address.OrderID))
+                //    {
+                //        JobProcess job = new JobProcess(string.Format("更改訂單【{0}】的地址至SC", address.OrderID));
+                //        try
+                //        {
+                //            job.StatusLog(EnumData.TaskStatus.執行中);
 
-                            job.AddLog("開始在SC上更改訂單地址");
+                //            job.AddLog("開始在SC上更改訂單地址");
 
-                            OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
-                            OM.UpdateAddressToSC(address.ID);
-                            OM.OrderSyncPush();
+                //            OM.SC_Api = new SellerCloud_WebService.SC_WebService(ApiUserName, ApiPassword);
+                //            OM.UpdateAddressToSC(address.ID);
+                //            OM.OrderSyncPush();
 
-                            job.AddLog("完成訂單地址更改");
+                //            job.AddLog("完成訂單地址更改");
 
-                            job.StatusLog(EnumData.TaskStatus.執行完);
-                        }
-                        catch (Exception ex)
-                        {
-                            job.Fail(ex.InnerException?.Message ?? ex.Message);
-                        }
-                    }
-                }
+                //            job.StatusLog(EnumData.TaskStatus.執行完);
+                //        }
+                //        catch (Exception ex)
+                //        {
+                //            job.Fail(ex.InnerException?.Message ?? ex.Message);
+                //        }
+                //    }
+                //}
 
                 var ShipsArray = new string[] { address.AddressLine1, address.AddressLine2, address.City, address.State, address.Postcode, address.CountryName, address.PhoneNumber };
                 result.data = string.Join("\r\n", new string[] { string.Format("{0}, {1}", address.FirstName, address.LastName), string.Join("\r\n", ShipsArray.Except(new string[] { "", null })) });

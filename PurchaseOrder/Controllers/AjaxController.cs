@@ -1600,9 +1600,8 @@ namespace PurchaseOrderSys.Controllers
             try
             {
                 string LangID = EnumData.DataLangList().First().Key;
-                List<SKU> sku = db.SKU.Include(s => s.SkuLang).Include(s => s.SkuType).Where(s => s.IsEnable && IDs.Contains(s.SkuID)).ToList();
-
-                result.data = sku.Select(s => new
+                string[] SkuIDs = IDs.Select(s => s.Split(new char[] { '-' })[0]).Distinct().ToArray();
+                var skuList = db.SKU.Include(s => s.SkuLang).Include(s => s.SkuType).Where(s => s.IsEnable && SkuIDs.Contains(s.SkuID)).ToList().Select(s => new
                 {
                     Sku = s.SkuID,
                     s.SkuLang.First(l => l.LangID.Equals(LangID)).Name,
@@ -1613,6 +1612,8 @@ namespace PurchaseOrderSys.Controllers
                     s.SkuType.HSCode,
                     ImagePath = s.SkuPicture.Where(x => x.PictureType == "Logistic").Select(x => x.FileName)
                 }).ToList();
+
+                result.data = IDs.ToDictionary(ID => ID, ID => skuList.FirstOrDefault(s => s.Sku.Equals(ID.Split(new char[] { '-' }))));
             }
             catch (Exception e)
             {
@@ -2491,18 +2492,38 @@ namespace PurchaseOrderSys.Controllers
             {
                 if(OrderIDs == null || !OrderIDs.Any()) throw new Exception("Not get any order IDs!");
 
-                var orderList = db.Orders.Where(o => o.IsEnable && (OrderIDs.Contains(o.ID) || (o.SCID.HasValue && OrderIDs.Contains(o.SCID.Value))));
+                var orderList = db.Orders.Where(o => o.IsEnable && (OrderIDs.Contains(o.ID) || (o.SCID.HasValue && OrderIDs.Contains(o.SCID.Value)))).ToList();
 
                 if (!orderList.Any()) throw new Exception("Not found orders!");
 
-                result.data = orderList.Select(o => new
+                var dataList = new List<object>();
+
+                foreach(var order in orderList)
                 {
-                    o.ID,
-                    o.SCID,
-                    o.ShippingTime,
-                    o.GetCompany.Marketplace.FirstOrDefault(m => m.CountryCode.Equals(o.Addresses.FirstOrDefault(a => a.Type.Equals((byte)EnumData.OrderAddressType.Shipped)).CountryCode)).DispatchTime,
-                    RushOrder = o.IsRush || o.ShippingTime <= 3
-                }).ToList();
+                    var countryCode = order.Addresses.First(a => a.Type.Equals((byte)EnumData.OrderAddressType.Shipped)).CountryCode;
+                    if (string.IsNullOrEmpty(countryCode))
+                    {
+                        using (var OM = new OrderManagement(order.ID))
+                        {
+                            OM.OrderSync(order.SCID);
+                            countryCode = db.OrderAddresses.AsNoTracking().First(a => a.OrderID.Equals(order.ID) && a.Type.Equals((byte)EnumData.OrderAddressType.Shipped)).CountryCode;
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(countryCode))
+                    {
+                        dataList.Add(new
+                        {
+                            order.ID,
+                            order.SCID,
+                            order.ShippingTime,
+                            order.GetCompany.Marketplace.First(m => m.CountryCode.Equals(countryCode)).DispatchTime,
+                            RushOrder = order.IsRush || order.ShippingTime <= 3
+                        });
+                    }
+                }
+
+                result.data = dataList;
             }
             catch (Exception ex)
             {
