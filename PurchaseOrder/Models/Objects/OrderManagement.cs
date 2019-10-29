@@ -153,9 +153,9 @@ namespace PurchaseOrderSys.Models
                     }
                 }
 
+                var soldTo = order.Addresses.First();
                 if (!orderData.Addresses.Any())
                 {
-                    var soldTo = order.Addresses.First();
                     soldTo.CreateBy = AdminName;
                     soldTo.CreateAt = UtcNow;
                     orderData.Addresses.Add(soldTo);
@@ -163,6 +163,13 @@ namespace PurchaseOrderSys.Models
                     var shipTo = new OrderAddresses() { Type = (byte)EnumData.OrderAddressType.Shipped };
                     SetUpdateData(shipTo, soldTo, new string[] { "FirstName", "LastName", "AddressLine1", "AddressLine2", "City", "State", "Postcode", "CountryCode", "CountryName", "PhoneNumber", "EmailAddress", "CreateBy", "CreateAt" });
                     orderData.Addresses.Add(shipTo);
+                }
+                else
+                {
+                    var soldToData = orderData.Addresses.First(a => a.Type.Equals((byte)EnumData.OrderAddressType.Sold));
+                    SetUpdateData(soldToData, soldTo, new string[] { "FirstName", "LastName", "AddressLine1", "AddressLine2", "City", "State", "Postcode", "CountryCode", "CountryName", "PhoneNumber", "EmailAddress" });
+                    var shipToData = orderData.Addresses.First(a => a.Type.Equals((byte)EnumData.OrderAddressType.Shipped));
+                    SetUpdateData(shipToData, soldTo, new string[] { "FirstName", "LastName", "AddressLine1", "AddressLine2", "City", "State", "Postcode", "CountryCode", "CountryName", "PhoneNumber", "EmailAddress" });
                 }
 
                 dbC.SaveChanges();
