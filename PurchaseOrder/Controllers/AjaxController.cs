@@ -666,7 +666,12 @@ namespace PurchaseOrderSys.Controllers
             var RrOrderID = new List<int>();
             foreach (var Serialsitem in ShipmentOrder)
             {
-                var ReSerialsLlist = db.SerialsLlist.Where(x => x.IsEnable && x.OrderID == Serialsitem.OrderID);
+                var TrueSerialsNo = db.WinitTransferBoxItem.Where(x => x.BarCode == Serialsitem.SerialsNo).AsEnumerable().LastOrDefault()?.SerialsNo;
+                if (string.IsNullOrWhiteSpace(TrueSerialsNo))
+                {
+                    TrueSerialsNo = Serialsitem.SerialsNo;
+                }
+                var ReSerialsLlist = db.SerialsLlist.Where(x => x.IsEnable && x.OrderID == Serialsitem.OrderID && (x.SerialsNo == TrueSerialsNo));
                 if (ReSerialsLlist.Any())//已有訂單記錄
                 {
                     var fReSerialsLlist = ReSerialsLlist.FirstOrDefault();
@@ -689,12 +694,8 @@ namespace PurchaseOrderSys.Controllers
                     {
                         QTY = -1 * Serialsitem.QTY;
                     }
-                    var sBarCode = db.WinitTransferBoxItem.Where(x => x.BarCode == Serialsitem.SerialsNo).AsEnumerable().LastOrDefault()?.SerialsNo;
-                    if (string.IsNullOrWhiteSpace(sBarCode))
-                    {
-                        sBarCode = Serialsitem.SerialsNo;
-                    }
-                    var SerialsLlist = db.SerialsLlist.Where(x => x.IsEnable && x.SerialsNo == sBarCode && !x.SerialsLlistC.Any(y => y.IsEnable) && ((x.PurchaseSKUID.HasValue && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable) || (x.TransferSKUID.HasValue && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable)));//檢查是否有序號或是SBarCode
+                   
+                    var SerialsLlist = db.SerialsLlist.Where(x => x.IsEnable && x.SerialsNo == TrueSerialsNo && !x.SerialsLlistC.Any(y => y.IsEnable) && ((x.PurchaseSKUID.HasValue && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable) || (x.TransferSKUID.HasValue && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable)));//檢查是否有序號或是SBarCode
                     var PurchaseSKUs = db.PurchaseSKU.Where(x => x.SkuNo == Serialsitem.SkuNo && x.PurchaseOrder.IsEnable && x.IsEnable && !x.SKU.SerialTracking);//無開序號管理才能任意取
                     PurchaseSKUs = PurchaseSKUs.Where(x => x.SerialsLlist.Where(y => y.SerialsQTY > 0 && (y.SerialsType == "PO" || y.SerialsType == "TransferIn" || y.SerialsType == "DropshpOrderIn") && !y.SerialsLlistC.Any(z => z.IsEnable)).Any());
                     if (SerialsLlist.Any())
@@ -724,7 +725,7 @@ namespace PurchaseOrderSys.Controllers
                                 PurchaseSKUID = POSerialsLlist.LastOrDefault().PurchaseSKUID,
                                 TransferSKUID = POSerialsLlist.LastOrDefault().TransferSKUID,
                                 PID = POSerialsLlist.LastOrDefault().ID,
-                                SerialsNo = sBarCode.Trim(),
+                                SerialsNo = TrueSerialsNo.Trim(),
                                 SerialsType = "Order",
                                 SerialsQTY = -1,
                                 Memo = JsonConvert.SerializeObject(ShipmentOrder),
@@ -889,7 +890,7 @@ namespace PurchaseOrderSys.Controllers
                 result.data = GDictionarylist;
                 if (RrOrderID.Any())
                 {
-                    result.message = "已有訂單記錄：" + string.Join(",", RrOrderID);
+                    result.message = "已有訂單記錄：" + string.Join(",", RrOrderID.Distinct());
                     //result.SetError("已有訂單記錄：" + string.Join(",", RrOrderID));
                 }
             }
