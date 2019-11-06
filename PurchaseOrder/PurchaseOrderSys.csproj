@@ -171,6 +171,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Api\AWSE_API.cs" />
     <Compile Include="Api\FedEx_API.cs" />
     <Compile Include="Api\NewWinit_API.cs" />
     <Compile Include="Api\SC_API.cs" />
@@ -204,6 +205,11 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Connected Services\AWSECommerceService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Connected Services\FedExShipService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -402,6 +408,7 @@
     <Compile Include="Models\NetoGroupMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Objects\AmazonWebServices.cs" />
     <Compile Include="Models\Objects\Common.cs" />
     <Compile Include="Models\Objects\EnumData.cs" />
     <Compile Include="Models\ImgFile.cs">
@@ -737,6 +744,66 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Connected Services\AWSECommerceService\configuration91.svcinfo" />
+    <None Include="Connected Services\AWSECommerceService\configuration.svcinfo" />
+    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.BrowseNodeLookupResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.BrowseNodeLookupResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.CartAddResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.CartAddResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.CartClearResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.CartClearResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.CartCreateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.CartCreateResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.CartGetResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.CartGetResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.CartModifyResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.CartModifyResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.ItemLookupResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.ItemLookupResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.ItemSearchResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.ItemSearchResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.SimilarityLookupResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.SimilarityLookupResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Connected Services\AWSECommerceService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="Connected Services\FedExShipService\PurchaseOrderSys.FedExShipService.deleteTagResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
@@ -755,6 +822,7 @@
     <Content Include="Connected Services\FedExShipService\PurchaseOrderSys.FedExShipService.ShipmentReply.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
+    <None Include="Connected Services\AWSECommerceService\AWSECommerceService.wsdl" />
     <None Include="Connected Services\FedExShipService\ShipServiceDefinitions.wsdl" />
     <Content Include="Connected Services\FedExTrackService\PurchaseOrderSys.FedExTrackService.retrieveSignatureProofOfDeliveryLetterResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -7850,6 +7918,7 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\AWSECommerceService\" />
     <WCFMetadataStorage Include="Connected Services\FedExShipService\" />
     <WCFMetadataStorage Include="Connected Services\FedExTrackService\" />
     <WCFMetadataStorage Include="Connected Services\OrderCreationService\" />
