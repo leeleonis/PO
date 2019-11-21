@@ -3,6 +3,7 @@ using Ionic.Zip;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using OfficeOpenXml;
+using PurchaseOrderSys.DHLApi;
 using PurchaseOrderSys.Models;
 using PurchaseOrderSys.NewApi;
 using System;
@@ -554,11 +555,11 @@ namespace PurchaseOrderSys.Controllers
                 });
             }
             Session["WinitPrepVMList" + ID] = PrepVMList;
-            if (!oTransfer.WinitTransfer.WinitTransferBox.Any())
+            if (!oTransfer.WinitTransfer.WinitTransferBox.Where(x=>x.IsEnable).Any())
             {
                 oTransfer.WinitTransfer.WinitTransferBox.Add(new WinitTransferBox());
             }
-            Session["WinitTransferBox" + ID] = oTransfer.WinitTransfer.WinitTransferBox.ToList();
+            Session["WinitTransferBox" + ID] = oTransfer.WinitTransfer.WinitTransferBox.Where(x => x.IsEnable).ToList();
             ViewBag.WCPScript = Neodynamic.SDK.Web.WebClientPrint.CreateScript(Url.Action("ProcessRequest", "WebClientPrintAPI", null, HttpContext.Request.Url.Scheme), Url.Action("PrintMyFiles", "Ajax", null, HttpContext.Request.Url.Scheme), HttpContext.Session.SessionID);
             return View(oTransfer);
         }
@@ -1226,13 +1227,12 @@ namespace PurchaseOrderSys.Controllers
         {
             //產生Fedex單
             var WinitTransfer = db.WinitTransfer.Find(ID);
+            var print = "";
             if (string.IsNullOrWhiteSpace(WinitTransfer.Transfer.Tracking))//空的就產提單
             {
                 var ShippingMethods = db.ShippingMethods.Find(int.Parse(WinitTransfer.Transfer.Carrier));
                 if (ShippingMethods.Name.Contains("FedEx"))
                 {
-
-
                     var winitWarehouse = WinitTransfer.Transfer.WarehouseTo.WinitWarehouse;
                     var Currency = CurrencyCode(winitWarehouse);
                     var EXRate = db.Currency.Where(x => x.Code == Currency).FirstOrDefault()?.EXRate ?? 1;
@@ -1255,7 +1255,7 @@ namespace PurchaseOrderSys.Controllers
                         foreach (var Boxitem in WinitTransfer.WinitTransferBox)
                         {
                             Boxitem.Tracking = FedExTrackingDataList[index].Tracking;
-                            Boxitem.FedExPdf = ZplToPdf( FedExTrackingDataList[index].FedExZpl);
+                            Boxitem.FedExPdf = ZplToPdf(FedExTrackingDataList[index].FedExZpl);
                             index++;
                         }
                         db.SaveChanges();
@@ -1264,13 +1264,47 @@ namespace PurchaseOrderSys.Controllers
                     {
                         return Json(new { status = false, Errmsg = "FedEx提單產生錯誤" }, JsonRequestBehavior.AllowGet);
                     }
+                    print = "key=FedEx&id=" + WinitTransfer.TransferID;
+                }
+                else if (ShippingMethods.Name.Contains("DHL"))
+                {
+                    var ApiSetting = db.ApiSetting.Find(14);
+                    var winitWarehouse = WinitTransfer.Transfer.WarehouseTo.WinitWarehouse;
+                    var Currency = CurrencyCode(winitWarehouse);
+                    var EXRate = db.Currency.Where(x => x.Code == Currency).FirstOrDefault()?.EXRate ?? 1;
+                    var nDHLData = new DHLData
+                    {
+                        TransferID = WinitTransfer.TransferID,
+                        Currency = Currency,
+                        BoxType = ShippingMethods.LastMile.BoxType,
+                        MethodType = ShippingMethods.LastMile.MethodType,
+                        WinitTransferBoxList = WinitTransfer.WinitTransferBox.Where(x => x.IsEnable && x.WinitTransferBoxItem.Any()).ToList(),
+                        WinitWarehouse = WinitTransfer.Transfer.WarehouseTo,
+                        EXRate = EXRate,
+                    };
+                    var DHL_API = new DHL_API(ApiSetting).Create(nDHLData);
+                    WinitTransfer.Transfer.Tracking = DHL_API.AirwayBillNumber;
+                    var pdfFiles = new ShipProcess().DHL_SaveFile(DHL_API);
+                    foreach (var item in pdfFiles)
+                    {
+                        if (item.Key == "AWB")
+                        {
+                            var WinitTransferBox = WinitTransfer.WinitTransferBox.FirstOrDefault();
+                            WinitTransferBox.FedExPdf = item.Value;
+                        }
+                        else if (item.Key == "Invoice")
+                        {
+                            WinitTransfer.InvoiceExcel = item.Value;
+                        }
+                    }
+                    db.SaveChanges();
+                    print = "key=DHL&id=" + WinitTransfer.TransferID;
                 }
                 else
                 {
-                    return Json(new { status = false, Errmsg = "非FedEx，無去產生提單" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { status = false, Errmsg = "非FedEx DHL，無去產生提單" }, JsonRequestBehavior.AllowGet);
                 }
             }
-            var print = "key=FedEx&id=" + WinitTransfer.TransferID;
             return Json(new { status = true, print }, JsonRequestBehavior.AllowGet);
         }
 
