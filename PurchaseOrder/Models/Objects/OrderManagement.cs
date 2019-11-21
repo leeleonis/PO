@@ -103,7 +103,7 @@ namespace PurchaseOrderSys.Models
                     if (orderData.Items.Any(i => i.SCID.Value.Equals(item.SCID.Value)))
                     {
                         var itemData = orderData.Items.First(i => i.SCID.Value.Equals(item.SCID.Value));
-                        SetUpdateData(itemData, item, new string[] { "IsEnable", "Sku", "OriginSku", "ExportValue", "DLExportValue", "Qty", "eBayItemID", "eBayTransationID", "SalesRecordNumber" });
+                        SetUpdateData(itemData, item, new string[] { "IsEnable", "PackageID", "Sku", "OriginSku", "ExportValue", "DLExportValue", "Qty", "eBayItemID", "eBayTransationID", "SalesRecordNumber" });
                     }
                     else
                     {
