@@ -101,7 +101,14 @@
                                                     }
                                                     else
                                                     {
-                                                        <a href='https://www.fedex.com/apps/fedextrack/?action=track&trackingnumber=@Model.Tracking' target="_blank" class="form-control">@Model.Tracking</a>
+                                                        if (Model.Carrier == "9")
+                                                        {
+                                                            <a href=' https://www.dhl.com/content/g0/en/express/tracking.shtml?AWB=@Model.Tracking' target="_blank" class="form-control">@Model.Tracking</a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a href='https://www.fedex.com/apps/fedextrack/?action=track&trackingnumber=@Model.Tracking' target="_blank" class="form-control">@Model.Tracking</a>
+                                                        }
                                                     }
 
                                                 </div>
@@ -269,8 +276,17 @@
                                                                 <label class="control-label col-sm-12">Carrier: @(ShippingList.Where(x => x.Value == Model.Carrier).FirstOrDefault()?.Text)</label>
                                                             </div>
                                                             <div class="col-sm-6 col-lg-2">
-                                                                <label class="control-label col-sm-12">Tracking: <a href='https://www.fedex.com/apps/fedextrack/?action=track&trackingnumber=@BoxItem.Tracking' target="_blank">@(BoxItem.Tracking)</a></label>
-                                                                
+                                                                @if (Model.Carrier == "9")
+                                                                {
+                                                                    <label class="control-label col-sm-12">Tracking: <a href=' https://www.dhl.com/content/g0/en/express/tracking.shtml?AWB=@Model.Tracking' target="_blank">@Model.Tracking</a></label>
+                                                                    
+                                                                }
+                                                                else
+                                                                {
+                                                                    <label class="control-label col-sm-12">Tracking: <a href='https://www.fedex.com/apps/fedextrack/?action=track&trackingnumber=@BoxItem.Tracking' target="_blank">@(BoxItem.Tracking)</a></label>
+                                                                }
+
+
                                                             </div>
                                                         </div>
                                                         <div class="form-group">

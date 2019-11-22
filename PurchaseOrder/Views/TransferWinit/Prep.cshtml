@@ -123,7 +123,7 @@
                                         </fieldset>
 
                                         <fieldset id="boxitem">
-                                            @Html.Partial("Boxitem", Model.WinitTransfer.WinitTransferBox)
+                                            @Html.Partial("Boxitem", Model.WinitTransfer.WinitTransferBox.Where(x => x.IsEnable))
                                         </fieldset>
                                     </div>
                                 </div>

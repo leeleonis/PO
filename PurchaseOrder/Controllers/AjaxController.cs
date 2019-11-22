@@ -881,7 +881,7 @@ namespace PurchaseOrderSys.Controllers
             db.SaveChanges();
             if (NoDataList.Any())
             {
-                result.SetError("查無序號及貨號：" + string.Join(",", NoDataList));
+                result.SetError("查無序號及貨號：" + string.Join(",", NoDataList.Distinct()));
             }
 
             if (string.IsNullOrWhiteSpace(Err))
@@ -2156,6 +2156,14 @@ namespace PurchaseOrderSys.Controllers
                     cpj.PrintFileGroup.Add(fileAdd);
                 }
             }
+            else if (key == "DHL")
+            {
+                printerName = "TSC TDP-247";
+                var WinitTransfer = db.WinitTransfer.Find(id);
+                var pdfbyte = Convert.FromBase64String(WinitTransfer.WinitTransferBox.FirstOrDefault().FedExPdf);
+                var file = new Neodynamic.SDK.Web.PrintFilePDF(pdfbyte, WinitTransfer.Transfer.Tracking + "DHL.pdf");
+                cpj.PrintFileGroup.Add(file);
+            }
             else if (key == "Invoice")
             {
                 printerName = "EPSON L310 Series (附件1)";
@@ -2196,7 +2204,7 @@ namespace PurchaseOrderSys.Controllers
                     cpj.ClientPrinter = new Neodynamic.SDK.Web.InstalledPrinter(printerName);
                 }
             }
-            //cpj.ClientPrinter = new UserSelectedPrinter();//自己選印表機
+            cpj.ClientPrinter = new Neodynamic.SDK.Web.UserSelectedPrinter();//自己選印表機
             System.Web.HttpContext.Current.Response.ContentType = "application/octet-stream";
             System.Web.HttpContext.Current.Response.BinaryWrite(cpj.GetContent());
             System.Web.HttpContext.Current.Response.End();

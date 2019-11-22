@@ -128,7 +128,14 @@
                                                                 <a href='https://seller.winit.com.cn/WHInbound/orderDetailDelivery/orderNo/@item.WinitTransfer.WinitOrderNo' target="_blank">@item.WinitTransfer.WinitOrderNo</a>
                                                             </td>
                                                             <td>
-                                                                <a href='https://www.fedex.com/apps/fedextrack/?action=track&trackingnumber=@item.Tracking' target="_blank">@item.Tracking</a>
+                                                                @if (item.Carrier == "9")
+                                                                {
+                                                                    <a href=' https://www.dhl.com/content/g0/en/express/tracking.shtml?AWB=@item.Tracking' target="_blank">@item.Tracking</a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a href='https://www.fedex.com/apps/fedextrack/?action=track&trackingnumber=@item.Tracking' target="_blank">@item.Tracking</a>
+                                                                }
                                                             </td>
                                                             <td>@item.Title</td>
                                                             <td>@(item.WarehouseFrom?.Name)</td>

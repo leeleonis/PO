@@ -171,6 +171,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Api\DHLService.cs">
+      <SubType>code</SubType>
+    </Compile>
+    <Compile Include="Api\DHL_API.cs" />
     <Compile Include="Api\AWSE_API.cs" />
     <Compile Include="Api\FedEx_API.cs" />
     <Compile Include="Api\NewWinit_API.cs" />
