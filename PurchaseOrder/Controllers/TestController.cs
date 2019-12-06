@@ -19,6 +19,7 @@ using PurchaseOrderSys.NewApi;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Data.Entity;
+using PurchaseOrderSys.DHLApi;
 
 namespace PurchaseOrderSys.Controllers
 {
@@ -1105,6 +1106,12 @@ namespace PurchaseOrderSys.Controllers
                 //}
 
             }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult DHTrackingL(string trackingNumber)
+        {
+            var ApiSetting = db.ApiSetting.Find(14);
+            var DHL_API = new DHL_API(ApiSetting).Tracking(trackingNumber);
             return Json(true, JsonRequestBehavior.AllowGet);
         }
     }

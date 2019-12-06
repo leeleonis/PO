@@ -302,7 +302,7 @@ namespace PurchaseOrderSys.Controllers
             var CreateAt = DateTime.UtcNow;
             var ReceiveVMList = (List<TransferItemVM>)Session["ReceiveVMList" + ID];
             var oTransfer = db.Transfer.Find(ID);
-            foreach (var item in oTransfer.TransferSKU.Where(x=>x.IsEnable))
+            foreach (var item in oTransfer.TransferSKU.Where(x => x.IsEnable))
             {
                 foreach (var ReceiveVM in ReceiveVMList.Where(x => x.SKU == item.SkuNo))
                 {
@@ -363,22 +363,22 @@ namespace PurchaseOrderSys.Controllers
                         }
                     }
                 }
-                                //無序號
+                //無序號
                 if (!item.SKU.SerialTracking)//不用序號
                 {
-                    var TransferOutCount = item.SerialsLlist.Where(x => x.SerialsType == "TransferIn").Count();
-                    foreach (var Prepitem in Prep.Where(x=>x.ID== item.ID))
+                    var TransferOutCount = item.SerialsLlist.Where(x => x.IsEnable && x.SerialsType == "TransferIn").Count();
+                    foreach (var Prepitem in Prep.Where(x => x.ID == item.ID))
                     {
                         var PrepCount = 0;
                         if (int.TryParse(Prepitem.val, out PrepCount))
                         {
-                            if (PrepCount> item.QTY)
+                            if (PrepCount > item.QTY)
                             {
                                 PrepCount = item.QTY.Value;
                             }
                             if (PrepCount > TransferOutCount)
                             {
-                                var TransferOutlist = db.SerialsLlist.Where(x => !x.SerialsLlistC.Any(y => y.IsEnable) && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable && x.PurchaseSKU.PurchaseOrder.WarehouseID == oTransfer.FromWID && x.PurchaseSKU.SkuNo == item.SkuNo && x.SerialsType == "TransferOut").Take(PrepCount - TransferOutCount).ToList();
+                                var TransferOutlist = item.SerialsLlist.Where(x => !x.SerialsLlistC.Any(y => y.IsEnable) && x.IsEnable && x.SerialsType == "TransferOut").Take(PrepCount - TransferOutCount).ToList();
                                 foreach (var SerialOut in TransferOutlist)
                                 {
                                     SerialOut.SerialsLlistC.Add(new SerialsLlist
@@ -515,19 +515,22 @@ namespace PurchaseOrderSys.Controllers
                 if (!item.SKU.SerialTracking)//不用序號
                 {
                     var TransferOutCount = item.SerialsLlist.Where(x => x.SerialsType == "TransferOut").Count();
-                    foreach (var Prepitem in Prep.Where(x=>x.ID== item.ID))
+                    foreach (var Prepitem in Prep.Where(x => x.ID == item.ID))
                     {
                         var PrepCount = 0;
                         if (int.TryParse(Prepitem.val, out PrepCount))
                         {
-                            if (PrepCount> item.QTY)
+                            if (PrepCount > item.QTY)
                             {
                                 PrepCount = item.QTY.Value;
                             }
                             if (PrepCount > TransferOutCount)
                             {
                                 var SerialsType = new List<string> { "PO", "TransferIn" };
-                                var TransferOutlist = db.SerialsLlist.Where(x => !x.SerialsLlistC.Any(y => y.IsEnable) && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable && x.PurchaseSKU.PurchaseOrder.WarehouseID == oTransfer.FromWID && x.PurchaseSKU.SkuNo == item.SkuNo&& SerialsType.Contains(x.SerialsType)).Take(PrepCount - TransferOutCount).ToList();
+                                var TransferOutlist = db.SerialsLlist.Where(x => !x.SerialsLlistC.Any(y => y.IsEnable)
+                                && ((x.PurchaseSKUID.HasValue && x.PurchaseSKU.SkuNo == item.SkuNo && x.PurchaseSKU.IsEnable && x.PurchaseSKU.PurchaseOrder.IsEnable && x.PurchaseSKU.PurchaseOrder.WarehouseID == oTransfer.FromWID)//有PO單號
+                                || (x.TransferSKUID.HasValue && x.TransferSKU.SkuNo == item.SkuNo && x.TransferSKU.IsEnable && x.TransferSKU.Transfer.IsEnable && x.TransferSKU.Transfer.ToWID == oTransfer.FromWID))//有移倉
+                                && SerialsType.Contains(x.SerialsType)).Take(PrepCount - TransferOutCount).ToList();
                                 var nSerialsLlist = TransferOutlist.Select(x => new SerialsLlist
                                 {
                                     IsEnable = true,
