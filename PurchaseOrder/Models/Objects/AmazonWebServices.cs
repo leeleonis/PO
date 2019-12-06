@@ -26,7 +26,7 @@ namespace PurchaseOrderSys.AmazonWebServices
         {
             Binding.MaxReceivedMessageSize = int.MaxValue;
             Binding.MaxBufferSize = int.MaxValue;
-
+            
             string uri = string.Format("https://webservices.amazon.{0}/onca/soap?Service=AWSECommerceService", marketplace);
             AmazonClient = new AWSECommerceServicePortTypeClient();
         }
