@@ -1026,7 +1026,7 @@ namespace PurchaseOrderSys.Controllers
         public ActionResult SerialsExcel(int id, string key)
         {
             ViewBag.id = id;
-            ViewBag.id = key;
+            ViewBag.key = key;
             return View();
         }
         [HttpPost]
@@ -2204,7 +2204,7 @@ namespace PurchaseOrderSys.Controllers
                     cpj.ClientPrinter = new Neodynamic.SDK.Web.InstalledPrinter(printerName);
                 }
             }
-            cpj.ClientPrinter = new Neodynamic.SDK.Web.UserSelectedPrinter();//自己選印表機
+            //cpj.ClientPrinter = new Neodynamic.SDK.Web.UserSelectedPrinter();//自己選印表機
             System.Web.HttpContext.Current.Response.ContentType = "application/octet-stream";
             System.Web.HttpContext.Current.Response.BinaryWrite(cpj.GetContent());
             System.Web.HttpContext.Current.Response.End();

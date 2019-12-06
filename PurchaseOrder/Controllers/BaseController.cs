@@ -2027,90 +2027,129 @@ namespace PurchaseOrderSys.Controllers
         }
         public MemoryStream InvoiceExcel(Transfer Transfer)
         {
-            var Code = CurrencyCode(Transfer.WarehouseTo.WinitWarehouse);
-            var EXRate = db.Currency.Where(x => x.Code == Code).FirstOrDefault()?.EXRate ?? 1;
-            decimal? AllWeight = 0m;
-            decimal? AllPrice = 0m;
-            int addrow = 0;
-            int comprow = 48;
-            int rowIndex = 25;
-            var Excelbyte = System.IO.File.ReadAllBytes(Server.MapPath(@"~/File/Invoice.xlsx"));
-            var stream = new System.IO.MemoryStream(Excelbyte);
-            OfficeOpenXml.ExcelPackage ep = new OfficeOpenXml.ExcelPackage(stream);
-            OfficeOpenXml.ExcelWorksheet sheet1 = ep.Workbook.Worksheets[1];//取得Sheet1 
-            sheet1.Cells.Style.WrapText = true;
-            sheet1.Cells[5, 4].Value = Transfer.Tracking;
-            sheet1.Cells[8, 2].Value = DateTime.Now.ToString("MMM dd, yyyy", System.Globalization.CultureInfo.CreateSpecificCulture("en-US"));
-            sheet1.Cells[11, 2].Value = "Zhi You Wan LTD (53362065)";
-            sheet1.Cells[12, 2].Value = "51 Section 3 Jianguo North Road";
-            sheet1.Cells[13, 2].Value = "Taichung City West District";
-            sheet1.Cells[14, 2].Value = "Taiwan (R.O.C) 40243";
-            sheet1.Cells[18, 2].Value = "Taiwan";
-
-            sheet1.Cells[11, 6].Value = Transfer.WarehouseTo.Company;
-            sheet1.Cells[12, 6].Value = Transfer.WarehouseTo.Phone;
-            sheet1.Cells[13, 6].Value = Transfer.WarehouseTo.Address1;
-            sheet1.Cells[14, 6].Value = Transfer.WarehouseTo.Address2;
-            sheet1.Cells[15, 6].Value = Transfer.WarehouseTo.City + " " + Transfer.WarehouseTo.State + " " + Transfer.WarehouseTo.Postcode;
-            sheet1.Cells[16, 6].Value = Transfer.WarehouseTo.Country;
-            sheet1.Cells[22, 2].Value = Transfer.WarehouseTo.Country;
-
-            if (Transfer.WarehouseTo.Country == "Australia")
+            var ShippingMethods = db.ShippingMethods.Find(int.Parse(Transfer.Carrier));
+            if (ShippingMethods.Name.Contains("DHL"))
             {
-                sheet1.Cells[17, 6].Value = "";
-                sheet1.Cells[18, 6].Value = "";
-                sheet1.Cells[19, 6].Value = "";
-                sheet1.Cells[20, 6].Value = "";
-                sheet1.Cells[21, 6].Value = "";
-                sheet1.Cells[22, 6].Value = "";
-            }
-            //sheet1.Cells.Style.ShrinkToFit = true;
-            foreach (var TransferSKU in Transfer.TransferSKU.Where(x => x.IsEnable && x.SerialsLlist.Any()))
-            {
-                var UPrice = Math.Round(TransferSKU.SerialsLlist.FirstOrDefault().WinitTransferBoxItem.Value.Value / 1.05m / EXRate, 2);
-                var Price = Math.Round(TransferSKU.SerialsLlist.Sum(x => x.WinitTransferBoxItem.Value).Value / 1.05m / EXRate, 2);
-                var Weight = TransferSKU.SerialsLlist.Sum(x => x.WinitTransferBoxItem.Weight).Value;
-                AllWeight += Weight;
-                AllPrice += Price;
-                sheet1.Cells[rowIndex, 2].Value = TransferSKU.SKU.Logistic.OriginCountry;
-                sheet1.Cells[rowIndex, 5].Value = TransferSKU.SKU.SkuType.SkuTypeLang.Where(x => x.LangID == "en-US").FirstOrDefault()?.Name + "-" + TransferSKU.Name;
-                sheet1.Cells[rowIndex, 7].Value = TransferSKU.SKU.SkuType.HSCode;//HS Code 
-                sheet1.Cells[rowIndex, 9].Value = Math.Abs(TransferSKU.SerialsLlist.Sum(x => x.SerialsQTY).Value);
-                sheet1.Cells[rowIndex, 10].Value = "pieces";
-                sheet1.Cells[rowIndex, 11].Value = (Weight / 1000).ToString("f2");
-                sheet1.Cells[rowIndex, 12].Value = UPrice.ToString("f2");
-                sheet1.Cells[rowIndex, 17].Value = Price.ToString("f2");
-                sheet1.Row(rowIndex).Height = 45;
-                sheet1.Row(rowIndex).CustomHeight = true;//自动调整行高
-                rowIndex++;
-                if (rowIndex >= comprow - 1)
+                var WinitWarehouse = Transfer.WarehouseTo;
+                var Currency = CurrencyCode(WinitWarehouse.WinitWarehouse);
+                var EXRate = db.Currency.Where(x => x.Code == Currency).FirstOrDefault()?.EXRate ?? 1;
+                OfficeOpenXml.ExcelPackage ep = new OfficeOpenXml.ExcelPackage();
+                OfficeOpenXml.ExcelWorksheet sheet1 = ep.Workbook.Worksheets[1];//取得Sheet1 
+                sheet1.Cells.Style.WrapText = true;
+                int rowIndex = 1;
+                foreach (var TransferSKU in Transfer.TransferSKU.Where(x => x.IsEnable && x.SerialsLlist.Any()))
                 {
-                    sheet1.InsertRow(rowIndex, 1, 26);
-                    sheet1.Cells[rowIndex, 5, rowIndex, 6].Merge = true;
-                    sheet1.Cells[rowIndex, 7, rowIndex, 8].Merge = true;
-                    sheet1.Cells[rowIndex, 12, rowIndex, 16].Merge = true;
-                    sheet1.Cells[rowIndex, 17, rowIndex, 21].Merge = true;
-                    addrow++;
+                    var Qty = TransferSKU.SerialsLlist.Count(x => x.IsEnable && x.SerialsType == "TransferOut");
+                    sheet1.Cells[rowIndex, 1].Value = TransferSKU.Name.ToLower().Contains("htc") ? "G3" : "G5"; ;
+                    sheet1.Cells[rowIndex, 2].Value = TransferSKU.Name.ToLower().Contains("htc") ? "81" : "02"; ;
+                    sheet1.Cells[rowIndex, 3].Value = "";//進貨發票
+                    sheet1.Cells[rowIndex, 4].Value = WinitWarehouse.Company;
+                    sheet1.Cells[rowIndex, 5].Value = TransferSKU.SKU.SkuType.SkuTypeLang.Where(x => x.LangID == LangID).FirstOrDefault().Name + " - " + TransferSKU.Name;
+                    sheet1.Cells[rowIndex, 6].Value = Transfer.Tracking;
+                    sheet1.Cells[rowIndex, 7].Value = Currency;
+                    sheet1.Cells[rowIndex, 8].Value = Math.Round(TransferSKU.SKU.Logistic.Price / 1.05m /EXRate, 2);
+                    sheet1.Cells[rowIndex, 9].Value = WinitWarehouse.Address1;
+                    sheet1.Cells[rowIndex, 10].Value = WinitWarehouse.City;
+                    sheet1.Cells[rowIndex, 11].Value = WinitWarehouse.State;
+                    sheet1.Cells[rowIndex, 12].Value = WinitWarehouse.Postcode;
+                    sheet1.Cells[rowIndex, 13].Value = WinitWarehouse.Country;
+                    sheet1.Cells[rowIndex, 14].Value = WinitWarehouse.Phone;
+                    sheet1.Cells[rowIndex, 15].Value = Qty;
                 }
+                var OutputStream = new System.IO.MemoryStream(ep.GetAsByteArray());
+                return OutputStream;
+            }
+            else if (ShippingMethods.Name.Contains("FedEx"))
+            {
+                var Code = CurrencyCode(Transfer.WarehouseTo.WinitWarehouse);
+                var EXRate = db.Currency.Where(x => x.Code == Code).FirstOrDefault()?.EXRate ?? 1;
+                decimal? AllWeight = 0m;
+                decimal? AllPrice = 0m;
+                int addrow = 0;
+                int comprow = 48;
+                int rowIndex = 25;
+                var Excelbyte = System.IO.File.ReadAllBytes(Server.MapPath(@"~/File/Invoice.xlsx"));
+                var stream = new System.IO.MemoryStream(Excelbyte);
+                OfficeOpenXml.ExcelPackage ep = new OfficeOpenXml.ExcelPackage(stream);
+                OfficeOpenXml.ExcelWorksheet sheet1 = ep.Workbook.Worksheets[1];//取得Sheet1 
+                sheet1.Cells.Style.WrapText = true;
+                sheet1.Cells[5, 4].Value = Transfer.Tracking;
+                sheet1.Cells[8, 2].Value = DateTime.Now.ToString("MMM dd, yyyy", System.Globalization.CultureInfo.CreateSpecificCulture("en-US"));
+                sheet1.Cells[11, 2].Value = "Zhi You Wan LTD (53362065)";
+                sheet1.Cells[12, 2].Value = "51 Section 3 Jianguo North Road";
+                sheet1.Cells[13, 2].Value = "Taichung City West District";
+                sheet1.Cells[14, 2].Value = "Taiwan (R.O.C) 40243";
+                sheet1.Cells[18, 2].Value = "Taiwan";
 
+                sheet1.Cells[11, 6].Value = Transfer.WarehouseTo.Company;
+                sheet1.Cells[12, 6].Value = Transfer.WarehouseTo.Phone;
+                sheet1.Cells[13, 6].Value = Transfer.WarehouseTo.Address1;
+                sheet1.Cells[14, 6].Value = Transfer.WarehouseTo.Address2;
+                sheet1.Cells[15, 6].Value = Transfer.WarehouseTo.City + " " + Transfer.WarehouseTo.State + " " + Transfer.WarehouseTo.Postcode;
+                sheet1.Cells[16, 6].Value = Transfer.WarehouseTo.Country;
+                sheet1.Cells[22, 2].Value = Transfer.WarehouseTo.Country;
+
+                if (Transfer.WarehouseTo.Country == "Australia")
+                {
+                    sheet1.Cells[17, 6].Value = "";
+                    sheet1.Cells[18, 6].Value = "";
+                    sheet1.Cells[19, 6].Value = "";
+                    sheet1.Cells[20, 6].Value = "";
+                    sheet1.Cells[21, 6].Value = "";
+                    sheet1.Cells[22, 6].Value = "";
+                }
+                //sheet1.Cells.Style.ShrinkToFit = true;
+                foreach (var TransferSKU in Transfer.TransferSKU.Where(x => x.IsEnable && x.SerialsLlist.Any()))
+                {
+                    var UPrice = Math.Round(TransferSKU.SerialsLlist.FirstOrDefault().WinitTransferBoxItem.Value.Value / 1.05m / EXRate, 2);
+                    var Price = Math.Round(TransferSKU.SerialsLlist.Sum(x => x.WinitTransferBoxItem.Value).Value / 1.05m / EXRate, 2);
+                    var Weight = TransferSKU.SerialsLlist.Sum(x => x.WinitTransferBoxItem.Weight).Value;
+                    AllWeight += Weight;
+                    AllPrice += Price;
+                    sheet1.Cells[rowIndex, 2].Value = TransferSKU.SKU.Logistic.OriginCountry;
+                    sheet1.Cells[rowIndex, 5].Value = TransferSKU.SKU.SkuType.SkuTypeLang.Where(x => x.LangID == "en-US").FirstOrDefault()?.Name + "-" + TransferSKU.Name;
+                    sheet1.Cells[rowIndex, 7].Value = TransferSKU.SKU.SkuType.HSCode;//HS Code 
+                    sheet1.Cells[rowIndex, 9].Value = Math.Abs(TransferSKU.SerialsLlist.Sum(x => x.SerialsQTY).Value);
+                    sheet1.Cells[rowIndex, 10].Value = "pieces";
+                    sheet1.Cells[rowIndex, 11].Value = (Weight / 1000).ToString("f2");
+                    sheet1.Cells[rowIndex, 12].Value = UPrice.ToString("f2");
+                    sheet1.Cells[rowIndex, 17].Value = Price.ToString("f2");
+                    sheet1.Row(rowIndex).Height = 45;
+                    sheet1.Row(rowIndex).CustomHeight = true;//自动调整行高
+                    rowIndex++;
+                    if (rowIndex >= comprow - 1)
+                    {
+                        sheet1.InsertRow(rowIndex, 1, 26);
+                        sheet1.Cells[rowIndex, 5, rowIndex, 6].Merge = true;
+                        sheet1.Cells[rowIndex, 7, rowIndex, 8].Merge = true;
+                        sheet1.Cells[rowIndex, 12, rowIndex, 16].Merge = true;
+                        sheet1.Cells[rowIndex, 17, rowIndex, 21].Merge = true;
+                        addrow++;
+                    }
+
+                }
+                for (int i = 25; i < rowIndex; i++)
+                {
+                    sheet1.Row(i).CustomHeight = true;
+                }
+                sheet1.Cells[comprow + addrow, 4].Value = Transfer.WinitTransfer.WinitTransferBox.Count();
+                sheet1.Cells[comprow + addrow, 11].Value = (AllWeight.Value / 1000).ToString("f2") + " KG";
+                sheet1.Cells[comprow + addrow, 12].Value = Code;
+                sheet1.Cells[comprow + addrow, 17].Value = AllPrice;
+                sheet1.Cells[58 + addrow, 10].Value = DateTime.Now.ToString("yyyy-MM-dd");
+                foreach (OfficeOpenXml.Drawing.ExcelPicture item in sheet1.Drawings)
+                {
+                    item.SetPosition(comprow + addrow - 1, 10, 5, 10);//印章位置
+                    item.SetSize(275, 158);
+                    item.EditAs = OfficeOpenXml.Drawing.eEditAs.TwoCell;
+                }
+                var OutputStream = new System.IO.MemoryStream(ep.GetAsByteArray());
+                return OutputStream;
             }
-            for (int i = 25; i < rowIndex; i++)
+            else
             {
-                sheet1.Row(i).CustomHeight = true;
+                return new System.IO.MemoryStream();
             }
-            sheet1.Cells[comprow + addrow, 4].Value = Transfer.WinitTransfer.WinitTransferBox.Count();
-            sheet1.Cells[comprow + addrow, 11].Value = (AllWeight.Value / 1000).ToString("f2") + " KG";
-            sheet1.Cells[comprow + addrow, 12].Value = Code;
-            sheet1.Cells[comprow + addrow, 17].Value = AllPrice;
-            sheet1.Cells[58 + addrow, 10].Value = DateTime.Now.ToString("yyyy-MM-dd");
-            foreach (OfficeOpenXml.Drawing.ExcelPicture item in sheet1.Drawings)
-            {
-                item.SetPosition(comprow + addrow - 1, 10, 5, 10);//印章位置
-                item.SetSize(275, 158);
-                item.EditAs = OfficeOpenXml.Drawing.eEditAs.TwoCell;
-            }
-            var OutputStream = new System.IO.MemoryStream(ep.GetAsByteArray());
-            return OutputStream;
         }
         internal void AlertErrMsg(string ErrMsg)
         {

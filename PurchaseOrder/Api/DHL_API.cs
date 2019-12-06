@@ -35,7 +35,7 @@ namespace PurchaseOrderSys.DHLApi
         private string api_siteID;
         private string api_password;
         private string api_account;
-
+        protected static string LangID = "en-US";
         private DateTime today = DateTime.Now;
 
         public DHL_API(ApiSetting Api)
@@ -284,7 +284,11 @@ namespace PurchaseOrderSys.DHLApi
             foreach (var item in DHLData.WinitTransferBoxList.FirstOrDefault().WinitTransfer.Transfer.TransferSKU.Where(x => x.IsEnable))
             {
                 var Qty = item.SerialsLlist.Count(x => x.IsEnable && x.SerialsType == "TransferOut");
-                var Description = item.SerialsLlist.FirstOrDefault().TransferSKU.SkuNo;
+                var Description = item.SerialsLlist.FirstOrDefault().TransferSKU.SKU.SkuType.SkuTypeLang.Where(x => x.LangID == LangID).FirstOrDefault().Name;
+                if (Description.Length > 70)
+                {
+                    Description = Description.Substring(0, 70);
+                }
                 var Value = Math.Round(item.SerialsLlist.FirstOrDefault().TransferSKU.SKU.Logistic.Price / 1.05m / DHLData.EXRate, 2);
                 var ShippingWeight = Qty * item.SerialsLlist.FirstOrDefault().TransferSKU.SKU.Logistic.ShippingWeight;
                 var ManufactureCountryCode = item.SerialsLlist.FirstOrDefault().TransferSKU.SKU.Logistic.OriginCountry;
@@ -670,11 +674,14 @@ namespace PurchaseOrderSys.DHLApi
     {
         public Dictionary<string,string> DHL_SaveFile(ShipmentResponse result)
         {
+            string basePath = HostingEnvironment.MapPath("~/FileUploads");
             var pdfFile = new Dictionary<string, string>();
+            var filePath = Path.Combine(basePath, "DHL_" + result.AirwayBillNumber);
+            if (!Directory.Exists(filePath)) Directory.CreateDirectory(filePath);//沒資料夾就新增
             pdfFile.Add("AWB",Convert.ToBase64String(Crop(result.LabelImage.First().OutputImage, 97f, 30f, 356f, 553f)));
-            pdfFile.Add("Invoice", Convert.ToBase64String(result.LabelImage.First().MultiLabels.First().DocImageVal));
+            //pdfFile.Add("Invoice", Convert.ToBase64String(result.LabelImage.First().MultiLabels.First().DocImageVal));
             //File.WriteAllBytes(Path.Combine(filePath, "AirWaybill.pdf"), );
-            // File.WriteAllBytes(Path.Combine(filePath, "Invoice.pdf"), result.LabelImage.First().MultiLabels.First().DocImageVal);
+            File.WriteAllBytes(Path.Combine(filePath, "Invoice_" + result.AirwayBillNumber + ".pdf"), result.LabelImage.First().MultiLabels.First().DocImageVal);
             return pdfFile;
         }
         private byte[] Crop(byte[] pdfbytes, float llx, float lly, float urx, float ury)
