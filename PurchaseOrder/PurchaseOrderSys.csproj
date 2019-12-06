@@ -63,6 +63,16 @@
       <HintPath>..\packages\iTextSharp.5.5.13.1\lib\itextsharp.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MWSClientCsRuntime-1.0, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Amazon MWS\MWSOrdersCSharpClientLibrary-2013-09-01\dist\MWSClientCsRuntime-1.0.dll</HintPath>
+    </Reference>
+    <Reference Include="MWSOrders_2013-09-01_v2018-10-31">
+      <HintPath>..\..\Amazon MWS\MWSOrdersCSharpClientLibrary-2013-09-01\dist\MWSOrders_2013-09-01_v2018-10-31.dll</HintPath>
+    </Reference>
+    <Reference Include="MWSProducts_2011-10-01_v2017-03-22">
+      <HintPath>..\..\Amazon MWS\MWSProductsCSharpClientLibrary-2011-10-01\dist\MWSProducts_2011-10-01_v2017-03-22.dll</HintPath>
+    </Reference>
     <Reference Include="Neodynamic.SDK.WebClientPrint, Version=4.0.2000.0, Culture=neutral, PublicKeyToken=93565f9c313b0a45, processorArchitecture=MSIL">
       <HintPath>..\packages\Neodynamic.SDK.WebClientPrint.4.0.2018.928\lib\Neodynamic.SDK.WebClientPrint.dll</HintPath>
     </Reference>
@@ -209,11 +219,6 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Connected Services\AWSECommerceService\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
     <Compile Include="Connected Services\FedExShipService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -412,7 +417,6 @@
     <Compile Include="Models\NetoGroupMetadata.cs">
       <DependentUpon>ModelTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Objects\AmazonWebServices.cs" />
     <Compile Include="Models\Objects\Common.cs" />
     <Compile Include="Models\Objects\EnumData.cs" />
     <Compile Include="Models\ImgFile.cs">
@@ -748,66 +752,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\AWSECommerceService\configuration91.svcinfo" />
-    <None Include="Connected Services\AWSECommerceService\configuration.svcinfo" />
-    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.BrowseNodeLookupResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.BrowseNodeLookupResponse1.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.CartAddResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.CartAddResponse1.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.CartClearResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.CartClearResponse1.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.CartCreateResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.CartCreateResponse1.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.CartGetResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.CartGetResponse1.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.CartModifyResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.CartModifyResponse1.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.ItemLookupResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.ItemLookupResponse1.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.ItemSearchResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.ItemSearchResponse1.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.SimilarityLookupResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Connected Services\AWSECommerceService\PurchaseOrderSys.AWSECommerceService.SimilarityLookupResponse1.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <None Include="Connected Services\AWSECommerceService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
     <Content Include="Connected Services\FedExShipService\PurchaseOrderSys.FedExShipService.deleteTagResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
@@ -826,7 +770,6 @@
     <Content Include="Connected Services\FedExShipService\PurchaseOrderSys.FedExShipService.ShipmentReply.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
-    <None Include="Connected Services\AWSECommerceService\AWSECommerceService.wsdl" />
     <None Include="Connected Services\FedExShipService\ShipServiceDefinitions.wsdl" />
     <Content Include="Connected Services\FedExTrackService\PurchaseOrderSys.FedExTrackService.retrieveSignatureProofOfDeliveryLetterResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -7922,7 +7865,6 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadataStorage Include="Connected Services\AWSECommerceService\" />
     <WCFMetadataStorage Include="Connected Services\FedExShipService\" />
     <WCFMetadataStorage Include="Connected Services\FedExTrackService\" />
     <WCFMetadataStorage Include="Connected Services\OrderCreationService\" />
