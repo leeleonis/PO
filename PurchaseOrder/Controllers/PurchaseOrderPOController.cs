@@ -786,7 +786,7 @@ namespace PurchaseOrderSys.Controllers
 
         private PurchaseSKU GetFreeSerials(PurchaseSKU PurchaseSKU, DateTime UpdateAt)
         {
-            var nPurchaseSKU = new PurchaseSKU {SkuNo= PurchaseSKU.SkuNo };
+            var nPurchaseSKU = new PurchaseSKU { SkuNo = PurchaseSKU.SkuNo, PurchaseOrder = PurchaseSKU.PurchaseOrder };
             var count = PurchaseSKU.QTYReceived;
             var SerialsLlistCount = PurchaseSKU.SerialsLlist.Where(x => x.SerialsType == "PO").Count();
             if (count > SerialsLlistCount)
